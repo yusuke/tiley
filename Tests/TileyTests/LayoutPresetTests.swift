@@ -17,9 +17,9 @@ struct LayoutPresetTests {
     func defaultPresetsLocalShortcuts() {
         let presets = LayoutPreset.defaultPresets(rows: 6, columns: 6)
         for preset in presets {
-            #expect(preset.shortcut != nil)
-            #expect(preset.isGlobalShortcut == false)
-            #expect(preset.shortcut?.modifiers == 0)
+            #expect(!preset.shortcuts.isEmpty)
+            #expect(preset.shortcuts.allSatisfy { !$0.isGlobal })
+            #expect(preset.shortcuts.allSatisfy { $0.modifiers == 0 })
         }
     }
 
@@ -42,24 +42,23 @@ struct LayoutPresetTests {
             selection: GridSelection(startColumn: 0, startRow: 0, endColumn: 2, endRow: 3),
             baseRows: 6,
             baseColumns: 6,
-            shortcut: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_A), modifiers: UInt32(cmdKey)),
-            isGlobalShortcut: true
+            shortcuts: [HotKeyShortcut(keyCode: UInt32(kVK_ANSI_A), modifiers: UInt32(cmdKey), isGlobal: true)]
         )
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(LayoutPreset.self, from: data)
         #expect(decoded == original)
+        #expect(decoded.shortcuts.first?.isGlobal == true)
     }
 
-    @Test("Codable round-trip with nil shortcut")
-    func codableNilShortcut() throws {
+    @Test("Codable round-trip with empty shortcuts")
+    func codableEmptyShortcuts() throws {
         let original = LayoutPreset(
             id: UUID(),
             name: "No Shortcut",
             selection: GridSelection(startColumn: 0, startRow: 0, endColumn: 1, endRow: 1),
             baseRows: 4,
             baseColumns: 4,
-            shortcut: nil,
-            isGlobalShortcut: false
+            shortcuts: []
         )
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(LayoutPreset.self, from: data)
@@ -81,10 +80,30 @@ struct LayoutPresetTests {
         """
         let data = Data(json.utf8)
         let decoded = try JSONDecoder().decode(LayoutPreset.self, from: data)
-        #expect(decoded.shortcut != nil)
-        #expect(decoded.shortcut?.keyCode == 49)
-        #expect(decoded.shortcut?.modifiers == 256)
-        #expect(decoded.isGlobalShortcut == true)
+        #expect(!decoded.shortcuts.isEmpty)
+        #expect(decoded.shortcuts.first?.keyCode == 49)
+        #expect(decoded.shortcuts.first?.modifiers == 256)
+        #expect(decoded.shortcuts.first?.isGlobal == true)
+    }
+
+    @Test("decoding legacy preset-level isGlobalShortcut migrates to per-shortcut")
+    func codableLegacyPresetLevelGlobal() throws {
+        let id = UUID()
+        let json = """
+        {
+            "id": "\(id.uuidString)",
+            "name": "LegacyGlobal",
+            "selection": {"startColumn": 0, "startRow": 0, "endColumn": 5, "endRow": 5},
+            "baseRows": 6,
+            "baseColumns": 6,
+            "shortcuts": [{"keyCode": 0, "modifiers": 256}, {"keyCode": 1, "modifiers": 512}],
+            "isGlobalShortcut": true
+        }
+        """
+        let data = Data(json.utf8)
+        let decoded = try JSONDecoder().decode(LayoutPreset.self, from: data)
+        #expect(decoded.shortcuts.count == 2)
+        #expect(decoded.shortcuts.allSatisfy { $0.isGlobal })
     }
 
     // MARK: - scaledSelection
@@ -97,8 +116,7 @@ struct LayoutPresetTests {
             selection: GridSelection(startColumn: 0, startRow: 0, endColumn: 5, endRow: 5),
             baseRows: 6,
             baseColumns: 6,
-            shortcut: nil,
-            isGlobalShortcut: false
+            shortcuts: []
         )
         let scaled = preset.scaledSelection(toRows: 4, columns: 4)
         #expect(scaled == GridSelection(startColumn: 0, startRow: 0, endColumn: 3, endRow: 3))
@@ -113,8 +131,7 @@ struct LayoutPresetTests {
             selection: selection,
             baseRows: 6,
             baseColumns: 6,
-            shortcut: nil,
-            isGlobalShortcut: false
+            shortcuts: []
         )
         let scaled = preset.scaledSelection(toRows: 6, columns: 6)
         #expect(scaled == selection.normalized)

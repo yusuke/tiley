@@ -65,6 +65,7 @@
 "Delete Layout" = "刪除版面";
 "This shortcut is already used by the global shortcut." = "此快捷鍵已被全域快捷鍵使用。";
 "This shortcut is already used by another layout." = "此快捷鍵已被其他版面使用。";
+"This shortcut is already assigned to this layout." = "此快捷鍵已指派給此版面。";
 "Drag a region or click once to reuse the last selection." = "拖曳區域，或按一下以重用上次選擇。";
 "Cancel" = "取消";
 "No selection" = "未選擇";

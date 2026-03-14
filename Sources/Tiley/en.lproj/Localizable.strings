@@ -65,6 +65,7 @@
 "Delete Layout" = "Delete Layout";
 "This shortcut is already used by the global shortcut." = "This shortcut is already used by the global shortcut.";
 "This shortcut is already used by another layout." = "This shortcut is already used by another layout.";
+"This shortcut is already assigned to this layout." = "This shortcut is already assigned to this layout.";
 "Drag a region or click once to reuse the last selection." = "Drag a region or click once to reuse the last selection.";
 "Cancel" = "Cancel";
 "No selection" = "No selection";

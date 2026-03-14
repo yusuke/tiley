@@ -4,6 +4,30 @@ import Carbon
 struct HotKeyShortcut: Equatable, Codable {
     var keyCode: UInt32
     var modifiers: UInt32
+    var isGlobal: Bool = false
+
+    static func == (lhs: HotKeyShortcut, rhs: HotKeyShortcut) -> Bool {
+        lhs.keyCode == rhs.keyCode && lhs.modifiers == rhs.modifiers
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case keyCode
+        case modifiers
+        case isGlobal
+    }
+
+    init(keyCode: UInt32, modifiers: UInt32, isGlobal: Bool = false) {
+        self.keyCode = keyCode
+        self.modifiers = modifiers
+        self.isGlobal = isGlobal
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        keyCode = try container.decode(UInt32.self, forKey: .keyCode)
+        modifiers = try container.decode(UInt32.self, forKey: .modifiers)
+        isGlobal = try container.decodeIfPresent(Bool.self, forKey: .isGlobal) ?? false
+    }
 
     static let `default` = HotKeyShortcut(
         keyCode: UInt32(kVK_Space),

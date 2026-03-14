@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Prompt to move the app to /Applications when launched from another location
+- Per-shortcut global flag: each shortcut within a layout preset can now individually be set as global or local
+- Separate add buttons for regular shortcuts and global shortcuts, with instant popover tooltips
+
+### Changed
+
+- Global shortcut setting moved from per-preset to per-shortcut granularity
+- Existing presets with the legacy per-preset global flag are automatically migrated
 
 ## [0.9.0] - 2026-03-14
 

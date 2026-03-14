@@ -6,17 +6,17 @@ struct ShortcutRecorderField: NSViewRepresentable {
     @Binding var shortcut: HotKeyShortcut
     var onRecordingChange: ((Bool) -> Void)?
 
-    func makeNSView(context: Context) -> RecorderButton {
-        let button = RecorderButton()
-        button.onShortcutChange = { newShortcut in
+    func makeNSView(context: Context) -> RecorderTextField {
+        let field = RecorderTextField()
+        field.onShortcutChange = { newShortcut in
             shortcut = newShortcut
         }
-        button.onRecordingChange = onRecordingChange
-        button.shortcut = shortcut
-        return button
+        field.onRecordingChange = onRecordingChange
+        field.shortcut = shortcut
+        return field
     }
 
-    func updateNSView(_ nsView: RecorderButton, context: Context) {
+    func updateNSView(_ nsView: RecorderTextField, context: Context) {
         nsView.onShortcutChange = { newShortcut in
             shortcut = newShortcut
         }
@@ -65,36 +65,41 @@ struct OptionalShortcutRecorderField: NSViewRepresentable {
     }
 }
 
-final class RecorderButton: NSButton {
+final class RecorderTextField: NSTextField {
     var onShortcutChange: ((HotKeyShortcut) -> Void)?
     var onRecordingChange: ((Bool) -> Void)?
     var shortcut = HotKeyShortcut.default {
         didSet {
-            updateTitle()
+            updateDisplay()
         }
     }
     private var recordingMonitor: Any?
 
     private var isRecording = false {
         didSet {
+            guard oldValue != isRecording else { return }
             if isRecording {
                 installRecordingMonitor()
             } else {
                 removeRecordingMonitor()
             }
             onRecordingChange?(isRecording)
-            updateTitle()
+            updateDisplay()
         }
     }
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-        bezelStyle = .rounded
-        setButtonType(.momentaryPushIn)
-        isBordered = true
+        isEditable = false
+        isSelectable = false
+        isBezeled = true
+        bezelStyle = .roundedBezel
         font = .systemFont(ofSize: 13, weight: .medium)
         focusRingType = .default
-        updateTitle()
+        alignment = .center
+        cell?.sendsActionOnEndEditing = false
+        cell?.isScrollable = true
+        updateDisplay()
     }
 
     @available(*, unavailable)
@@ -106,43 +111,39 @@ final class RecorderButton: NSButton {
         NSSize(width: 220, height: 32)
     }
 
-    override var acceptsFirstResponder: Bool {
-        true
-    }
+    override var acceptsFirstResponder: Bool { true }
 
     override func mouseDown(with event: NSEvent) {
-        window?.makeFirstResponder(self)
-        isRecording = true
+        startRecording()
     }
 
-    override func resignFirstResponder() -> Bool {
-        abortRecording(clearFocus: false)
-        return super.resignFirstResponder()
+    override func becomeFirstResponder() -> Bool {
+        let result = super.becomeFirstResponder()
+        return result
     }
 
-    override func keyDown(with event: NSEvent) {
-        guard isRecording else {
-            super.keyDown(with: event)
-            return
-        }
+    override func textDidEndEditing(_ notification: Notification) {
+        isRecording = false
+        updateDisplay()
+        super.textDidEndEditing(notification)
+    }
 
-        handleRecordingEvent(event)
+    override func textDidChange(_ notification: Notification) {
+        stringValue = ""
+    }
+
+    override func cancelOperation(_ sender: Any?) {
+        isRecording = false
+        updateDisplay()
+        window?.makeFirstResponder(nil)
     }
 
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         guard isRecording else {
             return super.performKeyEquivalent(with: event)
         }
-
         handleRecordingEvent(event)
         return true
-    }
-
-    override func flagsChanged(with event: NSEvent) {
-        if isRecording {
-            return
-        }
-        super.flagsChanged(with: event)
     }
 
     func applyShortcut(_ shortcut: HotKeyShortcut) {
@@ -150,21 +151,24 @@ final class RecorderButton: NSButton {
         isRecording = false
     }
 
-    override func cancelOperation(_ sender: Any?) {
-        if isRecording {
-            abortRecording()
-            return
-        }
-        super.cancelOperation(sender)
+    private func startRecording() {
+        isEditable = true
+        isSelectable = true
+        stringValue = ""
+        window?.makeFirstResponder(self)
+        isRecording = true
     }
 
-    private func abortRecording() {
-        abortRecording(clearFocus: true)
+    private func stopRecording() {
+        isRecording = false
+        isEditable = false
+        isSelectable = false
+        window?.makeFirstResponder(nil)
     }
 
     private func handleRecordingEvent(_ event: NSEvent) {
         if event.keyCode == UInt16(kVK_Escape) {
-            abortRecording()
+            stopRecording()
             return
         }
 
@@ -174,27 +178,18 @@ final class RecorderButton: NSButton {
         }
 
         if shortcut == self.shortcut {
-            abortRecording()
+            stopRecording()
             return
         }
 
         onShortcutChange?(shortcut)
-        abortRecording()
-    }
-
-    private func abortRecording(clearFocus: Bool) {
-        isRecording = false
-        if clearFocus {
-            window?.makeFirstResponder(nil)
-        }
+        stopRecording()
     }
 
     private func installRecordingMonitor() {
         guard recordingMonitor == nil else { return }
         recordingMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [weak self] event in
-            guard let self else { return event }
-            guard self.isRecording else { return event }
-
+            guard let self, self.isRecording else { return event }
             switch event.type {
             case .keyDown:
                 self.handleRecordingEvent(event)
@@ -213,8 +208,12 @@ final class RecorderButton: NSButton {
         self.recordingMonitor = nil
     }
 
-    private func updateTitle() {
-        title = isRecording ? NSLocalizedString("Type shortcut", comment: "Shortcut recorder recording state") : shortcut.displayString
+    private func updateDisplay() {
+        if isRecording {
+            stringValue = ""
+        } else {
+            stringValue = shortcut.displayString
+        }
     }
 }
 
@@ -421,6 +420,196 @@ final class OptionalRecorderButton: NSButton {
             title = NSLocalizedString("Type shortcut", comment: "Shortcut recorder recording state")
         } else {
             title = shortcut?.displayString ?? placeholderTitle
+        }
+    }
+}
+
+struct CompactShortcutRecorderField: NSViewRepresentable {
+    var onShortcutRecorded: (HotKeyShortcut) -> Void
+    var onRecordingChange: ((Bool) -> Void)?
+    var validateShortcut: ((HotKeyShortcut) -> String?)?
+
+    func makeNSView(context: Context) -> CompactRecorderTextField {
+        let field = CompactRecorderTextField()
+        field.onShortcutRecorded = onShortcutRecorded
+        field.onRecordingChange = onRecordingChange
+        field.validateShortcut = validateShortcut
+        Task { @MainActor in
+            guard let window = field.window else { return }
+            window.makeFirstResponder(field)
+        }
+        return field
+    }
+
+    func updateNSView(_ nsView: CompactRecorderTextField, context: Context) {
+        nsView.onShortcutRecorded = onShortcutRecorded
+        nsView.onRecordingChange = onRecordingChange
+        nsView.validateShortcut = validateShortcut
+    }
+}
+
+final class CompactRecorderTextField: NSTextField {
+    var onShortcutRecorded: ((HotKeyShortcut) -> Void)?
+    var onRecordingChange: ((Bool) -> Void)?
+    var validateShortcut: ((HotKeyShortcut) -> String?)?
+    private var recordingMonitor: Any?
+    private var validationPopover: NSPopover?
+    private var validationDismissTask: Task<Void, Never>?
+
+    private var isRecording = false {
+        didSet {
+            guard oldValue != isRecording else { return }
+            if isRecording {
+                installRecordingMonitor()
+            } else {
+                removeRecordingMonitor()
+            }
+            onRecordingChange?(isRecording)
+        }
+    }
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        stringValue = ""
+        isEditable = true
+        isSelectable = true
+        isBezeled = true
+        bezelStyle = .roundedBezel
+        font = .systemFont(ofSize: 11)
+        focusRingType = .default
+        placeholderString = nil
+        cell?.sendsActionOnEndEditing = false
+        cell?.isScrollable = true
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override var intrinsicContentSize: NSSize {
+        NSSize(width: 120, height: 22)
+    }
+
+    override var acceptsFirstResponder: Bool { true }
+
+    override func becomeFirstResponder() -> Bool {
+        let result = super.becomeFirstResponder()
+        if result {
+            isRecording = true
+        }
+        return result
+    }
+
+    override func textDidEndEditing(_ notification: Notification) {
+        isRecording = false
+        stringValue = ""
+        super.textDidEndEditing(notification)
+    }
+
+    override func textDidChange(_ notification: Notification) {
+        // Prevent any text from being typed into the field
+        stringValue = ""
+    }
+
+    override func cancelOperation(_ sender: Any?) {
+        isRecording = false
+        stringValue = ""
+        window?.makeFirstResponder(nil)
+    }
+
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        guard isRecording else {
+            return super.performKeyEquivalent(with: event)
+        }
+        handleRecordingEvent(event)
+        return true
+    }
+
+    private func handleRecordingEvent(_ event: NSEvent) {
+        if event.keyCode == UInt16(kVK_Escape) {
+            isRecording = false
+            stringValue = ""
+            window?.makeFirstResponder(nil)
+            return
+        }
+
+        guard let shortcut = HotKeyShortcut.from(event: event, requireModifiers: false) else {
+            NSSound.beep()
+            return
+        }
+
+        if let message = validateShortcut?(shortcut) {
+            NSSound.beep()
+            showValidationPopover(message: message)
+            return
+        }
+
+        stringValue = ""
+        onShortcutRecorded?(shortcut)
+    }
+
+    private func installRecordingMonitor() {
+        guard recordingMonitor == nil else { return }
+        recordingMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [weak self] event in
+            guard let self, self.isRecording else { return event }
+            switch event.type {
+            case .keyDown:
+                self.handleRecordingEvent(event)
+                return nil
+            case .flagsChanged:
+                return nil
+            default:
+                return event
+            }
+        }
+    }
+
+    private func removeRecordingMonitor() {
+        guard let recordingMonitor else { return }
+        NSEvent.removeMonitor(recordingMonitor)
+        self.recordingMonitor = nil
+    }
+
+    private func showValidationPopover(message: String) {
+        validationDismissTask?.cancel()
+
+        let label = NSTextField(labelWithString: message)
+        label.maximumNumberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.textColor = .labelColor
+        label.font = .systemFont(ofSize: 12)
+
+        let container = NSView(frame: NSRect(x: 0, y: 0, width: 220, height: 1))
+        label.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+            label.topAnchor.constraint(equalTo: container.topAnchor, constant: 8),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8),
+            container.widthAnchor.constraint(equalToConstant: 220)
+        ])
+
+        let controller = NSViewController()
+        controller.view = container
+
+        let popover = validationPopover ?? NSPopover()
+        popover.behavior = .semitransient
+        popover.animates = true
+        popover.contentSize = NSSize(width: 220, height: 44)
+        popover.contentViewController = controller
+        validationPopover = popover
+
+        if popover.isShown {
+            popover.close()
+        }
+        popover.show(relativeTo: bounds, of: self, preferredEdge: .maxY)
+
+        validationDismissTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(2.0))
+            guard !Task.isCancelled else { return }
+            self?.validationPopover?.close()
         }
     }
 }

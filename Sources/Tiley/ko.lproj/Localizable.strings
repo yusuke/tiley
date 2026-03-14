@@ -65,6 +65,7 @@
 "Delete Layout" = "레이아웃 삭제";
 "This shortcut is already used by the global shortcut." = "이 단축키는 전역 단축키에서 이미 사용 중입니다.";
 "This shortcut is already used by another layout." = "이 단축키는 다른 레이아웃에서 이미 사용 중입니다.";
+"This shortcut is already assigned to this layout." = "이 단축키는 이미 이 레이아웃에 할당되어 있습니다.";
 "Drag a region or click once to reuse the last selection." = "영역을 드래그하거나 클릭하여 마지막 선택을 다시 사용하세요.";
 "Cancel" = "취소";
 "No selection" = "선택 없음";

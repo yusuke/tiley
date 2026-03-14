@@ -50,8 +50,11 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
     var selection: GridSelection
     var baseRows: Int
     var baseColumns: Int
-    var shortcut: HotKeyShortcut?
-    var isGlobalShortcut: Bool
+    var shortcuts: [HotKeyShortcut]
+
+    var hasAnyGlobalShortcut: Bool { shortcuts.contains { $0.isGlobal } }
+    var globalShortcuts: [HotKeyShortcut] { shortcuts.filter { $0.isGlobal } }
+    var localShortcuts: [HotKeyShortcut] { shortcuts.filter { !$0.isGlobal } }
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -60,6 +63,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         case baseRows
         case baseColumns
         case shortcut
+        case shortcuts
         case isGlobalShortcut
         case localShortcut
         case globalShortcut
@@ -71,16 +75,14 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         selection: GridSelection,
         baseRows: Int,
         baseColumns: Int,
-        shortcut: HotKeyShortcut?,
-        isGlobalShortcut: Bool
+        shortcuts: [HotKeyShortcut]
     ) {
         self.id = id
         self.name = name
         self.selection = selection
         self.baseRows = baseRows
         self.baseColumns = baseColumns
-        self.shortcut = shortcut
-        self.isGlobalShortcut = isGlobalShortcut
+        self.shortcuts = shortcuts
     }
 
     init(from decoder: any Decoder) throws {
@@ -91,15 +93,26 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         baseRows = try container.decode(Int.self, forKey: .baseRows)
         baseColumns = try container.decode(Int.self, forKey: .baseColumns)
 
-        if let shortcut = try container.decodeIfPresent(HotKeyShortcut.self, forKey: .shortcut) {
-            self.shortcut = shortcut
-            isGlobalShortcut = try container.decodeIfPresent(Bool.self, forKey: .isGlobalShortcut) ?? false
+        // Decode new array format first, fall back to legacy formats
+        if let shortcuts = try container.decodeIfPresent([HotKeyShortcut].self, forKey: .shortcuts) {
+            // Migrate legacy preset-level isGlobalShortcut flag to per-shortcut isGlobal
+            let legacyGlobal = try container.decodeIfPresent(Bool.self, forKey: .isGlobalShortcut) ?? false
+            if legacyGlobal, !shortcuts.contains(where: { $0.isGlobal }) {
+                self.shortcuts = shortcuts.map { var s = $0; s.isGlobal = true; return s }
+            } else {
+                self.shortcuts = shortcuts
+            }
+        } else if let shortcut = try container.decodeIfPresent(HotKeyShortcut.self, forKey: .shortcut) {
+            let legacyGlobal = try container.decodeIfPresent(Bool.self, forKey: .isGlobalShortcut) ?? false
+            var s = shortcut
+            if legacyGlobal { s.isGlobal = true }
+            self.shortcuts = [s]
         } else if let globalShortcut = try container.decodeIfPresent(HotKeyShortcut.self, forKey: .globalShortcut) {
-            shortcut = globalShortcut
-            isGlobalShortcut = true
+            var s = globalShortcut
+            s.isGlobal = true
+            shortcuts = [s]
         } else {
-            shortcut = nil
-            isGlobalShortcut = false
+            shortcuts = []
         }
     }
 
@@ -110,8 +123,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         try container.encode(selection, forKey: .selection)
         try container.encode(baseRows, forKey: .baseRows)
         try container.encode(baseColumns, forKey: .baseColumns)
-        try container.encodeIfPresent(shortcut, forKey: .shortcut)
-        try container.encode(isGlobalShortcut, forKey: .isGlobalShortcut)
+        try container.encode(shortcuts, forKey: .shortcuts)
     }
 
     func scaledSelection(toRows rows: Int, columns: Int) -> GridSelection {
@@ -133,8 +145,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 selection: GridSelection(startColumn: 0, startRow: 0, endColumn: maxColumn, endRow: maxRow),
                 baseRows: rows,
                 baseColumns: columns,
-                shortcut: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_M), modifiers: 0),
-                isGlobalShortcut: false
+                shortcuts: [
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_M), modifiers: 0)
+                ]
             ),
             LayoutPreset(
                 id: UUID(),
@@ -142,8 +155,11 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 selection: GridSelection(startColumn: 0, startRow: 0, endColumn: leftEnd, endRow: maxRow),
                 baseRows: rows,
                 baseColumns: columns,
-                shortcut: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_A), modifiers: 0),
-                isGlobalShortcut: false
+                shortcuts: [
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_A), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_H), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_LeftArrow), modifiers: 0)
+                ]
             ),
             LayoutPreset(
                 id: UUID(),
@@ -151,8 +167,11 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 selection: GridSelection(startColumn: rightStart, startRow: 0, endColumn: maxColumn, endRow: maxRow),
                 baseRows: rows,
                 baseColumns: columns,
-                shortcut: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_D), modifiers: 0),
-                isGlobalShortcut: false
+                shortcuts: [
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_D), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_L), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_RightArrow), modifiers: 0)
+                ]
             ),
             LayoutPreset(
                 id: UUID(),
@@ -160,8 +179,11 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 selection: GridSelection(startColumn: 0, startRow: 0, endColumn: maxColumn, endRow: topEnd),
                 baseRows: rows,
                 baseColumns: columns,
-                shortcut: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_W), modifiers: 0),
-                isGlobalShortcut: false
+                shortcuts: [
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_W), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_K), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_UpArrow), modifiers: 0)
+                ]
             ),
             LayoutPreset(
                 id: UUID(),
@@ -169,8 +191,11 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 selection: GridSelection(startColumn: 0, startRow: bottomStart, endColumn: maxColumn, endRow: maxRow),
                 baseRows: rows,
                 baseColumns: columns,
-                shortcut: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_S), modifiers: 0),
-                isGlobalShortcut: false
+                shortcuts: [
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_S), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_J), modifiers: 0),
+                    HotKeyShortcut(keyCode: UInt32(kVK_DownArrow), modifiers: 0)
+                ]
             )
         ]
     }

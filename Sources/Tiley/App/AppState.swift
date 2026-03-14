@@ -62,6 +62,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var presetHotKeyRefs: [UInt32: EventHotKeyRef] = [:]
     @ObservationIgnored private var presetHotKeyIDs: [UInt32: UUID] = [:]
     @ObservationIgnored private var shortcutRecordingSessionCount = 0
+    var isEditingLayoutPresets = false
     @ObservationIgnored private var hotKeyHandler: EventHandlerRef?
     @ObservationIgnored private var lastSelection: GridSelection?
     @ObservationIgnored private var lastSelectionRows: Int?
@@ -407,9 +408,7 @@ final class AppState: NSObject, NSMenuDelegate {
         let persistedID = ensurePersistedLayoutPreset(id: id)
         guard let index = layoutPresets.firstIndex(where: { $0.id == persistedID }) else { return }
         mutate(&layoutPresets[index])
-        if !canEnableGlobalShortcut(for: layoutPresets[index]) {
-            layoutPresets[index].isGlobalShortcut = false
-        }
+        sanitizeShortcutGlobalFlags(for: &layoutPresets[index])
         selectedLayoutPresetID = persistedID
         saveLayoutPresets()
         registerPresetHotKeys()
@@ -460,18 +459,17 @@ final class AppState: NSObject, NSMenuDelegate {
         registerPresetHotKeys()
     }
 
-    func canEnableGlobalShortcut(for preset: LayoutPreset) -> Bool {
-        guard let shortcut = preset.shortcut else { return true }
-        return canEnableGlobalShortcut(for: shortcut)
-    }
-
     func layoutShortcutConflictMessage(for shortcut: HotKeyShortcut, excluding presetID: UUID) -> String? {
         if shortcut == hotKeyShortcut {
             return NSLocalizedString("This shortcut is already used by the global shortcut.", comment: "Layout shortcut conflict with app global shortcut")
         }
 
-        if layoutPresets.contains(where: { $0.id != presetID && $0.shortcut == shortcut }) {
+        if layoutPresets.contains(where: { $0.id != presetID && $0.shortcuts.contains(shortcut) }) {
             return NSLocalizedString("This shortcut is already used by another layout.", comment: "Layout shortcut conflict with another layout")
+        }
+
+        if let preset = layoutPresets.first(where: { $0.id == presetID }), preset.shortcuts.contains(shortcut) {
+            return NSLocalizedString("This shortcut is already assigned to this layout.", comment: "Layout shortcut duplicate within same layout")
         }
 
         return nil
@@ -557,7 +555,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func handleLocalShortcut(_ shortcut: HotKeyShortcut) -> Bool {
         guard isShowingLayoutGrid, !isEditingSettings else { return false }
-        guard let preset = layoutPresets.first(where: { !$0.isGlobalShortcut && $0.shortcut == shortcut }) else { return false }
+        guard let preset = layoutPresets.first(where: { $0.localShortcuts.contains(shortcut) }) else { return false }
         applyLayoutPreset(id: preset.id)
         return true
     }
@@ -735,23 +733,23 @@ final class AppState: NSObject, NSMenuDelegate {
         var nextID: UInt32 = 100
 
         for preset in layoutPresets {
-            guard preset.isGlobalShortcut,
-                  let shortcut = preset.shortcut,
-                  canEnableGlobalShortcut(for: shortcut) else { continue }
-            let hotKeyID = EventHotKeyID(signature: OSType(0x54594c59), id: nextID)
-            var ref: EventHotKeyRef?
-            let status = RegisterEventHotKey(
-                shortcut.keyCode,
-                shortcut.eventHotKeyModifiers,
-                hotKeyID,
-                GetApplicationEventTarget(),
-                0,
-                &ref
-            )
-            if status == noErr, let ref {
-                presetHotKeyRefs[nextID] = ref
-                presetHotKeyIDs[nextID] = preset.id
-                nextID += 1
+            for shortcut in preset.globalShortcuts {
+                guard canEnableGlobalShortcut(for: shortcut) else { continue }
+                let hotKeyID = EventHotKeyID(signature: OSType(0x54594c59), id: nextID)
+                var ref: EventHotKeyRef?
+                let status = RegisterEventHotKey(
+                    shortcut.keyCode,
+                    shortcut.eventHotKeyModifiers,
+                    hotKeyID,
+                    GetApplicationEventTarget(),
+                    0,
+                    &ref
+                )
+                if status == noErr, let ref {
+                    presetHotKeyRefs[nextID] = ref
+                    presetHotKeyIDs[nextID] = preset.id
+                    nextID += 1
+                }
             }
         }
     }
@@ -786,8 +784,17 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func sanitizePresetGlobalShortcutEligibility() {
-        for index in layoutPresets.indices where !canEnableGlobalShortcut(for: layoutPresets[index]) {
-            layoutPresets[index].isGlobalShortcut = false
+        for presetIndex in layoutPresets.indices {
+            sanitizeShortcutGlobalFlags(for: &layoutPresets[presetIndex])
+        }
+    }
+
+    private func sanitizeShortcutGlobalFlags(for preset: inout LayoutPreset) {
+        for shortcutIndex in preset.shortcuts.indices {
+            if preset.shortcuts[shortcutIndex].isGlobal,
+               !canEnableGlobalShortcut(for: preset.shortcuts[shortcutIndex]) {
+                preset.shortcuts[shortcutIndex].isGlobal = false
+            }
         }
     }
 
@@ -808,8 +815,7 @@ final class AppState: NSObject, NSMenuDelegate {
             selection: lastSelection.normalized,
             baseRows: lastSelectionRows,
             baseColumns: lastSelectionColumns,
-            shortcut: nil,
-            isGlobalShortcut: false
+            shortcuts: []
         )
 
         let candidateSelection = candidate.scaledSelection(toRows: rows, columns: columns)
@@ -990,6 +996,10 @@ final class AppState: NSObject, NSMenuDelegate {
             cancelSettingsEditing()
             return true
         }
+        if isEditingLayoutPresets {
+            isEditingLayoutPresets = false
+            return true
+        }
         return false
     }
 
@@ -1042,7 +1052,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
     private func hasRegisteredLocalShortcut(for event: NSEvent) -> Bool {
         guard let shortcut = HotKeyShortcut.from(event: event, requireModifiers: false) else { return false }
-        return layoutPresets.contains(where: { !$0.isGlobalShortcut && $0.shortcut == shortcut })
+        return layoutPresets.contains(where: { $0.localShortcuts.contains(shortcut) })
     }
 
     private func makeLayoutPreviewController(for target: WindowTarget) -> LayoutPreviewOverlayController {
