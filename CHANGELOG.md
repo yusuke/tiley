@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-03-14
+
 ### Added
 
 - Prompt to move the app to /Applications when launched from another location
@@ -34,5 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/yusuke/tiley/releases/tag/v1.0.0
 [0.9.0]: https://github.com/yusuke/tiley/releases/tag/v0.9.0
