@@ -65,6 +65,28 @@ struct OptionalShortcutRecorderField: NSViewRepresentable {
     }
 }
 
+private final class VerticallyCenteredTextFieldCell: NSTextFieldCell {
+    override func titleRect(forBounds rect: NSRect) -> NSRect {
+        var titleRect = super.titleRect(forBounds: rect)
+        let textHeight = cellSize(forBounds: rect).height
+        titleRect.origin.y = rect.origin.y + (rect.height - textHeight) / 2
+        titleRect.size.height = textHeight
+        return titleRect
+    }
+
+    override func drawInterior(withFrame cellFrame: NSRect, in controlView: NSView) {
+        super.drawInterior(withFrame: titleRect(forBounds: cellFrame), in: controlView)
+    }
+
+    override func select(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, start selStart: Int, length selLength: Int) {
+        super.select(withFrame: titleRect(forBounds: rect), in: controlView, editor: textObj, delegate: delegate, start: selStart, length: selLength)
+    }
+
+    override func edit(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, event: NSEvent?) {
+        super.edit(withFrame: titleRect(forBounds: rect), in: controlView, editor: textObj, delegate: delegate, event: event)
+    }
+}
+
 final class RecorderTextField: NSTextField {
     var onShortcutChange: ((HotKeyShortcut) -> Void)?
     var onRecordingChange: ((Bool) -> Void)?
@@ -82,6 +104,9 @@ final class RecorderTextField: NSTextField {
                 installRecordingMonitor()
             } else {
                 removeRecordingMonitor()
+                isEditable = false
+                isSelectable = false
+                applyLabelAppearance()
             }
             onRecordingChange?(isRecording)
             updateDisplay()
@@ -90,21 +115,31 @@ final class RecorderTextField: NSTextField {
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
+        let centeredCell = VerticallyCenteredTextFieldCell()
+        centeredCell.isScrollable = true
+        centeredCell.sendsActionOnEndEditing = false
+        cell = centeredCell
         isEditable = false
         isSelectable = false
-        isBezeled = true
-        bezelStyle = .roundedBezel
+        isBezeled = false
+        drawsBackground = false
+        wantsLayer = true
         font = .systemFont(ofSize: 13, weight: .medium)
-        focusRingType = .default
+        focusRingType = .none
         alignment = .center
-        cell?.sendsActionOnEndEditing = false
-        cell?.isScrollable = true
+        applyLabelAppearance()
         updateDisplay()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layout() {
+        super.layout()
+        layer?.cornerRadius = 6
+        layer?.masksToBounds = true
     }
 
     override var intrinsicContentSize: NSSize {
@@ -149,9 +184,11 @@ final class RecorderTextField: NSTextField {
     func applyShortcut(_ shortcut: HotKeyShortcut) {
         self.shortcut = shortcut
         isRecording = false
+        window?.makeFirstResponder(nil)
     }
 
     private func startRecording() {
+        applyFieldAppearance()
         isEditable = true
         isSelectable = true
         stringValue = ""
@@ -163,7 +200,24 @@ final class RecorderTextField: NSTextField {
         isRecording = false
         isEditable = false
         isSelectable = false
+        applyLabelAppearance()
         window?.makeFirstResponder(nil)
+    }
+
+    private func applyLabelAppearance() {
+        isBezeled = false
+        drawsBackground = false
+        layer?.backgroundColor = NSColor.quaternaryLabelColor.cgColor
+        textColor = .labelColor
+    }
+
+    private func applyFieldAppearance() {
+        layer?.backgroundColor = nil
+        isBezeled = true
+        bezelStyle = .roundedBezel
+        drawsBackground = true
+        backgroundColor = .textBackgroundColor
+        textColor = .labelColor
     }
 
     private func handleRecordingEvent(_ event: NSEvent) {
