@@ -78,3 +78,5 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley 不在「應用程式」檔案夾中。是否要移動到該檔案夾？";
 "Move to Applications" = "移動到「應用程式」";
 "Don't Move" = "不移動";
+"Add Shortcut" = "新增快捷鍵";
+"Add Global Shortcut" = "新增全域快捷鍵";

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-03-15
+
+### Fixed
+
+- Add missing localization for shortcut add button tooltips ("Add Shortcut" / "Add Global Shortcut")
+
 ## [1.0.0] - 2026-03-14
 
 ### Added
@@ -36,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/yusuke/tiley/releases/tag/v1.0.1
 [1.0.0]: https://github.com/yusuke/tiley/releases/tag/v1.0.0
 [0.9.0]: https://github.com/yusuke/tiley/releases/tag/v0.9.0
