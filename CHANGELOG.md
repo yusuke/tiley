@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Prompt to move the app to /Applications when launched from another location
+
 ## [0.9.0] - 2026-03-14
+
 
 - Initial release
 
@@ -20,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Multi-display support
 - Launch at login option
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
+
 
 [Unreleased]: https://github.com/yusuke/tiley/compare/v0.9.0...HEAD
 [0.9.0]: https://github.com/yusuke/tiley/releases/tag/v0.9.0

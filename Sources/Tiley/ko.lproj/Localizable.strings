@@ -73,3 +73,7 @@
 "Check for Updates…" = "업데이트 확인…";
 "Automatically check for updates" = "자동으로 업데이트 확인";
 "Updates" = "업데이트";
+"Move to Applications folder?" = "응용 프로그램 폴더로 이동할까요?";
+"Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley가 응용 프로그램 폴더에 없습니다. 이동하시겠습니까?";
+"Move to Applications" = "응용 프로그램으로 이동";
+"Don't Move" = "이동 안 함";

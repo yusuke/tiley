@@ -73,3 +73,7 @@
 "Check for Updates…" = "アップデートを確認…";
 "Automatically check for updates" = "自動的にアップデートを確認";
 "Updates" = "アップデート";
+"Move to Applications folder?" = "アプリケーションフォルダに移動しますか？";
+"Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley はアプリケーションフォルダにありません。移動しますか？";
+"Move to Applications" = "アプリケーションに移動";
+"Don't Move" = "移動しない";

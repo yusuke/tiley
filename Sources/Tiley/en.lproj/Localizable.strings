@@ -73,3 +73,7 @@
 "Check for Updates…" = "Check for Updates…";
 "Automatically check for updates" = "Automatically check for updates";
 "Updates" = "Updates";
+"Move to Applications folder?" = "Move to Applications folder?";
+"Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley is not in the Applications folder. Would you like to move it there?";
+"Move to Applications" = "Move to Applications";
+"Don't Move" = "Don't Move";

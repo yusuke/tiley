@@ -73,3 +73,7 @@
 "Check for Updates…" = "检查更新…";
 "Automatically check for updates" = "自动检查更新";
 "Updates" = "更新";
+"Move to Applications folder?" = "移动到应用程序文件夹？";
+"Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley 不在应用程序文件夹中。是否要将其移动到该文件夹？";
+"Move to Applications" = "移动到应用程序";
+"Don't Move" = "不移动";
