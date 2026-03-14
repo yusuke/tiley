@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Shortcut display now uses symbols (⌃ ⌥ ⇧ ⌘ ← → ↑ ↓) instead of English key names for modifier and arrow keys
 
+### Fixed
+
+- Main window now hides automatically when Sparkle shows the update dialog, preventing it from being obscured
+
 ## [1.0.1] - 2026-03-15
 
 ### Fixed

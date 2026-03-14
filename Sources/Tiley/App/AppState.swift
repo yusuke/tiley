@@ -578,6 +578,10 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
+    func hideMainWindow() {
+        mainWindowController?.hide()
+    }
+
     func quitApp() {
         NSApp.terminate(nil)
     }

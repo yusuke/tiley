@@ -5,9 +5,9 @@ import Sparkle
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let appState = AppState()
-    let updaterController = SPUStandardUpdaterController(
+    lazy var updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(
         startingUpdater: true,
-        updaterDelegate: nil,
+        updaterDelegate: self,
         userDriverDelegate: nil
     )
 
@@ -110,5 +110,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return false
         }
         return event.paramDescriptor(forKeyword: AEKeyword(keyAELaunchedAsLogInItem))?.booleanValue ?? false
+    }
+}
+
+extension AppDelegate: SPUUpdaterDelegate {
+    nonisolated func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
+        Task { @MainActor in
+            appState.hideMainWindow()
+        }
     }
 }
