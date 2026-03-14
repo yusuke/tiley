@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiley — macOS 창 타일링</title>
+  <meta name="description" content="가벼운 macOS 창 타일링 유틸리티. 그리드 오버레이와 키보드 단축키로 창을 간편하게 배치하세요.">
+  <meta property="og:title" content="Tiley — macOS 창 타일링">
+  <meta property="og:description" content="가벼운 macOS 창 타일링 유틸리티.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yusuke.github.io/tiley/ko/">
+  <meta property="og:image" content="https://yusuke.github.io/tiley/assets/images/og-image.png">
+  <link rel="alternate" hreflang="en" href="https://yusuke.github.io/tiley/">
+  <link rel="alternate" hreflang="ja" href="https://yusuke.github.io/tiley/ja/">
+  <link rel="alternate" hreflang="ko" href="https://yusuke.github.io/tiley/ko/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://yusuke.github.io/tiley/zh-Hans/">
+  <link rel="alternate" hreflang="zh-Hant" href="https://yusuke.github.io/tiley/zh-Hant/">
+  <link rel="alternate" hreflang="x-default" href="https://yusuke.github.io/tiley/">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../" class="nav-brand">Tiley</a>
+      <ul class="nav-links">
+        <li><a href="#features">기능</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://github.com/yusuke/tiley" target="_blank" rel="noopener">GitHub</a></li>
+        <li class="lang-switcher">
+          <select onchange="location.href=this.value">
+            <option value="../">English</option>
+            <option value="../ja/">日本語</option>
+            <option value="./" selected>한국어</option>
+            <option value="../zh-Hans/">简体中文</option>
+            <option value="../zh-Hant/">繁體中文</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <img src="../assets/images/icon.png" alt="Tiley 앱 아이콘" class="hero-icon" width="128" height="128">
+    <h1>Tiley</h1>
+    <p class="tagline">가벼운 macOS 창 타일링 유틸리티. 그리드를 드래그하여 창을 배치하세요.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/yusuke/tiley/releases/latest" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        다운로드
+      </a>
+      <a href="https://github.com/yusuke/tiley" class="btn btn-secondary" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </section>
+
+  <section class="screenshot-section">
+    <div class="screenshot-window">
+      <img src="../assets/images/screenshot-en.png" alt="Tiley 그리드 오버레이 스크린샷" loading="lazy">
+    </div>
+    <p class="screenshot-caption">그리드에서 영역을 선택하여 창을 타일링하세요.</p>
+  </section>
+
+  <section class="features" id="features">
+    <h2>기능</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="그리드">&#9638;</span>
+        <h3>그리드 오버레이</h3>
+        <p>사용자 지정 가능한 그리드가 화면에 표시됩니다. 드래그하여 창을 배치할 영역을 선택하세요.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="키보드">&#8984;</span>
+        <h3>전역 단축키</h3>
+        <p>사용자 지정 가능한 키보드 단축키로 그리드를 표시하거나 레이아웃 프리셋을 즉시 적용할 수 있습니다.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="레이아웃">&#9707;</span>
+        <h3>레이아웃 프리셋</h3>
+        <p>왼쪽 절반, 오른쪽 절반, 최대화 등 자주 사용하는 레이아웃을 저장하고 한 번에 적용하세요.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="Apple Silicon">&#63743;</span>
+        <h3>Apple Silicon 네이티브</h3>
+        <p>Swift와 AppKit으로 Apple Silicon에 맞게 네이티브 빌드. 빠르고 효율적이며 Mac에 최적화되어 있습니다.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="사용자 지정">&#9881;</span>
+        <h3>사용자 지정 그리드</h3>
+        <p>행, 열 수와 셀 간격을 조정하여 작업 흐름과 디스플레이에 맞출 수 있습니다.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="업데이트">&#8635;</span>
+        <h3>자동 업데이트</h3>
+        <p>Sparkle를 통한 내장 업데이트 확인 기능으로 항상 최신 버전을 자동으로 유지합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <div class="how-it-works-inner">
+      <h2>사용 방법</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>실행</h3>
+          <p>전역 단축키를 누르거나 메뉴 막대 아이콘을 클릭하여 레이아웃 그리드를 표시합니다.</p>
+        </div>
+        <div class="step">
+          <h3>선택</h3>
+          <p>그리드 셀을 드래그하여 창을 배치할 영역을 정의합니다.</p>
+        </div>
+        <div class="step">
+          <h3>완료</h3>
+          <p>최전면 창이 선택한 영역에 맞게 즉시 이동 및 크기 조절됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shortcut-section">
+    <h2>기본 단축키</h2>
+    <p>키 한 번으로 그리드 오버레이를 엽니다.</p>
+    <div class="kbd-combo">
+      <kbd>&#x21E7; Shift</kbd>
+      <span class="kbd-plus">+</span>
+      <kbd>&#x2318; Command</kbd>
+      <span class="kbd-plus">+</span>
+      <kbd>Space</kbd>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <h2>FAQ</h2>
+    <div class="faq-item">
+      <h3 class="faq-question">어떤 macOS 버전을 지원하나요?</h3>
+      <p class="faq-answer">Tiley는 macOS 14(Sonoma) 이상이 필요합니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">왜 손쉬운 사용 권한이 필요한가요?</h3>
+      <p class="faq-answer">macOS에서는 다른 앱의 창을 이동하고 크기를 변경하려면 손쉬운 사용 권한이 필요합니다. Tiley는 창 관리만을 위해 손쉬운 사용 API를 사용하며, 데이터를 수집하지 않습니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">그리드 크기를 변경할 수 있나요?</h3>
+      <p class="faq-answer">네. 메뉴 막대에서 설정을 열어 행, 열 수와 셀 간격을 조정할 수 있습니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">특정 레이아웃에 단축키를 지정할 수 있나요?</h3>
+      <p class="faq-answer">네. 각 레이아웃 프리셋(최대화, 왼쪽 절반 등)에 설정에서 개별 전역 단축키를 지정할 수 있습니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">Tiley는 무료인가요?</h3>
+      <p class="faq-answer">네, Tiley는 무료 오픈 소스입니다. 소스 코드는 GitHub에서 확인할 수 있습니다.</p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Tiley 받기</h2>
+    <p>무료, 오픈 소스, macOS 네이티브.</p>
+    <a href="https://github.com/yusuke/tiley/releases/latest" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      최신 릴리스 다운로드
+    </a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/yusuke/tiley" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/yusuke/tiley/releases" target="_blank" rel="noopener">릴리스</a>
+      <a href="https://github.com/yusuke/tiley/issues" target="_blank" rel="noopener">Issues</a>
+    </div>
+    <p>&copy; 2026 Yusuke. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

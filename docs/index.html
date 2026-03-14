@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiley — Window Tiling for macOS</title>
+  <meta name="description" content="A lightweight macOS utility for window tiling. Arrange windows with a simple grid overlay and keyboard shortcuts.">
+  <meta property="og:title" content="Tiley — Window Tiling for macOS">
+  <meta property="og:description" content="A lightweight macOS utility for window tiling.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yusuke.github.io/tiley/">
+  <meta property="og:image" content="https://yusuke.github.io/tiley/assets/images/og-image.png">
+  <link rel="alternate" hreflang="en" href="https://yusuke.github.io/tiley/">
+  <link rel="alternate" hreflang="ja" href="https://yusuke.github.io/tiley/ja/">
+  <link rel="alternate" hreflang="ko" href="https://yusuke.github.io/tiley/ko/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://yusuke.github.io/tiley/zh-Hans/">
+  <link rel="alternate" hreflang="zh-Hant" href="https://yusuke.github.io/tiley/zh-Hant/">
+  <link rel="alternate" hreflang="x-default" href="https://yusuke.github.io/tiley/">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="./" class="nav-brand">Tiley</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://github.com/yusuke/tiley" target="_blank" rel="noopener">GitHub</a></li>
+        <li class="lang-switcher">
+          <select onchange="location.href=this.value">
+            <option value="./" selected>English</option>
+            <option value="ja/">日本語</option>
+            <option value="ko/">한국어</option>
+            <option value="zh-Hans/">简体中文</option>
+            <option value="zh-Hant/">繁體中文</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="assets/images/icon.png" alt="Tiley app icon" class="hero-icon" width="128" height="128">
+    <h1>Tiley</h1>
+    <p class="tagline">A lightweight macOS utility for window tiling. Drag a grid, place a window.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/yusuke/tiley/releases/latest" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </a>
+      <a href="https://github.com/yusuke/tiley" class="btn btn-secondary" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- Screenshot -->
+  <section class="screenshot-section">
+    <div class="screenshot-window">
+      <img src="assets/images/screenshot-en.png" alt="Tiley grid overlay screenshot" loading="lazy">
+    </div>
+    <p class="screenshot-caption">Select a region on the grid to tile your window.</p>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <h2>Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="grid">&#9638;</span>
+        <h3>Grid Overlay</h3>
+        <p>A customizable grid appears over your screen. Drag to select the region where you want to place a window.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="keyboard">&#8984;</span>
+        <h3>Global Shortcuts</h3>
+        <p>Trigger the grid or apply layout presets instantly with customizable keyboard shortcuts.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="layout">&#9707;</span>
+        <h3>Layout Presets</h3>
+        <p>Save frequently used layouts — Left Half, Right Half, Maximize, and more — and apply them in one step.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="Apple Silicon">&#63743;</span>
+        <h3>Native on Apple Silicon</h3>
+        <p>Built natively for Apple Silicon with Swift and AppKit. Fast, efficient, and right at home on your Mac.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="customization">&#9881;</span>
+        <h3>Customizable Grid</h3>
+        <p>Adjust rows, columns, and gap size to match your workflow and display setup.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" role="img" aria-label="update">&#8635;</span>
+        <h3>Auto Updates</h3>
+        <p>Built-in update checking via Sparkle keeps you on the latest version automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="how-it-works-inner">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>Activate</h3>
+          <p>Press the global shortcut or click the menu bar icon to show the layout grid.</p>
+        </div>
+        <div class="step">
+          <h3>Select</h3>
+          <p>Drag across the grid cells to define the region where you want your window placed.</p>
+        </div>
+        <div class="step">
+          <h3>Done</h3>
+          <p>The frontmost window is moved and resized to fit your selection instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Default Shortcut -->
+  <section class="shortcut-section">
+    <h2>Default Shortcut</h2>
+    <p>Open the grid overlay with one keystroke.</p>
+    <div class="kbd-combo">
+      <kbd>&#x21E7; Shift</kbd>
+      <span class="kbd-plus">+</span>
+      <kbd>&#x2318; Command</kbd>
+      <span class="kbd-plus">+</span>
+      <kbd>Space</kbd>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <h2>FAQ</h2>
+    <div class="faq-item">
+      <h3 class="faq-question">What macOS versions are supported?</h3>
+      <p class="faq-answer">Tiley requires macOS 14 (Sonoma) or later.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">Why does Tiley need Accessibility permissions?</h3>
+      <p class="faq-answer">macOS requires Accessibility access to move and resize windows belonging to other applications. Tiley uses the Accessibility API solely for window management — no data is collected.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">Can I change the grid size?</h3>
+      <p class="faq-answer">Yes. Open Settings from the menu bar to adjust the number of rows, columns, and the gap between cells.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">Can I assign shortcuts to specific layouts?</h3>
+      <p class="faq-answer">Yes. Each layout preset (Maximize, Left Half, etc.) can have its own global shortcut assigned in Settings.</p>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">Is Tiley free?</h3>
+      <p class="faq-answer">Yes, Tiley is free and open source. The source code is available on GitHub.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Get Tiley</h2>
+    <p>Free, open source, and native to macOS.</p>
+    <a href="https://github.com/yusuke/tiley/releases/latest" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Latest Release
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/yusuke/tiley" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/yusuke/tiley/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/yusuke/tiley/issues" target="_blank" rel="noopener">Issues</a>
+    </div>
+    <p>&copy; 2026 Yusuke. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

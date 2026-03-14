@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		70840E2F2F61111100DF0607 /* menu-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E302F61111200DF0607 /* menu-icon.pdf */; };
+		70840E312F61111300DF0607 /* en.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E322F61111400DF0607 /* en.lproj/Localizable.strings */; };
+		70840E332F61111500DF0607 /* ja.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */; };
+		70840E352F61111700DF0607 /* ko.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E362F61111800DF0607 /* ko.lproj/Localizable.strings */; };
+		70840E372F61111900DF0607 /* zh-Hans.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E382F61111A00DF0607 /* zh-Hans.lproj/Localizable.strings */; };
+		70840E392F61111B00DF0607 /* zh-Hant.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E3A2F61111C00DF0607 /* zh-Hant.lproj/Localizable.strings */; };
+		70A778692F6183C5002DA5F7 /* TileyIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 70A778682F6183C5002DA5F7 /* TileyIcon.icon */; };
+		70B56A4D2F63E456005173A5 /* system-en.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B56A4A2F63E456005173A5 /* system-en.png */; };
+		70B56A4E2F63E456005173A5 /* dialog-en.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B56A482F63E456005173A5 /* dialog-en.png */; };
+		70B56A4F2F63E456005173A5 /* dialog-ja.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B56A492F63E456005173A5 /* dialog-ja.png */; };
+		70B56A502F63E456005173A5 /* system-ja.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B56A4B2F63E456005173A5 /* system-ja.png */; };
+		70B56A532F64336C005173A5 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 70B56A522F64336C005173A5 /* Sparkle */; };
+		70B56A6A2F64347E005173A5 /* TileyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A672F64347E005173A5 /* TileyApp.swift */; };
+		70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A652F64347E005173A5 /* AppDelegate.swift */; };
+		70B56A6C2F64347E005173A5 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A662F64347E005173A5 /* AppState.swift */; };
+		70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A682F64347E005173A5 /* UpdaterSupport.swift */; };
+		A00000000000000000000004 /* Services/AccessibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000024 /* Services/AccessibilityService.swift */; };
+		A00000000000000000000005 /* Services/WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000025 /* Services/WindowManager.swift */; };
+		A00000000000000000000006 /* Models/GridModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000026 /* Models/GridModels.swift */; };
+		A0000000000000000000000B /* UI/MainWindow/MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002B /* UI/MainWindow/MainWindowController.swift */; };
+		A0000000000000000000000C /* UI/MainWindow/MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002C /* UI/MainWindow/MainWindowView.swift */; };
+		A0000000000000000000000D /* UI/Layout/GridPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002D /* UI/Layout/GridPreviewView.swift */; };
+		A0000000000000000000000E /* UI/Layout/LayoutGridWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002E /* UI/Layout/LayoutGridWorkspaceView.swift */; };
+		A0000000000000000000000F /* UI/Layout/LayoutPreviewOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002F /* UI/Layout/LayoutPreviewOverlayController.swift */; };
+		A00000000000000000000040 /* Models/HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000041 /* Models/HotKeyShortcut.swift */; };
+		A00000000000000000000042 /* UI/MainWindow/ShortcutRecorderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000043 /* UI/MainWindow/ShortcutRecorderField.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		70840E302F61111200DF0607 /* menu-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "menu-icon.pdf"; sourceTree = "<group>"; };
+		70840E322F61111400DF0607 /* en.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		70840E362F61111800DF0607 /* ko.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		70840E382F61111A00DF0607 /* zh-Hans.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		70840E3A2F61111C00DF0607 /* zh-Hant.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		70A778682F6183C5002DA5F7 /* TileyIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = TileyIcon.icon; sourceTree = "<group>"; };
+		70B56A482F63E456005173A5 /* dialog-en.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dialog-en.png"; sourceTree = "<group>"; };
+		70B56A492F63E456005173A5 /* dialog-ja.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dialog-ja.png"; sourceTree = "<group>"; };
+		70B56A4A2F63E456005173A5 /* system-en.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "system-en.png"; sourceTree = "<group>"; };
+		70B56A4B2F63E456005173A5 /* system-ja.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "system-ja.png"; sourceTree = "<group>"; };
+		70B56A652F64347E005173A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		70B56A662F64347E005173A5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		70B56A672F64347E005173A5 /* TileyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileyApp.swift; sourceTree = "<group>"; };
+		70B56A682F64347E005173A5 /* UpdaterSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSupport.swift; sourceTree = "<group>"; };
+		A00000000000000000000011 /* Tiley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tiley.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000000000000000000012 /* Tiley-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tiley-Info.plist"; sourceTree = "<group>"; };
+		A00000000000000000000024 /* Services/AccessibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AccessibilityService.swift; sourceTree = "<group>"; };
+		A00000000000000000000025 /* Services/WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/WindowManager.swift; sourceTree = "<group>"; };
+		A00000000000000000000026 /* Models/GridModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/GridModels.swift; sourceTree = "<group>"; };
+		A0000000000000000000002B /* UI/MainWindow/MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/MainWindow/MainWindowController.swift; sourceTree = "<group>"; };
+		A0000000000000000000002C /* UI/MainWindow/MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/MainWindow/MainWindowView.swift; sourceTree = "<group>"; };
+		A0000000000000000000002D /* UI/Layout/GridPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Layout/GridPreviewView.swift; sourceTree = "<group>"; };
+		A0000000000000000000002E /* UI/Layout/LayoutGridWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Layout/LayoutGridWorkspaceView.swift; sourceTree = "<group>"; };
+		A0000000000000000000002F /* UI/Layout/LayoutPreviewOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Layout/LayoutPreviewOverlayController.swift; sourceTree = "<group>"; };
+		A00000000000000000000041 /* Models/HotKeyShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/HotKeyShortcut.swift; sourceTree = "<group>"; };
+		A00000000000000000000043 /* UI/MainWindow/ShortcutRecorderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/MainWindow/ShortcutRecorderField.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A00000000000000000000016 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70B56A532F64336C005173A5 /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		70B56A4C2F63E456005173A5 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				70B56A482F63E456005173A5 /* dialog-en.png */,
+				70B56A492F63E456005173A5 /* dialog-ja.png */,
+				70B56A4A2F63E456005173A5 /* system-en.png */,
+				70B56A4B2F63E456005173A5 /* system-ja.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		70B56A692F64347E005173A5 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				70B56A652F64347E005173A5 /* AppDelegate.swift */,
+				70B56A662F64347E005173A5 /* AppState.swift */,
+				70B56A672F64347E005173A5 /* TileyApp.swift */,
+				70B56A682F64347E005173A5 /* UpdaterSupport.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000013 = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000017 /* Sources/Tiley */,
+				A00000000000000000000018,
+				A00000000000000000000014 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A00000000000000000000014 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000011 /* Tiley.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000017 /* Sources/Tiley */ = {
+			isa = PBXGroup;
+			children = (
+				70B56A692F64347E005173A5 /* App */,
+				70B56A4C2F63E456005173A5 /* Images */,
+				70840E302F61111200DF0607 /* menu-icon.pdf */,
+				70840E322F61111400DF0607 /* en.lproj/Localizable.strings */,
+				70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */,
+				70840E362F61111800DF0607 /* ko.lproj/Localizable.strings */,
+				70840E382F61111A00DF0607 /* zh-Hans.lproj/Localizable.strings */,
+				70840E3A2F61111C00DF0607 /* zh-Hant.lproj/Localizable.strings */,
+				A00000000000000000000024 /* Services/AccessibilityService.swift */,
+				A00000000000000000000025 /* Services/WindowManager.swift */,
+				A00000000000000000000026 /* Models/GridModels.swift */,
+				A00000000000000000000041 /* Models/HotKeyShortcut.swift */,
+				A0000000000000000000002B /* UI/MainWindow/MainWindowController.swift */,
+				A0000000000000000000002C /* UI/MainWindow/MainWindowView.swift */,
+				A00000000000000000000043 /* UI/MainWindow/ShortcutRecorderField.swift */,
+				A0000000000000000000002D /* UI/Layout/GridPreviewView.swift */,
+				A0000000000000000000002E /* UI/Layout/LayoutGridWorkspaceView.swift */,
+				A0000000000000000000002F /* UI/Layout/LayoutPreviewOverlayController.swift */,
+			);
+			path = Sources/Tiley;
+			sourceTree = SOURCE_ROOT;
+		};
+		A00000000000000000000018 = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000012 /* Tiley-Info.plist */,
+				70A778682F6183C5002DA5F7 /* TileyIcon.icon */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A00000000000000000000015 /* Tiley */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A00000000000000000000034 /* Build configuration list for PBXNativeTarget "Tiley" */;
+			buildPhases = (
+				A00000000000000000000019 /* Sources */,
+				A00000000000000000000016 /* Frameworks */,
+				70840E2E2F61011400DF0607 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tiley;
+			productName = Tiley;
+			productReference = A00000000000000000000011 /* Tiley.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000010 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					A00000000000000000000015 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+				};
+			};
+			buildConfigurationList = A00000000000000000000031 /* Build configuration list for PBXProject "Tiley" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A00000000000000000000013;
+			packageReferences = (
+				70B56A512F64336C005173A5 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
+			productRefGroup = A00000000000000000000014 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A00000000000000000000015 /* Tiley */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		70840E2E2F61011400DF0607 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70840E2F2F61111100DF0607 /* menu-icon.pdf in Resources */,
+				70840E312F61111300DF0607 /* en.lproj/Localizable.strings in Resources */,
+				70B56A4D2F63E456005173A5 /* system-en.png in Resources */,
+				70B56A4E2F63E456005173A5 /* dialog-en.png in Resources */,
+				70B56A4F2F63E456005173A5 /* dialog-ja.png in Resources */,
+				70B56A502F63E456005173A5 /* system-ja.png in Resources */,
+				70840E332F61111500DF0607 /* ja.lproj/Localizable.strings in Resources */,
+				70840E352F61111700DF0607 /* ko.lproj/Localizable.strings in Resources */,
+				70A778692F6183C5002DA5F7 /* TileyIcon.icon in Resources */,
+				70840E372F61111900DF0607 /* zh-Hans.lproj/Localizable.strings in Resources */,
+				70840E392F61111B00DF0607 /* zh-Hant.lproj/Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A00000000000000000000019 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000004 /* Services/AccessibilityService.swift in Sources */,
+				A00000000000000000000005 /* Services/WindowManager.swift in Sources */,
+				A00000000000000000000006 /* Models/GridModels.swift in Sources */,
+				A00000000000000000000040 /* Models/HotKeyShortcut.swift in Sources */,
+				A0000000000000000000000B /* UI/MainWindow/MainWindowController.swift in Sources */,
+				A0000000000000000000000C /* UI/MainWindow/MainWindowView.swift in Sources */,
+				70B56A6A2F64347E005173A5 /* TileyApp.swift in Sources */,
+				70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */,
+				70B56A6C2F64347E005173A5 /* AppState.swift in Sources */,
+				70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */,
+				A00000000000000000000042 /* UI/MainWindow/ShortcutRecorderField.swift in Sources */,
+				A0000000000000000000000D /* UI/Layout/GridPreviewView.swift in Sources */,
+				A0000000000000000000000E /* UI/Layout/LayoutGridWorkspaceView.swift in Sources */,
+				A0000000000000000000000F /* UI/Layout/LayoutPreviewOverlayController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A00000000000000000000032 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		A00000000000000000000033 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		A00000000000000000000035 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = TileyIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 090;
+				DEVELOPMENT_TEAM = Y76V82PYLD;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Tiley-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		A00000000000000000000036 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = TileyIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 090;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Tiley-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A00000000000000000000031 /* Build configuration list for PBXProject "Tiley" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00000000000000000000032 /* Debug */,
+				A00000000000000000000033 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A00000000000000000000034 /* Build configuration list for PBXNativeTarget "Tiley" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00000000000000000000035 /* Debug */,
+				A00000000000000000000036 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		70B56A512F64336C005173A5 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		70B56A522F64336C005173A5 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 70B56A512F64336C005173A5 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A00000000000000000000010 /* Project object */;
+}
