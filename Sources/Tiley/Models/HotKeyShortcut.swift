@@ -104,16 +104,16 @@ struct HotKeyShortcut: Equatable, Codable {
     private var modifierDisplayParts: [String] {
         var parts: [String] = []
         if modifiers & UInt32(controlKey) != 0 {
-            parts.append("Control")
+            parts.append("⌃")
         }
         if modifiers & UInt32(optionKey) != 0 {
-            parts.append("Option")
+            parts.append("⌥")
         }
         if modifiers & UInt32(shiftKey) != 0 {
-            parts.append("Shift")
+            parts.append("⇧")
         }
         if modifiers & UInt32(cmdKey) != 0 {
-            parts.append("Command")
+            parts.append("⌘")
         }
         return parts
     }
@@ -173,10 +173,10 @@ struct HotKeyShortcut: Equatable, Codable {
         kVK_End: "End",
         kVK_PageUp: "Page Up",
         kVK_PageDown: "Page Down",
-        kVK_LeftArrow: "Left Arrow",
-        kVK_RightArrow: "Right Arrow",
-        kVK_UpArrow: "Up Arrow",
-        kVK_DownArrow: "Down Arrow",
+        kVK_LeftArrow: "←",
+        kVK_RightArrow: "→",
+        kVK_UpArrow: "↑",
+        kVK_DownArrow: "↓",
         kVK_F1: "F1",
         kVK_F2: "F2",
         kVK_F3: "F3",

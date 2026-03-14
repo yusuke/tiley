@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Dark mode support: all UI elements automatically adapt to the system appearance setting
+
+### Changed
+
+- Shortcut display now uses symbols (⌃ ⌥ ⇧ ⌘ ← → ↑ ↓) instead of English key names for modifier and arrow keys
+
 ## [1.0.1] - 2026-03-15
 
 ### Fixed
