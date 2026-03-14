@@ -55,11 +55,16 @@ final class LayoutPreviewOverlayController: NSWindowController {
     }
 
     func hide() {
-        if let parentWindow = attachedParentWindow, let window {
+        guard let window else {
+            attachedParentWindow = nil
+            return
+        }
+        if let parentWindow = attachedParentWindow {
             parentWindow.removeChildWindow(window)
         }
         attachedParentWindow = nil
-        window?.orderOut(nil)
+        window.contentView = nil
+        window.orderOut(nil)
     }
 
     private func present(behind parentWindow: NSWindow?) {

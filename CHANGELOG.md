@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix grid preview overlay sometimes staying visible on screen, causing duplicate overlays to stack up
+
+## [1.1.2] - 2026-03-15
+
 ### Added
 
 - Localization: Spanish, German, French, Portuguese (Brazil), Russian, Italian
@@ -62,7 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/yusuke/tiley/releases/tag/v1.1.2
 [1.1.1]: https://github.com/yusuke/tiley/releases/tag/v1.1.1
 [1.1.0]: https://github.com/yusuke/tiley/releases/tag/v1.1.0
 [1.0.1]: https://github.com/yusuke/tiley/releases/tag/v1.0.1

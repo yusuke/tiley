@@ -253,6 +253,7 @@ final class AppState: NSObject, NSMenuDelegate {
         guard let target = resolveWindowTarget() else { return }
 
         activeLayoutTarget = target
+        layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: target)
         lastTargetPID = target.processIdentifier
         isEditingSettings = false
@@ -362,6 +363,7 @@ final class AppState: NSObject, NSMenuDelegate {
         if layoutPreviewController == nil ||
             layoutPreviewController?.screenFrame != target.screenFrame ||
             layoutPreviewController?.visibleFrame != target.visibleFrame {
+            layoutPreviewController?.hide()
             layoutPreviewController = makeLayoutPreviewController(for: target)
         }
         layoutPreviewController?.showSelection(
@@ -382,6 +384,7 @@ final class AppState: NSObject, NSMenuDelegate {
         if layoutPreviewController == nil ||
             layoutPreviewController?.screenFrame != target.screenFrame ||
             layoutPreviewController?.visibleFrame != target.visibleFrame {
+            layoutPreviewController?.hide()
             layoutPreviewController = makeLayoutPreviewController(for: target)
         }
         layoutPreviewController?.showGrid(
@@ -641,6 +644,7 @@ final class AppState: NSObject, NSMenuDelegate {
             hidePreviewOverlay()
             return nil
         }
+        layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: target)
         return target
     }

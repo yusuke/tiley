@@ -89,6 +89,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     func hide() {
         guard !isHidingWindow else { return }
         isHidingWindow = true
+        appState?.hidePreviewOverlay()
         window?.orderOut(nil)
         onHide()
         isHidingWindow = false
@@ -107,6 +108,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     func windowDidResignKey(_ notification: Notification) {
+        // Always hide the preview overlay when the window loses key status,
+        // even if the main window itself stays visible.
+        appState?.hidePreviewOverlay()
         // Keep the main window visible when focus moves to another Tiley-owned panel
         // such as the standard About dialog.
         guard !NSApp.isActive else { return }
