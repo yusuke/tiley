@@ -97,7 +97,7 @@ git -C "$PROJECT_ROOT" tag "$TAG"
 git -C "$PROJECT_ROOT" push origin "$TAG"
 
 # Build gh release flags
-GH_FLAGS=("--repo" "$REPO" "--title" "Tiley $APP_VERSION" "--tag" "$TAG")
+GH_FLAGS=("--repo" "$REPO" "--title" "Tiley $APP_VERSION")
 
 if [[ "$DRAFT" == "true" ]]; then
   GH_FLAGS+=("--draft")
@@ -110,13 +110,26 @@ fi
 if [[ -n "$RELEASE_NOTES" && -f "$RELEASE_NOTES" ]]; then
   GH_FLAGS+=("--notes-file" "$RELEASE_NOTES")
 else
-  # Auto-generate release notes from git log since last tag
-  PREV_TAG=$(git -C "$PROJECT_ROOT" describe --tags --abbrev=0 "$TAG^" 2>/dev/null || echo "")
-  if [[ -n "$PREV_TAG" ]]; then
-    NOTES=$(git -C "$PROJECT_ROOT" log --pretty=format:"- %s" "$PREV_TAG..$TAG" -- ':!docs/' ':!scripts/')
-  else
-    NOTES=$(git -C "$PROJECT_ROOT" log --pretty=format:"- %s" "$TAG" -- ':!docs/' ':!scripts/' | head -20)
+  # Extract release notes from CHANGELOG.md for this version
+  CHANGELOG="$PROJECT_ROOT/CHANGELOG.md"
+  NOTES=""
+  if [[ -f "$CHANGELOG" ]]; then
+    # Extract the section between ## [X.Y.Z] and the next ## heading
+    NOTES=$(awk "/^## \\[${APP_VERSION}\\]/{found=1;next} /^## \\[/{if(found)exit} found" "$CHANGELOG" \
+      | grep -v '^\[.*\]: ' \
+      | awk '{lines[NR]=$0} END{for(i=1;i<=NR;i++)if(length(lines[i])>0){s=i;break} for(i=NR;i>=1;i--)if(length(lines[i])>0){e=i;break} for(i=s;i<=e;i++)print lines[i]}')
   fi
+
+  if [[ -z "$NOTES" ]]; then
+    echo "Warning: No entry for $APP_VERSION found in CHANGELOG.md, falling back to git log"
+    PREV_TAG=$(git -C "$PROJECT_ROOT" describe --tags --abbrev=0 "$TAG^" 2>/dev/null || echo "")
+    if [[ -n "$PREV_TAG" ]]; then
+      NOTES=$(git -C "$PROJECT_ROOT" log --pretty=format:"- %s" "$PREV_TAG..$TAG" -- ':!docs/' ':!scripts/')
+    else
+      NOTES=$(git -C "$PROJECT_ROOT" log --pretty=format:"- %s" "$TAG" -- ':!docs/' ':!scripts/' | head -20)
+    fi
+  fi
+
   if [[ -z "$NOTES" ]]; then
     NOTES="Tiley $APP_VERSION"
   fi
@@ -125,7 +138,7 @@ fi
 
 # Create GitHub Release and upload ZIP
 echo "Creating GitHub Release $TAG"
-gh release create "${GH_FLAGS[@]}" "$VERSIONED_ZIP#Tiley-${APP_VERSION}.zip"
+gh release create "$TAG" "${GH_FLAGS[@]}" "$VERSIONED_ZIP#Tiley-${APP_VERSION}.zip"
 
 RELEASE_URL="https://github.com/$REPO/releases/tag/$TAG"
 echo ""

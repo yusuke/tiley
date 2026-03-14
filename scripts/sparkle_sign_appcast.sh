@@ -61,6 +61,36 @@ APP_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$E
 BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$EXPORTED_APP_PATH/Contents/Info.plist")
 echo "App version: $APP_VERSION (build $BUILD_NUMBER)"
 
+# Promote [Unreleased] to [X.Y.Z] in CHANGELOG.md if no section exists yet
+CHANGELOG="$PROJECT_ROOT/CHANGELOG.md"
+if [[ -f "$CHANGELOG" ]]; then
+  if ! grep -q "^## \\[${APP_VERSION}\\]" "$CHANGELOG"; then
+    RELEASE_DATE=$(date +%Y-%m-%d)
+    echo "Promoting [Unreleased] to [${APP_VERSION}] - ${RELEASE_DATE} in CHANGELOG.md"
+    # Replace "## [Unreleased]" with "## [Unreleased]\n\n## [X.Y.Z] - YYYY-MM-DD"
+    sed -i '' "s/^## \\[Unreleased\\]/## [Unreleased]\\
+\\
+## [${APP_VERSION}] - ${RELEASE_DATE}/" "$CHANGELOG"
+    # Update link references at the bottom
+    if grep -q '^\[Unreleased\]:' "$CHANGELOG"; then
+      # Update existing Unreleased link to compare from new version
+      sed -i '' "s|^\[Unreleased\]:.*|[Unreleased]: https://github.com/yusuke/tiley/compare/v${APP_VERSION}...HEAD|" "$CHANGELOG"
+      # Add version link if not present
+      if ! grep -q "^\\[${APP_VERSION}\\]:" "$CHANGELOG"; then
+        sed -i '' "/^\[Unreleased\]:/a\\
+[${APP_VERSION}]: https://github.com/yusuke/tiley/releases/tag/v${APP_VERSION}
+" "$CHANGELOG"
+      fi
+    else
+      # No link references yet, append them
+      printf '\n[Unreleased]: https://github.com/yusuke/tiley/compare/v%s...HEAD\n[%s]: https://github.com/yusuke/tiley/releases/tag/v%s\n' \
+        "$APP_VERSION" "$APP_VERSION" "$APP_VERSION" >> "$CHANGELOG"
+    fi
+  else
+    echo "CHANGELOG.md already has section for ${APP_VERSION}"
+  fi
+fi
+
 # Sign the ZIP with Sparkle EdDSA (key is read from Keychain automatically)
 echo "Signing ZIP with Sparkle EdDSA"
 SIGNATURE=$("$SIGN_UPDATE" "$ZIP_PATH" -p)
@@ -89,6 +119,40 @@ echo "Generating appcast.xml"
   --download-url-prefix "$DOWNLOAD_URL_PREFIX/v$APP_VERSION/" \
   -o "$APPCAST_DIR/appcast.xml" \
   "$APPCAST_DIR"
+
+# Embed release notes from CHANGELOG.md into appcast.xml
+CHANGELOG="$PROJECT_ROOT/CHANGELOG.md"
+APPCAST_XML="$APPCAST_DIR/appcast.xml"
+if [[ -f "$CHANGELOG" ]]; then
+  # Extract the section for this version (between ## [X.Y.Z] and next ## heading)
+  CHANGELOG_NOTES=$(awk "/^## \\[${APP_VERSION}\\]/{found=1;next} /^## \\[/{if(found)exit} found" "$CHANGELOG" \
+    | grep -v '^\[.*\]: ' \
+    | awk '{lines[NR]=$0} END{for(i=1;i<=NR;i++)if(length(lines[i])>0){s=i;break} for(i=NR;i>=1;i--)if(length(lines[i])>0){e=i;break} for(i=s;i<=e;i++)print lines[i]}')
+  if [[ -n "$CHANGELOG_NOTES" ]]; then
+    # Convert Markdown release notes to simple HTML for Sparkle
+    HTML_NOTES=$(echo "$CHANGELOG_NOTES" | sed \
+      -e 's/&/\&amp;/g' \
+      -e 's/</\&lt;/g' \
+      -e 's/>/\&gt;/g' \
+      -e 's/^### \(.*\)/<h3>\1<\/h3>/' \
+      -e 's/^- \(.*\)/<li>\1<\/li>/' \
+    | awk 'BEGIN{il=0} /<li>/{if(il==0){printf "<ul>\n";il=1}} /<h3>/{if(il==1){printf "</ul>\n";il=0}} /^$/{next} {print} END{if(il==1)printf "</ul>\n"}')
+
+    # Insert <description> after <title>VERSION</title> in the matching <item>
+    ESCAPED_HTML=$(echo "$HTML_NOTES" | sed -e 's/[\/&]/\\&/g' | tr '\n' '\a')
+    sed -i '' "/<title>${APP_VERSION}<\/title>/a\\
+            <description><![CDATA[${ESCAPED_HTML}]]></description>
+" "$APPCAST_XML"
+    # Restore newlines from \a placeholders
+    sed -i '' "s/$(printf '\a')/\\
+/g" "$APPCAST_XML"
+    echo "Embedded release notes in appcast.xml"
+  else
+    echo "Warning: No entry for $APP_VERSION in CHANGELOG.md, skipping release notes in appcast"
+  fi
+else
+  echo "Warning: CHANGELOG.md not found, skipping release notes in appcast"
+fi
 
 # Copy updated appcast.xml to docs/ for GitHub Pages
 mkdir -p "$PROJECT_ROOT/docs"

@@ -98,7 +98,7 @@ echo "Re-signing app bundle"
 codesign --force --options runtime --timestamp --sign "$CODESIGN_ID" "$EXPORTED_APP_PATH"
 
 echo "Creating zip for notarization"
-ditto -c -k --keepParent "$EXPORTED_APP_PATH" "$ZIP_PATH"
+ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$ZIP_PATH"
 
 echo "Submitting for notarization"
 if [[ -n "${KEYCHAIN_PROFILE}" ]]; then
@@ -132,4 +132,16 @@ echo "Validating stapled app"
 xcrun stapler validate "$EXPORTED_APP_PATH"
 spctl -a -vvv -t exec "$EXPORTED_APP_PATH"
 
+# Strip extended attributes to prevent AppleDouble ._files in ZIP
+# (._files inside frameworks cause "unsealed contents" rejection by Gatekeeper
+#  when users extract with Finder/Archive Utility instead of ditto)
+echo "Stripping extended attributes"
+xattr -cr "$EXPORTED_APP_PATH"
+
+# Recreate ZIP with the stapled app
+echo "Recreating zip with stapled app"
+rm -f "$ZIP_PATH"
+ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$ZIP_PATH"
+
 echo "Release artifact ready at $EXPORTED_APP_PATH"
+echo "Stapled ZIP ready at $ZIP_PATH"
