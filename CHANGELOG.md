@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Localization: Spanish, German, French, Portuguese (Brazil), Russian, Italian
+
 ## [1.1.1] - 2026-03-15
 
 ## [1.1.0] - 2026-03-15

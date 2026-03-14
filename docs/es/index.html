@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tiley — macOS 視窗平鋪工具</title>
-  <meta name="description" content="輕量級 macOS 視窗平鋪工具。透過網格覆蓋層和鍵盤快捷鍵輕鬆排列視窗。">
-  <meta property="og:title" content="Tiley — macOS 視窗平鋪工具">
-  <meta property="og:description" content="輕量級 macOS 視窗平鋪工具。">
+  <title>Tiley — Organización de ventanas para macOS</title>
+  <meta name="description" content="Una utilidad ligera para macOS que organiza ventanas. Coloca ventanas fácilmente con una cuadrícula y atajos de teclado.">
+  <meta property="og:title" content="Tiley — Organización de ventanas para macOS">
+  <meta property="og:description" content="Una utilidad ligera para macOS que organiza ventanas.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yusuke.github.io/tiley/zh-Hant/">
+  <meta property="og:url" content="https://yusuke.github.io/tiley/es/">
   <meta property="og:image" content="https://yusuke.github.io/tiley/assets/images/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Tiley — macOS 視窗平鋪工具">
-  <meta name="twitter:description" content="輕量級 macOS 視窗平鋪工具。">
+  <meta name="twitter:title" content="Tiley — Organización de ventanas para macOS">
+  <meta name="twitter:description" content="Una utilidad ligera para macOS que organiza ventanas.">
   <meta name="twitter:image" content="https://yusuke.github.io/tiley/assets/images/og-image.png">
   <link rel="alternate" hreflang="en" href="https://yusuke.github.io/tiley/">
   <link rel="alternate" hreflang="ja" href="https://yusuke.github.io/tiley/ja/">
@@ -36,7 +36,7 @@
     <div class="nav-inner">
       <a href="../" class="nav-brand">Tiley</a>
       <ul class="nav-links">
-        <li><a href="#features">功能</a></li>
+        <li><a href="#features">Funciones</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="https://github.com/yusuke/tiley" target="_blank" rel="noopener">GitHub</a></li>
         <li class="lang-switcher">
@@ -45,8 +45,8 @@
             <option value="../ja/">日本語</option>
             <option value="../ko/">한국어</option>
             <option value="../zh-Hans/">简体中文</option>
-            <option value="./" selected>繁體中文</option>
-            <option value="../es/">Español</option>
+            <option value="../zh-Hant/">繁體中文</option>
+            <option value="./" selected>Español</option>
             <option value="../de/">Deutsch</option>
             <option value="../fr/">Français</option>
             <option value="../pt-BR/">Português</option>
@@ -59,13 +59,13 @@
   </nav>
 
   <section class="hero">
-    <img src="../assets/images/icon.png" alt="Tiley 應用程式圖示" class="hero-icon" width="128" height="128">
+    <img src="../assets/images/icon.png" alt="Icono de la app Tiley" class="hero-icon" width="128" height="128">
     <h1>Tiley</h1>
-    <p class="tagline">輕量級 macOS 視窗平鋪工具。拖曳網格，放置視窗。</p>
+    <p class="tagline">Una utilidad ligera para organizar ventanas en macOS. Arrastra una cuadrícula, coloca una ventana.</p>
     <div class="hero-actions">
       <a href="https://github.com/yusuke/tiley/releases/latest" class="btn btn-primary">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        下載
+        Descargar
       </a>
       <a href="https://github.com/yusuke/tiley" class="btn btn-secondary" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -76,70 +76,70 @@
 
   <section class="screenshot-section">
     <div class="screenshot-window">
-      <img src="../assets/images/screenshot-en.png" alt="Tiley 網格覆蓋層截圖" loading="lazy">
+      <img src="../assets/images/screenshot-en.png" alt="Captura de pantalla de la cuadrícula de Tiley" loading="lazy">
     </div>
-    <p class="screenshot-caption">在網格上選擇區域來平鋪視窗。</p>
+    <p class="screenshot-caption">Selecciona una región en la cuadrícula para organizar tu ventana.</p>
   </section>
 
   <section class="features" id="features">
-    <h2>功能</h2>
+    <h2>Funciones</h2>
     <div class="features-grid">
       <div class="feature-card">
-        <span class="feature-icon" role="img" aria-label="網格">&#9638;</span>
-        <h3>網格覆蓋層</h3>
-        <p>可自訂的網格顯示在螢幕上。拖曳選擇要放置視窗的區域。</p>
+        <span class="feature-icon" role="img" aria-label="cuadrícula">&#9638;</span>
+        <h3>Cuadrícula superpuesta</h3>
+        <p>Una cuadrícula personalizable aparece sobre tu pantalla. Arrastra para seleccionar la región donde quieres colocar una ventana.</p>
       </div>
       <div class="feature-card">
-        <span class="feature-icon" role="img" aria-label="鍵盤">&#8984;</span>
-        <h3>全域快捷鍵</h3>
-        <p>透過可自訂的鍵盤快捷鍵，即時顯示網格或套用版面預設。</p>
+        <span class="feature-icon" role="img" aria-label="teclado">&#8984;</span>
+        <h3>Atajos globales</h3>
+        <p>Activa la cuadrícula o aplica diseños predefinidos al instante con atajos de teclado personalizables.</p>
       </div>
       <div class="feature-card">
-        <span class="feature-icon" role="img" aria-label="版面">&#9707;</span>
-        <h3>版面預設</h3>
-        <p>儲存常用版面——左半邊、右半邊、最大化等——一步即可套用。</p>
+        <span class="feature-icon" role="img" aria-label="diseño">&#9707;</span>
+        <h3>Diseños predefinidos</h3>
+        <p>Guarda diseños frecuentes — mitad izquierda, mitad derecha, maximizar y más — y aplícalos en un solo paso.</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon" role="img" aria-label="Apple Silicon">&#63743;</span>
-        <h3>Apple Silicon 原生</h3>
-        <p>使用 Swift 和 AppKit 為 Apple Silicon 原生建構。快速、高效，完美適配您的 Mac。</p>
+        <h3>Nativo en Apple Silicon</h3>
+        <p>Compilado de forma nativa para Apple Silicon con Swift y AppKit. Rápido, eficiente y hecho para tu Mac.</p>
       </div>
       <div class="feature-card">
-        <span class="feature-icon" role="img" aria-label="自訂">&#9881;</span>
-        <h3>可自訂網格</h3>
-        <p>調整列數、欄數和間距，適配您的工作流程和顯示器設定。</p>
+        <span class="feature-icon" role="img" aria-label="personalización">&#9881;</span>
+        <h3>Cuadrícula personalizable</h3>
+        <p>Ajusta filas, columnas y el espacio entre celdas para adaptarlo a tu flujo de trabajo y configuración de pantalla.</p>
       </div>
       <div class="feature-card">
-        <span class="feature-icon" role="img" aria-label="更新">&#8635;</span>
-        <h3>自動更新</h3>
-        <p>透過 Sparkle 內建更新檢查功能，自動保持最新版本。</p>
+        <span class="feature-icon" role="img" aria-label="actualización">&#8635;</span>
+        <h3>Actualizaciones automáticas</h3>
+        <p>La comprobación de actualizaciones integrada mediante Sparkle te mantiene en la última versión automáticamente.</p>
       </div>
     </div>
   </section>
 
   <section class="how-it-works">
     <div class="how-it-works-inner">
-      <h2>使用方法</h2>
+      <h2>Cómo funciona</h2>
       <div class="steps">
         <div class="step">
-          <h3>啟用</h3>
-          <p>按下全域快捷鍵或點擊選單列圖示，顯示版面網格。</p>
+          <h3>Activar</h3>
+          <p>Pulsa el atajo global o haz clic en el icono de la barra de menús para mostrar la cuadrícula de diseño.</p>
         </div>
         <div class="step">
-          <h3>選擇</h3>
-          <p>在網格上拖曳，定義要放置視窗的區域。</p>
+          <h3>Seleccionar</h3>
+          <p>Arrastra sobre las celdas de la cuadrícula para definir la región donde quieres colocar tu ventana.</p>
         </div>
         <div class="step">
-          <h3>完成</h3>
-          <p>最前景的視窗將立即移動並調整大小以適應您的選擇。</p>
+          <h3>Listo</h3>
+          <p>La ventana en primer plano se mueve y redimensiona para ajustarse a tu selección al instante.</p>
         </div>
       </div>
     </div>
   </section>
 
   <section class="shortcut-section">
-    <h2>預設快捷鍵</h2>
-    <p>一鍵開啟網格覆蓋層。</p>
+    <h2>Atajo predeterminado</h2>
+    <p>Abre la cuadrícula con una sola pulsación de teclas.</p>
     <div class="kbd-combo">
       <kbd>&#x21E7; Shift</kbd>
       <span class="kbd-plus">+</span>
@@ -152,40 +152,40 @@
   <section class="faq" id="faq">
     <h2>FAQ</h2>
     <div class="faq-item">
-      <h3 class="faq-question">支援哪些 macOS 版本？</h3>
-      <p class="faq-answer">Tiley 需要 macOS 14（Sonoma）或更高版本。</p>
+      <h3 class="faq-question">¿Qué versiones de macOS son compatibles?</h3>
+      <p class="faq-answer">Tiley requiere macOS 14 (Sonoma) o posterior.</p>
     </div>
     <div class="faq-item">
-      <h3 class="faq-question">為什麼需要輔助使用權限？</h3>
-      <p class="faq-answer">macOS 要求輔助使用權限才能移動和調整其他應用程式的視窗大小。Tiley 僅將輔助使用 API 用於視窗管理，不會收集任何資料。</p>
+      <h3 class="faq-question">¿Por qué Tiley necesita permisos de accesibilidad?</h3>
+      <p class="faq-answer">macOS requiere acceso de accesibilidad para mover y redimensionar ventanas de otras aplicaciones. Tiley usa la API de accesibilidad únicamente para la gestión de ventanas — no se recopila ningún dato.</p>
     </div>
     <div class="faq-item">
-      <h3 class="faq-question">可以更改網格大小嗎？</h3>
-      <p class="faq-answer">可以。從選單列開啟設定，調整列數、欄數和儲存格間距。</p>
+      <h3 class="faq-question">¿Puedo cambiar el tamaño de la cuadrícula?</h3>
+      <p class="faq-answer">Sí. Abre los ajustes desde la barra de menús para modificar el número de filas, columnas y el espacio entre celdas.</p>
     </div>
     <div class="faq-item">
-      <h3 class="faq-question">可以為特定版面指定快捷鍵嗎？</h3>
-      <p class="faq-answer">可以。每個版面預設（最大化、左半邊等）都可以在設定中指定獨立的全域快捷鍵。</p>
+      <h3 class="faq-question">¿Puedo asignar atajos a diseños específicos?</h3>
+      <p class="faq-answer">Sí. Cada diseño predefinido (Maximizar, Mitad izquierda, etc.) puede tener su propio atajo global asignado en los ajustes.</p>
     </div>
     <div class="faq-item">
-      <h3 class="faq-question">Tiley 是免費的嗎？</h3>
-      <p class="faq-answer">是的，Tiley 是免費開源軟體。原始碼可在 GitHub 上取得。</p>
+      <h3 class="faq-question">¿Tiley es gratuito?</h3>
+      <p class="faq-answer">Sí, Tiley es gratuito y de código abierto. El código fuente está disponible en GitHub.</p>
     </div>
   </section>
 
   <section class="cta">
-    <h2>取得 Tiley</h2>
-    <p>免費、開源、macOS 原生。</p>
+    <h2>Obtener Tiley</h2>
+    <p>Gratuito, de código abierto y nativo de macOS.</p>
     <a href="https://github.com/yusuke/tiley/releases/latest" class="btn btn-primary">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      下載最新版本
+      Descargar última versión
     </a>
   </section>
 
   <footer class="footer">
     <div class="footer-links">
       <a href="https://github.com/yusuke/tiley" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://github.com/yusuke/tiley/releases" target="_blank" rel="noopener">發佈</a>
+      <a href="https://github.com/yusuke/tiley/releases" target="_blank" rel="noopener">Versiones</a>
       <a href="https://github.com/yusuke/tiley/issues" target="_blank" rel="noopener">Issues</a>
     </div>
     <p>&copy; 2026 Yusuke. All rights reserved.</p>
