@@ -3,15 +3,26 @@
     <channel>
         <title>Tiley</title>
         <item>
-            <title>1.0.0</title>
-            <pubDate>Sat, 14 Mar 2026 16:40:18 +0900</pubDate>
-            <sparkle:version>100</sparkle:version>
-            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <title>0.9.0</title>
+            <description><![CDATA[<ul>
+<li>Initial release</li>
+</ul>
+<h3>Added</h3>
+<ul>
+<li>Grid overlay for window tiling with customizable grid size</li>
+<li>Global keyboard shortcut (Shift + Command + Space) to activate overlay</li>
+<li>Drag across grid cells to define target window region</li>
+<li>Layout presets for saving and restoring window arrangements</li>
+<li>Multi-display support</li>
+<li>Launch at login option</li>
+<li>Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese</li>
+</ul>
+]]></description>
+            <pubDate>Sat, 14 Mar 2026 18:19:17 +0900</pubDate>
+            <sparkle:version>090</sparkle:version>
+            <sparkle:shortVersionString>0.9.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v0.9.0/Tiley-1.0.0.zip" length="4353509" type="application/octet-stream" sparkle:edSignature="hQxVIsaMCSEAttWDVzB5h+oh3dhyu4D5mLfp1BgL/apOmbyZQ6mhDS2fn4EHsIyV7tIefTNyTvUfQUUWUQlOBQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v0.9.0/Tiley100-090.delta" sparkle:deltaFrom="090" length="11730" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Z2LhsgZCPLSd2GU1vAT9KHjZcIzTLF1LP6N0bmjT0O9TLPdXqkF4Ce787lB69T+bTkid40ImjO8eLD1EzHlmDg=="/>
-            </sparkle:deltas>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v0.9.0/Tiley-0.9.0.zip" length="4353462" type="application/octet-stream" sparkle:edSignature="pAZxxSsTIl67I1Sjm7jWLHQ8+XzLLVJdP6y5B5v2eb/XgjyQ7fG1Be9eiz6dtxvZ40gpWZMly7Jyv0KloJ1NCg=="/>
         </item>
     </channel>
 </rss>
