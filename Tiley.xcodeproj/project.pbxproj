@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7012E05E2F65B653003EC442 /* LayoutPreviewOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0572F65B653003EC442 /* LayoutPreviewOverlayController.swift */; };
+		7012E05F2F65B653003EC442 /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0592F65B653003EC442 /* MainWindowController.swift */; };
+		7012E0602F65B653003EC442 /* GridPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0552F65B653003EC442 /* GridPreviewView.swift */; };
+		7012E0612F65B653003EC442 /* ShortcutRecorderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E05B2F65B653003EC442 /* ShortcutRecorderField.swift */; };
+		7012E0622F65B653003EC442 /* LayoutGridWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0562F65B653003EC442 /* LayoutGridWorkspaceView.swift */; };
+		7012E0632F65B653003EC442 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E05A2F65B653003EC442 /* MainWindowView.swift */; };
+		7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0662F65B796003EC442 /* ThemeColors.swift */; };
 		70840E2F2F61111100DF0607 /* menu-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E302F61111200DF0607 /* menu-icon.pdf */; };
 		70840E312F61111300DF0607 /* en.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E322F61111400DF0607 /* en.lproj/Localizable.strings */; };
 		70840E332F61111500DF0607 /* ja.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */; };
@@ -36,6 +43,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7012E0552F65B653003EC442 /* GridPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridPreviewView.swift; sourceTree = "<group>"; };
+		7012E0562F65B653003EC442 /* LayoutGridWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutGridWorkspaceView.swift; sourceTree = "<group>"; };
+		7012E0572F65B653003EC442 /* LayoutPreviewOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutPreviewOverlayController.swift; sourceTree = "<group>"; };
+		7012E0592F65B653003EC442 /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		7012E05A2F65B653003EC442 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
+		7012E05B2F65B653003EC442 /* ShortcutRecorderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRecorderField.swift; sourceTree = "<group>"; };
+		7012E0662F65B796003EC442 /* ThemeColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
 		70840E302F61111200DF0607 /* menu-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "menu-icon.pdf"; sourceTree = "<group>"; };
 		70840E322F61111400DF0607 /* en.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -77,6 +91,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7012E0582F65B653003EC442 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				7012E0662F65B796003EC442 /* ThemeColors.swift */,
+				7012E0552F65B653003EC442 /* GridPreviewView.swift */,
+				7012E0562F65B653003EC442 /* LayoutGridWorkspaceView.swift */,
+				7012E0572F65B653003EC442 /* LayoutPreviewOverlayController.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
+		7012E05C2F65B653003EC442 /* MainWindow */ = {
+			isa = PBXGroup;
+			children = (
+				7012E0592F65B653003EC442 /* MainWindowController.swift */,
+				7012E05A2F65B653003EC442 /* MainWindowView.swift */,
+				7012E05B2F65B653003EC442 /* ShortcutRecorderField.swift */,
+			);
+			path = MainWindow;
+			sourceTree = "<group>";
+		};
+		7012E05D2F65B653003EC442 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				7012E0582F65B653003EC442 /* Layout */,
+				7012E05C2F65B653003EC442 /* MainWindow */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		70B56A4C2F63E456005173A5 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +163,7 @@
 		A00000000000000000000017 /* Sources/Tiley */ = {
 			isa = PBXGroup;
 			children = (
+				7012E05D2F65B653003EC442 /* UI */,
 				70B56A692F64347E005173A5 /* App */,
 				70B56A4C2F63E456005173A5 /* Images */,
 				70840E302F61111200DF0607 /* menu-icon.pdf */,
@@ -242,9 +287,16 @@
 				70B56A6C2F64347E005173A5 /* AppState.swift in Sources */,
 				70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */,
 				A00000000000000000000042 /* UI/MainWindow/ShortcutRecorderField.swift in Sources */,
+				7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */,
 				A0000000000000000000000D /* UI/Layout/GridPreviewView.swift in Sources */,
 				A0000000000000000000000E /* UI/Layout/LayoutGridWorkspaceView.swift in Sources */,
 				A0000000000000000000000F /* UI/Layout/LayoutPreviewOverlayController.swift in Sources */,
+				7012E05E2F65B653003EC442 /* LayoutPreviewOverlayController.swift in Sources */,
+				7012E05F2F65B653003EC442 /* MainWindowController.swift in Sources */,
+				7012E0602F65B653003EC442 /* GridPreviewView.swift in Sources */,
+				7012E0612F65B653003EC442 /* ShortcutRecorderField.swift in Sources */,
+				7012E0622F65B653003EC442 /* LayoutGridWorkspaceView.swift in Sources */,
+				7012E0632F65B653003EC442 /* MainWindowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,7 +362,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 101;
+				CURRENT_PROJECT_VERSION = 110;
 				DEVELOPMENT_TEAM = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -321,7 +373,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -342,7 +394,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 101;
+				CURRENT_PROJECT_VERSION = 110;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -354,7 +406,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

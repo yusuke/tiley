@@ -8,6 +8,7 @@ struct LayoutGridWorkspaceView: View {
     let onHoverChange: ((GridSelection?) -> Void)?
     let onSelectionCommit: (GridSelection) -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
     @State private var dragSelection: GridSelection?
     @State private var dragStart: (row: Int, column: Int)?
     @State private var isDragging = false
@@ -142,23 +143,23 @@ struct LayoutGridWorkspaceView: View {
         if let selection = activeSelection?.normalized,
            selection.startRow...selection.endRow ~= row,
            selection.startColumn...selection.endColumn ~= column {
-            return Color(red: 0.16, green: 0.49, blue: 0.93)
+            return ThemeColors.gridCellSelectedFill(for: colorScheme)
         }
         if isHovered(row: row, column: column) {
-            return Color(red: 0.16, green: 0.49, blue: 0.93).opacity(0.35)
+            return ThemeColors.gridCellHoverFill(for: colorScheme)
         }
-        return Color(red: 0.90, green: 0.92, blue: 0.96)
+        return ThemeColors.gridCellFill(for: colorScheme)
     }
 
     private func borderColor(forRow row: Int, column: Int) -> Color {
         if let selection = activeSelection?.normalized,
            selection.startRow...selection.endRow ~= row,
            selection.startColumn...selection.endColumn ~= column {
-            return Color.white.opacity(0.82)
+            return ThemeColors.gridCellSelectedBorder(for: colorScheme)
         }
         if isHovered(row: row, column: column) {
-            return Color.white.opacity(0.5)
+            return ThemeColors.gridCellHoverBorder(for: colorScheme)
         }
-        return Color.black.opacity(0.08)
+        return ThemeColors.gridCellBorder(for: colorScheme)
     }
 }

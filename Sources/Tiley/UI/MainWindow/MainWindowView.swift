@@ -24,6 +24,7 @@ struct MainWindowView: View {
     private static let defaultGridRows = 6
     private static let defaultGridGap: CGFloat = 0
 
+    @Environment(\.colorScheme) private var colorScheme
     var appState: AppState
     @State private var draftSettings: AppState.SettingsSnapshot
     @State private var activeLayoutSelection: GridSelection?
@@ -49,7 +50,7 @@ struct MainWindowView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
-                Color(red: 0.95, green: 0.97, blue: 0.99)
+                ThemeColors.windowBackground(for: colorScheme)
                     .opacity(appState.isEditingSettings || appState.isShowingPermissionsOnly ? 1.0 : 0.86)
 
                 if appState.isShowingPermissionsOnly {
@@ -226,7 +227,7 @@ struct MainWindowView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .stroke(Color.black.opacity(0.10), lineWidth: 1)
+                        .stroke(ThemeColors.screenshotBorder(for: colorScheme), lineWidth: 1)
                 )
         }
     }
@@ -588,11 +589,11 @@ struct MainWindowView: View {
         .frame(height: Self.presetRowHeight)
         .background(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(isPresetSelected(preset.id) ? Color.accentColor.opacity(0.12) : Color.black.opacity(0.04))
+                .fill(ThemeColors.presetRowBackground(selected: isPresetSelected(preset.id), for: colorScheme))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(isPresetSelected(preset.id) ? Color.accentColor.opacity(0.35) : Color.black.opacity(0.06), lineWidth: 1)
+                .stroke(ThemeColors.presetRowBorder(selected: isPresetSelected(preset.id), for: colorScheme), lineWidth: 1)
         )
         .onHover { isHovering in
             guard draggingPresetID == nil else { return }
@@ -637,11 +638,11 @@ struct MainWindowView: View {
             .padding(.vertical, 6)
             .background(
                 RoundedRectangle(cornerRadius: 7, style: .continuous)
-                    .fill(Color.black.opacity(0.06))
+                    .fill(ThemeColors.presetCellBackground(for: colorScheme))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 7, style: .continuous)
-                    .stroke(Color.black.opacity(0.10), lineWidth: 1)
+                    .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 1)
             )
             .contentShape(Rectangle())
             .onTapGesture {
@@ -678,11 +679,11 @@ struct MainWindowView: View {
                     .padding(.vertical, 3)
                     .background(
                         RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .fill(Color.black.opacity(0.06))
+                            .fill(ThemeColors.presetCellBackground(for: colorScheme))
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .stroke(Color.black.opacity(0.10), lineWidth: 0.5)
+                            .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 0.5)
                     )
                     .instantTooltip(NSLocalizedString("Add Shortcut", comment: "Tooltip for add shortcut button"))
 
@@ -704,11 +705,11 @@ struct MainWindowView: View {
                     .padding(.vertical, 3)
                     .background(
                         RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .fill(Color.black.opacity(0.06))
+                            .fill(ThemeColors.presetCellBackground(for: colorScheme))
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .stroke(Color.black.opacity(0.10), lineWidth: 0.5)
+                            .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 0.5)
                     )
                     .instantTooltip(NSLocalizedString("Add Global Shortcut", comment: "Tooltip for add global shortcut button"))
                 }
@@ -1211,6 +1212,7 @@ private struct FlowLayout: Layout {
 }
 
 private struct PresetGridPreviewView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let rows: Int
     let columns: Int
     let selection: GridSelection
@@ -1226,7 +1228,7 @@ private struct PresetGridPreviewView: View {
                     ForEach(0..<columns, id: \.self) { column in
                         let selected = selection.startRow...selection.endRow ~= row && selection.startColumn...selection.endColumn ~= column
                         RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(selected ? Color.accentColor : Color.black.opacity(0.08))
+                            .fill(selected ? Color.accentColor : ThemeColors.presetGridUnselectedFill(for: colorScheme))
                             .frame(width: cellWidth, height: cellHeight)
                             .position(
                                 x: CGFloat(column) * (cellWidth + gap) + (cellWidth / 2),

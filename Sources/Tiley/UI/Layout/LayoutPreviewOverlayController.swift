@@ -85,6 +85,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
 }
 
 private struct SelectionPreviewOverlayView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let frame: CGRect
     let screenFrame: CGRect
 
@@ -98,10 +99,10 @@ private struct SelectionPreviewOverlayView: View {
 
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(red: 0.16, green: 0.49, blue: 0.93).opacity(0.24))
+                .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
                 .overlay(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(Color.white.opacity(0.88), lineWidth: 2)
+                        .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
                 )
                 .frame(width: localFrame.width, height: localFrame.height)
                 .position(x: localFrame.midX, y: localFrame.midY)
@@ -112,6 +113,7 @@ private struct SelectionPreviewOverlayView: View {
 }
 
 private struct GridPreviewOverlayView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let screenFrame: CGRect
     let visibleFrame: CGRect
     let rows: Int
@@ -132,7 +134,7 @@ private struct GridPreviewOverlayView: View {
 
         ZStack(alignment: .topLeading) {
             Rectangle()
-                .fill(Color.black.opacity(0.06))
+                .fill(ThemeColors.overlayBackground(for: colorScheme))
                 .frame(width: canvas.width, height: canvas.height)
                 .position(x: canvas.midX, y: canvas.midY)
 
@@ -145,10 +147,10 @@ private struct GridPreviewOverlayView: View {
                         height: cellHeight
                     )
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color(red: 0.16, green: 0.49, blue: 0.93).opacity(0.18))
+                        .fill(ThemeColors.overlayCellFill(for: colorScheme))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .stroke(Color.white.opacity(0.55), lineWidth: 1.25)
+                                .stroke(ThemeColors.overlayCellBorder(for: colorScheme), lineWidth: 1.25)
                         )
                         .frame(width: rect.width, height: rect.height)
                         .position(x: rect.midX, y: rect.midY)

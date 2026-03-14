@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct GridPreviewView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let rows: Int
     let columns: Int
     let gap: CGFloat
@@ -18,14 +19,14 @@ struct GridPreviewView: View {
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
                     .fill(
                         LinearGradient(
-                            colors: [Color.white, Color(red: 0.90, green: 0.94, blue: 0.98)],
+                            colors: [ThemeColors.previewGradientStart(for: colorScheme), ThemeColors.previewGradientEnd(for: colorScheme)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 24, style: .continuous)
-                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                            .stroke(ThemeColors.previewBorder(for: colorScheme), lineWidth: 1)
                     )
                     .frame(width: canvas.width, height: canvas.height)
                     .position(x: canvas.midX, y: canvas.midY)
@@ -34,10 +35,10 @@ struct GridPreviewView: View {
                     ForEach(0..<columns, id: \.self) { column in
                         let rect = cellRect(row: row, column: column, in: canvas)
                         RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .fill(Color(red: 0.85, green: 0.90, blue: 0.95).opacity(0.75))
+                            .fill(ThemeColors.previewCellFill(for: colorScheme))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .stroke(Color.white.opacity(0.95), lineWidth: 1.5)
+                                    .stroke(ThemeColors.previewCellBorder(for: colorScheme), lineWidth: 1.5)
                             )
                             .frame(width: rect.width, height: rect.height)
                             .position(x: rect.midX, y: rect.midY)
@@ -45,10 +46,10 @@ struct GridPreviewView: View {
                 }
 
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(Color(red: 0.16, green: 0.49, blue: 0.93).opacity(0.22))
+                    .fill(ThemeColors.previewSelectionFill(for: colorScheme))
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(Color(red: 0.11, green: 0.37, blue: 0.80), lineWidth: 2)
+                            .stroke(ThemeColors.previewSelectionBorder(for: colorScheme), lineWidth: 2)
                     )
                     .frame(width: ghost.width, height: ghost.height)
                     .position(x: canvas.minX + ghost.midX, y: canvas.maxY - ghost.midY)
