@@ -22,7 +22,7 @@
             <sparkle:version>090</sparkle:version>
             <sparkle:shortVersionString>0.9.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v0.9.0/Tiley-0.9.0.zip" length="4355329" type="application/octet-stream" sparkle:edSignature="3vofK2BMRT3ecIkt5yhAZ61A9tcdv9t0Stj6f1tFnkNEseXbORx3B4ogmV2jFgxA90+PnX0rD/YiDwbbaaRUBA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v0.9.0/Tiley-0.9.0.zip" length="4300782" type="application/octet-stream" sparkle:edSignature="CDpSAQwjaRxbAA8iG0rRx6EbEtVRx4aoFU9s6qTfdF8y1U5fOpgH6LodPNvYpzEQyRB5cibHxvr/i4nxEUl9Ag=="/>
         </item>
     </channel>
 </rss>
