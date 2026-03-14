@@ -3,26 +3,35 @@
     <channel>
         <title>Tiley</title>
         <item>
-            <title>0.9.0</title>
-            <description><![CDATA[<ul>
-<li>Initial release</li>
-</ul>
-<h3>Added</h3>
+            <title>1.0.0</title>
+            <description><![CDATA[<h3>Added</h3>
 <ul>
-<li>Grid overlay for window tiling with customizable grid size</li>
-<li>Global keyboard shortcut (Shift + Command + Space) to activate overlay</li>
-<li>Drag across grid cells to define target window region</li>
-<li>Layout presets for saving and restoring window arrangements</li>
-<li>Multi-display support</li>
-<li>Launch at login option</li>
-<li>Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese</li>
+<li>Prompt to move the app to /Applications when launched from another location</li>
+<li>Per-shortcut global flag: each shortcut within a layout preset can now individually be set as global or local</li>
+<li>Separate add buttons for regular shortcuts and global shortcuts, with instant popover tooltips</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Global shortcut setting moved from per-preset to per-shortcut granularity</li>
+<li>Existing presets with the legacy per-preset global flag are automatically migrated</li>
 </ul>
 ]]></description>
+            <pubDate>Sat, 14 Mar 2026 22:39:12 +0900</pubDate>
+            <sparkle:version>100</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.0.0/Tiley-1.0.0.zip" length="4357862" type="application/octet-stream" sparkle:edSignature="Zp7/ED9PyE/+cBJpDu65PL8jvAQcsC+FmOapMd9geN+ax5aYyhWUHHGndsMd2Xa6lNMCsi9xB3MVg5TO0roJCA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.0.0/Tiley100-090.delta" sparkle:deltaFrom="090" length="225354" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="jiQAZ9dUD6JAEJ3OHxuy1fkEl1H5Uu8zEYO+6UGZ7HidTMnAzYFoAfhXlDua3sEpbdnivI+OwU0VRcJujl06Aw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.9.0</title>
             <pubDate>Sat, 14 Mar 2026 18:19:17 +0900</pubDate>
             <sparkle:version>090</sparkle:version>
             <sparkle:shortVersionString>0.9.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v0.9.0/Tiley-0.9.0.zip" length="4300782" type="application/octet-stream" sparkle:edSignature="CDpSAQwjaRxbAA8iG0rRx6EbEtVRx4aoFU9s6qTfdF8y1U5fOpgH6LodPNvYpzEQyRB5cibHxvr/i4nxEUl9Ag=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.0.0/Tiley-0.9.0.zip" length="4300782" type="application/octet-stream" sparkle:edSignature="CDpSAQwjaRxbAA8iG0rRx6EbEtVRx4aoFU9s6qTfdF8y1U5fOpgH6LodPNvYpzEQyRB5cibHxvr/i4nxEUl9Ag=="/>
         </item>
     </channel>
 </rss>
