@@ -23,7 +23,7 @@
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2026 Yusuke. All rights reserved.</string>
+	<string>Copyright © 2026 Yusuke Yamamoto All rights reserved.</string>
 	<key>SUFeedURL</key>
 	<string>https://yusuke.github.io/tiley/appcast.xml</string>
 	<key>SUPublicEDKey</key>
