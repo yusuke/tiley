@@ -106,13 +106,12 @@ struct MainWindowView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .top) {
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    HStack(alignment: .bottom, spacing: 10) {
                         Image(nsImage: NSApp.applicationIconImage)
                             .resizable()
                             .interpolation(.high)
-                            .frame(width: 32, height: 32)
-                            .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-                            .alignmentGuide(.firstTextBaseline) { d in d[.bottom] }
+                            .frame(width: 36, height: 36)
+                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                         Text("Tiley")
                             .font(.system(size: 30, weight: .bold, design: .rounded))
@@ -173,13 +172,12 @@ struct MainWindowView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .top) {
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    HStack(alignment: .bottom, spacing: 10) {
                         Image(nsImage: NSApp.applicationIconImage)
                             .resizable()
                             .interpolation(.high)
-                            .frame(width: 32, height: 32)
-                            .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-                            .alignmentGuide(.firstTextBaseline) { d in d[.bottom] }
+                            .frame(width: 36, height: 36)
+                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                         Text("Tiley")
                             .font(.system(size: 30, weight: .bold, design: .rounded))
