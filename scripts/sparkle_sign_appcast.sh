@@ -61,6 +61,18 @@ APP_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$E
 BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$EXPORTED_APP_PATH/Contents/Info.plist")
 echo "App version: $APP_VERSION (build $BUILD_NUMBER)"
 
+# Check if this version+build already exists in appcast.xml
+EXISTING_APPCAST="$PROJECT_ROOT/docs/appcast.xml"
+if [[ -f "$EXISTING_APPCAST" ]]; then
+  # Check for matching shortVersionString AND version (build number)
+  if grep -q "<sparkle:shortVersionString>${APP_VERSION}</sparkle:shortVersionString>" "$EXISTING_APPCAST" \
+    && grep -q "<sparkle:version>${BUILD_NUMBER}</sparkle:version>" "$EXISTING_APPCAST"; then
+    echo "Error: Version $APP_VERSION (build $BUILD_NUMBER) already exists in appcast.xml."
+    echo "Bump the version or build number before releasing."
+    exit 1
+  fi
+fi
+
 # Promote [Unreleased] to [X.Y.Z] in CHANGELOG.md if no section exists yet
 CHANGELOG="$PROJECT_ROOT/CHANGELOG.md"
 if [[ -f "$CHANGELOG" ]]; then

@@ -42,6 +42,22 @@ if [[ -z "${KEYCHAIN_PROFILE}" && ! -f "${API_KEY_PATH}" ]]; then
   exit 1
 fi
 
+# Check if this version+build already exists in appcast.xml (before expensive archive/notarize)
+PBXPROJ="$PROJECT_ROOT/Tiley.xcodeproj/project.pbxproj"
+EXISTING_APPCAST="$PROJECT_ROOT/docs/appcast.xml"
+if [[ -f "$PBXPROJ" && -f "$EXISTING_APPCAST" ]]; then
+  PRE_APP_VERSION=$(grep -m1 'MARKETING_VERSION' "$PBXPROJ" | sed 's/.*= *\(.*\);/\1/' | tr -d ' ')
+  PRE_BUILD_NUMBER=$(grep -m1 'CURRENT_PROJECT_VERSION' "$PBXPROJ" | sed 's/.*= *\(.*\);/\1/' | tr -d ' ')
+  if [[ -n "$PRE_APP_VERSION" && -n "$PRE_BUILD_NUMBER" ]]; then
+    if grep -q "<sparkle:shortVersionString>${PRE_APP_VERSION}</sparkle:shortVersionString>" "$EXISTING_APPCAST" \
+      && grep -q "<sparkle:version>${PRE_BUILD_NUMBER}</sparkle:version>" "$EXISTING_APPCAST"; then
+      echo "Error: Version $PRE_APP_VERSION (build $PRE_BUILD_NUMBER) already exists in appcast.xml."
+      echo "Bump the version or build number before releasing."
+      exit 1
+    fi
+  fi
+fi
+
 echo "Cleaning previous build artifacts"
 rm -rf "$ARCHIVE_PATH" "$EXPORT_PATH" "$ZIP_PATH"
 mkdir -p build
