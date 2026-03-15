@@ -58,6 +58,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var windowManager: WindowManager?
     @ObservationIgnored private var statusItem: NSStatusItem?
     @ObservationIgnored private var mainWindowController: MainWindowController?
+    @ObservationIgnored private var isSwitchingActivationPolicy = false
     @ObservationIgnored private var hotKeyRef: EventHotKeyRef?
     @ObservationIgnored private var presetHotKeyRefs: [UInt32: EventHotKeyRef] = [:]
     @ObservationIgnored private var presetHotKeyIDs: [UInt32: UUID] = [:]
@@ -899,9 +900,28 @@ final class AppState: NSObject, NSMenuDelegate {
         refreshLaunchAtLoginState()
     }
 
-    private func applyDockIconVisibility() {
-        let activationPolicy: NSApplication.ActivationPolicy = dockIconVisible ? .regular : .accessory
-        _ = NSApp.setActivationPolicy(activationPolicy)
+    func applyDockIconVisibility() {
+        if dockIconVisible {
+            _ = NSApp.setActivationPolicy(.regular)
+        } else {
+            // Switching to .accessory causes macOS to hide all windows and
+            // fire windowDidResignKey, which normally resets UI state via
+            // handleMainWindowHidden(). Use a flag to suppress that reset.
+            let mainWindowWasVisible = mainWindowController?.isVisible == true
+            isSwitchingActivationPolicy = true
+            _ = NSApp.setActivationPolicy(.accessory)
+            if mainWindowWasVisible {
+                // macOS hides windows asynchronously after the policy change.
+                // A short delay ensures our restore happens after that.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                    self?.isSwitchingActivationPolicy = false
+                    self?.mainWindowController?.show()
+                    NSApp.activate(ignoringOtherApps: true)
+                }
+            } else {
+                isSwitchingActivationPolicy = false
+            }
+        }
     }
 
     private func refreshLaunchAtLoginState() {
@@ -988,6 +1008,9 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func handleMainWindowHidden() {
+        // During an activation-policy switch the window is temporarily hidden
+        // by macOS. Don't reset UI state — the window will be restored shortly.
+        guard !isSwitchingActivationPolicy else { return }
         hidePreviewOverlay()
         isEditingSettings = false
         isShowingPermissionsOnly = false

@@ -12,7 +12,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     )
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(.accessory)
         appState.updater = updaterController.updater
         moveToApplicationsFolderIfNeeded()
         appState.start(showMainWindowOnLaunch: !wasLaunchedAsLoginItem())
@@ -20,6 +19,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         appState.stop()
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -60,7 +63,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
         let response = alert.runModal()
-        NSApp.setActivationPolicy(.accessory)
 
         guard response == .alertFirstButtonReturn else { return }
 

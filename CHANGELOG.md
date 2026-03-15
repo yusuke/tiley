@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix "Show Dock icon" toggle not working: Dock icon was not appearing when enabled, and toggling off caused the window to disappear
+- Prevent app from terminating unexpectedly when all windows are closed
+
 ## [1.1.3] - 2026-03-15
 
 ### Fixed
