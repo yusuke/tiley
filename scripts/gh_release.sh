@@ -51,17 +51,6 @@ BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$EXPORTED_AP
 TAG="v$APP_VERSION"
 echo "Releasing $TAG (build $BUILD_NUMBER)"
 
-# Check if this version+build already exists in appcast.xml
-EXISTING_APPCAST="$PROJECT_ROOT/docs/appcast.xml"
-if [[ -f "$EXISTING_APPCAST" ]]; then
-  if grep -q "<sparkle:shortVersionString>${APP_VERSION}</sparkle:shortVersionString>" "$EXISTING_APPCAST" \
-    && grep -q "<sparkle:version>${BUILD_NUMBER}</sparkle:version>" "$EXISTING_APPCAST"; then
-    echo "Error: Version $APP_VERSION (build $BUILD_NUMBER) already exists in appcast.xml."
-    echo "Bump the version or build number before releasing."
-    exit 1
-  fi
-fi
-
 # Verify the versioned ZIP exists
 VERSIONED_ZIP="$APPCAST_DIR/Tiley-${APP_VERSION}.zip"
 if [[ ! -f "$VERSIONED_ZIP" ]]; then

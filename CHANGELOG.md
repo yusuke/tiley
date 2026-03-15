@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.4] - 2026-03-15
+
 ### Fixed
 
 - Fix "Show Dock icon" toggle not working: Dock icon was not appearing when enabled, and toggling off caused the window to disappear
@@ -77,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.3...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.4...HEAD
+[1.1.4]: https://github.com/yusuke/tiley/releases/tag/v1.1.4
 [1.1.3]: https://github.com/yusuke/tiley/releases/tag/v1.1.3
 [1.1.2]: https://github.com/yusuke/tiley/releases/tag/v1.1.2
 [1.1.1]: https://github.com/yusuke/tiley/releases/tag/v1.1.1
