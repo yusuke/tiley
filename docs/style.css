@@ -218,6 +218,36 @@ img {
   background: var(--color-border);
 }
 
+.btn-sponsor {
+  background: #fdeef3;
+  color: #bf3989;
+  border: 1px solid #f0c4d6;
+}
+
+.btn-sponsor:hover {
+  background: #fce0eb;
+}
+
+.btn-sponsor svg {
+  fill: #bf3989;
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-sponsor {
+    background: #2d1520;
+    color: #f778ba;
+    border-color: #5c2d42;
+  }
+
+  .btn-sponsor:hover {
+    background: #3d1f2e;
+  }
+
+  .btn-sponsor svg {
+    fill: #f778ba;
+  }
+}
+
 .btn svg {
   width: 18px;
   height: 18px;
