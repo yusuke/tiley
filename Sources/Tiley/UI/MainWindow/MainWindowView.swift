@@ -106,15 +106,22 @@ struct MainWindowView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .top) {
-                    HStack(alignment: .center, spacing: 10) {
+                    HStack(alignment: .firstTextBaseline, spacing: 10) {
                         Image(nsImage: NSApp.applicationIconImage)
                             .resizable()
                             .interpolation(.high)
                             .frame(width: 32, height: 32)
                             .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                            .alignmentGuide(.firstTextBaseline) { d in d[.bottom] }
 
                         Text("Tiley")
                             .font(.system(size: 30, weight: .bold, design: .rounded))
+
+                        if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+                            Text("v\(version)")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(.secondary)
+                        }
                     }
 
                     Spacer()
@@ -166,15 +173,22 @@ struct MainWindowView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .top) {
-                    HStack(alignment: .center, spacing: 10) {
+                    HStack(alignment: .firstTextBaseline, spacing: 10) {
                         Image(nsImage: NSApp.applicationIconImage)
                             .resizable()
                             .interpolation(.high)
                             .frame(width: 32, height: 32)
                             .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                            .alignmentGuide(.firstTextBaseline) { d in d[.bottom] }
 
                         Text("Tiley")
                             .font(.system(size: 30, weight: .bold, design: .rounded))
+
+                        if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+                            Text("v\(version)")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(.secondary)
+                        }
                     }
 
                     Spacer()
