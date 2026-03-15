@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Fix "Show Dock icon" toggle not working: Dock icon was not appearing when enabled, and toggling off caused the window to disappear
 - Prevent app from terminating unexpectedly when all windows are closed
+- Fix window target defaulting to Tiley itself when launched by double-clicking the app; now correctly targets the previously active app's window
+- Fix main window appearing on login-item launch: the window no longer opens when the app is auto-launched as a login item at system startup
 
 ## [1.1.3] - 2026-03-15
 

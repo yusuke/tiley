@@ -65,8 +65,11 @@ final class AccessibilityService {
         }
 
         let frontmostPID = try frontmostApplicationPID()
-        let pid = frontmostPID == getpid() ? (preferredPID ?? frontmostPID) : frontmostPID
-        return try windowTarget(for: pid)
+        if frontmostPID == getpid() {
+            // Tiley is frontmost — never target our own window.
+            throw WindowAccessError.focusedWindowUnavailable
+        }
+        return try windowTarget(for: frontmostPID)
     }
 
     private func windowTarget(for pid: pid_t) throws -> WindowTarget {

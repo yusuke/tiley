@@ -5,9 +5,53 @@ import ServiceManagement
 import Sparkle
 import SwiftUI
 
+/// Captured at module-load time, before Tiley becomes the frontmost app.
+/// Force-evaluated in AppDelegate init via `AppState.captureLaunchTimeFrontmostPID()`.
+private nonisolated(unsafe) var launchTimeFrontmostPID: pid_t?
+
 @MainActor
 @Observable
 final class AppState: NSObject, NSMenuDelegate {
+    /// Call as early as possible (e.g. AppDelegate init) to snapshot the
+    /// frontmost app before Tiley activates.
+    nonisolated static func captureLaunchTimeFrontmostPID() {
+        guard launchTimeFrontmostPID == nil else { return }
+        // First try NSWorkspace (works when another app is still frontmost).
+        if let app = NSWorkspace.shared.frontmostApplication,
+           app.processIdentifier != getpid() {
+            launchTimeFrontmostPID = app.processIdentifier
+            return
+        }
+        // NSWorkspace already reports Tiley as frontmost.
+        // Fall back to the on-screen window list: the topmost non-Tiley
+        // standard window is very likely the app the user was interacting
+        // with immediately before launching Tiley.
+        if let pid = topmostNonSelfWindowOwnerPID() {
+            launchTimeFrontmostPID = pid
+        }
+    }
+
+    /// Returns the PID that owns the topmost on-screen standard window
+    /// that does not belong to this process.
+    private nonisolated static func topmostNonSelfWindowOwnerPID() -> pid_t? {
+        guard let windowList = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[CFString: Any]] else { return nil }
+
+        let selfPID = getpid()
+        for info in windowList {
+            guard let ownerPID = info[kCGWindowOwnerPID] as? pid_t,
+                  ownerPID != selfPID else { continue }
+            // Skip menu bar items, overlays, etc. — only consider
+            // standard windows (layer == 0).
+            let layer = info[kCGWindowLayer] as? Int ?? -1
+            guard layer == 0 else { continue }
+            return ownerPID
+        }
+        return nil
+    }
+
     private var resourceBundle: Bundle {
         #if SWIFT_PACKAGE
         Bundle.module
@@ -94,10 +138,14 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var currentLayoutTargetPrimaryText: String {
-        guard let target = activeLayoutTarget else {
-            return NSLocalizedString("No active target", comment: "No active window target label")
+        if let target = activeLayoutTarget {
+            return target.appName
         }
-        return target.appName
+        if let pid = lastTargetPID,
+           let name = NSRunningApplication(processIdentifier: pid)?.localizedName {
+            return name
+        }
+        return NSLocalizedString("No active target", comment: "No active window target label")
     }
 
     var currentLayoutTargetSecondaryText: String? {
@@ -125,8 +173,12 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func start(showMainWindowOnLaunch: Bool = true) {
         windowManager = WindowManager(accessibilityService: accessibilityService)
-        if let frontmostApp = NSWorkspace.shared.frontmostApplication,
-           frontmostApp.processIdentifier != getpid() {
+        // Use the PID captured at module-load time (before Tiley became active),
+        // falling back to the current frontmost app.
+        if let launchTimeFrontmostPID {
+            lastTargetPID = launchTimeFrontmostPID
+        } else if let frontmostApp = NSWorkspace.shared.frontmostApplication,
+                  frontmostApp.processIdentifier != getpid() {
             lastTargetPID = frontmostApp.processIdentifier
         }
         loadSettings()
@@ -151,7 +203,20 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         activeLayoutTarget = initialLayoutTarget()
-        if activeLayoutTarget == nil {
+        if activeLayoutTarget == nil, lastTargetPID != nil {
+            // AX window is not available yet (Tiley just launched and is frontmost).
+            // Show the grid using the app name from NSRunningApplication; the actual
+            // AX window will be resolved when the user commits a layout selection.
+            let targetAppName = NSRunningApplication(processIdentifier: lastTargetPID!)?.localizedName
+                ?? NSLocalizedString("App", comment: "Generic app name fallback")
+            launchMessage = String(
+                format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                targetAppName
+            )
+            if showMainWindowOnLaunch {
+                isShowingLayoutGrid = true
+            }
+        } else if activeLayoutTarget == nil {
             launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt to activate target window")
         } else if let activeLayoutTarget {
             launchMessage = String(
@@ -267,6 +332,10 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func commitLayoutSelection(_ selection: GridSelection) {
+        if activeLayoutTarget == nil, lastTargetPID != nil {
+            // AX target was not available at launch; resolve it now.
+            activeLayoutTarget = resolveWindowTarget()
+        }
         guard let target = activeLayoutTarget else {
             launchMessage = NSLocalizedString("No active target window.", comment: "No active target error")
             isShowingLayoutGrid = false
@@ -604,6 +673,13 @@ final class AppState: NSObject, NSMenuDelegate {
                     format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
                     activeLayoutTarget.appName
                 )
+            } else if let lastTargetPID,
+                      let name = NSRunningApplication(processIdentifier: lastTargetPID)?.localizedName {
+                isShowingLayoutGrid = true
+                launchMessage = String(
+                    format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                    name
+                )
             } else {
                 launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt to activate target window")
             }
@@ -909,11 +985,14 @@ final class AppState: NSObject, NSMenuDelegate {
             // handleMainWindowHidden(). Use a flag to suppress that reset.
             let mainWindowWasVisible = mainWindowController?.isVisible == true
             isSwitchingActivationPolicy = true
+            // Transition through .prohibited to force macOS to fully
+            // de-register the Dock tile, then back to .accessory.
+            _ = NSApp.setActivationPolicy(.prohibited)
             _ = NSApp.setActivationPolicy(.accessory)
             if mainWindowWasVisible {
                 // macOS hides windows asynchronously after the policy change.
                 // A short delay ensures our restore happens after that.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
                     self?.isSwitchingActivationPolicy = false
                     self?.mainWindowController?.show()
                     NSApp.activate(ignoringOtherApps: true)

@@ -1,15 +1,24 @@
 import AppKit
 import Carbon
+import ServiceManagement
 import Sparkle
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    let appState = AppState()
+    let appState: AppState
+
     lazy var updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(
         startingUpdater: true,
         updaterDelegate: self,
         userDriverDelegate: nil
     )
+
+    override init() {
+        // Capture the frontmost app PID before Tiley activates.
+        AppState.captureLaunchTimeFrontmostPID()
+        appState = AppState()
+        super.init()
+    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         appState.updater = updaterController.updater
@@ -108,10 +117,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func wasLaunchedAsLoginItem() -> Bool {
-        guard let event = NSAppleEventManager.shared().currentAppleEvent else {
-            return false
+        // 1. Check the Apple Event flag (works for legacy login items).
+        if let event = NSAppleEventManager.shared().currentAppleEvent,
+           event.paramDescriptor(forKeyword: AEKeyword(keyAELaunchedAsLogInItem))?.booleanValue == true {
+            return true
         }
-        return event.paramDescriptor(forKeyword: AEKeyword(keyAELaunchedAsLogInItem))?.booleanValue ?? false
+
+        // 2. Heuristic for SMAppService.mainApp login items:
+        //    Apple does not set keyAELaunchedAsLogInItem when the app is
+        //    launched via SMAppService.mainApp (FB10207829).  As a workaround,
+        //    treat the launch as a login-item launch when:
+        //      - The app is registered as a login item, AND
+        //      - The system has been up for less than 120 seconds (i.e. we are
+        //        still in the login phase).
+        if SMAppService.mainApp.status == .enabled {
+            var bootTime = timeval()
+            var size = MemoryLayout<timeval>.size
+            var mib: [Int32] = [CTL_KERN, KERN_BOOTTIME]
+            if sysctl(&mib, 2, &bootTime, &size, nil, 0) == 0 {
+                let uptime = Date().timeIntervalSince1970 - Double(bootTime.tv_sec)
+                if uptime < 120 {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 }
 
