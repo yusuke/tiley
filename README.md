@@ -1,60 +1,64 @@
-# Tiley
+<p align="center">
+  <img src="docs/assets/images/icon.png" alt="Tiley app icon" width="128" height="128">
+</p>
 
-**[https://yusuke.github.io/tiley/](https://yusuke.github.io/tiley/)**
+<h1 align="center">Tiley</h1>
 
-Tiley is a macOS menu bar utility written in Swift that recreates the core Tiley workflow:
+<p align="center">
+  A simple macOS utility to arrange your windows. Drag a grid, place a window.
+</p>
 
-- Shows a grid overlay for the active display
-- Lets you drag across cells to define a target region
-- Moves and resizes the frontmost window through the macOS Accessibility API
-- Includes direct menu presets for halves, corners, and maximize
-- Supports Apple Silicon through a native Swift/macOS build
-- Provides a global shortcut: `Shift + Command + Space`
+<p align="center">
+  <a href="https://github.com/yusuke/tiley/releases/latest"><strong>Download</strong></a> &nbsp;·&nbsp;
+  <a href="https://yusuke.github.io/tiley/">Website</a> &nbsp;·&nbsp;
+  <a href="https://github.com/sponsors/yusuke">Sponsor</a>
+</p>
 
-## Project layout
+<p align="center">
+  <img src="docs/assets/images/screenshot-en.png" alt="Tiley grid overlay screenshot" width="700">
+</p>
 
-```
-Sources/Tiley/
-├── App/             # App entry point, lifecycle, central state
-├── Models/          # Grid selection, layout presets, hotkey models
-├── Services/        # Accessibility API, window management
-└── UI/
-    ├── MainWindow/  # Settings window
-    └── Layout/      # Layout preset editor, grid preview
-```
+## Features
 
-## Run
+- **Grid Overlay** — A customizable grid appears over your screen. Drag to select the region where you want to place a window.
+- **Global Shortcuts** — Trigger the grid or apply layout presets instantly with customizable keyboard shortcuts.
+- **Layout Presets** — Save frequently used layouts — Left Half, Right Half, Maximize, and more — and apply them in one step.
+- **Native on Apple Silicon** — Built natively for Apple Silicon with Swift and AppKit. Fast, efficient, and right at home on your Mac.
+- **Customizable Grid** — Adjust rows, columns, and gap size to match your workflow and display setup.
+- **Auto Updates** — Built-in update checking via Sparkle keeps you on the latest version automatically.
 
-```bash
-swift run
-```
+## How It Works
 
-On first launch, grant Accessibility permission in System Settings so the app can control other windows.
+1. **Activate** — Press the global shortcut or click the menu bar icon to show the layout grid.
+2. **Select** — Drag across the grid cells to define the region where you want your window placed.
+3. **Done** — The frontmost window is moved and resized to fit your selection instantly.
 
-## Open In Xcode
+## Default Shortcut
 
-- Open [Tiley.xcodeproj](./Tiley.xcodeproj) in Xcode
-- Select the `Tiley` scheme
-- Build or run as a standard macOS app target
+Open the grid overlay with one keystroke:
 
-You can still use the Swift Package workflow if preferred.
+> **Shift + Command + Space**
 
-## Developer ID Release
+## FAQ
 
-For direct distribution outside the Mac App Store, archive, notarize, and staple with:
+**What macOS versions are supported?**
+Tiley requires macOS 14 (Sonoma) or later.
 
-```bash
-KEYCHAIN_PROFILE=AC_NOTARY scripts/release_notarize.sh
-```
+**Why does Tiley need Accessibility permissions?**
+macOS requires Accessibility access to move and resize windows belonging to other applications. Tiley uses the Accessibility API solely for window management — no data is collected.
 
-Or with an App Store Connect API key:
+**Can I change the grid size?**
+Yes. Open Settings from the menu bar to adjust the number of rows, columns, and the gap between cells.
 
-```bash
-API_KEY_PATH=~/keys/AuthKey_ABC123XYZ.p8 \
-API_KEY_ID=ABC123XYZ \
-API_ISSUER_ID=00000000-0000-0000-0000-000000000000 \
-scripts/release_notarize.sh
-```
+**Can I assign shortcuts to specific layouts?**
+Yes. Each layout preset (Maximize, Left Half, etc.) can have its own global shortcut assigned in Settings.
+
+**Is Tiley free?**
+Yes, Tiley is free and open source. The source code is available on GitHub.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for build instructions, project layout, and development guidelines.
 
 ## License
 
