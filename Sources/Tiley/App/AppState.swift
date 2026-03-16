@@ -101,7 +101,9 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private let accessibilityService = AccessibilityService()
     @ObservationIgnored private var windowManager: WindowManager?
     @ObservationIgnored private var statusItem: NSStatusItem?
-    @ObservationIgnored private var mainWindowController: MainWindowController?
+    @ObservationIgnored private var mainWindowControllers: [CGDirectDisplayID: MainWindowController] = [:]
+    @ObservationIgnored private var targetScreenDisplayID: CGDirectDisplayID?
+    @ObservationIgnored private var screenChangeTask: Task<Void, Never>?
     @ObservationIgnored private var isSwitchingActivationPolicy = false
     @ObservationIgnored private var hotKeyRef: EventHotKeyRef?
     @ObservationIgnored private var presetHotKeyRefs: [UInt32: EventHotKeyRef] = [:]
@@ -247,6 +249,7 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         workspaceObserverTask?.cancel()
         appActivationTask?.cancel()
+        screenChangeTask?.cancel()
     }
 
     func requestAccessibilityAccess() {
@@ -279,21 +282,29 @@ final class AppState: NSObject, NSMenuDelegate {
         setMenuIconVisible(settings.menuIconVisible)
         setDockIconVisible(settings.dockIconVisible)
         sanitizePresetGlobalShortcutEligibility()
-        registerAllHotKeys()
+        // Only register the main toggle hotkey; keep preset global hotkeys
+        // unregistered while the layout grid is visible so local shortcuts work.
+        unregisterPresetHotKeys()
+        registerMainHotKey()
         hidePreviewOverlay()
         isEditingSettings = false
         isShowingLayoutGrid = true
         activeLayoutTarget = initialLayoutTarget()
         launchMessage = NSLocalizedString("Applied grid settings.", comment: "Settings applied confirmation")
+        openMainWindow()
     }
 
     func cancelSettingsEditing() {
         hidePreviewOverlay()
         isEditingSettings = false
         isShowingLayoutGrid = true
-        registerAllHotKeys()
+        // Only register the main toggle hotkey; keep preset global hotkeys
+        // unregistered while the layout grid is visible so local shortcuts work.
+        unregisterPresetHotKeys()
+        registerMainHotKey()
         activeLayoutTarget = initialLayoutTarget()
         launchMessage = NSLocalizedString("Canceled settings changes.", comment: "Settings canceled confirmation")
+        openMainWindow()
     }
 
     func beginSettingsEditing() {
@@ -301,6 +312,7 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
+        closeSecondaryWindows()
         openMainWindow()
     }
 
@@ -323,6 +335,10 @@ final class AppState: NSObject, NSMenuDelegate {
         layoutPreviewController = makeLayoutPreviewController(for: target)
         lastTargetPID = target.processIdentifier
         isEditingSettings = false
+        // Unregister preset global hotkeys while the overlay is visible so that
+        // key events reach the NSWindow's performKeyEquivalent and can be handled
+        // as local shortcuts. They are re-registered in handleMainWindowHidden().
+        unregisterPresetHotKeys()
         isShowingLayoutGrid = true
         openMainWindow()
         launchMessage = String(
@@ -349,7 +365,7 @@ final class AppState: NSObject, NSMenuDelegate {
         hidePreviewOverlay()
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
-        mainWindowController?.hide()
+        hideAllMainWindows()
         _ = reactivateLastTargetApp(clearingState: false)
         launchMessage = NSLocalizedString("Canceled layout selection.", comment: "Layout selection canceled")
     }
@@ -365,27 +381,73 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             try windowManager?.move(target: target, to: frame)
-            lastSelection = selection
-            lastSelectionRows = rows
-            lastSelectionColumns = columns
-            let newSignature = transientLayoutPresetSignature
-            if dismissedTransientLayoutPresetSignature != newSignature {
-                dismissedTransientLayoutPresetSignature = nil
-            }
-            transientLayoutPresetID = UUID()
-            hidePreviewOverlay()
-            activeLayoutTarget = nil
-            isShowingLayoutGrid = false
-            mainWindowController?.hide()
-        launchMessage = String(
-            format: NSLocalizedString("Moved %@ to %@.", comment: "Window moved message"),
-            target.appName,
-            selection.description
-        )
-            _ = reactivateLastTargetApp(clearingState: false)
+            recordSelectionAndHide(selection: selection, appName: target.appName)
         } catch {
             launchMessage = error.localizedDescription
         }
+    }
+
+    /// Commits a layout selection on a specific screen (used by multi-screen grid/preset interactions).
+    func commitLayoutSelectionOnScreen(_ selection: GridSelection, visibleFrame: CGRect, screenFrame: CGRect) {
+        if activeLayoutTarget == nil, lastTargetPID != nil {
+            activeLayoutTarget = resolveWindowTarget()
+        }
+        guard let target = activeLayoutTarget else {
+            launchMessage = NSLocalizedString("No active target window.", comment: "No active target error")
+            isShowingLayoutGrid = false
+            hidePreviewOverlay()
+            return
+        }
+
+        let frame = GridCalculator.frame(
+            for: selection,
+            in: visibleFrame,
+            rows: rows,
+            columns: columns,
+            gap: gap
+        )
+        do {
+            try windowManager?.move(target: target, to: frame, onScreenFrame: screenFrame)
+            recordSelectionAndHide(selection: selection, appName: target.appName)
+        } catch {
+            launchMessage = error.localizedDescription
+        }
+    }
+
+    /// Applies a layout preset targeting a specific screen.
+    func applyLayoutPresetOnScreen(id: UUID, visibleFrame: CGRect, screenFrame: CGRect) {
+        guard let preset = layoutPreset(for: id) else { return }
+        guard accessibilityGranted || accessibilityService.checkAccess(prompt: false) else {
+            requestAccessibilityAccess()
+            return
+        }
+        guard let target = resolveWindowTarget() else { return }
+
+        activeLayoutTarget = target
+        lastTargetPID = target.processIdentifier
+        let selection = preset.scaledSelection(toRows: rows, columns: columns)
+        commitLayoutSelectionOnScreen(selection, visibleFrame: visibleFrame, screenFrame: screenFrame)
+    }
+
+    private func recordSelectionAndHide(selection: GridSelection, appName: String) {
+        lastSelection = selection
+        lastSelectionRows = rows
+        lastSelectionColumns = columns
+        let newSignature = transientLayoutPresetSignature
+        if dismissedTransientLayoutPresetSignature != newSignature {
+            dismissedTransientLayoutPresetSignature = nil
+        }
+        transientLayoutPresetID = UUID()
+        hidePreviewOverlay()
+        activeLayoutTarget = nil
+        isShowingLayoutGrid = false
+        hideAllMainWindows()
+        launchMessage = String(
+            format: NSLocalizedString("Moved %@ to %@.", comment: "Window moved message"),
+            appName,
+            selection.description
+        )
+        _ = reactivateLastTargetApp(clearingState: false)
     }
 
     @objc private func showLayoutGrid() {
@@ -420,28 +482,47 @@ final class AppState: NSObject, NSMenuDelegate {
         openSettings()
     }
 
-    func updateLayoutPreview(_ selection: GridSelection?) {
+    func updateLayoutPreview(_ selection: GridSelection?, screenContext: ScreenContext? = nil) {
         guard isShowingLayoutGrid else {
             hidePreviewOverlay()
             return
         }
-        guard let selection, let target = activeLayoutTarget else {
+        guard let selection else {
+            hidePreviewOverlay()
+            return
+        }
+
+        let previewScreenFrame: CGRect
+        let previewVisibleFrame: CGRect
+        if let ctx = screenContext {
+            previewScreenFrame = ctx.screenFrame
+            previewVisibleFrame = ctx.visibleFrame
+        } else if let target = activeLayoutTarget {
+            previewScreenFrame = target.screenFrame
+            previewVisibleFrame = target.visibleFrame
+        } else {
             hidePreviewOverlay()
             return
         }
 
         if layoutPreviewController == nil ||
-            layoutPreviewController?.screenFrame != target.screenFrame ||
-            layoutPreviewController?.visibleFrame != target.visibleFrame {
+            layoutPreviewController?.screenFrame != previewScreenFrame ||
+            layoutPreviewController?.visibleFrame != previewVisibleFrame {
             layoutPreviewController?.hide()
-            layoutPreviewController = makeLayoutPreviewController(for: target)
+            layoutPreviewController = LayoutPreviewOverlayController(
+                screenFrame: previewScreenFrame,
+                visibleFrame: previewVisibleFrame
+            )
         }
+
+        let parentWindow = windowControllerForScreen(frame: previewScreenFrame)?.nsWindow
+            ?? targetWindowController?.nsWindow
         layoutPreviewController?.showSelection(
             selection,
             rows: rows,
             columns: columns,
             gap: gap,
-            behind: mainWindowController?.nsWindow
+            behind: parentWindow
         )
     }
 
@@ -461,7 +542,7 @@ final class AppState: NSObject, NSMenuDelegate {
             rows: settings.rows,
             columns: settings.columns,
             gap: settings.gap,
-            behind: mainWindowController?.nsWindow
+            behind: targetWindowController?.nsWindow
         )
     }
 
@@ -592,7 +673,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @discardableResult
     func applySelectedLayoutPreset() -> Bool {
         guard let id = selectedLayoutPresetID else { return false }
-        applyLayoutPreset(id: id)
+        applyPresetOnMouseScreen(id: id)
         return true
     }
 
@@ -626,10 +707,21 @@ final class AppState: NSObject, NSMenuDelegate {
         apply(selection: selection, to: target)
     }
 
+    /// Applies a layout preset on the screen where the mouse cursor is located.
+    /// Falls back to the target window's screen when the cursor screen cannot be determined.
+    private func applyPresetOnMouseScreen(id: UUID) {
+        let mouseLocation = NSEvent.mouseLocation
+        if let screen = NSScreen.screens.first(where: { $0.frame.contains(mouseLocation) }) {
+            applyLayoutPresetOnScreen(id: id, visibleFrame: screen.visibleFrame, screenFrame: screen.frame)
+        } else {
+            applyLayoutPreset(id: id)
+        }
+    }
+
     func handleLocalShortcut(_ shortcut: HotKeyShortcut) -> Bool {
         guard isShowingLayoutGrid, !isEditingSettings else { return false }
         guard let preset = layoutPresets.first(where: { $0.localShortcuts.contains(shortcut) }) else { return false }
-        applyLayoutPreset(id: preset.id)
+        applyPresetOnMouseScreen(id: preset.id)
         return true
     }
 
@@ -652,7 +744,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func hideMainWindow() {
-        mainWindowController?.hide()
+        hideAllMainWindows()
     }
 
     func quitApp() {
@@ -983,18 +1075,24 @@ final class AppState: NSObject, NSMenuDelegate {
             // Switching to .accessory causes macOS to hide all windows and
             // fire windowDidResignKey, which normally resets UI state via
             // handleMainWindowHidden(). Use a flag to suppress that reset.
-            let mainWindowWasVisible = mainWindowController?.isVisible == true
+            let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
             isSwitchingActivationPolicy = true
             // Transition through .prohibited to force macOS to fully
             // de-register the Dock tile, then back to .accessory.
             _ = NSApp.setActivationPolicy(.prohibited)
             _ = NSApp.setActivationPolicy(.accessory)
-            if mainWindowWasVisible {
+            if anyVisible {
                 // macOS hides windows asynchronously after the policy change.
                 // A short delay ensures our restore happens after that.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
-                    self?.isSwitchingActivationPolicy = false
-                    self?.mainWindowController?.show()
+                    guard let self else { return }
+                    self.isSwitchingActivationPolicy = false
+                    for (displayID, controller) in self.mainWindowControllers {
+                        if displayID != self.targetScreenDisplayID {
+                            controller.show(asKey: true)
+                        }
+                    }
+                    self.targetWindowController?.show(asKey: true)
                     NSApp.activate(ignoringOtherApps: true)
                 }
             } else {
@@ -1086,10 +1184,13 @@ final class AppState: NSObject, NSMenuDelegate {
         NSRunningApplication(processIdentifier: lastTargetPID)?.activate()
     }
 
-    private func handleMainWindowHidden() {
+    private func handleMainWindowHidden(displayID: CGDirectDisplayID) {
         // During an activation-policy switch the window is temporarily hidden
         // by macOS. Don't reset UI state — the window will be restored shortly.
         guard !isSwitchingActivationPolicy else { return }
+        // If any Tiley window is still visible, don't reset state.
+        let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
+        if anyVisible { return }
         hidePreviewOverlay()
         isEditingSettings = false
         isShowingPermissionsOnly = false
@@ -1110,31 +1211,146 @@ final class AppState: NSObject, NSMenuDelegate {
             isEditingLayoutPresets = false
             return true
         }
+        if isShowingLayoutGrid {
+            cancelLayoutGrid()
+            return true
+        }
         return false
     }
 
+    private var targetWindowController: MainWindowController? {
+        guard let id = targetScreenDisplayID else { return nil }
+        return mainWindowControllers[id]
+    }
+
+    private func windowControllerForScreen(frame screenFrame: CGRect) -> MainWindowController? {
+        guard let screen = NSScreen.screens.first(where: { $0.frame == screenFrame }) else { return nil }
+        return mainWindowControllers[screen.displayID]
+    }
+
     private func openMainWindow() {
-        if mainWindowController == nil {
-            mainWindowController = MainWindowController(appState: self, onHide: { [weak self] in
-                Task { @MainActor in
-                    self?.handleMainWindowHidden()
-                }
-            }, onEscape: { [weak self] in
-                guard let self else { return false }
-                return self.handleMainWindowEscape()
-            }, onLocalShortcut: { [weak self] shortcut in
-                guard let self else { return false }
-                return self.handleLocalShortcut(shortcut)
-            }, onKeyCommand: { [weak self] event in
-                guard let self else { return false }
-                return self.handleMainWindowKeyCommand(event)
-            })
+        if isEditingSettings || isShowingPermissionsOnly {
+            openTargetScreenWindow()
+        } else if isShowingLayoutGrid {
+            NSApp.activate(ignoringOtherApps: true)
+            openAllScreenWindows()
+        } else {
+            openTargetScreenWindow()
         }
+    }
+
+    private func openTargetScreenWindow() {
+        let targetScreen = targetScreenForWindow()
+        let displayID = targetScreen.displayID
+        targetScreenDisplayID = displayID
+
+        // Always recreate to ensure fresh ScreenContext and correct role.
+        // Use dismissSilently() to avoid triggering handleMainWindowHidden
+        // which would re-register preset global hotkeys and reset state.
+        for controller in mainWindowControllers.values {
+            controller.dismissSilently()
+        }
+        mainWindowControllers.removeAll()
+
+        mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
         NSApp.activate(ignoringOtherApps: true)
         Task { @MainActor [weak self] in
             self?.selectedLayoutPresetID = nil
-            self?.mainWindowController?.show()
+            self?.mainWindowControllers[displayID]?.show()
         }
+    }
+
+    private func openAllScreenWindows() {
+        let screens = NSScreen.screens
+        guard !screens.isEmpty else { return }
+
+        let targetScreen: NSScreen
+        if let screenFrame = activeLayoutTarget?.screenFrame,
+           let screen = NSScreen.screen(containing: screenFrame) {
+            targetScreen = screen
+        } else {
+            targetScreen = NSScreen.main ?? screens.first!
+        }
+        targetScreenDisplayID = targetScreen.displayID
+
+        // Always recreate all controllers so that ScreenContext (which
+        // captures each screen's visibleFrame at init time) stays fresh
+        // and roles are always correct for the current target screen.
+        // Use dismissSilently() to avoid triggering handleMainWindowHidden
+        // which would re-register preset global hotkeys and reset state.
+        for controller in mainWindowControllers.values {
+            controller.dismissSilently()
+        }
+        mainWindowControllers.removeAll()
+
+        for screen in screens {
+            let displayID = screen.displayID
+            let isTarget = (displayID == targetScreenDisplayID)
+            mainWindowControllers[displayID] = createWindowController(for: screen, isTarget: isTarget)
+        }
+
+        // Show secondary windows first, then target window last so it gets initial key focus.
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.selectedLayoutPresetID = nil
+            for (displayID, controller) in self.mainWindowControllers {
+                if displayID != self.targetScreenDisplayID {
+                    controller.show(asKey: true)
+                }
+            }
+            self.mainWindowControllers[self.targetScreenDisplayID ?? 0]?.show(asKey: true)
+        }
+    }
+
+    private func closeSecondaryWindows() {
+        for (displayID, controller) in mainWindowControllers {
+            if displayID != targetScreenDisplayID {
+                controller.hide()
+            }
+        }
+        mainWindowControllers = mainWindowControllers.filter { $0.key == targetScreenDisplayID }
+    }
+
+    private func hideAllMainWindows() {
+        for controller in mainWindowControllers.values {
+            controller.hide()
+        }
+    }
+
+    private func targetScreenForWindow() -> NSScreen {
+        if let screenFrame = activeLayoutTarget?.screenFrame,
+           let screen = NSScreen.screen(containing: screenFrame) {
+            return screen
+        }
+        return NSScreen.main ?? NSScreen.screens.first!
+    }
+
+    private func createWindowController(for screen: NSScreen, isTarget: Bool) -> MainWindowController {
+        let displayID = screen.displayID
+        let role: ScreenRole = isTarget ? .target : .secondary(screen: screen)
+
+        return MainWindowController(
+            appState: self,
+            screenRole: role,
+            targetScreen: screen,
+            onHide: { [weak self] in
+                Task { @MainActor in
+                    self?.handleMainWindowHidden(displayID: displayID)
+                }
+            },
+            onEscape: { [weak self] in
+                guard let self else { return false }
+                return self.handleMainWindowEscape()
+            },
+            onLocalShortcut: { [weak self] shortcut in
+                guard let self else { return false }
+                return self.handleLocalShortcut(shortcut)
+            },
+            onKeyCommand: { [weak self] event in
+                guard let self else { return false }
+                return self.handleMainWindowKeyCommand(event)
+            }
+        )
     }
 
     private func handleMainWindowKeyCommand(_ event: NSEvent) -> Bool {
@@ -1202,6 +1418,23 @@ final class AppState: NSObject, NSMenuDelegate {
                 }
             }
         }
+
+        screenChangeTask = Task { [weak self] in
+            let notifications = NotificationCenter.default.notifications(
+                named: NSApplication.didChangeScreenParametersNotification
+            )
+            for await _ in notifications {
+                guard !Task.isCancelled else { break }
+                await MainActor.run { [weak self] in
+                    self?.handleScreenConfigurationChange()
+                }
+            }
+        }
+    }
+
+    private func handleScreenConfigurationChange() {
+        guard isShowingLayoutGrid, !isEditingSettings, !isShowingPermissionsOnly else { return }
+        openAllScreenWindows()
     }
 
     private func handleAppDidBecomeActive() {

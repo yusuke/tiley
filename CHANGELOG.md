@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Multi-screen overlay: the layout grid window now appears on every connected screen simultaneously
+- Cross-screen tiling: drag grid or click a preset on a secondary screen to tile the target window to that screen
+- Preview overlay appears on the screen where the hovered preset window is displayed
+
+### Fixed
+
+- Fix maximize layout not filling the full screen when tiling across displays of different sizes
+- Fix local keyboard shortcuts (arrow keys, preset hotkeys) not working after the second overlay activation
+- Fix only some overlay windows closing when clicking a background app window; all overlay windows now dismiss together
+- Fix preset hover/selection highlight appearing on all screens; it now only appears on the screen where the mouse cursor resides
+
 ## [1.1.4] - 2026-03-15
 
 ### Fixed

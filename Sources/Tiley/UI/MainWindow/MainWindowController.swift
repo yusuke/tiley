@@ -22,6 +22,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private static let settingsModeWindowAlpha: CGFloat = 1.0
 
     private weak var appState: AppState?
+    private let screenRole: ScreenRole
+    private let targetScreen: NSScreen
     private let onHide: () -> Void
     private let onEscape: () -> Bool
     private let onLocalShortcut: (HotKeyShortcut) -> Bool
@@ -29,15 +31,22 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private var screenParameterTask: Task<Void, Never>?
     private var isHidingWindow = false
 
-    init(appState: AppState, onHide: @escaping () -> Void, onEscape: @escaping () -> Bool, onLocalShortcut: @escaping (HotKeyShortcut) -> Bool, onKeyCommand: @escaping (NSEvent) -> Bool) {
+    init(appState: AppState, screenRole: ScreenRole = .target, targetScreen: NSScreen? = nil, onHide: @escaping () -> Void, onEscape: @escaping () -> Bool, onLocalShortcut: @escaping (HotKeyShortcut) -> Bool, onKeyCommand: @escaping (NSEvent) -> Bool) {
         self.appState = appState
+        self.screenRole = screenRole
+        self.targetScreen = targetScreen ?? NSScreen.main ?? NSScreen.screens.first!
         self.onHide = onHide
         self.onEscape = onEscape
         self.onLocalShortcut = onLocalShortcut
         self.onKeyCommand = onKeyCommand
-        let initialVisibleFrame = NSScreen.main?.visibleFrame
+        let initialVisibleFrame = self.targetScreen.visibleFrame
         let initialSize = Self.windowSize(for: appState, visibleFrame: initialVisibleFrame)
-        let view = MainWindowView(appState: appState)
+        let screenContext = ScreenContext(
+            visibleFrame: self.targetScreen.visibleFrame,
+            screenFrame: self.targetScreen.frame
+        )
+        let view = MainWindowView(appState: appState, screenRole: screenRole)
+            .environment(\.screenContext, screenContext)
         let hostingView = ZeroInsetHostingView(rootView: view)
         hostingView.frame = NSRect(origin: .zero, size: initialSize)
         hostingView.autoresizingMask = [.width, .height]
@@ -55,10 +64,14 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = false
-        window.identifier = NSUserInterfaceItemIdentifier("main-window")
+        let displayID = self.targetScreen.displayID
+        window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
         window.isReleasedWhenClosed = false
         window.contentView = hostingView
-        window.setFrameAutosaveName("TileyMainWindow")
+        // Only use autosave for the target window to avoid position conflicts
+        if screenRole.isTarget {
+            window.setFrameAutosaveName("TileyMainWindow")
+        }
         window.standardWindowButton(.closeButton)?.isHidden = true
         window.standardWindowButton(.miniaturizeButton)?.isHidden = true
         window.standardWindowButton(.zoomButton)?.isHidden = true
@@ -79,11 +92,15 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func show() {
+    func show(asKey: Bool = true) {
         let destinationScreen = preferredDisplayScreen(for: window)
         applyWindowMode(animated: false, preferredScreen: destinationScreen)
         positionWindow(preferredScreen: destinationScreen)
-        window?.makeKeyAndOrderFront(nil)
+        if asKey {
+            window?.makeKeyAndOrderFront(nil)
+        } else {
+            window?.orderFront(nil)
+        }
     }
 
     func hide() {
@@ -93,6 +110,12 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window?.orderOut(nil)
         onHide()
         isHidingWindow = false
+    }
+
+    /// Dismiss the window without firing the onHide callback.
+    /// Used when recreating window controllers to avoid triggering state resets.
+    func dismissSilently() {
+        window?.orderOut(nil)
     }
 
     var isVisible: Bool {
@@ -108,16 +131,17 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     func windowDidResignKey(_ notification: Notification) {
-        // Always hide the preview overlay when the window loses key status,
-        // even if the main window itself stays visible.
-        appState?.hidePreviewOverlay()
-        // Keep the main window visible when focus moves to another Tiley-owned panel
-        // such as the standard About dialog.
+        // Keep the main window visible when focus moves to another Tiley-owned
+        // window (e.g. a secondary-screen MainWindow or the About dialog).
         guard !NSApp.isActive else { return }
+        appState?.hidePreviewOverlay()
         // Keep the permissions-only panel visible so the user can grant access
         // in System Settings and return to Tiley.
         guard appState?.isShowingPermissionsOnly != true else { return }
-        hide()
+        // Hide all Tiley windows when the app loses focus, not just this one.
+        // Secondary windows don't receive windowDidResignKey because they
+        // were never the key window.
+        appState?.hideMainWindow()
     }
 
     func windowDidChangeScreen(_ notification: Notification) {
@@ -197,6 +221,11 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     private func currentVisibleFrame(for window: NSWindow, preferredScreen: NSScreen? = nil) -> CGRect {
+        // Secondary screens always use their assigned screen's visible frame.
+        if !screenRole.isTarget {
+            let frame = targetScreen.visibleFrame
+            if !frame.equalTo(.zero) { return frame }
+        }
         if let targetVisibleFrame = appState?.preferredMainWindowVisibleFrame,
            !targetVisibleFrame.equalTo(.zero) {
             return targetVisibleFrame
@@ -220,6 +249,10 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     private func preferredDisplayScreen(for window: NSWindow?) -> NSScreen? {
+        // Secondary screens always display on their assigned screen.
+        if !screenRole.isTarget {
+            return targetScreen
+        }
         guard let window else { return NSScreen.main ?? NSScreen.screens.first }
         if let targetScreenFrame = appState?.preferredMainWindowScreenFrame,
            let targetScreen = NSScreen.screen(containing: targetScreenFrame) {
@@ -316,7 +349,27 @@ private final class MainAppWindow: NSWindow {
         hideHandler?()
     }
 
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        guard event.type == .keyDown else {
+            return super.performKeyEquivalent(with: event)
+        }
+        // Let text fields handle their own input.
+        if !shouldHandleWindowKeyEvents {
+            return super.performKeyEquivalent(with: event)
+        }
+        if keyCommandHandler?(event) == true {
+            return true
+        }
+        if let shortcut = HotKeyShortcut.from(event: event, requireModifiers: false),
+           localShortcutHandler?(shortcut) == true {
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
+
     override func keyDown(with event: NSEvent) {
+        // performKeyEquivalent handles shortcuts; keyDown is a fallback for
+        // events that were not consumed there (e.g. when a text field is focused).
         if shouldHandleWindowKeyEvents,
            keyCommandHandler?(event) == true {
             return
@@ -344,6 +397,10 @@ private final class ZeroInsetHostingView<Content: View>: NSHostingView<Content> 
     override var additionalSafeAreaInsets: NSEdgeInsets {
         get { NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) }
         set { }
+    }
+
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+        true
     }
 
     override func viewDidMoveToWindow() {

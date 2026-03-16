@@ -3,6 +3,32 @@ import Sparkle
 import SwiftUI
 import UniformTypeIdentifiers
 
+enum ScreenRole {
+    case target
+    case secondary(screen: NSScreen)
+
+    var isTarget: Bool {
+        if case .target = self { return true }
+        return false
+    }
+}
+
+struct ScreenContext {
+    let visibleFrame: CGRect
+    let screenFrame: CGRect
+}
+
+private struct ScreenContextKey: EnvironmentKey {
+    static let defaultValue: ScreenContext? = nil
+}
+
+extension EnvironmentValues {
+    var screenContext: ScreenContext? {
+        get { self[ScreenContextKey.self] }
+        set { self[ScreenContextKey.self] = newValue }
+    }
+}
+
 struct MainWindowView: View {
     private static let windowCornerRadius: CGFloat = 14
     private static let layoutPanelHorizontalPadding: CGFloat = 28
@@ -25,7 +51,9 @@ struct MainWindowView: View {
     private static let defaultGridGap: CGFloat = 0
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.screenContext) private var screenContext
     var appState: AppState
+    var screenRole: ScreenRole
     @State private var draftSettings: AppState.SettingsSnapshot
     @State private var activeLayoutSelection: GridSelection?
     @State private var editingPresetNameID: UUID?
@@ -42,8 +70,9 @@ struct MainWindowView: View {
     @State private var dragEndTask: Task<Void, Never>?
     @State private var isHoveringGridSection = false
 
-    init(appState: AppState) {
+    init(appState: AppState, screenRole: ScreenRole = .target) {
         self.appState = appState
+        self.screenRole = screenRole
         _draftSettings = State(initialValue: appState.settingsSnapshot)
     }
 
@@ -97,6 +126,15 @@ struct MainWindowView: View {
             if let hoveredPresetID, selectedID != hoveredPresetID {
                 appState.selectLayoutPreset(hoveredPresetID)
                 return
+            }
+            // Only the view that owns the hover should drive the preview,
+            // so the preview appears on the correct screen. For keyboard-
+            // driven selection (no view hovering), the view whose screen
+            // contains the mouse cursor handles the preview.
+            if let selectedID {
+                let thisViewOwnsHover = (hoveredPresetID == selectedID)
+                let isKeyboardDriven = (hoveredPresetID == nil && isMouseOnThisScreen)
+                guard thisViewOwnsHover || isKeyboardDriven else { return }
             }
             updatePresetSelectionPreview(for: selectedID)
         }
@@ -275,15 +313,27 @@ struct MainWindowView: View {
                     hoveredPresetID = nil
                     appState.selectedLayoutPresetID = nil
                     activeLayoutSelection = selection
-                    appState.updateLayoutPreview(selection)
+                    if let ctx = screenContext {
+                        appState.updateLayoutPreview(selection, screenContext: ctx)
+                    } else {
+                        appState.updateLayoutPreview(selection)
+                    }
                 },
                 onHoverChange: { selection in
                     guard activeLayoutSelection == nil else { return }
-                    appState.updateLayoutPreview(selection)
+                    if let ctx = screenContext {
+                        appState.updateLayoutPreview(selection, screenContext: ctx)
+                    } else {
+                        appState.updateLayoutPreview(selection)
+                    }
                 },
                 onSelectionCommit: { selection in
                     activeLayoutSelection = nil
-                    appState.commitLayoutSelection(selection)
+                    if let ctx = screenContext {
+                        appState.commitLayoutSelectionOnScreen(selection, visibleFrame: ctx.visibleFrame, screenFrame: ctx.screenFrame)
+                    } else {
+                        appState.commitLayoutSelection(selection)
+                    }
                 }
             )
             .frame(width: gridWidth, height: gridHeight, alignment: .topLeading)
@@ -302,17 +352,22 @@ struct MainWindowView: View {
 
     private var layoutGridFooterBar: some View {
         HStack(spacing: 16) {
-            Button {
-                dismissPresetNameEditingIfNeeded()
-                draftSettings = appState.settingsSnapshot
-                appState.beginSettingsEditing()
-            } label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 15, weight: .semibold))
+            if screenRole.isTarget {
+                Button {
+                    dismissPresetNameEditingIfNeeded()
+                    draftSettings = appState.settingsSnapshot
+                    appState.beginSettingsEditing()
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 15, weight: .semibold))
+                }
+                .buttonStyle(.bordered)
+                .help("Edit Settings")
+                .frame(width: Self.footerLeadingWidth, alignment: .leading)
+            } else {
+                Color.clear
+                    .frame(width: Self.footerLeadingWidth, alignment: .leading)
             }
-            .buttonStyle(.bordered)
-            .help("Edit Settings")
-            .frame(width: Self.footerLeadingWidth, alignment: .leading)
 
             Spacer(minLength: 0)
 
@@ -903,7 +958,16 @@ struct MainWindowView: View {
 
     private func isPresetSelected(_ id: UUID) -> Bool {
         if draggingPresetID == id { return true }
-        return (hoveredPresetID ?? appState.selectedLayoutPresetID) == id
+        if hoveredPresetID == id { return true }
+        // Only show the shared keyboard/hover selection highlight on the
+        // screen where the mouse cursor currently resides.
+        guard appState.selectedLayoutPresetID == id else { return false }
+        return isMouseOnThisScreen
+    }
+
+    private var isMouseOnThisScreen: Bool {
+        guard let ctx = screenContext else { return screenRole.isTarget }
+        return ctx.screenFrame.contains(NSEvent.mouseLocation)
     }
 
     private func updatePresetSelectionPreview(for id: UUID?) {
@@ -915,7 +979,12 @@ struct MainWindowView: View {
             appState.updateLayoutPreview(nil)
             return
         }
-        appState.updateLayoutPreview(preset.scaledSelection(toRows: appState.rows, columns: appState.columns))
+        let selection = preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+        if let ctx = screenContext {
+            appState.updateLayoutPreview(selection, screenContext: ctx)
+        } else {
+            appState.updateLayoutPreview(selection)
+        }
     }
 
     private func deletePreset(id: UUID) {
@@ -936,7 +1005,11 @@ struct MainWindowView: View {
             return
         }
         appState.selectLayoutPreset(preset.id)
-        appState.applyLayoutPreset(id: preset.id)
+        if let ctx = screenContext {
+            appState.applyLayoutPresetOnScreen(id: preset.id, visibleFrame: ctx.visibleFrame, screenFrame: ctx.screenFrame)
+        } else {
+            appState.applyLayoutPreset(id: preset.id)
+        }
     }
 
     private func startDraggingPreset(_ id: UUID) {

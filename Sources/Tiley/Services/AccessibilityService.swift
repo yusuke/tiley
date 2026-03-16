@@ -105,7 +105,11 @@ final class AccessibilityService {
     }
 
     func setFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) throws {
-        var origin = CGPoint(x: frame.minX, y: screenFrame.maxY - frame.maxY)
+        // AX coordinates have their origin at the top-left of the primary
+        // screen, so use the primary screen's maxY for the conversion from
+        // AppKit's bottom-left coordinate system.
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
+        var origin = CGPoint(x: frame.minX, y: primaryMaxY - frame.maxY)
         var size = frame.size
         guard let position = AXValueCreate(.cgPoint, &origin) else {
             throw WindowAccessError.positionSetFailed
@@ -114,6 +118,14 @@ final class AccessibilityService {
             throw WindowAccessError.sizeSetFailed
         }
 
+        // When moving a window across screens of different sizes, some apps
+        // constrain the window size based on the screen it currently occupies.
+        // To work around this we apply the geometry in multiple passes:
+        // 1. Set position to move the window onto the destination screen.
+        // 2. Set size — the app now accepts the larger dimensions.
+        // 3. Re-apply position to correct any drift from the resize.
+        // 4. Re-apply size once more in case the first resize was still
+        //    constrained by the old screen (belt-and-suspenders).
         let positionResult = AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
         guard positionResult == .success else {
             throw WindowAccessError.positionSetFailed
@@ -123,6 +135,10 @@ final class AccessibilityService {
         guard sizeResult == .success else {
             throw WindowAccessError.sizeSetFailed
         }
+
+        // Re-apply position then size to handle apps that need a second pass.
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
     }
 
     private func copyAttribute(_ element: AXUIElement, attribute: String) throws -> AnyObject? {
@@ -213,10 +229,12 @@ final class AccessibilityService {
     }
 
     private func frameForAXOrigin(_ origin: CGPoint, size: CGSize, on screen: NSScreen?) -> CGRect {
-        let maxY = screen?.frame.maxY ?? (origin.y + size.height)
+        // AX coordinates have their origin at the top-left of the primary
+        // screen, so use the primary screen's maxY for the conversion.
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen?.frame.maxY ?? (origin.y + size.height)
         return CGRect(
             x: origin.x,
-            y: maxY - origin.y - size.height,
+            y: primaryMaxY - origin.y - size.height,
             width: size.width,
             height: size.height
         )
