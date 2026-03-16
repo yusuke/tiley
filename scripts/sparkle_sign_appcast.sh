@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Signs the notarized ZIP with Sparkle EdDSA and updates appcast.xml.
+# Signs the notarized DMG with Sparkle EdDSA and updates appcast.xml.
 # Run this after release_notarize.sh completes successfully.
 #
 # Usage:
@@ -9,7 +9,7 @@
 # Environment variables (optional):
 #   DOWNLOAD_URL_PREFIX  - Base URL for update downloads
 #                          (default: https://github.com/yusuke/tiley/releases/download)
-#   APPCAST_DIR          - Directory where appcast.xml and ZIPs are managed
+#   APPCAST_DIR          - Directory where appcast.xml and DMGs are managed
 #                          (default: build/sparkle)
 
 set -euo pipefail
@@ -24,7 +24,7 @@ SIGN_UPDATE="$SPARKLE_BIN/sign_update"
 GENERATE_APPCAST="$SPARKLE_BIN/generate_appcast"
 
 # Paths from release_notarize.sh output
-ZIP_PATH="${ZIP_PATH:-build/Tiley.zip}"
+DMG_PATH="${DMG_PATH:-build/Tiley.dmg}"
 EXPORT_PATH="${EXPORT_PATH:-build/export}"
 APP_NAME="${APP_NAME:-Tiley.app}"
 EXPORTED_APP_PATH="$EXPORT_PATH/$APP_NAME"
@@ -45,8 +45,8 @@ if [[ ! -x "$GENERATE_APPCAST" ]]; then
   exit 1
 fi
 
-if [[ ! -f "$ZIP_PATH" ]]; then
-  echo "Error: Notarized ZIP not found at $ZIP_PATH"
+if [[ ! -f "$DMG_PATH" ]]; then
+  echo "Error: Notarized DMG not found at $DMG_PATH"
   echo "Run scripts/release_notarize.sh first."
   exit 1
 fi
@@ -103,9 +103,9 @@ if [[ -f "$CHANGELOG" ]]; then
   fi
 fi
 
-# Sign the ZIP with Sparkle EdDSA (key is read from Keychain automatically)
-echo "Signing ZIP with Sparkle EdDSA"
-SIGNATURE=$("$SIGN_UPDATE" "$ZIP_PATH" -p)
+# Sign the DMG with Sparkle EdDSA (key is read from Keychain automatically)
+echo "Signing DMG with Sparkle EdDSA"
+SIGNATURE=$("$SIGN_UPDATE" "$DMG_PATH" -p)
 echo "EdDSA signature: $SIGNATURE"
 
 # Prepare appcast directory
@@ -117,13 +117,13 @@ if [[ -f "$PROJECT_ROOT/docs/appcast.xml" && ! -f "$APPCAST_DIR/appcast.xml" ]];
   cp "$PROJECT_ROOT/docs/appcast.xml" "$APPCAST_DIR/"
 fi
 
-# Copy the notarized ZIP with version-tagged filename
-VERSIONED_ZIP="Tiley-${APP_VERSION}.zip"
-cp "$ZIP_PATH" "$APPCAST_DIR/$VERSIONED_ZIP"
-echo "Copied ZIP to $APPCAST_DIR/$VERSIONED_ZIP"
+# Copy the notarized DMG with version-tagged filename
+VERSIONED_DMG="Tiley-${APP_VERSION}.dmg"
+cp "$DMG_PATH" "$APPCAST_DIR/$VERSIONED_DMG"
+echo "Copied DMG to $APPCAST_DIR/$VERSIONED_DMG"
 
 # Generate/update appcast.xml
-DOWNLOAD_URL="$DOWNLOAD_URL_PREFIX/v$APP_VERSION/$VERSIONED_ZIP"
+DOWNLOAD_URL="$DOWNLOAD_URL_PREFIX/v$APP_VERSION/$VERSIONED_DMG"
 echo "Download URL: $DOWNLOAD_URL"
 
 echo "Generating appcast.xml"
@@ -176,9 +176,9 @@ echo "=== Sparkle signing complete ==="
 echo "  Version:     $APP_VERSION (build $BUILD_NUMBER)"
 echo "  Signature:   $SIGNATURE"
 echo "  Appcast:     docs/appcast.xml"
-echo "  ZIP:         $APPCAST_DIR/$VERSIONED_ZIP"
+echo "  DMG:         $APPCAST_DIR/$VERSIONED_DMG"
 echo ""
 echo "Next steps:"
 echo "  1. Commit docs/appcast.xml"
 echo "  2. Create GitHub Release tagged v$APP_VERSION"
-echo "  3. Upload $APPCAST_DIR/$VERSIONED_ZIP to the release"
+echo "  3. Upload $APPCAST_DIR/$VERSIONED_DMG to the release"

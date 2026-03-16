@@ -1,11 +1,11 @@
 #!/bin/zsh
 
-# Creates a GitHub Release, uploads the notarized ZIP, and pushes the updated appcast.xml.
+# Creates a GitHub Release, uploads the notarized DMG, and pushes the updated appcast.xml.
 # Run this after sparkle_sign_appcast.sh completes successfully.
 #
 # Prerequisites:
 #   - gh CLI installed and authenticated (https://cli.github.com/)
-#   - sparkle_sign_appcast.sh has been run (builds build/sparkle/Tiley-X.Y.Z.zip and docs/appcast.xml)
+#   - sparkle_sign_appcast.sh has been run (builds build/sparkle/Tiley-X.Y.Z.dmg and docs/appcast.xml)
 #
 # Usage:
 #   scripts/gh_release.sh
@@ -51,10 +51,10 @@ BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$EXPORTED_AP
 TAG="v$APP_VERSION"
 echo "Releasing $TAG (build $BUILD_NUMBER)"
 
-# Verify the versioned ZIP exists
-VERSIONED_ZIP="$APPCAST_DIR/Tiley-${APP_VERSION}.zip"
-if [[ ! -f "$VERSIONED_ZIP" ]]; then
-  echo "Error: Versioned ZIP not found at $VERSIONED_ZIP"
+# Verify the versioned DMG exists
+VERSIONED_DMG="$APPCAST_DIR/Tiley-${APP_VERSION}.dmg"
+if [[ ! -f "$VERSIONED_DMG" ]]; then
+  echo "Error: Versioned DMG not found at $VERSIONED_DMG"
   echo "Run scripts/sparkle_sign_appcast.sh first."
   exit 1
 fi
@@ -136,14 +136,14 @@ else
   GH_FLAGS+=("--notes" "$NOTES")
 fi
 
-# Create GitHub Release and upload ZIP
+# Create GitHub Release and upload DMG
 echo "Creating GitHub Release $TAG"
-gh release create "$TAG" "${GH_FLAGS[@]}" "$VERSIONED_ZIP#Tiley-${APP_VERSION}.zip"
+gh release create "$TAG" "${GH_FLAGS[@]}" "$VERSIONED_DMG#Tiley-${APP_VERSION}.dmg"
 
 RELEASE_URL="https://github.com/$REPO/releases/tag/$TAG"
 echo ""
 echo "=== GitHub Release published ==="
 echo "  Tag:       $TAG"
 echo "  Release:   $RELEASE_URL"
-echo "  Asset:     Tiley-${APP_VERSION}.zip"
+echo "  Asset:     Tiley-${APP_VERSION}.dmg"
 echo "  Appcast:   docs/appcast.xml (committed & pushed)"
