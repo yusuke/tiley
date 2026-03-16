@@ -58,4 +58,7 @@ fi
 echo "Copying app to $INSTALL_DIR"
 cp -R "$ARCHIVED_APP_PATH" "$INSTALL_DIR/"
 
+echo "Launching $APP_NAME"
+open "$INSTALLED_APP_PATH"
+
 echo "Done: $INSTALLED_APP_PATH"
