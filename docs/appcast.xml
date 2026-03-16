@@ -3,18 +3,170 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>1.2.0</title>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Window target switching: press Tab / Shift+Tab while the overlay is showing to cycle through available windows</li>
+<li>Window target dropdown: click the target info area to select a window from a popup menu</li>
+<li>Tab and Shift+Tab are now reserved and cannot be assigned as layout shortcuts</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>ウィンドウターゲット切り替え: オーバーレイ表示中にTab / Shift+Tabで利用可能なウィンドウを順番に切り替え</li>
+<li>ウィンドウターゲットドロップダウン: ターゲット情報エリアをクリックしてポップアップメニューからウィンドウを選択</li>
+<li>TabとShift+Tabは予約キーとなり、レイアウトショートカットに割り当てできなくなりました</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>윈도우 대상 전환: 오버레이가 표시된 상태에서 Tab / Shift+Tab을 눌러 사용 가능한 윈도우를 순환</li>
+<li>윈도우 대상 드롭다운: 대상 정보 영역을 클릭하여 팝업 메뉴에서 윈도우를 선택</li>
+<li>Tab과 Shift+Tab은 예약 키로 지정되어 레이아웃 단축키에 할당할 수 없습니다</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>窗口目标切换：在叠加层显示时按 Tab / Shift+Tab 可在可用窗口之间循环切换</li>
+<li>窗口目标下拉菜单：点击目标信息区域，从弹出菜单中选择窗口</li>
+<li>Tab 和 Shift+Tab 现已设为保留键，无法分配为布局快捷键</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>視窗目標切換：在疊加層顯示時按 Tab / Shift+Tab 可在可用視窗之間循環切換</li>
+<li>視窗目標下拉選單：點擊目標資訊區域，從彈出式選單中選擇視窗</li>
+<li>Tab 和 Shift+Tab 現已設為保留鍵，無法指定為佈局快捷鍵</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Fensterziel-Umschaltung: Drücken Sie Tab / Umschalt+Tab während der Overlay-Anzeige, um zwischen verfügbaren Fenstern zu wechseln</li>
+<li>Fensterziel-Dropdown: Klicken Sie auf den Zielinformationsbereich, um ein Fenster aus einem Popup-Menü auszuwählen</li>
+<li>Tab und Umschalt+Tab sind jetzt reserviert und können nicht als Layout-Tastenkürzel zugewiesen werden</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Cambio de ventana objetivo: pulsa Tab / Mayús+Tab mientras se muestra la superposición para recorrer las ventanas disponibles</li>
+<li>Menú desplegable de ventana objetivo: haz clic en el área de información del objetivo para seleccionar una ventana desde un menú emergente</li>
+<li>Tab y Mayús+Tab ahora están reservados y no pueden asignarse como atajos de disposición</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Changement de fenêtre cible : appuyez sur Tab / Maj+Tab pendant l'affichage de la superposition pour parcourir les fenêtres disponibles</li>
+<li>Menu déroulant de fenêtre cible : cliquez sur la zone d'information de la cible pour sélectionner une fenêtre dans un menu contextuel</li>
+<li>Tab et Maj+Tab sont désormais réservés et ne peuvent pas être attribués comme raccourcis de disposition</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Cambio finestra di destinazione: premi Tab / Maiusc+Tab mentre l'overlay è visualizzato per scorrere le finestre disponibili</li>
+<li>Menu a tendina finestra di destinazione: fai clic sull'area informazioni del target per selezionare una finestra dal menu a comparsa</li>
+<li>Tab e Maiusc+Tab sono ora riservati e non possono essere assegnati come scorciatoie di layout</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Alternância de janela alvo: pressione Tab / Shift+Tab enquanto a sobreposição estiver visível para alternar entre as janelas disponíveis</li>
+<li>Menu suspenso de janela alvo: clique na área de informações do alvo para selecionar uma janela em um menu pop-up</li>
+<li>Tab e Shift+Tab agora são reservados e não podem ser atribuídos como atalhos de layout</li>
+</ul>
+]]></description>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Переключение целевого окна: нажмите Tab / Shift+Tab при отображении наложения для переключения между доступными окнами</li>
+<li>Раскрывающийся список целевого окна: нажмите на область информации о цели, чтобы выбрать окно из всплывающего меню</li>
+<li>Tab и Shift+Tab теперь зарезервированы и не могут быть назначены в качестве горячих клавиш макетов</li>
+</ul>
+]]></description>
+            <pubDate>Tue, 17 Mar 2026 08:48:48 +0900</pubDate>
+            <sparkle:version>120</sparkle:version>
+            <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley-1.2.0.dmg" length="4611749" type="application/octet-stream" sparkle:edSignature="BjuPdPxfrq1oKAi2JcVULbjRvvFY7cbuysf1ZL2dvuA3q9wDaG6it059XfYFLIIQ0vP3wQ6raGmTnnOFnec5Aw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-118.delta" sparkle:deltaFrom="118" length="164554" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vqYYvsxI8eXTbSuovFAUrheX+YAMQGYrDL6CvvdwLhE9+r9QO11RmjdBBm+dxjApi/hEQ2XBFZF03IY2/SQTAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-117.delta" sparkle:deltaFrom="117" length="178886" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="R6h4PV0/TZwXkfiWtlGIsahj3z8JKm7Iu8elscCO2EU+M4F6+mso/rTVnEs3tcMMkhCnejUEas3gtUIyJzGVCQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-116.delta" sparkle:deltaFrom="116" length="183258" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mRG5Dv27laq0T/550HRJqf8rFKJWTldQaDrFLxnASVHykFELEltgUnJq8oXOIg+i67sqogoME2kKA3e+uKbXAw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-115.delta" sparkle:deltaFrom="115" length="192370" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OLBoNbk5j0m/Gr7ElY5FRmQMf0F+VMFt7VCTKhGzFKDn94ufoBnAFUZln9Q/5WxTlg72qQFnfsM0MuaI7J5xAA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-114.delta" sparkle:deltaFrom="114" length="248530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="w3vCfl5qqL5Gvx3PX/0CUB28W1k1ktKNsp6X7Fu46wH+kNEufW4GvzHQMFjPA4TzyFWSF2dsr7jR6eGpmIwSAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.1.8</title>
-            <description><![CDATA[<h3>Added</h3>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
 <ul>
 <li>After copying from a DMG, offer to eject the disk image and move the DMG file to Trash</li>
-<li>Detect a mounted Tiley DMG on launch from /Applications (e.g. after manual Finder copy) and offer to eject and trash it</li>
+<li>Detect a mounted Tiley DMG on launch from /Applications and offer to eject and trash it</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>DMGからコピー後、ディスクイメージの取り出しとDMGファイルのゴミ箱への移動を提案</li>
+<li>/Applicationsからの起動時にマウントされたTiley DMGを検出し、取り出しとゴミ箱への移動を提案</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>DMG에서 복사 후 디스크 이미지 추출 및 DMG 파일 휴지통 이동을 제안</li>
+<li>/Applications에서 실행 시 마운트된 Tiley DMG를 감지하여 추출 및 휴지통 이동을 제안</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>从 DMG 复制后，提供推出磁盘映像并将 DMG 文件移至废纸篓的选项</li>
+<li>从"应用程序"启动时检测已挂载的 Tiley DMG，并提供推出和移至废纸篓的选项</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>從 DMG 拷貝後，提供退出磁碟映像檔並將 DMG 檔案移至垃圾桶的選項</li>
+<li>從「應用程式」啟動時偵測已掛載的 Tiley DMG，並提供退出和移至垃圾桶的選項</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Nach dem Kopieren von einem DMG wird angeboten, das Disk-Image auszuwerfen und die DMG-Datei in den Papierkorb zu verschieben</li>
+<li>Erkennung eines eingehängten Tiley-DMG beim Start aus /Programme mit Angebot zum Auswerfen und Löschen</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Tras copiar desde un DMG, ofrece expulsar la imagen de disco y mover el archivo DMG a la papelera</li>
+<li>Al iniciar desde /Aplicaciones, detecta un DMG de Tiley montado y ofrece expulsarlo y eliminarlo</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Après la copie depuis un DMG, propose d'éjecter l'image disque et de déplacer le fichier DMG vers la corbeille</li>
+<li>Détection d'un DMG Tiley monté au lancement depuis /Applications avec proposition d'éjection et de suppression</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Dopo la copia da un DMG, offre di espellere l'immagine disco e spostare il file DMG nel cestino</li>
+<li>Rilevamento di un DMG Tiley montato all'avvio da /Applicazioni con offerta di espulsione e eliminazione</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Após copiar de um DMG, oferece ejetar a imagem de disco e mover o arquivo DMG para a lixeira</li>
+<li>Ao iniciar de /Aplicativos, detecta um DMG do Tiley montado e oferece ejetar e descartar</li>
+</ul>
+]]></description>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>После копирования из DMG предлагается извлечь образ диска и переместить файл DMG в корзину</li>
+<li>При запуске из /Программы обнаруживается смонтированный DMG Tiley с предложением извлечь и удалить его</li>
 </ul>
 ]]></description>
             <pubDate>Mon, 16 Mar 2026 23:56:13 +0900</pubDate>
             <sparkle:version>118</sparkle:version>
             <sparkle:shortVersionString>1.1.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley-1.1.8.dmg" length="4579074" type="application/octet-stream" sparkle:edSignature="LHZpvGtc9EclS1EN6JOBX7pI25DQkuX3cUM411JmrbV6QMPqm5n10xZzRKKUtsW3PZ+n2Ap10qt7HGshLSULAw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley-1.1.8.dmg" length="4579074" type="application/octet-stream" sparkle:edSignature="LHZpvGtc9EclS1EN6JOBX7pI25DQkuX3cUM411JmrbV6QMPqm5n10xZzRKKUtsW3PZ+n2Ap10qt7HGshLSULAw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-117.delta" sparkle:deltaFrom="117" length="101670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="QogG+Q9vSKwTfECnATO4ZtKM7aYgUPRo6MBXoSX9xFDKF5mSXJSJI57JZDM8a106Z1UPbCHdJ8NTDfENMWENCw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-116.delta" sparkle:deltaFrom="116" length="107046" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="e98gOoZTaTCkUzT4brQdIp3WRDokc6kbLFFmriZ2T9ga0Mm6yb/yQD2eb9HFcUE2J/SsHDndkp0dLpQiLrZLAQ=="/>
@@ -25,32 +177,127 @@
         </item>
         <item>
             <title>1.1.7</title>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Switch distribution format from zip to DMG with Applications shortcut and custom Finder layout</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fix "Move to Applications" failing with a read-only volume error when launched from a downloaded zip without moving first</li>
+<li>Show "Copy to Applications" dialog instead of "Move" when launched from a disk image (DMG)</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>配布形式をzipからDMGに変更（アプリケーションフォルダへのショートカットとカスタムFinderレイアウト付き）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>ダウンロードしたzipから移動せずに起動した場合に「アプリケーションに移動」が読み取り専用ボリュームエラーで失敗する問題を修正</li>
+<li>ディスクイメージ（DMG）から起動した場合、「移動」ではなく「アプリケーションにコピー」ダイアログを表示するように変更</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>배포 형식을 zip에서 응용 프로그램 바로가기와 사용자 정의 Finder 레이아웃이 포함된 DMG로 변경</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>다운로드한 zip에서 이동하지 않고 실행 시 "응용 프로그램으로 이동"이 읽기 전용 볼륨 오류로 실패하는 문제 수정</li>
+<li>디스크 이미지(DMG)에서 실행 시 "이동" 대신 "응용 프로그램으로 복사" 대화 상자 표시</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>将分发格式从 zip 切换为带有"应用程序"快捷方式和自定义 Finder 布局的 DMG</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复从下载的 zip 直接启动（未先移动）时"移动到应用程序"因只读卷错误而失败的问题</li>
+<li>从磁盘映像（DMG）启动时显示"拷贝到应用程序"对话框，而非"移动"</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>將發佈格式從 zip 切換為帶有「應用程式」捷徑和自訂 Finder 佈局的 DMG</li>
+</ul>
+<h3>修復</h3>
+<ul>
+<li>修復從下載的 zip 直接啟動（未先移動）時「移動到應用程式」因唯讀卷宗錯誤而失敗的問題</li>
+<li>從磁碟映像檔（DMG）啟動時顯示「拷貝到應用程式」對話框，而非「移動」</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Verteilungsformat von zip auf DMG mit Programme-Verknüpfung und benutzerdefiniertem Finder-Layout umgestellt</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fehler behoben, bei dem „In Programme verschieben" mit einem Nur-Lese-Volume-Fehler fehlschlug, wenn die App aus einer heruntergeladenen zip ohne vorheriges Verschieben gestartet wurde</li>
+<li>Beim Start von einem Disk-Image (DMG) wird nun der Dialog „In Programme kopieren" statt „Verschieben" angezeigt</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Formato de distribución cambiado de zip a DMG con acceso directo a Aplicaciones y diseño personalizado de Finder</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido el error de "Mover a Aplicaciones" con error de volumen de solo lectura al iniciar desde un zip descargado sin moverlo primero</li>
+<li>Se muestra el diálogo "Copiar a Aplicaciones" en lugar de "Mover" al iniciar desde una imagen de disco (DMG)</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Format de distribution changé de zip à DMG avec raccourci Applications et disposition Finder personnalisée</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'erreur « Déplacer vers Applications » échouant avec une erreur de volume en lecture seule lors du lancement depuis un zip téléchargé sans déplacement préalable</li>
+<li>Affichage du dialogue « Copier vers Applications » au lieu de « Déplacer » lors du lancement depuis une image disque (DMG)</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Formato di distribuzione cambiato da zip a DMG con collegamento ad Applicazioni e layout Finder personalizzato</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto l'errore "Sposta in Applicazioni" che falliva con errore volume di sola lettura quando avviato da uno zip scaricato senza spostarlo prima</li>
+<li>Visualizzazione del dialogo "Copia in Applicazioni" invece di "Sposta" quando avviato da un'immagine disco (DMG)</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Formato de distribuição alterado de zip para DMG com atalho para Aplicativos e layout personalizado do Finder</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o erro "Mover para Aplicativos" falhando com erro de volume somente leitura ao iniciar de um zip baixado sem movê-lo primeiro</li>
+<li>Exibição do diálogo "Copiar para Aplicativos" em vez de "Mover" ao iniciar de uma imagem de disco (DMG)</li>
+</ul>
+]]></description>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Формат распространения изменён с zip на DMG с ярлыком «Программы» и пользовательским макетом Finder</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена ошибка «Переместить в Программы», возникавшая из-за тома только для чтения при запуске из загруженного zip без предварительного перемещения</li>
+<li>При запуске из образа диска (DMG) отображается диалог «Скопировать в Программы» вместо «Переместить»</li>
+</ul>
+]]></description>
             <pubDate>Mon, 16 Mar 2026 23:03:11 +0900</pubDate>
             <sparkle:version>117</sparkle:version>
             <sparkle:shortVersionString>1.1.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley-1.1.7.dmg" length="4536207" type="application/octet-stream" sparkle:edSignature="wXBpggW/MDIavtpBQHwICIuoXN7XcuoFZEVIq8X0dspbtRAQcy8GHsggfmeG+GNV1Tr7dxxgHO7Vx6GjeezADA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley-1.1.7.dmg" length="4536207" type="application/octet-stream" sparkle:edSignature="wXBpggW/MDIavtpBQHwICIuoXN7XcuoFZEVIq8X0dspbtRAQcy8GHsggfmeG+GNV1Tr7dxxgHO7Vx6GjeezADA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley117-116.delta" sparkle:deltaFrom="116" length="85570" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="pGiu5QsndnI5XGd1KobVI/ipDyXDBcOtsTGsA0hgS3aEdZS7LzRW2xFl6gS8CXW5zGgZ6hCIdHxbPD5qPX2bBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley117-115.delta" sparkle:deltaFrom="115" length="106274" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OwMVJ3Pdl1Od/cs0OsMTFPxt9lJnOgKPiZvRmyTRQyRGYNCbVMEG4AWvwfRKCBXntPRjsw3bkVhB5njV5SyCAg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley117-114.delta" sparkle:deltaFrom="114" length="195494" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0Hzp3TmHOduKOCo4hrvAzTfaQia1fLr0ZkOdxoGh4B21WkZ2aYfPvU7gW1CMCRVjauwFxFP8n8U6V3TXPY3zAg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley117-113.delta" sparkle:deltaFrom="113" length="210998" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dltzKsJPCUTsQGwKZfNMvjv2cdeQ+MFQJ6XxjYQ7BZVZVzgWeVGeIkxH0FccgRNm1utLqzzstcEOdyspzP2dBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley117-112.delta" sparkle:deltaFrom="112" length="213822" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vX238NZnhTGePWKmPlDWyHfqAw0FrH44Wz9FQZrzrVHiQGSYb9cOlOCARLTb2G7DlvA3C/PohJKQsT6z/lbOBQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.1.6</title>
-            <pubDate>Mon, 16 Mar 2026 17:27:35 +0900</pubDate>
-            <sparkle:version>116</sparkle:version>
-            <sparkle:shortVersionString>1.1.6</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley-1.1.6.zip" length="4430139" type="application/octet-stream" sparkle:edSignature="C5VBIs1HvvBlEx0UFw73m2dkdK1HsH7BIP9fWZxqupPHKqv+bfnhy2Onub6j/HyDtKI4PsMC39+LwIWSCLKKBw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-115.delta" sparkle:deltaFrom="115" length="91894" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aqUHIYdogCAt8pJnyhQIWKJFz5Tcjgl5+FcXH7q4KXt4IxO6PQvt0jRq1kSmXK+XnREamH6GrPVe6qcJ1EXoBQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-114.delta" sparkle:deltaFrom="114" length="185678" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Oxhd17rEqTiztSnwqO1PjT0hYyVT2belRxyjBm82cuzxFdzeE0R6pX6WEaTsMKLQ4LVPPaRKSAdPaFXPl6UdCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-113.delta" sparkle:deltaFrom="113" length="204530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9itJRtj2gflUNIJxEM48cVTtcDczLQaIYYPUsoTgA59aR7gC/YBzlYyquZwErYvd3i5H+84qo+hpZhzCMaSXDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-112.delta" sparkle:deltaFrom="112" length="208082" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="JDOQ1UHENMaVxrPLtsZKd7SO58OXlbjSoozxmHj9nqC7DycW4YT6gQhIGrQtcZ+myuMp9GIfS1reP1S1dcR1BA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-111.delta" sparkle:deltaFrom="111" length="209250" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="al4jzCZhAJzWMtWkbBi4nivKvrcTVEB4Vy93GQre53C1Ltx94QJ0foHKBKGXK6K7CZ9HtUnnVfj1AbHQJlLPBQ=="/>
             </sparkle:deltas>
         </item>
     </channel>
