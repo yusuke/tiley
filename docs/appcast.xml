@@ -3,22 +3,33 @@
     <channel>
         <title>Tiley</title>
         <item>
-            <title>1.1.7</title>
-            <description><![CDATA[<h3>Changed</h3>
+            <title>1.1.8</title>
+            <description><![CDATA[<h3>Added</h3>
 <ul>
-<li>Switch distribution format from zip to DMG with Applications shortcut and custom Finder layout (large icons, square window)</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fix "Move to Applications" failing with a read-only volume error when the app is launched from a downloaded zip without moving it first (Gatekeeper App Translocation)</li>
-<li>Show "Copy to Applications" dialog instead of "Move" when the app is launched from a disk image (DMG)</li>
+<li>After copying from a DMG, offer to eject the disk image and move the DMG file to Trash</li>
+<li>Detect a mounted Tiley DMG on launch from /Applications (e.g. after manual Finder copy) and offer to eject and trash it</li>
 </ul>
 ]]></description>
+            <pubDate>Mon, 16 Mar 2026 23:56:13 +0900</pubDate>
+            <sparkle:version>118</sparkle:version>
+            <sparkle:shortVersionString>1.1.8</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley-1.1.8.dmg" length="4579074" type="application/octet-stream" sparkle:edSignature="LHZpvGtc9EclS1EN6JOBX7pI25DQkuX3cUM411JmrbV6QMPqm5n10xZzRKKUtsW3PZ+n2Ap10qt7HGshLSULAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-117.delta" sparkle:deltaFrom="117" length="101670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="QogG+Q9vSKwTfECnATO4ZtKM7aYgUPRo6MBXoSX9xFDKF5mSXJSJI57JZDM8a106Z1UPbCHdJ8NTDfENMWENCw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-116.delta" sparkle:deltaFrom="116" length="107046" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="e98gOoZTaTCkUzT4brQdIp3WRDokc6kbLFFmriZ2T9ga0Mm6yb/yQD2eb9HFcUE2J/SsHDndkp0dLpQiLrZLAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-115.delta" sparkle:deltaFrom="115" length="127986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="UYJ60nPkMIKYWoQKs1Lm3DEsa44l1uSEjAKXbu3DKE4EHyf1cV0cSCDFaZf/rkl4Rw7lk11/I89bLAJtD0QBCg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-114.delta" sparkle:deltaFrom="114" length="207814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2im7Th2/OUmnkqWfkoAep1cv+Z0Wt3/wast+572qalDzde9vT/qcmGR2EXhEojaWJ0HVFoBLDVVIh9PzpHetBA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-113.delta" sparkle:deltaFrom="113" length="222738" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ABa1uPv6fnCTk0h5QByztG0keOAbBG1GLmSCXW/3nXuFkMjmlMuE1x/O7XfFF2kQ/my3Uf/yJBWtlj7EdTF0DQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.1.7</title>
             <pubDate>Mon, 16 Mar 2026 23:03:11 +0900</pubDate>
             <sparkle:version>117</sparkle:version>
             <sparkle:shortVersionString>1.1.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley-1.1.7.dmg" length="4536207" type="application/octet-stream" sparkle:edSignature="wXBpggW/MDIavtpBQHwICIuoXN7XcuoFZEVIq8X0dspbtRAQcy8GHsggfmeG+GNV1Tr7dxxgHO7Vx6GjeezADA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley-1.1.7.dmg" length="4536207" type="application/octet-stream" sparkle:edSignature="wXBpggW/MDIavtpBQHwICIuoXN7XcuoFZEVIq8X0dspbtRAQcy8GHsggfmeG+GNV1Tr7dxxgHO7Vx6GjeezADA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley117-116.delta" sparkle:deltaFrom="116" length="85570" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="pGiu5QsndnI5XGd1KobVI/ipDyXDBcOtsTGsA0hgS3aEdZS7LzRW2xFl6gS8CXW5zGgZ6hCIdHxbPD5qPX2bBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley117-115.delta" sparkle:deltaFrom="115" length="106274" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OwMVJ3Pdl1Od/cs0OsMTFPxt9lJnOgKPiZvRmyTRQyRGYNCbVMEG4AWvwfRKCBXntPRjsw3bkVhB5njV5SyCAg=="/>
@@ -33,28 +44,13 @@
             <sparkle:version>116</sparkle:version>
             <sparkle:shortVersionString>1.1.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley-1.1.6.zip" length="4430139" type="application/octet-stream" sparkle:edSignature="C5VBIs1HvvBlEx0UFw73m2dkdK1HsH7BIP9fWZxqupPHKqv+bfnhy2Onub6j/HyDtKI4PsMC39+LwIWSCLKKBw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley-1.1.6.zip" length="4430139" type="application/octet-stream" sparkle:edSignature="C5VBIs1HvvBlEx0UFw73m2dkdK1HsH7BIP9fWZxqupPHKqv+bfnhy2Onub6j/HyDtKI4PsMC39+LwIWSCLKKBw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-115.delta" sparkle:deltaFrom="115" length="91894" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aqUHIYdogCAt8pJnyhQIWKJFz5Tcjgl5+FcXH7q4KXt4IxO6PQvt0jRq1kSmXK+XnREamH6GrPVe6qcJ1EXoBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-114.delta" sparkle:deltaFrom="114" length="185678" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Oxhd17rEqTiztSnwqO1PjT0hYyVT2belRxyjBm82cuzxFdzeE0R6pX6WEaTsMKLQ4LVPPaRKSAdPaFXPl6UdCg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-113.delta" sparkle:deltaFrom="113" length="204530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9itJRtj2gflUNIJxEM48cVTtcDczLQaIYYPUsoTgA59aR7gC/YBzlYyquZwErYvd3i5H+84qo+hpZhzCMaSXDw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-112.delta" sparkle:deltaFrom="112" length="208082" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="JDOQ1UHENMaVxrPLtsZKd7SO58OXlbjSoozxmHj9nqC7DycW4YT6gQhIGrQtcZ+myuMp9GIfS1reP1S1dcR1BA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.6/Tiley116-111.delta" sparkle:deltaFrom="111" length="209250" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="al4jzCZhAJzWMtWkbBi4nivKvrcTVEB4Vy93GQre53C1Ltx94QJ0foHKBKGXK6K7CZ9HtUnnVfj1AbHQJlLPBQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.1.5</title>
-            <pubDate>Mon, 16 Mar 2026 16:56:56 +0900</pubDate>
-            <sparkle:version>115</sparkle:version>
-            <sparkle:shortVersionString>1.1.5</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.7/Tiley-1.1.5.zip" length="4431539" type="application/octet-stream" sparkle:edSignature="HQfqqgRngOyK4Thq4oGEp0x6G25ijWTAGu8yIUaVMX3rgDnsxvEM7C6pd1T4cz0TnqmP8xjrD6ZhFI4Hk3h5Bg=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.5/Tiley115-114.delta" sparkle:deltaFrom="114" length="187658" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9TV8z8wtFBI67jurhgyrNLiYLi9C2YjpOMu8PD7JGeMWTGhrwUkK9Qpt9vklM4Dr+OQEIhZNAiZ4xGhPLLlhAg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.5/Tiley115-113.delta" sparkle:deltaFrom="113" length="206658" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="X3PzJpRd9yL2tZ08ER7BEn0YrHNVoLvEeqpeyCbn8x5MUrbTmO0AOcTzlSYSndgBq6E+QIFJ6olzh3lahIV9Bw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.5/Tiley115-112.delta" sparkle:deltaFrom="112" length="209810" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="djQHmGkkWuduBjWRSGCwjuCzYcFkbjWl52fFnJo5W2ByTbxoBnP/Hah7ddJWXOmQ2cn11mBJ1RFHlyx3v991AA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.5/Tiley115-111.delta" sparkle:deltaFrom="111" length="210254" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="o1kmvmjr/oCvLJH0eYGivn5od1IVaX0TZyCKr37nEFV4guCHDWRtjIJxfq6flfI2xCeLbxoIf2itstwgT1b2Aw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.5/Tiley115-110.delta" sparkle:deltaFrom="110" length="212466" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="fMPZ8FFM8ncbZgpSVtdb7Ajq3NVMvZVXe/V4bmOLaDmZHqX047gdpsQmC+N1dKLzt6Q+zvjjS8pclsjElXspAw=="/>
             </sparkle:deltas>
         </item>
     </channel>
