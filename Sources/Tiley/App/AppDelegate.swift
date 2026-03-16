@@ -49,24 +49,58 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Skip development builds (Xcode DerivedData, Swift PM .build, etc.)
         if bundlePath.contains("/DerivedData/") || bundlePath.contains("/Build/Products/") || bundlePath.contains("/.build/") { return }
 
+        // Detect whether the app is running from a mounted disk image.
+        let isFromDiskImage = bundlePath.hasPrefix("/Volumes/")
+
+        // When launched from a zip without moving first, Gatekeeper App
+        // Translocation runs the app from a randomized read-only path.
+        // Resolve the original (writable) path so we can move it.
+        let sourcePath: String
+        if isFromDiskImage {
+            sourcePath = bundlePath
+        } else {
+            sourcePath = Self.originalURLResolvingTranslocation(
+                URL(fileURLWithPath: bundlePath)
+            )?.path ?? bundlePath
+        }
+
         let alert = NSAlert()
-        alert.messageText = NSLocalizedString(
-            "Move to Applications folder?",
-            comment: "Alert title asking user to move app to /Applications"
-        )
-        alert.informativeText = NSLocalizedString(
-            "Tiley is not in the Applications folder. Would you like to move it there?",
-            comment: "Alert body explaining app is not in /Applications"
-        )
+        if isFromDiskImage {
+            alert.messageText = NSLocalizedString(
+                "Copy to Applications folder?",
+                comment: "Alert title asking user to copy app from disk image to /Applications"
+            )
+            alert.informativeText = NSLocalizedString(
+                "Tiley is running from a disk image. Would you like to copy it to the Applications folder?",
+                comment: "Alert body explaining app is on a disk image"
+            )
+            alert.addButton(withTitle: NSLocalizedString(
+                "Copy to Applications",
+                comment: "Button to copy the app from disk image"
+            ))
+            alert.addButton(withTitle: NSLocalizedString(
+                "Don't Copy",
+                comment: "Button to skip copying the app"
+            ))
+        } else {
+            alert.messageText = NSLocalizedString(
+                "Move to Applications folder?",
+                comment: "Alert title asking user to move app to /Applications"
+            )
+            alert.informativeText = NSLocalizedString(
+                "Tiley is not in the Applications folder. Would you like to move it there?",
+                comment: "Alert body explaining app is not in /Applications"
+            )
+            alert.addButton(withTitle: NSLocalizedString(
+                "Move to Applications",
+                comment: "Button to move the app"
+            ))
+            alert.addButton(withTitle: NSLocalizedString(
+                "Don't Move",
+                comment: "Button to skip moving the app"
+            ))
+        }
         alert.alertStyle = .informational
-        alert.addButton(withTitle: NSLocalizedString(
-            "Move to Applications",
-            comment: "Button to move the app"
-        ))
-        alert.addButton(withTitle: NSLocalizedString(
-            "Don't Move",
-            comment: "Button to skip moving the app"
-        ))
 
         // Temporarily show as regular app so the alert is visible
         NSApp.setActivationPolicy(.regular)
@@ -75,7 +109,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         guard response == .alertFirstButtonReturn else { return }
 
-        let appName = (bundlePath as NSString).lastPathComponent
+        let appName = (sourcePath as NSString).lastPathComponent
         let destinationPath = (applicationsDir as NSString).appendingPathComponent(appName)
         let fileManager = FileManager.default
 
@@ -102,7 +136,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 try fileManager.removeItem(atPath: destinationPath)
             }
-            try fileManager.moveItem(atPath: bundlePath, toPath: destinationPath)
+
+            if isFromDiskImage {
+                try fileManager.copyItem(atPath: sourcePath, toPath: destinationPath)
+            } else {
+                try fileManager.moveItem(atPath: sourcePath, toPath: destinationPath)
+            }
+
+            // Strip the quarantine extended attribute so macOS does not
+            // translocate the app again from its new location.
+            removexattr(destinationPath, "com.apple.quarantine", XATTR_NOFOLLOW)
 
             // Relaunch from the new location
             let task = Process()
@@ -114,6 +157,41 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let errorAlert = NSAlert(error: error)
             errorAlert.runModal()
         }
+    }
+
+    // MARK: - App Translocation resolution (private API via dlsym)
+
+    private typealias IsTranslocatedFn = @convention(c)
+        (CFURL, UnsafeMutablePointer<ObjCBool>, UnsafeMutablePointer<Unmanaged<CFError>?>?) -> Bool
+    private typealias OriginalPathFn = @convention(c)
+        (CFURL, UnsafeMutablePointer<Unmanaged<CFError>?>?) -> CFURL?
+
+    /// Resolve the original bundle URL when Gatekeeper App Translocation is
+    /// active.  Uses `SecTranslocateCreateOriginalPathForURL` loaded via
+    /// `dlsym` (private but stable Security.framework symbol).
+    /// Returns `nil` if the app is not translocated or resolution fails.
+    private static func originalURLResolvingTranslocation(_ url: URL) -> URL? {
+        guard let handle = dlopen(
+            "/System/Library/Frameworks/Security.framework/Security",
+            RTLD_LAZY
+        ) else { return nil }
+        defer { dlclose(handle) }
+
+        guard let isSym = dlsym(handle, "SecTranslocateIsTranslocatedURL"),
+              let origSym = dlsym(handle, "SecTranslocateCreateOriginalPathForURL")
+        else { return nil }
+
+        let isTranslocated = unsafeBitCast(isSym, to: IsTranslocatedFn.self)
+        let createOriginal = unsafeBitCast(origSym, to: OriginalPathFn.self)
+
+        var flag = ObjCBool(false)
+        guard isTranslocated(url as CFURL, &flag, nil), flag.boolValue else {
+            return nil
+        }
+        guard let originalCFURL = createOriginal(url as CFURL, nil) else {
+            return nil
+        }
+        return originalCFURL as URL
     }
 
     private func wasLaunchedAsLoginItem() -> Bool {

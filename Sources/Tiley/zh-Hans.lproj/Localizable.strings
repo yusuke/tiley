@@ -78,5 +78,9 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley 不在应用程序文件夹中。是否要将其移动到该文件夹？";
 "Move to Applications" = "移动到应用程序";
 "Don't Move" = "不移动";
+"Copy to Applications folder?" = "拷贝到应用程序文件夹？";
+"Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley 正在从磁盘映像运行。是否要将其拷贝到应用程序文件夹？";
+"Copy to Applications" = "拷贝到应用程序";
+"Don't Copy" = "不拷贝";
 "Add Shortcut" = "添加快捷键";
 "Add Global Shortcut" = "添加全局快捷键";

@@ -78,5 +78,9 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley はアプリケーションフォルダにありません。移動しますか？";
 "Move to Applications" = "アプリケーションに移動";
 "Don't Move" = "移動しない";
+"Copy to Applications folder?" = "アプリケーションフォルダにコピーしますか？";
+"Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley はディスクイメージから起動されています。アプリケーションフォルダにコピーしますか？";
+"Copy to Applications" = "アプリケーションにコピー";
+"Don't Copy" = "コピーしない";
 "Add Shortcut" = "ショートカットを追加";
 "Add Global Shortcut" = "グローバルショートカットを追加";

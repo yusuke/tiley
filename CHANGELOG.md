@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.7] - 2026-03-16
+
+### Changed
+
+- Switch distribution format from zip to DMG with Applications shortcut and custom Finder layout (large icons, square window)
+
+### Fixed
+
+- Fix "Move to Applications" failing with a read-only volume error when the app is launched from a downloaded zip without moving it first (Gatekeeper App Translocation)
+- Show "Copy to Applications" dialog instead of "Move" when the app is launched from a disk image (DMG)
+
 ## [1.1.6] - 2026-03-16
 
 ### Fixed
@@ -100,7 +111,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.6...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.7...HEAD
+[1.1.7]: https://github.com/yusuke/tiley/releases/tag/v1.1.7
 [1.1.6]: https://github.com/yusuke/tiley/releases/tag/v1.1.6
 [1.1.5]: https://github.com/yusuke/tiley/releases/tag/v1.1.5
 [1.1.4]: https://github.com/yusuke/tiley/releases/tag/v1.1.4

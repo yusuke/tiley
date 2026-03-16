@@ -78,5 +78,9 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley is not in the Applications folder. Would you like to move it there?";
 "Move to Applications" = "Move to Applications";
 "Don't Move" = "Don't Move";
+"Copy to Applications folder?" = "Copy to Applications folder?";
+"Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley is running from a disk image. Would you like to copy it to the Applications folder?";
+"Copy to Applications" = "Copy to Applications";
+"Don't Copy" = "Don't Copy";
 "Add Shortcut" = "Add Shortcut";
 "Add Global Shortcut" = "Add Global Shortcut";

@@ -16,7 +16,7 @@ CONFIGURATION="Release"
 ARCHIVE_PATH="${ARCHIVE_PATH:-build/Tiley.xcarchive}"
 EXPORT_PATH="${EXPORT_PATH:-build/export}"
 APP_NAME="${APP_NAME:-Tiley.app}"
-ZIP_PATH="${ZIP_PATH:-build/Tiley.zip}"
+DMG_PATH="${DMG_PATH:-build/Tiley.dmg}"
 KEYCHAIN_PROFILE="${KEYCHAIN_PROFILE:-}"
 API_KEY_PATH="${API_KEY_PATH:-}"
 API_KEY_ID="${API_KEY_ID:-}"
@@ -59,7 +59,7 @@ if [[ -f "$PBXPROJ" && -f "$EXISTING_APPCAST" ]]; then
 fi
 
 echo "Cleaning previous build artifacts"
-rm -rf "$ARCHIVE_PATH" "$EXPORT_PATH" "$ZIP_PATH"
+rm -rf "$ARCHIVE_PATH" "$EXPORT_PATH" "$DMG_PATH"
 mkdir -p build
 
 echo "Archiving app"
@@ -113,21 +113,22 @@ fi
 echo "Re-signing app bundle"
 codesign --force --options runtime --timestamp --sign "$CODESIGN_ID" "$EXPORTED_APP_PATH"
 
-echo "Creating zip for notarization"
-ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$ZIP_PATH"
+echo "Submitting app for notarization (via temporary zip)"
+NOTARIZE_ZIP="build/Tiley-notarize-tmp.zip"
+ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$NOTARIZE_ZIP"
 
-echo "Submitting for notarization"
 if [[ -n "${KEYCHAIN_PROFILE}" ]]; then
-  xcrun notarytool submit "$ZIP_PATH" \
+  xcrun notarytool submit "$NOTARIZE_ZIP" \
     --keychain-profile "$KEYCHAIN_PROFILE" \
     --wait
 else
-  xcrun notarytool submit "$ZIP_PATH" \
+  xcrun notarytool submit "$NOTARIZE_ZIP" \
     --key "$API_KEY_PATH" \
     --key-id "$API_KEY_ID" \
     --issuer "$API_ISSUER_ID" \
     --wait
 fi
+rm -f "$NOTARIZE_ZIP"
 
 echo "Stapling notarization ticket"
 STAPLE_MAX_RETRIES=5
@@ -148,16 +149,67 @@ echo "Validating stapled app"
 xcrun stapler validate "$EXPORTED_APP_PATH"
 spctl -a -vvv -t exec "$EXPORTED_APP_PATH"
 
-# Strip extended attributes to prevent AppleDouble ._files in ZIP
-# (._files inside frameworks cause "unsealed contents" rejection by Gatekeeper
-#  when users extract with Finder/Archive Utility instead of ditto)
+# Strip extended attributes to prevent AppleDouble ._files
 echo "Stripping extended attributes"
 xattr -cr "$EXPORTED_APP_PATH"
 
-# Recreate ZIP with the stapled app
-echo "Recreating zip with stapled app"
-rm -f "$ZIP_PATH"
-ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$ZIP_PATH"
+# Create DMG with the app and an Applications symlink (custom Finder layout)
+echo "Creating DMG"
+DMG_STAGING="build/dmg-staging"
+DMG_RW="build/Tiley-rw.dmg"
+rm -rf "$DMG_STAGING" "$DMG_RW"
+mkdir -p "$DMG_STAGING"
+cp -R "$EXPORTED_APP_PATH" "$DMG_STAGING/"
+ln -s /Applications "$DMG_STAGING/Applications"
+
+# Create a read-write DMG first so we can customise the Finder view
+rm -f "$DMG_PATH"
+hdiutil create \
+  -volname "Tiley" \
+  -srcfolder "$DMG_STAGING" \
+  -ov \
+  -format UDRW \
+  "$DMG_RW"
+rm -rf "$DMG_STAGING"
+
+# Mount the read-write DMG
+MOUNT_DIR=$(hdiutil attach "$DMG_RW" -readwrite -noverify -noautoopen | grep '/Volumes/' | tail -1 | awk -F'\t' '{print $NF}')
+echo "Mounted DMG at: $MOUNT_DIR"
+
+# Configure Finder window appearance via AppleScript
+echo "Configuring DMG Finder layout"
+osascript <<APPLESCRIPT
+tell application "Finder"
+  tell disk "Tiley"
+    open
+    set current view of container window to icon view
+    set toolbar visible of container window to false
+    set statusbar visible of container window to false
+    set the bounds of container window to {100, 100, 640, 640}
+    set viewOptions to the icon view options of container window
+    set arrangement of viewOptions to not arranged
+    set icon size of viewOptions to 128
+    set background color of viewOptions to {65535, 65535, 65535}
+    set position of item "Tiley.app" of container window to {130, 190}
+    set position of item "Applications" of container window to {410, 190}
+    close
+    open
+    update without registering applications
+    delay 1
+    close
+  end tell
+end tell
+APPLESCRIPT
+
+# Make sure .DS_Store is flushed to disk
+sync
+
+# Detach the DMG
+hdiutil detach "$MOUNT_DIR" -quiet
+
+# Convert to compressed read-only format
+hdiutil convert "$DMG_RW" -format UDZO -o "$DMG_PATH"
+rm -f "$DMG_RW"
 
 echo "Release artifact ready at $EXPORTED_APP_PATH"
-echo "Stapled ZIP ready at $ZIP_PATH"
+echo "DMG ready at $DMG_PATH"

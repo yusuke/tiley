@@ -78,5 +78,9 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley가 응용 프로그램 폴더에 없습니다. 이동하시겠습니까?";
 "Move to Applications" = "응용 프로그램으로 이동";
 "Don't Move" = "이동 안 함";
+"Copy to Applications folder?" = "응용 프로그램 폴더로 복사할까요?";
+"Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley가 디스크 이미지에서 실행 중입니다. 응용 프로그램 폴더로 복사하시겠습니까?";
+"Copy to Applications" = "응용 프로그램으로 복사";
+"Don't Copy" = "복사 안 함";
 "Add Shortcut" = "단축키 추가";
 "Add Global Shortcut" = "전역 단축키 추가";
