@@ -82,5 +82,12 @@
 "Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley is running from a disk image. Would you like to copy it to the Applications folder?";
 "Copy to Applications" = "Copy to Applications";
 "Don't Copy" = "Don't Copy";
+"Eject disk image?" = "Eject disk image?";
+"The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?" = "The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?";
+"The app has been copied. Would you like to eject the disk image?" = "The app has been copied. Would you like to eject the disk image?";
+"Eject and Move to Trash" = "Eject and Move to Trash";
+"Don't Eject" = "Don't Eject";
+"A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?" = "A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?";
+"A Tiley disk image is still mounted. Would you like to eject it?" = "A Tiley disk image is still mounted. Would you like to eject it?";
 "Add Shortcut" = "Add Shortcut";
 "Add Global Shortcut" = "Add Global Shortcut";

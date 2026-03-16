@@ -82,5 +82,12 @@
 "Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley 正從磁碟映像檔執行。是否要將其拷貝到「應用程式」檔案夾？";
 "Copy to Applications" = "拷貝到「應用程式」";
 "Don't Copy" = "不拷貝";
+"Eject disk image?" = "要退出磁碟映像檔嗎？";
+"The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?" = "應用程式已拷貝完成。是否要退出磁碟映像檔並將「%@」移至垃圾桶？";
+"The app has been copied. Would you like to eject the disk image?" = "應用程式已拷貝完成。是否要退出磁碟映像檔？";
+"Eject and Move to Trash" = "退出並移至垃圾桶";
+"Don't Eject" = "不退出";
+"A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?" = "Tiley 的磁碟映像檔仍處於掛載狀態。是否要退出並將「%@」移至垃圾桶？";
+"A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley 的磁碟映像檔仍處於掛載狀態。是否要退出？";
 "Add Shortcut" = "新增快捷鍵";
 "Add Global Shortcut" = "新增全域快捷鍵";

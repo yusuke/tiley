@@ -78,5 +78,16 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley не находится в папке «Программы». Переместить его туда?";
 "Move to Applications" = "Переместить в Программы";
 "Don't Move" = "Не перемещать";
+"Copy to Applications folder?" = "Скопировать в папку «Программы»?";
+"Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley запущен с образа диска. Скопировать его в папку «Программы»?";
+"Copy to Applications" = "Скопировать в Программы";
+"Don't Copy" = "Не копировать";
+"Eject disk image?" = "Извлечь образ диска?";
+"The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?" = "Приложение скопировано. Извлечь образ диска и переместить «%@» в Корзину?";
+"The app has been copied. Would you like to eject the disk image?" = "Приложение скопировано. Извлечь образ диска?";
+"Eject and Move to Trash" = "Извлечь и удалить в Корзину";
+"Don't Eject" = "Не извлекать";
+"A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?" = "Образ диска Tiley всё ещё подключён. Извлечь его и переместить «%@» в Корзину?";
+"A Tiley disk image is still mounted. Would you like to eject it?" = "Образ диска Tiley всё ещё подключён. Извлечь его?";
 "Add Shortcut" = "Добавить сочетание";
 "Add Global Shortcut" = "Добавить глобальное сочетание";

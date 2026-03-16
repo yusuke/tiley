@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- After copying from a DMG, offer to eject the disk image and move the DMG file to Trash
+- Detect a mounted Tiley DMG on launch from /Applications (e.g. after manual Finder copy) and offer to eject and trash it
+
 ## [1.1.7] - 2026-03-16
 
 ### Changed

@@ -78,5 +78,16 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "O Tiley não está na pasta Aplicativos. Deseja movê-lo para lá?";
 "Move to Applications" = "Mover para Aplicativos";
 "Don't Move" = "Não mover";
+"Copy to Applications folder?" = "Copiar para a pasta Aplicativos?";
+"Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "O Tiley está sendo executado a partir de uma imagem de disco. Deseja copiá-lo para a pasta Aplicativos?";
+"Copy to Applications" = "Copiar para Aplicativos";
+"Don't Copy" = "Não copiar";
+"Eject disk image?" = "Ejetar imagem de disco?";
+"The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?" = "O app foi copiado. Deseja ejetar a imagem de disco e mover \"%@\" para o Lixo?";
+"The app has been copied. Would you like to eject the disk image?" = "O app foi copiado. Deseja ejetar a imagem de disco?";
+"Eject and Move to Trash" = "Ejetar e mover para o Lixo";
+"Don't Eject" = "Não ejetar";
+"A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?" = "Uma imagem de disco do Tiley ainda está montada. Deseja ejetá-la e mover \"%@\" para o Lixo?";
+"A Tiley disk image is still mounted. Would you like to eject it?" = "Uma imagem de disco do Tiley ainda está montada. Deseja ejetá-la?";
 "Add Shortcut" = "Adicionar atalho";
 "Add Global Shortcut" = "Adicionar atalho global";

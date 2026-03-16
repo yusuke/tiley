@@ -78,5 +78,16 @@
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley befindet sich nicht im Ordner „Programme". Möchtest du es dorthin verschieben?";
 "Move to Applications" = "In Programme verschieben";
 "Don't Move" = "Nicht verschieben";
+"Copy to Applications folder?" = "In den Ordner „Programme" kopieren?";
+"Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley wird von einem Disk-Image ausgeführt. Möchtest du es in den Ordner „Programme" kopieren?";
+"Copy to Applications" = "In Programme kopieren";
+"Don't Copy" = "Nicht kopieren";
+"Eject disk image?" = "Disk-Image auswerfen?";
+"The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?" = "Die App wurde kopiert. Möchtest du das Disk-Image auswerfen und „%@" in den Papierkorb verschieben?";
+"The app has been copied. Would you like to eject the disk image?" = "Die App wurde kopiert. Möchtest du das Disk-Image auswerfen?";
+"Eject and Move to Trash" = "Auswerfen und in den Papierkorb";
+"Don't Eject" = "Nicht auswerfen";
+"A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?" = "Ein Tiley-Disk-Image ist noch aktiviert. Möchtest du es auswerfen und „%@" in den Papierkorb verschieben?";
+"A Tiley disk image is still mounted. Would you like to eject it?" = "Ein Tiley-Disk-Image ist noch aktiviert. Möchtest du es auswerfen?";
 "Add Shortcut" = "Tastenkürzel hinzufügen";
 "Add Global Shortcut" = "Globales Kürzel hinzufügen";

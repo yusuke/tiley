@@ -82,5 +82,12 @@
 "Tiley is running from a disk image. Would you like to copy it to the Applications folder?" = "Tiley가 디스크 이미지에서 실행 중입니다. 응용 프로그램 폴더로 복사하시겠습니까?";
 "Copy to Applications" = "응용 프로그램으로 복사";
 "Don't Copy" = "복사 안 함";
+"Eject disk image?" = "디스크 이미지를 추출할까요?";
+"The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?" = "앱이 복사되었습니다. 디스크 이미지를 추출하고 \"%@\"을(를) 휴지통으로 이동하시겠습니까?";
+"The app has been copied. Would you like to eject the disk image?" = "앱이 복사되었습니다. 디스크 이미지를 추출하시겠습니까?";
+"Eject and Move to Trash" = "추출 후 휴지통으로 이동";
+"Don't Eject" = "추출 안 함";
+"A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?" = "Tiley 디스크 이미지가 아직 마운트되어 있습니다. 추출하고 \"%@\"을(를) 휴지통으로 이동하시겠습니까?";
+"A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley 디스크 이미지가 아직 마운트되어 있습니다. 추출하시겠습니까?";
 "Add Shortcut" = "단축키 추가";
 "Add Global Shortcut" = "전역 단축키 추가";

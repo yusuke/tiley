@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         appState.updater = updaterController.updater
+        performDeferredDMGCleanupIfNeeded()
         moveToApplicationsFolderIfNeeded()
         appState.start(showMainWindowOnLaunch: !wasLaunchedAsLoginItem())
     }
@@ -43,8 +44,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let bundlePath = Bundle.main.bundlePath
         let applicationsDir = "/Applications"
 
-        // Already in /Applications — nothing to do
-        if bundlePath.hasPrefix(applicationsDir + "/") { return }
+        // Already in /Applications — but a Tiley DMG may still be mounted
+        // (e.g. the user copied the app manually via Finder).
+        if bundlePath.hasPrefix(applicationsDir + "/") {
+            cleanupMountedDiskImageIfNeeded()
+            return
+        }
 
         // Skip development builds (Xcode DerivedData, Swift PM .build, etc.)
         if bundlePath.contains("/DerivedData/") || bundlePath.contains("/Build/Products/") || bundlePath.contains("/.build/") { return }
@@ -147,16 +152,194 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             // translocate the app again from its new location.
             removexattr(destinationPath, "com.apple.quarantine", XATTR_NOFOLLOW)
 
+            // For disk image launches, ask whether to eject & trash the DMG.
+            // The actual cleanup is deferred to the relaunched process because
+            // the current process is still running from the DMG volume.
+            var cleanupDMGPath: String?
+            var cleanupMountPoint: String?
+            if isFromDiskImage {
+                let volComponents = sourcePath.split(separator: "/", maxSplits: 3)
+                if volComponents.count >= 2, volComponents[0] == "Volumes" {
+                    let mp = "/" + volComponents[0 ..< 2].joined(separator: "/")
+                    let dmg = dmgPathForVolume(mp)
+                    if askCleanupDiskImage(mountPoint: mp, dmgPath: dmg, copiedByApp: true) {
+                        cleanupMountPoint = mp
+                        cleanupDMGPath = dmg
+                    }
+                }
+            }
+
             // Relaunch from the new location
             let task = Process()
             task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-            task.arguments = ["-n", destinationPath]
+            var args = ["-n", destinationPath, "--args"]
+            if let mp = cleanupMountPoint {
+                args += ["--cleanup-dmg-mount", mp]
+            }
+            if let dmg = cleanupDMGPath {
+                args += ["--cleanup-dmg-path", dmg]
+            }
+            task.arguments = args
             try task.run()
             NSApp.terminate(nil)
         } catch {
             let errorAlert = NSAlert(error: error)
             errorAlert.runModal()
         }
+    }
+
+    // MARK: - Disk image cleanup
+
+    /// Show a dialog asking the user whether to eject the DMG volume and trash
+    /// the DMG file.  Returns `true` if the user accepted.
+    @discardableResult
+    private func askCleanupDiskImage(mountPoint: String, dmgPath: String?, copiedByApp: Bool) -> Bool {
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString(
+            "Eject disk image?",
+            comment: "Alert title asking whether to eject the DMG after copying"
+        )
+        if let dmg = dmgPath {
+            let key = copiedByApp
+                ? "The app has been copied. Would you like to eject the disk image and move \"%@\" to the Trash?"
+                : "A Tiley disk image is still mounted. Would you like to eject it and move \"%@\" to the Trash?"
+            alert.informativeText = String(
+                format: NSLocalizedString(
+                    key,
+                    comment: "Alert body when DMG path is known; %@ is the DMG filename"
+                ),
+                (dmg as NSString).lastPathComponent
+            )
+        } else {
+            let key = copiedByApp
+                ? "The app has been copied. Would you like to eject the disk image?"
+                : "A Tiley disk image is still mounted. Would you like to eject it?"
+            alert.informativeText = NSLocalizedString(
+                key,
+                comment: "Alert body when DMG path is unknown"
+            )
+        }
+        alert.addButton(withTitle: NSLocalizedString(
+            "Eject and Move to Trash",
+            comment: "Button to eject volume and trash DMG"
+        ))
+        alert.addButton(withTitle: NSLocalizedString(
+            "Don't Eject",
+            comment: "Button to skip ejecting"
+        ))
+        alert.alertStyle = .informational
+
+        // Temporarily show as regular app so the alert is visible
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+
+        return alert.runModal() == .alertFirstButtonReturn
+    }
+
+    /// Eject the DMG volume and move the DMG file to Trash.
+    private func performDMGCleanup(mountPoint: String, dmgPath: String?) {
+        // Eject the volume via hdiutil detach.
+        let detach = Process()
+        detach.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        detach.arguments = ["detach", mountPoint, "-force"]
+        detach.standardOutput = FileHandle.nullDevice
+        detach.standardError = FileHandle.nullDevice
+        try? detach.run()
+        detach.waitUntilExit()
+
+        // Move the DMG to Trash.
+        if let dmg = dmgPath, FileManager.default.fileExists(atPath: dmg) {
+            try? FileManager.default.trashItem(
+                at: URL(fileURLWithPath: dmg),
+                resultingItemURL: nil
+            )
+        }
+    }
+
+    /// Called on launch to handle --cleanup-dmg-mount / --cleanup-dmg-path
+    /// arguments passed by the previous (DMG-based) process.
+    private func performDeferredDMGCleanupIfNeeded() {
+        let args = ProcessInfo.processInfo.arguments
+        guard let mountIdx = args.firstIndex(of: "--cleanup-dmg-mount"),
+              mountIdx + 1 < args.count
+        else { return }
+        let mountPoint = args[mountIdx + 1]
+
+        var dmgPath: String?
+        if let pathIdx = args.firstIndex(of: "--cleanup-dmg-path"),
+           pathIdx + 1 < args.count {
+            dmgPath = args[pathIdx + 1]
+        }
+
+        performDMGCleanup(mountPoint: mountPoint, dmgPath: dmgPath)
+    }
+
+    /// Check whether a Tiley disk image volume is currently mounted and, if so,
+    /// offer to eject it and trash the DMG.  Called when the app is already
+    /// running from /Applications (i.e. the user copied it manually).
+    private func cleanupMountedDiskImageIfNeeded() {
+        guard let (mountPoint, _) = findMountedTileyDiskImage() else { return }
+        let dmgPath = dmgPathForVolume(mountPoint)
+        if askCleanupDiskImage(mountPoint: mountPoint, dmgPath: dmgPath, copiedByApp: false) {
+            performDMGCleanup(mountPoint: mountPoint, dmgPath: dmgPath)
+        }
+    }
+
+    /// Use `hdiutil info -plist` to find a mounted volume whose DMG filename
+    /// contains "Tiley" (case-insensitive).  Returns the mount point and DMG
+    /// path, or `nil` if none is found.
+    private func findMountedTileyDiskImage() -> (mountPoint: String, dmgPath: String)? {
+        guard let images = hdiutilImageList() else { return nil }
+        let appName = (Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Tiley").lowercased()
+        for image in images {
+            guard let imagePath = image["image-path"] as? String else { continue }
+            let filename = (imagePath as NSString).lastPathComponent.lowercased()
+            guard filename.contains(appName) else { continue }
+            guard let entities = image["system-entities"] as? [[String: Any]] else { continue }
+            for entity in entities {
+                if let mp = entity["mount-point"] as? String {
+                    return (mp, imagePath)
+                }
+            }
+        }
+        return nil
+    }
+
+    /// Use `hdiutil info -plist` to find the disk image file backing a volume.
+    private func dmgPathForVolume(_ mountPoint: String) -> String? {
+        guard let images = hdiutilImageList() else { return nil }
+        for image in images {
+            guard let entities = image["system-entities"] as? [[String: Any]] else { continue }
+            for entity in entities {
+                if let mp = entity["mount-point"] as? String, mp == mountPoint {
+                    return image["image-path"] as? String
+                }
+            }
+        }
+        return nil
+    }
+
+    /// Run `hdiutil info -plist` and return the images array.
+    private func hdiutilImageList() -> [[String: Any]]? {
+        let proc = Process()
+        proc.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        proc.arguments = ["info", "-plist"]
+        let pipe = Pipe()
+        proc.standardOutput = pipe
+        proc.standardError = FileHandle.nullDevice
+        do {
+            try proc.run()
+            proc.waitUntilExit()
+        } catch {
+            return nil
+        }
+        guard let data = try? pipe.fileHandleForReading.readDataToEndOfFile(),
+              let plist = try? PropertyListSerialization.propertyList(
+                  from: data, format: nil
+              ) as? [String: Any],
+              let images = plist["images"] as? [[String: Any]]
+        else { return nil }
+        return images
     }
 
     // MARK: - App Translocation resolution (private API via dlsym)
