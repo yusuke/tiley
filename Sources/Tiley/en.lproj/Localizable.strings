@@ -91,3 +91,5 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "A Tiley disk image is still mounted. Would you like to eject it?";
 "Add Shortcut" = "Add Shortcut";
 "Add Global Shortcut" = "Add Global Shortcut";
+"No windows available" = "No windows available";
+"Tab is reserved for switching target windows." = "Tab is reserved for switching target windows.";

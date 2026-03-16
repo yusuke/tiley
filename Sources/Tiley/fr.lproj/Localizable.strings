@@ -91,3 +91,5 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Une image disque de Tiley est encore montée. Souhaitez-vous l'éjecter ?";
 "Add Shortcut" = "Ajouter un raccourci";
 "Add Global Shortcut" = "Ajouter un raccourci global";
+"No windows available" = "Aucune fenêtre disponible";
+"Tab is reserved for switching target windows." = "Tab est réservé au changement de fenêtre cible.";

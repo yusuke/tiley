@@ -67,6 +67,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let displayID = self.targetScreen.displayID
         window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
         window.isReleasedWhenClosed = false
+        window.autorecalculatesKeyViewLoop = false
         window.contentView = hostingView
         // Only use autosave for the target window to avoid position conflicts
         if screenRole.isTarget {

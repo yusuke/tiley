@@ -11,6 +11,10 @@ final class WindowManager {
         try? accessibilityService.focusedWindowTarget(preferredPID: preferredPID)
     }
 
+    func captureAllWindows() -> [WindowTarget] {
+        accessibilityService.allWindowTargets()
+    }
+
     func move(target: WindowTarget, to frame: CGRect) throws {
         try accessibilityService.setFrame(frame, on: target.screenFrame, for: target.windowElement)
     }
@@ -18,6 +22,7 @@ final class WindowManager {
     func move(target: WindowTarget, to frame: CGRect, onScreenFrame screenFrame: CGRect) throws {
         try accessibilityService.setFrame(frame, on: screenFrame, for: target.windowElement)
     }
+
 }
 
 extension NSScreen {

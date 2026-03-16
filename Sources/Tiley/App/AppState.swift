@@ -122,6 +122,10 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var appActivationTask: Task<Void, Never>?
     @ObservationIgnored private var activeLayoutTarget: WindowTarget?
     @ObservationIgnored private var layoutPreviewController: LayoutPreviewOverlayController?
+    @ObservationIgnored private var availableWindowTargets: [WindowTarget] = []
+    @ObservationIgnored private var activeTargetIndex: Int = 0
+    @ObservationIgnored private var originalFrontmostPID: pid_t?
+    var windowTargetListVersion: Int = 0
 
     var settingsSnapshot: SettingsSnapshot {
         SettingsSnapshot(
@@ -136,11 +140,14 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var currentLayoutTargetIcon: NSImage? {
+        // Access windowTargetListVersion to trigger SwiftUI updates when the target changes.
+        _ = windowTargetListVersion
         guard let pid = activeLayoutTarget?.processIdentifier ?? lastTargetPID else { return nil }
         return NSRunningApplication(processIdentifier: pid)?.icon
     }
 
     var currentLayoutTargetPrimaryText: String {
+        _ = windowTargetListVersion
         if let target = activeLayoutTarget {
             return target.appName
         }
@@ -152,11 +159,22 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var currentLayoutTargetSecondaryText: String? {
+        _ = windowTargetListVersion
         guard let title = activeLayoutTarget?.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines),
               !title.isEmpty else {
             return nil
         }
         return title
+    }
+
+    var windowTargetList: [WindowTarget] {
+        _ = windowTargetListVersion
+        return availableWindowTargets
+    }
+
+    var currentWindowTargetIndex: Int {
+        _ = windowTargetListVersion
+        return activeTargetIndex
     }
 
     var displayedLayoutPresets: [LayoutPreset] {
@@ -335,6 +353,8 @@ final class AppState: NSObject, NSMenuDelegate {
         layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: target)
         lastTargetPID = target.processIdentifier
+        originalFrontmostPID = nil
+        refreshAvailableWindows()
         isEditingSettings = false
         // Unregister preset global hotkeys while the overlay is visible so that
         // key events reach the NSWindow's performKeyEquivalent and can be handled
@@ -342,6 +362,9 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterPresetHotKeys()
         isShowingLayoutGrid = true
         openMainWindow()
+        // Bump version after the window is open so the view picks up the latest
+        // target info and window list.
+        windowTargetListVersion += 1
         launchMessage = String(
             format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
             target.appName
@@ -368,7 +391,80 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = nil
         hideAllMainWindows()
         _ = reactivateLastTargetApp(clearingState: false)
+        clearWindowCyclingState()
         launchMessage = NSLocalizedString("Canceled layout selection.", comment: "Layout selection canceled")
+    }
+
+    func cycleTargetWindow(forward: Bool) {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+
+        refreshAvailableWindows()
+        guard !availableWindowTargets.isEmpty else { return }
+
+        // Record the original frontmost app on first cycle.
+        if originalFrontmostPID == nil {
+            originalFrontmostPID = lastTargetPID
+        }
+
+        if forward {
+            activeTargetIndex = (activeTargetIndex + 1) % availableWindowTargets.count
+        } else {
+            activeTargetIndex = (activeTargetIndex - 1 + availableWindowTargets.count) % availableWindowTargets.count
+        }
+
+        applyTargetAtCurrentIndex()
+    }
+
+    func selectWindowTarget(at index: Int) {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+        guard index >= 0, index < availableWindowTargets.count else { return }
+
+        if originalFrontmostPID == nil {
+            originalFrontmostPID = lastTargetPID
+        }
+
+        activeTargetIndex = index
+        applyTargetAtCurrentIndex()
+    }
+
+    private func applyTargetAtCurrentIndex() {
+        let newTarget = availableWindowTargets[activeTargetIndex]
+        activeLayoutTarget = newTarget
+        lastTargetPID = newTarget.processIdentifier
+        windowTargetListVersion += 1
+
+        layoutPreviewController?.hide()
+        layoutPreviewController = makeLayoutPreviewController(for: newTarget)
+
+        launchMessage = String(
+            format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+            newTarget.appName
+        )
+
+        openMainWindow()
+    }
+
+    func refreshAvailableWindows() {
+        availableWindowTargets = windowManager?.captureAllWindows() ?? []
+        windowTargetListVersion += 1
+        if let current = activeLayoutTarget {
+            activeTargetIndex = availableWindowTargets.firstIndex(where: {
+                $0.processIdentifier == current.processIdentifier
+                && $0.windowElement == current.windowElement
+            }) ?? availableWindowTargets.firstIndex(where: {
+                $0.processIdentifier == current.processIdentifier
+                && $0.windowTitle == current.windowTitle
+            }) ?? 0
+        } else {
+            activeTargetIndex = 0
+        }
+    }
+
+    private func clearWindowCyclingState() {
+        originalFrontmostPID = nil
+        availableWindowTargets = []
+        activeTargetIndex = 0
+        windowTargetListVersion += 1
     }
 
     func apply(selection: GridSelection, to target: WindowTarget) {
@@ -422,7 +518,13 @@ final class AppState: NSObject, NSMenuDelegate {
             requestAccessibilityAccess()
             return
         }
-        guard let target = resolveWindowTarget() else { return }
+        let target: WindowTarget
+        if let existing = activeLayoutTarget {
+            target = existing
+        } else {
+            guard let resolved = resolveWindowTarget() else { return }
+            target = resolved
+        }
 
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
@@ -449,6 +551,7 @@ final class AppState: NSObject, NSMenuDelegate {
             selection.description
         )
         _ = reactivateLastTargetApp(clearingState: false)
+        clearWindowCyclingState()
     }
 
     @objc private func showLayoutGrid() {
@@ -615,6 +718,12 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func layoutShortcutConflictMessage(for shortcut: HotKeyShortcut, excluding presetID: UUID) -> String? {
+        // Tab and Shift+Tab are reserved for window target cycling.
+        if shortcut.keyCode == UInt32(kVK_Tab),
+           shortcut.modifiers == 0 || shortcut.modifiers == UInt32(shiftKey) {
+            return NSLocalizedString("Tab is reserved for switching target windows.", comment: "Tab shortcut reserved for window cycling")
+        }
+
         if shortcut == hotKeyShortcut {
             return NSLocalizedString("This shortcut is already used by the global shortcut.", comment: "Layout shortcut conflict with app global shortcut")
         }
@@ -700,7 +809,13 @@ final class AppState: NSObject, NSMenuDelegate {
             requestAccessibilityAccess()
             return
         }
-        guard let target = resolveWindowTarget() else { return }
+        let target: WindowTarget
+        if let existing = activeLayoutTarget {
+            target = existing
+        } else {
+            guard let resolved = resolveWindowTarget() else { return }
+            target = resolved
+        }
 
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
@@ -1200,6 +1315,7 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingPermissionsOnly = false
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
+        clearWindowCyclingState()
         registerAllHotKeys()
         if !NSApp.isActive {
             refocusLastTargetApp()
@@ -1364,6 +1480,10 @@ final class AppState: NSObject, NSMenuDelegate {
         guard !isEditingSettings else { return false }
 
         switch Int(event.keyCode) {
+        case kVK_Tab:
+            let isShift = event.modifierFlags.contains(.shift)
+            cycleTargetWindow(forward: !isShift)
+            return true
         case kVK_UpArrow:
             if hasRegisteredLocalShortcut(for: event) {
                 return false

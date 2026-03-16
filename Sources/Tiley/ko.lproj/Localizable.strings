@@ -91,3 +91,5 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley 디스크 이미지가 아직 마운트되어 있습니다. 추출하시겠습니까?";
 "Add Shortcut" = "단축키 추가";
 "Add Global Shortcut" = "전역 단축키 추가";
+"No windows available" = "사용 가능한 창이 없습니다";
+"Tab is reserved for switching target windows." = "Tab은 대상 창 전환에 사용됩니다.";

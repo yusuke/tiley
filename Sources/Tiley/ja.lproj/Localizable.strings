@@ -91,3 +91,5 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley のディスクイメージがマウントされたままです。取り出しますか？";
 "Add Shortcut" = "ショートカットを追加";
 "Add Global Shortcut" = "グローバルショートカットを追加";
+"No windows available" = "利用可能なウインドウがありません";
+"Tab is reserved for switching target windows." = "Tab はターゲットウインドウの切り替えに使用されています。";

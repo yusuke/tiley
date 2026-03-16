@@ -433,7 +433,33 @@ struct MainWindowView: View {
         return rowsHeight + spacingHeight
     }
 
+    @ViewBuilder
     private var layoutTargetInfoView: some View {
+        if screenRole.isTarget {
+            layoutTargetDropdownView
+        } else {
+            layoutTargetStaticView
+        }
+    }
+
+    private var layoutTargetDropdownView: some View {
+        WindowTargetDropdownButton(appState: appState) {
+            HStack(spacing: 6) {
+                targetInfoContent
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: 260)
+    }
+
+    private var layoutTargetStaticView: some View {
+        targetInfoContent
+            .frame(maxWidth: 260)
+    }
+
+    private var targetInfoContent: some View {
         HStack(spacing: 10) {
             if let icon = appState.currentLayoutTargetIcon {
                 Image(nsImage: icon)
@@ -456,7 +482,6 @@ struct MainWindowView: View {
             }
             .multilineTextAlignment(.center)
         }
-        .frame(maxWidth: 260)
     }
 
     private var settingsEditor: some View {
@@ -1410,5 +1435,110 @@ private final class TooltipHoverView: NSView {
 extension View {
     fileprivate func instantTooltip(_ text: String) -> some View {
         modifier(InstantBubbleTooltip(text: text))
+    }
+}
+
+// MARK: - Window Target Dropdown Button
+
+private struct WindowTargetDropdownButton<Label: View>: NSViewRepresentable {
+    let appState: AppState
+    @ViewBuilder let label: Label
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(appState: appState)
+    }
+
+    func makeNSView(context: Context) -> WindowTargetDropdownContainerView {
+        let container = WindowTargetDropdownContainerView()
+        container.onMouseDown = { [coordinator = context.coordinator] view in
+            coordinator.showMenu(from: view)
+        }
+        let hostingView = NSHostingView(rootView: label)
+        hostingView.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(hostingView)
+        NSLayoutConstraint.activate([
+            hostingView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            hostingView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            hostingView.topAnchor.constraint(equalTo: container.topAnchor),
+            hostingView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+        ])
+        context.coordinator.hostingView = hostingView
+        return container
+    }
+
+    func updateNSView(_ nsView: WindowTargetDropdownContainerView, context: Context) {
+        context.coordinator.appState = appState
+        context.coordinator.hostingView?.rootView = label
+    }
+
+    @MainActor final class Coordinator: NSObject {
+        var appState: AppState
+        var hostingView: NSHostingView<Label>?
+
+        init(appState: AppState) {
+            self.appState = appState
+            super.init()
+        }
+
+        func showMenu(from view: NSView) {
+            appState.refreshAvailableWindows()
+            let targets = appState.windowTargetList
+            let currentIndex = appState.currentWindowTargetIndex
+            let menu = NSMenu()
+            menu.autoenablesItems = false
+
+            if targets.isEmpty {
+                let item = NSMenuItem(
+                    title: NSLocalizedString("No windows available", comment: "Empty window target menu"),
+                    action: nil,
+                    keyEquivalent: ""
+                )
+                item.isEnabled = false
+                menu.addItem(item)
+            } else {
+                for (index, target) in targets.enumerated() {
+                    let title: String
+                    if let windowTitle = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines),
+                       !windowTitle.isEmpty {
+                        title = "\(target.appName) — \(windowTitle)"
+                    } else {
+                        title = target.appName
+                    }
+                    let item = NSMenuItem(
+                        title: title,
+                        action: #selector(menuItemSelected(_:)),
+                        keyEquivalent: ""
+                    )
+                    item.target = self
+                    item.tag = index
+                    if let icon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon {
+                        let resizedIcon = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { rect in
+                            icon.draw(in: rect)
+                            return true
+                        }
+                        item.image = resizedIcon
+                    }
+                    if index == currentIndex {
+                        item.state = .on
+                    }
+                    menu.addItem(item)
+                }
+            }
+
+            let position = NSPoint(x: 0, y: view.bounds.height)
+            menu.popUp(positioning: nil, at: position, in: view)
+        }
+
+        @objc func menuItemSelected(_ sender: NSMenuItem) {
+            appState.selectWindowTarget(at: sender.tag)
+        }
+    }
+}
+
+private final class WindowTargetDropdownContainerView: NSView {
+    var onMouseDown: ((NSView) -> Void)?
+
+    override func mouseDown(with event: NSEvent) {
+        onMouseDown?(self)
     }
 }

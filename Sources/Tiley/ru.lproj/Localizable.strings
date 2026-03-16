@@ -91,3 +91,5 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Образ диска Tiley всё ещё подключён. Извлечь его?";
 "Add Shortcut" = "Добавить сочетание";
 "Add Global Shortcut" = "Добавить глобальное сочетание";
+"No windows available" = "Нет доступных окон";
+"Tab is reserved for switching target windows." = "Tab зарезервирована для переключения целевого окна.";

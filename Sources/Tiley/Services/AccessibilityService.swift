@@ -72,7 +72,7 @@ final class AccessibilityService {
         return try windowTarget(for: frontmostPID)
     }
 
-    private func windowTarget(for pid: pid_t) throws -> WindowTarget {
+    func windowTarget(for pid: pid_t) throws -> WindowTarget {
         let appElement = AXUIElementCreateApplication(pid)
         let windowElement = try copyWindowElement(from: appElement)
         let position = try copyAXValueAttribute(windowElement, attribute: kAXPositionAttribute)
@@ -139,6 +139,137 @@ final class AccessibilityService {
         // Re-apply position then size to handle apps that need a second pass.
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
         AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+    }
+
+    /// Returns all on-screen standard windows (excluding Tiley) in z-order (front to back).
+    func allWindowTargets() -> [WindowTarget] {
+        guard checkAccess(prompt: false) else { return [] }
+
+        guard let windowList = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[CFString: Any]] else { return [] }
+
+        let selfPID = getpid()
+
+        // Collect CGWindow entries for standard windows (layer 0), grouped by PID, preserving z-order.
+        struct CGWindowEntry {
+            let pid: pid_t
+            let bounds: CGRect  // Top-left origin (AX/CG coordinate space)
+            let ownerName: String?
+        }
+
+        var cgEntries: [CGWindowEntry] = []
+        for info in windowList {
+            guard let ownerPID = info[kCGWindowOwnerPID] as? pid_t,
+                  ownerPID != selfPID else { continue }
+            let layer = info[kCGWindowLayer] as? Int ?? -1
+            guard layer == 0 else { continue }
+            guard let boundsRef = info[kCGWindowBounds],
+                  let bounds = CGRect(dictionaryRepresentation: boundsRef as! CFDictionary) else { continue }
+            guard bounds.width > 0, bounds.height > 0 else { continue }
+            let ownerName = info[kCGWindowOwnerName] as? String
+            cgEntries.append(CGWindowEntry(pid: ownerPID, bounds: bounds, ownerName: ownerName))
+        }
+
+        // Collect unique PIDs preserving first-seen order.
+        var seenPIDs = Set<pid_t>()
+        var orderedPIDs: [pid_t] = []
+        for entry in cgEntries {
+            if seenPIDs.insert(entry.pid).inserted {
+                orderedPIDs.append(entry.pid)
+            }
+        }
+
+        // For each PID, enumerate AX windows and build WindowTarget list.
+        struct AXWindowInfo {
+            let element: AXUIElement
+            let origin: CGPoint   // AX/CG top-left coordinates
+            let size: CGSize
+        }
+
+        var axWindowsByPID: [pid_t: [AXWindowInfo]] = [:]
+        for pid in orderedPIDs {
+            let appElement = AXUIElementCreateApplication(pid)
+            guard let axWindows = try? copyAllWindowElements(from: appElement) else { continue }
+            var infos: [AXWindowInfo] = []
+            for w in axWindows {
+                guard let pos = try? copyAXValueAttribute(w, attribute: kAXPositionAttribute),
+                      let sz = try? copyAXValueAttribute(w, attribute: kAXSizeAttribute) else { continue }
+                var origin = CGPoint.zero
+                var size = CGSize.zero
+                guard AXValueGetValue(pos, .cgPoint, &origin),
+                      AXValueGetValue(sz, .cgSize, &size) else { continue }
+                guard size.width > 0, size.height > 0 else { continue }
+                infos.append(AXWindowInfo(element: w, origin: origin, size: size))
+            }
+            axWindowsByPID[pid] = infos
+        }
+
+        // Match CGWindow entries to AX windows and build results in z-order.
+        var results: [WindowTarget] = []
+        var usedAXWindows = Set<ObjectIdentifier>()  // Track used AXUIElement refs
+
+        for cgEntry in cgEntries {
+            guard let axInfos = axWindowsByPID[cgEntry.pid] else { continue }
+            // Find matching AX window by position/size comparison.
+            let tolerance: CGFloat = 5
+            var matchedIndex: Int?
+            for (i, axInfo) in axInfos.enumerated() {
+                let id = ObjectIdentifier(axInfo.element)
+                guard !usedAXWindows.contains(id) else { continue }
+                if abs(axInfo.origin.x - cgEntry.bounds.origin.x) < tolerance
+                    && abs(axInfo.origin.y - cgEntry.bounds.origin.y) < tolerance
+                    && abs(axInfo.size.width - cgEntry.bounds.width) < tolerance
+                    && abs(axInfo.size.height - cgEntry.bounds.height) < tolerance {
+                    matchedIndex = i
+                    break
+                }
+            }
+
+            // If no exact match and only one unmatched AX window left, use it.
+            if matchedIndex == nil {
+                let unusedIndices = axInfos.indices.filter { !usedAXWindows.contains(ObjectIdentifier(axInfos[$0].element)) }
+                if unusedIndices.count == 1 {
+                    matchedIndex = unusedIndices[0]
+                }
+            }
+
+            guard let idx = matchedIndex else { continue }
+            let axInfo = axInfos[idx]
+            usedAXWindows.insert(ObjectIdentifier(axInfo.element))
+
+            let screen = resolveScreen(forAXOrigin: axInfo.origin, size: axInfo.size)
+            let frame = frameForAXOrigin(axInfo.origin, size: axInfo.size, on: screen)
+            let screenFrame = screen?.frame ?? NSScreen.main?.frame ?? frame
+            let visibleFrame = screen?.visibleFrame ?? NSScreen.main?.visibleFrame ?? frame
+            let appName = NSRunningApplication(processIdentifier: cgEntry.pid)?.localizedName
+                ?? cgEntry.ownerName
+                ?? NSLocalizedString("App", comment: "Generic app name fallback")
+            let windowTitle = try? copyStringAttribute(axInfo.element, attribute: kAXTitleAttribute)
+
+            let target = WindowTarget(
+                appElement: AXUIElementCreateApplication(cgEntry.pid),
+                windowElement: axInfo.element,
+                processIdentifier: cgEntry.pid,
+                appName: appName,
+                windowTitle: windowTitle,
+                frame: frame,
+                visibleFrame: visibleFrame,
+                screenFrame: screenFrame
+            )
+            results.append(target)
+        }
+
+        return results
+    }
+
+    private func copyAllWindowElements(from appElement: AXUIElement) throws -> [AXUIElement] {
+        guard let value = try copyAttribute(appElement, attribute: kAXWindowsAttribute) else {
+            return []
+        }
+        let windows = unsafeBitCast(value, to: CFArray.self) as [AnyObject]
+        return windows.map { unsafeBitCast($0, to: AXUIElement.self) }
     }
 
     private func copyAttribute(_ element: AXUIElement, attribute: String) throws -> AnyObject? {

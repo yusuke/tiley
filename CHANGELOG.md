@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Window target switching: press Tab / Shift+Tab while the overlay is showing to cycle through available windows
+- Window target dropdown: click the target info area to select a window from a popup menu
+- Tab and Shift+Tab are now reserved and cannot be assigned as layout shortcuts
+
+## [1.1.8] - 2026-03-16
+
+### Added
+
 - After copying from a DMG, offer to eject the disk image and move the DMG file to Trash
 - Detect a mounted Tiley DMG on launch from /Applications (e.g. after manual Finder copy) and offer to eject and trash it
 
@@ -116,7 +124,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.7...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.8...HEAD
+[1.1.8]: https://github.com/yusuke/tiley/releases/tag/v1.1.8
 [1.1.7]: https://github.com/yusuke/tiley/releases/tag/v1.1.7
 [1.1.6]: https://github.com/yusuke/tiley/releases/tag/v1.1.6
 [1.1.5]: https://github.com/yusuke/tiley/releases/tag/v1.1.5

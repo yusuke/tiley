@@ -91,3 +91,5 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley 的磁盘映像仍处于挂载状态。是否要推出？";
 "Add Shortcut" = "添加快捷键";
 "Add Global Shortcut" = "添加全局快捷键";
+"No windows available" = "没有可用的窗口";
+"Tab is reserved for switching target windows." = "Tab 已用于切换目标窗口。";
