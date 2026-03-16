@@ -134,6 +134,10 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         // Keep the main window visible when focus moves to another Tiley-owned
         // window (e.g. a secondary-screen MainWindow or the About dialog).
         guard !NSApp.isActive else { return }
+        // During window controller recreation (e.g. switching from layout grid
+        // to settings mode), the old key window is ordered out which triggers
+        // this callback. Suppress state resets so the new mode is preserved.
+        guard appState?.isRecreatingWindows != true else { return }
         appState?.hidePreviewOverlay()
         // Keep the permissions-only panel visible so the user can grant access
         // in System Settings and return to Tiley.

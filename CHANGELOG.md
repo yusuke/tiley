@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix settings window requiring two activations to open on multi-screen setups (menu bar icon, Cmd+,, and Tiley menu → Settings all affected)
+
 ## [1.1.5] - 2026-03-16
 
 ### Added

@@ -105,6 +105,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var targetScreenDisplayID: CGDirectDisplayID?
     @ObservationIgnored private var screenChangeTask: Task<Void, Never>?
     @ObservationIgnored private var isSwitchingActivationPolicy = false
+    @ObservationIgnored private(set) var isRecreatingWindows = false
     @ObservationIgnored private var hotKeyRef: EventHotKeyRef?
     @ObservationIgnored private var presetHotKeyRefs: [UInt32: EventHotKeyRef] = [:]
     @ObservationIgnored private var presetHotKeyIDs: [UInt32: UUID] = [:]
@@ -1188,6 +1189,9 @@ final class AppState: NSObject, NSMenuDelegate {
         // During an activation-policy switch the window is temporarily hidden
         // by macOS. Don't reset UI state — the window will be restored shortly.
         guard !isSwitchingActivationPolicy else { return }
+        // During window controller recreation the old windows are dismissed.
+        // Don't reset UI state — new windows are about to be shown.
+        guard !isRecreatingWindows else { return }
         // If any Tiley window is still visible, don't reset state.
         let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
         if anyVisible { return }
@@ -1247,6 +1251,9 @@ final class AppState: NSObject, NSMenuDelegate {
         // Always recreate to ensure fresh ScreenContext and correct role.
         // Use dismissSilently() to avoid triggering handleMainWindowHidden
         // which would re-register preset global hotkeys and reset state.
+        // Set isRecreatingWindows to suppress windowDidResignKey state resets
+        // that occur when the old key window is ordered out during recreation.
+        isRecreatingWindows = true
         for controller in mainWindowControllers.values {
             controller.dismissSilently()
         }
@@ -1254,10 +1261,9 @@ final class AppState: NSObject, NSMenuDelegate {
 
         mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
         NSApp.activate(ignoringOtherApps: true)
-        Task { @MainActor [weak self] in
-            self?.selectedLayoutPresetID = nil
-            self?.mainWindowControllers[displayID]?.show()
-        }
+        selectedLayoutPresetID = nil
+        mainWindowControllers[displayID]?.show()
+        isRecreatingWindows = false
     }
 
     private func openAllScreenWindows() {
@@ -1278,6 +1284,9 @@ final class AppState: NSObject, NSMenuDelegate {
         // and roles are always correct for the current target screen.
         // Use dismissSilently() to avoid triggering handleMainWindowHidden
         // which would re-register preset global hotkeys and reset state.
+        // Set isRecreatingWindows to suppress windowDidResignKey state resets
+        // that occur when the old key window is ordered out during recreation.
+        isRecreatingWindows = true
         for controller in mainWindowControllers.values {
             controller.dismissSilently()
         }
@@ -1290,22 +1299,20 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         // Show secondary windows first, then target window last so it gets initial key focus.
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            self.selectedLayoutPresetID = nil
-            for (displayID, controller) in self.mainWindowControllers {
-                if displayID != self.targetScreenDisplayID {
-                    controller.show(asKey: true)
-                }
+        selectedLayoutPresetID = nil
+        for (displayID, controller) in mainWindowControllers {
+            if displayID != targetScreenDisplayID {
+                controller.show(asKey: true)
             }
-            self.mainWindowControllers[self.targetScreenDisplayID ?? 0]?.show(asKey: true)
         }
+        mainWindowControllers[targetScreenDisplayID ?? 0]?.show(asKey: true)
+        isRecreatingWindows = false
     }
 
     private func closeSecondaryWindows() {
         for (displayID, controller) in mainWindowControllers {
             if displayID != targetScreenDisplayID {
-                controller.hide()
+                controller.dismissSilently()
             }
         }
         mainWindowControllers = mainWindowControllers.filter { $0.key == targetScreenDisplayID }
