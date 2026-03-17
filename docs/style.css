@@ -104,6 +104,12 @@ img {
   gap: 8px;
 }
 
+.nav-brand img {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
 .nav-brand:hover {
   text-decoration: none;
 }
