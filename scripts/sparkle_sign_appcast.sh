@@ -73,35 +73,42 @@ if [[ -f "$EXISTING_APPCAST" ]]; then
   fi
 fi
 
-# Promote [Unreleased] to [X.Y.Z] in CHANGELOG.md if no section exists yet
-CHANGELOG="$PROJECT_ROOT/CHANGELOG.md"
-if [[ -f "$CHANGELOG" ]]; then
+# Promote [Unreleased] to [X.Y.Z] in all CHANGELOG files if no section exists yet
+RELEASE_DATE=$(date +%Y-%m-%d)
+CHANGELOG_FILES=("$PROJECT_ROOT/CHANGELOG.md")
+for f in "$PROJECT_ROOT"/changelogs/CHANGELOG.*.md; do
+  [[ -f "$f" ]] && CHANGELOG_FILES+=("$f")
+done
+
+for CHANGELOG in "${CHANGELOG_FILES[@]}"; do
+  CHANGELOG_BASENAME=$(basename "$CHANGELOG")
   if ! grep -q "^## \\[${APP_VERSION}\\]" "$CHANGELOG"; then
-    RELEASE_DATE=$(date +%Y-%m-%d)
-    echo "Promoting [Unreleased] to [${APP_VERSION}] - ${RELEASE_DATE} in CHANGELOG.md"
+    echo "Promoting [Unreleased] to [${APP_VERSION}] - ${RELEASE_DATE} in ${CHANGELOG_BASENAME}"
     # Replace "## [Unreleased]" with "## [Unreleased]\n\n## [X.Y.Z] - YYYY-MM-DD"
     sed -i '' "s/^## \\[Unreleased\\]/## [Unreleased]\\
 \\
 ## [${APP_VERSION}] - ${RELEASE_DATE}/" "$CHANGELOG"
-    # Update link references at the bottom
-    if grep -q '^\[Unreleased\]:' "$CHANGELOG"; then
-      # Update existing Unreleased link to compare from new version
-      sed -i '' "s|^\[Unreleased\]:.*|[Unreleased]: https://github.com/yusuke/tiley/compare/v${APP_VERSION}...HEAD|" "$CHANGELOG"
-      # Add version link if not present
-      if ! grep -q "^\\[${APP_VERSION}\\]:" "$CHANGELOG"; then
-        sed -i '' "/^\[Unreleased\]:/a\\
+    # Update link references at the bottom (only in main CHANGELOG.md)
+    if [[ "$CHANGELOG_BASENAME" == "CHANGELOG.md" ]]; then
+      if grep -q '^\[Unreleased\]:' "$CHANGELOG"; then
+        # Update existing Unreleased link to compare from new version
+        sed -i '' "s|^\[Unreleased\]:.*|[Unreleased]: https://github.com/yusuke/tiley/compare/v${APP_VERSION}...HEAD|" "$CHANGELOG"
+        # Add version link if not present
+        if ! grep -q "^\\[${APP_VERSION}\\]:" "$CHANGELOG"; then
+          sed -i '' "/^\[Unreleased\]:/a\\
 [${APP_VERSION}]: https://github.com/yusuke/tiley/releases/tag/v${APP_VERSION}
 " "$CHANGELOG"
+        fi
+      else
+        # No link references yet, append them
+        printf '\n[Unreleased]: https://github.com/yusuke/tiley/compare/v%s...HEAD\n[%s]: https://github.com/yusuke/tiley/releases/tag/v%s\n' \
+          "$APP_VERSION" "$APP_VERSION" "$APP_VERSION" >> "$CHANGELOG"
       fi
-    else
-      # No link references yet, append them
-      printf '\n[Unreleased]: https://github.com/yusuke/tiley/compare/v%s...HEAD\n[%s]: https://github.com/yusuke/tiley/releases/tag/v%s\n' \
-        "$APP_VERSION" "$APP_VERSION" "$APP_VERSION" >> "$CHANGELOG"
     fi
   else
-    echo "CHANGELOG.md already has section for ${APP_VERSION}"
+    echo "${CHANGELOG_BASENAME} already has section for ${APP_VERSION}"
   fi
-fi
+done
 
 # Sign the DMG with Sparkle EdDSA (key is read from Keychain automatically)
 echo "Signing DMG with Sparkle EdDSA"
