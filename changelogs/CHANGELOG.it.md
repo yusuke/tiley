@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-03-18
+
 ### Aggiunto
 
 - Rilevamento dei vincoli di ridimensionamento delle finestre: rileva automaticamente la ridimensionabilità per asse tramite un controllo rapido a 3 livelli (non ridimensionabile → pulsante schermo intero → sonda da 1px come fallback)

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-03-18
+
 ### Adicionado
 
 - Detecção de restrições de redimensionamento de janelas: detecta automaticamente a capacidade de redimensionamento por eixo através de uma verificação rápida em 3 etapas (não redimensionável → botão de tela cheia → sonda de 1px como fallback)

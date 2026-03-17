@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-03-18
+
 ### Añadido
 
 - Detección de restricciones de redimensionamiento de ventanas: detecta automáticamente la capacidad de redimensionamiento por eje mediante una verificación rápida de 3 niveles (no redimensionable → botón de pantalla completa → prueba de 1px como respaldo)

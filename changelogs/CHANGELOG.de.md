@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-03-18
+
 ### Hinzugefügt
 
 - Erkennung von Fenstergrößenbeschränkungen: Automatische Erkennung der achsenweisen Größenänderbarkeit durch eine schnelle 3-stufige Prüfung (nicht änderbar → Vollbildtaste → 1px-Probe als Rückfall)

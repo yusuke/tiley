@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-03-18
+
 ### Ajouté
 
 - Détection des contraintes de redimensionnement des fenêtres : détecte automatiquement la possibilité de redimensionnement par axe grâce à une vérification rapide en 3 étapes (non redimensionnable → bouton plein écran → sonde de 1px en dernier recours)

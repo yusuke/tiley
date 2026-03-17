@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-03-18
+
 ### Added
 
 - Window resize constraint detection: automatically detects per-axis resizability using a fast 3-tier check (non-resizable → full-screen button → 1px probe fallback)
@@ -156,7 +158,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.4...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.5...HEAD
+[1.2.5]: https://github.com/yusuke/tiley/releases/tag/v1.2.5
 [1.2.4]: https://github.com/yusuke/tiley/releases/tag/v1.2.4
 [1.2.3]: https://github.com/yusuke/tiley/releases/tag/v1.2.3
 [1.2.2]: https://github.com/yusuke/tiley/releases/tag/v1.2.2
