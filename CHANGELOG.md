@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-03-17
+
 ### Improved
 
 - Fine-tuned layout preset editing UI: delete button now overlays the grid preview with a confirmation dialog, opaque hover background, and consistent button styling
@@ -142,7 +144,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.3...HEAD
+[1.2.3]: https://github.com/yusuke/tiley/releases/tag/v1.2.3
 [1.2.2]: https://github.com/yusuke/tiley/releases/tag/v1.2.2
 [1.2.1]: https://github.com/yusuke/tiley/releases/tag/v1.2.1
 [1.2.0]: https://github.com/yusuke/tiley/releases/tag/v1.2.0
