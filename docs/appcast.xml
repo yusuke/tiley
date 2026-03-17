@@ -3,50 +3,80 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>1.2.3</title>
+            <description xml:lang="ru"><![CDATA[<h3>Улучшено</h3>
+<ul>
+<li>Доработан интерфейс редактирования пресетов макетов: кнопка удаления отображается поверх предварительного просмотра сетки, с диалогом подтверждения, непрозрачным фоном при наведении и единообразным стилем кнопок</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Melhorado</h3>
+<ul>
+<li>Ajuste da interface de edição de predefinições de layout: o botão de exclusão é exibido como sobreposição na visualização da grade, com diálogo de confirmação, fundo opaco ao passar o mouse e estilo de botão uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Migliorato</h3>
+<ul>
+<li>Perfezionamento dell'interfaccia di modifica dei preset di layout: il pulsante di eliminazione viene mostrato come overlay sull'anteprima della griglia, con dialogo di conferma, sfondo opaco al passaggio del mouse e stile dei pulsanti uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Amélioré</h3>
+<ul>
+<li>Peaufinage de l'interface d'édition des préréglages de disposition : le bouton de suppression s'affiche en superposition sur l'aperçu de la grille, avec dialogue de confirmation, arrière-plan opaque au survol et style de bouton uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Mejorado</h3>
+<ul>
+<li>Ajuste de la interfaz de edición de preajustes de diseño: el botón de eliminar se muestra como superposición en la vista previa de la cuadrícula, con diálogo de confirmación, fondo opaco al pasar el ratón y estilo de botón uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Verbessert</h3>
+<ul>
+<li>Feinabstimmung der Benutzeroberfläche zur Bearbeitung von Layout-Vorlagen: Löschen-Schaltfläche wird als Overlay über der Rastervorschau angezeigt, mit Bestätigungsdialog, opakem Hover-Hintergrund und einheitlichem Schaltflächenstil</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>改進</h3>
+<ul>
+<li>優化佈局預設編輯介面：刪除按鈕以疊加層顯示在網格預覽上，新增確認對話框、不透明懸停背景和統一的按鈕樣式</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>改进</h3>
+<ul>
+<li>优化布局预设编辑界面：删除按钮以叠加层显示在网格预览上，新增确认对话框、不透明悬停背景和统一的按钮样式</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>개선</h3>
+<ul>
+<li>레이아웃 프리셋 편집 UI 개선: 삭제 버튼을 그리드 미리보기 위에 오버레이로 표시하고, 확인 대화상자·불투명 호버 배경·일관된 버튼 스타일 적용</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>改善</h3>
+<ul>
+<li>レイアウトプリセット編集UIを調整：削除ボタンをグリッドプレビュー上にオーバーレイ表示し、確認ダイアログ・不透明ホバー背景・統一されたボタンスタイルを適用</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Improved</h3>
+<ul>
+<li>Fine-tuned layout preset editing UI: delete button now overlays the grid preview with a confirmation dialog, opaque hover background, and consistent button styling</li>
+</ul>
+]]></description>
+            <pubDate>Tue, 17 Mar 2026 16:07:05 +0900</pubDate>
+            <sparkle:version>123</sparkle:version>
+            <sparkle:shortVersionString>1.2.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley-1.2.3.dmg" length="4652928" type="application/octet-stream" sparkle:edSignature="kIr6hu4SClD7ISz7QE1ee3aLHrC1nqh34TDbLOuJjTVNWkWo4L99jVHUGw4+acdVUnSq1MtXdRIrDFndHbBSCg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-122.delta" sparkle:deltaFrom="122" length="115462" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nRbKAWV0hTB50osyINdCCLWMU/tn1RaY/pIoPYrthemXORDL94zIWPy5iFaxs3sS2LANrkF0vj19bNhxClAzCA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-121.delta" sparkle:deltaFrom="121" length="211498" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="91eWBnd1Tlktugmwqy2SLgp7ywUbUDY5Q39LQ1H7Lhem3fqh+YriycqYji/QX6tiRg9h+G9CmzROaMwJddQkAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-120.delta" sparkle:deltaFrom="120" length="212178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0fI3bDlU51Br/qp1xEHl7XWA0/JHp4CKL4ZRy8pVr6zMakbxZ14qldThF1VurF7fzlU6ePviCDrfKWzEkwOEDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-118.delta" sparkle:deltaFrom="118" length="266818" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NKsUdjNq6b8tlOyboPwmUShjJjzU9oFCrrIwuwFL1VCv6DBdHo3+RHh7eQanJIBxAGQ37mmjePlPzNaRhV5MBw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-117.delta" sparkle:deltaFrom="117" length="279914" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="J9I7O9SZz4KaDpCkTCdl4Ji2KiIr65jVTnzmO58Y1Vsf9JFMhJVj5htxyN+s5t3hgQ9oKmkTREWZVSSn959+Cw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.2.2</title>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
 <ul>
-<li>Redesigned layout preset editing for a more intuitive settings experience</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>レイアウトプリセットの編集をより直感的に再設計</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>레이아웃 프리셋 편집을 보다 직관적으로 재설계</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>重新设计布局预设编辑，提供更直观的设置体验</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>重新設計佈局預設編輯，提供更直覺的設定體驗</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Bearbeitung von Layout-Vorlagen für ein intuitiveres Einstellungserlebnis neu gestaltet</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Rediseño de la edición de preajustes de diseño para una experiencia de configuración más intuitiva</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Refonte de l'édition des préréglages de disposition pour une expérience de configuration plus intuitive</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Riprogettata la modifica dei preset di layout per un'esperienza di impostazione più intuitiva</li>
+<li>Переработано редактирование пресетов макетов для более интуитивного управления настройками</li>
 </ul>
 ]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
@@ -54,16 +84,56 @@
 <li>Remodelada a edição de predefinições de layout para uma experiência de configuração mais intuitiva</li>
 </ul>
 ]]></description>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
 <ul>
-<li>Переработано редактирование пресетов макетов для более интуитивного управления настройками</li>
+<li>Riprogettata la modifica dei preset di layout per un'esperienza di impostazione più intuitiva</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Refonte de l'édition des préréglages de disposition pour une expérience de configuration plus intuitive</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Rediseño de la edición de preajustes de diseño para una experiencia de configuración más intuitiva</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Bearbeitung von Layout-Vorlagen für ein intuitiveres Einstellungserlebnis neu gestaltet</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>重新設計佈局預設編輯，提供更直覺的設定體驗</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>重新设计布局预设编辑，提供更直观的设置体验</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>레이아웃 프리셋 편집을 보다 직관적으로 재설계</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>レイアウトプリセットの編集をより直感的に再設計</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Redesigned layout preset editing for a more intuitive settings experience</li>
 </ul>
 ]]></description>
             <pubDate>Tue, 17 Mar 2026 12:50:49 +0900</pubDate>
             <sparkle:version>122</sparkle:version>
             <sparkle:shortVersionString>1.2.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley-1.2.2.dmg" length="4646914" type="application/octet-stream" sparkle:edSignature="PGKBa/SP4WD3YatgrNL3y8CiQYLvjubHbiMUueUiuq+uPfx81qccnDp1f4x/3A3IyQKdef+eWYG9VkC0VCrCAg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley-1.2.2.dmg" length="4646914" type="application/octet-stream" sparkle:edSignature="PGKBa/SP4WD3YatgrNL3y8CiQYLvjubHbiMUueUiuq+uPfx81qccnDp1f4x/3A3IyQKdef+eWYG9VkC0VCrCAg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-121.delta" sparkle:deltaFrom="121" length="205790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="l8JOm/bC7c340ittS/+ZuE2vpFbRBbABTAfe6lAXToYWM++HbP5slCm9G7eyrYxnzDdJBAr3skUR3BIv85zmDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-120.delta" sparkle:deltaFrom="120" length="206470" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="gBAlXO62WywUD5X2nR+EhO5gJNz6rpBUTJfinpHZS07/Jx83ArjEA11FCIprSKBZVqAsBLIWb2fqOt3tDUnbCg=="/>
@@ -74,49 +144,9 @@
         </item>
         <item>
             <title>1.2.1</title>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+            <description xml:lang="ru"><![CDATA[<h3>Исправления</h3>
 <ul>
-<li>Fix "Move to Applications" dialog incorrectly shown instead of "Copy" when launching from a downloaded DMG (Gatekeeper App Translocation caused the disk image path to be unrecognized)</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>ダウンロードしたDMGから起動した際、「コピー」ではなく「移動」ダイアログが誤って表示される問題を修正（Gatekeeper App Translocationによりディスクイメージのパスが認識されなかった問題）</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>다운로드한 DMG에서 실행 시 "복사" 대신 "이동" 대화상자가 잘못 표시되는 문제 수정 (Gatekeeper App Translocation으로 인해 디스크 이미지 경로가 인식되지 않는 문제)</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复从下载的DMG启动时错误显示"移动"对话框而非"拷贝"的问题（Gatekeeper App Translocation导致磁盘映像路径未被识别）</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正從下載的DMG啟動時錯誤顯示「移動」對話框而非「拷貝」的問題（Gatekeeper App Translocation導致磁碟映像路徑未被辨識）</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Dialog „In Programme bewegen" wurde fälschlich anstelle von „In Programme kopieren" angezeigt, wenn die App aus einem heruntergeladenen DMG gestartet wurde (Gatekeeper App Translocation verhinderte die Erkennung des Disk-Image-Pfads)</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Correcciones</h3>
-<ul>
-<li>Se corrigió el diálogo "Mover a Aplicaciones" que se mostraba incorrectamente en lugar de "Copiar" al iniciar desde un DMG descargado (Gatekeeper App Translocation impedía reconocer la ruta de la imagen de disco)</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrections</h3>
-<ul>
-<li>Correction du dialogue « Déplacer vers Applications » affiché à tort au lieu de « Copier » lors du lancement depuis un DMG téléchargé (Gatekeeper App Translocation empêchait la reconnaissance du chemin de l'image disque)</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Correzioni</h3>
-<ul>
-<li>Corretto il dialogo "Sposta in Applicazioni" mostrato erroneamente invece di "Copia" durante l'avvio da un DMG scaricato (Gatekeeper App Translocation impediva il riconoscimento del percorso dell'immagine disco)</li>
+<li>Исправлен диалог «Переместить в Программы», ошибочно отображавшийся вместо «Скопировать» при запуске из загруженного DMG (Gatekeeper App Translocation не позволял распознать путь к образу диска)</li>
 </ul>
 ]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Correções</h3>
@@ -124,195 +154,62 @@
 <li>Corrigido o diálogo "Mover para Aplicativos" exibido incorretamente em vez de "Copiar" ao iniciar a partir de um DMG baixado (Gatekeeper App Translocation impedia o reconhecimento do caminho da imagem de disco)</li>
 </ul>
 ]]></description>
-            <description xml:lang="ru"><![CDATA[<h3>Исправления</h3>
+            <description xml:lang="it"><![CDATA[<h3>Correzioni</h3>
 <ul>
-<li>Исправлен диалог «Переместить в Программы», ошибочно отображавшийся вместо «Скопировать» при запуске из загруженного DMG (Gatekeeper App Translocation не позволял распознать путь к образу диска)</li>
+<li>Corretto il dialogo "Sposta in Applicazioni" mostrato erroneamente invece di "Copia" durante l'avvio da un DMG scaricato (Gatekeeper App Translocation impediva il riconoscimento del percorso dell'immagine disco)</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrections</h3>
+<ul>
+<li>Correction du dialogue « Déplacer vers Applications » affiché à tort au lieu de « Copier » lors du lancement depuis un DMG téléchargé (Gatekeeper App Translocation empêchait la reconnaissance du chemin de l'image disque)</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Correcciones</h3>
+<ul>
+<li>Se corrigió el diálogo "Mover a Aplicaciones" que se mostraba incorrectamente en lugar de "Copiar" al iniciar desde un DMG descargado (Gatekeeper App Translocation impedía reconocer la ruta de la imagen de disco)</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Dialog „In Programme bewegen" wurde fälschlich anstelle von „In Programme kopieren" angezeigt, wenn die App aus einem heruntergeladenen DMG gestartet wurde (Gatekeeper App Translocation verhinderte die Erkennung des Disk-Image-Pfads)</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正從下載的DMG啟動時錯誤顯示「移動」對話框而非「拷貝」的問題（Gatekeeper App Translocation導致磁碟映像路徑未被辨識）</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复从下载的DMG启动时错误显示"移动"对话框而非"拷贝"的问题（Gatekeeper App Translocation导致磁盘映像路径未被识别）</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>다운로드한 DMG에서 실행 시 "복사" 대신 "이동" 대화상자가 잘못 표시되는 문제 수정 (Gatekeeper App Translocation으로 인해 디스크 이미지 경로가 인식되지 않는 문제)</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>ダウンロードしたDMGから起動した際、「コピー」ではなく「移動」ダイアログが誤って表示される問題を修正（Gatekeeper App Translocationによりディスクイメージのパスが認識されなかった問題）</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fix "Move to Applications" dialog incorrectly shown instead of "Copy" when launching from a downloaded DMG (Gatekeeper App Translocation caused the disk image path to be unrecognized)</li>
 </ul>
 ]]></description>
             <pubDate>Tue, 17 Mar 2026 09:02:10 +0900</pubDate>
             <sparkle:version>121</sparkle:version>
             <sparkle:shortVersionString>1.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley-1.2.1.dmg" length="4610623" type="application/octet-stream" sparkle:edSignature="o6o+K9N5RMKLmgUbTX+0LnxlnvUsHrzoh1O8Yafz31mGxrXv18zPm3yblLCUts9jTvTS7Eq7kfMwJBeY5L+wBw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley-1.2.1.dmg" length="4610623" type="application/octet-stream" sparkle:edSignature="o6o+K9N5RMKLmgUbTX+0LnxlnvUsHrzoh1O8Yafz31mGxrXv18zPm3yblLCUts9jTvTS7Eq7kfMwJBeY5L+wBw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley121-120.delta" sparkle:deltaFrom="120" length="54278" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="J8wEliACJFP0ijbAfKxVPar+3/7dBZuPPo8v5D1lngC85tk9Uf7zrt5xAVPHvOQk0l9sRnGSgN3Ndj8IWK4VAA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley121-118.delta" sparkle:deltaFrom="118" length="165366" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="7S2l+lnkYadHLl+bXtprysDRXXq7PtrK623ASaGPP5OfhRA3IXa/7UO3kg4a5vzVeoxZ+hvbfcJbeqfmLkHfAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley121-117.delta" sparkle:deltaFrom="117" length="179918" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="lLEKWaomi4DeopbThTmj9i8F0fiVFXe9pyTC2E97gAr4kLvaqb2O2cd7R427VFwLzbApDj1Ki+KJiZCoB+yMCw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley121-116.delta" sparkle:deltaFrom="116" length="183218" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="HnqgbVPMKonTdioH2OLiomcPtbdK3m33/0/9oKCnuaDMJkmiXek6SqEnzwFOCDiNYqDYk2hejhLx7TrS9cdZBw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley121-115.delta" sparkle:deltaFrom="115" length="191510" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dNr3q8ckOlbPHXULXT6Zv3jO+Zgusdss15IrRNDXsbwEaHdcHD6VTlB5DtxuotqOfOTcWINGxm8x+V1ZUwtjDw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.2.0</title>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Window target switching: press Tab / Shift+Tab while the overlay is showing to cycle through available windows</li>
-<li>Window target dropdown: click the target info area to select a window from a popup menu</li>
-<li>Tab and Shift+Tab are now reserved and cannot be assigned as layout shortcuts</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>ウィンドウターゲット切り替え: オーバーレイ表示中にTab / Shift+Tabで利用可能なウィンドウを順に切り替え</li>
-<li>ウィンドウターゲットドロップダウン: ターゲット情報エリアをクリックしてポップアップメニューからウィンドウを選択</li>
-<li>TabとShift+Tabは予約キーとなり、レイアウトショートカットに割り当て不可に</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>윈도우 대상 전환: 오버레이가 표시된 상태에서 Tab / Shift+Tab을 눌러 사용 가능한 윈도우를 순환</li>
-<li>윈도우 대상 드롭다운: 대상 정보 영역을 클릭하여 팝업 메뉴에서 윈도우 선택</li>
-<li>Tab과 Shift+Tab은 예약 키로 지정되어 레이아웃 단축키에 할당 불가</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>窗口目标切换：在网格覆盖层显示时按 Tab / Shift+Tab 循环切换可用窗口</li>
-<li>窗口目标下拉菜单：点击目标信息区域从弹出菜单中选择窗口</li>
-<li>Tab 和 Shift+Tab 现为保留按键，无法分配为布局快捷键</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>視窗目標切換：在網格覆蓋層顯示時按 Tab / Shift+Tab 循環切換可用視窗</li>
-<li>視窗目標下拉選單：點擊目標資訊區域從彈出式選單中選擇視窗</li>
-<li>Tab 和 Shift+Tab 現為保留按鍵，無法指定為佈局快捷鍵</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Fensterziel-Umschaltung: Tab / Umschalt+Tab drücken, während das Overlay angezeigt wird, um zwischen verfügbaren Fenstern zu wechseln</li>
-<li>Fensterziel-Dropdown: Klicken Sie auf den Zielinfobereich, um ein Fenster aus einem Popup-Menü auszuwählen</li>
-<li>Tab und Umschalt+Tab sind jetzt reserviert und können nicht als Layout-Tastenkürzel zugewiesen werden</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Cambio de ventana objetivo: pulsa Tab / Mayús+Tab mientras la cuadrícula esté visible para alternar entre las ventanas disponibles</li>
-<li>Menú desplegable de ventana objetivo: haz clic en el área de información del objetivo para seleccionar una ventana desde un menú emergente</li>
-<li>Tab y Mayús+Tab son ahora teclas reservadas y no se pueden asignar como atajos de diseño</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Changement de fenêtre cible : appuyez sur Tab / Maj+Tab pendant l'affichage de la grille pour parcourir les fenêtres disponibles</li>
-<li>Menu déroulant de fenêtre cible : cliquez sur la zone d'information de la cible pour sélectionner une fenêtre dans un menu contextuel</li>
-<li>Tab et Maj+Tab sont désormais réservés et ne peuvent pas être attribués comme raccourcis de disposition</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Cambio finestra di destinazione: premi Tab / Maiusc+Tab mentre la griglia è visualizzata per scorrere le finestre disponibili</li>
-<li>Menu a discesa finestra di destinazione: fai clic sull'area informazioni per selezionare una finestra da un menu a comparsa</li>
-<li>Tab e Maiusc+Tab sono ora tasti riservati e non possono essere assegnati come scorciatoie di layout</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Troca de janela alvo: pressione Tab / Shift+Tab enquanto a grade estiver visível para alternar entre as janelas disponíveis</li>
-<li>Menu suspenso de janela alvo: clique na área de informações do alvo para selecionar uma janela em um menu pop-up</li>
-<li>Tab e Shift+Tab agora são teclas reservadas e não podem ser atribuídas como atalhos de layout</li>
-</ul>
-]]></description>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Переключение целевого окна: нажмите Tab / Shift+Tab при отображении сетки для переключения между доступными окнами</li>
-<li>Выпадающее меню целевого окна: нажмите на область информации о цели для выбора окна из всплывающего меню</li>
-<li>Tab и Shift+Tab теперь зарезервированы и не могут быть назначены как горячие клавиши макетов</li>
-</ul>
-]]></description>
-            <pubDate>Tue, 17 Mar 2026 08:48:48 +0900</pubDate>
-            <sparkle:version>120</sparkle:version>
-            <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley-1.2.0.dmg" length="4611749" type="application/octet-stream" sparkle:edSignature="BjuPdPxfrq1oKAi2JcVULbjRvvFY7cbuysf1ZL2dvuA3q9wDaG6it059XfYFLIIQ0vP3wQ6raGmTnnOFnec5Aw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-118.delta" sparkle:deltaFrom="118" length="164554" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vqYYvsxI8eXTbSuovFAUrheX+YAMQGYrDL6CvvdwLhE9+r9QO11RmjdBBm+dxjApi/hEQ2XBFZF03IY2/SQTAQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-117.delta" sparkle:deltaFrom="117" length="178886" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="R6h4PV0/TZwXkfiWtlGIsahj3z8JKm7Iu8elscCO2EU+M4F6+mso/rTVnEs3tcMMkhCnejUEas3gtUIyJzGVCQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-116.delta" sparkle:deltaFrom="116" length="183258" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mRG5Dv27laq0T/550HRJqf8rFKJWTldQaDrFLxnASVHykFELEltgUnJq8oXOIg+i67sqogoME2kKA3e+uKbXAw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-115.delta" sparkle:deltaFrom="115" length="192370" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OLBoNbk5j0m/Gr7ElY5FRmQMf0F+VMFt7VCTKhGzFKDn94ufoBnAFUZln9Q/5WxTlg72qQFnfsM0MuaI7J5xAA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.0/Tiley120-114.delta" sparkle:deltaFrom="114" length="248530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="w3vCfl5qqL5Gvx3PX/0CUB28W1k1ktKNsp6X7Fu46wH+kNEufW4GvzHQMFjPA4TzyFWSF2dsr7jR6eGpmIwSAg=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.1.8</title>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>After copying from a DMG, offer to eject the disk image and move the DMG file to Trash</li>
-<li>Detect a mounted Tiley DMG on launch from /Applications (e.g. after manual Finder copy) and offer to eject and trash it</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>DMGからコピー後、ディスクイメージの取り出しとDMGファイルのゴミ箱への移動を提案</li>
-<li>/Applicationsから起動時にマウントされたTiley DMGを検出し（Finderで手動コピーした場合など）、取り出しとゴミ箱への移動を提案</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>DMG에서 복사 후 디스크 이미지 추출 및 DMG 파일 휴지통 이동 제안</li>
-<li>/Applications에서 시작 시 마운트된 Tiley DMG 감지 (Finder에서 수동 복사 후 등) 및 추출과 휴지통 이동 제안</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>从DMG拷贝后，提供推出磁盘映像并将DMG文件移至废纸篓的选项</li>
-<li>从"应用程序"启动时检测已挂载的Tiley DMG（例如通过Finder手动拷贝后），并提供推出和移至废纸篓的选项</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>從DMG拷貝後，提供退出磁碟映像並將DMG檔案移至垃圾桶的選項</li>
-<li>從「應用程式」啟動時偵測已掛載的Tiley DMG（例如透過Finder手動拷貝後），並提供退出和移至垃圾桶的選項</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Nach dem Kopieren von einem DMG wird angeboten, das Disk-Image auszuwerfen und die DMG-Datei in den Papierkorb zu verschieben</li>
-<li>Erkennung eines eingehängten Tiley-DMG beim Start aus /Programme (z. B. nach manuellem Kopieren im Finder) mit Angebot zum Auswerfen und Löschen</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Tras copiar desde un DMG, se ofrece expulsar la imagen de disco y mover el archivo DMG a la Papelera</li>
-<li>Detección de un DMG de Tiley montado al iniciar desde /Aplicaciones (por ejemplo, tras copiar manualmente en Finder) con opción de expulsar y mover a la Papelera</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Après la copie depuis un DMG, proposition d'éjecter l'image disque et de placer le fichier DMG dans la Corbeille</li>
-<li>Détection d'un DMG Tiley monté au lancement depuis /Applications (par ex. après copie manuelle dans le Finder) avec proposition d'éjection et de mise à la Corbeille</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Dopo la copia da un DMG, viene offerta l'opzione di espellere l'immagine disco e spostare il file DMG nel Cestino</li>
-<li>Rilevamento di un DMG Tiley montato all'avvio da /Applicazioni (ad es. dopo copia manuale dal Finder) con offerta di espulsione e spostamento nel Cestino</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Após copiar de um DMG, oferece ejetar a imagem de disco e mover o arquivo DMG para o Lixo</li>
-<li>Detecção de um DMG do Tiley montado ao iniciar de /Aplicativos (por exemplo, após cópia manual pelo Finder) com opção de ejetar e mover para o Lixo</li>
-</ul>
-]]></description>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>После копирования из DMG предлагается извлечь образ диска и переместить файл DMG в Корзину</li>
-<li>Обнаружение подключённого DMG Tiley при запуске из /Программы (например, после ручного копирования через Finder) с предложением извлечь и удалить в Корзину</li>
-</ul>
-]]></description>
-            <pubDate>Mon, 16 Mar 2026 23:56:13 +0900</pubDate>
-            <sparkle:version>118</sparkle:version>
-            <sparkle:shortVersionString>1.1.8</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.1/Tiley-1.1.8.dmg" length="4579074" type="application/octet-stream" sparkle:edSignature="LHZpvGtc9EclS1EN6JOBX7pI25DQkuX3cUM411JmrbV6QMPqm5n10xZzRKKUtsW3PZ+n2Ap10qt7HGshLSULAw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-117.delta" sparkle:deltaFrom="117" length="101670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="QogG+Q9vSKwTfECnATO4ZtKM7aYgUPRo6MBXoSX9xFDKF5mSXJSJI57JZDM8a106Z1UPbCHdJ8NTDfENMWENCw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-116.delta" sparkle:deltaFrom="116" length="107046" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="e98gOoZTaTCkUzT4brQdIp3WRDokc6kbLFFmriZ2T9ga0Mm6yb/yQD2eb9HFcUE2J/SsHDndkp0dLpQiLrZLAQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-115.delta" sparkle:deltaFrom="115" length="127986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="UYJ60nPkMIKYWoQKs1Lm3DEsa44l1uSEjAKXbu3DKE4EHyf1cV0cSCDFaZf/rkl4Rw7lk11/I89bLAJtD0QBCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-114.delta" sparkle:deltaFrom="114" length="207814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2im7Th2/OUmnkqWfkoAep1cv+Z0Wt3/wast+572qalDzde9vT/qcmGR2EXhEojaWJ0HVFoBLDVVIh9PzpHetBA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.1.8/Tiley118-113.delta" sparkle:deltaFrom="113" length="222738" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ABa1uPv6fnCTk0h5QByztG0keOAbBG1GLmSCXW/3nXuFkMjmlMuE1x/O7XfFF2kQ/my3Uf/yJBWtlj7EdTF0DQ=="/>
             </sparkle:deltas>
         </item>
     </channel>
