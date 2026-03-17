@@ -93,7 +93,7 @@
 "Add Global Shortcut" = "Ajouter un raccourci global";
 "No windows available" = "Aucune fenêtre disponible";
 "Tab is reserved for switching target windows." = "Tab est réservé au changement de fenêtre cible.";
-"Edit Name & Shortcuts" = "Modifier le nom et les raccourcis";
+"Edit Layout" = "Modifier la disposition";
 "Done Editing" = "Terminer la modification";
 "Delete Shortcut" = "Supprimer le raccourci";
 "Are you sure you want to delete \"%@\"?" = "Voulez-vous vraiment supprimer \"%@\" ?";

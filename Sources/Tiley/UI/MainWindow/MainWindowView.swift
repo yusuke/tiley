@@ -791,7 +791,7 @@ struct MainWindowView: View {
                 }
                 .buttonStyle(.plain)
                 .transition(.opacity)
-                .instantTooltip(NSLocalizedString("Edit Name & Shortcuts", comment: "Tooltip for edit layout button"))
+                .instantTooltip(NSLocalizedString("Edit Layout", comment: "Tooltip for edit layout button"))
 
                 Spacer(minLength: 0)
             }

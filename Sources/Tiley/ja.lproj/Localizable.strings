@@ -93,7 +93,7 @@
 "Add Global Shortcut" = "グローバルショートカットを追加";
 "No windows available" = "利用可能なウインドウがありません";
 "Tab is reserved for switching target windows." = "Tab はターゲットウインドウの切り替えに使用されています。";
-"Edit Name & Shortcuts" = "名前、ショートカットを編集";
+"Edit Layout" = "レイアウトを編集";
 "Done Editing" = "編集を完了";
 "Delete Shortcut" = "ショートカットを削除";
 "Are you sure you want to delete \"%@\"?" = "「%@」を削除してもよろしいですか？";
