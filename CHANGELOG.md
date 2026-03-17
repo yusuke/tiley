@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Improved
+
+- Fine-tuned layout preset editing UI: delete button now overlays the grid preview with a confirmation dialog, opaque hover background, and consistent button styling
+
 ## [1.2.2] - 2026-03-17
 
 ### Changed

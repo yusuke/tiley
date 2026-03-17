@@ -100,3 +100,4 @@
 "Delete" = "삭제";
 "Delete \"%@\"" = "\"%@\" 삭제";
 "Click to change \"%@\"" = "클릭하여 \"%@\" 변경";
+"Are you sure you want to delete the layout \"%@\"?" = "레이아웃 \"%@\"을(를) 삭제하시겠습니까?";

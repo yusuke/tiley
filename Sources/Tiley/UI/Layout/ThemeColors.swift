@@ -204,6 +204,24 @@ enum ThemeColors {
         }
     }
 
+    static func editButtonBackground(for colorScheme: ColorScheme) -> Color {
+        switch colorScheme {
+        case .dark:
+            return Color(red: 0.22, green: 0.22, blue: 0.24)
+        default:
+            return Color(red: 0.91, green: 0.93, blue: 0.95)
+        }
+    }
+
+    static func deleteButtonHoverBackground(for colorScheme: ColorScheme) -> Color {
+        switch colorScheme {
+        case .dark:
+            return Color(red: 0.35, green: 0.16, blue: 0.16)
+        default:
+            return Color(red: 0.98, green: 0.90, blue: 0.90)
+        }
+    }
+
     static func presetGridUnselectedFill(for colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .dark:

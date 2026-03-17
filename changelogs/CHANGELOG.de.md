@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Verbessert
+
+- Feinabstimmung der Benutzeroberfläche zur Bearbeitung von Layout-Vorlagen: Löschen-Schaltfläche wird als Overlay über der Rastervorschau angezeigt, mit Bestätigungsdialog, opakem Hover-Hintergrund und einheitlichem Schaltflächenstil
+
 ## [1.2.2] - 2026-03-17
 
 ### Geändert

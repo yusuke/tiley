@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Mejorado
+
+- Ajuste de la interfaz de edición de preajustes de diseño: el botón de eliminar se muestra como superposición en la vista previa de la cuadrícula, con diálogo de confirmación, fondo opaco al pasar el ratón y estilo de botón uniforme
+
 ## [1.2.2] - 2026-03-17
 
 ### Cambiado

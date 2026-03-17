@@ -650,22 +650,19 @@ struct MainWindowView: View {
                 .frame(width: Self.presetGridColumnWidth, height: 26, alignment: .center)
 
                 if isInEditMode {
-                    Button {
-                        dismissPresetNameEditingIfNeeded(except: preset.id)
-                        deletePreset(id: preset.id)
-                        editingPresetID = nil
-                    } label: {
-                        Image(systemName: "trash")
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(.primary)
-                            .padding(4)
-                            .background(
-                                Circle()
-                                    .fill(.ultraThinMaterial)
-                            )
+                    DeleteLayoutButton(colorScheme: colorScheme) {
+                        let alert = NSAlert()
+                        alert.messageText = NSLocalizedString("Delete Layout", comment: "Alert title for deleting a layout")
+                        alert.informativeText = String(format: NSLocalizedString("Are you sure you want to delete the layout \"%@\"?", comment: "Alert message for deleting a layout with name"), preset.name)
+                        alert.alertStyle = .warning
+                        alert.addButton(withTitle: NSLocalizedString("Delete", comment: "Delete button title"))
+                        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel button title"))
+                        if alert.runModal() == .alertFirstButtonReturn {
+                            dismissPresetNameEditingIfNeeded(except: preset.id)
+                            deletePreset(id: preset.id)
+                            editingPresetID = nil
+                        }
                     }
-                    .buttonStyle(.plain)
-                    .help("Delete Layout")
                 }
             }
             .frame(width: Self.presetGridColumnWidth, height: 26, alignment: .center)
@@ -715,7 +712,7 @@ struct MainWindowView: View {
                         .padding(6)
                         .background(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(ThemeColors.presetCellBackground(for: colorScheme))
+                                .fill(ThemeColors.editButtonBackground(for: colorScheme))
                                 .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
                         )
                         .overlay(
@@ -1473,6 +1470,35 @@ private struct AddShortcutButton<Label: View>: View {
             isHovered = hovering
         }
         .instantTooltip(tooltip)
+    }
+}
+
+private struct DeleteLayoutButton: View {
+    let colorScheme: ColorScheme
+    let action: () -> Void
+
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "trash")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(isHovered ? .red : .primary)
+                .padding(6)
+                .background(
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(isHovered ? ThemeColors.deleteButtonHoverBackground(for: colorScheme) : ThemeColors.editButtonBackground(for: colorScheme))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .stroke(isHovered ? Color.red.opacity(0.4) : ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 1)
+                )
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering in
+            isHovered = hovering
+        }
+        .instantTooltip(NSLocalizedString("Delete Layout", comment: "Tooltip for delete layout button"))
     }
 }
 

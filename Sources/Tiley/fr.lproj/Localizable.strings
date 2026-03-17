@@ -100,3 +100,4 @@
 "Delete" = "Supprimer";
 "Delete \"%@\"" = "Supprimer \"%@\"";
 "Click to change \"%@\"" = "Cliquer pour modifier \"%@\"";
+"Are you sure you want to delete the layout \"%@\"?" = "Voulez-vous vraiment supprimer la disposition « %@ » ?";

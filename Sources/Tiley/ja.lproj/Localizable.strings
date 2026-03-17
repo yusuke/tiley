@@ -100,3 +100,4 @@
 "Delete" = "削除";
 "Delete \"%@\"" = "「%@」を削除";
 "Click to change \"%@\"" = "クリックして「%@」を変更";
+"Are you sure you want to delete the layout \"%@\"?" = "レイアウト「%@」を削除してもよろしいですか？";

@@ -100,3 +100,4 @@
 "Delete" = "删除";
 "Delete \"%@\"" = "删除\U201C%@\U201D";
 "Click to change \"%@\"" = "点击以更改 \"%@\"";
+"Are you sure you want to delete the layout \"%@\"?" = "确定要删除布局\U201C%@\U201D吗？";

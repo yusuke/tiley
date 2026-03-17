@@ -100,3 +100,4 @@
 "Delete" = "刪除";
 "Delete \"%@\"" = "刪除「%@」";
 "Click to change \"%@\"" = "點擊以變更「%@」";
+"Are you sure you want to delete the layout \"%@\"?" = "確定要刪除版面「%@」嗎？";
