@@ -132,38 +132,65 @@ echo "Generating appcast.xml"
   -o "$APPCAST_DIR/appcast.xml" \
   "$APPCAST_DIR"
 
-# Embed release notes from CHANGELOG.md into appcast.xml
-CHANGELOG="$PROJECT_ROOT/CHANGELOG.md"
+# Embed localized release notes from CHANGELOG files into appcast.xml
+#
+# English comes from CHANGELOG.md (root); other languages from
+# changelogs/CHANGELOG.{lang}.md.  Each <description> gets an xml:lang
+# attribute so Sparkle can pick the right one for the user's locale.
 APPCAST_XML="$APPCAST_DIR/appcast.xml"
-if [[ -f "$CHANGELOG" ]]; then
-  # Extract the section for this version (between ## [X.Y.Z] and next ## heading)
-  CHANGELOG_NOTES=$(awk "/^## \\[${APP_VERSION}\\]/{found=1;next} /^## \\[/{if(found)exit} found" "$CHANGELOG" \
+CHANGELOG_LANGS=("en" "ja" "ko" "zh-Hans" "zh-Hant" "de" "es" "fr" "it" "pt-BR" "ru")
+EMBEDDED_COUNT=0
+
+# Helper: extract version section from a changelog and convert to HTML
+extract_and_convert() {
+  local changelog_file="$1"
+  local version="$2"
+
+  [[ -f "$changelog_file" ]] || return 1
+
+  local notes
+  notes=$(awk "/^## \\[${version}\\]/{found=1;next} /^## \\[/{if(found)exit} found" "$changelog_file" \
     | grep -v '^\[.*\]: ' \
     | awk '{lines[NR]=$0} END{for(i=1;i<=NR;i++)if(length(lines[i])>0){s=i;break} for(i=NR;i>=1;i--)if(length(lines[i])>0){e=i;break} for(i=s;i<=e;i++)print lines[i]}')
-  if [[ -n "$CHANGELOG_NOTES" ]]; then
-    # Convert Markdown release notes to simple HTML for Sparkle
-    HTML_NOTES=$(echo "$CHANGELOG_NOTES" | sed \
-      -e 's/&/\&amp;/g' \
-      -e 's/</\&lt;/g' \
-      -e 's/>/\&gt;/g' \
-      -e 's/^### \(.*\)/<h3>\1<\/h3>/' \
-      -e 's/^- \(.*\)/<li>\1<\/li>/' \
-    | awk 'BEGIN{il=0} /<li>/{if(il==0){printf "<ul>\n";il=1}} /<h3>/{if(il==1){printf "</ul>\n";il=0}} /^$/{next} {print} END{if(il==1)printf "</ul>\n"}')
 
-    # Insert <description> after <title>VERSION</title> in the matching <item>
-    ESCAPED_HTML=$(echo "$HTML_NOTES" | sed -e 's/[\/&]/\\&/g' | tr '\n' '\a')
-    sed -i '' "/<title>${APP_VERSION}<\/title>/a\\
-            <description><![CDATA[${ESCAPED_HTML}]]></description>
-" "$APPCAST_XML"
-    # Restore newlines from \a placeholders
-    sed -i '' "s/$(printf '\a')/\\
-/g" "$APPCAST_XML"
-    echo "Embedded release notes in appcast.xml"
+  [[ -z "$notes" ]] && return 1
+
+  echo "$notes" | sed \
+    -e 's/&/\&amp;/g' \
+    -e 's/</\&lt;/g' \
+    -e 's/>/\&gt;/g' \
+    -e 's/^### \(.*\)/<h3>\1<\/h3>/' \
+    -e 's/^- \(.*\)/<li>\1<\/li>/' \
+  | awk 'BEGIN{il=0} /<li>/{if(il==0){printf "<ul>\n";il=1}} /<h3>/{if(il==1){printf "</ul>\n";il=0}} /^$/{next} {print} END{if(il==1)printf "</ul>\n"}'
+}
+
+for lang in "${CHANGELOG_LANGS[@]}"; do
+  if [[ "$lang" == "en" ]]; then
+    changelog_file="$PROJECT_ROOT/CHANGELOG.md"
   else
-    echo "Warning: No entry for $APP_VERSION in CHANGELOG.md, skipping release notes in appcast"
+    changelog_file="$PROJECT_ROOT/changelogs/CHANGELOG.${lang}.md"
   fi
+
+  HTML_NOTES=$(extract_and_convert "$changelog_file" "$APP_VERSION")
+  if [[ -z "$HTML_NOTES" ]]; then
+    echo "Warning: No $lang entry for $APP_VERSION in $(basename "$changelog_file"), skipping"
+    continue
+  fi
+
+  ESCAPED_HTML=$(echo "$HTML_NOTES" | sed -e 's/[\/&]/\\&/g' | tr '\n' '\a')
+  sed -i '' "/<title>${APP_VERSION}<\/title>/a\\
+            <description xml:lang=\"${lang}\"><![CDATA[${ESCAPED_HTML}]]></description>
+" "$APPCAST_XML"
+  # Restore newlines from \a placeholders
+  sed -i '' "s/$(printf '\a')/\\
+/g" "$APPCAST_XML"
+  EMBEDDED_COUNT=$((EMBEDDED_COUNT + 1))
+done
+
+if [[ $EMBEDDED_COUNT -gt 0 ]]; then
+  echo "Embedded release notes in appcast.xml ($EMBEDDED_COUNT languages)"
 else
-  echo "Warning: CHANGELOG.md not found, skipping release notes in appcast"
+  echo "Warning: No release notes embedded in appcast.xml"
 fi
 
 # Copy updated appcast.xml to docs/ for GitHub Pages
