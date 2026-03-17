@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-03-17
+
 ### Cambiado
 
 - Rediseño de la edición de preajustes de diseño para una experiencia de configuración más intuitiva

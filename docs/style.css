@@ -132,6 +132,18 @@ img {
   text-decoration: none;
 }
 
+.nav-links .github-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-text-secondary);
+  transition: fill 0.2s;
+  vertical-align: middle;
+}
+
+.nav-links .github-icon:hover svg {
+  fill: var(--color-text);
+}
+
 .lang-switcher {
   position: relative;
 }

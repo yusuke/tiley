@@ -3,6 +3,76 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>1.2.2</title>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Redesigned layout preset editing for a more intuitive settings experience</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>レイアウトプリセットの編集をより直感的に再設計</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>레이아웃 프리셋 편집을 보다 직관적으로 재설계</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>重新设计布局预设编辑，提供更直观的设置体验</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>重新設計佈局預設編輯，提供更直覺的設定體驗</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Bearbeitung von Layout-Vorlagen für ein intuitiveres Einstellungserlebnis neu gestaltet</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Rediseño de la edición de preajustes de diseño para una experiencia de configuración más intuitiva</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Refonte de l'édition des préréglages de disposition pour une expérience de configuration plus intuitive</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Riprogettata la modifica dei preset di layout per un'esperienza di impostazione più intuitiva</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Remodelada a edição de predefinições de layout para uma experiência de configuração mais intuitiva</li>
+</ul>
+]]></description>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Переработано редактирование пресетов макетов для более интуитивного управления настройками</li>
+</ul>
+]]></description>
+            <pubDate>Tue, 17 Mar 2026 12:50:49 +0900</pubDate>
+            <sparkle:version>122</sparkle:version>
+            <sparkle:shortVersionString>1.2.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley-1.2.2.dmg" length="4646914" type="application/octet-stream" sparkle:edSignature="PGKBa/SP4WD3YatgrNL3y8CiQYLvjubHbiMUueUiuq+uPfx81qccnDp1f4x/3A3IyQKdef+eWYG9VkC0VCrCAg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-121.delta" sparkle:deltaFrom="121" length="205790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="l8JOm/bC7c340ittS/+ZuE2vpFbRBbABTAfe6lAXToYWM++HbP5slCm9G7eyrYxnzDdJBAr3skUR3BIv85zmDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-120.delta" sparkle:deltaFrom="120" length="206470" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="gBAlXO62WywUD5X2nR+EhO5gJNz6rpBUTJfinpHZS07/Jx83ArjEA11FCIprSKBZVqAsBLIWb2fqOt3tDUnbCg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-118.delta" sparkle:deltaFrom="118" length="259054" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="U6uSNIiy+VuHwrjFqMBFK2+ILbBffqvtpWge+dUSE8391a/2Z6CNJY7+767Hrd24Ov7kJRaeFUUoaezcppbCDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-117.delta" sparkle:deltaFrom="117" length="275038" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="z2wvmIl2tYm4ihr5bB7XtTovZFpU96tcoDQ3vR4xwhyZrWLInZBYDxVuTLNBEuem4ywTBfNkc8qzj57CC512AA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-116.delta" sparkle:deltaFrom="116" length="277866" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ib2sYZ1Bm3uMB554GeMG3xjP4JONjPqu7nsrw/vwjVniVUF8BbW0Tp4Zav1erqSzjDkgLvHovWs802eGeP8iAQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.2.1</title>
             <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
 <ul>

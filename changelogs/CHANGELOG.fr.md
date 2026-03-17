@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-03-17
+
 ### Modifié
 
 - Refonte de l'édition des préréglages de disposition pour une expérience de configuration plus intuitive

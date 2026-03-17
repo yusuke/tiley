@@ -164,27 +164,33 @@ extract_and_convert() {
   | awk 'BEGIN{il=0} /<li>/{if(il==0){printf "<ul>\n";il=1}} /<h3>/{if(il==1){printf "</ul>\n";il=0}} /^$/{next} {print} END{if(il==1)printf "</ul>\n"}'
 }
 
-for lang in "${CHANGELOG_LANGS[@]}"; do
-  if [[ "$lang" == "en" ]]; then
-    changelog_file="$PROJECT_ROOT/CHANGELOG.md"
-  else
-    changelog_file="$PROJECT_ROOT/changelogs/CHANGELOG.${lang}.md"
-  fi
+# Collect all versions present in the appcast
+APPCAST_VERSIONS=($(grep -oE '<sparkle:shortVersionString>[^<]+</sparkle:shortVersionString>' "$APPCAST_XML" \
+  | sed 's/<[^>]*>//g'))
 
-  HTML_NOTES=$(extract_and_convert "$changelog_file" "$APP_VERSION")
-  if [[ -z "$HTML_NOTES" ]]; then
-    echo "Warning: No $lang entry for $APP_VERSION in $(basename "$changelog_file"), skipping"
-    continue
-  fi
+for version in "${APPCAST_VERSIONS[@]}"; do
+  for lang in "${CHANGELOG_LANGS[@]}"; do
+    if [[ "$lang" == "en" ]]; then
+      changelog_file="$PROJECT_ROOT/CHANGELOG.md"
+    else
+      changelog_file="$PROJECT_ROOT/changelogs/CHANGELOG.${lang}.md"
+    fi
 
-  ESCAPED_HTML=$(echo "$HTML_NOTES" | sed -e 's/[\/&]/\\&/g' | tr '\n' '\a')
-  sed -i '' "/<title>${APP_VERSION}<\/title>/a\\
+    HTML_NOTES=$(extract_and_convert "$changelog_file" "$version")
+    if [[ -z "$HTML_NOTES" ]]; then
+      echo "Warning: No $lang entry for $version in $(basename "$changelog_file"), skipping"
+      continue
+    fi
+
+    ESCAPED_HTML=$(echo "$HTML_NOTES" | sed -e 's/[\/&]/\\&/g' | tr '\n' '\a')
+    sed -i '' "/<title>${version}<\/title>/a\\
             <description xml:lang=\"${lang}\"><![CDATA[${ESCAPED_HTML}]]></description>
 " "$APPCAST_XML"
-  # Restore newlines from \a placeholders
-  sed -i '' "s/$(printf '\a')/\\
+    # Restore newlines from \a placeholders
+    sed -i '' "s/$(printf '\a')/\\
 /g" "$APPCAST_XML"
-  EMBEDDED_COUNT=$((EMBEDDED_COUNT + 1))
+    EMBEDDED_COUNT=$((EMBEDDED_COUNT + 1))
+  done
 done
 
 if [[ $EMBEDDED_COUNT -gt 0 ]]; then

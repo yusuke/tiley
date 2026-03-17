@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-03-17
+
 ### Modificato
 
 - Riprogettata la modifica dei preset di layout per un'esperienza di impostazione più intuitiva
