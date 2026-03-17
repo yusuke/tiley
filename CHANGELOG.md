@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-03-17
+
+### Fixed
+
+- Fix "Move to Applications" dialog incorrectly shown instead of "Copy" when launching from a downloaded DMG (Gatekeeper App Translocation caused the disk image path to be unrecognized)
+
+## [1.2.0] - 2026-03-17
+
 ### Added
 
 - Window target switching: press Tab / Shift+Tab while the overlay is showing to cycle through available windows
@@ -124,7 +132,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.1.8...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/yusuke/tiley/releases/tag/v1.2.1
+[1.2.0]: https://github.com/yusuke/tiley/releases/tag/v1.2.0
 [1.1.8]: https://github.com/yusuke/tiley/releases/tag/v1.1.8
 [1.1.7]: https://github.com/yusuke/tiley/releases/tag/v1.1.7
 [1.1.6]: https://github.com/yusuke/tiley/releases/tag/v1.1.6

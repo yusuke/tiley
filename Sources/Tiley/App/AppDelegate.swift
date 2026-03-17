@@ -55,11 +55,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if bundlePath.contains("/DerivedData/") || bundlePath.contains("/Build/Products/") || bundlePath.contains("/.build/") { return }
 
         // Detect whether the app is running from a mounted disk image.
-        let isFromDiskImage = bundlePath.hasPrefix("/Volumes/")
+        var isFromDiskImage = bundlePath.hasPrefix("/Volumes/")
 
-        // When launched from a zip without moving first, Gatekeeper App
-        // Translocation runs the app from a randomized read-only path.
-        // Resolve the original (writable) path so we can move it.
+        // When launched from a zip (or DMG) without moving first, Gatekeeper
+        // App Translocation runs the app from a randomized read-only path
+        // (e.g. /private/var/folders/.../AppTranslocation/...).
+        // Resolve the original (writable) path so we can move/copy it.
         let sourcePath: String
         if isFromDiskImage {
             sourcePath = bundlePath
@@ -67,6 +68,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             sourcePath = Self.originalURLResolvingTranslocation(
                 URL(fileURLWithPath: bundlePath)
             )?.path ?? bundlePath
+
+            // The resolved original path may reside on a mounted disk image
+            // (e.g. the user opened the app directly from a DMG, triggering
+            // translocation).  Re-check so we copy instead of move.
+            if sourcePath.hasPrefix("/Volumes/") {
+                isFromDiskImage = true
+            }
         }
 
         let alert = NSAlert()
