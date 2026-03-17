@@ -3,6 +3,87 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>1.2.5</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Обнаружение ограничений изменения размера окон: автоматическое определение возможности изменения размера по осям с помощью быстрой 3-уровневой проверки (неизменяемый размер → кнопка полноэкранного режима → проба 1px как запасной вариант)</li>
+<li>Предварительный просмотр макета теперь показывает красные области, где окно не может быть увеличено, и жёлтые области, где оно не может быть уменьшено, обеспечивая визуальную обратную связь об ограничениях размера перед применением</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Detecção de restrições de redimensionamento de janelas: detecta automaticamente a capacidade de redimensionamento por eixo através de uma verificação rápida em 3 etapas (não redimensionável → botão de tela cheia → sonda de 1px como fallback)</li>
+<li>A visualização de layout agora mostra regiões vermelhas onde a janela não pode expandir e regiões amarelas onde não pode encolher, fornecendo feedback visual sobre restrições de tamanho antes da aplicação</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Rilevamento dei vincoli di ridimensionamento delle finestre: rileva automaticamente la ridimensionabilità per asse tramite un controllo rapido a 3 livelli (non ridimensionabile → pulsante schermo intero → sonda da 1px come fallback)</li>
+<li>L'anteprima del layout ora mostra aree rosse dove la finestra non può espandersi e aree gialle dove non può ridursi, fornendo un feedback visivo sui vincoli di dimensione prima dell'applicazione</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Détection des contraintes de redimensionnement des fenêtres : détecte automatiquement la possibilité de redimensionnement par axe grâce à une vérification rapide en 3 étapes (non redimensionnable → bouton plein écran → sonde de 1px en dernier recours)</li>
+<li>L'aperçu de disposition affiche désormais des zones rouges là où la fenêtre ne peut pas s'agrandir et des zones jaunes là où elle ne peut pas se réduire, offrant un retour visuel sur les contraintes de taille avant application</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Detección de restricciones de redimensionamiento de ventanas: detecta automáticamente la capacidad de redimensionamiento por eje mediante una verificación rápida de 3 niveles (no redimensionable → botón de pantalla completa → prueba de 1px como respaldo)</li>
+<li>La vista previa de diseño ahora muestra regiones rojas donde la ventana no puede expandirse y regiones amarillas donde no puede reducirse, proporcionando retroalimentación visual sobre las restricciones de tamaño antes de aplicar</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Erkennung von Fenstergrößenbeschränkungen: Automatische Erkennung der achsenweisen Größenänderbarkeit durch eine schnelle 3-stufige Prüfung (nicht änderbar → Vollbildtaste → 1px-Probe als Rückfall)</li>
+<li>Layout-Vorschau-Overlay zeigt jetzt rote Bereiche, in denen das Fenster nicht vergrößert werden kann, und gelbe Bereiche, in denen es nicht verkleinert werden kann – visuelle Rückmeldung zu Größenbeschränkungen vor der Anwendung</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>視窗大小調整約束偵測：透過3級快速檢查（不可調整大小 → 全螢幕按鈕 → 1px探測回退）自動判斷每個軸的可調整性</li>
+<li>佈局預覽疊加層新增大小約束視覺化：視窗無法擴展的區域顯示為紅色，無法縮小的區域顯示為黃色，在套用前即可確認大小約束</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>窗口大小调整约束检测：通过3级快速检查（不可调整大小 → 全屏按钮 → 1px探测回退）自动判断每个轴的可调整性</li>
+<li>布局预览叠加层新增大小约束可视化：窗口无法扩展的区域显示为红色，无法缩小的区域显示为黄色，在应用前即可确认大小约束</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>창 크기 조절 제약 감지: 3단계 고속 확인(크기 조절 불가 → 전체 화면 버튼 → 1px 프로브 폴백)으로 축별 크기 조절 가능 여부를 자동 판별</li>
+<li>레이아웃 미리보기 오버레이에 크기 조절 제약 시각화 추가: 창이 확장할 수 없는 영역은 빨간색, 축소할 수 없는 영역은 노란색으로 표시하여 적용 전에 크기 제약을 확인 가능</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>ウインドウのリサイズ制約検出: 3段階の高速チェック（非リサイズ → フルスクリーンボタン → 1pxプローブ）で軸ごとのリサイズ可否を自動判定</li>
+<li>レイアウトプレビューオーバーレイにリサイズ制約の可視化を追加: ウインドウが拡張できない領域を赤色、縮小できない領域を黄色で表示し、適用前にサイズ制約を確認可能に</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Window resize constraint detection: automatically detects per-axis resizability using a fast 3-tier check (non-resizable → full-screen button → 1px probe fallback)</li>
+<li>Layout preview overlay now shows red regions where the window cannot expand and yellow regions where the window cannot shrink, giving visual feedback on resize constraints before applying</li>
+</ul>
+]]></description>
+            <pubDate>Wed, 18 Mar 2026 08:29:47 +0900</pubDate>
+            <sparkle:version>125</sparkle:version>
+            <sparkle:shortVersionString>1.2.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley-1.2.5.dmg" length="4671196" type="application/octet-stream" sparkle:edSignature="7zDNFMHqiLb+FKQ/1qDMVDb9TxQAHKZtzJek80lyYpShqU6+pCBkd+EBpByEwHg5DKk9b17A8dCmSikdx64RBQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-124.delta" sparkle:deltaFrom="124" length="426746" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="w0Pz6IHf42fJsmRFcOihBlYZGfg5287YRF8/1OI9ndrTdudt4BH6H/6eFelcTyPJc7zRrABeUUArHBogi8nMDw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-123.delta" sparkle:deltaFrom="123" length="471966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="HbwHOO3V1C84CCf5E5CdJpqxNugfBlRwRRzrlgsYtvWJJlwDL6uDL0zOC5JlP65LzrTFdtgGhI8s1OLfBp25Aw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-122.delta" sparkle:deltaFrom="122" length="481994" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="W1eJJUk+//JhBSbB8Ggnc2xL53p/5bQrADARPP3TcM/F2O0zUjy+xwwZR5IcbwP6dFyuzzrP5Vlm2sE/Qcj+CQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-121.delta" sparkle:deltaFrom="121" length="549222" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="03M/3Lq+a+U4fTtLWkF4Mc8euLzgvUtfCNoX7cJaQZoWgvxURypNO5Qe2Oac4tb2bP6sC0IjFGEizTvr9bAwAg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-120.delta" sparkle:deltaFrom="120" length="552286" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="7IDx1dt16jR5RVhRZ2KQm+14hTMEVbFxRXfP4J4+A45F8wxJbII7wXQiUtXF4xHlZs+xQrNu0GYr8Hnokt8uCg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.2.4</title>
             <description xml:lang="ru"><![CDATA[<h3>Улучшено</h3>
 <ul>
@@ -70,11 +151,71 @@
 <li>Layout grid selection is now editable in edit mode: drag on the grid to update the preset's position with live preview and highlight</li>
 </ul>
 ]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Melhorado</h3>
+<ul>
+<li>Interface de edição de predefinições de layout refinada: botão de exclusão movido para ao lado do botão de confirmação, botões de edição/ação colocados em uma coluna dedicada para evitar sobreposição com os atalhos</li>
+<li>A seleção da grade agora é editável no modo de edição: arraste sobre a grade para atualizar a posição da predefinição com visualização ao vivo e destaque</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Migliorato</h3>
+<ul>
+<li>Interfaccia di modifica dei preset di layout perfezionata: pulsante di eliminazione spostato accanto al pulsante di conferma, pulsanti di modifica/azione posizionati in una colonna dedicata per evitare sovrapposizioni con le scorciatoie</li>
+<li>La selezione della griglia è ora modificabile in modalità di modifica: trascina sulla griglia per aggiornare la posizione del preset con anteprima in tempo reale ed evidenziazione</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Amélioré</h3>
+<ul>
+<li>Interface d'édition des préréglages de disposition affinée : bouton de suppression déplacé à côté du bouton de confirmation, boutons d'édition/action placés dans une colonne dédiée pour éviter le chevauchement avec les raccourcis</li>
+<li>La sélection de la grille est désormais modifiable en mode édition : glissez sur la grille pour mettre à jour la position du préréglage avec aperçu en direct et mise en surbrillance</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Mejorado</h3>
+<ul>
+<li>Interfaz de edición de preajustes de diseño refinada: botón de eliminar movido junto al botón de confirmar, botones de edición/acción colocados en una columna dedicada para evitar superposición con los atajos</li>
+<li>La selección de cuadrícula ahora es editable en modo de edición: arrastra sobre la cuadrícula para actualizar la posición del preajuste con vista previa en vivo y resaltado</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Verbessert</h3>
+<ul>
+<li>Layout-Vorlagen-Bearbeitungs-UI verfeinert: Löschen-Schaltfläche neben die Bestätigungsschaltfläche verschoben, Bearbeitungs-/Aktionsschaltflächen in einer eigenen Spalte platziert, um Überlappungen mit Tastenkombinationen zu vermeiden</li>
+<li>Rasterauswahl im Bearbeitungsmodus jetzt änderbar: Durch Ziehen im Raster kann die Position der Vorlage mit Live-Vorschau und Hervorhebung aktualisiert werden</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>改進</h3>
+<ul>
+<li>優化佈局預設編輯介面：刪除按鈕移至確認按鈕旁邊，編輯/操作按鈕放置在專用欄位中以避免與快速鍵重疊</li>
+<li>編輯模式下可透過拖曳網格更改佈局位置：支援即時預覽和醒目提示</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>改进</h3>
+<ul>
+<li>优化布局预设编辑界面：删除按钮移至确认按钮旁边，编辑/操作按钮放置在专用列中以避免与快捷键重叠</li>
+<li>编辑模式下可通过拖拽网格更改布局位置：支持实时预览和高亮显示</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>개선</h3>
+<ul>
+<li>레이아웃 프리셋 편집 UI 개선: 삭제 버튼을 확인 버튼 옆으로 이동하고, 편집/액션 버튼을 단축키 영역과 겹치지 않는 전용 열에 배치</li>
+<li>편집 모드에서 그리드 드래그로 레이아웃 위치 변경 가능: 실시간 미리보기와 하이라이트 지원</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>改善</h3>
+<ul>
+<li>レイアウトプリセット編集UIを改良：削除ボタンを確定ボタンの右側に移動し、編集・アクションボタンをショートカット欄と干渉しない専用カラムに配置</li>
+<li>編集モードでグリッドのドラッグによるレイアウト位置の変更が可能に：ライブプレビューとハイライト表示に対応</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Improved</h3>
+<ul>
+<li>Refined layout preset editing UI: delete button moved next to the confirm button, edit/action buttons placed in a dedicated column to avoid overlapping shortcuts</li>
+<li>Layout grid selection is now editable in edit mode: drag on the grid to update the preset's position with live preview and highlight</li>
+</ul>
+]]></description>
             <pubDate>Tue, 17 Mar 2026 19:31:29 +0900</pubDate>
             <sparkle:version>124</sparkle:version>
             <sparkle:shortVersionString>1.2.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.4/Tiley-1.2.4.dmg" length="4661176" type="application/octet-stream" sparkle:edSignature="uH+MaoyLebnMRENiXUApP72OeVjvryCliZCyJUXQIs25Je7Ex/AOLVKv/h25ENAoiNzq/RDTqj44dhPa6O6WBg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley-1.2.4.dmg" length="4661176" type="application/octet-stream" sparkle:edSignature="uH+MaoyLebnMRENiXUApP72OeVjvryCliZCyJUXQIs25Je7Ex/AOLVKv/h25ENAoiNzq/RDTqj44dhPa6O6WBg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.4/Tiley124-123.delta" sparkle:deltaFrom="123" length="145406" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="JfUWNC3UgjknDW03pIwm5psugua8dO54qUxQstx2mEwYufv3mk3sxuIBLsmTdpY1yrwhx/IDyX2MrjHiWieNCg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.4/Tiley124-122.delta" sparkle:deltaFrom="122" length="155442" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="1ouZhrFjsGQ3V1QfIbVDWkkCAmOL3nt0T63QJI3++wVnDnHW2CaRrBtJf47xj1OYMYLiBmy5DKvQQ5kDMA5MDw=="/>
@@ -190,137 +331,67 @@
 <li>Fine-tuned layout preset editing UI: delete button now overlays the grid preview with a confirmation dialog, opaque hover background, and consistent button styling</li>
 </ul>
 ]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Melhorado</h3>
+<ul>
+<li>Ajuste da interface de edição de predefinições de layout: o botão de exclusão é exibido como sobreposição na visualização da grade, com diálogo de confirmação, fundo opaco ao passar o mouse e estilo de botão uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Migliorato</h3>
+<ul>
+<li>Perfezionamento dell'interfaccia di modifica dei preset di layout: il pulsante di eliminazione viene mostrato come overlay sull'anteprima della griglia, con dialogo di conferma, sfondo opaco al passaggio del mouse e stile dei pulsanti uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Amélioré</h3>
+<ul>
+<li>Peaufinage de l'interface d'édition des préréglages de disposition : le bouton de suppression s'affiche en superposition sur l'aperçu de la grille, avec dialogue de confirmation, arrière-plan opaque au survol et style de bouton uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Mejorado</h3>
+<ul>
+<li>Ajuste de la interfaz de edición de preajustes de diseño: el botón de eliminar se muestra como superposición en la vista previa de la cuadrícula, con diálogo de confirmación, fondo opaco al pasar el ratón y estilo de botón uniforme</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Verbessert</h3>
+<ul>
+<li>Feinabstimmung der Benutzeroberfläche zur Bearbeitung von Layout-Vorlagen: Löschen-Schaltfläche wird als Overlay über der Rastervorschau angezeigt, mit Bestätigungsdialog, opakem Hover-Hintergrund und einheitlichem Schaltflächenstil</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>改進</h3>
+<ul>
+<li>優化佈局預設編輯介面：刪除按鈕以疊加層顯示在網格預覽上，新增確認對話框、不透明懸停背景和統一的按鈕樣式</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>改进</h3>
+<ul>
+<li>优化布局预设编辑界面：删除按钮以叠加层显示在网格预览上，新增确认对话框、不透明悬停背景和统一的按钮样式</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>개선</h3>
+<ul>
+<li>레이아웃 프리셋 편집 UI 개선: 삭제 버튼을 그리드 미리보기 위에 오버레이로 표시하고, 확인 대화상자·불투명 호버 배경·일관된 버튼 스타일 적용</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>改善</h3>
+<ul>
+<li>レイアウトプリセット編集UIを調整：削除ボタンをグリッドプレビュー上にオーバーレイ表示し、確認ダイアログ・不透明ホバー背景・統一されたボタンスタイルを適用</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Improved</h3>
+<ul>
+<li>Fine-tuned layout preset editing UI: delete button now overlays the grid preview with a confirmation dialog, opaque hover background, and consistent button styling</li>
+</ul>
+]]></description>
             <pubDate>Tue, 17 Mar 2026 16:07:05 +0900</pubDate>
             <sparkle:version>123</sparkle:version>
             <sparkle:shortVersionString>1.2.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.4/Tiley-1.2.3.dmg" length="4652928" type="application/octet-stream" sparkle:edSignature="kIr6hu4SClD7ISz7QE1ee3aLHrC1nqh34TDbLOuJjTVNWkWo4L99jVHUGw4+acdVUnSq1MtXdRIrDFndHbBSCg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley-1.2.3.dmg" length="4652928" type="application/octet-stream" sparkle:edSignature="kIr6hu4SClD7ISz7QE1ee3aLHrC1nqh34TDbLOuJjTVNWkWo4L99jVHUGw4+acdVUnSq1MtXdRIrDFndHbBSCg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-122.delta" sparkle:deltaFrom="122" length="115462" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nRbKAWV0hTB50osyINdCCLWMU/tn1RaY/pIoPYrthemXORDL94zIWPy5iFaxs3sS2LANrkF0vj19bNhxClAzCA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-121.delta" sparkle:deltaFrom="121" length="211498" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="91eWBnd1Tlktugmwqy2SLgp7ywUbUDY5Q39LQ1H7Lhem3fqh+YriycqYji/QX6tiRg9h+G9CmzROaMwJddQkAQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-120.delta" sparkle:deltaFrom="120" length="212178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0fI3bDlU51Br/qp1xEHl7XWA0/JHp4CKL4ZRy8pVr6zMakbxZ14qldThF1VurF7fzlU6ePviCDrfKWzEkwOEDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-118.delta" sparkle:deltaFrom="118" length="266818" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NKsUdjNq6b8tlOyboPwmUShjJjzU9oFCrrIwuwFL1VCv6DBdHo3+RHh7eQanJIBxAGQ37mmjePlPzNaRhV5MBw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.3/Tiley123-117.delta" sparkle:deltaFrom="117" length="279914" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="J9I7O9SZz4KaDpCkTCdl4Ji2KiIr65jVTnzmO58Y1Vsf9JFMhJVj5htxyN+s5t3hgQ9oKmkTREWZVSSn959+Cw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.2.2</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>Переработано редактирование пресетов макетов для более интуитивного управления настройками</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Remodelada a edição de predefinições de layout para uma experiência de configuração mais intuitiva</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Riprogettata la modifica dei preset di layout per un'esperienza di impostazione più intuitiva</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Refonte de l'édition des préréglages de disposition pour une expérience de configuration plus intuitive</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Rediseño de la edición de preajustes de diseño para una experiencia de configuración más intuitiva</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Bearbeitung von Layout-Vorlagen für ein intuitiveres Einstellungserlebnis neu gestaltet</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>重新設計佈局預設編輯，提供更直覺的設定體驗</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>重新设计布局预设编辑，提供更直观的设置体验</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>레이아웃 프리셋 편집을 보다 직관적으로 재설계</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>レイアウトプリセットの編集をより直感的に再設計</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Redesigned layout preset editing for a more intuitive settings experience</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Remodelada a edição de predefinições de layout para uma experiência de configuração mais intuitiva</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Riprogettata la modifica dei preset di layout per un'esperienza di impostazione più intuitiva</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Refonte de l'édition des préréglages de disposition pour une expérience de configuration plus intuitive</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Rediseño de la edición de preajustes de diseño para una experiencia de configuración más intuitiva</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Bearbeitung von Layout-Vorlagen für ein intuitiveres Einstellungserlebnis neu gestaltet</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>重新設計佈局預設編輯，提供更直覺的設定體驗</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>重新设计布局预设编辑，提供更直观的设置体验</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>레이아웃 프리셋 편집을 보다 직관적으로 재설계</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>レイアウトプリセットの編集をより直感的に再設計</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Redesigned layout preset editing for a more intuitive settings experience</li>
-</ul>
-]]></description>
-            <pubDate>Tue, 17 Mar 2026 12:50:49 +0900</pubDate>
-            <sparkle:version>122</sparkle:version>
-            <sparkle:shortVersionString>1.2.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.4/Tiley-1.2.2.dmg" length="4646914" type="application/octet-stream" sparkle:edSignature="PGKBa/SP4WD3YatgrNL3y8CiQYLvjubHbiMUueUiuq+uPfx81qccnDp1f4x/3A3IyQKdef+eWYG9VkC0VCrCAg=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-121.delta" sparkle:deltaFrom="121" length="205790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="l8JOm/bC7c340ittS/+ZuE2vpFbRBbABTAfe6lAXToYWM++HbP5slCm9G7eyrYxnzDdJBAr3skUR3BIv85zmDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-120.delta" sparkle:deltaFrom="120" length="206470" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="gBAlXO62WywUD5X2nR+EhO5gJNz6rpBUTJfinpHZS07/Jx83ArjEA11FCIprSKBZVqAsBLIWb2fqOt3tDUnbCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-118.delta" sparkle:deltaFrom="118" length="259054" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="U6uSNIiy+VuHwrjFqMBFK2+ILbBffqvtpWge+dUSE8391a/2Z6CNJY7+767Hrd24Ov7kJRaeFUUoaezcppbCDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-117.delta" sparkle:deltaFrom="117" length="275038" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="z2wvmIl2tYm4ihr5bB7XtTovZFpU96tcoDQ3vR4xwhyZrWLInZBYDxVuTLNBEuem4ywTBfNkc8qzj57CC512AA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.2/Tiley122-116.delta" sparkle:deltaFrom="116" length="277866" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ib2sYZ1Bm3uMB554GeMG3xjP4JONjPqu7nsrw/vwjVniVUF8BbW0Tp4Zav1erqSzjDkgLvHovWs802eGeP8iAQ=="/>
             </sparkle:deltas>
         </item>
     </channel>
