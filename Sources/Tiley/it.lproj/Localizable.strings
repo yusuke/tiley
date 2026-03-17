@@ -93,3 +93,10 @@
 "Add Global Shortcut" = "Aggiungi scorciatoia globale";
 "No windows available" = "Nessuna finestra disponibile";
 "Tab is reserved for switching target windows." = "Tab è riservato per cambiare la finestra di destinazione.";
+"Edit Name & Shortcuts" = "Modifica nome e scorciatoie";
+"Done Editing" = "Fine modifica";
+"Delete Shortcut" = "Elimina scorciatoia";
+"Are you sure you want to delete \"%@\"?" = "Sei sicuro di voler eliminare \"%@\"?";
+"Delete" = "Elimina";
+"Delete \"%@\"" = "Elimina \"%@\"";
+"Click to change \"%@\"" = "Clicca per modificare \"%@\"";

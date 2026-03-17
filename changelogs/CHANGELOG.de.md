@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Bearbeitung von Layout-Vorlagen für ein intuitiveres Einstellungserlebnis neu gestaltet
+
 ## [1.2.1] - 2026-03-17
 
 ### Behoben

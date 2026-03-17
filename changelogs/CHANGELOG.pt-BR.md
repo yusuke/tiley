@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Remodelada a edição de predefinições de layout para uma experiência de configuração mais intuitiva
+
 ## [1.2.1] - 2026-03-17
 
 ### Correções

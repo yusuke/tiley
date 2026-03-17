@@ -93,3 +93,10 @@
 "Add Global Shortcut" = "Добавить глобальное сочетание";
 "No windows available" = "Нет доступных окон";
 "Tab is reserved for switching target windows." = "Tab зарезервирована для переключения целевого окна.";
+"Edit Name & Shortcuts" = "Редактировать имя и сочетания";
+"Done Editing" = "Завершить редактирование";
+"Delete Shortcut" = "Удалить сочетание клавиш";
+"Are you sure you want to delete \"%@\"?" = "Вы уверены, что хотите удалить \"%@\"?";
+"Delete" = "Удалить";
+"Delete \"%@\"" = "Удалить \"%@\"";
+"Click to change \"%@\"" = "Нажмите, чтобы изменить \"%@\"";

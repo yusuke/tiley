@@ -93,3 +93,10 @@
 "Add Global Shortcut" = "전역 단축키 추가";
 "No windows available" = "사용 가능한 창이 없습니다";
 "Tab is reserved for switching target windows." = "Tab은 대상 창 전환에 사용됩니다.";
+"Edit Name & Shortcuts" = "이름 및 단축키 편집";
+"Done Editing" = "편집 완료";
+"Delete Shortcut" = "단축키 삭제";
+"Are you sure you want to delete \"%@\"?" = "\"%@\" 단축키를 삭제하시겠습니까?";
+"Delete" = "삭제";
+"Delete \"%@\"" = "\"%@\" 삭제";
+"Click to change \"%@\"" = "클릭하여 \"%@\" 변경";

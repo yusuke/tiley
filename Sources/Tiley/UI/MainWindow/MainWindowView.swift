@@ -56,6 +56,7 @@ struct MainWindowView: View {
     var screenRole: ScreenRole
     @State private var draftSettings: AppState.SettingsSnapshot
     @State private var activeLayoutSelection: GridSelection?
+    @State private var editingPresetID: UUID?
     @State private var editingPresetNameID: UUID?
     @State private var editingPresetNameDraft = ""
     @State private var isRecordingGlobalShortcut = false
@@ -63,6 +64,7 @@ struct MainWindowView: View {
     @State private var addingShortcutPresetID: UUID?
     @State private var addingShortcutIsGlobal = false
     @State private var replacingShortcutIndex: Int?
+    @State private var nameFieldFocusTrigger: Int = 0
     @State private var hoveredPresetID: UUID?
     @State private var draggingPresetID: UUID?
     @State private var didReorderDuringDrag = false
@@ -116,6 +118,7 @@ struct MainWindowView: View {
             if !isEditing {
                 dismissShortcutEditingIfNeeded()
                 dismissPresetNameEditingIfNeeded()
+                editingPresetID = nil
             }
         }
         .onChange(of: draftSettings) { _, newValue in
@@ -636,6 +639,7 @@ struct MainWindowView: View {
 
     @ViewBuilder
     private func layoutPresetRow(_ preset: LayoutPreset) -> some View {
+        let isInEditMode = editingPresetID == preset.id
         HStack(spacing: 12) {
             ZStack(alignment: .center) {
                 PresetGridPreviewView(
@@ -645,10 +649,11 @@ struct MainWindowView: View {
                 )
                 .frame(width: Self.presetGridColumnWidth, height: 26, alignment: .center)
 
-                if isShowingDeleteButton(for: preset.id) {
+                if isInEditMode {
                     Button {
                         dismissPresetNameEditingIfNeeded(except: preset.id)
                         deletePreset(id: preset.id)
+                        editingPresetID = nil
                     } label: {
                         Image(systemName: "trash")
                             .font(.system(size: 10, weight: .semibold))
@@ -669,12 +674,60 @@ struct MainWindowView: View {
 
             presetShortcutsCell(for: preset)
                 .frame(width: Self.presetShortcutColumnWidth, alignment: .center)
+
+            if isInEditMode {
+                Button {
+                    finishEditingPreset(preset.id)
+                } label: {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(6)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(Color.accentColor)
+                                .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
+                        )
+                }
+                .buttonStyle(.plain)
+                .transition(.opacity)
+                .instantTooltip(NSLocalizedString("Done Editing", comment: "Tooltip for done editing button"))
+            }
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            dismissPresetNameEditingIfNeeded(except: preset.id)
-            dismissShortcutEditingIfNeeded(except: preset.id)
+            guard !isInEditMode else { return }
+            if editingPresetID != nil {
+                dismissEditingPresetIfNeeded(except: preset.id)
+                appState.selectLayoutPreset(preset.id)
+                return
+            }
             handlePresetTap(preset)
+        }
+        .overlay(alignment: .trailing) {
+            if editingPresetID == nil, hoveredPresetID == preset.id, draggingPresetID == nil {
+                Button {
+                    beginEditingPreset(preset)
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .padding(6)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(ThemeColors.presetCellBackground(for: colorScheme))
+                                .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 1)
+                        )
+                }
+                .buttonStyle(.plain)
+                .padding(.trailing, 4)
+                .transition(.opacity)
+                .instantTooltip(NSLocalizedString("Edit Name & Shortcuts", comment: "Tooltip for edit layout button"))
+            }
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
@@ -713,8 +766,12 @@ struct MainWindowView: View {
         if editingPresetNameID == preset.id {
             InlinePresetNameField(
                 text: $editingPresetNameDraft,
+                focusTrigger: nameFieldFocusTrigger,
                 onCommit: {
                     commitPresetNameEdit(for: preset.id)
+                },
+                onExplicitCommit: {
+                    commitPresetNameEditAndFinish(for: preset.id)
                 },
                 onCancel: {
                     cancelPresetNameEdit()
@@ -726,27 +783,13 @@ struct MainWindowView: View {
                 .lineLimit(1)
                 .foregroundStyle(.primary)
                 .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(
-                RoundedRectangle(cornerRadius: 7, style: .continuous)
-                    .fill(ThemeColors.presetCellBackground(for: colorScheme))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 7, style: .continuous)
-                    .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 1)
-            )
-            .contentShape(Rectangle())
-            .onTapGesture {
-                    beginPresetNameEdit(for: preset)
-            }
         }
     }
 
     @ViewBuilder
     private func presetShortcutsCell(for preset: LayoutPreset) -> some View {
         let shortcuts = preset.shortcuts
-        let isEditing = recordingPresetShortcutID == preset.id
+        let isEditing = editingPresetID == preset.id || recordingPresetShortcutID == preset.id
         let isAdding = addingShortcutPresetID == preset.id
         let isReplacing = isEditing && replacingShortcutIndex != nil
 
@@ -757,53 +800,29 @@ struct MainWindowView: View {
                 }
 
                 if (isEditing || shortcuts.isEmpty) && !isAdding && !isReplacing {
-                    Button {
+                    AddShortcutButton(colorScheme: colorScheme, tooltip: NSLocalizedString("Add Shortcut", comment: "Tooltip for add shortcut button")) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 9, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                    } action: {
                         addingShortcutIsGlobal = false
                         addingShortcutPresetID = preset.id
                         appState.setShortcutRecordingActive(true)
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(.secondary)
                     }
-                    .buttonStyle(.plain)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 3)
-                    .background(
-                        RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .fill(ThemeColors.presetCellBackground(for: colorScheme))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 0.5)
-                    )
-                    .instantTooltip(NSLocalizedString("Add Shortcut", comment: "Tooltip for add shortcut button"))
 
-                    Button {
-                        addingShortcutIsGlobal = true
-                        addingShortcutPresetID = preset.id
-                        appState.setShortcutRecordingActive(true)
-                    } label: {
+                    AddShortcutButton(colorScheme: colorScheme, tooltip: NSLocalizedString("Add Global Shortcut", comment: "Tooltip for add global shortcut button")) {
                         HStack(spacing: 2) {
                             Image(systemName: "globe")
                                 .font(.system(size: 8, weight: .semibold))
                             Image(systemName: "plus")
-                                .font(.system(size: 10, weight: .semibold))
+                                .font(.system(size: 9, weight: .semibold))
                         }
                         .foregroundStyle(.secondary)
+                    } action: {
+                        addingShortcutIsGlobal = true
+                        addingShortcutPresetID = preset.id
+                        appState.setShortcutRecordingActive(true)
                     }
-                    .buttonStyle(.plain)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 3)
-                    .background(
-                        RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .fill(ThemeColors.presetCellBackground(for: colorScheme))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 0.5)
-                    )
-                    .instantTooltip(NSLocalizedString("Add Global Shortcut", comment: "Tooltip for add global shortcut button"))
                 }
             }
 
@@ -817,19 +836,29 @@ struct MainWindowView: View {
                                 p.shortcuts.append(shortcut)
                             }
                         }
+                        let keepEditing = editingPresetID == preset.id
                         addingShortcutPresetID = nil
                         replacingShortcutIndex = nil
-                        recordingPresetShortcutID = nil
+                        recordingPresetShortcutID = keepEditing ? preset.id : nil
                         appState.setShortcutRecordingActive(false)
-                        appState.isEditingLayoutPresets = false
+                        if keepEditing {
+                            nameFieldFocusTrigger += 1
+                        } else {
+                            appState.isEditingLayoutPresets = false
+                        }
                     },
                     onRecordingChange: { recording in
                         if !recording {
+                            let keepEditing = editingPresetID == preset.id
                             addingShortcutPresetID = nil
                             replacingShortcutIndex = nil
-                            recordingPresetShortcutID = nil
+                            recordingPresetShortcutID = keepEditing ? preset.id : nil
                             appState.setShortcutRecordingActive(false)
-                            appState.isEditingLayoutPresets = false
+                            if keepEditing {
+                                nameFieldFocusTrigger += 1
+                            } else {
+                                appState.isEditingLayoutPresets = false
+                            }
                         }
                     },
                     validateShortcut: { shortcut in
@@ -838,21 +867,6 @@ struct MainWindowView: View {
                 )
                 .frame(height: 22)
             }
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            dismissPresetNameEditingIfNeeded(except: preset.id)
-            appState.selectLayoutPreset(preset.id)
-            if shortcuts.isEmpty {
-                addingShortcutPresetID = preset.id
-                recordingPresetShortcutID = preset.id
-                appState.setShortcutRecordingActive(true)
-            } else {
-                addingShortcutPresetID = nil
-                replacingShortcutIndex = nil
-                recordingPresetShortcutID = preset.id
-            }
-            appState.isEditingLayoutPresets = true
         }
     }
 
@@ -865,17 +879,27 @@ struct MainWindowView: View {
                         guard index < p.shortcuts.count else { return }
                         p.shortcuts[index] = newShortcut
                     }
+                    let keepEditing = editingPresetID == preset.id
                     replacingShortcutIndex = nil
-                    recordingPresetShortcutID = nil
+                    recordingPresetShortcutID = keepEditing ? preset.id : nil
                     appState.setShortcutRecordingActive(false)
-                    appState.isEditingLayoutPresets = false
+                    if keepEditing {
+                        nameFieldFocusTrigger += 1
+                    } else {
+                        appState.isEditingLayoutPresets = false
+                    }
                 },
                 onRecordingChange: { recording in
                     if !recording {
+                        let keepEditing = editingPresetID == preset.id
                         replacingShortcutIndex = nil
-                        recordingPresetShortcutID = nil
+                        recordingPresetShortcutID = keepEditing ? preset.id : nil
                         appState.setShortcutRecordingActive(false)
-                        appState.isEditingLayoutPresets = false
+                        if keepEditing {
+                            nameFieldFocusTrigger += 1
+                        } else {
+                            appState.isEditingLayoutPresets = false
+                        }
                     }
                 },
                 validateShortcut: { candidate in
@@ -890,49 +914,18 @@ struct MainWindowView: View {
 
     @ViewBuilder
     private func shortcutBadgeLabel(for preset: LayoutPreset, index: Int, shortcut: HotKeyShortcut, isEditing: Bool, isAdding: Bool, isReplacing: Bool) -> some View {
-        HStack(spacing: 3) {
-            if shortcut.isGlobal {
-                Image(systemName: "globe")
-                    .font(.system(size: 8, weight: .semibold))
-                    .foregroundStyle(Color.accentColor)
-            }
-
-            Text(shortcut.displayString)
-                .font(.system(size: 10, weight: .medium, design: .rounded))
-                .lineLimit(1)
-
-            if isEditing && !isReplacing {
-                Button {
-                    removeShortcut(at: index, from: preset.id)
-                } label: {
-                    Image(systemName: "trash")
-                        .font(.system(size: 8, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(.horizontal, 6)
-        .padding(.vertical, 3)
-        .background(
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(Color.accentColor.opacity(0.15))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .stroke(Color.accentColor.opacity(0.3), lineWidth: 0.5)
-        )
-        .onTapGesture {
+        ShortcutBadgeLabelView(shortcut: shortcut, isEditing: isEditing, showDelete: isEditing && !isReplacing, onDelete: {
+            removeShortcut(at: index, from: preset.id)
+        }, onTap: {
             guard !isReplacing, !isAdding else { return }
-            guard !isEditing else { return }
-            dismissPresetNameEditingIfNeeded(except: preset.id)
             appState.selectLayoutPreset(preset.id)
             replacingShortcutIndex = index
             addingShortcutPresetID = nil
             recordingPresetShortcutID = preset.id
             appState.setShortcutRecordingActive(true)
             appState.isEditingLayoutPresets = true
-        }
+        })
+        .allowsHitTesting(isEditing)
     }
 
     private func removeShortcut(at index: Int, from presetID: UUID) {
@@ -940,6 +933,42 @@ struct MainWindowView: View {
             guard index < preset.shortcuts.count else { return }
             preset.shortcuts.remove(at: index)
         }
+    }
+
+    private func finishEditingPreset(_ id: UUID) {
+        if editingPresetNameID == id {
+            let trimmed = editingPresetNameDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+            let currentName = appState.displayedLayoutPresets.first(where: { $0.id == id })?.name ?? ""
+            let committedName = trimmed.isEmpty ? currentName : trimmed
+            if appState.isPersistedLayoutPreset(id) || committedName != currentName {
+                appState.updateLayoutPreset(id) { preset in
+                    preset.name = committedName
+                }
+            }
+            editingPresetNameID = nil
+            editingPresetNameDraft = ""
+        }
+        dismissShortcutEditingIfNeeded()
+        editingPresetID = nil
+        syncEditingLayoutPresetsFlag()
+    }
+
+    private func beginEditingPreset(_ preset: LayoutPreset) {
+        dismissEditingPresetIfNeeded(except: preset.id)
+        appState.selectLayoutPreset(preset.id)
+        editingPresetID = preset.id
+        editingPresetNameID = preset.id
+        editingPresetNameDraft = preset.name
+        recordingPresetShortcutID = preset.id
+        appState.isEditingLayoutPresets = true
+    }
+
+    private func dismissEditingPresetIfNeeded(except id: UUID? = nil) {
+        guard let editingPresetID, editingPresetID != id else { return }
+        // Clear editingPresetID first so commitPresetNameEdit won't keep name field alive
+        self.editingPresetID = nil
+        dismissPresetNameEditingIfNeeded(except: id)
+        dismissShortcutEditingIfNeeded(except: id)
     }
 
     private func beginPresetNameEdit(for preset: LayoutPreset) {
@@ -959,26 +988,51 @@ struct MainWindowView: View {
         let trimmed = editingPresetNameDraft.trimmingCharacters(in: .whitespacesAndNewlines)
         let currentName = appState.displayedLayoutPresets.first(where: { $0.id == id })?.name ?? ""
         let committedName = trimmed.isEmpty ? currentName : trimmed
+        let inEditMode = editingPresetID == id
         if !appState.isPersistedLayoutPreset(id), committedName == currentName {
+            if inEditMode {
+                // In unified edit mode, keep name field active even if name unchanged
+                return
+            }
             cancelPresetNameEdit()
             return
         }
         appState.updateLayoutPreset(id) { preset in
             preset.name = committedName
         }
-        editingPresetNameID = nil
-        editingPresetNameDraft = ""
+        if inEditMode {
+            // In unified edit mode, save name but keep the name field editable
+            editingPresetNameDraft = committedName
+        } else {
+            editingPresetNameID = nil
+            editingPresetNameDraft = ""
+        }
         syncEditingLayoutPresetsFlag()
     }
 
+    /// Called on explicit Enter/Tab: commit name and exit edit mode entirely.
+    private func commitPresetNameEditAndFinish(for id: UUID) {
+        if editingPresetID == id {
+            finishEditingPreset(id)
+        } else {
+            commitPresetNameEdit(for: id)
+        }
+    }
+
     private func cancelPresetNameEdit() {
+        let wasInEditMode = editingPresetNameID != nil && editingPresetID == editingPresetNameID
         editingPresetNameID = nil
         editingPresetNameDraft = ""
+        if wasInEditMode {
+            // ESC in name field exits the entire edit mode
+            dismissShortcutEditingIfNeeded()
+            editingPresetID = nil
+        }
         syncEditingLayoutPresetsFlag()
     }
 
     private func isShowingDeleteButton(for id: UUID) -> Bool {
-        editingPresetNameID == id || recordingPresetShortcutID == id
+        editingPresetID == id || editingPresetNameID == id || recordingPresetShortcutID == id
     }
 
     private func isPresetSelected(_ id: UUID) -> Bool {
@@ -997,6 +1051,7 @@ struct MainWindowView: View {
 
     private func updatePresetSelectionPreview(for id: UUID?) {
         guard !appState.isEditingSettings else { return }
+        guard editingPresetID == nil else { return }
         guard draggingPresetID == nil else { return }
         guard activeLayoutSelection == nil else { return }
         guard let id,
@@ -1024,7 +1079,7 @@ struct MainWindowView: View {
     }
 
     private func handlePresetTap(_ preset: LayoutPreset) {
-        let isEditing = editingPresetNameID != nil || isRecordingGlobalShortcut || recordingPresetShortcutID != nil || draggingPresetID != nil
+        let isEditing = editingPresetID != nil || editingPresetNameID != nil || isRecordingGlobalShortcut || recordingPresetShortcutID != nil || draggingPresetID != nil
         if isEditing {
             appState.selectLayoutPreset(preset.id)
             return
@@ -1038,6 +1093,7 @@ struct MainWindowView: View {
     }
 
     private func startDraggingPreset(_ id: UUID) {
+        dismissEditingPresetIfNeeded()
         dismissPresetNameEditingIfNeeded()
         if editingPresetNameID == id {
             commitPresetNameEdit(for: id)
@@ -1144,7 +1200,7 @@ struct MainWindowView: View {
 
 
     private func syncEditingLayoutPresetsFlag() {
-        let isEditing = recordingPresetShortcutID != nil || editingPresetNameID != nil
+        let isEditing = editingPresetID != nil || recordingPresetShortcutID != nil || editingPresetNameID != nil
         if appState.isEditingLayoutPresets != isEditing {
             appState.isEditingLayoutPresets = isEditing
         }
@@ -1166,11 +1222,13 @@ struct MainWindowView: View {
 
 private struct InlinePresetNameField: NSViewRepresentable {
     @Binding var text: String
+    var focusTrigger: Int
     let onCommit: () -> Void
+    let onExplicitCommit: () -> Void
     let onCancel: () -> Void
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text, onCommit: onCommit, onCancel: onCancel)
+        Coordinator(text: $text, onCommit: onCommit, onExplicitCommit: onExplicitCommit, onCancel: onCancel)
     }
 
     func makeNSView(context: Context) -> InlinePresetNameTextField {
@@ -1179,6 +1237,7 @@ private struct InlinePresetNameField: NSViewRepresentable {
         textField.onCommit = context.coordinator.commit
         textField.onCancel = context.coordinator.cancel
         textField.stringValue = text
+        context.coordinator.lastFocusTrigger = focusTrigger
         Task { @MainActor in
             guard let window = textField.window else { return }
             window.makeFirstResponder(textField)
@@ -1193,16 +1252,26 @@ private struct InlinePresetNameField: NSViewRepresentable {
         if nsView.stringValue != text {
             nsView.stringValue = text
         }
+        if focusTrigger != context.coordinator.lastFocusTrigger {
+            context.coordinator.lastFocusTrigger = focusTrigger
+            Task { @MainActor in
+                guard let window = nsView.window else { return }
+                window.makeFirstResponder(nsView)
+            }
+        }
     }
 
     final class Coordinator: NSObject, NSTextFieldDelegate {
         @Binding private var text: String
         private let onCommit: () -> Void
+        private let onExplicitCommit: () -> Void
         private let onCancel: () -> Void
+        var lastFocusTrigger: Int = 0
 
-        init(text: Binding<String>, onCommit: @escaping () -> Void, onCancel: @escaping () -> Void) {
+        init(text: Binding<String>, onCommit: @escaping () -> Void, onExplicitCommit: @escaping () -> Void, onCancel: @escaping () -> Void) {
             _text = text
             self.onCommit = onCommit
+            self.onExplicitCommit = onExplicitCommit
             self.onCancel = onCancel
         }
 
@@ -1222,7 +1291,7 @@ private struct InlinePresetNameField: NSViewRepresentable {
             switch commandSelector {
             case #selector(NSResponder.insertNewline(_:)), #selector(NSResponder.insertTab(_:)):
                 textField.suppressEndEditingCommit = true
-                onCommit()
+                onExplicitCommit()
                 textField.window?.makeFirstResponder(nil)
                 return true
             case #selector(NSResponder.cancelOperation(_:)):
@@ -1274,6 +1343,136 @@ private final class InlinePresetNameTextField: NSTextField {
             return
         }
         super.textDidEndEditing(notification)
+    }
+}
+
+private struct ShortcutBadgeLabelView: View {
+    /// Content height inside padding, matching the badge text line height
+    static let badgeContentHeight: CGFloat = 13
+
+    let shortcut: HotKeyShortcut
+    let isEditing: Bool
+    var showDelete: Bool = false
+    var onDelete: (() -> Void)? = nil
+    var onTap: (() -> Void)? = nil
+
+    @State private var isLabelHovered = false
+    @State private var isDeleteHovered = false
+
+    private var isGroupHovered: Bool { isLabelHovered || isDeleteHovered }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Shortcut label area
+            HStack(spacing: 3) {
+                if shortcut.isGlobal {
+                    Image(systemName: "globe")
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(Color.accentColor)
+                }
+
+                Text(shortcut.displayString)
+                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                    .lineLimit(1)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .contentShape(Rectangle())
+            .onHover { hovering in
+                isLabelHovered = hovering
+            }
+            .onTapGesture {
+                onTap?()
+            }
+            .modifier(EditingTooltipModifier(isEditing: isEditing, shortcutName: shortcut.displayString))
+
+            if showDelete {
+                // Divider
+                Rectangle()
+                    .fill(Color.accentColor.opacity(0.3))
+                    .frame(width: 0.5)
+                    .padding(.vertical, 2)
+
+                // Delete button area
+                Button {
+                    guard let onDelete else { return }
+                    let alert = NSAlert()
+                    alert.messageText = NSLocalizedString("Delete Shortcut", comment: "Alert title for deleting a shortcut")
+                    alert.informativeText = String(format: NSLocalizedString("Are you sure you want to delete \"%@\"?", comment: "Alert message for deleting a shortcut with name"), shortcut.displayString)
+                    alert.alertStyle = .warning
+                    alert.addButton(withTitle: NSLocalizedString("Delete", comment: "Delete button title"))
+                    alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel button title"))
+                    if alert.runModal() == .alertFirstButtonReturn {
+                        onDelete()
+                    }
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(isDeleteHovered ? Color.red : Color.secondary)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 3)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .onHover { hovering in
+                    isDeleteHovered = hovering
+                }
+                .instantTooltip(String(format: NSLocalizedString("Delete \"%@\"", comment: "Tooltip for delete shortcut button with name"), shortcut.displayString))
+            }
+        }
+        .fixedSize()
+        .background(
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .fill(Color.accentColor.opacity(isEditing && isGroupHovered ? 0.25 : 0.15))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .stroke(isEditing && isGroupHovered ? Color.accentColor.opacity(0.6) : Color.accentColor.opacity(0.3), lineWidth: isEditing && isGroupHovered ? 1 : 0.5)
+        )
+    }
+}
+
+private struct EditingTooltipModifier: ViewModifier {
+    let isEditing: Bool
+    let shortcutName: String
+
+    func body(content: Content) -> some View {
+        if isEditing {
+            content.instantTooltip(String(format: NSLocalizedString("Click to change \"%@\"", comment: "Tooltip for clicking shortcut badge to edit with name"), shortcutName))
+        } else {
+            content
+        }
+    }
+}
+
+private struct AddShortcutButton<Label: View>: View {
+    let colorScheme: ColorScheme
+    let tooltip: String
+    @ViewBuilder let label: Label
+    let action: () -> Void
+
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            label
+                .frame(minHeight: ShortcutBadgeLabelView.badgeContentHeight)
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 5)
+        .padding(.vertical, 3)
+        .background(
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .fill(isHovered ? ThemeColors.presetCellBackground(for: colorScheme).opacity(0.8) : ThemeColors.presetCellBackground(for: colorScheme))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .stroke(isHovered ? Color.accentColor.opacity(0.5) : ThemeColors.presetCellBorder(for: colorScheme), lineWidth: isHovered ? 1 : 0.5)
+        )
+        .onHover { hovering in
+            isHovered = hovering
+        }
+        .instantTooltip(tooltip)
     }
 }
 

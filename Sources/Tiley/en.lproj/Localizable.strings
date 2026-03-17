@@ -93,3 +93,10 @@
 "Add Global Shortcut" = "Add Global Shortcut";
 "No windows available" = "No windows available";
 "Tab is reserved for switching target windows." = "Tab is reserved for switching target windows.";
+"Edit Name & Shortcuts" = "Edit Name & Shortcuts";
+"Done Editing" = "Done Editing";
+"Delete Shortcut" = "Delete Shortcut";
+"Are you sure you want to delete \"%@\"?" = "Are you sure you want to delete \"%@\"?";
+"Delete" = "Delete";
+"Delete \"%@\"" = "Delete \"%@\"";
+"Click to change \"%@\"" = "Click to change \"%@\"";

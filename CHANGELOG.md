@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Redesigned layout preset editing for a more intuitive settings experience
+
 ## [1.2.1] - 2026-03-17
 
 ### Fixed

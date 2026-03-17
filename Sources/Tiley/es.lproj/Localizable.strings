@@ -93,3 +93,10 @@
 "Add Global Shortcut" = "Añadir atajo global";
 "No windows available" = "No hay ventanas disponibles";
 "Tab is reserved for switching target windows." = "Tab está reservado para cambiar la ventana de destino.";
+"Edit Name & Shortcuts" = "Editar nombre y atajos";
+"Done Editing" = "Finalizar edición";
+"Delete Shortcut" = "Eliminar atajo";
+"Are you sure you want to delete \"%@\"?" = "¿Está seguro de que desea eliminar \"%@\"?";
+"Delete" = "Eliminar";
+"Delete \"%@\"" = "Eliminar \"%@\"";
+"Click to change \"%@\"" = "Haz clic para cambiar \"%@\"";
