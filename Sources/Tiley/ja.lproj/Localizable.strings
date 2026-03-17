@@ -8,6 +8,7 @@
 "No active target window." = "アクティブな対象ウインドウがありません。";
 "Canceled layout selection." = "レイアウト選択をキャンセルしました。";
 "Moved %@ to %@." = "%@ を %@ に移動しました。";
+"Moved %@ to %@ (size adjusted due to window constraints)." = "%@ を %@ に移動しました（ウインドウの制約によりサイズが調整されました）。";
 "Unknown" = "不明";
 "No standard focused window was found. frontmost=%@(%d) preferred=%d" = "標準的なフォーカスウインドウが見つかりませんでした。frontmost=%@(%d) preferred=%d";
 "Show Layout Grid" = "レイアウトグリッドを表示";

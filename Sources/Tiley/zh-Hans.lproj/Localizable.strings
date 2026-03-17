@@ -8,6 +8,7 @@
 "No active target window." = "没有活动目标窗口。";
 "Canceled layout selection." = "已取消布局选择。";
 "Moved %@ to %@." = "已将 %@ 移动到 %@。";
+"Moved %@ to %@ (size adjusted due to window constraints)." = "已将 %@ 移动到 %@（因窗口限制，大小已调整）。";
 "Unknown" = "未知";
 "No standard focused window was found. frontmost=%@(%d) preferred=%d" = "未找到标准焦点窗口。frontmost=%@(%d) preferred=%d";
 "Show Layout Grid" = "显示布局网格";

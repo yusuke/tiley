@@ -121,6 +121,8 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var workspaceObserverTask: Task<Void, Never>?
     @ObservationIgnored private var appActivationTask: Task<Void, Never>?
     @ObservationIgnored private var activeLayoutTarget: WindowTarget?
+    @ObservationIgnored private var cachedResizability: WindowResizability?
+    @ObservationIgnored private var cachedResizabilityPID: pid_t?
     @ObservationIgnored private var layoutPreviewController: LayoutPreviewOverlayController?
     @ObservationIgnored private var availableWindowTargets: [WindowTarget] = []
     @ObservationIgnored private var activeTargetIndex: Int = 0
@@ -389,6 +391,7 @@ final class AppState: NSObject, NSMenuDelegate {
         hidePreviewOverlay()
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
+        clearResizabilityCache()
         hideAllMainWindows()
         _ = reactivateLastTargetApp(clearingState: false)
         clearWindowCyclingState()
@@ -430,6 +433,7 @@ final class AppState: NSObject, NSMenuDelegate {
     private func applyTargetAtCurrentIndex() {
         let newTarget = availableWindowTargets[activeTargetIndex]
         activeLayoutTarget = newTarget
+        clearResizabilityCache()
         lastTargetPID = newTarget.processIdentifier
         windowTargetListVersion += 1
 
@@ -477,8 +481,8 @@ final class AppState: NSObject, NSMenuDelegate {
         )
 
         do {
-            try windowManager?.move(target: target, to: frame)
-            recordSelectionAndHide(selection: selection, appName: target.appName)
+            let constrained = try windowManager?.move(target: target, to: frame) ?? false
+            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
             launchMessage = error.localizedDescription
         }
@@ -503,9 +507,10 @@ final class AppState: NSObject, NSMenuDelegate {
             columns: columns,
             gap: gap
         )
+
         do {
-            try windowManager?.move(target: target, to: frame, onScreenFrame: screenFrame)
-            recordSelectionAndHide(selection: selection, appName: target.appName)
+            let constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: screenFrame) ?? false
+            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
             launchMessage = error.localizedDescription
         }
@@ -532,7 +537,7 @@ final class AppState: NSObject, NSMenuDelegate {
         commitLayoutSelectionOnScreen(selection, visibleFrame: visibleFrame, screenFrame: screenFrame)
     }
 
-    private func recordSelectionAndHide(selection: GridSelection, appName: String) {
+    private func recordSelectionAndHide(selection: GridSelection, appName: String, wasConstrained: Bool = false) {
         lastSelection = selection
         lastSelectionRows = rows
         lastSelectionColumns = columns
@@ -543,13 +548,22 @@ final class AppState: NSObject, NSMenuDelegate {
         transientLayoutPresetID = UUID()
         hidePreviewOverlay()
         activeLayoutTarget = nil
+        clearResizabilityCache()
         isShowingLayoutGrid = false
         hideAllMainWindows()
-        launchMessage = String(
-            format: NSLocalizedString("Moved %@ to %@.", comment: "Window moved message"),
-            appName,
-            selection.description
-        )
+        if wasConstrained {
+            launchMessage = String(
+                format: NSLocalizedString("Moved %@ to %@ (size adjusted due to window constraints).", comment: "Window moved with size constraint message"),
+                appName,
+                selection.description
+            )
+        } else {
+            launchMessage = String(
+                format: NSLocalizedString("Moved %@ to %@.", comment: "Window moved message"),
+                appName,
+                selection.description
+            )
+        }
         _ = reactivateLastTargetApp(clearingState: false)
         clearWindowCyclingState()
     }
@@ -621,12 +635,18 @@ final class AppState: NSObject, NSMenuDelegate {
 
         let parentWindow = windowControllerForScreen(frame: previewScreenFrame)?.nsWindow
             ?? targetWindowController?.nsWindow
+
+        let resizability = resizabilityForActiveTarget()
+        let windowSize = activeLayoutTarget?.frame.size
+
         layoutPreviewController?.showSelection(
             selection,
             rows: rows,
             columns: columns,
             gap: gap,
-            behind: parentWindow
+            behind: parentWindow,
+            resizability: resizability,
+            windowSize: windowSize
         )
     }
 
@@ -653,6 +673,25 @@ final class AppState: NSObject, NSMenuDelegate {
     func hidePreviewOverlay() {
         layoutPreviewController?.hide()
         layoutPreviewController = nil
+    }
+
+    /// Returns the resize capability of the active layout target window,
+    /// caching the result per PID to avoid repeated probes.
+    private func resizabilityForActiveTarget() -> WindowResizability {
+        guard let target = activeLayoutTarget else { return .both }
+        // Return cached result if we're still targeting the same process.
+        if let cached = cachedResizability, cachedResizabilityPID == target.processIdentifier {
+            return cached
+        }
+        let result = accessibilityService.detectResizability(of: target.windowElement)
+        cachedResizability = result
+        cachedResizabilityPID = target.processIdentifier
+        return result
+    }
+
+    private func clearResizabilityCache() {
+        cachedResizability = nil
+        cachedResizabilityPID = nil
     }
 
     func resetLayoutPresetsToDefault() {
@@ -1315,6 +1354,7 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingPermissionsOnly = false
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
+        clearResizabilityCache()
         clearWindowCyclingState()
         registerAllHotKeys()
         if !NSApp.isActive {

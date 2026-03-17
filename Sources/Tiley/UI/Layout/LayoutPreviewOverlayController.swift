@@ -31,9 +31,12 @@ final class LayoutPreviewOverlayController: NSWindowController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?) {
+    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil) {
+        let frame = GridCalculator.frame(for: selection, in: visibleFrame, rows: rows, columns: columns, gap: gap)
         let rootView = SelectionPreviewOverlayView(
-            frame: GridCalculator.frame(for: selection, in: visibleFrame, rows: rows, columns: columns, gap: gap),
+            frame: frame,
+            resizability: resizability,
+            windowSize: windowSize,
             screenFrame: screenFrame
         )
         window?.contentView = NSHostingView(rootView: rootView)
@@ -92,9 +95,13 @@ final class LayoutPreviewOverlayController: NSWindowController {
 private struct SelectionPreviewOverlayView: View {
     @Environment(\.colorScheme) private var colorScheme
     let frame: CGRect
+    let resizability: WindowResizability
+    /// Current window size — used to compute the accepted region on locked axes.
+    let windowSize: CGSize?
     let screenFrame: CGRect
 
     var body: some View {
+        // Full requested frame in screen-local coordinates (top-left origin).
         let localFrame = CGRect(
             x: frame.minX - screenFrame.minX,
             y: screenFrame.maxY - frame.maxY,
@@ -102,15 +109,94 @@ private struct SelectionPreviewOverlayView: View {
             height: frame.height
         )
 
+        let hasConstraint = !resizability.horizontal || !resizability.vertical
+
+        // On locked axes the window keeps its current size.
+        // If selection > windowSize → red overflow (can't expand).
+        // If selection < windowSize → yellow underflow (can't shrink).
+        let lockedWidth = windowSize?.width ?? localFrame.width
+        let lockedHeight = windowSize?.height ?? localFrame.height
+        let effectiveWidth = resizability.horizontal ? localFrame.width : lockedWidth
+        let effectiveHeight = resizability.vertical ? localFrame.height : lockedHeight
+
         ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
-                )
-                .frame(width: localFrame.width, height: localFrame.height)
-                .position(x: localFrame.midX, y: localFrame.midY)
+            if hasConstraint, let _ = windowSize {
+                // The region the window will actually occupy (clamped to selection bounds for display).
+                let displayWidth = min(effectiveWidth, localFrame.width)
+                let displayHeight = min(effectiveHeight, localFrame.height)
+
+                // Accepted region at the top-left.
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
+                    )
+                    .frame(width: displayWidth, height: displayHeight)
+                    .position(x: localFrame.minX + displayWidth / 2, y: localFrame.minY + displayHeight / 2)
+
+                // --- Red: selection is wider than the window can expand ---
+                let widthOverflow = localFrame.width - effectiveWidth
+                if widthOverflow > 1 {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(Color.red.opacity(0.35))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(Color.red.opacity(0.7), lineWidth: 1.5)
+                        )
+                        .frame(width: widthOverflow, height: localFrame.height)
+                        .position(x: localFrame.minX + effectiveWidth + widthOverflow / 2, y: localFrame.midY)
+                }
+
+                // --- Red: selection is taller than the window can expand ---
+                let heightOverflow = localFrame.height - effectiveHeight
+                if heightOverflow > 1 {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(Color.red.opacity(0.35))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(Color.red.opacity(0.7), lineWidth: 1.5)
+                        )
+                        .frame(width: min(effectiveWidth, localFrame.width), height: heightOverflow)
+                        .position(x: localFrame.minX + min(effectiveWidth, localFrame.width) / 2, y: localFrame.minY + min(effectiveHeight, localFrame.height) + heightOverflow / 2)
+                }
+
+                // --- Yellow: window is wider than the selection (can't shrink) ---
+                let widthUnderflow = effectiveWidth - localFrame.width
+                if widthUnderflow > 1 {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(Color.yellow.opacity(0.35))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(Color.yellow.opacity(0.7), lineWidth: 1.5)
+                        )
+                        .frame(width: widthUnderflow, height: localFrame.height)
+                        .position(x: localFrame.maxX + widthUnderflow / 2, y: localFrame.midY)
+                }
+
+                // --- Yellow: window is taller than the selection (can't shrink) ---
+                let heightUnderflow = effectiveHeight - localFrame.height
+                if heightUnderflow > 1 {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(Color.yellow.opacity(0.35))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(Color.yellow.opacity(0.7), lineWidth: 1.5)
+                        )
+                        .frame(width: localFrame.width, height: heightUnderflow)
+                        .position(x: localFrame.midX, y: localFrame.maxY + heightUnderflow / 2)
+                }
+            } else {
+                // Fully resizable — normal display.
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
+                    )
+                    .frame(width: localFrame.width, height: localFrame.height)
+                    .position(x: localFrame.midX, y: localFrame.midY)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Color.clear)

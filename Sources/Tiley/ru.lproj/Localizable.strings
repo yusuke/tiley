@@ -8,6 +8,7 @@
 "No active target window." = "Нет активного целевого окна.";
 "Canceled layout selection." = "Выбор компоновки отменён.";
 "Moved %@ to %@." = "%@ перемещено в %@.";
+"Moved %@ to %@ (size adjusted due to window constraints)." = "%@ перемещено в %@ (размер скорректирован из-за ограничений окна).";
 "Unknown" = "Неизвестно";
 "No standard focused window was found. frontmost=%@(%d) preferred=%d" = "Стандартное активное окно не найдено. frontmost=%@(%d) preferred=%d";
 "Show Layout Grid" = "Показать сетку компоновки";

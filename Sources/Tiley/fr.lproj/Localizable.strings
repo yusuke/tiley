@@ -8,6 +8,7 @@
 "No active target window." = "Aucune fenêtre cible active.";
 "Canceled layout selection." = "Sélection de disposition annulée.";
 "Moved %@ to %@." = "%@ déplacé vers %@.";
+"Moved %@ to %@ (size adjusted due to window constraints)." = "%@ déplacé vers %@ (taille ajustée en raison des contraintes de la fenêtre).";
 "Unknown" = "Inconnu";
 "No standard focused window was found. frontmost=%@(%d) preferred=%d" = "Aucune fenêtre active standard n'a été trouvée. frontmost=%@(%d) preferred=%d";
 "Show Layout Grid" = "Afficher la grille de disposition";

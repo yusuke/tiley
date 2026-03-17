@@ -15,11 +15,13 @@ final class WindowManager {
         accessibilityService.allWindowTargets()
     }
 
-    func move(target: WindowTarget, to frame: CGRect) throws {
+    @discardableResult
+    func move(target: WindowTarget, to frame: CGRect) throws -> Bool {
         try accessibilityService.setFrame(frame, on: target.screenFrame, for: target.windowElement)
     }
 
-    func move(target: WindowTarget, to frame: CGRect, onScreenFrame screenFrame: CGRect) throws {
+    @discardableResult
+    func move(target: WindowTarget, to frame: CGRect, onScreenFrame screenFrame: CGRect) throws -> Bool {
         try accessibilityService.setFrame(frame, on: screenFrame, for: target.windowElement)
     }
 

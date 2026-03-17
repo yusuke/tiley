@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Window resize constraint detection: automatically detects per-axis resizability using a fast 3-tier check (non-resizable → full-screen button → 1px probe fallback)
+- Layout preview overlay now shows red regions where the window cannot expand and yellow regions where the window cannot shrink, giving visual feedback on resize constraints before applying
+
 ## [1.2.4] - 2026-03-17
 
 ### Improved

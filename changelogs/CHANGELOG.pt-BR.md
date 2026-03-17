@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Detecção de restrições de redimensionamento de janelas: detecta automaticamente a capacidade de redimensionamento por eixo através de uma verificação rápida em 3 etapas (não redimensionável → botão de tela cheia → sonda de 1px como fallback)
+- A visualização de layout agora mostra regiões vermelhas onde a janela não pode expandir e regiões amarelas onde não pode encolher, fornecendo feedback visual sobre restrições de tamanho antes da aplicação
+
 ## [1.2.4] - 2026-03-17
 
 ### Melhorado

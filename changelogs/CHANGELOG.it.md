@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Rilevamento dei vincoli di ridimensionamento delle finestre: rileva automaticamente la ridimensionabilità per asse tramite un controllo rapido a 3 livelli (non ridimensionabile → pulsante schermo intero → sonda da 1px come fallback)
+- L'anteprima del layout ora mostra aree rosse dove la finestra non può espandersi e aree gialle dove non può ridursi, fornendo un feedback visivo sui vincoli di dimensione prima dell'applicazione
+
 ## [1.2.4] - 2026-03-17
 
 ### Migliorato

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Détection des contraintes de redimensionnement des fenêtres : détecte automatiquement la possibilité de redimensionnement par axe grâce à une vérification rapide en 3 étapes (non redimensionnable → bouton plein écran → sonde de 1px en dernier recours)
+- L'aperçu de disposition affiche désormais des zones rouges là où la fenêtre ne peut pas s'agrandir et des zones jaunes là où elle ne peut pas se réduire, offrant un retour visuel sur les contraintes de taille avant application
+
 ## [1.2.4] - 2026-03-17
 
 ### Amélioré

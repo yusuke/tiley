@@ -1,6 +1,14 @@
 import ApplicationServices
 import AppKit
 
+struct WindowResizability {
+    let horizontal: Bool
+    let vertical: Bool
+
+    static let both = WindowResizability(horizontal: true, vertical: true)
+    static let none = WindowResizability(horizontal: false, vertical: false)
+}
+
 struct WindowTarget {
     let appElement: AXUIElement
     let windowElement: AXUIElement
@@ -104,7 +112,93 @@ final class AccessibilityService {
         )
     }
 
-    func setFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) throws {
+    /// Detects per-axis resize capability of a window using non-destructive
+    /// AX attribute checks.  Falls back to a 1px probe only for ambiguous
+    /// windows (e.g. System Settings — size attribute reports settable but
+    /// the full-screen button is absent).
+    ///
+    /// - Fully non-resizable windows (Calculator): `kAXSizeAttribute` is
+    ///   not settable → `.none` immediately.
+    /// - Fully resizable windows (Finder, Safari, Xcode): `kAXSizeAttribute`
+    ///   is settable **and** `AXFullScreenButton` is present → `.both`.
+    /// - Partially constrained windows (System Settings): settable but no
+    ///   full-screen button → probe each axis with a 1px nudge.
+    func detectResizability(of window: AXUIElement) -> WindowResizability {
+        // Fast path: if the size attribute is not settable at all, the
+        // window cannot be resized on either axis.
+        var settable: DarwinBoolean = false
+        let settableResult = AXUIElementIsAttributeSettable(window, kAXSizeAttribute as CFString, &settable)
+        if settableResult != .success || !settable.boolValue {
+            return .none
+        }
+
+        // Check for the full-screen button. Fully resizable standard
+        // windows expose this button; constrained windows (like System
+        // Settings) do not.
+        var fsButton: CFTypeRef?
+        let hasFSButton = AXUIElementCopyAttributeValue(
+            window,
+            "AXFullScreenButton" as CFString,
+            &fsButton
+        ) == .success && fsButton != nil
+
+        if hasFSButton {
+            return .both
+        }
+
+        // Ambiguous case: settable but no full-screen button.
+        // Probe each axis with a 1px nudge to determine which axes
+        // actually accept size changes.
+        return probeResizabilityPerAxis(window)
+    }
+
+    /// Probes each axis individually by nudging the window size 1px and
+    /// checking whether the size actually changed. Restores the original
+    /// size immediately after each probe.
+    private func probeResizabilityPerAxis(_ window: AXUIElement) -> WindowResizability {
+        guard let currentValue = try? copyAXValueAttribute(window, attribute: kAXSizeAttribute) else {
+            return .none
+        }
+        var currentSize = CGSize.zero
+        guard AXValueGetValue(currentValue, .cgSize, &currentSize) else { return .none }
+        guard currentSize.width > 1, currentSize.height > 1 else { return .none }
+
+        let horizontalChanged = probeSingleAxis(window, currentSize: currentSize,
+                                                 probeSize: CGSize(width: currentSize.width + 1, height: currentSize.height),
+                                                 checkAxis: \.width)
+        let verticalChanged = probeSingleAxis(window, currentSize: currentSize,
+                                               probeSize: CGSize(width: currentSize.width, height: currentSize.height + 1),
+                                               checkAxis: \.height)
+
+        return WindowResizability(horizontal: horizontalChanged, vertical: verticalChanged)
+    }
+
+    private func probeSingleAxis(_ window: AXUIElement, currentSize: CGSize, probeSize: CGSize, checkAxis: KeyPath<CGSize, CGFloat>) -> Bool {
+        var probe = probeSize
+        guard let probeValue = AXValueCreate(.cgSize, &probe) else { return false }
+        let setResult = AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, probeValue)
+        let changed: Bool
+        if setResult == .success,
+           let afterValue = try? copyAXValueAttribute(window, attribute: kAXSizeAttribute) {
+            var afterSize = CGSize.zero
+            AXValueGetValue(afterValue, .cgSize, &afterSize)
+            changed = abs(afterSize[keyPath: checkAxis] - currentSize[keyPath: checkAxis]) > 0.5
+        } else {
+            changed = false
+        }
+        // Restore original size.
+        var restore = currentSize
+        if let rv = AXValueCreate(.cgSize, &restore) {
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, rv)
+        }
+        return changed
+    }
+
+    /// Moves and resizes the given window, returning `true` when the window's
+    /// actual post-move size differs from the requested size (i.e. the app
+    /// applied its own constraints).
+    @discardableResult
+    func setFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) throws -> Bool {
         // AX coordinates have their origin at the top-left of the primary
         // screen, so use the primary screen's maxY for the conversion from
         // AppKit's bottom-left coordinate system.
@@ -139,6 +233,25 @@ final class AccessibilityService {
         // Re-apply position then size to handle apps that need a second pass.
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
         AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+
+        // Give the app a moment to apply its own constraints before reading
+        // back the actual size.  A short run-loop spin is enough for most apps.
+        usleep(50_000) // 50 ms
+
+        // Read back the actual size to detect if the app constrained it.
+        let constrained: Bool
+        if let actualSize = try? copyAXValueAttribute(window, attribute: kAXSizeAttribute) {
+            var actualCGSize = CGSize.zero
+            if AXValueGetValue(actualSize, .cgSize, &actualCGSize) {
+                constrained = abs(actualCGSize.width - size.width) > 1
+                    || abs(actualCGSize.height - size.height) > 1
+            } else {
+                constrained = false
+            }
+        } else {
+            constrained = false
+        }
+        return constrained
     }
 
     /// Returns all on-screen standard windows (excluding Tiley) in z-order (front to back).

@@ -8,6 +8,7 @@
 "No active target window." = "No active target window.";
 "Canceled layout selection." = "Canceled layout selection.";
 "Moved %@ to %@." = "Moved %@ to %@.";
+"Moved %@ to %@ (size adjusted due to window constraints)." = "Moved %@ to %@ (size adjusted due to window constraints).";
 "Unknown" = "Unknown";
 "No standard focused window was found. frontmost=%@(%d) preferred=%d" = "No standard focused window was found. frontmost=%@(%d) preferred=%d";
 "Show Layout Grid" = "Show Layout Grid";
