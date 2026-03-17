@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Mejorado
+
+- Interfaz de edición de preajustes de diseño refinada: botón de eliminar movido junto al botón de confirmar, botones de edición/acción colocados en una columna dedicada para evitar superposición con los atajos
+- La selección de cuadrícula ahora es editable en modo de edición: arrastra sobre la cuadrícula para actualizar la posición del preajuste con vista previa en vivo y resaltado
+
 ## [1.2.3] - 2026-03-17
 
 ### Mejorado

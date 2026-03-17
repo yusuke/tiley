@@ -46,6 +46,7 @@ struct MainWindowView: View {
     private static let presetsPanelChromeHeight: CGFloat = 42
     private static let presetGridColumnWidth: CGFloat = 51
     private static let presetShortcutColumnWidth: CGFloat = 160
+    private static let presetActionColumnWidth: CGFloat = 60
     private static let defaultGridColumns = 6
     private static let defaultGridRows = 6
     private static let defaultGridGap: CGFloat = 0
@@ -310,11 +311,14 @@ struct MainWindowView: View {
                 rows: appState.rows,
                 columns: appState.columns,
                 gap: appState.gap,
+                highlightSelection: editingPresetHighlightSelection,
                 onSelectionChange: { selection in
-                    dismissPresetNameEditingIfNeeded()
-                    dismissShortcutEditingIfNeeded()
-                    hoveredPresetID = nil
-                    appState.selectedLayoutPresetID = nil
+                    if editingPresetID == nil {
+                        dismissPresetNameEditingIfNeeded()
+                        dismissShortcutEditingIfNeeded()
+                        hoveredPresetID = nil
+                        appState.selectedLayoutPresetID = nil
+                    }
                     activeLayoutSelection = selection
                     if let ctx = screenContext {
                         appState.updateLayoutPreview(selection, screenContext: ctx)
@@ -332,7 +336,14 @@ struct MainWindowView: View {
                 },
                 onSelectionCommit: { selection in
                     activeLayoutSelection = nil
-                    if let ctx = screenContext {
+                    if let editingID = editingPresetID {
+                        appState.updateLayoutPreset(editingID) { preset in
+                            preset.selection = selection
+                            preset.baseRows = appState.rows
+                            preset.baseColumns = appState.columns
+                        }
+                        appState.updateLayoutPreview(nil)
+                    } else if let ctx = screenContext {
                         appState.commitLayoutSelectionOnScreen(selection, visibleFrame: ctx.visibleFrame, screenFrame: ctx.screenFrame)
                     } else {
                         appState.commitLayoutSelection(selection)
@@ -400,6 +411,8 @@ struct MainWindowView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 Text("Shortcut")
                     .frame(width: Self.presetShortcutColumnWidth, alignment: .center)
+                Color.clear
+                    .frame(width: Self.presetActionColumnWidth)
             }
             .padding(.horizontal, 10)
             .font(.system(size: 11, weight: .semibold))
@@ -641,30 +654,11 @@ struct MainWindowView: View {
     private func layoutPresetRow(_ preset: LayoutPreset) -> some View {
         let isInEditMode = editingPresetID == preset.id
         HStack(spacing: 12) {
-            ZStack(alignment: .center) {
-                PresetGridPreviewView(
-                    rows: appState.rows,
-                    columns: appState.columns,
-                    selection: preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
-                )
-                .frame(width: Self.presetGridColumnWidth, height: 26, alignment: .center)
-
-                if isInEditMode {
-                    DeleteLayoutButton(colorScheme: colorScheme) {
-                        let alert = NSAlert()
-                        alert.messageText = NSLocalizedString("Delete Layout", comment: "Alert title for deleting a layout")
-                        alert.informativeText = String(format: NSLocalizedString("Are you sure you want to delete the layout \"%@\"?", comment: "Alert message for deleting a layout with name"), preset.name)
-                        alert.alertStyle = .warning
-                        alert.addButton(withTitle: NSLocalizedString("Delete", comment: "Delete button title"))
-                        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel button title"))
-                        if alert.runModal() == .alertFirstButtonReturn {
-                            dismissPresetNameEditingIfNeeded(except: preset.id)
-                            deletePreset(id: preset.id)
-                            editingPresetID = nil
-                        }
-                    }
-                }
-            }
+            PresetGridPreviewView(
+                rows: appState.rows,
+                columns: appState.columns,
+                selection: preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+            )
             .frame(width: Self.presetGridColumnWidth, height: 26, alignment: .center)
 
             presetNameCell(for: preset)
@@ -672,24 +666,8 @@ struct MainWindowView: View {
             presetShortcutsCell(for: preset)
                 .frame(width: Self.presetShortcutColumnWidth, alignment: .center)
 
-            if isInEditMode {
-                Button {
-                    finishEditingPreset(preset.id)
-                } label: {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(.white)
-                        .padding(6)
-                        .background(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(Color.accentColor)
-                                .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
-                        )
-                }
-                .buttonStyle(.plain)
-                .transition(.opacity)
-                .instantTooltip(NSLocalizedString("Done Editing", comment: "Tooltip for done editing button"))
-            }
+            presetActionCell(for: preset, isInEditMode: isInEditMode)
+                .frame(width: Self.presetActionColumnWidth, alignment: .leading)
         }
         .contentShape(Rectangle())
         .onTapGesture {
@@ -700,31 +678,6 @@ struct MainWindowView: View {
                 return
             }
             handlePresetTap(preset)
-        }
-        .overlay(alignment: .trailing) {
-            if editingPresetID == nil, hoveredPresetID == preset.id, draggingPresetID == nil {
-                Button {
-                    beginEditingPreset(preset)
-                } label: {
-                    Image(systemName: "pencil")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(.primary)
-                        .padding(6)
-                        .background(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(ThemeColors.editButtonBackground(for: colorScheme))
-                                .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 1)
-                        )
-                }
-                .buttonStyle(.plain)
-                .padding(.trailing, 4)
-                .transition(.opacity)
-                .instantTooltip(NSLocalizedString("Edit Name & Shortcuts", comment: "Tooltip for edit layout button"))
-            }
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
@@ -780,6 +733,68 @@ struct MainWindowView: View {
                 .lineLimit(1)
                 .foregroundStyle(.primary)
                 .frame(maxWidth: .infinity, alignment: .center)
+        }
+    }
+
+    @ViewBuilder
+    private func presetActionCell(for preset: LayoutPreset, isInEditMode: Bool) -> some View {
+        HStack(spacing: 4) {
+            if isInEditMode {
+                Button {
+                    finishEditingPreset(preset.id)
+                } label: {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 11, weight: .bold))
+                        .frame(width: 14, height: 14)
+                        .foregroundStyle(.white)
+                        .padding(6)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(Color.accentColor)
+                                .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
+                        )
+                }
+                .buttonStyle(.plain)
+                .instantTooltip(NSLocalizedString("Done Editing", comment: "Tooltip for done editing button"))
+
+                DeleteLayoutButton(colorScheme: colorScheme) {
+                    let alert = NSAlert()
+                    alert.messageText = NSLocalizedString("Delete Layout", comment: "Alert title for deleting a layout")
+                    alert.informativeText = String(format: NSLocalizedString("Are you sure you want to delete the layout \"%@\"?", comment: "Alert message for deleting a layout with name"), preset.name)
+                    alert.alertStyle = .warning
+                    alert.addButton(withTitle: NSLocalizedString("Delete", comment: "Delete button title"))
+                    alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel button title"))
+                    if alert.runModal() == .alertFirstButtonReturn {
+                        dismissPresetNameEditingIfNeeded(except: preset.id)
+                        deletePreset(id: preset.id)
+                        editingPresetID = nil
+                    }
+                }
+            } else if editingPresetID == nil, hoveredPresetID == preset.id, draggingPresetID == nil {
+                Button {
+                    beginEditingPreset(preset)
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 11, weight: .bold))
+                        .frame(width: 14, height: 14)
+                        .foregroundStyle(.primary)
+                        .padding(6)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(ThemeColors.editButtonBackground(for: colorScheme))
+                                .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(ThemeColors.presetCellBorder(for: colorScheme), lineWidth: 1)
+                        )
+                }
+                .buttonStyle(.plain)
+                .transition(.opacity)
+                .instantTooltip(NSLocalizedString("Edit Name & Shortcuts", comment: "Tooltip for edit layout button"))
+
+                Spacer(minLength: 0)
+            }
         }
     }
 
@@ -1044,6 +1059,25 @@ struct MainWindowView: View {
     private var isMouseOnThisScreen: Bool {
         guard let ctx = screenContext else { return screenRole.isTarget }
         return ctx.screenFrame.contains(NSEvent.mouseLocation)
+    }
+
+    private var editingPresetHighlightSelection: GridSelection? {
+        // Editing preset takes priority
+        if let editingID = editingPresetID,
+           let preset = appState.displayedLayoutPresets.first(where: { $0.id == editingID }) {
+            return preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+        }
+        // Hovered preset
+        if let hoveredID = hoveredPresetID,
+           let preset = appState.displayedLayoutPresets.first(where: { $0.id == hoveredID }) {
+            return preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+        }
+        // Keyboard-selected preset
+        if let selectedID = appState.selectedLayoutPresetID, isMouseOnThisScreen,
+           let preset = appState.displayedLayoutPresets.first(where: { $0.id == selectedID }) {
+            return preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+        }
+        return nil
     }
 
     private func updatePresetSelectionPreview(for id: UUID?) {
@@ -1483,6 +1517,7 @@ private struct DeleteLayoutButton: View {
         Button(action: action) {
             Image(systemName: "trash")
                 .font(.system(size: 11, weight: .bold))
+                .frame(width: 14, height: 14)
                 .foregroundStyle(isHovered ? .red : .primary)
                 .padding(6)
                 .background(

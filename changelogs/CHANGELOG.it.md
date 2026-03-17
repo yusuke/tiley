@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Migliorato
+
+- Interfaccia di modifica dei preset di layout perfezionata: pulsante di eliminazione spostato accanto al pulsante di conferma, pulsanti di modifica/azione posizionati in una colonna dedicata per evitare sovrapposizioni con le scorciatoie
+- La selezione della griglia è ora modificabile in modalità di modifica: trascina sulla griglia per aggiornare la posizione del preset con anteprima in tempo reale ed evidenziazione
+
 ## [1.2.3] - 2026-03-17
 
 ### Migliorato

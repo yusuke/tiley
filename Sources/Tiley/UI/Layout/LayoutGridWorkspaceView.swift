@@ -4,6 +4,7 @@ struct LayoutGridWorkspaceView: View {
     let rows: Int
     let columns: Int
     let gap: CGFloat
+    var highlightSelection: GridSelection?
     let onSelectionChange: (GridSelection?) -> Void
     let onHoverChange: ((GridSelection?) -> Void)?
     let onSelectionCommit: (GridSelection) -> Void
@@ -139,6 +140,11 @@ struct LayoutGridWorkspaceView: View {
         return hover.row == row && hover.column == column
     }
 
+    private func isHighlighted(row: Int, column: Int) -> Bool {
+        guard let hl = highlightSelection?.normalized, activeSelection == nil else { return false }
+        return hl.startRow...hl.endRow ~= row && hl.startColumn...hl.endColumn ~= column
+    }
+
     private func fillColor(forRow row: Int, column: Int) -> Color {
         if let selection = activeSelection?.normalized,
            selection.startRow...selection.endRow ~= row,
@@ -147,6 +153,9 @@ struct LayoutGridWorkspaceView: View {
         }
         if isHovered(row: row, column: column) {
             return ThemeColors.gridCellHoverFill(for: colorScheme)
+        }
+        if isHighlighted(row: row, column: column) {
+            return ThemeColors.gridCellHighlightFill(for: colorScheme)
         }
         return ThemeColors.gridCellFill(for: colorScheme)
     }
@@ -159,6 +168,9 @@ struct LayoutGridWorkspaceView: View {
         }
         if isHovered(row: row, column: column) {
             return ThemeColors.gridCellHoverBorder(for: colorScheme)
+        }
+        if isHighlighted(row: row, column: column) {
+            return ThemeColors.gridCellHighlightBorder(for: colorScheme)
         }
         return ThemeColors.gridCellBorder(for: colorScheme)
     }

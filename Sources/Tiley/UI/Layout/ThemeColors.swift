@@ -63,6 +63,19 @@ enum ThemeColors {
         }
     }
 
+    static func gridCellHighlightFill(for colorScheme: ColorScheme) -> Color {
+        gridCellSelectedFill(for: colorScheme).opacity(0.25)
+    }
+
+    static func gridCellHighlightBorder(for colorScheme: ColorScheme) -> Color {
+        switch colorScheme {
+        case .dark:
+            return Color.white.opacity(0.25)
+        default:
+            return Color.white.opacity(0.4)
+        }
+    }
+
     // MARK: - Grid Preview (Settings)
 
     static func previewGradientStart(for colorScheme: ColorScheme) -> Color {

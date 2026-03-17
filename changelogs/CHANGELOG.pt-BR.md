@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Melhorado
+
+- Interface de edição de predefinições de layout refinada: botão de exclusão movido para ao lado do botão de confirmação, botões de edição/ação colocados em uma coluna dedicada para evitar sobreposição com os atalhos
+- A seleção da grade agora é editável no modo de edição: arraste sobre a grade para atualizar a posição da predefinição com visualização ao vivo e destaque
+
 ## [1.2.3] - 2026-03-17
 
 ### Melhorado

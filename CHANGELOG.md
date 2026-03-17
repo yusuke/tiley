@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Improved
+
+- Refined layout preset editing UI: delete button moved next to the confirm button, edit/action buttons placed in a dedicated column to avoid overlapping shortcuts
+- Layout grid selection is now editable in edit mode: drag on the grid to update the preset's position with live preview and highlight
+
 ## [1.2.3] - 2026-03-17
 
 ### Improved
