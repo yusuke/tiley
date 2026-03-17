@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-03-17
+
 ### Amélioré
 
 - Interface d'édition des préréglages de disposition affinée : bouton de suppression déplacé à côté du bouton de confirmation, boutons d'édition/action placés dans une colonne dédiée pour éviter le chevauchement avec les raccourcis

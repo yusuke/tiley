@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-03-17
+
 ### Melhorado
 
 - Interface de edição de predefinições de layout refinada: botão de exclusão movido para ao lado do botão de confirmação, botões de edição/ação colocados em uma coluna dedicada para evitar sobreposição com os atalhos

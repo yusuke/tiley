@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-03-17
+
 ### Improved
 
 - Refined layout preset editing UI: delete button moved next to the confirm button, edit/action buttons placed in a dedicated column to avoid overlapping shortcuts
@@ -149,7 +151,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.3...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.4...HEAD
+[1.2.4]: https://github.com/yusuke/tiley/releases/tag/v1.2.4
 [1.2.3]: https://github.com/yusuke/tiley/releases/tag/v1.2.3
 [1.2.2]: https://github.com/yusuke/tiley/releases/tag/v1.2.2
 [1.2.1]: https://github.com/yusuke/tiley/releases/tag/v1.2.1

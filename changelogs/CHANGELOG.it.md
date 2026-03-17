@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-03-17
+
 ### Migliorato
 
 - Interfaccia di modifica dei preset di layout perfezionata: pulsante di eliminazione spostato accanto al pulsante di conferma, pulsanti di modifica/azione posizionati in una colonna dedicata per evitare sovrapposizioni con le scorciatoie
