@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.6] - 2026-03-18
+
 ### Corregido
 
 - Al redimensionar una ventana en segundo plano de la misma aplicación mediante el ciclo con Tab, la ventana ahora se trae al frente si quedaría oculta detrás de otras ventanas de esa aplicación

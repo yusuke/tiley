@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.6] - 2026-03-18
+
 ### Fixed
 
 - When resizing a background window of the same application via Tab cycling, the window is now brought to the front if it would be hidden behind other windows of that application
@@ -162,7 +164,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.5...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.6...HEAD
+[1.2.6]: https://github.com/yusuke/tiley/releases/tag/v1.2.6
 [1.2.5]: https://github.com/yusuke/tiley/releases/tag/v1.2.5
 [1.2.4]: https://github.com/yusuke/tiley/releases/tag/v1.2.4
 [1.2.3]: https://github.com/yusuke/tiley/releases/tag/v1.2.3

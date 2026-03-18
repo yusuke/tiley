@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.6] - 2026-03-18
+
 ### Corrigé
 
 - Lors du redimensionnement d'une fenêtre d'arrière-plan de la même application via le cycle Tab, la fenêtre est désormais mise au premier plan si elle serait masquée par d'autres fenêtres de cette application

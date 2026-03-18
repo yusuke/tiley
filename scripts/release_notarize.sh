@@ -160,6 +160,7 @@ DMG_RW="build/Tiley-rw.dmg"
 rm -rf "$DMG_STAGING" "$DMG_RW"
 mkdir -p "$DMG_STAGING"
 cp -R "$EXPORTED_APP_PATH" "$DMG_STAGING/"
+ln -s /Applications "$DMG_STAGING/Applications"
 
 # Create a read-write DMG first so we can customise the Finder view
 rm -f "$DMG_PATH"
@@ -184,12 +185,13 @@ tell application "Finder"
     set current view of container window to icon view
     set toolbar visible of container window to false
     set statusbar visible of container window to false
-    set the bounds of container window to {100, 100, 480, 480}
+    set the bounds of container window to {100, 100, 640, 640}
     set viewOptions to the icon view options of container window
     set arrangement of viewOptions to not arranged
     set icon size of viewOptions to 128
     set background color of viewOptions to {65535, 65535, 65535}
-    set position of item "Tiley.app" of container window to {190, 150}
+    set position of item "Tiley.app" of container window to {130, 190}
+    set position of item "Applications" of container window to {410, 190}
     close
     open
     update without registering applications

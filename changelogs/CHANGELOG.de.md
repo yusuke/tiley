@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.6] - 2026-03-18
+
 ### Behoben
 
 - Beim Ändern der Größe eines Hintergrundfensters derselben Anwendung über Tab-Wechsel wird das Fenster jetzt in den Vordergrund gebracht, wenn es hinter anderen Fenstern dieser Anwendung verdeckt wäre
