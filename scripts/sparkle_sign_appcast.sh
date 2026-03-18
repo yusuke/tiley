@@ -1,15 +1,16 @@
 #!/bin/zsh
 
-# Signs the notarized DMG with Sparkle EdDSA and updates appcast.xml.
+# Signs the notarized archive (ZIP or DMG) with Sparkle EdDSA and updates appcast.xml.
 # Run this after release_notarize.sh completes successfully.
 #
 # Usage:
-#   scripts/sparkle_sign_appcast.sh
+#   scripts/sparkle_sign_appcast.sh          # uses ZIP (default)
+#   scripts/sparkle_sign_appcast.sh --dmg    # uses DMG
 #
 # Environment variables (optional):
 #   DOWNLOAD_URL_PREFIX  - Base URL for update downloads
 #                          (default: https://github.com/yusuke/tiley/releases/download)
-#   APPCAST_DIR          - Directory where appcast.xml and DMGs are managed
+#   APPCAST_DIR          - Directory where appcast.xml and archives are managed
 #                          (default: build/sparkle)
 
 set -euo pipefail
@@ -18,6 +19,13 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT_ROOT"
 
+FORMAT=zip
+for arg in "$@"; do
+  case "$arg" in
+    --dmg) FORMAT=dmg ;;
+  esac
+done
+
 # Sparkle CLI tools
 SPARKLE_BIN="$PROJECT_ROOT/.build/artifacts/sparkle/Sparkle/bin"
 SIGN_UPDATE="$SPARKLE_BIN/sign_update"
@@ -25,9 +33,19 @@ GENERATE_APPCAST="$SPARKLE_BIN/generate_appcast"
 
 # Paths from release_notarize.sh output
 DMG_PATH="${DMG_PATH:-build/Tiley.dmg}"
+ZIP_PATH="${ZIP_PATH:-build/Tiley.zip}"
 EXPORT_PATH="${EXPORT_PATH:-build/export}"
 APP_NAME="${APP_NAME:-Tiley.app}"
 EXPORTED_APP_PATH="$EXPORT_PATH/$APP_NAME"
+
+# Determine which archive to use
+if [[ "$FORMAT" == "dmg" ]]; then
+  ARCHIVE_PATH="$DMG_PATH"
+  ARCHIVE_EXT="dmg"
+else
+  ARCHIVE_PATH="$ZIP_PATH"
+  ARCHIVE_EXT="zip"
+fi
 
 # Sparkle appcast settings
 DOWNLOAD_URL_PREFIX="${DOWNLOAD_URL_PREFIX:-https://github.com/yusuke/tiley/releases/download}"
@@ -45,9 +63,9 @@ if [[ ! -x "$GENERATE_APPCAST" ]]; then
   exit 1
 fi
 
-if [[ ! -f "$DMG_PATH" ]]; then
-  echo "Error: Notarized DMG not found at $DMG_PATH"
-  echo "Run scripts/release_notarize.sh first."
+if [[ ! -f "$ARCHIVE_PATH" ]]; then
+  echo "Error: Notarized archive not found at $ARCHIVE_PATH"
+  echo "Run scripts/release_notarize.sh first$([ "$FORMAT" = "dmg" ] && echo " with --dmg")."
   exit 1
 fi
 
@@ -55,6 +73,8 @@ if [[ ! -d "$EXPORTED_APP_PATH" ]]; then
   echo "Error: Exported app not found at $EXPORTED_APP_PATH"
   exit 1
 fi
+
+echo "Distribution format: $FORMAT"
 
 # Extract version from the app bundle
 APP_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$EXPORTED_APP_PATH/Contents/Info.plist")
@@ -110,9 +130,9 @@ for CHANGELOG in "${CHANGELOG_FILES[@]}"; do
   fi
 done
 
-# Sign the DMG with Sparkle EdDSA (key is read from Keychain automatically)
-echo "Signing DMG with Sparkle EdDSA"
-SIGNATURE=$("$SIGN_UPDATE" "$DMG_PATH" -p)
+# Sign the archive with Sparkle EdDSA (key is read from Keychain automatically)
+echo "Signing $ARCHIVE_EXT with Sparkle EdDSA"
+SIGNATURE=$("$SIGN_UPDATE" "$ARCHIVE_PATH" -p)
 echo "EdDSA signature: $SIGNATURE"
 
 # Prepare appcast directory
@@ -124,13 +144,13 @@ if [[ -f "$PROJECT_ROOT/docs/appcast.xml" && ! -f "$APPCAST_DIR/appcast.xml" ]];
   cp "$PROJECT_ROOT/docs/appcast.xml" "$APPCAST_DIR/"
 fi
 
-# Copy the notarized DMG with version-tagged filename
-VERSIONED_DMG="Tiley-${APP_VERSION}.dmg"
-cp "$DMG_PATH" "$APPCAST_DIR/$VERSIONED_DMG"
-echo "Copied DMG to $APPCAST_DIR/$VERSIONED_DMG"
+# Copy the notarized archive with version-tagged filename
+VERSIONED_ARCHIVE="Tiley-${APP_VERSION}.${ARCHIVE_EXT}"
+cp "$ARCHIVE_PATH" "$APPCAST_DIR/$VERSIONED_ARCHIVE"
+echo "Copied $ARCHIVE_EXT to $APPCAST_DIR/$VERSIONED_ARCHIVE"
 
 # Generate/update appcast.xml
-DOWNLOAD_URL="$DOWNLOAD_URL_PREFIX/v$APP_VERSION/$VERSIONED_DMG"
+DOWNLOAD_URL="$DOWNLOAD_URL_PREFIX/v$APP_VERSION/$VERSIONED_ARCHIVE"
 echo "Download URL: $DOWNLOAD_URL"
 
 echo "Generating appcast.xml"
@@ -216,9 +236,9 @@ echo "=== Sparkle signing complete ==="
 echo "  Version:     $APP_VERSION (build $BUILD_NUMBER)"
 echo "  Signature:   $SIGNATURE"
 echo "  Appcast:     docs/appcast.xml"
-echo "  DMG:         $APPCAST_DIR/$VERSIONED_DMG"
+echo "  Archive:     $APPCAST_DIR/$VERSIONED_ARCHIVE"
 echo ""
 echo "Next steps:"
 echo "  1. Commit docs/appcast.xml"
 echo "  2. Create GitHub Release tagged v$APP_VERSION"
-echo "  3. Upload $APPCAST_DIR/$VERSIONED_DMG to the release"
+echo "  3. Upload $APPCAST_DIR/$VERSIONED_ARCHIVE to the release"

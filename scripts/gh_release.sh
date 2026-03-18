@@ -1,14 +1,15 @@
 #!/bin/zsh
 
-# Creates a GitHub Release, uploads the notarized DMG, and pushes the updated appcast.xml.
+# Creates a GitHub Release, uploads the notarized archive (ZIP or DMG), and pushes the updated appcast.xml.
 # Run this after sparkle_sign_appcast.sh completes successfully.
 #
 # Prerequisites:
 #   - gh CLI installed and authenticated (https://cli.github.com/)
-#   - sparkle_sign_appcast.sh has been run (builds build/sparkle/Tiley-X.Y.Z.dmg and docs/appcast.xml)
+#   - sparkle_sign_appcast.sh has been run (builds build/sparkle/Tiley-X.Y.Z.{zip,dmg} and docs/appcast.xml)
 #
 # Usage:
-#   scripts/gh_release.sh
+#   scripts/gh_release.sh            # uploads ZIP (default)
+#   scripts/gh_release.sh --dmg      # uploads DMG
 #
 # Environment variables (optional):
 #   REPO            - GitHub repository (default: yusuke/tiley)
@@ -22,6 +23,13 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT_ROOT"
 
+FORMAT=zip
+for arg in "$@"; do
+  case "$arg" in
+    --dmg) FORMAT=dmg ;;
+  esac
+done
+
 # Settings
 REPO="${REPO:-yusuke/tiley}"
 EXPORT_PATH="${EXPORT_PATH:-build/export}"
@@ -32,6 +40,13 @@ PRERELEASE="${PRERELEASE:-false}"
 RELEASE_NOTES="${RELEASE_NOTES:-}"
 
 EXPORTED_APP_PATH="$EXPORT_PATH/$APP_NAME"
+
+# Determine archive extension
+if [[ "$FORMAT" == "dmg" ]]; then
+  ARCHIVE_EXT="dmg"
+else
+  ARCHIVE_EXT="zip"
+fi
 
 # Verify prerequisites
 if ! command -v gh &>/dev/null; then
@@ -49,13 +64,13 @@ fi
 APP_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$EXPORTED_APP_PATH/Contents/Info.plist")
 BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$EXPORTED_APP_PATH/Contents/Info.plist")
 TAG="v$APP_VERSION"
-echo "Releasing $TAG (build $BUILD_NUMBER)"
+echo "Releasing $TAG (build $BUILD_NUMBER) — format: $FORMAT"
 
-# Verify the versioned DMG exists
-VERSIONED_DMG="$APPCAST_DIR/Tiley-${APP_VERSION}.dmg"
-if [[ ! -f "$VERSIONED_DMG" ]]; then
-  echo "Error: Versioned DMG not found at $VERSIONED_DMG"
-  echo "Run scripts/sparkle_sign_appcast.sh first."
+# Verify the versioned archive exists
+VERSIONED_ARCHIVE="$APPCAST_DIR/Tiley-${APP_VERSION}.${ARCHIVE_EXT}"
+if [[ ! -f "$VERSIONED_ARCHIVE" ]]; then
+  echo "Error: Versioned archive not found at $VERSIONED_ARCHIVE"
+  echo "Run scripts/sparkle_sign_appcast.sh first$([ "$FORMAT" = "dmg" ] && echo " with --dmg")."
   exit 1
 fi
 
@@ -136,14 +151,15 @@ else
   GH_FLAGS+=("--notes" "$NOTES")
 fi
 
-# Create GitHub Release and upload DMG
+# Create GitHub Release and upload archive
+ASSET_NAME="Tiley-${APP_VERSION}.${ARCHIVE_EXT}"
 echo "Creating GitHub Release $TAG"
-gh release create "$TAG" "${GH_FLAGS[@]}" "$VERSIONED_DMG#Tiley-${APP_VERSION}.dmg"
+gh release create "$TAG" "${GH_FLAGS[@]}" "$VERSIONED_ARCHIVE#$ASSET_NAME"
 
 RELEASE_URL="https://github.com/$REPO/releases/tag/$TAG"
 echo ""
 echo "=== GitHub Release published ==="
 echo "  Tag:       $TAG"
 echo "  Release:   $RELEASE_URL"
-echo "  Asset:     Tiley-${APP_VERSION}.dmg"
+echo "  Asset:     $ASSET_NAME"
 echo "  Appcast:   docs/appcast.xml (committed & pushed)"

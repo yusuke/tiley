@@ -7,9 +7,11 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT_ROOT"
 
 SKIP_NOTARIZE=false
+FORMAT=zip  # default to zip; use --dmg to create a DMG instead
 for arg in "$@"; do
   case "$arg" in
     --skip-notarize) SKIP_NOTARIZE=true ;;
+    --dmg) FORMAT=dmg ;;
   esac
 done
 
@@ -24,6 +26,7 @@ ARCHIVE_PATH="${ARCHIVE_PATH:-build/Tiley.xcarchive}"
 EXPORT_PATH="${EXPORT_PATH:-build/export}"
 APP_NAME="${APP_NAME:-Tiley.app}"
 DMG_PATH="${DMG_PATH:-build/Tiley.dmg}"
+ZIP_PATH="${ZIP_PATH:-build/Tiley.zip}"
 KEYCHAIN_PROFILE="${KEYCHAIN_PROFILE:-}"
 API_KEY_PATH="${API_KEY_PATH:-}"
 API_KEY_ID="${API_KEY_ID:-}"
@@ -36,7 +39,7 @@ fi
 if [[ "$SKIP_NOTARIZE" == false ]]; then
   if [[ -z "${KEYCHAIN_PROFILE}" && ( -z "${API_KEY_PATH}" || -z "${API_KEY_ID}" || -z "${API_ISSUER_ID}" ) ]]; then
     echo "Either KEYCHAIN_PROFILE or all of API_KEY_PATH, API_KEY_ID, API_ISSUER_ID is required."
-    echo "(Use --skip-notarize to skip notarization and only build the DMG.)"
+    echo "(Use --skip-notarize to skip notarization and only build the archive.)"
     [[ -z "${API_KEY_PATH}" ]] && echo "Missing: API_KEY_PATH"
     [[ -z "${API_KEY_ID}" ]] && echo "Missing: API_KEY_ID"
     [[ -z "${API_ISSUER_ID}" ]] && echo "Missing: API_ISSUER_ID"
@@ -53,6 +56,8 @@ if [[ "$SKIP_NOTARIZE" == false ]]; then
 else
   echo "Notarization will be skipped (--skip-notarize)"
 fi
+
+echo "Distribution format: $FORMAT"
 
 # Check if this version+build already exists in appcast.xml (before expensive archive/notarize)
 PBXPROJ="$PROJECT_ROOT/Tiley.xcodeproj/project.pbxproj"
@@ -71,7 +76,7 @@ if [[ -f "$PBXPROJ" && -f "$EXISTING_APPCAST" ]]; then
 fi
 
 echo "Cleaning previous build artifacts"
-rm -rf "$ARCHIVE_PATH" "$EXPORT_PATH" "$DMG_PATH"
+rm -rf "$ARCHIVE_PATH" "$EXPORT_PATH" "$DMG_PATH" "$ZIP_PATH"
 mkdir -p build
 
 echo "Archiving app"
@@ -169,36 +174,37 @@ fi
 echo "Stripping extended attributes"
 xattr -cr "$EXPORTED_APP_PATH"
 
-# Create DMG with the app and an Applications symlink (custom Finder layout)
-echo "Creating DMG"
-DMG_STAGING="build/dmg-staging"
-DMG_RW="build/Tiley-rw.dmg"
-rm -rf "$DMG_STAGING" "$DMG_RW"
-mkdir -p "$DMG_STAGING/.background"
-cp -R "$EXPORTED_APP_PATH" "$DMG_STAGING/"
-ln -s /Applications "$DMG_STAGING/Applications"
-cp "$SCRIPT_DIR/dmg_background.png" "$DMG_STAGING/.background/background.png"
+if [[ "$FORMAT" == "dmg" ]]; then
+  # Create DMG with the app and an Applications symlink (custom Finder layout)
+  echo "Creating DMG"
+  DMG_STAGING="build/dmg-staging"
+  DMG_RW="build/Tiley-rw.dmg"
+  rm -rf "$DMG_STAGING" "$DMG_RW"
+  mkdir -p "$DMG_STAGING/.background"
+  cp -R "$EXPORTED_APP_PATH" "$DMG_STAGING/"
+  ln -s /Applications "$DMG_STAGING/Applications"
+  cp "$SCRIPT_DIR/dmg_background.png" "$DMG_STAGING/.background/background.png"
 
-# Create a read-write DMG first so we can customise the Finder view
-rm -f "$DMG_PATH"
-hdiutil create \
-  -volname "Tiley" \
-  -srcfolder "$DMG_STAGING" \
-  -ov \
-  -format UDRW \
-  "$DMG_RW"
-rm -rf "$DMG_STAGING"
+  # Create a read-write DMG first so we can customise the Finder view
+  rm -f "$DMG_PATH"
+  hdiutil create \
+    -volname "Tiley" \
+    -srcfolder "$DMG_STAGING" \
+    -ov \
+    -format UDRW \
+    "$DMG_RW"
+  rm -rf "$DMG_STAGING"
 
-# Mount the read-write DMG
-MOUNT_DIR=$(hdiutil attach "$DMG_RW" -readwrite -noverify -noautoopen | grep '/Volumes/' | tail -1 | awk -F'\t' '{print $NF}')
-echo "Mounted DMG at: $MOUNT_DIR"
+  # Mount the read-write DMG
+  MOUNT_DIR=$(hdiutil attach "$DMG_RW" -readwrite -noverify -noautoopen | grep '/Volumes/' | tail -1 | awk -F'\t' '{print $NF}')
+  echo "Mounted DMG at: $MOUNT_DIR"
 
-# Configure Finder window appearance via AppleScript
-echo "Configuring DMG Finder layout"
-BG_HFS_PATH=$(osascript -e "POSIX file \"$MOUNT_DIR/.background/background.png\" as text")
-echo "Background picture HFS path: $BG_HFS_PATH"
+  # Configure Finder window appearance via AppleScript
+  echo "Configuring DMG Finder layout"
+  BG_HFS_PATH=$(osascript -e "POSIX file \"$MOUNT_DIR/.background/background.png\" as text")
+  echo "Background picture HFS path: $BG_HFS_PATH"
 
-osascript <<APPLESCRIPT
+  osascript <<APPLESCRIPT
 set bckPict to "$BG_HFS_PATH"
 set volPath to POSIX file "$MOUNT_DIR" as text
 
@@ -222,15 +228,23 @@ tell application "Finder"
 end tell
 APPLESCRIPT
 
-# Make sure .DS_Store is flushed to disk
-sync
+  # Make sure .DS_Store is flushed to disk
+  sync
 
-# Detach the DMG
-hdiutil detach "$MOUNT_DIR" -quiet
+  # Detach the DMG
+  hdiutil detach "$MOUNT_DIR" -quiet
 
-# Convert to compressed read-only format
-hdiutil convert "$DMG_RW" -format UDZO -o "$DMG_PATH"
-rm -f "$DMG_RW"
+  # Convert to compressed read-only format
+  hdiutil convert "$DMG_RW" -format UDZO -o "$DMG_PATH"
+  rm -f "$DMG_RW"
 
-echo "Release artifact ready at $EXPORTED_APP_PATH"
-echo "DMG ready at $DMG_PATH"
+  echo "Release artifact ready at $EXPORTED_APP_PATH"
+  echo "DMG ready at $DMG_PATH"
+else
+  # Create ZIP archive
+  echo "Creating ZIP"
+  ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$ZIP_PATH"
+
+  echo "Release artifact ready at $EXPORTED_APP_PATH"
+  echo "ZIP ready at $ZIP_PATH"
+fi
