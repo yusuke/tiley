@@ -4,6 +4,13 @@
 
 ### Mejorado
 
+- El menú desplegable de selección de ventanas ahora está agrupado por aplicación, ordenado por la más recientemente en primer plano; las ventanas dentro de cada grupo se listan en orden Z
+- Se filtraron las ventanas no estándar (paletas, barras de herramientas, etc.) de la lista de ventanas para mostrar solo ventanas de documento redimensionables
+
+## [1.2.7] - 2026-03-18
+
+### Mejorado
+
 - La ventana principal se cierra automáticamente cuando Sparkle comienza a descargar una actualización
 
 ### Corregido

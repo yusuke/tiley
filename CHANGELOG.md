@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Improved
 
+- Window target dropdown menu is now grouped by application, ordered by most recently frontmost; windows within each group are listed in z-order
+- Filtered out non-standard windows (palettes, toolbars, etc.) from the window target list so only resizable document windows are shown
+
+## [1.2.7] - 2026-03-18
+
+### Improved
+
 - Automatically close the main window when Sparkle begins downloading an update
 
 ### Fixed
@@ -172,7 +179,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.6...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.7...HEAD
+[1.2.7]: https://github.com/yusuke/tiley/releases/tag/v1.2.7
 [1.2.6]: https://github.com/yusuke/tiley/releases/tag/v1.2.6
 [1.2.5]: https://github.com/yusuke/tiley/releases/tag/v1.2.5
 [1.2.4]: https://github.com/yusuke/tiley/releases/tag/v1.2.4

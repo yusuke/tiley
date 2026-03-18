@@ -4,6 +4,13 @@
 
 ### Migliorato
 
+- Il menu a tendina per la selezione delle finestre è ora raggruppato per applicazione, ordinato in base all'ultimo utilizzo in primo piano; le finestre all'interno di ogni gruppo sono elencate in ordine Z
+- Le finestre non standard (palette, barre degli strumenti, ecc.) sono state filtrate dall'elenco delle finestre in modo da mostrare solo le finestre documento ridimensionabili
+
+## [1.2.7] - 2026-03-18
+
+### Migliorato
+
 - La finestra principale viene chiusa automaticamente quando Sparkle inizia a scaricare un aggiornamento
 
 ### Corretto

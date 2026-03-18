@@ -4,6 +4,13 @@
 
 ### Melhorado
 
+- O menu suspenso de seleção de janelas agora está agrupado por aplicativo, ordenado pelo mais recentemente em primeiro plano; as janelas dentro de cada grupo são listadas em ordem Z
+- Janelas não padrão (paletas, barras de ferramentas, etc.) foram filtradas da lista de janelas para exibir apenas janelas de documento redimensionáveis
+
+## [1.2.7] - 2026-03-18
+
+### Melhorado
+
 - A janela principal é fechada automaticamente quando o Sparkle começa a baixar uma atualização
 
 ### Corrigido

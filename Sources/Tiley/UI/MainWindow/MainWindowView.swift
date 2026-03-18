@@ -1756,32 +1756,86 @@ private struct WindowTargetDropdownButton<Label: View>: NSViewRepresentable {
                 item.isEnabled = false
                 menu.addItem(item)
             } else {
+                // Group windows by application (PID), preserving z-order within each group
+                // and ordering groups by the z-index of their frontmost window.
+                // Each group: (pid, appName, [(originalIndex, target)])
+                var groups: [(pid: pid_t, appName: String, windows: [(index: Int, target: WindowTarget)])] = []
+                var pidToGroupIndex: [pid_t: Int] = [:]
+
                 for (index, target) in targets.enumerated() {
-                    let title: String
-                    if let windowTitle = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines),
-                       !windowTitle.isEmpty {
-                        title = "\(target.appName) — \(windowTitle)"
+                    if let groupIndex = pidToGroupIndex[target.processIdentifier] {
+                        groups[groupIndex].windows.append((index, target))
                     } else {
-                        title = target.appName
+                        pidToGroupIndex[target.processIdentifier] = groups.count
+                        groups.append((target.processIdentifier, target.appName, [(index, target)]))
                     }
-                    let item = NSMenuItem(
-                        title: title,
-                        action: #selector(menuItemSelected(_:)),
-                        keyEquivalent: ""
-                    )
-                    item.target = self
-                    item.tag = index
-                    if let icon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon {
+                }
+
+                // Resolve app icon once per group
+                var appIcons: [pid_t: NSImage] = [:]
+                for group in groups {
+                    if let icon = NSRunningApplication(processIdentifier: group.pid)?.icon {
                         let resizedIcon = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { rect in
                             icon.draw(in: rect)
                             return true
                         }
-                        item.image = resizedIcon
+                        appIcons[group.pid] = resizedIcon
                     }
-                    if index == currentIndex {
-                        item.state = .on
+                }
+
+                let menuFont = NSFont.menuFont(ofSize: 0)
+
+                for group in groups {
+                    // Measure the prefix width: "AppName — "
+                    let prefix = "\(group.appName) — "
+                    let prefixWidth = ceil((prefix as NSString).size(
+                        withAttributes: [.font: menuFont]
+                    ).width)
+
+                    for (windowOffset, (index, target)) in group.windows.enumerated() {
+                        let windowTitle = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+                        let item = NSMenuItem(
+                            title: "",
+                            action: #selector(menuItemSelected(_:)),
+                            keyEquivalent: ""
+                        )
+                        item.target = self
+                        item.tag = index
+
+                        if windowOffset == 0 {
+                            // First window: "[icon] AppName — WindowTitle"
+                            item.image = appIcons[group.pid]
+                            if !windowTitle.isEmpty {
+                                item.title = prefix + windowTitle
+                            } else {
+                                item.title = group.appName
+                            }
+                        } else {
+                            // Subsequent windows: use tab stop to align with first row's window title
+                            let displayTitle = !windowTitle.isEmpty ? windowTitle : group.appName
+                            let paragraphStyle = NSMutableParagraphStyle()
+                            paragraphStyle.tabStops = [
+                                NSTextTab(textAlignment: .left, location: prefixWidth)
+                            ]
+                            paragraphStyle.defaultTabInterval = prefixWidth
+                            let attributed = NSAttributedString(
+                                string: "\t\(displayTitle)",
+                                attributes: [
+                                    .font: menuFont,
+                                    .paragraphStyle: paragraphStyle,
+                                ]
+                            )
+                            item.attributedTitle = attributed
+                            // Transparent icon to keep the icon column space
+                            item.image = NSImage(size: NSSize(width: 16, height: 16))
+                        }
+
+                        if index == currentIndex {
+                            item.state = .on
+                        }
+                        menu.addItem(item)
                     }
-                    menu.addItem(item)
                 }
             }
 

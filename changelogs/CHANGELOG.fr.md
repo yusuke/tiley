@@ -4,6 +4,13 @@
 
 ### Amélioré
 
+- Le menu déroulant de sélection des fenêtres est désormais regroupé par application, trié par ordre de mise au premier plan ; les fenêtres de chaque groupe sont listées en ordre Z
+- Les fenêtres non standard (palettes, barres d'outils, etc.) sont filtrées de la liste des fenêtres afin de n'afficher que les fenêtres de document redimensionnables
+
+## [1.2.7] - 2026-03-18
+
+### Amélioré
+
 - La fenêtre principale se ferme automatiquement lorsque Sparkle commence à télécharger une mise à jour
 
 ### Corrigé

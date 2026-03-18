@@ -386,6 +386,9 @@ final class AccessibilityService {
             guard let axWindows = try? copyAllWindowElements(from: appElement) else { continue }
             var infos: [AXWindowInfo] = []
             for w in axWindows {
+                // Only include standard windows (skip palettes, toolbars, dialogs, etc.)
+                let subrole = try? copyStringAttribute(w, attribute: kAXSubroleAttribute)
+                guard subrole == "AXStandardWindow" else { continue }
                 guard let pos = try? copyAXValueAttribute(w, attribute: kAXPositionAttribute),
                       let sz = try? copyAXValueAttribute(w, attribute: kAXSizeAttribute) else { continue }
                 var origin = CGPoint.zero
