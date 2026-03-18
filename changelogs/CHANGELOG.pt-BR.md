@@ -6,6 +6,10 @@
 
 - A janela principal é fechada automaticamente quando o Sparkle começa a baixar uma atualização
 
+### Corrigido
+
+- Eliminadas as emendas visíveis na pré-visualização de restrições de redimensionamento quando as regiões de estouro (vermelho) ou insuficiência (amarelo) são exibidas simultaneamente em ambas as direções
+
 ## [1.2.6] - 2026-03-18
 
 ### Corrigido

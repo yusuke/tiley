@@ -6,6 +6,10 @@
 
 - Das Hauptfenster wird jetzt automatisch geschlossen, wenn Sparkle mit dem Herunterladen eines Updates beginnt
 
+### Behoben
+
+- Sichtbare Nahtstellen in der Vorschau der Größenänderungsbeschränkungen behoben, wenn gleichzeitig horizontale und vertikale Überlauf- (rot) oder Unterlaufbereiche (gelb) angezeigt werden
+
 ## [1.2.6] - 2026-03-18
 
 ### Behoben

@@ -6,6 +6,10 @@
 
 - La ventana principal se cierra automáticamente cuando Sparkle comienza a descargar una actualización
 
+### Corregido
+
+- Se eliminaron las costuras visibles en la vista previa de restricciones de redimensionamiento cuando se muestran simultáneamente regiones de desbordamiento (rojo) o insuficiencia (amarillo) en ambas direcciones
+
 ## [1.2.6] - 2026-03-18
 
 ### Corregido

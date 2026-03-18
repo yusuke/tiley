@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Automatically close the main window when Sparkle begins downloading an update
 
+### Fixed
+
+- Eliminated visible seams in the resize constraint preview overlay when both horizontal and vertical overflow (red) or underflow (yellow) regions are displayed simultaneously
+
 ## [1.2.6] - 2026-03-18
 
 ### Fixed

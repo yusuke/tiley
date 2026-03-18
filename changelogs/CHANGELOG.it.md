@@ -6,6 +6,10 @@
 
 - La finestra principale viene chiusa automaticamente quando Sparkle inizia a scaricare un aggiornamento
 
+### Corretto
+
+- Eliminate le giunture visibili nell'anteprima dei vincoli di ridimensionamento quando le regioni di overflow (rosso) o underflow (giallo) vengono visualizzate contemporaneamente in entrambe le direzioni
+
 ## [1.2.6] - 2026-03-18
 
 ### Corretto

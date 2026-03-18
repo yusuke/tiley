@@ -135,56 +135,56 @@ private struct SelectionPreviewOverlayView: View {
                     .frame(width: displayWidth, height: displayHeight)
                     .position(x: localFrame.minX + displayWidth / 2, y: localFrame.minY + displayHeight / 2)
 
-                // --- Red: selection is wider than the window can expand ---
+                // --- Red: unified overflow region (selection larger than window can expand) ---
                 let widthOverflow = localFrame.width - effectiveWidth
-                if widthOverflow > 1 {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.red.opacity(0.35))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(Color.red.opacity(0.7), lineWidth: 1.5)
-                        )
-                        .frame(width: widthOverflow, height: localFrame.height)
-                        .position(x: localFrame.minX + effectiveWidth + widthOverflow / 2, y: localFrame.midY)
-                }
-
-                // --- Red: selection is taller than the window can expand ---
                 let heightOverflow = localFrame.height - effectiveHeight
-                if heightOverflow > 1 {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.red.opacity(0.35))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(Color.red.opacity(0.7), lineWidth: 1.5)
-                        )
-                        .frame(width: min(effectiveWidth, localFrame.width), height: heightOverflow)
-                        .position(x: localFrame.minX + min(effectiveWidth, localFrame.width) / 2, y: localFrame.minY + min(effectiveHeight, localFrame.height) + heightOverflow / 2)
+                if widthOverflow > 1 || heightOverflow > 1 {
+                    let outerRect = CGRect(
+                        x: localFrame.minX,
+                        y: localFrame.minY,
+                        width: localFrame.width,
+                        height: localFrame.height
+                    )
+                    let innerRect = CGRect(
+                        x: localFrame.minX,
+                        y: localFrame.minY,
+                        width: displayWidth,
+                        height: displayHeight
+                    )
+                    Path { path in
+                        path.addRoundedRect(in: outerRect, cornerSize: CGSize(width: 6, height: 6), style: .continuous)
+                        path.addRoundedRect(in: innerRect, cornerSize: CGSize(width: 6, height: 6), style: .continuous)
+                    }
+                    .fill(Color.red.opacity(0.35), style: FillStyle(eoFill: true))
+                    .overlay(
+                        Path { path in
+                            path.addRoundedRect(in: outerRect, cornerSize: CGSize(width: 6, height: 6), style: .continuous)
+                        }
+                        .stroke(Color.red.opacity(0.7), lineWidth: 1.5)
+                    )
                 }
 
-                // --- Yellow: window is wider than the selection (can't shrink) ---
+                // --- Yellow: unified underflow region (window larger than selection, can't shrink) ---
                 let widthUnderflow = effectiveWidth - localFrame.width
-                if widthUnderflow > 1 {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.yellow.opacity(0.35))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(Color.yellow.opacity(0.7), lineWidth: 1.5)
-                        )
-                        .frame(width: widthUnderflow, height: localFrame.height)
-                        .position(x: localFrame.maxX + widthUnderflow / 2, y: localFrame.midY)
-                }
-
-                // --- Yellow: window is taller than the selection (can't shrink) ---
                 let heightUnderflow = effectiveHeight - localFrame.height
-                if heightUnderflow > 1 {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.yellow.opacity(0.35))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(Color.yellow.opacity(0.7), lineWidth: 1.5)
-                        )
-                        .frame(width: localFrame.width, height: heightUnderflow)
-                        .position(x: localFrame.midX, y: localFrame.maxY + heightUnderflow / 2)
+                if widthUnderflow > 1 || heightUnderflow > 1 {
+                    let outerRect = CGRect(
+                        x: localFrame.minX,
+                        y: localFrame.minY,
+                        width: localFrame.width + max(0, widthUnderflow),
+                        height: localFrame.height + max(0, heightUnderflow)
+                    )
+                    Path { path in
+                        path.addRoundedRect(in: outerRect, cornerSize: CGSize(width: 6, height: 6), style: .continuous)
+                        path.addRoundedRect(in: localFrame, cornerSize: CGSize(width: 6, height: 6), style: .continuous)
+                    }
+                    .fill(Color.yellow.opacity(0.35), style: FillStyle(eoFill: true))
+                    .overlay(
+                        Path { path in
+                            path.addRoundedRect(in: outerRect, cornerSize: CGSize(width: 6, height: 6), style: .continuous)
+                        }
+                        .stroke(Color.yellow.opacity(0.7), lineWidth: 1.5)
+                    )
                 }
             } else {
                 // Fully resizable — normal display.

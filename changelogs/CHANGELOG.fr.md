@@ -6,6 +6,10 @@
 
 - La fenêtre principale se ferme automatiquement lorsque Sparkle commence à télécharger une mise à jour
 
+### Corrigé
+
+- Suppression des jointures visibles dans l'aperçu des contraintes de redimensionnement lorsque les zones de dépassement (rouge) ou de sous-capacité (jaune) sont affichées simultanément dans les deux directions
+
 ## [1.2.6] - 2026-03-18
 
 ### Corrigé
