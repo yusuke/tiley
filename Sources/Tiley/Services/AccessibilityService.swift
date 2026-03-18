@@ -254,6 +254,85 @@ final class AccessibilityService {
         return constrained
     }
 
+    /// Raises a window to the front of its application's window stack.
+    func raiseWindow(_ window: AXUIElement) {
+        AXUIElementPerformAction(window, kAXRaiseAction as CFString)
+    }
+
+    /// Checks whether the given window would be substantially occluded by
+    /// other windows of the **same** application after being moved to `newFrame`.
+    ///
+    /// Because `CGWindowListCopyWindowInfo` may not yet reflect the post-move
+    /// position, this method identifies the target window by its **pre-move**
+    /// frame (`oldFrame`) and then tests the new frame against same-app windows
+    /// that are in front of it in z-order.
+    ///
+    /// - Parameters:
+    ///   - pid: The process identifier of the window's owning application.
+    ///   - oldFrame: The window's frame *before* the move (CG top-left coordinates).
+    ///   - newFrame: The window's frame *after* the move (CG top-left coordinates).
+    /// - Returns: `true` when the window would be mostly hidden behind same-app windows.
+    func isWindowOccludedBySameApp(pid: pid_t, oldFrame: CGRect, newFrame: CGRect) -> Bool {
+        guard let windowList = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[CFString: Any]] else { return false }
+
+        let selfPID = getpid()
+
+        // Walk the z-ordered window list (front to back).
+        // Collect frames of same-app windows that appear *before* the target window.
+        var sameAppFramesInFront: [CGRect] = []
+        var foundTarget = false
+
+        for info in windowList {
+            guard let ownerPID = info[kCGWindowOwnerPID] as? pid_t else { continue }
+            if ownerPID == selfPID { continue }
+            let layer = info[kCGWindowLayer] as? Int ?? -1
+            guard layer == 0 else { continue }
+            guard let boundsRef = info[kCGWindowBounds],
+                  let bounds = CGRect(dictionaryRepresentation: boundsRef as! CFDictionary) else { continue }
+            guard bounds.width > 0, bounds.height > 0 else { continue }
+
+            if ownerPID == pid {
+                // Match the target by its pre-move frame (which CGWindowList still has)
+                // or its post-move frame (in case the CG server already updated).
+                let tolerance: CGFloat = 10
+                let matchesOld = abs(bounds.origin.x - oldFrame.origin.x) < tolerance
+                    && abs(bounds.origin.y - oldFrame.origin.y) < tolerance
+                    && abs(bounds.width - oldFrame.width) < tolerance
+                    && abs(bounds.height - oldFrame.height) < tolerance
+                let matchesNew = abs(bounds.origin.x - newFrame.origin.x) < tolerance
+                    && abs(bounds.origin.y - newFrame.origin.y) < tolerance
+                    && abs(bounds.width - newFrame.width) < tolerance
+                    && abs(bounds.height - newFrame.height) < tolerance
+                if matchesOld || matchesNew {
+                    foundTarget = true
+                    break
+                }
+                // Same-app window that is in front of our target.
+                sameAppFramesInFront.append(bounds)
+            }
+        }
+
+        guard foundTarget, !sameAppFramesInFront.isEmpty else { return false }
+
+        // Calculate how much of newFrame is covered by same-app windows in front.
+        let targetArea = newFrame.width * newFrame.height
+        guard targetArea > 0 else { return false }
+
+        var coveredArea: CGFloat = 0
+        for frontFrame in sameAppFramesInFront {
+            let intersection = newFrame.intersection(frontFrame)
+            if !intersection.isNull {
+                coveredArea += intersection.width * intersection.height
+            }
+        }
+
+        // Consider the window "occluded" if more than 5% is covered.
+        return coveredArea / targetArea > 0.05
+    }
+
     /// Returns all on-screen standard windows (excluding Tiley) in z-order (front to back).
     func allWindowTargets() -> [WindowTarget] {
         guard checkAccess(prompt: false) else { return [] }

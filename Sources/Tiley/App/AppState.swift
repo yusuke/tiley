@@ -482,6 +482,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             let constrained = try windowManager?.move(target: target, to: frame) ?? false
+            windowManager?.raiseWindowIfOccluded(target: target, newFrame: frame, screenFrame: target.screenFrame)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
             launchMessage = error.localizedDescription
@@ -510,6 +511,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             let constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: screenFrame) ?? false
+            windowManager?.raiseWindowIfOccluded(target: target, newFrame: frame, screenFrame: screenFrame)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
             launchMessage = error.localizedDescription

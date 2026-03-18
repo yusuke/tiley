@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Quando si ridimensiona una finestra in background della stessa applicazione tramite il ciclo Tab, la finestra viene ora portata in primo piano se risulterebbe nascosta dietro altre finestre di quella applicazione
+
 ## [1.2.5] - 2026-03-18
 
 ### Aggiunto
