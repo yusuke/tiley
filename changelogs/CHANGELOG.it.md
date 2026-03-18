@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Migliorato
+
+- La finestra principale viene chiusa automaticamente quando Sparkle inizia a scaricare un aggiornamento
+
 ## [1.2.6] - 2026-03-18
 
 ### Corretto

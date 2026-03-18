@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Improved
+
+- Automatically close the main window when Sparkle begins downloading an update
+
 ## [1.2.6] - 2026-03-18
 
 ### Fixed

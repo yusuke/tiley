@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Verbessert
+
+- Das Hauptfenster wird jetzt automatisch geschlossen, wenn Sparkle mit dem Herunterladen eines Updates beginnt
+
 ## [1.2.6] - 2026-03-18
 
 ### Behoben
