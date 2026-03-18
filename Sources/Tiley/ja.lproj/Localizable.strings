@@ -102,3 +102,7 @@
 "Delete \"%@\"" = "「%@」を削除";
 "Click to change \"%@\"" = "クリックして「%@」を変更";
 "Are you sure you want to delete the layout \"%@\"?" = "レイアウト「%@」を削除してもよろしいですか？";
+"Filter windows..." = "ウインドウを絞り込む…";
+"No matching windows" = "一致するウインドウがありません";
+"Tab: next window · %@: window list" = "Tab: 次のウインドウ · %@: ウインドウ一覧";
+"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab: 次のウインドウ · ⇧Tab: 前のウインドウ · %@: ウインドウ一覧";

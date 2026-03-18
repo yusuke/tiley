@@ -102,3 +102,7 @@
 "Delete \"%@\"" = "\"%@\" 삭제";
 "Click to change \"%@\"" = "클릭하여 \"%@\" 변경";
 "Are you sure you want to delete the layout \"%@\"?" = "레이아웃 \"%@\"을(를) 삭제하시겠습니까?";
+"Filter windows..." = "윈도우 필터링...";
+"No matching windows" = "일치하는 윈도우 없음";
+"Tab: next window · %@: window list" = "Tab: 다음 윈도우 · %@: 윈도우 목록";
+"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab: 다음 윈도우 · ⇧Tab: 이전 윈도우 · %@: 윈도우 목록";

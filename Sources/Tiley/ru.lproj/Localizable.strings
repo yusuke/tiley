@@ -102,3 +102,7 @@
 "Delete \"%@\"" = "Удалить \"%@\"";
 "Click to change \"%@\"" = "Нажмите, чтобы изменить \"%@\"";
 "Are you sure you want to delete the layout \"%@\"?" = "Вы уверены, что хотите удалить компоновку \"%@\"?";
+"Filter windows..." = "Фильтр окон…";
+"No matching windows" = "Нет подходящих окон";
+"Tab: next window · %@: window list" = "Tab: следующее окно · %@: список окон";
+"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab: следующее окно · ⇧Tab: предыдущее · %@: список окон";

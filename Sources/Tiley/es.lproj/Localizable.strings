@@ -102,3 +102,7 @@
 "Delete \"%@\"" = "Eliminar \"%@\"";
 "Click to change \"%@\"" = "Haz clic para cambiar \"%@\"";
 "Are you sure you want to delete the layout \"%@\"?" = "¿Está seguro de que desea eliminar el diseño \"%@\"?";
+"Filter windows..." = "Filtrar ventanas…";
+"No matching windows" = "No hay ventanas coincidentes";
+"Tab: next window · %@: window list" = "Tab: siguiente ventana · %@: lista de ventanas";
+"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab: siguiente ventana · ⇧Tab: anterior · %@: lista de ventanas";

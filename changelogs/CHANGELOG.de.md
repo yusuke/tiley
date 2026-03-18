@@ -6,6 +6,7 @@
 
 - Das Dropdown-Menü zur Fensterauswahl ist jetzt nach Anwendung gruppiert, sortiert nach zuletzt im Vordergrund; Fenster innerhalb jeder Gruppe werden in Z-Reihenfolge aufgelistet
 - Nicht-Standard-Fenster (Paletten, Symbolleisten usw.) werden aus der Fensterliste gefiltert, sodass nur größenveränderbare Dokumentfenster angezeigt werden
+- Suchfeld zum Filtern durch Tippen im Dropdown-Menü zur Fensterauswahl hinzugefügt; Teilübereinstimmung nach App-Name oder Fenstertitel mit Unterstützung für IME-Eingabequellenumschaltung
 
 ## [1.2.7] - 2026-03-18
 

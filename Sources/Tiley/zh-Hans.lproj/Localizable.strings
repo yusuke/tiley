@@ -102,3 +102,7 @@
 "Delete \"%@\"" = "删除\U201C%@\U201D";
 "Click to change \"%@\"" = "点击以更改 \"%@\"";
 "Are you sure you want to delete the layout \"%@\"?" = "确定要删除布局\U201C%@\U201D吗？";
+"Filter windows..." = "筛选窗口…";
+"No matching windows" = "没有匹配的窗口";
+"Tab: next window · %@: window list" = "Tab：下一个窗口 · %@：窗口列表";
+"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab：下一个窗口 · ⇧Tab：上一个窗口 · %@：窗口列表";

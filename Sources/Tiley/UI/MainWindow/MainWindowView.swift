@@ -307,6 +307,16 @@ struct MainWindowView: View {
                 .padding(.top, Self.layoutFooterTopPadding)
                 .padding(.bottom, Self.layoutFooterBottomPadding)
 
+            if screenRole.isTarget {
+                let shortcut = appState.hotKeyShortcut.displayString
+                Text(appState.hasUsedTabCycling
+                     ? String(format: NSLocalizedString("Tab: next window · ⇧Tab: previous · %@: window list", comment: "Tab cycling hint after first use"), shortcut)
+                     : String(format: NSLocalizedString("Tab: next window · %@: window list", comment: "Tab cycling hint before first use"), shortcut))
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
+                    .padding(.bottom, 4)
+            }
+
             LayoutGridWorkspaceView(
                 rows: appState.rows,
                 columns: appState.columns,
@@ -365,32 +375,30 @@ struct MainWindowView: View {
     }
 
     private var layoutGridFooterBar: some View {
-        HStack(spacing: 16) {
-            if screenRole.isTarget {
-                Button {
-                    dismissPresetNameEditingIfNeeded()
-                    draftSettings = appState.settingsSnapshot
-                    appState.beginSettingsEditing()
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .font(.system(size: 15, weight: .semibold))
-                }
-                .buttonStyle(.bordered)
-                .help("Edit Settings")
-                .frame(width: Self.footerLeadingWidth, alignment: .leading)
-            } else {
-                Color.clear
-                    .frame(width: Self.footerLeadingWidth, alignment: .leading)
-            }
-
-            Spacer(minLength: 0)
-
+        ZStack {
+            // Center: label is centered in the full width.
+            // Horizontal padding prevents overlap with the gear button on the left
+            // and keeps symmetry on the right.
             layoutTargetInfoView
+                .padding(.horizontal, screenRole.isTarget ? Self.footerLeadingWidth + 8 : 0)
 
-            Spacer(minLength: 0)
+            // Leading: gear button
+            if screenRole.isTarget {
+                HStack {
+                    Button {
+                        dismissPresetNameEditingIfNeeded()
+                        draftSettings = appState.settingsSnapshot
+                        appState.beginSettingsEditing()
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                    .buttonStyle(.bordered)
+                    .help("Edit Settings")
 
-            Color.clear
-                .frame(width: Self.footerTrailingWidth, alignment: .trailing)
+                    Spacer(minLength: 0)
+                }
+            }
         }
         .frame(height: Self.footerHeight)
     }
@@ -458,21 +466,28 @@ struct MainWindowView: View {
         }
     }
 
+    @State private var isTargetLabelHovered = false
+
     private var layoutTargetDropdownView: some View {
-        WindowTargetDropdownButton(appState: appState) {
-            HStack(spacing: 6) {
-                targetInfoContent
-                Image(systemName: "chevron.up.chevron.down")
-                    .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(.secondary)
-            }
+        WindowTargetClickableLabel(appState: appState) {
+            targetInfoContent
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(ThemeColors.presetRowBackground(selected: isTargetLabelHovered, for: colorScheme))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .stroke(ThemeColors.presetRowBorder(selected: isTargetLabelHovered, for: colorScheme), lineWidth: 1)
+                )
+                .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .onHover { isTargetLabelHovered = $0 }
         }
-        .frame(maxWidth: 260)
     }
 
     private var layoutTargetStaticView: some View {
         targetInfoContent
-            .frame(maxWidth: 260)
     }
 
     private var targetInfoContent: some View {
@@ -1700,7 +1715,7 @@ extension View {
 
 // MARK: - Window Target Dropdown Button
 
-private struct WindowTargetDropdownButton<Label: View>: NSViewRepresentable {
+private struct WindowTargetClickableLabel<Label: View>: NSViewRepresentable {
     let appState: AppState
     @ViewBuilder let label: Label
 
@@ -1708,46 +1723,89 @@ private struct WindowTargetDropdownButton<Label: View>: NSViewRepresentable {
         Coordinator(appState: appState)
     }
 
-    func makeNSView(context: Context) -> WindowTargetDropdownContainerView {
-        let container = WindowTargetDropdownContainerView()
+    func makeNSView(context: Context) -> WindowTargetClickableContainerView {
+        let container = WindowTargetClickableContainerView()
         container.onMouseDown = { [coordinator = context.coordinator] view in
-            coordinator.showMenu(from: view)
+            coordinator.showPopover(from: view)
         }
         let hostingView = NSHostingView(rootView: label)
         hostingView.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(hostingView)
         NSLayoutConstraint.activate([
-            hostingView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            hostingView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            hostingView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             hostingView.topAnchor.constraint(equalTo: container.topAnchor),
             hostingView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            hostingView.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor),
+            hostingView.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor),
         ])
         context.coordinator.hostingView = hostingView
         return container
     }
 
-    func updateNSView(_ nsView: WindowTargetDropdownContainerView, context: Context) {
+    func updateNSView(_ nsView: WindowTargetClickableContainerView, context: Context) {
         context.coordinator.appState = appState
+        context.coordinator.containerView = nsView
         context.coordinator.hostingView?.rootView = label
+
+        let currentVersion = appState.windowTargetMenuRequestVersion
+        if currentVersion != context.coordinator.lastMenuRequestVersion {
+            context.coordinator.lastMenuRequestVersion = currentVersion
+            context.coordinator.pendingMenuOpen = true
+            // Dispatch to avoid opening the popover during a view update.
+            DispatchQueue.main.async {
+                context.coordinator.openMenuIfPending()
+            }
+        }
     }
 
-    @MainActor final class Coordinator: NSObject {
+    @MainActor final class Coordinator: NSObject, NSPopoverDelegate {
         var appState: AppState
         var hostingView: NSHostingView<Label>?
+        weak var containerView: WindowTargetClickableContainerView?
+        var lastMenuRequestVersion: Int
+        var pendingMenuOpen = false
+        var activePopover: NSPopover?
 
         init(appState: AppState) {
             self.appState = appState
+            self.lastMenuRequestVersion = appState.windowTargetMenuRequestVersion
             super.init()
         }
 
-        func showMenu(from view: NSView) {
+        func popoverDidClose(_ notification: Notification) {
+            activePopover = nil
+            // Restore key status to the main window so layout shortcuts work again.
+            containerView?.window?.makeKeyAndOrderFront(nil)
+        }
+
+        func openMenuIfPending() {
+            guard pendingMenuOpen, let view = containerView else { return }
+            guard let window = view.window, window.isKeyWindow else {
+                // Window not yet key — retry on the next run loop iteration.
+                DispatchQueue.main.async { [weak self] in
+                    self?.openMenuIfPending()
+                }
+                return
+            }
+            pendingMenuOpen = false
+            showPopover(from: view)
+        }
+
+        func showPopover(from view: NSView) {
+            // Toggle: close if already open
+            if let existing = activePopover, existing.isShown {
+                existing.close()
+                activePopover = nil
+                return
+            }
+
             appState.refreshAvailableWindows()
             let targets = appState.windowTargetList
             let currentIndex = appState.currentWindowTargetIndex
-            let menu = NSMenu()
-            menu.autoenablesItems = false
+
 
             if targets.isEmpty {
+                let menu = NSMenu()
                 let item = NSMenuItem(
                     title: NSLocalizedString("No windows available", comment: "Empty window target menu"),
                     action: nil,
@@ -1755,104 +1813,312 @@ private struct WindowTargetDropdownButton<Label: View>: NSViewRepresentable {
                 )
                 item.isEnabled = false
                 menu.addItem(item)
-            } else {
-                // Group windows by application (PID), preserving z-order within each group
-                // and ordering groups by the z-index of their frontmost window.
-                // Each group: (pid, appName, [(originalIndex, target)])
-                var groups: [(pid: pid_t, appName: String, windows: [(index: Int, target: WindowTarget)])] = []
-                var pidToGroupIndex: [pid_t: Int] = [:]
-
-                for (index, target) in targets.enumerated() {
-                    if let groupIndex = pidToGroupIndex[target.processIdentifier] {
-                        groups[groupIndex].windows.append((index, target))
-                    } else {
-                        pidToGroupIndex[target.processIdentifier] = groups.count
-                        groups.append((target.processIdentifier, target.appName, [(index, target)]))
-                    }
-                }
-
-                // Resolve app icon once per group
-                var appIcons: [pid_t: NSImage] = [:]
-                for group in groups {
-                    if let icon = NSRunningApplication(processIdentifier: group.pid)?.icon {
-                        let resizedIcon = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { rect in
-                            icon.draw(in: rect)
-                            return true
-                        }
-                        appIcons[group.pid] = resizedIcon
-                    }
-                }
-
-                let menuFont = NSFont.menuFont(ofSize: 0)
-
-                for group in groups {
-                    // Measure the prefix width: "AppName — "
-                    let prefix = "\(group.appName) — "
-                    let prefixWidth = ceil((prefix as NSString).size(
-                        withAttributes: [.font: menuFont]
-                    ).width)
-
-                    for (windowOffset, (index, target)) in group.windows.enumerated() {
-                        let windowTitle = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-
-                        let item = NSMenuItem(
-                            title: "",
-                            action: #selector(menuItemSelected(_:)),
-                            keyEquivalent: ""
-                        )
-                        item.target = self
-                        item.tag = index
-
-                        if windowOffset == 0 {
-                            // First window: "[icon] AppName — WindowTitle"
-                            item.image = appIcons[group.pid]
-                            if !windowTitle.isEmpty {
-                                item.title = prefix + windowTitle
-                            } else {
-                                item.title = group.appName
-                            }
-                        } else {
-                            // Subsequent windows: use tab stop to align with first row's window title
-                            let displayTitle = !windowTitle.isEmpty ? windowTitle : group.appName
-                            let paragraphStyle = NSMutableParagraphStyle()
-                            paragraphStyle.tabStops = [
-                                NSTextTab(textAlignment: .left, location: prefixWidth)
-                            ]
-                            paragraphStyle.defaultTabInterval = prefixWidth
-                            let attributed = NSAttributedString(
-                                string: "\t\(displayTitle)",
-                                attributes: [
-                                    .font: menuFont,
-                                    .paragraphStyle: paragraphStyle,
-                                ]
-                            )
-                            item.attributedTitle = attributed
-                            // Transparent icon to keep the icon column space
-                            item.image = NSImage(size: NSSize(width: 16, height: 16))
-                        }
-
-                        if index == currentIndex {
-                            item.state = .on
-                        }
-                        menu.addItem(item)
-                    }
-                }
+                menu.popUp(positioning: nil, at: NSPoint(x: 0, y: view.bounds.height), in: view)
+                return
             }
 
-            let position = NSPoint(x: 0, y: view.bounds.height)
-            menu.popUp(positioning: nil, at: position, in: view)
-        }
-
-        @objc func menuItemSelected(_ sender: NSMenuItem) {
-            appState.selectWindowTarget(at: sender.tag)
+            let popover = NSPopover()
+            popover.behavior = .transient
+            popover.delegate = self
+            popover.contentViewController = WindowTargetListController(
+                targets: targets,
+                currentIndex: currentIndex
+            ) { [weak self] selectedIndex in
+                self?.appState.selectWindowTarget(at: selectedIndex)
+                self?.activePopover?.close()
+                self?.activePopover = nil
+            }
+            popover.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
+            activePopover = popover
         }
     }
 }
 
-private final class WindowTargetDropdownContainerView: NSView {
+/// Popover-based window target list with a search field.
+/// Uses NSPopover so the search field supports full keyboard input including IME.
+private final class WindowTargetListController: NSViewController, NSSearchFieldDelegate,
+    NSTableViewDataSource, NSTableViewDelegate
+{
+    private struct Item {
+        let index: Int
+        let appName: String
+        let windowTitle: String
+        let pid: pid_t
+        let appIcon: NSImage?
+    }
+
+    private static let horizontalPadding: CGFloat = 8 + 16 + 6 + 8 // leading + icon + gap + trailing
+    private static let minWidth: CGFloat = 200
+    private static let maxWidth: CGFloat = 480
+
+    private let searchField = NSSearchField()
+    private let tableView = NSTableView()
+    private let scrollView = NSScrollView()
+    private var allItems: [Item] = []
+    private var filteredItems: [Item] = []
+    private let currentTargetIndex: Int
+    private let onSelect: (Int) -> Void
+    private var contentWidth: CGFloat
+
+    init(targets: [WindowTarget], currentIndex: Int, onSelect: @escaping (Int) -> Void) {
+        self.currentTargetIndex = currentIndex
+        self.onSelect = onSelect
+        // Temporary value; calculated below after building allItems.
+        self.contentWidth = 0
+        super.init(nibName: nil, bundle: nil)
+
+        let menuFont = NSFont.menuFont(ofSize: 0)
+        var iconCache: [pid_t: NSImage] = [:]
+        var maxTextWidth: CGFloat = 0
+
+        for (index, target) in targets.enumerated() {
+            let pid = target.processIdentifier
+            if iconCache[pid] == nil,
+               let icon = NSRunningApplication(processIdentifier: pid)?.icon
+            {
+                iconCache[pid] = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { rect in
+                    icon.draw(in: rect)
+                    return true
+                }
+            }
+            let windowTitle = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            let displayText: String
+            if !windowTitle.isEmpty {
+                displayText = "\(target.appName) — \(windowTitle)"
+            } else {
+                displayText = target.appName
+            }
+            let textWidth = ceil((displayText as NSString).size(
+                withAttributes: [.font: menuFont]
+            ).width)
+            maxTextWidth = max(maxTextWidth, textWidth)
+
+            allItems.append(Item(
+                index: index,
+                appName: target.appName,
+                windowTitle: windowTitle,
+                pid: pid,
+                appIcon: iconCache[pid]
+            ))
+        }
+        filteredItems = allItems
+
+        let totalWidth = Self.horizontalPadding + maxTextWidth
+        contentWidth = min(max(totalWidth, Self.minWidth), Self.maxWidth)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError() }
+
+    override func loadView() {
+        let container = NSView(frame: NSRect(x: 0, y: 0, width: contentWidth, height: 300))
+
+        searchField.placeholderString = NSLocalizedString(
+            "Filter windows...", comment: "Window filter search field placeholder"
+        )
+        searchField.font = NSFont.systemFont(ofSize: 12)
+        searchField.focusRingType = .none
+        searchField.sendsSearchStringImmediately = true
+        searchField.sendsWholeSearchString = false
+        searchField.delegate = self
+        searchField.translatesAutoresizingMaskIntoConstraints = false
+
+        let separator = NSBox()
+        separator.boxType = .separator
+        separator.translatesAutoresizingMaskIntoConstraints = false
+
+        let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier("window"))
+        column.isEditable = false
+        tableView.addTableColumn(column)
+        tableView.headerView = nil
+        tableView.rowHeight = 24
+        tableView.style = .plain
+        tableView.intercellSpacing = NSSize(width: 0, height: 0)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.target = self
+        tableView.action = #selector(rowClicked)
+
+        scrollView.documentView = tableView
+        scrollView.hasVerticalScroller = true
+        scrollView.autohidesScrollers = true
+        scrollView.drawsBackground = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        container.addSubview(searchField)
+        container.addSubview(separator)
+        container.addSubview(scrollView)
+
+        NSLayoutConstraint.activate([
+            searchField.topAnchor.constraint(equalTo: container.topAnchor, constant: 8),
+            searchField.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
+            searchField.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
+            separator.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 8),
+            separator.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            separator.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: separator.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+        ])
+
+        self.view = container
+        recalculateSize()
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        view.window?.makeFirstResponder(searchField)
+        // Highlight the current target row
+        if let row = filteredItems.firstIndex(where: { $0.index == currentTargetIndex }) {
+            tableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+            tableView.scrollRowToVisible(row)
+        }
+    }
+
+    private static let chromeHeight: CGFloat = 43 // 8 (top pad) + 22 (search) + 8 (pad) + 1 (separator) + 4 (bottom pad)
+    /// Popover arrow + padding that NSPopover adds around the content.
+    private static let popoverExtraHeight: CGFloat = 30
+
+    private func recalculateSize() {
+        let allRowsHeight = CGFloat(max(filteredItems.count, 1)) * tableView.rowHeight
+        // Limit height so the popover does not extend beyond the screen.
+        let screenHeight = view.window?.screen?.visibleFrame.height
+            ?? NSScreen.main?.visibleFrame.height ?? 800
+        let maxContentHeight = screenHeight - Self.popoverExtraHeight
+        let desiredHeight = Self.chromeHeight + allRowsHeight
+        let height = min(desiredHeight, maxContentHeight)
+        preferredContentSize = NSSize(width: contentWidth, height: height)
+    }
+
+    // MARK: - NSSearchFieldDelegate
+
+    func controlTextDidChange(_ obj: Notification) {
+        applyFilter()
+    }
+
+    func control(
+        _ control: NSControl, textView: NSTextView,
+        doCommandBy commandSelector: Selector
+    ) -> Bool {
+        if commandSelector == #selector(NSResponder.moveDown(_:)) {
+            let row = tableView.selectedRow + 1
+            if row < filteredItems.count {
+                tableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+                tableView.scrollRowToVisible(row)
+            }
+            return true
+        }
+        if commandSelector == #selector(NSResponder.moveUp(_:)) {
+            let row = tableView.selectedRow - 1
+            if row >= 0 {
+                tableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+                tableView.scrollRowToVisible(row)
+            }
+            return true
+        }
+        if commandSelector == #selector(NSResponder.insertNewline(_:)) {
+            selectCurrentRow()
+            return true
+        }
+        return false
+    }
+
+    // MARK: - NSTableViewDataSource
+
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        filteredItems.count
+    }
+
+    // MARK: - NSTableViewDelegate
+
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        let item = filteredItems[row]
+        let cellId = NSUserInterfaceItemIdentifier("WindowCell")
+        let cell: NSTableCellView
+        if let reused = tableView.makeView(withIdentifier: cellId, owner: nil) as? NSTableCellView {
+            cell = reused
+        } else {
+            cell = NSTableCellView()
+            cell.identifier = cellId
+
+            let iv = NSImageView()
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            iv.imageScaling = .scaleProportionallyDown
+            cell.addSubview(iv)
+            cell.imageView = iv
+
+            let tf = NSTextField(labelWithString: "")
+            tf.translatesAutoresizingMaskIntoConstraints = false
+            tf.lineBreakMode = .byTruncatingTail
+            tf.font = NSFont.menuFont(ofSize: 0)
+            cell.addSubview(tf)
+            cell.textField = tf
+
+            NSLayoutConstraint.activate([
+                iv.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 8),
+                iv.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
+                iv.widthAnchor.constraint(equalToConstant: 16),
+                iv.heightAnchor.constraint(equalToConstant: 16),
+                tf.leadingAnchor.constraint(equalTo: iv.trailingAnchor, constant: 6),
+                tf.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -8),
+                tf.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
+            ])
+        }
+
+        cell.imageView?.image = item.appIcon
+        if !item.windowTitle.isEmpty {
+            cell.textField?.stringValue = "\(item.appName) — \(item.windowTitle)"
+        } else {
+            cell.textField?.stringValue = item.appName
+        }
+        return cell
+    }
+
+    // MARK: - Actions
+
+    @objc private func rowClicked() {
+        selectCurrentRow()
+    }
+
+    private func selectCurrentRow() {
+        let row = tableView.selectedRow
+        guard row >= 0, row < filteredItems.count else { return }
+        onSelect(filteredItems[row].index)
+    }
+
+    // MARK: - Filtering
+
+    private func applyFilter() {
+        let query = searchField.stringValue
+            .trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if query.isEmpty {
+            filteredItems = allItems
+        } else {
+            let matchingPIDs = Set(allItems.compactMap { item -> pid_t? in
+                item.appName.lowercased().contains(query) ? item.pid : nil
+            })
+            filteredItems = allItems.filter { item in
+                matchingPIDs.contains(item.pid)
+                    || item.windowTitle.lowercased().contains(query)
+            }
+        }
+        tableView.reloadData()
+        recalculateSize()
+        if !filteredItems.isEmpty {
+            tableView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+        }
+    }
+}
+
+private final class WindowTargetClickableContainerView: NSView {
     var onMouseDown: ((NSView) -> Void)?
 
     override func mouseDown(with event: NSEvent) {
         onMouseDown?(self)
+    }
+
+    override func resetCursorRects() {
+        addCursorRect(bounds, cursor: .pointingHand)
     }
 }

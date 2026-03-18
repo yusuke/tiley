@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Window target dropdown menu is now grouped by application, ordered by most recently frontmost; windows within each group are listed in z-order
 - Filtered out non-standard windows (palettes, toolbars, etc.) from the window target list so only resizable document windows are shown
+- Added type-to-filter search field in the window target dropdown menu; matches by app name or window title with support for IME input source switching
 
 ## [1.2.7] - 2026-03-18
 

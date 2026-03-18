@@ -127,7 +127,11 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var availableWindowTargets: [WindowTarget] = []
     @ObservationIgnored private var activeTargetIndex: Int = 0
     @ObservationIgnored private var originalFrontmostPID: pid_t?
+    /// Whether the user has cycled the target window at least once via Tab.
+    var hasUsedTabCycling: Bool { originalFrontmostPID != nil }
     var windowTargetListVersion: Int = 0
+    /// Incremented to signal the UI to open the window target dropdown menu.
+    var windowTargetMenuRequestVersion: Int = 0
 
     var settingsSnapshot: SettingsSnapshot {
         SettingsSnapshot(
@@ -345,7 +349,8 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         if isShowingLayoutGrid {
-            cancelLayoutGrid()
+            NSApp.activate(ignoringOtherApps: true)
+            windowTargetMenuRequestVersion += 1
             return
         }
 
