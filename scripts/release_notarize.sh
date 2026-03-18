@@ -6,6 +6,13 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT_ROOT"
 
+SKIP_NOTARIZE=false
+for arg in "$@"; do
+  case "$arg" in
+    --skip-notarize) SKIP_NOTARIZE=true ;;
+  esac
+done
+
 if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
   source "$SCRIPT_DIR/env.sh"
 fi
@@ -26,20 +33,25 @@ if [[ -n "${API_KEY_PATH}" && "${API_KEY_PATH}" == "~"* ]]; then
   API_KEY_PATH="${HOME}${API_KEY_PATH#\~}"
 fi
 
-if [[ -z "${KEYCHAIN_PROFILE}" && ( -z "${API_KEY_PATH}" || -z "${API_KEY_ID}" || -z "${API_ISSUER_ID}" ) ]]; then
-  echo "Either KEYCHAIN_PROFILE or all of API_KEY_PATH, API_KEY_ID, API_ISSUER_ID is required."
-  [[ -z "${API_KEY_PATH}" ]] && echo "Missing: API_KEY_PATH"
-  [[ -z "${API_KEY_ID}" ]] && echo "Missing: API_KEY_ID"
-  [[ -z "${API_ISSUER_ID}" ]] && echo "Missing: API_ISSUER_ID"
-  echo "Examples:"
-  echo "  KEYCHAIN_PROFILE=AC_NOTARY scripts/release_notarize.sh"
-  echo "  API_KEY_PATH=~/keys/AuthKey_ABC123XYZ.p8 API_KEY_ID=ABC123XYZ API_ISSUER_ID=00000000-0000-0000-0000-000000000000 scripts/release_notarize.sh"
-  exit 1
-fi
+if [[ "$SKIP_NOTARIZE" == false ]]; then
+  if [[ -z "${KEYCHAIN_PROFILE}" && ( -z "${API_KEY_PATH}" || -z "${API_KEY_ID}" || -z "${API_ISSUER_ID}" ) ]]; then
+    echo "Either KEYCHAIN_PROFILE or all of API_KEY_PATH, API_KEY_ID, API_ISSUER_ID is required."
+    echo "(Use --skip-notarize to skip notarization and only build the DMG.)"
+    [[ -z "${API_KEY_PATH}" ]] && echo "Missing: API_KEY_PATH"
+    [[ -z "${API_KEY_ID}" ]] && echo "Missing: API_KEY_ID"
+    [[ -z "${API_ISSUER_ID}" ]] && echo "Missing: API_ISSUER_ID"
+    echo "Examples:"
+    echo "  KEYCHAIN_PROFILE=AC_NOTARY scripts/release_notarize.sh"
+    echo "  API_KEY_PATH=~/keys/AuthKey_ABC123XYZ.p8 API_KEY_ID=ABC123XYZ API_ISSUER_ID=00000000-0000-0000-0000-000000000000 scripts/release_notarize.sh"
+    exit 1
+  fi
 
-if [[ -z "${KEYCHAIN_PROFILE}" && ! -f "${API_KEY_PATH}" ]]; then
-  echo "API key file not found: ${API_KEY_PATH}"
-  exit 1
+  if [[ -z "${KEYCHAIN_PROFILE}" && ! -f "${API_KEY_PATH}" ]]; then
+    echo "API key file not found: ${API_KEY_PATH}"
+    exit 1
+  fi
+else
+  echo "Notarization will be skipped (--skip-notarize)"
 fi
 
 # Check if this version+build already exists in appcast.xml (before expensive archive/notarize)
@@ -113,41 +125,45 @@ fi
 echo "Re-signing app bundle"
 codesign --force --options runtime --timestamp --sign "$CODESIGN_ID" "$EXPORTED_APP_PATH"
 
-echo "Submitting app for notarization (via temporary zip)"
-NOTARIZE_ZIP="build/Tiley-notarize-tmp.zip"
-ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$NOTARIZE_ZIP"
+if [[ "$SKIP_NOTARIZE" == false ]]; then
+  echo "Submitting app for notarization (via temporary zip)"
+  NOTARIZE_ZIP="build/Tiley-notarize-tmp.zip"
+  ditto -c -k --norsrc --keepParent "$EXPORTED_APP_PATH" "$NOTARIZE_ZIP"
 
-if [[ -n "${KEYCHAIN_PROFILE}" ]]; then
-  xcrun notarytool submit "$NOTARIZE_ZIP" \
-    --keychain-profile "$KEYCHAIN_PROFILE" \
-    --wait
+  if [[ -n "${KEYCHAIN_PROFILE}" ]]; then
+    xcrun notarytool submit "$NOTARIZE_ZIP" \
+      --keychain-profile "$KEYCHAIN_PROFILE" \
+      --wait
+  else
+    xcrun notarytool submit "$NOTARIZE_ZIP" \
+      --key "$API_KEY_PATH" \
+      --key-id "$API_KEY_ID" \
+      --issuer "$API_ISSUER_ID" \
+      --wait
+  fi
+  rm -f "$NOTARIZE_ZIP"
+
+  echo "Stapling notarization ticket"
+  STAPLE_MAX_RETRIES=5
+  STAPLE_RETRY_INTERVAL=30
+  for ((i=1; i<=STAPLE_MAX_RETRIES; i++)); do
+    if xcrun stapler staple "$EXPORTED_APP_PATH"; then
+      break
+    fi
+    if ((i == STAPLE_MAX_RETRIES)); then
+      echo "Stapling failed after $STAPLE_MAX_RETRIES attempts."
+      exit 1
+    fi
+    echo "Stapling attempt $i failed. Retrying in ${STAPLE_RETRY_INTERVAL}s... ($i/$STAPLE_MAX_RETRIES)"
+    sleep "$STAPLE_RETRY_INTERVAL"
+  done
+
+  echo "Validating stapled app"
+  xcrun stapler validate "$EXPORTED_APP_PATH"
+  spctl -a -vvv -t exec "$EXPORTED_APP_PATH"
 else
-  xcrun notarytool submit "$NOTARIZE_ZIP" \
-    --key "$API_KEY_PATH" \
-    --key-id "$API_KEY_ID" \
-    --issuer "$API_ISSUER_ID" \
-    --wait
+  echo "Skipping notarization, stapling, and validation"
 fi
-rm -f "$NOTARIZE_ZIP"
-
-echo "Stapling notarization ticket"
-STAPLE_MAX_RETRIES=5
-STAPLE_RETRY_INTERVAL=30
-for ((i=1; i<=STAPLE_MAX_RETRIES; i++)); do
-  if xcrun stapler staple "$EXPORTED_APP_PATH"; then
-    break
-  fi
-  if ((i == STAPLE_MAX_RETRIES)); then
-    echo "Stapling failed after $STAPLE_MAX_RETRIES attempts."
-    exit 1
-  fi
-  echo "Stapling attempt $i failed. Retrying in ${STAPLE_RETRY_INTERVAL}s... ($i/$STAPLE_MAX_RETRIES)"
-  sleep "$STAPLE_RETRY_INTERVAL"
-done
-
-echo "Validating stapled app"
-xcrun stapler validate "$EXPORTED_APP_PATH"
-spctl -a -vvv -t exec "$EXPORTED_APP_PATH"
 
 # Strip extended attributes to prevent AppleDouble ._files
 echo "Stripping extended attributes"
@@ -158,9 +174,10 @@ echo "Creating DMG"
 DMG_STAGING="build/dmg-staging"
 DMG_RW="build/Tiley-rw.dmg"
 rm -rf "$DMG_STAGING" "$DMG_RW"
-mkdir -p "$DMG_STAGING"
+mkdir -p "$DMG_STAGING/.background"
 cp -R "$EXPORTED_APP_PATH" "$DMG_STAGING/"
 ln -s /Applications "$DMG_STAGING/Applications"
+cp "$SCRIPT_DIR/dmg_background.png" "$DMG_STAGING/.background/background.png"
 
 # Create a read-write DMG first so we can customise the Finder view
 rm -f "$DMG_PATH"
@@ -178,26 +195,30 @@ echo "Mounted DMG at: $MOUNT_DIR"
 
 # Configure Finder window appearance via AppleScript
 echo "Configuring DMG Finder layout"
+BG_HFS_PATH=$(osascript -e "POSIX file \"$MOUNT_DIR/.background/background.png\" as text")
+echo "Background picture HFS path: $BG_HFS_PATH"
+
 osascript <<APPLESCRIPT
+set bckPict to "$BG_HFS_PATH"
+set volPath to POSIX file "$MOUNT_DIR" as text
+
 tell application "Finder"
-  tell disk "Tiley"
-    open
-    set current view of container window to icon view
-    set toolbar visible of container window to false
-    set statusbar visible of container window to false
-    set the bounds of container window to {100, 100, 640, 640}
-    set viewOptions to the icon view options of container window
-    set arrangement of viewOptions to not arranged
-    set icon size of viewOptions to 128
-    set background color of viewOptions to {65535, 65535, 65535}
-    set position of item "Tiley.app" of container window to {130, 190}
-    set position of item "Applications" of container window to {410, 190}
-    close
-    open
-    update without registering applications
-    delay 1
-    close
-  end tell
+  activate
+  open volPath
+  delay 2
+  set toolbar visible of the front window to false
+  set statusbar visible of the front window to false
+  set the bounds of the front window to {100, 100, 555, 446}
+  set viewOptions to the icon view options of the front window
+  set arrangement of viewOptions to not arranged
+  set icon size of viewOptions to 128
+  set background picture of viewOptions to bckPict
+  set position of item "Tiley.app" of the front window to {120, 10}
+  set position of item "Applications" of the front window to {290, 10}
+  close the front window
+  open volPath
+  delay 1
+  close the front window
 end tell
 APPLESCRIPT
 
