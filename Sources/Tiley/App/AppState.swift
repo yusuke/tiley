@@ -507,7 +507,17 @@ final class AppState: NSObject, NSMenuDelegate {
     func refreshAvailableWindows() {
         availableWindowTargets = windowManager?.captureAllWindows() ?? []
         windowTargetListVersion += 1
-        if let current = activeLayoutTarget {
+
+        if let pendingIndex = pendingTargetIndexAfterClose {
+            pendingTargetIndexAfterClose = nil
+            // Clamp to the new list bounds so the selection lands on the next window,
+            // or the new last window if the closed one was at the end.
+            if availableWindowTargets.isEmpty {
+                activeTargetIndex = 0
+            } else {
+                activeTargetIndex = min(pendingIndex, availableWindowTargets.count - 1)
+            }
+        } else if let current = activeLayoutTarget {
             activeTargetIndex = availableWindowTargets.firstIndex(where: {
                 $0.processIdentifier == current.processIdentifier
                 && $0.windowElement == current.windowElement
@@ -523,6 +533,11 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Closes the window at the given index in the window list.
     /// If `quitAppOnLastWindowClose` is true and this is the app's last window,
     /// the app itself is terminated.
+    /// The index to select after the next `refreshAvailableWindows` call.
+    /// Set by `closeWindowTarget` so the selection lands on the next window
+    /// rather than jumping to the top of the list.
+    private var pendingTargetIndexAfterClose: Int?
+
     func closeWindowTarget(at index: Int) {
         guard index >= 0, index < availableWindowTargets.count else { return }
         let target = availableWindowTargets[index]
@@ -532,8 +547,12 @@ final class AppState: NSObject, NSMenuDelegate {
             $0.processIdentifier == target.processIdentifier
         }.count == 1
 
+        // Remember where the selection should land after the window disappears.
+        // The closed window will be removed, so `index` will point at the next one.
+        // If it was the last item, clamp to the new last item.
+        pendingTargetIndexAfterClose = index
+
         if isLastWindow && quitAppOnLastWindowClose {
-            // Terminate the app instead of just closing the window.
             NSRunningApplication(processIdentifier: target.processIdentifier)?.terminate()
         } else {
             accessibilityService.closeWindow(target.windowElement)
@@ -888,6 +907,12 @@ final class AppState: NSObject, NSMenuDelegate {
         if (shortcut.keyCode == UInt32(kVK_UpArrow) || shortcut.keyCode == UInt32(kVK_DownArrow)),
            shortcut.modifiers == 0 {
             return NSLocalizedString("Arrow keys are reserved for switching target windows.", comment: "Arrow key shortcut reserved for window cycling")
+        }
+
+        // "/" is reserved for closing the selected window.
+        if shortcut.keyCode == UInt32(kVK_ANSI_Slash),
+           shortcut.modifiers == 0 {
+            return NSLocalizedString("/ is reserved for closing the selected window.", comment: "Slash shortcut reserved for closing window")
         }
 
         // Cmd+F is reserved for the window search field.
@@ -1450,6 +1475,7 @@ final class AppState: NSObject, NSMenuDelegate {
             saveLayoutPresets()
         }
         migrateRemoveArrowShortcutsFromPresets()
+        migrateRemoveSlashShortcutFromPresets()
         sanitizePresetGlobalShortcutEligibility()
         selectedLayoutPresetID = layoutPresets.first?.id
     }
@@ -1467,6 +1493,24 @@ final class AppState: NSObject, NSMenuDelegate {
             let before = layoutPresets[i].shortcuts.count
             layoutPresets[i].shortcuts.removeAll { shortcut in
                 reservedKeyCodes.contains(shortcut.keyCode) && shortcut.modifiers == 0
+            }
+            if layoutPresets[i].shortcuts.count != before { changed = true }
+        }
+        if changed { saveLayoutPresets() }
+    }
+
+    /// Remove "/" (Slash) shortcut from layout presets.
+    /// This key is now reserved for closing the selected window.
+    private func migrateRemoveSlashShortcutFromPresets() {
+        let migrationKey = "didMigrateRemoveSlashShortcut"
+        guard !UserDefaults.standard.bool(forKey: migrationKey) else { return }
+        UserDefaults.standard.set(true, forKey: migrationKey)
+
+        var changed = false
+        for i in layoutPresets.indices {
+            let before = layoutPresets[i].shortcuts.count
+            layoutPresets[i].shortcuts.removeAll { shortcut in
+                shortcut.keyCode == UInt32(kVK_ANSI_Slash) && shortcut.modifiers == 0
             }
             if layoutPresets[i].shortcuts.count != before { changed = true }
         }
@@ -1688,6 +1732,9 @@ final class AppState: NSObject, NSMenuDelegate {
             return true
         case kVK_Return:
             raiseCurrentTargetWindow()
+            return true
+        case kVK_ANSI_Slash where event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty:
+            closeWindowTarget(at: activeTargetIndex)
             return true
         case kVK_ANSI_F where event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
             // Handled in MainWindowController.performKeyEquivalent which checks first responder.

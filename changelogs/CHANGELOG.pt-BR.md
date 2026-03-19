@@ -7,6 +7,7 @@
 - Botão de fechar nas linhas da barra lateral de janelas: ao passar o mouse sobre o nome de uma janela, um botão × aparece para fechá-la
 - Configuração "Encerrar o app ao fechar a última janela" (Configurações > Janelas): quando ativada (padrão), fechar a última janela de um app encerra o app; quando desativada, apenas a janela é fechada
 - O tooltip do botão de fechar mostra o nome da janela; quando a ação encerrará o app, mostra o nome do app
+- Atalho de teclado "/" para fechar a janela selecionada (ou encerrar o app se for a última janela e a configuração estiver ativada)
 
 ## [2.0.1] - 2026-03-19
 

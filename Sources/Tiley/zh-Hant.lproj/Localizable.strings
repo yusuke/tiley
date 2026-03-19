@@ -94,8 +94,11 @@
 "Delete \"%@\"" = "刪除\U201C%@\U201D";
 "Click to change \"%@\"" = "點擊以變更\U201C%@\U201D";
 "Are you sure you want to delete the layout \"%@\"?" = "確定要刪除版面\U201C%@\U201D嗎？";
-"Filter windows..." = "篩選視窗…";
+"Type to filter" = "輸入以篩選";
+"Type to filter (⌘F)" = "輸入以篩選 (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F 已保留用於搜尋視窗列表。";
+"/ is reserved for closing the selected window." = "/ 已保留用於關閉所選視窗。";
+"Close window" = "關閉視窗";
 "Bring to front" = "移至最前";
 "Next window" = "下一個視窗";
 "Previous window" = "上一個視窗";
@@ -103,3 +106,6 @@
 "Confirm search criteria" = "確認搜尋條件";
 "Clear search criteria" = "清除搜尋條件";
 "Close Tiley" = "關閉 Tiley";
+"Show sidebar" = "顯示側邊欄";
+"Hide sidebar" = "隱藏側邊欄";
+"Settings (⌘,)" = "設定 (⌘,)";

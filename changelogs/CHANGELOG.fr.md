@@ -7,6 +7,7 @@
 - Bouton de fermeture dans les lignes de la barre latérale des fenêtres : au survol du nom d'une fenêtre, un bouton × apparaît pour la fermer
 - Réglage « Quitter l'app en fermant la dernière fenêtre » (Réglages > Fenêtres) : lorsqu'il est activé (par défaut), fermer la dernière fenêtre d'une app quitte l'app ; lorsqu'il est désactivé, seule la fenêtre est fermée
 - L'infobulle du bouton de fermeture affiche le nom de la fenêtre ; lorsque l'action quittera l'app, le nom de l'app est affiché
+- Raccourci clavier « / » pour fermer la fenêtre sélectionnée (ou quitter l'app s'il s'agit de la dernière fenêtre et que le réglage est activé)
 
 ## [2.0.1] - 2026-03-19
 

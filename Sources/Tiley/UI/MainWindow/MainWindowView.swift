@@ -444,14 +444,15 @@ struct MainWindowView: View {
                     .padding(.bottom, Self.footerBottomPadding)
 
                 Spacer(minLength: 0)
-
-                if screenRole.isTarget {
-                    keyboardHintsBar
-                }
             }
             .frame(width: mainContentWidth)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
+        .overlay(alignment: .bottom) {
+            if screenRole.isTarget {
+                keyboardHintsBar
+            }
+        }
     }
 
     private var keyboardHintsBar: some View {
@@ -463,14 +464,13 @@ struct MainWindowView: View {
                 hintLabel("Esc", NSLocalizedString("Clear search criteria", comment: "Status bar hint for clearing search criteria"))
             } else {
                 hintLabel("↩", NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
-                hintLabel("⌘F", NSLocalizedString("Search windows", comment: "Status bar hint for Cmd+F window search"))
+                hintLabel("/", NSLocalizedString("Close window", comment: "Status bar hint for slash key to close window"))
                 hintLabel("Esc", NSLocalizedString("Close Tiley", comment: "Status bar hint for Escape to close"))
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 20)
-        .padding(.horizontal, Self.layoutPanelHorizontalPadding)
-        .padding(.bottom, 4)
+        .frame(height: 24)
+        .background(.ultraThinMaterial)
     }
 
     private func hintLabel(_ key: String, _ label: String) -> some View {
@@ -503,7 +503,9 @@ struct MainWindowView: View {
                         .font(.system(size: 13, weight: .medium))
                 }
                 .buttonStyle(TahoeToolbarButtonStyle())
-                .help(NSLocalizedString("Toggle window list", comment: "Sidebar toggle button tooltip"))
+                .instantTooltip(isSidebarVisible
+                    ? NSLocalizedString("Hide sidebar", comment: "Sidebar toggle tooltip when visible")
+                    : NSLocalizedString("Show sidebar", comment: "Sidebar toggle tooltip when hidden"))
             }
 
             targetInfoContent
@@ -521,7 +523,7 @@ struct MainWindowView: View {
                         .font(.system(size: 13, weight: .medium))
                 }
                 .buttonStyle(TahoeToolbarButtonStyle())
-                .help("Edit Settings")
+                .instantTooltip(NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
             }
         }
         .frame(height: Self.footerHeight)
@@ -632,6 +634,7 @@ struct MainWindowView: View {
                     isSearchFieldFocused = focused
                 }
             )
+            .instantTooltip(NSLocalizedString("Type to filter (⌘F)", comment: "Window filter search field tooltip"))
             .frame(height: 22)
             .padding(.horizontal, 8)
             .padding(.top, 8)
@@ -2042,7 +2045,7 @@ private struct WindowSearchField: NSViewRepresentable {
     func makeNSView(context: Context) -> NSSearchField {
         let field = NSSearchField()
         field.placeholderString = NSLocalizedString(
-            "Filter windows...", comment: "Window filter search field placeholder"
+            "Type to filter", comment: "Window filter search field placeholder"
         )
         field.font = NSFont.systemFont(ofSize: 11)
         field.focusRingType = .none

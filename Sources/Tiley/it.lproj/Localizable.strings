@@ -94,8 +94,11 @@
 "Delete \"%@\"" = "Elimina \"%@\"";
 "Click to change \"%@\"" = "Clicca per modificare \"%@\"";
 "Are you sure you want to delete the layout \"%@\"?" = "Sei sicuro di voler eliminare il layout \"%@\"?";
-"Filter windows..." = "Filtra finestre…";
+"Type to filter" = "Digita per filtrare";
+"Type to filter (⌘F)" = "Digita per filtrare (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F è riservato per la ricerca nell'elenco finestre.";
+"/ is reserved for closing the selected window." = "/ è riservato per chiudere la finestra selezionata.";
+"Close window" = "Chiudi finestra";
 "Bring to front" = "Porta in primo piano";
 "Next window" = "Finestra successiva";
 "Previous window" = "Finestra precedente";
@@ -103,3 +106,6 @@
 "Confirm search criteria" = "Conferma criteri di ricerca";
 "Clear search criteria" = "Cancella criteri di ricerca";
 "Close Tiley" = "Chiudi Tiley";
+"Show sidebar" = "Mostra barra laterale";
+"Hide sidebar" = "Nascondi barra laterale";
+"Settings (⌘,)" = "Impostazioni (⌘,)";

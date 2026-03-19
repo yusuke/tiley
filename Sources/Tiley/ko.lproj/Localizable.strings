@@ -94,8 +94,11 @@
 "Delete \"%@\"" = "\"%@\" 삭제";
 "Click to change \"%@\"" = "클릭하여 \"%@\" 변경";
 "Are you sure you want to delete the layout \"%@\"?" = "레이아웃 \"%@\"을(를) 삭제하시겠습니까?";
-"Filter windows..." = "윈도우 필터링...";
+"Type to filter" = "입력하여 필터링";
+"Type to filter (⌘F)" = "입력하여 필터링 (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F는 윈도우 목록 검색에 예약되어 있습니다.";
+"/ is reserved for closing the selected window." = "/는 선택한 윈도우를 닫는 데 예약되어 있습니다.";
+"Close window" = "윈도우 닫기";
 "Bring to front" = "앞으로 가져오기";
 "Next window" = "다음 창";
 "Previous window" = "이전 창";
@@ -103,3 +106,6 @@
 "Confirm search criteria" = "검색 조건 확정";
 "Clear search criteria" = "검색 조건 지우기";
 "Close Tiley" = "Tiley 닫기";
+"Show sidebar" = "사이드바 표시";
+"Hide sidebar" = "사이드바 숨기기";
+"Settings (⌘,)" = "설정 (⌘,)";
