@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.2] - 2026-03-19
+
 ### Aggiunto
 
 - Pulsante di chiusura nelle righe della barra laterale delle finestre: passando il mouse sul nome di una finestra appare un pulsante × per chiuderla
