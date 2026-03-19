@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-03-20
+
 ### Added
 
 - Double-click a window in the sidebar list to bring it to the foreground and dismiss the layout grid
@@ -228,7 +230,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v2.0.3...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/yusuke/tiley/releases/tag/v2.1.0
 [2.0.3]: https://github.com/yusuke/tiley/releases/tag/v2.0.3
 [2.0.2]: https://github.com/yusuke/tiley/releases/tag/v2.0.2
 [2.0.1]: https://github.com/yusuke/tiley/releases/tag/v2.0.1

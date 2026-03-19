@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-03-20
+
 ### Añadido
 
 - Doble clic en una ventana de la barra lateral para traerla al frente y cerrar la cuadrícula de diseño

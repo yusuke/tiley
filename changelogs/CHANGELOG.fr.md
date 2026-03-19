@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-03-20
+
 ### Ajouté
 
 - Double-clic sur une fenêtre dans la barre latérale pour la mettre au premier plan et fermer la grille de disposition

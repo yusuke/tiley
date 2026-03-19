@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-03-20
+
 ### Adicionado
 
 - Duplo clique em uma janela na barra lateral para trazê-la para o primeiro plano e fechar a grade de layout

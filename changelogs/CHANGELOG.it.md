@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-03-20
+
 ### Aggiunto
 
 - Doppio clic su una finestra nella barra laterale per portarla in primo piano e chiudere la griglia di layout
