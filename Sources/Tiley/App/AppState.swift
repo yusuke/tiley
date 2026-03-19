@@ -1904,11 +1904,6 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
-    private func hasRegisteredLocalShortcut(for event: NSEvent) -> Bool {
-        guard let shortcut = HotKeyShortcut.from(event: event, requireModifiers: false) else { return false }
-        return layoutPresets.contains(where: { $0.localShortcuts.contains(shortcut) })
-    }
-
     private func makeLayoutPreviewController(for target: WindowTarget) -> LayoutPreviewOverlayController {
         LayoutPreviewOverlayController(
             screenFrame: target.screenFrame,

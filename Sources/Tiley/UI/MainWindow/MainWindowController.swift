@@ -285,16 +285,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         return NSScreen.main ?? NSScreen.screens.first
     }
 
-    private func preferredScreen(for window: NSWindow) -> NSScreen? {
-        if let containingScreen = screenContainingWindowCenter(window) {
-            return containingScreen
-        }
-        if let screen = window.screen {
-            return screen
-        }
-        return preferredDisplayScreen(for: window)
-    }
-
     private func screenContainingWindowCenter(_ window: NSWindow) -> NSScreen? {
         let center = NSPoint(x: window.frame.midX, y: window.frame.midY)
         return NSScreen.screens.first(where: { $0.frame.contains(center) })
