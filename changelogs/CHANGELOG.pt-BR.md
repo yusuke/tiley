@@ -11,7 +11,7 @@
 ### Corrigido
 
 - Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta
-- Corrigido um problema onde a janela não se movia para a posição selecionada quando o app de destino reposiciona sua janela durante o redimensionamento; a última operação AX agora é sempre uma definição de posição
+- Corrigido um problema onde a posição ou o tamanho da janela não eram aplicados quando o app de destino ajusta sua geometria de forma assíncrona após uma alteração AX; um loop de verificação em segundo plano agora reaaplica automaticamente os atributos desviados
 
 ## [2.0.0] - 2026-03-19
 

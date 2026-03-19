@@ -11,7 +11,7 @@
 ### Corretto
 
 - Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto
-- Corretto un problema in cui la finestra non si spostava nella posizione selezionata quando l'app di destinazione riposiziona la finestra durante il ridimensionamento; l'ultima operazione AX è ora sempre un'impostazione di posizione
+- Corretto un problema in cui la posizione o la dimensione della finestra non venivano applicate quando l'app di destinazione regola la geometria in modo asincrono dopo una modifica AX; un ciclo di verifica in background ora riapplica automaticamente gli attributi deviati
 
 ## [2.0.0] - 2026-03-19
 

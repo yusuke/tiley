@@ -11,7 +11,7 @@
 ### Corregido
 
 - Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta
-- Corregido un problema donde la ventana no se movía a la posición seleccionada cuando la app de destino reposiciona su ventana durante el redimensionamiento; la última operación AX ahora es siempre un ajuste de posición
+- Corregido un problema donde la posición o el tamaño de la ventana no se aplicaban cuando la app de destino ajusta su geometría de forma asíncrona tras un cambio AX; un bucle de verificación en segundo plano ahora reaplica automáticamente los atributos desviados
 
 ## [2.0.0] - 2026-03-19
 

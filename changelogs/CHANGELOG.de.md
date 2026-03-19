@@ -11,7 +11,7 @@
 ### Behoben
 
 - Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde
-- Fenster wurde nicht an die ausgewählte Position verschoben, wenn die Ziel-App die Fensterposition bei Größenänderung neu berechnet; die letzte AX-Operation ist jetzt immer eine Positionssetzung
+- Fensterposition oder -größe wurde nicht angewendet, wenn die Ziel-App ihre Geometrie nach einer AX-Änderung asynchron anpasst; eine Hintergrund-Überprüfungsschleife wendet abweichende Attribute nun automatisch erneut an
 
 ## [2.0.0] - 2026-03-19
 

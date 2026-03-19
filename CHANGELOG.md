@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open
-- Fixed window not moving to the selected position when the target app repositions its window during a resize; the final AX operation is now always a position set
+- Fixed window position or size not being applied when the target app asynchronously adjusts its geometry after an AX change; a background verify-and-retry loop now re-applies any drifted attribute
 
 ## [2.0.0] - 2026-03-19
 

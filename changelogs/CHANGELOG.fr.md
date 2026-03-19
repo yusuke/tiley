@@ -11,7 +11,7 @@
 ### Corrigé
 
 - Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte
-- Correction d'un problème où la fenêtre ne se déplaçait pas à la position sélectionnée lorsque l'app cible repositionne sa fenêtre pendant le redimensionnement ; la dernière opération AX est désormais toujours un réglage de position
+- Correction d'un problème où la position ou la taille de la fenêtre n'était pas appliquée lorsque l'app cible ajuste sa géométrie de manière asynchrone après un changement AX ; une boucle de vérification en arrière-plan réapplique désormais automatiquement les attributs déviés
 
 ## [2.0.0] - 2026-03-19
 

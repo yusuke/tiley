@@ -194,67 +194,102 @@ final class AccessibilityService {
         return changed
     }
 
-    /// Moves and resizes the given window, returning `true` when the window's
-    /// actual post-move size differs from the requested size (i.e. the app
-    /// applied its own constraints).
+    /// Moves and resizes the given window synchronously, then returns.
+    /// Call ``verifyAndCorrectFrame(_:for:)`` afterwards (on a background
+    /// thread) to handle apps that asynchronously revert position or size.
     @discardableResult
     func setFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) throws -> Bool {
-        // AX coordinates have their origin at the top-left of the primary
-        // screen, so use the primary screen's maxY for the conversion from
-        // AppKit's bottom-left coordinate system.
+        let (targetOrigin, targetSize) = axOriginAndSize(for: frame, screenFrame: screenFrame)
+
+        // Apply position first (for cross-screen moves), then size,
+        // then re-apply both to handle apps that need a second pass.
+        try applyPositionAndSize(targetOrigin, targetSize, for: window)
+
+        return false
+    }
+
+    /// Verifies the window matches the expected frame and re-applies any
+    /// attribute that drifted.  Designed to run on a background thread
+    /// after the UI has been dismissed.
+    func verifyAndCorrectFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) {
+        let (targetOrigin, targetSize) = axOriginAndSize(for: frame, screenFrame: screenFrame)
+        let tolerance: CGFloat = 2
+        let maxRetries = 5
+
+        for _ in 0..<maxRetries {
+            usleep(200_000) // 200 ms
+
+            guard let (actualOrigin, actualSize) = try? readPositionAndSize(of: window) else { return }
+
+            let positionOK = abs(actualOrigin.x - targetOrigin.x) <= tolerance
+                && abs(actualOrigin.y - targetOrigin.y) <= tolerance
+            let sizeOK = abs(actualSize.width - targetSize.width) <= tolerance
+                && abs(actualSize.height - targetSize.height) <= tolerance
+
+            if positionOK && sizeOK { return }
+
+            // Re-apply only the attributes that drifted.
+            if !sizeOK {
+                var sz = targetSize
+                if let v = AXValueCreate(.cgSize, &sz) {
+                    AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, v)
+                }
+            }
+            if !positionOK {
+                var org = targetOrigin
+                if let v = AXValueCreate(.cgPoint, &org) {
+                    AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
+                }
+            }
+        }
+    }
+
+    /// Converts an AppKit frame to AX origin + size.
+    private func axOriginAndSize(for frame: CGRect, screenFrame: CGRect) -> (origin: CGPoint, size: CGSize) {
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
-        var origin = CGPoint(x: frame.minX, y: primaryMaxY - frame.maxY)
-        var size = frame.size
-        guard let position = AXValueCreate(.cgPoint, &origin) else {
+        let origin = CGPoint(x: frame.minX, y: primaryMaxY - frame.maxY)
+        return (origin, frame.size)
+    }
+
+    /// Applies position then size in two passes for cross-screen compatibility.
+    private func applyPositionAndSize(_ origin: CGPoint, _ size: CGSize, for window: AXUIElement) throws {
+        var org = origin
+        var sz = size
+        guard let position = AXValueCreate(.cgPoint, &org) else {
             throw WindowAccessError.positionSetFailed
         }
-        guard let sizeValue = AXValueCreate(.cgSize, &size) else {
+        guard let sizeValue = AXValueCreate(.cgSize, &sz) else {
             throw WindowAccessError.sizeSetFailed
         }
 
-        // When moving a window across screens of different sizes, some apps
-        // constrain the window size based on the screen it currently occupies.
-        // To work around this we apply the geometry in multiple passes:
         // 1. Set position to move the window onto the destination screen.
-        // 2. Set size — the app now accepts the larger dimensions.
-        // 3. Re-apply size once more in case the first resize was still
-        //    constrained by the old screen.
-        // 4. Re-apply position LAST to correct any drift caused by the
-        //    resize — some apps reposition the window during a size change,
-        //    so the final operation must be a position set.
         let positionResult = AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
         guard positionResult == .success else {
             throw WindowAccessError.positionSetFailed
         }
 
+        // 2. Set size — the app now accepts the dimensions for the new screen.
         let sizeResult = AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         guard sizeResult == .success else {
             throw WindowAccessError.sizeSetFailed
         }
 
-        // Re-apply size then position. Ending with position ensures apps
-        // that adjust window position during resize don't override our target.
+        // 3. Re-apply both to handle apps that need a second pass.
         AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+    }
 
-        // Give the app a moment to apply its own constraints before reading
-        // back the actual size.  A short run-loop spin is enough for most apps.
-        usleep(50_000) // 50 ms
-
-        // Read back the actual size to detect if the app constrained it.
-        let constrained: Bool
-        if let actualSize = try? copyAXValueAttribute(window, attribute: kAXSizeAttribute) {
-            var actualCGSize = CGSize.zero
-            if AXValueGetValue(actualSize, .cgSize, &actualCGSize) {
-                constrained = abs(actualCGSize.width - size.width) > 1
-                    || abs(actualCGSize.height - size.height) > 1
-            } else {
-                constrained = false
-            }
-        } else {
-            constrained = false
+    /// Reads back the current AX position and size of a window.
+    private func readPositionAndSize(of window: AXUIElement) throws -> (origin: CGPoint, size: CGSize) {
+        let posValue = try copyAXValueAttribute(window, attribute: kAXPositionAttribute)
+        let szValue = try copyAXValueAttribute(window, attribute: kAXSizeAttribute)
+        var origin = CGPoint.zero
+        var size = CGSize.zero
+        guard AXValueGetValue(posValue, .cgPoint, &origin),
+              AXValueGetValue(szValue, .cgSize, &size) else {
+            throw WindowAccessError.unsupportedWindow
         }
-        return constrained
+        return (origin, size)
     }
 
     /// Raises a window to the front of its application's window stack.
