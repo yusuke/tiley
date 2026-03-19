@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Botón de cierre en las filas de la barra lateral de ventanas: al pasar el cursor sobre el nombre de una ventana aparece un botón × para cerrarla
+- Ajuste "Cerrar la app al cerrar la última ventana" (Ajustes > Ventanas): cuando está activado (por defecto), cerrar la última ventana de una app cierra la app; cuando está desactivado, solo se cierra la ventana
+- El tooltip del botón de cierre muestra el nombre de la ventana; cuando la acción cerrará la app, muestra el nombre de la app
+
 ## [2.0.1] - 2026-03-19
 
 ### Cambiado

@@ -77,6 +77,7 @@ struct MainWindowView: View {
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
+    @State private var hoveredCloseButtonIndex: Int?
     @State private var isSearchFieldFocused = false
     @State private var isSidebarVisible = UserDefaults.standard.object(forKey: "windowListSidebarVisible") != nil
         ? UserDefaults.standard.bool(forKey: "windowListSidebarVisible")
@@ -581,11 +582,18 @@ struct MainWindowView: View {
         let appName: String
         let windowTitle: String
         let pid: pid_t
+        let isLastWindowOfApp: Bool
     }
 
     private var filteredWindowTargets: [WindowListItem] {
         let targets = appState.windowTargetList
         let query = windowSearchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+
+        // Count windows per PID to determine if a window is the last one for its app.
+        var windowCountByPID: [pid_t: Int] = [:]
+        for target in targets {
+            windowCountByPID[target.processIdentifier, default: 0] += 1
+        }
 
         var items: [WindowListItem] = []
         for (index, target) in targets.enumerated() {
@@ -599,7 +607,8 @@ struct MainWindowView: View {
                 id: index,
                 appName: target.appName,
                 windowTitle: title,
-                pid: target.processIdentifier
+                pid: target.processIdentifier,
+                isLastWindowOfApp: windowCountByPID[target.processIdentifier] == 1
             ))
         }
         return items
@@ -695,6 +704,45 @@ struct MainWindowView: View {
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
                     .stroke(ThemeColors.presetRowBorder(selected: isSelected, for: colorScheme), lineWidth: isSelected ? 1 : 0)
             )
+            .overlay(alignment: .trailing) {
+                if isHovered {
+                    let isCloseHovered = hoveredCloseButtonIndex == item.id
+                    Button {
+                        appState.closeWindowTarget(at: item.id)
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundStyle(isCloseHovered ? .primary : .tertiary)
+                            .frame(width: 16, height: 16)
+                            .background(
+                                Circle()
+                                    .fill(isCloseHovered
+                                          ? Color(white: colorScheme == .dark ? 0.45 : 0.55)
+                                          : Color(white: colorScheme == .dark ? 0.3 : 0.7))
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .onHover { hovering in
+                        hoveredCloseButtonIndex = hovering ? item.id : nil
+                    }
+                    .instantTooltip({
+                        if item.isLastWindowOfApp && appState.quitAppOnLastWindowClose {
+                            return String(
+                                format: NSLocalizedString("Quit \"%@\"", comment: "Tooltip for closing the last window of an app (quits the app)"),
+                                item.appName
+                            )
+                        } else {
+                            return String(
+                                format: NSLocalizedString("Close \"%@\"", comment: "Tooltip for close window button with window name"),
+                                item.windowTitle.isEmpty ? item.appName : item.windowTitle
+                            )
+                        }
+                    }())
+                    .padding(.trailing, 4)
+                    .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut(duration: 0.15), value: isHovered)
         }
         .buttonStyle(.plain)
         .onHover { hovering in hoveredWindowIndex = hovering ? item.id : nil }
@@ -798,6 +846,23 @@ struct MainWindowView: View {
                             draftSettings.hotKeyShortcut = .default
                         }
                     }
+                }
+            }
+
+            TahoeSettingsSection(title: NSLocalizedString("Windows", comment: "Settings section")) {
+                VStack(spacing: 0) {
+                    TahoeSettingsRow(label: NSLocalizedString("Quit app when closing last window", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.quitAppOnLastWindowClose },
+                            set: { newValue in
+                                draftSettings.quitAppOnLastWindowClose = newValue
+                                appState.quitAppOnLastWindowClose = newValue
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
                 }
             }
 

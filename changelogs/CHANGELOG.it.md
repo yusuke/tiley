@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Pulsante di chiusura nelle righe della barra laterale delle finestre: passando il mouse sul nome di una finestra appare un pulsante × per chiuderla
+- Impostazione "Esci dall'app alla chiusura dell'ultima finestra" (Impostazioni > Finestre): quando attiva (predefinito), chiudere l'ultima finestra di un'app chiude l'app; quando disattivata, viene chiusa solo la finestra
+- Il tooltip del pulsante di chiusura mostra il nome della finestra; quando l'azione chiuderà l'app, mostra il nome dell'app
+
 ## [2.0.1] - 2026-03-19
 
 ### Modificato

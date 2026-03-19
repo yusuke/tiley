@@ -1,7 +1,7 @@
 "Tiley" = "Tiley";
 "Show the grid from the menu bar or use the global shortcut." = "メニューバー、またはグローバルショートカットでグリッドを表示します。";
 "No active target" = "アクティブな対象がありません";
-"Activate the window you want to arrange, then choose Show Layout Grid." = "配置したいウインドウを前面にしてから、「レイアウトグリッドを表示」を選んでください。";
+"Activate the window you want to arrange, then choose Show Layout Grid." = "配置したいウインドウを前面にしてから、\U201Cレイアウトグリッドを表示\U201Dを選んでください。";
 "Select a layout region for %@." = "%@ のレイアウト領域を選択してください。";
 "Applied grid settings." = "グリッド設定を適用しました。";
 "Canceled settings changes." = "設定変更を取り消しました。";
@@ -47,6 +47,8 @@
 "Launch at login" = "ログイン時に起動";
 "Show menu icon" = "メニューアイコンを表示";
 "Show Dock icon" = "Dockアイコンを表示";
+"Windows" = "ウインドウ";
+"Quit app when closing last window" = "最後のウインドウを閉じるときアプリを終了";
 "Changes are applied immediately." = "変更はすぐに反映されます。";
 "Global shortcut" = "グローバルショートカット";
 "Reset to Default" = "デフォルトに戻す";
@@ -60,6 +62,8 @@
 "This shortcut is already used by another layout." = "このショートカットは他のレイアウトで既に使われています。";
 "This shortcut is already assigned to this layout." = "このショートカットはこのレイアウトに既に割り当てられています。";
 "Cancel" = "キャンセル";
+"Close \"%@\"" = "\U201C%@\U201Dを閉じる";
+"Quit \"%@\"" = "\U201C%@\U201Dを終了";
 "Sample placement" = "配置サンプル";
 "Check for Updates…" = "アップデートを確認…";
 "Automatically check for updates" = "自動的にアップデートを確認";
@@ -85,11 +89,11 @@
 "Edit Layout" = "レイアウトを編集";
 "Done Editing" = "編集を完了";
 "Delete Shortcut" = "ショートカットを削除";
-"Are you sure you want to delete \"%@\"?" = "「%@」を削除してもよろしいですか？";
+"Are you sure you want to delete \"%@\"?" = "\U201C%@\U201Dを削除してもよろしいですか？";
 "Delete" = "削除";
-"Delete \"%@\"" = "「%@」を削除";
-"Click to change \"%@\"" = "クリックして「%@」を変更";
-"Are you sure you want to delete the layout \"%@\"?" = "レイアウト「%@」を削除してもよろしいですか？";
+"Delete \"%@\"" = "\U201C%@\U201Dを削除";
+"Click to change \"%@\"" = "クリックして\U201C%@\U201Dを変更";
+"Are you sure you want to delete the layout \"%@\"?" = "レイアウト\U201C%@\U201Dを削除してもよろしいですか？";
 "Filter windows..." = "ウインドウを絞り込む…";
 "⌘F is reserved for searching the window list." = "⌘Fはウインドウリストの検索に予約されています。";
 "Bring to front" = "最前面へ";

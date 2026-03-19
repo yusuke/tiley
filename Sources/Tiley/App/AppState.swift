@@ -68,6 +68,7 @@ final class AppState: NSObject, NSMenuDelegate {
         var launchAtLoginEnabled: Bool
         var menuIconVisible: Bool
         var dockIconVisible: Bool
+        var quitAppOnLastWindowClose: Bool
     }
 
     var accessibilityGranted = false
@@ -92,6 +93,9 @@ final class AppState: NSObject, NSMenuDelegate {
     var launchAtLoginEnabled = false
     var menuIconVisible = true
     var dockIconVisible = false
+    var quitAppOnLastWindowClose = true {
+        didSet { UserDefaults.standard.set(quitAppOnLastWindowClose, forKey: UserDefaultsKey.quitAppOnLastWindowClose) }
+    }
     var layoutPresets: [LayoutPreset] = []
     var selectedLayoutPresetID: UUID?
     var launchMessage = NSLocalizedString("Show the grid from the menu bar or use the global shortcut.", comment: "Initial launch message")
@@ -147,7 +151,8 @@ final class AppState: NSObject, NSMenuDelegate {
             hotKeyShortcut: hotKeyShortcut,
             launchAtLoginEnabled: launchAtLoginEnabled,
             menuIconVisible: menuIconVisible,
-            dockIconVisible: dockIconVisible
+            dockIconVisible: dockIconVisible,
+            quitAppOnLastWindowClose: quitAppOnLastWindowClose
         )
     }
 
@@ -312,6 +317,7 @@ final class AppState: NSObject, NSMenuDelegate {
         _ = updateLaunchAtLogin(enabled: settings.launchAtLoginEnabled, updateMessageOnFailure: true)
         setMenuIconVisible(settings.menuIconVisible)
         setDockIconVisible(settings.dockIconVisible)
+        quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
         sanitizePresetGlobalShortcutEligibility()
         // Only register the main toggle hotkey; keep preset global hotkeys
         // unregistered while the layout grid is visible so local shortcuts work.
@@ -511,6 +517,31 @@ final class AppState: NSObject, NSMenuDelegate {
             }) ?? 0
         } else {
             activeTargetIndex = 0
+        }
+    }
+
+    /// Closes the window at the given index in the window list.
+    /// If `quitAppOnLastWindowClose` is true and this is the app's last window,
+    /// the app itself is terminated.
+    func closeWindowTarget(at index: Int) {
+        guard index >= 0, index < availableWindowTargets.count else { return }
+        let target = availableWindowTargets[index]
+
+        // Check if this is the last window of its app.
+        let isLastWindow = availableWindowTargets.filter {
+            $0.processIdentifier == target.processIdentifier
+        }.count == 1
+
+        if isLastWindow && quitAppOnLastWindowClose {
+            // Terminate the app instead of just closing the window.
+            NSRunningApplication(processIdentifier: target.processIdentifier)?.terminate()
+        } else {
+            accessibilityService.closeWindow(target.windowElement)
+        }
+
+        // Refresh the window list after a short delay to let the window close.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
         }
     }
 
@@ -1322,6 +1353,9 @@ final class AppState: NSObject, NSMenuDelegate {
         } else {
             dockIconVisible = false
         }
+        if let storedQuitAppOnLastWindowClose = defaults.object(forKey: UserDefaultsKey.quitAppOnLastWindowClose) as? Bool {
+            quitAppOnLastWindowClose = storedQuitAppOnLastWindowClose
+        }
         refreshLaunchAtLoginState()
     }
 
@@ -1759,4 +1793,5 @@ private enum UserDefaultsKey {
     static let menuIconVisible = "menuIconVisible"
     static let dockIconVisible = "dockIconVisible"
     static let windowListSidebarVisible = "windowListSidebarVisible"
+    static let quitAppOnLastWindowClose = "quitAppOnLastWindowClose"
 }

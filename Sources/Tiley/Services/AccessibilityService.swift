@@ -297,6 +297,17 @@ final class AccessibilityService {
         AXUIElementPerformAction(window, kAXRaiseAction as CFString)
     }
 
+    /// Closes a window by pressing its close button via the Accessibility API.
+    /// Returns `true` if the close action was successfully performed.
+    @discardableResult
+    func closeWindow(_ window: AXUIElement) -> Bool {
+        var closeButton: AnyObject?
+        let result = AXUIElementCopyAttributeValue(window, kAXCloseButtonAttribute as CFString, &closeButton)
+        guard result == .success, let button = closeButton else { return false }
+        let actionResult = AXUIElementPerformAction(button as! AXUIElement, kAXPressAction as CFString)
+        return actionResult == .success
+    }
+
     /// Returns all on-screen standard windows (excluding Tiley) in z-order (front to back).
     func allWindowTargets() -> [WindowTarget] {
         guard checkAccess(prompt: false) else { return [] }

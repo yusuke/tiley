@@ -47,6 +47,8 @@
 "Launch at login" = "Iniciar al iniciar sesión";
 "Show menu icon" = "Mostrar icono en la barra de menús";
 "Show Dock icon" = "Mostrar icono en el Dock";
+"Windows" = "Ventanas";
+"Quit app when closing last window" = "Cerrar la app al cerrar la última ventana";
 "Changes are applied immediately." = "Los cambios se aplican de inmediato.";
 "Global shortcut" = "Atajo global";
 "Reset to Default" = "Restablecer valores";
@@ -60,6 +62,8 @@
 "This shortcut is already used by another layout." = "Este atajo ya lo usa otro diseño.";
 "This shortcut is already assigned to this layout." = "Este atajo ya está asignado a este diseño.";
 "Cancel" = "Cancelar";
+"Close \"%@\"" = "Cerrar \"%@\"";
+"Quit \"%@\"" = "Salir de \"%@\"";
 "Sample placement" = "Vista previa de ubicación";
 "Check for Updates…" = "Buscar actualizaciones…";
 "Automatically check for updates" = "Buscar actualizaciones automáticamente";

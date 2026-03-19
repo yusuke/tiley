@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Close button on window list sidebar rows: hover over a window name to reveal an × button that closes the window
+- "Quit app when closing last window" setting (Settings > Windows): when enabled (default), closing an app's last window terminates the app; when disabled, only the window is closed
+- Close button tooltip shows the window name, or the app name when it will quit the app
+
 ## [2.0.1] - 2026-03-19
 
 ### Changed
