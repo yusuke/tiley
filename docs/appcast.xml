@@ -3,6 +3,153 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>2.0.3</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Мягкие напоминания об обновлениях Sparkle: при обнаружении новой версии в фоновом режиме на значке в строке меню появляется красная точка, а рядом с кнопкой шестерёнки и кнопкой «Проверить обновления» в настройках отображается метка «Доступно обновление»</li>
+<li>Если значок в строке меню скрыт, он временно отображается с индикатором при обнаружении обновления и снова скрывается после завершения сеанса</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Окно настроек теперь скрывается, когда Sparkle находит обновление (ранее — только при начале загрузки), и восстанавливается при отмене</li>
+<li>Заголовок окна настроек теперь локализован на всех поддерживаемых языках</li>
+<li>Номер версии перемещён из заголовка настроек в раздел обновлений, рядом с кнопкой «Проверить обновления»</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Lembretes suaves de atualização do Sparkle: quando uma verificação em segundo plano encontra uma nova versão, um ponto vermelho aparece no ícone da barra de menus e rótulos "Atualização disponível" são exibidos ao lado do botão de engrenagem e do botão "Verificar atualizações" nas configurações</li>
+<li>Se o ícone da barra de menus estiver oculto, ele é exibido temporariamente com o emblema ao detectar uma atualização e ocultado novamente ao final da sessão</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>A janela de configurações é ocultada quando o Sparkle encontra uma atualização (antes apenas no início do download) e restaurada ao cancelar</li>
+<li>O título da janela de configurações agora é localizado em todos os idiomas suportados</li>
+<li>O número da versão foi movido do título das configurações para a seção de atualizações, ao lado do botão "Verificar atualizações"</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni</li>
+<li>Se l'icona della barra dei menu è nascosta, viene mostrata temporaneamente con il badge al rilevamento di un aggiornamento e nascosta nuovamente al termine della sessione</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>La finestra delle impostazioni viene ora nascosta quando Sparkle trova un aggiornamento (in precedenza solo all'inizio del download) e ripristinata in caso di annullamento</li>
+<li>Il titolo della finestra delle impostazioni è ora localizzato in tutte le lingue supportate</li>
+<li>Il numero di versione è stato spostato dal titolo delle impostazioni alla sezione Aggiornamenti, accanto al pulsante "Verifica aggiornamenti"</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Rappels de mise à jour discrets de Sparkle : lorsqu'une vérification en arrière-plan trouve une nouvelle version, un point rouge apparaît sur l'icône de la barre des menus et des labels « Mise à jour disponible » s'affichent à côté du bouton engrenage et du bouton « Vérifier les mises à jour » dans les réglages</li>
+<li>Si l'icône de la barre des menus est masquée, elle s'affiche temporairement avec le badge lors de la détection d'une mise à jour, puis se masque à nouveau à la fin de la session</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>La fenêtre des réglages est désormais masquée lorsque Sparkle trouve une mise à jour (auparavant uniquement au début du téléchargement) et restaurée en cas d'annulation</li>
+<li>Le titre de la fenêtre des réglages est maintenant localisé dans toutes les langues prises en charge</li>
+<li>Le numéro de version a été déplacé du titre des réglages vers la section Mises à jour, à côté du bouton « Vérifier les mises à jour »</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Recordatorios suaves de actualización de Sparkle: cuando una comprobación en segundo plano encuentra una nueva versión, aparece un punto rojo en el icono de la barra de menús y etiquetas "Actualización disponible" junto al botón de engranaje y el botón "Buscar actualizaciones" en los ajustes</li>
+<li>Si el icono de la barra de menús está oculto, se muestra temporalmente con la insignia al detectar una actualización y se oculta de nuevo al finalizar la sesión</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>La ventana de ajustes se oculta cuando Sparkle encuentra una actualización (antes solo al iniciar la descarga) y se restaura al cancelar</li>
+<li>El título de la ventana de ajustes está ahora localizado en todos los idiomas soportados</li>
+<li>El número de versión se movió del título de ajustes a la sección de actualizaciones, junto al botón "Buscar actualizaciones"</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Sanfte Sparkle-Update-Erinnerungen: Wenn eine Hintergrundprüfung eine neue Version findet, erscheint ein roter Badge-Punkt am Menüleistensymbol und „Update verfügbar"-Labels neben dem Zahnrad-Button und dem „Nach Updates suchen"-Button in den Einstellungen</li>
+<li>Wenn das Menüleistensymbol ausgeblendet ist, wird es bei Update-Erkennung vorübergehend mit Badge angezeigt und nach Ende der Update-Sitzung wieder ausgeblendet</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Das Einstellungsfenster wird jetzt ausgeblendet, wenn Sparkle ein Update findet (zuvor erst beim Download-Start), und beim Abbrechen wiederhergestellt</li>
+<li>Der Titel des Einstellungsfensters ist jetzt in allen unterstützten Sprachen lokalisiert</li>
+<li>Versionsnummer vom Einstellungstitel in den Update-Bereich neben den „Nach Updates suchen"-Button verschoben</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>Sparkle 溫和更新提醒：背景檢測到新版本時，選單列圖示顯示紅色徽章圓點，齒輪按鈕和設定中「檢查更新」按鈕旁顯示「有可用更新」標籤</li>
+<li>選單列圖示被隱藏時，檢測到更新會暫時顯示帶徽章的圖示，更新作業結束後恢復隱藏</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>Sparkle 發現更新時立即隱藏設定視窗（之前僅在開始下載時隱藏），取消時恢復顯示</li>
+<li>設定視窗標題已支援所有語言的在地化</li>
+<li>版本號從設定標題移至更新區段的「檢查更新」按鈕旁</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>Sparkle 温和更新提醒：后台检测到新版本时，菜单栏图标显示红色徽章圆点，齿轮按钮和设置中"检查更新"按钮旁显示"有可用更新"标签</li>
+<li>菜单栏图标被隐藏时，检测到更新会临时显示带徽章的图标，更新会话结束后恢复隐藏</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>Sparkle 发现更新时立即隐藏设置窗口（之前仅在开始下载时隐藏），取消时恢复显示</li>
+<li>设置窗口标题已支持所有语言的本地化</li>
+<li>版本号从设置标题移至更新部分的"检查更新"按钮旁</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>Sparkle 부드러운 업데이트 알림: 백그라운드에서 새 버전을 감지하면 메뉴 막대 아이콘에 빨간 배지 점이 나타나고, 기어 버튼 및 설정의 "업데이트 확인" 버튼 옆에 "업데이트 있음" 라벨 표시</li>
+<li>메뉴 막대 아이콘이 숨겨져 있을 때 업데이트 감지 시 배지와 함께 일시적으로 표시, 세션 종료 후 다시 숨김</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>Sparkle가 업데이트를 찾으면 설정 창을 숨기도록 변경(이전에는 다운로드 시작 시에만 숨김), 취소 시 복원</li>
+<li>설정 창 제목을 모든 지원 언어로 현지화</li>
+<li>버전 번호를 설정 제목에서 업데이트 섹션의 "업데이트 확인" 버튼 옆으로 이동</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>Sparkleのジェントルリマインダー対応：バックグラウンドでアップデートを検出した際、メニューバーアイコンに赤いバッジドットを表示。ギアボタンおよび設定画面の「アップデートを確認」ボタン横に「アップデートがあります」ラベルを表示</li>
+<li>メニューバーアイコンが非表示の場合、アップデート検出時にバッジ付きで一時的に表示し、アップデートセッション終了後に再び非表示に戻す</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>Sparkleがアップデートを検出した時点で設定ウインドウを非表示にするよう変更（以前はダウンロード開始時）。キャンセル時に設定ウインドウを復元</li>
+<li>設定画面のタイトルを全対応言語でローカライズ</li>
+<li>バージョン番号を設定画面のタイトルからアップデートセクションの「アップデートを確認」ボタン横に移動</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Sparkle gentle scheduled update reminders: when a background update check finds a new version, a red badge dot appears on the menu bar icon and "Update available" labels appear next to the gear button and the "Check for Updates" button in settings</li>
+<li>If the menu bar icon is hidden when an update is detected, it is temporarily shown with the badge and hidden again after the update session ends</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Settings window is now hidden when Sparkle finds an update (previously only when download started), and restored when the user cancels</li>
+<li>Settings window title is now localized across all supported languages</li>
+<li>Version number moved from the settings title to the Updates section, displayed next to the "Check for Updates" button</li>
+</ul>
+]]></description>
+            <pubDate>Thu, 19 Mar 2026 21:40:09 +0900</pubDate>
+            <sparkle:version>203</sparkle:version>
+            <sparkle:shortVersionString>2.0.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley-2.0.3.zip" length="4650558" type="application/octet-stream" sparkle:edSignature="pGJ3AQMBNsL2Bf5kGm7CU0iw6CRvAVlInFLg604V/5UkJ9vIkobPwKjSIHmUtOpJ7Kvchkv2tAWS+pW0iFuTAQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-202.delta" sparkle:deltaFrom="202" length="163078" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yLd3kDSJ7f6yX6ZWO6HA4H2tTBw8s9hXi/RWVGkl0Is3Mk1qN/S0uIw4W+jTMqBVYGavnm96rBB3FUzl2YGBDg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-201.delta" sparkle:deltaFrom="201" length="233782" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="knjPUxBLvanpIylxioHgqqsAAwd+HPkV4DU+sf4Mtbqqn9d/5vwamcLUC/tLn/XCAxRHn4r4HDkP4Gcg0WX5Bg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-200.delta" sparkle:deltaFrom="200" length="280958" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mcp6gv/U3coQilQOJKagOSEBMnqiqL5sgK0G4fJ/YGGm0B3Qos8lSbDyzZruIkD2VvEjEAF6N3KzDMKuA4EkAg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-127.delta" sparkle:deltaFrom="127" length="351142" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="P/V5he8STtxTefTXsf5nL4F6+WeJf2hKqH0sCjLdYA0V6yYjmWcWWmq/U9PbqgNCDl0YCt8UAhRofNfKkiKuDg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-126.delta" sparkle:deltaFrom="126" length="359710" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mKpl0URQK+T+/uY2t/X6ATfw2M8KjC5kErZKHdZMCmtvpWliXuWB12MBsXBq6L2YmPzCym8YOP+6kVl7RedWAA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.0.2</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -92,11 +239,91 @@
 <li>"/" keyboard shortcut to close the selected window (or quit the app if it's the last window and the setting is enabled)</li>
 </ul>
 ]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Botão de fechar nas linhas da barra lateral de janelas: ao passar o mouse sobre o nome de uma janela, um botão × aparece para fechá-la</li>
+<li>Configuração "Encerrar o app ao fechar a última janela" (Configurações &gt; Janelas): quando ativada (padrão), fechar a última janela de um app encerra o app; quando desativada, apenas a janela é fechada</li>
+<li>O tooltip do botão de fechar mostra o nome da janela; quando a ação encerrará o app, mostra o nome do app</li>
+<li>Atalho de teclado "/" para fechar a janela selecionada (ou encerrar o app se for a última janela e a configuração estiver ativada)</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Pulsante di chiusura nelle righe della barra laterale delle finestre: passando il mouse sul nome di una finestra appare un pulsante × per chiuderla</li>
+<li>Impostazione "Esci dall'app alla chiusura dell'ultima finestra" (Impostazioni &gt; Finestre): quando attiva (predefinito), chiudere l'ultima finestra di un'app chiude l'app; quando disattivata, viene chiusa solo la finestra</li>
+<li>Il tooltip del pulsante di chiusura mostra il nome della finestra; quando l'azione chiuderà l'app, mostra il nome dell'app</li>
+<li>Scorciatoia da tastiera "/" per chiudere la finestra selezionata (o uscire dall'app se è l'ultima finestra e l'impostazione è attiva)</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Bouton de fermeture dans les lignes de la barre latérale des fenêtres : au survol du nom d'une fenêtre, un bouton × apparaît pour la fermer</li>
+<li>Réglage « Quitter l'app en fermant la dernière fenêtre » (Réglages &gt; Fenêtres) : lorsqu'il est activé (par défaut), fermer la dernière fenêtre d'une app quitte l'app ; lorsqu'il est désactivé, seule la fenêtre est fermée</li>
+<li>L'infobulle du bouton de fermeture affiche le nom de la fenêtre ; lorsque l'action quittera l'app, le nom de l'app est affiché</li>
+<li>Raccourci clavier « / » pour fermer la fenêtre sélectionnée (ou quitter l'app s'il s'agit de la dernière fenêtre et que le réglage est activé)</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Botón de cierre en las filas de la barra lateral de ventanas: al pasar el cursor sobre el nombre de una ventana aparece un botón × para cerrarla</li>
+<li>Ajuste "Cerrar la app al cerrar la última ventana" (Ajustes &gt; Ventanas): cuando está activado (por defecto), cerrar la última ventana de una app cierra la app; cuando está desactivado, solo se cierra la ventana</li>
+<li>El tooltip del botón de cierre muestra el nombre de la ventana; cuando la acción cerrará la app, muestra el nombre de la app</li>
+<li>Atajo de teclado "/" para cerrar la ventana seleccionada (o cerrar la app si es la última ventana y el ajuste está activado)</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Schließen-Button in der Fensterlisten-Seitenleiste: Beim Überfahren eines Fensternamens erscheint ein ×-Button zum Schließen des Fensters</li>
+<li>Einstellung „App beenden beim Schließen des letzten Fensters" (Einstellungen &gt; Fenster): Bei Aktivierung (Standard) wird die App beim Schließen des letzten Fensters beendet; bei Deaktivierung wird nur das Fenster geschlossen</li>
+<li>Tooltip des Schließen-Buttons zeigt den Fensternamen; wenn die App beendet wird, wird der App-Name angezeigt</li>
+<li>„/" Tastenkürzel zum Schließen des ausgewählten Fensters (oder Beenden der App, wenn es das letzte Fenster ist und die Einstellung aktiviert ist)</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>視窗列表側邊欄新增關閉按鈕：將滑鼠懸停在視窗名稱上時會顯示 × 按鈕，點擊可關閉視窗</li>
+<li>新增「關閉最後一個視窗時結束應用程式」設定（設定 &gt; 視窗）：啟用時（預設），關閉應用程式的最後一個視窗將結束應用程式；停用時僅關閉視窗</li>
+<li>關閉按鈕的工具提示顯示視窗名稱；當操作將結束應用程式時顯示應用程式名稱</li>
+<li>「/」鍵盤快捷鍵關閉所選視窗（當為最後一個視窗且設定已啟用時結束應用程式）</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>窗口列表侧边栏添加关闭按钮：鼠标悬停在窗口名称上时显示 × 按钮，点击可关闭窗口</li>
+<li>添加"关闭最后一个窗口时退出应用"设置（设置 &gt; 窗口）：启用时（默认），关闭应用的最后一个窗口将退出应用；禁用时仅关闭窗口</li>
+<li>关闭按钮的工具提示显示窗口名称；当操作将退出应用时显示应用名称</li>
+<li>"/" 快捷键关闭选中的窗口（当为最后一个窗口且设置已启用时退出应用）</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>윈도우 목록 사이드바에 닫기 버튼 추가: 윈도우 이름에 마우스를 올리면 × 버튼이 나타나며 클릭하면 윈도우를 닫을 수 있음</li>
+<li>"마지막 윈도우를 닫을 때 앱 종료" 설정 추가 (설정 &gt; 윈도우): 활성화 시(기본값) 앱의 마지막 윈도우를 닫으면 앱이 종료되고, 비활성화 시 윈도우만 닫힘</li>
+<li>닫기 버튼 툴팁에 윈도우 이름을 표시. 앱이 종료되는 경우 앱 이름을 표시</li>
+<li>"/" 키보드 단축키로 선택한 윈도우 닫기 (마지막 윈도우이고 설정이 활성화된 경우 앱 종료)</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>ウインドウ一覧サイドバーに閉じるボタンを追加：ウインドウ名にホバーすると×ボタンが表示され、クリックでウインドウを閉じられるように</li>
+<li>「最後のウインドウを閉じるときアプリを終了」設定を追加（設定 &gt; ウインドウ）：有効時（デフォルト）はアプリの最後のウインドウを閉じるとアプリを終了、無効時はウインドウのみを閉じる</li>
+<li>閉じるボタンのツールチップにウインドウ名を表示。アプリを終了する場合はアプリ名を表示</li>
+<li>「/」キーで選択中のウインドウを閉じるショートカットを追加（最後のウインドウかつ設定が有効な場合はアプリを終了）</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Close button on window list sidebar rows: hover over a window name to reveal an × button that closes the window</li>
+<li>"Quit app when closing last window" setting (Settings &gt; Windows): when enabled (default), closing an app's last window terminates the app; when disabled, only the window is closed</li>
+<li>Close button tooltip shows the window name, or the app name when it will quit the app</li>
+<li>"/" keyboard shortcut to close the selected window (or quit the app if it's the last window and the setting is enabled)</li>
+</ul>
+]]></description>
             <pubDate>Thu, 19 Mar 2026 20:41:33 +0900</pubDate>
             <sparkle:version>202</sparkle:version>
             <sparkle:shortVersionString>2.0.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley-2.0.2.zip" length="4636916" type="application/octet-stream" sparkle:edSignature="MRf6dmrTZA9BQuETXqvs7Ml9C3ZYX+KIQUXeFAVFnenMRKBdNvHFJm/Jy9Hb0vTR/CtKBux6fhDdlxl3ZBg7BA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley-2.0.2.zip" length="4636916" type="application/octet-stream" sparkle:edSignature="MRf6dmrTZA9BQuETXqvs7Ml9C3ZYX+KIQUXeFAVFnenMRKBdNvHFJm/Jy9Hb0vTR/CtKBux6fhDdlxl3ZBg7BA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley202-201.delta" sparkle:deltaFrom="201" length="208366" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="qfBzRxOFNbN8y/ITk/jJ/Yltr9tGgE3Xbq/iLpdr1shajQ8vsYP1N6dUUBFUDZkpaENuFNcd98K+8/0BituABw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley202-200.delta" sparkle:deltaFrom="200" length="266086" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bVg1HY2PbGmcajlQCI6FJda2jyJMvKU3axr2GkAR4IP/WqgnpD1cLMJRVOGDQMu9EP7EeG47zdumrC6ebMnqCg=="/>
@@ -115,6 +342,106 @@
 <ul>
 <li>Исправлена проблема, при которой размещение окна использовало устаревшую геометрию экрана, когда Dock или строка меню автоматически показывались/скрывались во время отображения оверлея</li>
 <li>Исправлена проблема, при которой позиция или размер окна не применялись, когда целевое приложение асинхронно корректирует свою геометрию после изменения AX; фоновый цикл проверки теперь автоматически повторно применяет отклонившиеся атрибуты</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Painel de configurações redesenhado no estilo Tahoe: seções com fundo de vidro (Liquid Glass no macOS 26+), barra de ferramentas compacta com botões voltar/sair e linhas agrupadas estilo iOS com controles em linha</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta</li>
+<li>Corrigido um problema onde a posição ou o tamanho da janela não eram aplicados quando o app de destino ajusta sua geometria de forma assíncrona após uma alteração AX; um loop de verificação em segundo plano agora reaaplica automaticamente os atributos desviados</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Pannello impostazioni ridisegnato in stile Tahoe: sezioni con sfondo in vetro (Liquid Glass su macOS 26+), barra degli strumenti compatta con pulsanti indietro/esci e righe raggruppate in stile iOS con controlli in linea</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto</li>
+<li>Corretto un problema in cui la posizione o la dimensione della finestra non venivano applicate quando l'app di destinazione regola la geometria in modo asincrono dopo una modifica AX; un ciclo di verifica in background ora riapplica automaticamente gli attributi deviati</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Panneau de réglages redessiné dans le style Tahoe : sections avec fond en verre (Liquid Glass sur macOS 26+), barre d'outils compacte avec boutons retour/quitter, et lignes groupées style iOS avec contrôles intégrés</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte</li>
+<li>Correction d'un problème où la position ou la taille de la fenêtre n'était pas appliquée lorsque l'app cible ajuste sa géométrie de manière asynchrone après un changement AX ; une boucle de vérification en arrière-plan réapplique désormais automatiquement les attributs déviés</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Panel de ajustes rediseñado con estilo Tahoe: secciones con fondo de cristal (Liquid Glass en macOS 26+), barra de herramientas compacta con botones de volver/salir, y filas agrupadas estilo iOS con controles en línea</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta</li>
+<li>Corregido un problema donde la posición o el tamaño de la ventana no se aplicaban cuando la app de destino ajusta su geometría de forma asíncrona tras un cambio AX; un bucle de verificación en segundo plano ahora reaplica automáticamente los atributos desviados</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Einstellungspanel im Tahoe-Stil neu gestaltet: Abschnitte mit Glas-Hintergrund (Liquid Glass ab macOS 26+), kompakte Symbolleiste mit Zurück-/Beenden-Buttons und iOS-ähnliche gruppierte Zeilen mit Inline-Steuerelementen</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde</li>
+<li>Fensterposition oder -größe wurde nicht angewendet, wenn die Ziel-App ihre Geometrie nach einer AX-Änderung asynchron anpasst; eine Hintergrund-Überprüfungsschleife wendet abweichende Attribute nun automatisch erneut an</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>將設定面板重新設計為 Tahoe 風格：玻璃背景區塊（macOS 26+ 支援 Liquid Glass）、附返回/結束按鈕的精簡工具列標頭、iOS 風格的群組列佈局與內嵌控制項</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了在覆蓋層顯示期間 Dock 或選單列自動顯示/隱藏時，使用過時的螢幕資訊導致視窗被放置在錯誤位置的問題</li>
+<li>修正了目標應用程式在 AX 變更後非同步調整視窗位置或大小，導致指定佈局未生效的問題。透過背景驗證和重試自動重新套用偏移的屬性</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>将设置面板重新设计为 Tahoe 风格：玻璃背景分区（macOS 26+ 支持 Liquid Glass）、带返回/退出按钮的紧凑工具栏头部、iOS 风格的分组行布局与内联控件</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了在覆盖层显示期间 Dock 或菜单栏自动显示/隐藏时，使用过时的屏幕信息导致窗口被放置在错误位置的问题</li>
+<li>修复了目标应用在 AX 更改后异步调整窗口位置或大小，导致指定布局未生效的问题。通过后台验证和重试自动重新应用偏移的属性</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>설정 패널을 Tahoe 스타일로 재디자인: 글래스 배경 섹션(macOS 26+에서 Liquid Glass 지원), 뒤로가기/종료 버튼이 있는 컴팩트 툴바 헤더, iOS 스타일 그룹 행 레이아웃 및 인라인 컨트롤</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>오버레이 표시 중 Dock 또는 메뉴 막대가 자동으로 표시/숨김되면 이전 화면 정보를 사용하여 윈도우가 잘못된 위치에 배치되는 문제를 수정</li>
+<li>대상 앱이 AX 변경 후 비동기적으로 윈도우의 위치나 크기를 조정하여 지정한 배치가 반영되지 않는 문제를 수정. 백그라운드 검증 및 재시도를 통해 어긋난 속성을 자동으로 재적용</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>設定画面をTahoeスタイルにリデザイン：グラス背景のセクション（macOS 26+でLiquid Glass対応）、戻る/終了ボタン付きのコンパクトなツールバーヘッダー、iOS風のグループ化された行レイアウトとインラインコントロール</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>オーバーレイ表示中にDockやメニューバーが自動的に表示/非表示されると、古い画面情報を使ってウインドウが配置され、意図しない位置に移動する問題を修正</li>
+<li>ターゲットアプリがAX変更後に非同期でウインドウの位置やサイズを調整することで、指定した配置が反映されない問題を修正。バックグラウンドでの検証・リトライにより、ずれた属性を自動的に再適用</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Redesigned the settings panel with a Tahoe-style layout: glass-backed sections (Liquid Glass on macOS 26+), compact toolbar header with back/quit buttons, and iOS-like grouped rows with inline controls</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open</li>
+<li>Fixed window position or size not being applied when the target app asynchronously adjusts its geometry after an AX change; a background verify-and-retry loop now re-applies any drifted attribute</li>
 </ul>
 ]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
@@ -321,338 +648,13 @@
             <sparkle:version>201</sparkle:version>
             <sparkle:shortVersionString>2.0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley-2.0.1.zip" length="4616096" type="application/octet-stream" sparkle:edSignature="EUdjLc9dih2/OGOB8E0awsE0Mp9Oz0iyt007uwYcqk+TBOONGAVDspIqPBf+lPdA9iCVvn8QQr9K/Ng3nRPoDg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley-2.0.1.zip" length="4616096" type="application/octet-stream" sparkle:edSignature="EUdjLc9dih2/OGOB8E0awsE0Mp9Oz0iyt007uwYcqk+TBOONGAVDspIqPBf+lPdA9iCVvn8QQr9K/Ng3nRPoDg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.1/Tiley201-200.delta" sparkle:deltaFrom="200" length="197754" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mp2GP2OO7gnVaVilnftaiA8FHDqRPBKHa/TCkj3uHt2wozlLkHPpHz6dxHumMvPjABQP5SVtH80HpmVHsVgHBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.1/Tiley201-127.delta" sparkle:deltaFrom="127" length="311658" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="cSDkzgnmrCb1byJiEnKJgf6xciCijxwAfSsmBgH+z0y+GgMEeycaJeB6EBG2O5p5LuDM9FrFxzMz+emKGgDGAQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.1/Tiley201-126.delta" sparkle:deltaFrom="126" length="320202" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="SJ6vuhpWVDbhkaPvHt3dF4fqevwrO2QJ7aVmAQQZB/smLNVlZDQ01sRDu38WYeQ9Obu/w921jJsZ4t7CvPoUDA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.1/Tiley201-125.delta" sparkle:deltaFrom="125" length="318550" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PwCQ5TkvjvKCQZVnHjgHDsSIwcPT09Ouj/zePqaUj/akV0ulxtCGzZvkAyO7pJyKwhJhYcvnM8x3VVbdm7u2DQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.1/Tiley201-124.delta" sparkle:deltaFrom="124" length="628562" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vWhbH9Q77FYmkhVUUNK5IPRIhmGoCJSEoKlIfoSeuHXUlONLCGkSfY1eWu30pGgdZPYF6EnmCOzSjOIFtNt0Ag=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>2.0.0</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>Выпадающее меню выбора целевого окна заменено боковой панелью с Liquid Glass (macOS Tahoe); включает поле поиска с полной поддержкой IME, навигацию клавишами-стрелками и Tab/Shift+Tab, а также Cmd+F для переключения видимости</li>
-</ul>
-<h3>Улучшено</h3>
-<ul>
-<li>Окна в боковой панели перечислены в Z-порядке (от переднего к заднему), а не сгруппированы по приложениям</li>
-<li>Нестандартные окна (палитры, панели инструментов и т. д.) исключены из списка целевых окон — отображаются только масштабируемые окна документов</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>O menu suspenso de seleção de janela alvo foi substituído por um painel lateral com Liquid Glass (macOS Tahoe); inclui campo de busca com suporte completo a IME, navegação por teclas de seta e Tab/Shift+Tab, e Cmd+F para alternar a visibilidade</li>
-</ul>
-<h3>Melhorado</h3>
-<ul>
-<li>As janelas no painel lateral são listadas em ordem Z (da frente para trás) em vez de agrupadas por aplicativo</li>
-<li>Janelas não padrão (paletas, barras de ferramentas, etc.) foram filtradas da lista de janelas alvo para exibir apenas janelas de documento redimensionáveis</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Il menu a tendina per la selezione della finestra di destinazione è stato sostituito con un pannello laterale con Liquid Glass (macOS Tahoe); include un campo di ricerca con supporto completo IME, navigazione con tasti freccia e Tab/Maiusc+Tab, e Cmd+F per attivare/disattivare la visibilità</li>
-</ul>
-<h3>Migliorato</h3>
-<ul>
-<li>Le finestre nel pannello laterale sono elencate in ordine Z (dal fronte al retro) anziché raggruppate per applicazione</li>
-<li>Le finestre non standard (palette, barre degli strumenti, ecc.) sono state filtrate dall'elenco delle finestre di destinazione in modo da mostrare solo le finestre documento ridimensionabili</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Le menu déroulant de sélection de fenêtre cible a été remplacé par un panneau latéral avec Liquid Glass (macOS Tahoe) ; comprend un champ de recherche avec prise en charge complète de l'IME, navigation par touches fléchées et Tab/Maj+Tab, et Cmd+F pour basculer la visibilité</li>
-</ul>
-<h3>Amélioré</h3>
-<ul>
-<li>Les fenêtres dans le panneau latéral sont listées en ordre Z (avant vers arrière) plutôt que regroupées par application</li>
-<li>Les fenêtres non standard (palettes, barres d'outils, etc.) sont filtrées de la liste des fenêtres cibles afin de n'afficher que les fenêtres de document redimensionnables</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Se reemplazó el menú desplegable de ventana objetivo por un panel lateral con Liquid Glass (macOS Tahoe); incluye un campo de búsqueda con soporte completo de IME, navegación con teclas de flecha y Tab/Mayús+Tab, y Cmd+F para alternar la visibilidad</li>
-</ul>
-<h3>Mejorado</h3>
-<ul>
-<li>Las ventanas en el panel lateral se listan en orden Z (de adelante hacia atrás) en lugar de agruparse por aplicación</li>
-<li>Se filtraron las ventanas no estándar (paletas, barras de herramientas, etc.) de la lista de ventanas objetivo para mostrar solo ventanas de documento redimensionables</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Das Dropdown-Menü zur Fensterzielauswahl wurde durch ein Seitenleisten-Panel mit Liquid Glass (macOS Tahoe) ersetzt; enthält ein Suchfeld mit vollständiger IME-Unterstützung, Navigation per Pfeiltasten und Tab/Umschalt+Tab sowie Cmd+F zum Ein-/Ausblenden</li>
-</ul>
-<h3>Verbessert</h3>
-<ul>
-<li>Fenster in der Seitenleiste werden in Z-Reihenfolge (vorne nach hinten) aufgelistet statt nach Anwendung gruppiert</li>
-<li>Nicht-Standard-Fenster (Paletten, Symbolleisten usw.) werden aus der Fensterziel-Liste gefiltert, sodass nur größenveränderbare Dokumentfenster angezeigt werden</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>將視窗目標下拉選單替換為基於 Liquid Glass（macOS Tahoe）的側邊欄面板；包含支援完整 IME 的搜尋欄位、方向鍵和 Tab/Shift+Tab 導覽，以及 Cmd+F 切換顯示/隱藏</li>
-</ul>
-<h3>改進</h3>
-<ul>
-<li>側邊欄中的視窗按 Z 順序（從前到後）列出，而非按應用程式分組</li>
-<li>從視窗目標列表中過濾掉非標準視窗（調色盤、工具列等），僅顯示可調整大小的文件視窗</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>将窗口目标下拉菜单替换为基于 Liquid Glass（macOS Tahoe）的侧边栏面板；包含支持完整 IME 的搜索框、方向键和 Tab/Shift+Tab 导航，以及 Cmd+F 切换显示/隐藏</li>
-</ul>
-<h3>改进</h3>
-<ul>
-<li>侧边栏中的窗口按 Z 顺序（从前到后）列出，而非按应用程序分组</li>
-<li>从窗口目标列表中过滤掉非标准窗口（调色板、工具栏等），仅显示可调整大小的文档窗口</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>창 대상 드롭다운 메뉴를 Liquid Glass(macOS Tahoe) 기반 사이드바 패널로 교체. 완전한 IME 지원 검색 필드, 화살표 키 및 Tab/Shift+Tab 탐색, Cmd+F로 표시/숨기기 전환 기능 포함</li>
-</ul>
-<h3>개선</h3>
-<ul>
-<li>사이드바의 창 목록이 애플리케이션별 그룹이 아닌 Z 순서(앞에서 뒤로)로 표시</li>
-<li>비표준 창(팔레트, 도구 모음 등)을 창 대상 목록에서 제외하여 크기 조절 가능한 문서 창만 표시</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ウインドウ選択をプルダウンメニューからサイドバーパネルに変更。Liquid Glass（macOS Tahoe）対応。検索フィールドでの日本語IME入力、矢印キー・Tab/Shift+Tabによるナビゲーション、Cmd+Fでの表示/非表示切り替えに対応</li>
-</ul>
-<h3>改善</h3>
-<ul>
-<li>サイドバーのウインドウ一覧をz-index順（前面から背面）に表示するように変更</li>
-<li>パレット・ツールバー等の非標準ウインドウをウインドウリストから除外し、リサイズ可能なドキュメントウインドウのみを表示するように改善</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Replaced the window target dropdown menu with a sidebar panel using Liquid Glass (macOS Tahoe); includes a search field with full IME support, arrow-key and Tab/Shift+Tab navigation, and Cmd+F to toggle visibility</li>
-</ul>
-<h3>Improved</h3>
-<ul>
-<li>Windows in the sidebar are listed in z-order (front-to-back) rather than grouped by application</li>
-<li>Filtered out non-standard windows (palettes, toolbars, etc.) from the window target list so only resizable document windows are shown</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>O menu suspenso de seleção de janela alvo foi substituído por um painel lateral com Liquid Glass (macOS Tahoe); inclui campo de busca com suporte completo a IME, navegação por teclas de seta e Tab/Shift+Tab, e Cmd+F para alternar a visibilidade</li>
-</ul>
-<h3>Melhorado</h3>
-<ul>
-<li>As janelas no painel lateral são listadas em ordem Z (da frente para trás) em vez de agrupadas por aplicativo</li>
-<li>Janelas não padrão (paletas, barras de ferramentas, etc.) foram filtradas da lista de janelas alvo para exibir apenas janelas de documento redimensionáveis</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Il menu a tendina per la selezione della finestra di destinazione è stato sostituito con un pannello laterale con Liquid Glass (macOS Tahoe); include un campo di ricerca con supporto completo IME, navigazione con tasti freccia e Tab/Maiusc+Tab, e Cmd+F per attivare/disattivare la visibilità</li>
-</ul>
-<h3>Migliorato</h3>
-<ul>
-<li>Le finestre nel pannello laterale sono elencate in ordine Z (dal fronte al retro) anziché raggruppate per applicazione</li>
-<li>Le finestre non standard (palette, barre degli strumenti, ecc.) sono state filtrate dall'elenco delle finestre di destinazione in modo da mostrare solo le finestre documento ridimensionabili</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Le menu déroulant de sélection de fenêtre cible a été remplacé par un panneau latéral avec Liquid Glass (macOS Tahoe) ; comprend un champ de recherche avec prise en charge complète de l'IME, navigation par touches fléchées et Tab/Maj+Tab, et Cmd+F pour basculer la visibilité</li>
-</ul>
-<h3>Amélioré</h3>
-<ul>
-<li>Les fenêtres dans le panneau latéral sont listées en ordre Z (avant vers arrière) plutôt que regroupées par application</li>
-<li>Les fenêtres non standard (palettes, barres d'outils, etc.) sont filtrées de la liste des fenêtres cibles afin de n'afficher que les fenêtres de document redimensionnables</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Se reemplazó el menú desplegable de ventana objetivo por un panel lateral con Liquid Glass (macOS Tahoe); incluye un campo de búsqueda con soporte completo de IME, navegación con teclas de flecha y Tab/Mayús+Tab, y Cmd+F para alternar la visibilidad</li>
-</ul>
-<h3>Mejorado</h3>
-<ul>
-<li>Las ventanas en el panel lateral se listan en orden Z (de adelante hacia atrás) en lugar de agruparse por aplicación</li>
-<li>Se filtraron las ventanas no estándar (paletas, barras de herramientas, etc.) de la lista de ventanas objetivo para mostrar solo ventanas de documento redimensionables</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Das Dropdown-Menü zur Fensterzielauswahl wurde durch ein Seitenleisten-Panel mit Liquid Glass (macOS Tahoe) ersetzt; enthält ein Suchfeld mit vollständiger IME-Unterstützung, Navigation per Pfeiltasten und Tab/Umschalt+Tab sowie Cmd+F zum Ein-/Ausblenden</li>
-</ul>
-<h3>Verbessert</h3>
-<ul>
-<li>Fenster in der Seitenleiste werden in Z-Reihenfolge (vorne nach hinten) aufgelistet statt nach Anwendung gruppiert</li>
-<li>Nicht-Standard-Fenster (Paletten, Symbolleisten usw.) werden aus der Fensterziel-Liste gefiltert, sodass nur größenveränderbare Dokumentfenster angezeigt werden</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>將視窗目標下拉選單替換為基於 Liquid Glass（macOS Tahoe）的側邊欄面板；包含支援完整 IME 的搜尋欄位、方向鍵和 Tab/Shift+Tab 導覽，以及 Cmd+F 切換顯示/隱藏</li>
-</ul>
-<h3>改進</h3>
-<ul>
-<li>側邊欄中的視窗按 Z 順序（從前到後）列出，而非按應用程式分組</li>
-<li>從視窗目標列表中過濾掉非標準視窗（調色盤、工具列等），僅顯示可調整大小的文件視窗</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>将窗口目标下拉菜单替换为基于 Liquid Glass（macOS Tahoe）的侧边栏面板；包含支持完整 IME 的搜索框、方向键和 Tab/Shift+Tab 导航，以及 Cmd+F 切换显示/隐藏</li>
-</ul>
-<h3>改进</h3>
-<ul>
-<li>侧边栏中的窗口按 Z 顺序（从前到后）列出，而非按应用程序分组</li>
-<li>从窗口目标列表中过滤掉非标准窗口（调色板、工具栏等），仅显示可调整大小的文档窗口</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>창 대상 드롭다운 메뉴를 Liquid Glass(macOS Tahoe) 기반 사이드바 패널로 교체. 완전한 IME 지원 검색 필드, 화살표 키 및 Tab/Shift+Tab 탐색, Cmd+F로 표시/숨기기 전환 기능 포함</li>
-</ul>
-<h3>개선</h3>
-<ul>
-<li>사이드바의 창 목록이 애플리케이션별 그룹이 아닌 Z 순서(앞에서 뒤로)로 표시</li>
-<li>비표준 창(팔레트, 도구 모음 등)을 창 대상 목록에서 제외하여 크기 조절 가능한 문서 창만 표시</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ウインドウ選択をプルダウンメニューからサイドバーパネルに変更。Liquid Glass（macOS Tahoe）対応。検索フィールドでの日本語IME入力、矢印キー・Tab/Shift+Tabによるナビゲーション、Cmd+Fでの表示/非表示切り替えに対応</li>
-</ul>
-<h3>改善</h3>
-<ul>
-<li>サイドバーのウインドウ一覧をz-index順（前面から背面）に表示するように変更</li>
-<li>パレット・ツールバー等の非標準ウインドウをウインドウリストから除外し、リサイズ可能なドキュメントウインドウのみを表示するように改善</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Replaced the window target dropdown menu with a sidebar panel using Liquid Glass (macOS Tahoe); includes a search field with full IME support, arrow-key and Tab/Shift+Tab navigation, and Cmd+F to toggle visibility</li>
-</ul>
-<h3>Improved</h3>
-<ul>
-<li>Windows in the sidebar are listed in z-order (front-to-back) rather than grouped by application</li>
-<li>Filtered out non-standard windows (palettes, toolbars, etc.) from the window target list so only resizable document windows are shown</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>O menu suspenso de seleção de janela alvo foi substituído por um painel lateral com Liquid Glass (macOS Tahoe); inclui campo de busca com suporte completo a IME, navegação por teclas de seta e Tab/Shift+Tab, e Cmd+F para alternar a visibilidade</li>
-</ul>
-<h3>Melhorado</h3>
-<ul>
-<li>As janelas no painel lateral são listadas em ordem Z (da frente para trás) em vez de agrupadas por aplicativo</li>
-<li>Janelas não padrão (paletas, barras de ferramentas, etc.) foram filtradas da lista de janelas alvo para exibir apenas janelas de documento redimensionáveis</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Il menu a tendina per la selezione della finestra di destinazione è stato sostituito con un pannello laterale con Liquid Glass (macOS Tahoe); include un campo di ricerca con supporto completo IME, navigazione con tasti freccia e Tab/Maiusc+Tab, e Cmd+F per attivare/disattivare la visibilità</li>
-</ul>
-<h3>Migliorato</h3>
-<ul>
-<li>Le finestre nel pannello laterale sono elencate in ordine Z (dal fronte al retro) anziché raggruppate per applicazione</li>
-<li>Le finestre non standard (palette, barre degli strumenti, ecc.) sono state filtrate dall'elenco delle finestre di destinazione in modo da mostrare solo le finestre documento ridimensionabili</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Le menu déroulant de sélection de fenêtre cible a été remplacé par un panneau latéral avec Liquid Glass (macOS Tahoe) ; comprend un champ de recherche avec prise en charge complète de l'IME, navigation par touches fléchées et Tab/Maj+Tab, et Cmd+F pour basculer la visibilité</li>
-</ul>
-<h3>Amélioré</h3>
-<ul>
-<li>Les fenêtres dans le panneau latéral sont listées en ordre Z (avant vers arrière) plutôt que regroupées par application</li>
-<li>Les fenêtres non standard (palettes, barres d'outils, etc.) sont filtrées de la liste des fenêtres cibles afin de n'afficher que les fenêtres de document redimensionnables</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Se reemplazó el menú desplegable de ventana objetivo por un panel lateral con Liquid Glass (macOS Tahoe); incluye un campo de búsqueda con soporte completo de IME, navegación con teclas de flecha y Tab/Mayús+Tab, y Cmd+F para alternar la visibilidad</li>
-</ul>
-<h3>Mejorado</h3>
-<ul>
-<li>Las ventanas en el panel lateral se listan en orden Z (de adelante hacia atrás) en lugar de agruparse por aplicación</li>
-<li>Se filtraron las ventanas no estándar (paletas, barras de herramientas, etc.) de la lista de ventanas objetivo para mostrar solo ventanas de documento redimensionables</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Das Dropdown-Menü zur Fensterzielauswahl wurde durch ein Seitenleisten-Panel mit Liquid Glass (macOS Tahoe) ersetzt; enthält ein Suchfeld mit vollständiger IME-Unterstützung, Navigation per Pfeiltasten und Tab/Umschalt+Tab sowie Cmd+F zum Ein-/Ausblenden</li>
-</ul>
-<h3>Verbessert</h3>
-<ul>
-<li>Fenster in der Seitenleiste werden in Z-Reihenfolge (vorne nach hinten) aufgelistet statt nach Anwendung gruppiert</li>
-<li>Nicht-Standard-Fenster (Paletten, Symbolleisten usw.) werden aus der Fensterziel-Liste gefiltert, sodass nur größenveränderbare Dokumentfenster angezeigt werden</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>將視窗目標下拉選單替換為基於 Liquid Glass（macOS Tahoe）的側邊欄面板；包含支援完整 IME 的搜尋欄位、方向鍵和 Tab/Shift+Tab 導覽，以及 Cmd+F 切換顯示/隱藏</li>
-</ul>
-<h3>改進</h3>
-<ul>
-<li>側邊欄中的視窗按 Z 順序（從前到後）列出，而非按應用程式分組</li>
-<li>從視窗目標列表中過濾掉非標準視窗（調色盤、工具列等），僅顯示可調整大小的文件視窗</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>将窗口目标下拉菜单替换为基于 Liquid Glass（macOS Tahoe）的侧边栏面板；包含支持完整 IME 的搜索框、方向键和 Tab/Shift+Tab 导航，以及 Cmd+F 切换显示/隐藏</li>
-</ul>
-<h3>改进</h3>
-<ul>
-<li>侧边栏中的窗口按 Z 顺序（从前到后）列出，而非按应用程序分组</li>
-<li>从窗口目标列表中过滤掉非标准窗口（调色板、工具栏等），仅显示可调整大小的文档窗口</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>창 대상 드롭다운 메뉴를 Liquid Glass(macOS Tahoe) 기반 사이드바 패널로 교체. 완전한 IME 지원 검색 필드, 화살표 키 및 Tab/Shift+Tab 탐색, Cmd+F로 표시/숨기기 전환 기능 포함</li>
-</ul>
-<h3>개선</h3>
-<ul>
-<li>사이드바의 창 목록이 애플리케이션별 그룹이 아닌 Z 순서(앞에서 뒤로)로 표시</li>
-<li>비표준 창(팔레트, 도구 모음 등)을 창 대상 목록에서 제외하여 크기 조절 가능한 문서 창만 표시</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ウインドウ選択をプルダウンメニューからサイドバーパネルに変更。Liquid Glass（macOS Tahoe）対応。検索フィールドでの日本語IME入力、矢印キー・Tab/Shift+Tabによるナビゲーション、Cmd+Fでの表示/非表示切り替えに対応</li>
-</ul>
-<h3>改善</h3>
-<ul>
-<li>サイドバーのウインドウ一覧をz-index順（前面から背面）に表示するように変更</li>
-<li>パレット・ツールバー等の非標準ウインドウをウインドウリストから除外し、リサイズ可能なドキュメントウインドウのみを表示するように改善</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Replaced the window target dropdown menu with a sidebar panel using Liquid Glass (macOS Tahoe); includes a search field with full IME support, arrow-key and Tab/Shift+Tab navigation, and Cmd+F to toggle visibility</li>
-</ul>
-<h3>Improved</h3>
-<ul>
-<li>Windows in the sidebar are listed in z-order (front-to-back) rather than grouped by application</li>
-<li>Filtered out non-standard windows (palettes, toolbars, etc.) from the window target list so only resizable document windows are shown</li>
-</ul>
-]]></description>
-            <pubDate>Thu, 19 Mar 2026 12:25:28 +0900</pubDate>
-            <sparkle:version>200</sparkle:version>
-            <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley-2.0.0.zip" length="4594852" type="application/octet-stream" sparkle:edSignature="KhJKJcUigeGWUh8dAQjngE03Vmjajz5lbFPrJXH0SjdRGHf6lN+TvMjFdFCcYBJM5ZHhg8+1y+pM3Ph2mhPyBg=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-127.delta" sparkle:deltaFrom="127" length="260138" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="jPsSB8qrM0hCswfjxc+Rmp8ZrgpDfV2izIr+Rmn2HNknsl4BDDkSzzUnUuQEJy6xi7eOfRHNk6P/X54VvQj9AA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-126.delta" sparkle:deltaFrom="126" length="267962" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="rjC+fN0EcBTIpCWcXWaQcw+qHMsAsBYFMYoFk52MRoovfm+rmq5x0vgofRib/BiqHMjtzawlL+eW2403BG3mBw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-125.delta" sparkle:deltaFrom="125" length="268422" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="DBz9qXFlNxq+NsCS2Mz4NVCxuKxhG15pcRJopaZ+7ZHvKYnRCS5Y8p8YwjU5oRuoJVcDX4xlQ8wPgJGEgkOYDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-124.delta" sparkle:deltaFrom="124" length="578938" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="fTAEk2zuBUFIwrKN6xRthsr2GnMUJ1GmYVRwEx9y0gvjT/JL4ODMEMjEBKQHyr1FD6kJRjlmuxrPltxzUcaRCw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-123.delta" sparkle:deltaFrom="123" length="602570" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="sqxZUMR7X2LCNWqDXLgvie+tbKwm3pVIDjab+PNxwoAneGC04lGGH8WhAELGQPHhNNynfl/yACIoKd6VvDJgAw=="/>
             </sparkle:deltas>
         </item>
     </channel>
