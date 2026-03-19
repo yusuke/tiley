@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Recordatorios suaves de actualización de Sparkle: cuando una comprobación en segundo plano encuentra una nueva versión, aparece un punto rojo en el icono de la barra de menús y etiquetas "Actualización disponible" junto al botón de engranaje y el botón "Buscar actualizaciones" en los ajustes
+- Si el icono de la barra de menús está oculto, se muestra temporalmente con la insignia al detectar una actualización y se oculta de nuevo al finalizar la sesión
+
+### Cambiado
+
+- La ventana de ajustes se oculta cuando Sparkle encuentra una actualización (antes solo al iniciar la descarga) y se restaura al cancelar
+- El título de la ventana de ajustes está ahora localizado en todos los idiomas soportados
+- El número de versión se movió del título de ajustes a la sección de actualizaciones, junto al botón "Buscar actualizaciones"
+
 ## [2.0.2] - 2026-03-19
 
 ### Añadido

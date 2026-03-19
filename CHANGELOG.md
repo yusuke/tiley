@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Sparkle gentle scheduled update reminders: when a background update check finds a new version, a red badge dot appears on the menu bar icon and "Update available" labels appear next to the gear button and the "Check for Updates" button in settings
+- If the menu bar icon is hidden when an update is detected, it is temporarily shown with the badge and hidden again after the update session ends
+
+### Changed
+
+- Settings window is now hidden when Sparkle finds an update (previously only when download started), and restored when the user cancels
+- Settings window title is now localized across all supported languages
+- Version number moved from the settings title to the Updates section, displayed next to the "Check for Updates" button
+
 ## [2.0.2] - 2026-03-19
 
 ### Added

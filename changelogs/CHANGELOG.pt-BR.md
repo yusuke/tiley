@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Lembretes suaves de atualização do Sparkle: quando uma verificação em segundo plano encontra uma nova versão, um ponto vermelho aparece no ícone da barra de menus e rótulos "Atualização disponível" são exibidos ao lado do botão de engrenagem e do botão "Verificar atualizações" nas configurações
+- Se o ícone da barra de menus estiver oculto, ele é exibido temporariamente com o emblema ao detectar uma atualização e ocultado novamente ao final da sessão
+
+### Alterado
+
+- A janela de configurações é ocultada quando o Sparkle encontra uma atualização (antes apenas no início do download) e restaurada ao cancelar
+- O título da janela de configurações agora é localizado em todos os idiomas suportados
+- O número da versão foi movido do título das configurações para a seção de atualizações, ao lado do botão "Verificar atualizações"
+
 ## [2.0.2] - 2026-03-19
 
 ### Adicionado

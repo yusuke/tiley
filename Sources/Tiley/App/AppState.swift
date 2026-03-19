@@ -101,6 +101,8 @@ final class AppState: NSObject, NSMenuDelegate {
     var launchMessage = NSLocalizedString("Show the grid from the menu bar or use the global shortcut.", comment: "Initial launch message")
 
     @ObservationIgnored var updater: SPUUpdater?
+    private(set) var hasUpdateBadge = false
+    @ObservationIgnored private var menuIconTemporarilyShown = false
 
     @ObservationIgnored private let accessibilityService = AccessibilityService()
     @ObservationIgnored private var windowManager: WindowManager?
@@ -1152,6 +1154,9 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         item.menu = nil
         statusItem = item
+        if hasUpdateBadge {
+            applyUpdateBadgeIcon()
+        }
     }
 
     private func removeStatusItem() {
@@ -1166,6 +1171,53 @@ final class AppState: NSObject, NSMenuDelegate {
         } else {
             removeStatusItem()
         }
+    }
+
+    func setUpdateBadge(_ show: Bool) {
+        hasUpdateBadge = show
+        if show && statusItem == nil {
+            // Menu icon is hidden — temporarily show it so the badge is visible.
+            installStatusItem()
+            menuIconTemporarilyShown = true
+        }
+        if !show && menuIconTemporarilyShown {
+            // Restore the hidden state when the badge is cleared.
+            menuIconTemporarilyShown = false
+            if !menuIconVisible {
+                removeStatusItem()
+                return
+            }
+        }
+        if show {
+            applyUpdateBadgeIcon()
+        } else {
+            removeUpdateBadgeIcon()
+        }
+    }
+
+    private static let updateBadgeViewTag = 9999
+
+    private func applyUpdateBadgeIcon() {
+        guard let button = statusItem?.button else { return }
+        guard button.viewWithTag(Self.updateBadgeViewTag) == nil else { return }
+        let badgeDiameter: CGFloat = 6
+        let dot = TaggableView(frame: NSRect(
+            x: button.bounds.maxX - badgeDiameter,
+            y: 0,
+            width: badgeDiameter,
+            height: badgeDiameter
+        ))
+        dot.assignedTag = Self.updateBadgeViewTag
+        dot.wantsLayer = true
+        dot.layer?.backgroundColor = NSColor.systemRed.cgColor
+        dot.layer?.cornerRadius = badgeDiameter / 2
+        dot.autoresizingMask = [.minXMargin, .minYMargin]
+        button.addSubview(dot)
+    }
+
+    private func removeUpdateBadgeIcon() {
+        guard let button = statusItem?.button else { return }
+        button.viewWithTag(Self.updateBadgeViewTag)?.removeFromSuperview()
     }
 
     private func updateStatusMenu() {
@@ -1841,4 +1893,9 @@ private enum UserDefaultsKey {
     static let dockIconVisible = "dockIconVisible"
     static let windowListSidebarVisible = "windowListSidebarVisible"
     static let quitAppOnLastWindowClose = "quitAppOnLastWindowClose"
+}
+
+private final class TaggableView: NSView {
+    var assignedTag: Int = 0
+    override var tag: Int { assignedTag }
 }

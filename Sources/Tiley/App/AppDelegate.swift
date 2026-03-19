@@ -6,11 +6,12 @@ import Sparkle
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let appState: AppState
+    private var wasSettingsVisibleBeforeUpdate = false
 
     lazy var updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(
         startingUpdater: true,
         updaterDelegate: self,
-        userDriverDelegate: nil
+        userDriverDelegate: self
     )
 
     override init() {
@@ -415,10 +416,46 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-extension AppDelegate: SPUUpdaterDelegate {
-    nonisolated func updater(_ updater: SPUUpdater, willDownloadUpdate item: SUAppcastItem, with request: NSMutableURLRequest) {
+extension AppDelegate: SPUUpdaterDelegate {}
+
+extension AppDelegate: SPUStandardUserDriverDelegate {
+    nonisolated var supportsGentleScheduledUpdateReminders: Bool { true }
+
+    nonisolated func standardUserDriverShouldHandleShowingScheduledUpdate(_ update: SUAppcastItem, andInImmediateFocus immediateFocus: Bool) -> Bool {
+        // When Sparkle wants to show in immediate focus (e.g. right after launch
+        // or after long idle), let it handle showing the alert directly.
+        // Otherwise the delegate handles it via a badge on the menu icon.
+        immediateFocus
+    }
+
+    nonisolated func standardUserDriverWillHandleShowingUpdate(_ handleShowingUpdate: Bool, forUpdate update: SUAppcastItem, state: SPUUserUpdateState) {
         Task { @MainActor in
-            appState.hideMainWindow()
+            if state.userInitiated {
+                // User-initiated check: hide the settings window so the
+                // Sparkle alert is not obscured behind it.
+                wasSettingsVisibleBeforeUpdate = appState.isEditingSettings
+                appState.hideMainWindow()
+            } else if !handleShowingUpdate {
+                // Scheduled check where Sparkle defers to us: show a badge
+                // on the menu bar icon to gently notify the user.
+                appState.setUpdateBadge(true)
+            }
+        }
+    }
+
+    nonisolated func standardUserDriverDidReceiveUserAttention(forUpdate update: SUAppcastItem) {
+        Task { @MainActor in
+            appState.setUpdateBadge(false)
+        }
+    }
+
+    nonisolated func standardUserDriverWillFinishUpdateSession() {
+        Task { @MainActor in
+            appState.setUpdateBadge(false)
+            if wasSettingsVisibleBeforeUpdate {
+                wasSettingsVisibleBeforeUpdate = false
+                appState.beginSettingsEditing()
+            }
         }
     }
 }

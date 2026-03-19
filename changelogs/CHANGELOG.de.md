@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Sanfte Sparkle-Update-Erinnerungen: Wenn eine Hintergrundprüfung eine neue Version findet, erscheint ein roter Badge-Punkt am Menüleistensymbol und „Update verfügbar"-Labels neben dem Zahnrad-Button und dem „Nach Updates suchen"-Button in den Einstellungen
+- Wenn das Menüleistensymbol ausgeblendet ist, wird es bei Update-Erkennung vorübergehend mit Badge angezeigt und nach Ende der Update-Sitzung wieder ausgeblendet
+
+### Geändert
+
+- Das Einstellungsfenster wird jetzt ausgeblendet, wenn Sparkle ein Update findet (zuvor erst beim Download-Start), und beim Abbrechen wiederhergestellt
+- Der Titel des Einstellungsfensters ist jetzt in allen unterstützten Sprachen lokalisiert
+- Versionsnummer vom Einstellungstitel in den Update-Bereich neben den „Nach Updates suchen"-Button verschoben
+
 ## [2.0.2] - 2026-03-19
 
 ### Hinzugefügt

@@ -220,7 +220,7 @@ struct MainWindowView: View {
                         .frame(width: 20, height: 20)
                         .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
 
-                    Text("Settings")
+                    Text(NSLocalizedString("Settings", comment: "Settings window title"))
                         .font(.system(size: 13, weight: .semibold))
                 }
 
@@ -524,6 +524,13 @@ struct MainWindowView: View {
                 }
                 .buttonStyle(TahoeToolbarButtonStyle())
                 .instantTooltip(NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
+                .overlay(alignment: .trailing) {
+                    if appState.hasUpdateBadge {
+                        UpdateAvailableBadge()
+                            .fixedSize()
+                            .offset(x: -28)
+                    }
+                }
             }
         }
         .frame(height: Self.footerHeight)
@@ -956,7 +963,13 @@ struct MainWindowView: View {
                         Divider().opacity(0.4)
 
                         HStack {
+                            Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?")")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.secondary)
                             Spacer()
+                            if appState.hasUpdateBadge {
+                                UpdateAvailableBadge()
+                            }
                             CheckForUpdatesView(updater: updater)
                         }
                         .padding(.vertical, 4)
@@ -2341,5 +2354,17 @@ private struct TahoeToolbarButtonStyle: ButtonStyle {
             }
             .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
+private struct UpdateAvailableBadge: View {
+    var body: some View {
+        Text(NSLocalizedString("Update available", comment: "Badge shown when an update is available"))
+            .font(.system(size: 10, weight: .medium))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(Color.red, in: Capsule())
+            .fixedSize()
     }
 }

@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Rappels de mise à jour discrets de Sparkle : lorsqu'une vérification en arrière-plan trouve une nouvelle version, un point rouge apparaît sur l'icône de la barre des menus et des labels « Mise à jour disponible » s'affichent à côté du bouton engrenage et du bouton « Vérifier les mises à jour » dans les réglages
+- Si l'icône de la barre des menus est masquée, elle s'affiche temporairement avec le badge lors de la détection d'une mise à jour, puis se masque à nouveau à la fin de la session
+
+### Modifié
+
+- La fenêtre des réglages est désormais masquée lorsque Sparkle trouve une mise à jour (auparavant uniquement au début du téléchargement) et restaurée en cas d'annulation
+- Le titre de la fenêtre des réglages est maintenant localisé dans toutes les langues prises en charge
+- Le numéro de version a été déplacé du titre des réglages vers la section Mises à jour, à côté du bouton « Vérifier les mises à jour »
+
 ## [2.0.2] - 2026-03-19
 
 ### Ajouté

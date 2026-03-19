@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni
+- Se l'icona della barra dei menu è nascosta, viene mostrata temporaneamente con il badge al rilevamento di un aggiornamento e nascosta nuovamente al termine della sessione
+
+### Modificato
+
+- La finestra delle impostazioni viene ora nascosta quando Sparkle trova un aggiornamento (in precedenza solo all'inizio del download) e ripristinata in caso di annullamento
+- Il titolo della finestra delle impostazioni è ora localizzato in tutte le lingue supportate
+- Il numero di versione è stato spostato dal titolo delle impostazioni alla sezione Aggiornamenti, accanto al pulsante "Verifica aggiornamenti"
+
 ## [2.0.2] - 2026-03-19
 
 ### Aggiunto
