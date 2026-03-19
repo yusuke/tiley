@@ -77,6 +77,7 @@ struct MainWindowView: View {
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
+    @State private var isSearchFieldFocused = false
     @State private var isSidebarVisible = UserDefaults.standard.object(forKey: "windowListSidebarVisible") != nil
         ? UserDefaults.standard.bool(forKey: "windowListSidebarVisible")
         : true
@@ -416,10 +417,51 @@ struct MainWindowView: View {
                     .padding(.bottom, Self.footerBottomPadding)
 
                 Spacer(minLength: 0)
+
+                if screenRole.isTarget {
+                    keyboardHintsBar
+                }
             }
             .frame(width: mainContentWidth)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
+    }
+
+    private var keyboardHintsBar: some View {
+        HStack(spacing: 12) {
+            if isSearchFieldFocused {
+                hintLabel("↩", NSLocalizedString("Confirm search criteria", comment: "Status bar hint for confirming search criteria"))
+                hintLabel("Esc", NSLocalizedString("Clear search criteria", comment: "Status bar hint for clearing search criteria"))
+            } else {
+                hintLabel("↩", NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
+            }
+            hintLabel("↓ Tab", NSLocalizedString("Next window", comment: "Status bar hint for next window"))
+            hintLabel("↑ ⇧Tab", NSLocalizedString("Previous window", comment: "Status bar hint for previous window"))
+            if !isSearchFieldFocused {
+                hintLabel("⌘F", NSLocalizedString("Search windows", comment: "Status bar hint for Cmd+F window search"))
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 20)
+        .padding(.horizontal, Self.layoutPanelHorizontalPadding)
+        .padding(.bottom, 4)
+    }
+
+    private func hintLabel(_ key: String, _ label: String) -> some View {
+        HStack(spacing: 3) {
+            Text(key)
+                .font(.system(size: 10, weight: .medium, design: .rounded))
+                .foregroundStyle(.tertiary)
+                .padding(.horizontal, 4)
+                .padding(.vertical, 1)
+                .background(
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(.quaternary)
+                )
+            Text(label)
+                .font(.system(size: 10))
+                .foregroundStyle(.tertiary)
+        }
     }
 
     private var layoutGridFooterBar: some View {
@@ -551,6 +593,9 @@ struct MainWindowView: View {
                 onEscape: {
                     windowSearchText = ""
                     windowSearchBlurTrigger += 1
+                },
+                onFocusChange: { focused in
+                    isSearchFieldFocused = focused
                 }
             )
             .frame(height: 22)
@@ -558,14 +603,22 @@ struct MainWindowView: View {
             .padding(.top, 8)
             .padding(.bottom, 6)
 
-            ScrollView {
-                VStack(spacing: 2) {
-                    ForEach(filteredWindowTargets) { item in
-                        windowListRow(item: item)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 2) {
+                        ForEach(filteredWindowTargets) { item in
+                            windowListRow(item: item)
+                                .id(item.id)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 6)
+                }
+                .onChange(of: appState.currentWindowTargetIndex) { _, newIndex in
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        proxy.scrollTo(newIndex, anchor: .center)
                     }
                 }
-                .padding(.vertical, 4)
-                .padding(.horizontal, 6)
             }
         }
         .frame(width: Self.sidebarWidth - 8, height: height - 16)
@@ -1907,7 +1960,9 @@ private struct WindowSearchField: NSViewRepresentable {
             if field.window?.firstResponder == field.currentEditor() {
                 field.window?.makeFirstResponder(nil)
             }
-            onFocusChange?(false)
+            DispatchQueue.main.async { [onFocusChange] in
+                onFocusChange?(false)
+            }
         }
     }
 
@@ -1931,11 +1986,13 @@ private struct WindowSearchField: NSViewRepresentable {
         }
 
         func controlTextDidBeginEditing(_ obj: Notification) {
-            parent.onFocusChange?(true)
+            let onFocus = parent.onFocusChange
+            DispatchQueue.main.async { onFocus?(true) }
         }
 
         func controlTextDidEndEditing(_ obj: Notification) {
-            parent.onFocusChange?(false)
+            let onFocus = parent.onFocusChange
+            DispatchQueue.main.async { onFocus?(false) }
         }
 
         func control(
@@ -1943,27 +2000,38 @@ private struct WindowSearchField: NSViewRepresentable {
             doCommandBy commandSelector: Selector
         ) -> Bool {
             if commandSelector == #selector(NSResponder.insertTab(_:)) {
-                parent.onTab(true)
+                let onTab = parent.onTab
+                let onFocus = parent.onFocusChange
+                DispatchQueue.main.async { onTab(true); onFocus?(false) }
                 return true
             }
             if commandSelector == #selector(NSResponder.insertBacktab(_:)) {
-                parent.onTab(false)
+                let onTab = parent.onTab
+                let onFocus = parent.onFocusChange
+                DispatchQueue.main.async { onTab(false); onFocus?(false) }
                 return true
             }
             if commandSelector == #selector(NSResponder.moveDown(_:)) {
-                parent.onTab(true)
+                let onTab = parent.onTab
+                let onFocus = parent.onFocusChange
+                DispatchQueue.main.async { onTab(true); onFocus?(false) }
                 return true
             }
             if commandSelector == #selector(NSResponder.moveUp(_:)) {
-                parent.onTab(false)
+                let onTab = parent.onTab
+                let onFocus = parent.onFocusChange
+                DispatchQueue.main.async { onTab(false); onFocus?(false) }
                 return true
             }
             if commandSelector == #selector(NSResponder.insertNewline(_:)) {
                 control.window?.makeFirstResponder(nil)
+                let onFocus = parent.onFocusChange
+                DispatchQueue.main.async { onFocus?(false) }
                 return true
             }
             if commandSelector == #selector(NSResponder.cancelOperation(_:)) {
-                parent.onEscape()
+                let onEscape = parent.onEscape
+                DispatchQueue.main.async { onEscape() }
                 return true
             }
             return false

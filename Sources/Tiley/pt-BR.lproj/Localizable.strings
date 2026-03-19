@@ -95,6 +95,7 @@
 "No windows available" = "Nenhuma janela disponível";
 "Tab is reserved for switching target windows." = "Tab é reservado para alternar a janela de destino.";
 "Return is reserved for raising the selected window." = "Return é reservado para trazer a janela selecionada para frente.";
+"Arrow keys are reserved for switching target windows." = "As setas são reservadas para alternar a janela de destino.";
 "Edit Layout" = "Editar layout";
 "Done Editing" = "Concluir edição";
 "Delete Shortcut" = "Excluir atalho";
@@ -108,3 +109,9 @@
 "Windows" = "Janelas";
 "Toggle window list (%@)" = "Mostrar/ocultar lista de janelas (%@)";
 "⌘F is reserved for searching the window list." = "⌘F está reservado para pesquisar a lista de janelas.";
+"Bring to front" = "Trazer para frente";
+"Next window" = "Próxima janela";
+"Previous window" = "Janela anterior";
+"Search windows" = "Buscar janelas";
+"Confirm search criteria" = "Confirmar critérios de busca";
+"Clear search criteria" = "Limpar critérios de busca";

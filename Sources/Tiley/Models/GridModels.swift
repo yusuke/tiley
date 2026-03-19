@@ -181,8 +181,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 baseColumns: columns,
                 shortcuts: [
                     HotKeyShortcut(keyCode: UInt32(kVK_ANSI_W), modifiers: 0),
-                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_K), modifiers: 0),
-                    HotKeyShortcut(keyCode: UInt32(kVK_UpArrow), modifiers: 0)
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_K), modifiers: 0)
                 ]
             ),
             LayoutPreset(
@@ -193,8 +192,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 baseColumns: columns,
                 shortcuts: [
                     HotKeyShortcut(keyCode: UInt32(kVK_ANSI_S), modifiers: 0),
-                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_J), modifiers: 0),
-                    HotKeyShortcut(keyCode: UInt32(kVK_DownArrow), modifiers: 0)
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_J), modifiers: 0)
                 ]
             )
         ]

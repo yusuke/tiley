@@ -95,6 +95,7 @@
 "No windows available" = "没有可用的窗口";
 "Tab is reserved for switching target windows." = "Tab 已用于切换目标窗口。";
 "Return is reserved for raising the selected window." = "Return 已用于将选定窗口置于最前面。";
+"Arrow keys are reserved for switching target windows." = "方向键已用于切换目标窗口。";
 "Edit Layout" = "编辑布局";
 "Done Editing" = "完成编辑";
 "Delete Shortcut" = "删除快捷键";
@@ -108,3 +109,9 @@
 "Windows" = "窗口";
 "Toggle window list (%@)" = "显示/隐藏窗口列表 (%@)";
 "⌘F is reserved for searching the window list." = "⌘F 已被保留用于搜索窗口列表。";
+"Bring to front" = "移至最前";
+"Next window" = "下一个窗口";
+"Previous window" = "上一个窗口";
+"Search windows" = "搜索窗口";
+"Confirm search criteria" = "确认搜索条件";
+"Clear search criteria" = "清除搜索条件";

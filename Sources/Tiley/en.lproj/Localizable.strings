@@ -95,6 +95,7 @@
 "No windows available" = "No windows available";
 "Tab is reserved for switching target windows." = "Tab is reserved for switching target windows.";
 "Return is reserved for raising the selected window." = "Return is reserved for raising the selected window.";
+"Arrow keys are reserved for switching target windows." = "Arrow keys are reserved for switching target windows.";
 "Edit Layout" = "Edit Layout";
 "Done Editing" = "Done Editing";
 "Delete Shortcut" = "Delete Shortcut";
@@ -108,3 +109,9 @@
 "Windows" = "Windows";
 "Toggle window list (%@)" = "Toggle window list (%@)";
 "⌘F is reserved for searching the window list." = "⌘F is reserved for searching the window list.";
+"Bring to front" = "Bring to front";
+"Next window" = "Next window";
+"Previous window" = "Previous window";
+"Search windows" = "Search windows";
+"Confirm search criteria" = "Confirm search criteria";
+"Clear search criteria" = "Clear search criteria";

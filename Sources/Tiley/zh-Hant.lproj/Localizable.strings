@@ -95,6 +95,7 @@
 "No windows available" = "沒有可用的視窗";
 "Tab is reserved for switching target windows." = "Tab 已用於切換目標視窗。";
 "Return is reserved for raising the selected window." = "Return 已用於將選定視窗移至最前面。";
+"Arrow keys are reserved for switching target windows." = "方向鍵已用於切換目標視窗。";
 "Edit Layout" = "編輯佈局";
 "Done Editing" = "完成編輯";
 "Delete Shortcut" = "刪除快速鍵";
@@ -108,3 +109,9 @@
 "Windows" = "視窗";
 "Toggle window list (%@)" = "顯示/隱藏視窗列表 (%@)";
 "⌘F is reserved for searching the window list." = "⌘F 已保留用於搜尋視窗列表。";
+"Bring to front" = "移至最前";
+"Next window" = "下一個視窗";
+"Previous window" = "上一個視窗";
+"Search windows" = "搜尋視窗";
+"Confirm search criteria" = "確認搜尋條件";
+"Clear search criteria" = "清除搜尋條件";

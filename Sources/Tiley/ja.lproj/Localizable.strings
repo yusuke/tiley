@@ -95,6 +95,7 @@
 "No windows available" = "利用可能なウインドウがありません";
 "Tab is reserved for switching target windows." = "Tab はターゲットウインドウの切り替えに使用されています。";
 "Return is reserved for raising the selected window." = "Return は選択したウインドウの最前面化に使用されています。";
+"Arrow keys are reserved for switching target windows." = "矢印キーはターゲットウインドウの切り替えに使用されています。";
 "Edit Layout" = "レイアウトを編集";
 "Done Editing" = "編集を完了";
 "Delete Shortcut" = "ショートカットを削除";
@@ -108,3 +109,9 @@
 "Windows" = "ウインドウ";
 "Toggle window list (%@)" = "ウインドウリストの表示/非表示 (%@)";
 "⌘F is reserved for searching the window list." = "⌘Fはウインドウリストの検索に予約されています。";
+"Bring to front" = "最前面へ";
+"Next window" = "次のウインドウ";
+"Previous window" = "前のウインドウ";
+"Search windows" = "ウインドウを検索";
+"Confirm search criteria" = "検索条件を確定";
+"Clear search criteria" = "検索条件をクリア";

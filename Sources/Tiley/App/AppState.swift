@@ -405,7 +405,12 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = nil
         clearResizabilityCache()
         hideAllMainWindows()
-        _ = reactivateLastTargetApp(clearingState: false)
+        // Reactivate the original app (before any Tab cycling), not the current target.
+        if let originalPID = originalFrontmostPID {
+            NSRunningApplication(processIdentifier: originalPID)?.activate()
+        } else {
+            _ = reactivateLastTargetApp(clearingState: false)
+        }
         clearWindowCyclingState()
         launchMessage = NSLocalizedString("Canceled layout selection.", comment: "Layout selection canceled")
     }
@@ -814,6 +819,12 @@ final class AppState: NSObject, NSMenuDelegate {
         if shortcut.keyCode == UInt32(kVK_Return),
            shortcut.modifiers == 0 {
             return NSLocalizedString("Return is reserved for raising the selected window.", comment: "Return shortcut reserved for raising window")
+        }
+
+        // Up/Down arrows are reserved for window cycling.
+        if (shortcut.keyCode == UInt32(kVK_UpArrow) || shortcut.keyCode == UInt32(kVK_DownArrow)),
+           shortcut.modifiers == 0 {
+            return NSLocalizedString("Arrow keys are reserved for switching target windows.", comment: "Arrow key shortcut reserved for window cycling")
         }
 
         // Cmd+F is reserved for the window search field.
@@ -1372,8 +1383,28 @@ final class AppState: NSObject, NSMenuDelegate {
             layoutPresets = LayoutPreset.defaultPresets(rows: rows, columns: columns)
             saveLayoutPresets()
         }
+        migrateRemoveArrowShortcutsFromPresets()
         sanitizePresetGlobalShortcutEligibility()
         selectedLayoutPresetID = layoutPresets.first?.id
+    }
+
+    /// Remove UpArrow / DownArrow shortcuts from layout presets.
+    /// These keys are now reserved for window cycling (↑/↓).
+    private func migrateRemoveArrowShortcutsFromPresets() {
+        let migrationKey = "didMigrateRemoveArrowShortcuts"
+        guard !UserDefaults.standard.bool(forKey: migrationKey) else { return }
+        UserDefaults.standard.set(true, forKey: migrationKey)
+
+        let reservedKeyCodes: Set<UInt32> = [UInt32(kVK_UpArrow), UInt32(kVK_DownArrow)]
+        var changed = false
+        for i in layoutPresets.indices {
+            let before = layoutPresets[i].shortcuts.count
+            layoutPresets[i].shortcuts.removeAll { shortcut in
+                reservedKeyCodes.contains(shortcut.keyCode) && shortcut.modifiers == 0
+            }
+            if layoutPresets[i].shortcuts.count != before { changed = true }
+        }
+        if changed { saveLayoutPresets() }
     }
 
     private func saveLayoutPresets() {

@@ -95,6 +95,7 @@
 "No windows available" = "Nessuna finestra disponibile";
 "Tab is reserved for switching target windows." = "Tab è riservato per cambiare la finestra di destinazione.";
 "Return is reserved for raising the selected window." = "Return è riservato per portare in primo piano la finestra selezionata.";
+"Arrow keys are reserved for switching target windows." = "I tasti freccia sono riservati per cambiare la finestra di destinazione.";
 "Edit Layout" = "Modifica layout";
 "Done Editing" = "Fine modifica";
 "Delete Shortcut" = "Elimina scorciatoia";
@@ -108,3 +109,9 @@
 "Windows" = "Finestre";
 "Toggle window list (%@)" = "Mostra/nascondi elenco finestre (%@)";
 "⌘F is reserved for searching the window list." = "⌘F è riservato per la ricerca nell'elenco finestre.";
+"Bring to front" = "Porta in primo piano";
+"Next window" = "Finestra successiva";
+"Previous window" = "Finestra precedente";
+"Search windows" = "Cerca finestre";
+"Confirm search criteria" = "Conferma criteri di ricerca";
+"Clear search criteria" = "Cancella criteri di ricerca";

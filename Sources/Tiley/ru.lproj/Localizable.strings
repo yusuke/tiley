@@ -95,6 +95,7 @@
 "No windows available" = "Нет доступных окон";
 "Tab is reserved for switching target windows." = "Tab зарезервирована для переключения целевого окна.";
 "Return is reserved for raising the selected window." = "Return зарезервирована для вывода выбранного окна на передний план.";
+"Arrow keys are reserved for switching target windows." = "Клавиши стрелок зарезервированы для переключения целевого окна.";
 "Edit Layout" = "Редактировать макет";
 "Done Editing" = "Завершить редактирование";
 "Delete Shortcut" = "Удалить сочетание клавиш";
@@ -108,3 +109,9 @@
 "Windows" = "Окна";
 "Toggle window list (%@)" = "Показать/скрыть список окон (%@)";
 "⌘F is reserved for searching the window list." = "⌘F зарезервировано для поиска в списке окон.";
+"Bring to front" = "На передний план";
+"Next window" = "Следующее окно";
+"Previous window" = "Предыдущее окно";
+"Search windows" = "Поиск окон";
+"Confirm search criteria" = "Подтвердить условия поиска";
+"Clear search criteria" = "Очистить условия поиска";
