@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Doppio clic su una finestra nella barra laterale per portarla in primo piano e chiudere la griglia di layout
+- Menu contestuale (pulsante puntini di sospensione) sulle righe delle finestre nella barra laterale con tre azioni:
+  - "Chiudi altre finestre di [App]" — chiude le altre finestre della stessa app (mostrato solo quando l'app ha più finestre)
+  - "Esci da [App]" — termina l'applicazione
+  - "Nascondi finestre tranne [App]" — nasconde tutte le altre applicazioni (equivalente di Cmd-H), mostra l'app selezionata se era nascosta
+- Le applicazioni nascoste (Cmd-H) appaiono ora nella barra laterale come voci segnaposto (solo nome dell'app) e vengono visualizzate al 50% di opacità
+- Selezionando un'app nascosta (Invio, doppio clic, ridimensionamento griglia/layout) viene automaticamente mostrata e si opera sulla sua finestra in primo piano
+
 ## [2.0.3] - 2026-03-19
 
 ### Aggiunto

@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Double-clic sur une fenêtre dans la barre latérale pour la mettre au premier plan et fermer la grille de disposition
+- Menu contextuel (bouton points de suspension) sur les lignes de fenêtres de la barre latérale avec trois actions :
+  - « Fermer les autres fenêtres de [App] » — ferme les autres fenêtres de la même app (affiché uniquement quand l'app a plusieurs fenêtres)
+  - « Quitter [App] » — ferme l'application
+  - « Masquer les fenêtres sauf [App] » — masque toutes les autres applications (équivalent Cmd-H), affiche l'app sélectionnée si elle était masquée
+- Les applications masquées (Cmd-H) apparaissent désormais dans la barre latérale comme entrées de remplacement (nom de l'app uniquement) et sont affichées à 50 % d'opacité
+- La sélection d'une app masquée (Entrée, double-clic, redimensionnement grille/disposition) la rend automatiquement visible et opère sur sa fenêtre au premier plan
+
 ## [2.0.3] - 2026-03-19
 
 ### Ajouté

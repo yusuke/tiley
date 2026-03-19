@@ -111,3 +111,5 @@
 "Settings (⌘,)" = "Ajustes (⌘,)";
 "Settings" = "Ajustes";
 "Update available" = "Actualización disponible";
+"Close other windows of \"%@\"" = "Cerrar otras ventanas de %@";
+"Hide windows besides \"%@\"" = "Ocultar ventanas excepto \"%@\"";

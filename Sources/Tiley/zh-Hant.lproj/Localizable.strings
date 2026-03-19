@@ -111,3 +111,5 @@
 "Settings (⌘,)" = "設定 (⌘,)";
 "Settings" = "設定";
 "Update available" = "有可用更新";
+"Close other windows of \"%@\"" = "關閉%@的其他視窗";
+"Hide windows besides \"%@\"" = "隱藏「%@」以外的視窗";

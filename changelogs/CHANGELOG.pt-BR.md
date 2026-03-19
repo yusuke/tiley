@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Duplo clique em uma janela na barra lateral para trazê-la para o primeiro plano e fechar a grade de layout
+- Menu de contexto (botão de reticências) nas linhas de janelas da barra lateral com três ações:
+  - "Fechar outras janelas do [App]" — fecha outras janelas do mesmo app (exibido apenas quando o app tem múltiplas janelas)
+  - "Encerrar [App]" — encerra o aplicativo
+  - "Ocultar janelas exceto [App]" — oculta todos os outros aplicativos (equivalente a Cmd-H), exibe o app selecionado se estava oculto
+- Aplicativos ocultos (Cmd-H) agora aparecem na barra lateral como entradas de espaço reservado (apenas nome do app) e são exibidos com 50% de opacidade
+- Ao selecionar um app oculto (Enter, duplo clique, redimensionar com grade/layout) ele é automaticamente exibido e a operação é realizada na sua janela principal
+
 ## [2.0.3] - 2026-03-19
 
 ### Adicionado

@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Doble clic en una ventana de la barra lateral para traerla al frente y cerrar la cuadrícula de diseño
+- Menú contextual (botón de puntos suspensivos) en las filas de ventanas de la barra lateral con tres acciones:
+  - "Cerrar otras ventanas de [App]" — cierra otras ventanas de la misma app (solo se muestra cuando la app tiene múltiples ventanas)
+  - "Salir de [App]" — cierra la aplicación
+  - "Ocultar ventanas excepto [App]" — oculta todas las demás aplicaciones (equivalente a Cmd-H), muestra la app seleccionada si estaba oculta
+- Las aplicaciones ocultas (Cmd-H) ahora aparecen en la barra lateral como entradas de marcador (solo nombre de la app) y se muestran con 50 % de opacidad
+- Al seleccionar una app oculta (Enter, doble clic, redimensionar con cuadrícula/diseño) se muestra automáticamente y se opera sobre su ventana principal
+
 ## [2.0.3] - 2026-03-19
 
 ### Añadido

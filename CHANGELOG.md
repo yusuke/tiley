@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Double-click a window in the sidebar list to bring it to the foreground and dismiss the layout grid
+- Context menu (ellipsis button) on sidebar window rows with three actions:
+  - "Close other windows of [App]" — closes other windows of the same app (shown only when the app has multiple windows)
+  - "Quit [App]" — terminates the application
+  - "Hide windows besides [App]" — hides all other applications (Cmd-H equivalent), unhides the selected app if it was hidden
+- Hidden (Cmd-H) applications now appear in the sidebar as placeholder entries (app name only) and are displayed at 50% opacity
+- Selecting a hidden app (Enter, double-click, grid/layout resize) automatically unhides it and operates on its frontmost window
+
 ## [2.0.3] - 2026-03-19
 
 ### Added

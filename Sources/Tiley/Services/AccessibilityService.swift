@@ -11,13 +11,16 @@ struct WindowResizability {
 
 struct WindowTarget {
     let appElement: AXUIElement
-    let windowElement: AXUIElement
+    /// `nil` for hidden-app placeholders whose AX windows couldn't be queried.
+    let windowElement: AXUIElement?
     let processIdentifier: pid_t
     let appName: String
     let windowTitle: String?
     let frame: CGRect
     let visibleFrame: CGRect
     let screenFrame: CGRect
+    /// True when the owning application is hidden (Cmd-H).
+    let isHidden: Bool
 }
 
 enum WindowAccessError: LocalizedError {
@@ -108,7 +111,8 @@ final class AccessibilityService {
             windowTitle: windowTitle,
             frame: frame,
             visibleFrame: visibleFrame,
-            screenFrame: screenFrame
+            screenFrame: screenFrame,
+            isHidden: NSRunningApplication(processIdentifier: pid)?.isHidden ?? false
         )
     }
 
@@ -340,9 +344,16 @@ final class AccessibilityService {
         }
 
         // Collect unique PIDs preserving first-seen order.
+        // Exclude PIDs of hidden apps so they are handled in the hidden-apps section below.
+        let hiddenPIDs = Set(
+            NSWorkspace.shared.runningApplications
+                .filter { $0.isHidden }
+                .map(\.processIdentifier)
+        )
         var seenPIDs = Set<pid_t>()
         var orderedPIDs: [pid_t] = []
         for entry in cgEntries {
+            guard !hiddenPIDs.contains(entry.pid) else { continue }
             if seenPIDs.insert(entry.pid).inserted {
                 orderedPIDs.append(entry.pid)
             }
@@ -381,6 +392,7 @@ final class AccessibilityService {
         var usedAXWindows = Set<ObjectIdentifier>()  // Track used AXUIElement refs
 
         for cgEntry in cgEntries {
+            guard !hiddenPIDs.contains(cgEntry.pid) else { continue }
             guard let axInfos = axWindowsByPID[cgEntry.pid] else { continue }
             // Find matching AX window by position/size comparison.
             let tolerance: CGFloat = 5
@@ -426,9 +438,77 @@ final class AccessibilityService {
                 windowTitle: windowTitle,
                 frame: frame,
                 visibleFrame: visibleFrame,
-                screenFrame: screenFrame
+                screenFrame: screenFrame,
+                isHidden: false
             )
             results.append(target)
+        }
+
+        // Append entries for hidden applications.
+        // Hidden apps don't appear in CGWindowListCopyWindowInfo(.optionOnScreenOnly).
+        // AX queries often fail with kAXErrorCannotComplete for hidden apps, so
+        // if we can't enumerate individual windows, we add a single placeholder
+        // entry (with a nil windowElement) showing just the app name.
+        let hiddenApps = NSWorkspace.shared.runningApplications.filter {
+            $0.isHidden && $0.activationPolicy == .regular && $0.processIdentifier != selfPID
+        }
+        let defaultScreen = NSScreen.main?.frame ?? .zero
+        let defaultVisible = NSScreen.main?.visibleFrame ?? .zero
+        for app in hiddenApps {
+            let pid = app.processIdentifier
+            guard !seenPIDs.contains(pid) else { continue }
+            let appElement = AXUIElementCreateApplication(pid)
+            let appName = app.localizedName
+                ?? NSLocalizedString("App", comment: "Generic app name fallback")
+
+            let axWindows = (try? copyAllWindowElements(from: appElement)) ?? []
+            var addedAny = false
+            for w in axWindows {
+                let subrole = try? copyStringAttribute(w, attribute: kAXSubroleAttribute)
+                guard subrole == "AXStandardWindow" else { continue }
+                guard let pos = try? copyAXValueAttribute(w, attribute: kAXPositionAttribute),
+                      let sz = try? copyAXValueAttribute(w, attribute: kAXSizeAttribute) else { continue }
+                var origin = CGPoint.zero
+                var size = CGSize.zero
+                guard AXValueGetValue(pos, .cgPoint, &origin),
+                      AXValueGetValue(sz, .cgSize, &size) else { continue }
+                guard size.width > 0, size.height > 0 else { continue }
+
+                let screen = resolveScreen(forAXOrigin: origin, size: size)
+                let frame = frameForAXOrigin(origin, size: size, on: screen)
+                let screenFrame = screen?.frame ?? defaultScreen
+                let visibleFrame = screen?.visibleFrame ?? defaultVisible
+                let windowTitle = try? copyStringAttribute(w, attribute: kAXTitleAttribute)
+
+                results.append(WindowTarget(
+                    appElement: appElement,
+                    windowElement: w,
+                    processIdentifier: pid,
+                    appName: appName,
+                    windowTitle: windowTitle,
+                    frame: frame,
+                    visibleFrame: visibleFrame,
+                    screenFrame: screenFrame,
+                    isHidden: true
+                ))
+                addedAny = true
+            }
+
+            // If AX query failed or returned no standard windows, add a placeholder
+            // so the hidden app still appears in the sidebar.
+            if !addedAny {
+                results.append(WindowTarget(
+                    appElement: appElement,
+                    windowElement: nil,
+                    processIdentifier: pid,
+                    appName: appName,
+                    windowTitle: nil,
+                    frame: defaultVisible,
+                    visibleFrame: defaultVisible,
+                    screenFrame: defaultScreen,
+                    isHidden: true
+                ))
+            }
         }
 
         return results

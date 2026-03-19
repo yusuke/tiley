@@ -17,21 +17,24 @@ final class WindowManager {
 
     @discardableResult
     func move(target: WindowTarget, to frame: CGRect) throws -> Bool {
-        let constrained = try accessibilityService.setFrame(frame, on: target.screenFrame, for: target.windowElement)
-        scheduleFrameVerification(frame: frame, screenFrame: target.screenFrame, window: target.windowElement)
+        guard let window = target.windowElement else { return false }
+        let constrained = try accessibilityService.setFrame(frame, on: target.screenFrame, for: window)
+        scheduleFrameVerification(frame: frame, screenFrame: target.screenFrame, window: window)
         return constrained
     }
 
     @discardableResult
     func move(target: WindowTarget, to frame: CGRect, onScreenFrame screenFrame: CGRect) throws -> Bool {
-        let constrained = try accessibilityService.setFrame(frame, on: screenFrame, for: target.windowElement)
-        scheduleFrameVerification(frame: frame, screenFrame: screenFrame, window: target.windowElement)
+        guard let window = target.windowElement else { return false }
+        let constrained = try accessibilityService.setFrame(frame, on: screenFrame, for: window)
+        scheduleFrameVerification(frame: frame, screenFrame: screenFrame, window: window)
         return constrained
     }
 
     /// After a move/resize, always raises the window to the front.
     func raiseWindow(target: WindowTarget) {
-        accessibilityService.raiseWindow(target.windowElement)
+        guard let window = target.windowElement else { return }
+        accessibilityService.raiseWindow(window)
     }
 
     /// Schedules a background verify-and-correct pass so that the UI can

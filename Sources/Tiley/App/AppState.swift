@@ -478,7 +478,9 @@ final class AppState: NSObject, NSMenuDelegate {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
         guard activeTargetIndex >= 0, activeTargetIndex < availableWindowTargets.count else { return }
         let target = availableWindowTargets[activeTargetIndex]
-        accessibilityService.raiseWindow(target.windowElement)
+        if let window = target.windowElement {
+            accessibilityService.raiseWindow(window)
+        }
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
     }
 
@@ -540,6 +542,22 @@ final class AppState: NSObject, NSMenuDelegate {
     /// rather than jumping to the top of the list.
     private var pendingTargetIndexAfterClose: Int?
 
+    /// Brings the window at the given index to the foreground and dismisses the layout grid.
+    func focusWindowAndDismiss(at index: Int) {
+        guard index >= 0, index < availableWindowTargets.count else { return }
+        let target = unhideAppIfNeeded(availableWindowTargets[index])
+        hidePreviewOverlay()
+        isShowingLayoutGrid = false
+        activeLayoutTarget = nil
+        clearResizabilityCache()
+        hideAllMainWindows()
+        if let window = target.windowElement {
+            accessibilityService.raiseWindow(window)
+        }
+        NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
+        clearWindowCyclingState()
+    }
+
     func closeWindowTarget(at index: Int) {
         guard index >= 0, index < availableWindowTargets.count else { return }
         let target = availableWindowTargets[index]
@@ -556,13 +574,72 @@ final class AppState: NSObject, NSMenuDelegate {
 
         if isLastWindow && quitAppOnLastWindowClose {
             NSRunningApplication(processIdentifier: target.processIdentifier)?.terminate()
-        } else {
-            accessibilityService.closeWindow(target.windowElement)
+        } else if let window = target.windowElement {
+            accessibilityService.closeWindow(window)
         }
 
         // Refresh the window list after a short delay to let the window close.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             self?.refreshAvailableWindows()
+        }
+    }
+
+    /// Close other windows of the same application, keeping the one at the given index.
+    func closeOtherWindowTargets(except index: Int) {
+        guard index >= 0, index < availableWindowTargets.count else { return }
+        let keepTarget = availableWindowTargets[index]
+
+        for (i, target) in availableWindowTargets.enumerated()
+            where i != index && target.processIdentifier == keepTarget.processIdentifier {
+            if let window = target.windowElement {
+                accessibilityService.closeWindow(window)
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
+        }
+    }
+
+    /// Quit the application that owns the window at the given index.
+    func quitApp(at index: Int) {
+        guard index >= 0, index < availableWindowTargets.count else { return }
+        let target = availableWindowTargets[index]
+        NSRunningApplication(processIdentifier: target.processIdentifier)?.terminate()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
+        }
+    }
+
+    /// Hide all applications except the one that owns the window at the given index.
+    /// If the selected app is currently hidden, it will be unhidden first.
+    func hideOtherApps(except index: Int) {
+        guard index >= 0, index < availableWindowTargets.count else { return }
+        let keepPID = availableWindowTargets[index].processIdentifier
+        let selfPID = getpid()
+        let keepApp = NSRunningApplication(processIdentifier: keepPID)
+        // Unhide the keep app first if needed.
+        if keepApp?.isHidden == true {
+            keepApp?.unhide()
+        }
+        // Activate the keep app so it becomes the frontmost regular app.
+        // macOS won't hide the active app via hide(), so by making the
+        // keep app active first, all other regular apps become hideable.
+        // We need a short delay for the activation to fully propagate
+        // before calling hide() on others.
+        keepApp?.activate()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+            for app in NSWorkspace.shared.runningApplications
+                where app.activationPolicy == .regular
+                    && app.processIdentifier != keepPID
+                    && app.processIdentifier != selfPID {
+                app.hide()
+            }
+            // Refresh to reflect hidden state (opacity) in the sidebar.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self?.refreshAvailableWindows()
+            }
         }
     }
 
@@ -573,7 +650,34 @@ final class AppState: NSObject, NSMenuDelegate {
         windowTargetListVersion += 1
     }
 
+    /// If the target's app is hidden (Cmd-H), unhide it so the window becomes
+    /// visible before we try to raise/move it.
+    /// Returns an updated target with a valid `windowElement` when possible.
+    @discardableResult
+    private func unhideAppIfNeeded(_ target: WindowTarget) -> WindowTarget {
+        guard target.isHidden else { return target }
+        let app = NSRunningApplication(processIdentifier: target.processIdentifier)
+        app?.unhide()
+
+        // If the target already has a window element, just return it.
+        if target.windowElement != nil { return target }
+
+        // For placeholders (windowElement == nil), activate the app and re-capture
+        // its frontmost window so we have a real AXUIElement to work with.
+        app?.activate()
+        // Give the app a moment to unhide and surface its windows.
+        Thread.sleep(forTimeInterval: 0.15)
+
+        if let freshTarget = try? accessibilityService.focusedWindowTarget(
+            preferredPID: target.processIdentifier
+        ) {
+            return freshTarget
+        }
+        return target
+    }
+
     func apply(selection: GridSelection, to target: WindowTarget) {
+        let target = unhideAppIfNeeded(target)
         // Re-fetch the current visibleFrame from the actual screen to avoid
         // using stale values captured when the target was resolved. The Dock
         // or menu bar may have auto-shown/hidden since then.
@@ -606,12 +710,14 @@ final class AppState: NSObject, NSMenuDelegate {
         if activeLayoutTarget == nil, lastTargetPID != nil {
             activeLayoutTarget = resolveWindowTarget()
         }
-        guard let target = activeLayoutTarget else {
+        guard var target = activeLayoutTarget else {
             launchMessage = NSLocalizedString("No active target window.", comment: "No active target error")
             isShowingLayoutGrid = false
             hidePreviewOverlay()
             return
         }
+        target = unhideAppIfNeeded(target)
+        activeLayoutTarget = target
 
         // Re-fetch the current visibleFrame from the actual screen to avoid
         // using stale values captured at overlay-open time. The Dock or menu
@@ -650,13 +756,14 @@ final class AppState: NSObject, NSMenuDelegate {
             requestAccessibilityAccess()
             return
         }
-        let target: WindowTarget
+        var target: WindowTarget
         if let existing = activeLayoutTarget {
             target = existing
         } else {
             guard let resolved = resolveWindowTarget() else { return }
             target = resolved
         }
+        target = unhideAppIfNeeded(target)
 
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
@@ -819,7 +926,8 @@ final class AppState: NSObject, NSMenuDelegate {
         if let cached = cachedResizability, cachedResizabilityPID == target.processIdentifier {
             return cached
         }
-        let result = accessibilityService.detectResizability(of: target.windowElement)
+        guard let window = target.windowElement else { return .both }
+        let result = accessibilityService.detectResizability(of: window)
         cachedResizability = result
         cachedResizabilityPID = target.processIdentifier
         return result

@@ -78,6 +78,7 @@ struct MainWindowView: View {
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
     @State private var hoveredCloseButtonIndex: Int?
+    @State private var hoveredKebabButtonIndex: Int?
     @State private var isSearchFieldFocused = false
     @State private var isSidebarVisible = UserDefaults.standard.object(forKey: "windowListSidebarVisible") != nil
         ? UserDefaults.standard.bool(forKey: "windowListSidebarVisible")
@@ -592,6 +593,8 @@ struct MainWindowView: View {
         let windowTitle: String
         let pid: pid_t
         let isLastWindowOfApp: Bool
+        let sameAppWindowCount: Int
+        let isHidden: Bool
     }
 
     private var filteredWindowTargets: [WindowListItem] {
@@ -617,7 +620,9 @@ struct MainWindowView: View {
                 appName: target.appName,
                 windowTitle: title,
                 pid: target.processIdentifier,
-                isLastWindowOfApp: windowCountByPID[target.processIdentifier] == 1
+                isLastWindowOfApp: windowCountByPID[target.processIdentifier] == 1,
+                sameAppWindowCount: windowCountByPID[target.processIdentifier] ?? 1,
+                isHidden: target.isHidden
             ))
         }
         return items
@@ -716,38 +721,57 @@ struct MainWindowView: View {
             )
             .overlay(alignment: .trailing) {
                 if isHovered {
-                    let isCloseHovered = hoveredCloseButtonIndex == item.id
-                    Button {
-                        appState.closeWindowTarget(at: item.id)
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 8, weight: .bold))
-                            .foregroundStyle(isCloseHovered ? .primary : .tertiary)
-                            .frame(width: 16, height: 16)
-                            .background(
-                                Circle()
-                                    .fill(isCloseHovered
-                                          ? Color(white: colorScheme == .dark ? 0.45 : 0.55)
-                                          : Color(white: colorScheme == .dark ? 0.3 : 0.7))
-                            )
-                    }
-                    .buttonStyle(.plain)
-                    .onHover { hovering in
-                        hoveredCloseButtonIndex = hovering ? item.id : nil
-                    }
-                    .instantTooltip({
-                        if item.isLastWindowOfApp && appState.quitAppOnLastWindowClose {
-                            return String(
-                                format: NSLocalizedString("Quit \"%@\"", comment: "Tooltip for closing the last window of an app (quits the app)"),
-                                item.appName
-                            )
-                        } else {
-                            return String(
-                                format: NSLocalizedString("Close \"%@\"", comment: "Tooltip for close window button with window name"),
-                                item.windowTitle.isEmpty ? item.appName : item.windowTitle
-                            )
+                    HStack(spacing: 2) {
+                        // Close button
+                        let isCloseHovered = hoveredCloseButtonIndex == item.id
+                        Button {
+                            appState.closeWindowTarget(at: item.id)
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 8, weight: .bold))
+                                .foregroundStyle(isCloseHovered ? .primary : .tertiary)
+                                .frame(width: 16, height: 16)
+                                .background(
+                                    Circle()
+                                        .fill(isCloseHovered
+                                              ? Color(white: colorScheme == .dark ? 0.45 : 0.55)
+                                              : Color(white: colorScheme == .dark ? 0.3 : 0.7))
+                                )
                         }
-                    }())
+                        .buttonStyle(.plain)
+                        .onHover { hovering in
+                            hoveredCloseButtonIndex = hovering ? item.id : nil
+                        }
+                        .instantTooltip({
+                            if item.isLastWindowOfApp && appState.quitAppOnLastWindowClose {
+                                return String(
+                                    format: NSLocalizedString("Quit \"%@\"", comment: "Tooltip for closing the last window of an app (quits the app)"),
+                                    item.appName
+                                )
+                            } else {
+                                return String(
+                                    format: NSLocalizedString("Close \"%@\"", comment: "Tooltip for close window button with window name"),
+                                    item.windowTitle.isEmpty ? item.appName : item.windowTitle
+                                )
+                            }
+                        }())
+
+                        // More menu button
+                        let isKebabHovered = hoveredKebabButtonIndex == item.id
+                        WindowListMoreButton(
+                            isHovered: isKebabHovered,
+                            colorScheme: colorScheme,
+                            sameAppWindowCount: item.sameAppWindowCount,
+                            appName: item.appName,
+                            windowTitle: item.windowTitle,
+                            onCloseOthers: { appState.closeOtherWindowTargets(except: item.id) },
+                            onQuit: { appState.quitApp(at: item.id) },
+                            onHideOthers: { appState.hideOtherApps(except: item.id) }
+                        )
+                        .onHover { hovering in
+                            hoveredKebabButtonIndex = hovering ? item.id : nil
+                        }
+                    }
                     .padding(.trailing, 4)
                     .transition(.opacity)
                 }
@@ -755,7 +779,13 @@ struct MainWindowView: View {
             .animation(.easeInOut(duration: 0.15), value: isHovered)
         }
         .buttonStyle(.plain)
+        .opacity(item.isHidden ? 0.5 : 1.0)
         .onHover { hovering in hoveredWindowIndex = hovering ? item.id : nil }
+        .simultaneousGesture(
+            TapGesture(count: 2).onEnded {
+                appState.focusWindowAndDismiss(at: item.id)
+            }
+        )
     }
 
     // MARK: - Target Info (secondary screens)
@@ -2366,5 +2396,137 @@ private struct UpdateAvailableBadge: View {
             .padding(.vertical, 3)
             .background(Color.red, in: Capsule())
             .fixedSize()
+    }
+}
+
+// MARK: - Window List More Button (NSViewRepresentable)
+
+/// A circular "…" button that shows a context menu via NSMenu.
+/// Using NSViewRepresentable avoids SwiftUI Menu rendering issues
+/// where the Circle background gets stripped by borderlessButton style.
+private struct WindowListMoreButton: NSViewRepresentable {
+    let isHovered: Bool
+    let colorScheme: ColorScheme
+    let sameAppWindowCount: Int
+    let appName: String
+    let windowTitle: String
+    let onCloseOthers: () -> Void
+    let onQuit: () -> Void
+    let onHideOthers: () -> Void
+
+    func makeNSView(context: Context) -> NSButton {
+        let button = NSButton(frame: NSRect(x: 0, y: 0, width: 16, height: 16))
+        button.bezelStyle = .inline
+        button.isBordered = false
+        button.image = NSImage(systemSymbolName: "ellipsis", accessibilityDescription: nil)?
+            .withSymbolConfiguration(.init(pointSize: 8, weight: .bold))
+        button.imagePosition = .imageOnly
+        button.target = context.coordinator
+        button.action = #selector(Coordinator.showMenu(_:))
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentHuggingPriority(.required, for: .vertical)
+        button.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        button.wantsLayer = true
+        button.layer?.cornerRadius = 8
+        return button
+    }
+
+    func updateNSView(_ button: NSButton, context: Context) {
+        let coord = context.coordinator
+        coord.sameAppWindowCount = sameAppWindowCount
+        coord.appName = appName
+        coord.windowTitle = windowTitle
+        coord.onCloseOthers = onCloseOthers
+        coord.onQuit = onQuit
+        coord.onHideOthers = onHideOthers
+
+        let bgColor: NSColor
+        if isHovered {
+            bgColor = NSColor(white: colorScheme == .dark ? 0.45 : 0.55, alpha: 1)
+        } else {
+            bgColor = NSColor(white: colorScheme == .dark ? 0.3 : 0.7, alpha: 1)
+        }
+        button.layer?.backgroundColor = bgColor.cgColor
+        button.contentTintColor = isHovered ? .labelColor : .tertiaryLabelColor
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(
+            sameAppWindowCount: sameAppWindowCount,
+            appName: appName,
+            windowTitle: windowTitle,
+            onCloseOthers: onCloseOthers,
+            onQuit: onQuit,
+            onHideOthers: onHideOthers
+        )
+    }
+
+    class Coordinator: NSObject {
+        var sameAppWindowCount: Int
+        var appName: String
+        var windowTitle: String
+        var onCloseOthers: () -> Void
+        var onQuit: () -> Void
+        var onHideOthers: () -> Void
+
+        init(sameAppWindowCount: Int, appName: String, windowTitle: String,
+             onCloseOthers: @escaping () -> Void, onQuit: @escaping () -> Void,
+             onHideOthers: @escaping () -> Void) {
+            self.sameAppWindowCount = sameAppWindowCount
+            self.appName = appName
+            self.windowTitle = windowTitle
+            self.onCloseOthers = onCloseOthers
+            self.onQuit = onQuit
+            self.onHideOthers = onHideOthers
+        }
+
+        @objc func showMenu(_ sender: NSButton) {
+            let menu = NSMenu()
+
+            if sameAppWindowCount > 1 {
+                let closeOthersItem = NSMenuItem(
+                    title: String(
+                        format: NSLocalizedString("Close other windows of \"%@\"", comment: "Menu item to close other windows of the same app"),
+                        appName
+                    ),
+                    action: #selector(closeOthersAction),
+                    keyEquivalent: ""
+                )
+                closeOthersItem.image = NSImage(systemSymbolName: "xmark", accessibilityDescription: nil)
+                closeOthersItem.target = self
+                menu.addItem(closeOthersItem)
+            }
+
+            let quitItem = NSMenuItem(
+                title: String(
+                    format: NSLocalizedString("Quit \"%@\"", comment: "Menu item to quit the application"),
+                    appName
+                ),
+                action: #selector(quitAction),
+                keyEquivalent: ""
+            )
+            quitItem.image = NSImage(systemSymbolName: "power", accessibilityDescription: nil)
+            quitItem.target = self
+            menu.addItem(quitItem)
+
+            let hideItem = NSMenuItem(
+                title: String(
+                    format: NSLocalizedString("Hide windows besides \"%@\"", comment: "Menu item to hide all windows except the selected app"),
+                    appName
+                ),
+                action: #selector(hideOthersAction),
+                keyEquivalent: ""
+            )
+            hideItem.image = NSImage(systemSymbolName: "eye.slash", accessibilityDescription: nil)
+            hideItem.target = self
+            menu.addItem(hideItem)
+
+            menu.popUp(positioning: nil, at: NSPoint(x: 0, y: sender.bounds.height), in: sender)
+        }
+
+        @objc private func closeOthersAction() { onCloseOthers() }
+        @objc private func quitAction() { onQuit() }
+        @objc private func hideOthersAction() { onHideOthers() }
     }
 }
