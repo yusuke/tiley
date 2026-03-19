@@ -77,7 +77,9 @@ struct MainWindowView: View {
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
-    @State private var isSidebarVisible = UserDefaults.standard.bool(forKey: "windowListSidebarVisible")
+    @State private var isSidebarVisible = UserDefaults.standard.object(forKey: "windowListSidebarVisible") != nil
+        ? UserDefaults.standard.bool(forKey: "windowListSidebarVisible")
+        : true
 
     init(appState: AppState, screenRole: ScreenRole = .target) {
         self.appState = appState
@@ -433,10 +435,7 @@ struct MainWindowView: View {
                         .font(.system(size: 13, weight: .medium))
                 }
                 .buttonStyle(TahoeToolbarButtonStyle())
-                .help(String(
-                    format: NSLocalizedString("Toggle window list (%@)", comment: "Sidebar toggle button tooltip with shortcut"),
-                    appState.hotKeyShortcut.displayString
-                ))
+                .help(NSLocalizedString("Toggle window list", comment: "Sidebar toggle button tooltip"))
             }
 
             targetInfoContent
