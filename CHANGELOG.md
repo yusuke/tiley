@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced the window target dropdown menu with a sidebar panel using Liquid Glass (macOS Tahoe); includes a search field with full IME support, arrow-key and Tab/Shift+Tab navigation, and Cmd+F to toggle visibility
+
 ### Improved
 
-- Window target dropdown menu is now grouped by application, ordered by most recently frontmost; windows within each group are listed in z-order
+- Windows in the sidebar are listed in z-order (front-to-back) rather than grouped by application
 - Filtered out non-standard windows (palettes, toolbars, etc.) from the window target list so only resizable document windows are shown
-- Added type-to-filter search field in the window target dropdown menu; matches by app name or window title with support for IME input source switching
 
 ## [1.2.7] - 2026-03-18
 

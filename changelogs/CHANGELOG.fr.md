@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Le menu déroulant de sélection de fenêtre cible a été remplacé par un panneau latéral avec Liquid Glass (macOS Tahoe) ; comprend un champ de recherche avec prise en charge complète de l'IME, navigation par touches fléchées et Tab/Maj+Tab, et Cmd+F pour basculer la visibilité
+
 ### Amélioré
 
-- Le menu déroulant de sélection des fenêtres est désormais regroupé par application, trié par ordre de mise au premier plan ; les fenêtres de chaque groupe sont listées en ordre Z
-- Les fenêtres non standard (palettes, barres d'outils, etc.) sont filtrées de la liste des fenêtres afin de n'afficher que les fenêtres de document redimensionnables
-- Ajout d'un champ de recherche pour filtrer en tapant dans le menu déroulant de sélection des fenêtres ; correspondance partielle par nom d'application ou titre de fenêtre avec prise en charge du changement de source d'entrée IME
+- Les fenêtres dans le panneau latéral sont listées en ordre Z (avant vers arrière) plutôt que regroupées par application
+- Les fenêtres non standard (palettes, barres d'outils, etc.) sont filtrées de la liste des fenêtres cibles afin de n'afficher que les fenêtres de document redimensionnables
 
 ## [1.2.7] - 2026-03-18
 

@@ -94,6 +94,7 @@
 "Add Global Shortcut" = "新增全域快捷鍵";
 "No windows available" = "沒有可用的視窗";
 "Tab is reserved for switching target windows." = "Tab 已用於切換目標視窗。";
+"Return is reserved for raising the selected window." = "Return 已用於將選定視窗移至最前面。";
 "Edit Layout" = "編輯佈局";
 "Done Editing" = "完成編輯";
 "Delete Shortcut" = "刪除快速鍵";
@@ -104,5 +105,6 @@
 "Are you sure you want to delete the layout \"%@\"?" = "確定要刪除版面「%@」嗎？";
 "Filter windows..." = "篩選視窗…";
 "No matching windows" = "沒有符合的視窗";
-"Tab: next window · %@: window list" = "Tab：下一個視窗 · %@：視窗列表";
-"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab：下一個視窗 · ⇧Tab：上一個視窗 · %@：視窗列表";
+"Windows" = "視窗";
+"Toggle window list (%@)" = "顯示/隱藏視窗列表 (%@)";
+"⌘F is reserved for searching the window list." = "⌘F 已保留用於搜尋視窗列表。";

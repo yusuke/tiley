@@ -94,6 +94,7 @@
 "Add Global Shortcut" = "Добавить глобальное сочетание";
 "No windows available" = "Нет доступных окон";
 "Tab is reserved for switching target windows." = "Tab зарезервирована для переключения целевого окна.";
+"Return is reserved for raising the selected window." = "Return зарезервирована для вывода выбранного окна на передний план.";
 "Edit Layout" = "Редактировать макет";
 "Done Editing" = "Завершить редактирование";
 "Delete Shortcut" = "Удалить сочетание клавиш";
@@ -104,5 +105,6 @@
 "Are you sure you want to delete the layout \"%@\"?" = "Вы уверены, что хотите удалить компоновку \"%@\"?";
 "Filter windows..." = "Фильтр окон…";
 "No matching windows" = "Нет подходящих окон";
-"Tab: next window · %@: window list" = "Tab: следующее окно · %@: список окон";
-"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab: следующее окно · ⇧Tab: предыдущее · %@: список окон";
+"Windows" = "Окна";
+"Toggle window list (%@)" = "Показать/скрыть список окон (%@)";
+"⌘F is reserved for searching the window list." = "⌘F зарезервировано для поиска в списке окон.";

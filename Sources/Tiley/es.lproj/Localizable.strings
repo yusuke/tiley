@@ -94,6 +94,7 @@
 "Add Global Shortcut" = "Añadir atajo global";
 "No windows available" = "No hay ventanas disponibles";
 "Tab is reserved for switching target windows." = "Tab está reservado para cambiar la ventana de destino.";
+"Return is reserved for raising the selected window." = "Return está reservado para traer al frente la ventana seleccionada.";
 "Edit Layout" = "Editar disposición";
 "Done Editing" = "Finalizar edición";
 "Delete Shortcut" = "Eliminar atajo";
@@ -104,5 +105,6 @@
 "Are you sure you want to delete the layout \"%@\"?" = "¿Está seguro de que desea eliminar el diseño \"%@\"?";
 "Filter windows..." = "Filtrar ventanas…";
 "No matching windows" = "No hay ventanas coincidentes";
-"Tab: next window · %@: window list" = "Tab: siguiente ventana · %@: lista de ventanas";
-"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab: siguiente ventana · ⇧Tab: anterior · %@: lista de ventanas";
+"Windows" = "Ventanas";
+"Toggle window list (%@)" = "Mostrar/ocultar lista de ventanas (%@)";
+"⌘F is reserved for searching the window list." = "⌘F está reservado para buscar en la lista de ventanas.";

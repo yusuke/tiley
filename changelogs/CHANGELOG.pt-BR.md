@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- O menu suspenso de seleção de janela alvo foi substituído por um painel lateral com Liquid Glass (macOS Tahoe); inclui campo de busca com suporte completo a IME, navegação por teclas de seta e Tab/Shift+Tab, e Cmd+F para alternar a visibilidade
+
 ### Melhorado
 
-- O menu suspenso de seleção de janelas agora está agrupado por aplicativo, ordenado pelo mais recentemente em primeiro plano; as janelas dentro de cada grupo são listadas em ordem Z
-- Janelas não padrão (paletas, barras de ferramentas, etc.) foram filtradas da lista de janelas para exibir apenas janelas de documento redimensionáveis
-- Adicionado campo de busca para filtrar digitando no menu suspenso de seleção de janelas; correspondência parcial por nome do aplicativo ou título da janela com suporte para troca de fonte de entrada IME
+- As janelas no painel lateral são listadas em ordem Z (da frente para trás) em vez de agrupadas por aplicativo
+- Janelas não padrão (paletas, barras de ferramentas, etc.) foram filtradas da lista de janelas alvo para exibir apenas janelas de documento redimensionáveis
 
 ## [1.2.7] - 2026-03-18
 

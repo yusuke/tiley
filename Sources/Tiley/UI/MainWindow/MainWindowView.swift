@@ -31,16 +31,16 @@ extension EnvironmentValues {
 
 struct MainWindowView: View {
     private static let windowCornerRadius: CGFloat = 14
-    private static let layoutPanelHorizontalPadding: CGFloat = 28
+    private static let layoutPanelHorizontalPadding: CGFloat = 8
     private static let layoutGridAspectHeightRatio: CGFloat = 0.75
     private static let footerLeadingWidth: CGFloat = 36
     private static let footerTrailingWidth: CGFloat = 88
-    private static let footerHeight: CGFloat = 44
-    private static let footerBottomPadding: CGFloat = 28
-    private static let layoutFooterTopPadding: CGFloat = 16
-    private static let layoutFooterBottomPadding: CGFloat = 8
+    private static let footerHeight: CGFloat = 28
+    private static let footerBottomPadding: CGFloat = 8
+    private static let layoutFooterTopPadding: CGFloat = 8
+    private static let layoutFooterBottomPadding: CGFloat = 0
     private static let layoutGridTopPadding: CGFloat = 8
-    private static let layoutPresetsTopPadding: CGFloat = 10
+    private static let layoutPresetsTopPadding: CGFloat = 0
     private static let presetRowHeight: CGFloat = 44
     private static let presetRowSpacing: CGFloat = 8
     private static let presetsPanelChromeHeight: CGFloat = 42
@@ -50,6 +50,7 @@ struct MainWindowView: View {
     private static let defaultGridColumns = 6
     private static let defaultGridRows = 6
     private static let defaultGridGap: CGFloat = 0
+    private static let sidebarWidth: CGFloat = 180
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.screenContext) private var screenContext
@@ -72,6 +73,11 @@ struct MainWindowView: View {
     @State private var isPerformingDrop = false
     @State private var dragEndTask: Task<Void, Never>?
     @State private var isHoveringGridSection = false
+    @State private var windowSearchText = ""
+    @State private var windowSearchFocusTrigger: Int = 0
+    @State private var windowSearchBlurTrigger: Int = 0
+    @State private var hoveredWindowIndex: Int?
+    @State private var isSidebarVisible = UserDefaults.standard.bool(forKey: "windowListSidebarVisible")
 
     init(appState: AppState, screenRole: ScreenRole = .target) {
         self.appState = appState
@@ -111,7 +117,9 @@ struct MainWindowView: View {
             }
         }
         .onChange(of: appState.isShowingLayoutGrid) { _, isShowing in
-            if !isShowing {
+            if isShowing {
+                windowSearchText = ""
+            } else {
                 dismissShortcutEditingIfNeeded()
             }
         }
@@ -125,6 +133,45 @@ struct MainWindowView: View {
         .onChange(of: draftSettings) { _, newValue in
             guard appState.isEditingSettings, isHoveringGridSection else { return }
             appState.updateSettingsPreview(newValue)
+        }
+        .onChange(of: isSidebarVisible) { _, newValue in
+            UserDefaults.standard.set(newValue, forKey: "windowListSidebarVisible")
+        }
+        .onChange(of: appState.windowTargetMenuRequestVersion) { _, _ in
+            if screenRole.isTarget {
+                if !isSidebarVisible {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isSidebarVisible = true
+                    }
+                }
+                windowSearchFocusTrigger += 1
+            }
+        }
+        .onChange(of: appState.windowSearchFocusRequestVersion) { _, _ in
+            if screenRole.isTarget {
+                if !isSidebarVisible {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isSidebarVisible = true
+                    }
+                }
+                windowSearchFocusTrigger += 1
+            }
+        }
+        .onChange(of: appState.windowSearchHideRequestVersion) { _, _ in
+            if screenRole.isTarget {
+                windowSearchBlurTrigger += 1
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isSidebarVisible = false
+                }
+            }
+        }
+        .onChange(of: windowSearchText) { _, newValue in
+            appState.windowSearchQuery = newValue
+        }
+        .onChange(of: appState.windowTargetListVersion) { _, _ in
+            if screenRole.isTarget, appState.hasUsedTabCycling {
+                showSidebarIfNeeded()
+            }
         }
         .onChange(of: appState.selectedLayoutPresetID) { _, selectedID in
             if let hoveredPresetID, selectedID != hoveredPresetID {
@@ -182,9 +229,9 @@ struct MainWindowView: View {
                 settingsEditor
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            .padding(.horizontal, 24)
-            .padding(.top, 24)
-            .padding(.bottom, 24)
+            .padding(.horizontal, 12)
+            .padding(.top, 12)
+            .padding(.bottom, 12)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
     }
@@ -265,9 +312,9 @@ struct MainWindowView: View {
             }
             .font(.system(size: 14))
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            .padding(.horizontal, 24)
-            .padding(.top, 24)
-            .padding(.bottom, 24)
+            .padding(.horizontal, 12)
+            .padding(.top, 12)
+            .padding(.bottom, 12)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
     }
@@ -287,7 +334,9 @@ struct MainWindowView: View {
     }
 
     private func layoutGridPanel(size: CGSize) -> some View {
-        let gridWidth = size.width - (Self.layoutPanelHorizontalPadding * 2)
+        let hasSidebar = screenRole.isTarget && isSidebarVisible
+        let mainContentWidth = hasSidebar ? size.width - Self.sidebarWidth - 1 : size.width
+        let gridWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
         let gridHeight = gridWidth * Self.layoutGridAspectHeightRatio
         let availablePresetsHeight = max(
             0,
@@ -301,117 +350,118 @@ struct MainWindowView: View {
                 - Self.footerBottomPadding
         )
 
-        return VStack(spacing: 0) {
-            layoutGridFooterBar
-                .padding(.horizontal, Self.layoutPanelHorizontalPadding)
-                .padding(.top, Self.layoutFooterTopPadding)
-                .padding(.bottom, Self.layoutFooterBottomPadding)
-
-            if screenRole.isTarget {
-                let shortcut = appState.hotKeyShortcut.displayString
-                Text(appState.hasUsedTabCycling
-                     ? String(format: NSLocalizedString("Tab: next window · ⇧Tab: previous · %@: window list", comment: "Tab cycling hint after first use"), shortcut)
-                     : String(format: NSLocalizedString("Tab: next window · %@: window list", comment: "Tab cycling hint before first use"), shortcut))
-                    .font(.system(size: 11))
-                    .foregroundStyle(.tertiary)
-                    .padding(.bottom, 4)
+        return HStack(spacing: 0) {
+            if hasSidebar {
+                windowListSidebar(height: size.height)
             }
 
-            LayoutGridWorkspaceView(
-                rows: appState.rows,
-                columns: appState.columns,
-                gap: appState.gap,
-                highlightSelection: editingPresetHighlightSelection,
-                onSelectionChange: { selection in
-                    if editingPresetID == nil {
-                        dismissPresetNameEditingIfNeeded()
-                        dismissShortcutEditingIfNeeded()
-                        hoveredPresetID = nil
-                        appState.selectedLayoutPresetID = nil
-                    }
-                    activeLayoutSelection = selection
-                    if let ctx = screenContext {
-                        appState.updateLayoutPreview(selection, screenContext: ctx)
-                    } else {
-                        appState.updateLayoutPreview(selection)
-                    }
-                },
-                onHoverChange: { selection in
-                    guard activeLayoutSelection == nil else { return }
-                    if let ctx = screenContext {
-                        appState.updateLayoutPreview(selection, screenContext: ctx)
-                    } else {
-                        appState.updateLayoutPreview(selection)
-                    }
-                },
-                onSelectionCommit: { selection in
-                    activeLayoutSelection = nil
-                    if let editingID = editingPresetID {
-                        appState.updateLayoutPreset(editingID) { preset in
-                            preset.selection = selection
-                            preset.baseRows = appState.rows
-                            preset.baseColumns = appState.columns
+            VStack(spacing: 0) {
+                layoutGridFooterBar
+                    .padding(.horizontal, Self.layoutPanelHorizontalPadding)
+                    .padding(.top, Self.layoutFooterTopPadding)
+                    .padding(.bottom, Self.layoutFooterBottomPadding)
+
+                LayoutGridWorkspaceView(
+                    rows: appState.rows,
+                    columns: appState.columns,
+                    gap: appState.gap,
+                    highlightSelection: editingPresetHighlightSelection,
+                    onSelectionChange: { selection in
+                        if editingPresetID == nil {
+                            dismissPresetNameEditingIfNeeded()
+                            dismissShortcutEditingIfNeeded()
+                            hoveredPresetID = nil
+                            appState.selectedLayoutPresetID = nil
                         }
-                        appState.updateLayoutPreview(nil)
-                    } else if let ctx = screenContext {
-                        appState.commitLayoutSelectionOnScreen(selection, visibleFrame: ctx.visibleFrame, screenFrame: ctx.screenFrame)
-                    } else {
-                        appState.commitLayoutSelection(selection)
+                        activeLayoutSelection = selection
+                        if let ctx = screenContext {
+                            appState.updateLayoutPreview(selection, screenContext: ctx)
+                        } else {
+                            appState.updateLayoutPreview(selection)
+                        }
+                    },
+                    onHoverChange: { selection in
+                        guard activeLayoutSelection == nil else { return }
+                        if let ctx = screenContext {
+                            appState.updateLayoutPreview(selection, screenContext: ctx)
+                        } else {
+                            appState.updateLayoutPreview(selection)
+                        }
+                    },
+                    onSelectionCommit: { selection in
+                        activeLayoutSelection = nil
+                        if let editingID = editingPresetID {
+                            appState.updateLayoutPreset(editingID) { preset in
+                                preset.selection = selection
+                                preset.baseRows = appState.rows
+                                preset.baseColumns = appState.columns
+                            }
+                            appState.updateLayoutPreview(nil)
+                        } else if let ctx = screenContext {
+                            appState.commitLayoutSelectionOnScreen(selection, visibleFrame: ctx.visibleFrame, screenFrame: ctx.screenFrame)
+                        } else {
+                            appState.commitLayoutSelection(selection)
+                        }
                     }
-                }
-            )
-            .frame(width: gridWidth, height: gridHeight, alignment: .topLeading)
-            .padding(.horizontal, Self.layoutPanelHorizontalPadding)
-            .padding(.top, 8)
-
-            layoutPresetsPanel(availableHeight: availablePresetsHeight)
+                )
+                .frame(width: gridWidth, height: gridHeight, alignment: .topLeading)
                 .padding(.horizontal, Self.layoutPanelHorizontalPadding)
-                .padding(.top, Self.layoutPresetsTopPadding)
-                .padding(.bottom, Self.footerBottomPadding)
+                .padding(.top, 8)
 
-            Spacer(minLength: 0)
+                layoutPresetsPanel(availableHeight: availablePresetsHeight)
+                    .padding(.horizontal, Self.layoutPanelHorizontalPadding)
+                    .padding(.top, Self.layoutPresetsTopPadding)
+                    .padding(.bottom, Self.footerBottomPadding)
+
+                Spacer(minLength: 0)
+            }
+            .frame(width: mainContentWidth)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
     }
 
     private var layoutGridFooterBar: some View {
-        ZStack {
-            // Center: label is centered in the full width.
-            // Horizontal padding prevents overlap with the gear button on the left
-            // and keeps symmetry on the right.
-            layoutTargetInfoView
-                .padding(.horizontal, screenRole.isTarget ? Self.footerLeadingWidth + 8 : 0)
-
-            // Leading: gear button
+        HStack(spacing: 8) {
             if screenRole.isTarget {
-                HStack {
-                    Button {
-                        dismissPresetNameEditingIfNeeded()
-                        draftSettings = appState.settingsSnapshot
-                        appState.beginSettingsEditing()
-                    } label: {
-                        Image(systemName: "gearshape.fill")
-                            .font(.system(size: 15, weight: .semibold))
+                // Leading: sidebar toggle button
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isSidebarVisible.toggle()
                     }
-                    .buttonStyle(.bordered)
-                    .help("Edit Settings")
-
-                    Spacer(minLength: 0)
+                } label: {
+                    Image(systemName: "sidebar.left")
+                        .font(.system(size: 13, weight: .medium))
                 }
+                .buttonStyle(TahoeToolbarButtonStyle())
+                .help(String(
+                    format: NSLocalizedString("Toggle window list (%@)", comment: "Sidebar toggle button tooltip with shortcut"),
+                    appState.hotKeyShortcut.displayString
+                ))
+            }
+
+            targetInfoContent
+
+            Spacer(minLength: 0)
+
+            if screenRole.isTarget {
+                // Trailing: gear button
+                Button {
+                    dismissPresetNameEditingIfNeeded()
+                    draftSettings = appState.settingsSnapshot
+                    appState.beginSettingsEditing()
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 13, weight: .medium))
+                }
+                .buttonStyle(TahoeToolbarButtonStyle())
+                .help("Edit Settings")
             }
         }
         .frame(height: Self.footerHeight)
     }
 
     private func layoutPresetsPanel(availableHeight: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text("Layouts")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.secondary)
-                Spacer()
-            }
-
+        VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 12) {
                 Text("Grid")
                     .frame(width: Self.presetGridColumnWidth, alignment: .center)
@@ -423,6 +473,7 @@ struct MainWindowView: View {
                     .frame(width: Self.presetActionColumnWidth)
             }
             .padding(.horizontal, 10)
+            .frame(height: 24)
             .font(.system(size: 11, weight: .semibold))
             .foregroundStyle(.secondary)
 
@@ -457,61 +508,143 @@ struct MainWindowView: View {
         return rowsHeight + spacingHeight
     }
 
-    @ViewBuilder
-    private var layoutTargetInfoView: some View {
-        if screenRole.isTarget {
-            layoutTargetDropdownView
-        } else {
-            layoutTargetStaticView
+    // MARK: - Window List Sidebar
+
+    private struct WindowListItem: Identifiable {
+        let id: Int
+        let appName: String
+        let windowTitle: String
+        let pid: pid_t
+    }
+
+    private var filteredWindowTargets: [WindowListItem] {
+        let targets = appState.windowTargetList
+        let query = windowSearchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+
+        var items: [WindowListItem] = []
+        for (index, target) in targets.enumerated() {
+            let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if !query.isEmpty {
+                let matchesApp = target.appName.lowercased().contains(query)
+                let matchesTitle = title.lowercased().contains(query)
+                if !matchesApp && !matchesTitle { continue }
+            }
+            items.append(WindowListItem(
+                id: index,
+                appName: target.appName,
+                windowTitle: title,
+                pid: target.processIdentifier
+            ))
+        }
+        return items
+    }
+
+    private func windowListSidebar(height: CGFloat) -> some View {
+        VStack(spacing: 0) {
+            WindowSearchField(
+                text: $windowSearchText,
+                focusTrigger: windowSearchFocusTrigger,
+                blurTrigger: windowSearchBlurTrigger,
+                onTab: { forward in
+                    appState.cycleTargetWindow(forward: forward)
+                    windowSearchBlurTrigger += 1
+                },
+                onEscape: {
+                    windowSearchText = ""
+                    windowSearchBlurTrigger += 1
+                }
+            )
+            .frame(height: 22)
+            .padding(.horizontal, 8)
+            .padding(.top, 8)
+            .padding(.bottom, 6)
+
+            ScrollView {
+                VStack(spacing: 2) {
+                    ForEach(filteredWindowTargets) { item in
+                        windowListRow(item: item)
+                    }
+                }
+                .padding(.vertical, 4)
+                .padding(.horizontal, 6)
+            }
+        }
+        .frame(width: Self.sidebarWidth - 8, height: height - 16)
+        .modifier(SidebarGlassBackground(cornerRadius: 10))
+        .padding(.leading, 8)
+        .padding(.vertical, 8)
+        .frame(width: Self.sidebarWidth, height: height)
+        .onAppear {
+            appState.refreshAvailableWindows()
         }
     }
 
-    @State private var isTargetLabelHovered = false
+    private func windowListRow(item: WindowListItem) -> some View {
+        let isSelected = item.id == appState.currentWindowTargetIndex
+        let isHovered = hoveredWindowIndex == item.id
 
-    private var layoutTargetDropdownView: some View {
-        WindowTargetClickableLabel(appState: appState) {
-            targetInfoContent
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(ThemeColors.presetRowBackground(selected: isTargetLabelHovered, for: colorScheme))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .stroke(ThemeColors.presetRowBorder(selected: isTargetLabelHovered, for: colorScheme), lineWidth: 1)
-                )
-                .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                .onHover { isTargetLabelHovered = $0 }
+        return Button {
+            appState.selectWindowTarget(at: item.id)
+        } label: {
+            HStack(spacing: 6) {
+                if let icon = NSRunningApplication(processIdentifier: item.pid)?.icon {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .frame(width: 16, height: 16)
+                        .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                }
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(item.appName)
+                        .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                        .lineLimit(1)
+                    if !item.windowTitle.isEmpty {
+                        Text(item.windowTitle)
+                            .font(.system(size: 10))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .stroke(ThemeColors.presetRowBorder(selected: isSelected, for: colorScheme), lineWidth: isSelected ? 1 : 0)
+            )
         }
+        .buttonStyle(.plain)
+        .onHover { hovering in hoveredWindowIndex = hovering ? item.id : nil }
     }
 
-    private var layoutTargetStaticView: some View {
-        targetInfoContent
-    }
+    // MARK: - Target Info (secondary screens)
 
     private var targetInfoContent: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 6) {
             if let icon = appState.currentLayoutTargetIcon {
                 Image(nsImage: icon)
                     .resizable()
                     .interpolation(.high)
-                    .frame(width: 20, height: 20)
+                    .frame(width: 22, height: 22)
                     .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
             }
 
-            VStack(spacing: 1) {
+            if let secondary = appState.currentLayoutTargetSecondaryText {
+                Text("\(appState.currentLayoutTargetPrimaryText) — \(secondary)")
+                    .font(.system(size: 12, weight: .semibold))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            } else {
                 Text(appState.currentLayoutTargetPrimaryText)
                     .font(.system(size: 12, weight: .semibold))
                     .lineLimit(1)
-                if let secondary = appState.currentLayoutTargetSecondaryText {
-                    Text(secondary)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
             }
-            .multilineTextAlignment(.center)
         }
     }
 
@@ -1252,6 +1385,16 @@ struct MainWindowView: View {
         }
     }
 
+    private func showSidebarIfNeeded() {
+        if !isSidebarVisible {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isSidebarVisible = true
+            }
+        }
+    }
+
+
+
     private func dismissShortcutEditingIfNeeded(except id: UUID? = nil) {
         if let addingShortcutPresetID, addingShortcutPresetID != id {
             self.addingShortcutPresetID = nil
@@ -1713,412 +1856,194 @@ extension View {
     }
 }
 
-// MARK: - Window Target Dropdown Button
+// MARK: - Window Search Field (NSViewRepresentable)
 
-private struct WindowTargetClickableLabel<Label: View>: NSViewRepresentable {
-    let appState: AppState
-    @ViewBuilder let label: Label
+/// A search field that intercepts Tab, Shift+Tab, and Escape before the system
+/// focus navigation handles them.  Focus is driven by integer triggers rather
+/// than `@FocusState` because the latter does not work with NSViewRepresentable.
+private struct WindowSearchField: NSViewRepresentable {
+    @Binding var text: String
+    var focusTrigger: Int
+    var blurTrigger: Int
+    var onTab: (_ forward: Bool) -> Void
+    var onEscape: () -> Void
+    var onFocusChange: ((_ focused: Bool) -> Void)?
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(appState: appState)
+        Coordinator(parent: self)
     }
 
-    func makeNSView(context: Context) -> WindowTargetClickableContainerView {
-        let container = WindowTargetClickableContainerView()
-        container.onMouseDown = { [coordinator = context.coordinator] view in
-            coordinator.showPopover(from: view)
-        }
-        let hostingView = NSHostingView(rootView: label)
-        hostingView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(hostingView)
-        NSLayoutConstraint.activate([
-            hostingView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            hostingView.topAnchor.constraint(equalTo: container.topAnchor),
-            hostingView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            hostingView.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor),
-            hostingView.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor),
-        ])
-        context.coordinator.hostingView = hostingView
-        return container
-    }
-
-    func updateNSView(_ nsView: WindowTargetClickableContainerView, context: Context) {
-        context.coordinator.appState = appState
-        context.coordinator.containerView = nsView
-        context.coordinator.hostingView?.rootView = label
-
-        let currentVersion = appState.windowTargetMenuRequestVersion
-        if currentVersion != context.coordinator.lastMenuRequestVersion {
-            context.coordinator.lastMenuRequestVersion = currentVersion
-            context.coordinator.pendingMenuOpen = true
-            // Dispatch to avoid opening the popover during a view update.
-            DispatchQueue.main.async {
-                context.coordinator.openMenuIfPending()
-            }
-        }
-    }
-
-    @MainActor final class Coordinator: NSObject, NSPopoverDelegate {
-        var appState: AppState
-        var hostingView: NSHostingView<Label>?
-        weak var containerView: WindowTargetClickableContainerView?
-        var lastMenuRequestVersion: Int
-        var pendingMenuOpen = false
-        var activePopover: NSPopover?
-
-        init(appState: AppState) {
-            self.appState = appState
-            self.lastMenuRequestVersion = appState.windowTargetMenuRequestVersion
-            super.init()
-        }
-
-        func popoverDidClose(_ notification: Notification) {
-            activePopover = nil
-            // Restore key status to the main window so layout shortcuts work again.
-            containerView?.window?.makeKeyAndOrderFront(nil)
-        }
-
-        func openMenuIfPending() {
-            guard pendingMenuOpen, let view = containerView else { return }
-            guard let window = view.window, window.isKeyWindow else {
-                // Window not yet key — retry on the next run loop iteration.
-                DispatchQueue.main.async { [weak self] in
-                    self?.openMenuIfPending()
-                }
-                return
-            }
-            pendingMenuOpen = false
-            showPopover(from: view)
-        }
-
-        func showPopover(from view: NSView) {
-            // Toggle: close if already open
-            if let existing = activePopover, existing.isShown {
-                existing.close()
-                activePopover = nil
-                return
-            }
-
-            appState.refreshAvailableWindows()
-            let targets = appState.windowTargetList
-            let currentIndex = appState.currentWindowTargetIndex
-
-
-            if targets.isEmpty {
-                let menu = NSMenu()
-                let item = NSMenuItem(
-                    title: NSLocalizedString("No windows available", comment: "Empty window target menu"),
-                    action: nil,
-                    keyEquivalent: ""
-                )
-                item.isEnabled = false
-                menu.addItem(item)
-                menu.popUp(positioning: nil, at: NSPoint(x: 0, y: view.bounds.height), in: view)
-                return
-            }
-
-            let popover = NSPopover()
-            popover.behavior = .transient
-            popover.delegate = self
-            popover.contentViewController = WindowTargetListController(
-                targets: targets,
-                currentIndex: currentIndex
-            ) { [weak self] selectedIndex in
-                self?.appState.selectWindowTarget(at: selectedIndex)
-                self?.activePopover?.close()
-                self?.activePopover = nil
-            }
-            popover.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
-            activePopover = popover
-        }
-    }
-}
-
-/// Popover-based window target list with a search field.
-/// Uses NSPopover so the search field supports full keyboard input including IME.
-private final class WindowTargetListController: NSViewController, NSSearchFieldDelegate,
-    NSTableViewDataSource, NSTableViewDelegate
-{
-    private struct Item {
-        let index: Int
-        let appName: String
-        let windowTitle: String
-        let pid: pid_t
-        let appIcon: NSImage?
-    }
-
-    private static let horizontalPadding: CGFloat = 8 + 16 + 6 + 8 // leading + icon + gap + trailing
-    private static let minWidth: CGFloat = 200
-    private static let maxWidth: CGFloat = 480
-
-    private let searchField = NSSearchField()
-    private let tableView = NSTableView()
-    private let scrollView = NSScrollView()
-    private var allItems: [Item] = []
-    private var filteredItems: [Item] = []
-    private let currentTargetIndex: Int
-    private let onSelect: (Int) -> Void
-    private var contentWidth: CGFloat
-
-    init(targets: [WindowTarget], currentIndex: Int, onSelect: @escaping (Int) -> Void) {
-        self.currentTargetIndex = currentIndex
-        self.onSelect = onSelect
-        // Temporary value; calculated below after building allItems.
-        self.contentWidth = 0
-        super.init(nibName: nil, bundle: nil)
-
-        let menuFont = NSFont.menuFont(ofSize: 0)
-        var iconCache: [pid_t: NSImage] = [:]
-        var maxTextWidth: CGFloat = 0
-
-        for (index, target) in targets.enumerated() {
-            let pid = target.processIdentifier
-            if iconCache[pid] == nil,
-               let icon = NSRunningApplication(processIdentifier: pid)?.icon
-            {
-                iconCache[pid] = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { rect in
-                    icon.draw(in: rect)
-                    return true
-                }
-            }
-            let windowTitle = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            let displayText: String
-            if !windowTitle.isEmpty {
-                displayText = "\(target.appName) — \(windowTitle)"
-            } else {
-                displayText = target.appName
-            }
-            let textWidth = ceil((displayText as NSString).size(
-                withAttributes: [.font: menuFont]
-            ).width)
-            maxTextWidth = max(maxTextWidth, textWidth)
-
-            allItems.append(Item(
-                index: index,
-                appName: target.appName,
-                windowTitle: windowTitle,
-                pid: pid,
-                appIcon: iconCache[pid]
-            ))
-        }
-        filteredItems = allItems
-
-        let totalWidth = Self.horizontalPadding + maxTextWidth
-        contentWidth = min(max(totalWidth, Self.minWidth), Self.maxWidth)
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError() }
-
-    override func loadView() {
-        let container = NSView(frame: NSRect(x: 0, y: 0, width: contentWidth, height: 300))
-
-        searchField.placeholderString = NSLocalizedString(
+    func makeNSView(context: Context) -> NSSearchField {
+        let field = NSSearchField()
+        field.placeholderString = NSLocalizedString(
             "Filter windows...", comment: "Window filter search field placeholder"
         )
-        searchField.font = NSFont.systemFont(ofSize: 12)
-        searchField.focusRingType = .none
-        searchField.sendsSearchStringImmediately = true
-        searchField.sendsWholeSearchString = false
-        searchField.delegate = self
-        searchField.translatesAutoresizingMaskIntoConstraints = false
-
-        let separator = NSBox()
-        separator.boxType = .separator
-        separator.translatesAutoresizingMaskIntoConstraints = false
-
-        let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier("window"))
-        column.isEditable = false
-        tableView.addTableColumn(column)
-        tableView.headerView = nil
-        tableView.rowHeight = 24
-        tableView.style = .plain
-        tableView.intercellSpacing = NSSize(width: 0, height: 0)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.target = self
-        tableView.action = #selector(rowClicked)
-
-        scrollView.documentView = tableView
-        scrollView.hasVerticalScroller = true
-        scrollView.autohidesScrollers = true
-        scrollView.drawsBackground = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-
-        container.addSubview(searchField)
-        container.addSubview(separator)
-        container.addSubview(scrollView)
-
-        NSLayoutConstraint.activate([
-            searchField.topAnchor.constraint(equalTo: container.topAnchor, constant: 8),
-            searchField.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
-            searchField.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
-            separator.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 8),
-            separator.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            separator.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: separator.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-        ])
-
-        self.view = container
-        recalculateSize()
+        field.font = NSFont.systemFont(ofSize: 11)
+        field.focusRingType = .none
+        field.sendsSearchStringImmediately = true
+        field.sendsWholeSearchString = false
+        field.delegate = context.coordinator
+        field.target = context.coordinator
+        field.action = #selector(Coordinator.textChanged(_:))
+        context.coordinator.lastFocusTrigger = focusTrigger
+        context.coordinator.lastBlurTrigger = blurTrigger
+        return field
     }
 
-    override func viewDidAppear() {
-        super.viewDidAppear()
-        view.window?.makeFirstResponder(searchField)
-        // Highlight the current target row
-        if let row = filteredItems.firstIndex(where: { $0.index == currentTargetIndex }) {
-            tableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
-            tableView.scrollRowToVisible(row)
+    func updateNSView(_ field: NSSearchField, context: Context) {
+        context.coordinator.parent = self
+        if field.stringValue != text {
+            field.stringValue = text
         }
-    }
-
-    private static let chromeHeight: CGFloat = 43 // 8 (top pad) + 22 (search) + 8 (pad) + 1 (separator) + 4 (bottom pad)
-    /// Popover arrow + padding that NSPopover adds around the content.
-    private static let popoverExtraHeight: CGFloat = 30
-
-    private func recalculateSize() {
-        let allRowsHeight = CGFloat(max(filteredItems.count, 1)) * tableView.rowHeight
-        // Limit height so the popover does not extend beyond the screen.
-        let screenHeight = view.window?.screen?.visibleFrame.height
-            ?? NSScreen.main?.visibleFrame.height ?? 800
-        let maxContentHeight = screenHeight - Self.popoverExtraHeight
-        let desiredHeight = Self.chromeHeight + allRowsHeight
-        let height = min(desiredHeight, maxContentHeight)
-        preferredContentSize = NSSize(width: contentWidth, height: height)
-    }
-
-    // MARK: - NSSearchFieldDelegate
-
-    func controlTextDidChange(_ obj: Notification) {
-        applyFilter()
-    }
-
-    func control(
-        _ control: NSControl, textView: NSTextView,
-        doCommandBy commandSelector: Selector
-    ) -> Bool {
-        if commandSelector == #selector(NSResponder.moveDown(_:)) {
-            let row = tableView.selectedRow + 1
-            if row < filteredItems.count {
-                tableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
-                tableView.scrollRowToVisible(row)
-            }
-            return true
-        }
-        if commandSelector == #selector(NSResponder.moveUp(_:)) {
-            let row = tableView.selectedRow - 1
-            if row >= 0 {
-                tableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
-                tableView.scrollRowToVisible(row)
-            }
-            return true
-        }
-        if commandSelector == #selector(NSResponder.insertNewline(_:)) {
-            selectCurrentRow()
-            return true
-        }
-        return false
-    }
-
-    // MARK: - NSTableViewDataSource
-
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        filteredItems.count
-    }
-
-    // MARK: - NSTableViewDelegate
-
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let item = filteredItems[row]
-        let cellId = NSUserInterfaceItemIdentifier("WindowCell")
-        let cell: NSTableCellView
-        if let reused = tableView.makeView(withIdentifier: cellId, owner: nil) as? NSTableCellView {
-            cell = reused
-        } else {
-            cell = NSTableCellView()
-            cell.identifier = cellId
-
-            let iv = NSImageView()
-            iv.translatesAutoresizingMaskIntoConstraints = false
-            iv.imageScaling = .scaleProportionallyDown
-            cell.addSubview(iv)
-            cell.imageView = iv
-
-            let tf = NSTextField(labelWithString: "")
-            tf.translatesAutoresizingMaskIntoConstraints = false
-            tf.lineBreakMode = .byTruncatingTail
-            tf.font = NSFont.menuFont(ofSize: 0)
-            cell.addSubview(tf)
-            cell.textField = tf
-
-            NSLayoutConstraint.activate([
-                iv.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 8),
-                iv.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
-                iv.widthAnchor.constraint(equalToConstant: 16),
-                iv.heightAnchor.constraint(equalToConstant: 16),
-                tf.leadingAnchor.constraint(equalTo: iv.trailingAnchor, constant: 6),
-                tf.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -8),
-                tf.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
-            ])
-        }
-
-        cell.imageView?.image = item.appIcon
-        if !item.windowTitle.isEmpty {
-            cell.textField?.stringValue = "\(item.appName) — \(item.windowTitle)"
-        } else {
-            cell.textField?.stringValue = item.appName
-        }
-        return cell
-    }
-
-    // MARK: - Actions
-
-    @objc private func rowClicked() {
-        selectCurrentRow()
-    }
-
-    private func selectCurrentRow() {
-        let row = tableView.selectedRow
-        guard row >= 0, row < filteredItems.count else { return }
-        onSelect(filteredItems[row].index)
-    }
-
-    // MARK: - Filtering
-
-    private func applyFilter() {
-        let query = searchField.stringValue
-            .trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        if query.isEmpty {
-            filteredItems = allItems
-        } else {
-            let matchingPIDs = Set(allItems.compactMap { item -> pid_t? in
-                item.appName.lowercased().contains(query) ? item.pid : nil
-            })
-            filteredItems = allItems.filter { item in
-                matchingPIDs.contains(item.pid)
-                    || item.windowTitle.lowercased().contains(query)
+        if focusTrigger != context.coordinator.lastFocusTrigger {
+            context.coordinator.lastFocusTrigger = focusTrigger
+            // Dispatch to next run loop so the field's window is ready.
+            DispatchQueue.main.async { [onFocusChange] in
+                field.window?.makeFirstResponder(field)
+                onFocusChange?(true)
             }
         }
-        tableView.reloadData()
-        recalculateSize()
-        if !filteredItems.isEmpty {
-            tableView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+        if blurTrigger != context.coordinator.lastBlurTrigger {
+            context.coordinator.lastBlurTrigger = blurTrigger
+            if field.window?.firstResponder == field.currentEditor() {
+                field.window?.makeFirstResponder(nil)
+            }
+            onFocusChange?(false)
+        }
+    }
+
+    @MainActor
+    final class Coordinator: NSObject, NSSearchFieldDelegate {
+        var parent: WindowSearchField
+        var lastFocusTrigger: Int = 0
+        var lastBlurTrigger: Int = 0
+
+        init(parent: WindowSearchField) {
+            self.parent = parent
+        }
+
+        @objc func textChanged(_ sender: NSSearchField) {
+            parent.text = sender.stringValue
+        }
+
+        func controlTextDidChange(_ obj: Notification) {
+            guard let field = obj.object as? NSSearchField else { return }
+            parent.text = field.stringValue
+        }
+
+        func controlTextDidBeginEditing(_ obj: Notification) {
+            parent.onFocusChange?(true)
+        }
+
+        func controlTextDidEndEditing(_ obj: Notification) {
+            parent.onFocusChange?(false)
+        }
+
+        func control(
+            _ control: NSControl, textView: NSTextView,
+            doCommandBy commandSelector: Selector
+        ) -> Bool {
+            if commandSelector == #selector(NSResponder.insertTab(_:)) {
+                parent.onTab(true)
+                return true
+            }
+            if commandSelector == #selector(NSResponder.insertBacktab(_:)) {
+                parent.onTab(false)
+                return true
+            }
+            if commandSelector == #selector(NSResponder.moveDown(_:)) {
+                parent.onTab(true)
+                return true
+            }
+            if commandSelector == #selector(NSResponder.moveUp(_:)) {
+                parent.onTab(false)
+                return true
+            }
+            if commandSelector == #selector(NSResponder.insertNewline(_:)) {
+                control.window?.makeFirstResponder(nil)
+                return true
+            }
+            if commandSelector == #selector(NSResponder.cancelOperation(_:)) {
+                parent.onEscape()
+                return true
+            }
+            return false
         }
     }
 }
 
-private final class WindowTargetClickableContainerView: NSView {
-    var onMouseDown: ((NSView) -> Void)?
+// MARK: - SidebarGlassBackground
 
-    override func mouseDown(with event: NSEvent) {
-        onMouseDown?(self)
+/// Applies Liquid Glass (macOS 26+) or falls back to NSVisualEffectView.
+private struct SidebarGlassBackground: ViewModifier {
+    let cornerRadius: CGFloat
+
+    func body(content: Content) -> some View {
+        if #available(macOS 26.0, *) {
+            content
+                .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+        } else {
+            content
+                .background(
+                    VisualEffectFallbackBackground(cornerRadius: cornerRadius)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        }
+    }
+}
+
+/// Fallback for macOS < 26.
+private struct VisualEffectFallbackBackground: NSViewRepresentable {
+    let cornerRadius: CGFloat
+
+    func makeNSView(context: Context) -> NSVisualEffectView {
+        let view = NSVisualEffectView()
+        view.material = .sidebar
+        view.blendingMode = .withinWindow
+        view.state = .active
+        view.wantsLayer = true
+        view.layer?.cornerRadius = cornerRadius
+        view.layer?.cornerCurve = .continuous
+        view.layer?.masksToBounds = true
+        return view
     }
 
-    override func resetCursorRects() {
-        addCursorRect(bounds, cursor: .pointingHand)
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
+        nsView.layer?.cornerRadius = cornerRadius
+    }
+}
+
+// MARK: - Tahoe-style Toolbar Button
+
+private struct TahoeToolbarButtonStyle: ButtonStyle {
+    @State private var isHovered = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
+            .frame(width: 30, height: 30)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(
+                        configuration.isPressed
+                            ? Color.black.opacity(0.08)
+                            : isHovered
+                                ? Color.white.opacity(0.9)
+                                : Color.clear
+                    )
+                    .shadow(
+                        color: isHovered || configuration.isPressed
+                            ? .black.opacity(0.08) : .clear,
+                        radius: 2, x: 0, y: 0.5
+                    )
+            )
+            .contentShape(Capsule())
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isHovered = hovering
+                }
+            }
+            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }

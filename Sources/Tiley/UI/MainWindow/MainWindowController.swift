@@ -5,6 +5,7 @@ import SwiftUI
 
 final class MainWindowController: NSWindowController, NSWindowDelegate {
     private static let windowWidth: CGFloat = 559
+    private static let sidebarWidth: CGFloat = 180
     private static let minimumWindowHeight: CGFloat = 780
     private static let extraWindowHeight: CGFloat = 55
     private static let visibleFrameInset: CGFloat = 16
@@ -40,7 +41,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         self.onLocalShortcut = onLocalShortcut
         self.onKeyCommand = onKeyCommand
         let initialVisibleFrame = self.targetScreen.visibleFrame
-        let initialSize = Self.windowSize(for: appState, visibleFrame: initialVisibleFrame)
+        let initialSize = Self.windowSize(for: appState, visibleFrame: initialVisibleFrame, screenRole: screenRole)
         let screenContext = ScreenContext(
             visibleFrame: self.targetScreen.visibleFrame,
             screenFrame: self.targetScreen.frame
@@ -80,6 +81,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.escapeHandler = onEscape
         window.localShortcutHandler = onLocalShortcut
         window.keyCommandHandler = onKeyCommand
+        window.cmdFHandler = { [weak appState] _ in
+            appState?.windowSearchFocusRequestVersion += 1
+        }
 
         super.init(window: window)
         window.delegate = self
@@ -205,7 +209,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private func applyWindowMode(animated: Bool, preferredScreen: NSScreen? = nil) {
         guard let window else { return }
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
-        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame)
+        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenRole: screenRole)
         window.minSize = targetSize
         window.maxSize = targetSize
         window.alphaValue = (appState?.isEditingSettings == true || appState?.isShowingPermissionsOnly == true) ? Self.settingsModeWindowAlpha : Self.layoutModeWindowAlpha
@@ -220,7 +224,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         guard let window else { return }
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
         guard !visibleFrame.equalTo(.zero) else { return }
-        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame)
+        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenRole: screenRole)
         let origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
         window.setFrameOrigin(origin)
     }
@@ -296,10 +300,12 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         return NSScreen.screens.first(where: { $0.frame.contains(center) })
     }
 
-    private static func windowSize(for appState: AppState?, visibleFrame: CGRect?) -> NSSize {
+    private static func windowSize(for appState: AppState?, visibleFrame: CGRect?, screenRole: ScreenRole = .target) -> NSSize {
         if appState?.isShowingPermissionsOnly == true {
             return NSSize(width: windowWidth, height: permissionsOnlyHeight)
         }
+        let showSidebar = screenRole.isTarget && appState?.isEditingSettings != true
+        let totalWidth = showSidebar ? windowWidth + sidebarWidth + 1 : windowWidth
         let presetCount = CGFloat(appState?.displayedLayoutPresets.count ?? 0)
         let gridWidth = windowWidth - (layoutPanelHorizontalPadding * 2)
         let layoutGridHeight = gridWidth * layoutGridAspectHeightRatio
@@ -314,7 +320,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let idealHeight = max(minimumWindowHeight, settingsHeight, layoutHeight) + extraWindowHeight
         let maxHeight = maxAllowedHeight(in: visibleFrame)
         let height = min(idealHeight, maxHeight)
-        return NSSize(width: windowWidth, height: height)
+        return NSSize(width: totalWidth, height: height)
     }
 
     private static func maxAllowedHeight(in visibleFrame: CGRect?) -> CGFloat {
@@ -342,6 +348,8 @@ private final class MainAppWindow: NSWindow {
     var escapeHandler: (() -> Bool)?
     var localShortcutHandler: ((HotKeyShortcut) -> Bool)?
     var keyCommandHandler: ((NSEvent) -> Bool)?
+    /// Called when Cmd+F is pressed. Bool parameter: true if a text field is focused.
+    var cmdFHandler: ((_ textFieldFocused: Bool) -> Void)?
 
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { true }
@@ -357,6 +365,11 @@ private final class MainAppWindow: NSWindow {
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         guard event.type == .keyDown else {
             return super.performKeyEquivalent(with: event)
+        }
+        // Cmd+F: check first responder to decide focus-search vs hide-sidebar.
+        if isReservedKeyCommand(event) {
+            cmdFHandler?(!shouldHandleWindowKeyEvents)
+            return true
         }
         // Let text fields handle their own input.
         if !shouldHandleWindowKeyEvents {
@@ -384,6 +397,11 @@ private final class MainAppWindow: NSWindow {
             return
         }
         super.keyDown(with: event)
+    }
+
+    private func isReservedKeyCommand(_ event: NSEvent) -> Bool {
+        Int(event.keyCode) == kVK_ANSI_F
+            && event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command
     }
 
     private var shouldHandleWindowKeyEvents: Bool {

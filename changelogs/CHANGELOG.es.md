@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Se reemplazó el menú desplegable de ventana objetivo por un panel lateral con Liquid Glass (macOS Tahoe); incluye un campo de búsqueda con soporte completo de IME, navegación con teclas de flecha y Tab/Mayús+Tab, y Cmd+F para alternar la visibilidad
+
 ### Mejorado
 
-- El menú desplegable de selección de ventanas ahora está agrupado por aplicación, ordenado por la más recientemente en primer plano; las ventanas dentro de cada grupo se listan en orden Z
-- Se filtraron las ventanas no estándar (paletas, barras de herramientas, etc.) de la lista de ventanas para mostrar solo ventanas de documento redimensionables
-- Se añadió un campo de búsqueda para filtrar escribiendo en el menú desplegable de selección de ventanas; coincidencia parcial por nombre de aplicación o título de ventana con soporte para cambio de fuente de entrada IME
+- Las ventanas en el panel lateral se listan en orden Z (de adelante hacia atrás) en lugar de agruparse por aplicación
+- Se filtraron las ventanas no estándar (paletas, barras de herramientas, etc.) de la lista de ventanas objetivo para mostrar solo ventanas de documento redimensionables
 
 ## [1.2.7] - 2026-03-18
 

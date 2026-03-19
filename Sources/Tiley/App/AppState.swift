@@ -130,8 +130,14 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Whether the user has cycled the target window at least once via Tab.
     var hasUsedTabCycling: Bool { originalFrontmostPID != nil }
     var windowTargetListVersion: Int = 0
-    /// Incremented to signal the UI to open the window target dropdown menu.
+    /// Incremented to signal the UI to toggle the window list sidebar.
     var windowTargetMenuRequestVersion: Int = 0
+    /// Incremented to signal Cmd+F when search field is NOT focused: show sidebar and focus search.
+    var windowSearchFocusRequestVersion: Int = 0
+    /// Incremented to signal Cmd+F when search field IS focused: hide sidebar.
+    var windowSearchHideRequestVersion: Int = 0
+    /// Current window search query, synced from the UI for filtered cycling.
+    var windowSearchQuery: String = ""
 
     var settingsSnapshot: SettingsSnapshot {
         SettingsSnapshot(
@@ -367,6 +373,7 @@ final class AppState: NSObject, NSMenuDelegate {
         // key events reach the NSWindow's performKeyEquivalent and can be handled
         // as local shortcuts. They are re-registered in handleMainWindowHidden().
         unregisterPresetHotKeys()
+        windowSearchQuery = ""
         isShowingLayoutGrid = true
         openMainWindow()
         // Bump version after the window is open so the view picks up the latest
@@ -414,10 +421,28 @@ final class AppState: NSObject, NSMenuDelegate {
             originalFrontmostPID = lastTargetPID
         }
 
-        if forward {
-            activeTargetIndex = (activeTargetIndex + 1) % availableWindowTargets.count
+        // Build filtered index list based on search query.
+        let query = windowSearchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let filteredIndices: [Int]
+        if query.isEmpty {
+            filteredIndices = Array(availableWindowTargets.indices)
         } else {
-            activeTargetIndex = (activeTargetIndex - 1 + availableWindowTargets.count) % availableWindowTargets.count
+            filteredIndices = availableWindowTargets.indices.filter { i in
+                let target = availableWindowTargets[i]
+                let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                return target.appName.lowercased().contains(query)
+                    || title.lowercased().contains(query)
+            }
+        }
+        guard !filteredIndices.isEmpty else { return }
+
+        if let currentPos = filteredIndices.firstIndex(of: activeTargetIndex) {
+            let nextPos = forward
+                ? (currentPos + 1) % filteredIndices.count
+                : (currentPos - 1 + filteredIndices.count) % filteredIndices.count
+            activeTargetIndex = filteredIndices[nextPos]
+        } else {
+            activeTargetIndex = forward ? filteredIndices.first! : filteredIndices.last!
         }
 
         applyTargetAtCurrentIndex()
@@ -435,8 +460,18 @@ final class AppState: NSObject, NSMenuDelegate {
         applyTargetAtCurrentIndex()
     }
 
+    /// Raises (brings to front) the currently selected target window and activates its app.
+    func raiseCurrentTargetWindow() {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+        guard activeTargetIndex >= 0, activeTargetIndex < availableWindowTargets.count else { return }
+        let target = availableWindowTargets[activeTargetIndex]
+        accessibilityService.raiseWindow(target.windowElement)
+        NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
+    }
+
     private func applyTargetAtCurrentIndex() {
         let newTarget = availableWindowTargets[activeTargetIndex]
+        let previousScreenFrame = activeLayoutTarget?.screenFrame
         activeLayoutTarget = newTarget
         clearResizabilityCache()
         lastTargetPID = newTarget.processIdentifier
@@ -450,7 +485,12 @@ final class AppState: NSObject, NSMenuDelegate {
             newTarget.appName
         )
 
-        openMainWindow()
+        // Only recreate windows when the target moves to a different screen.
+        // Recreating every time causes a visible flicker ("ヒュン").
+        let screenChanged = previousScreenFrame != newTarget.screenFrame
+        if screenChanged {
+            openMainWindow()
+        }
     }
 
     func refreshAvailableWindows() {
@@ -487,7 +527,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             let constrained = try windowManager?.move(target: target, to: frame) ?? false
-            windowManager?.raiseWindowIfOccluded(target: target, newFrame: frame, screenFrame: target.screenFrame)
+            windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
             launchMessage = error.localizedDescription
@@ -516,7 +556,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             let constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: screenFrame) ?? false
-            windowManager?.raiseWindowIfOccluded(target: target, newFrame: frame, screenFrame: screenFrame)
+            windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
             launchMessage = error.localizedDescription
@@ -768,6 +808,18 @@ final class AppState: NSObject, NSMenuDelegate {
         if shortcut.keyCode == UInt32(kVK_Tab),
            shortcut.modifiers == 0 || shortcut.modifiers == UInt32(shiftKey) {
             return NSLocalizedString("Tab is reserved for switching target windows.", comment: "Tab shortcut reserved for window cycling")
+        }
+
+        // Return is reserved for raising the selected window.
+        if shortcut.keyCode == UInt32(kVK_Return),
+           shortcut.modifiers == 0 {
+            return NSLocalizedString("Return is reserved for raising the selected window.", comment: "Return shortcut reserved for raising window")
+        }
+
+        // Cmd+F is reserved for the window search field.
+        if shortcut.keyCode == UInt32(kVK_ANSI_F),
+           shortcut.modifiers == UInt32(cmdKey) {
+            return NSLocalizedString("⌘F is reserved for searching the window list.", comment: "Cmd+F shortcut reserved for window search")
         }
 
         if shortcut == hotKeyShortcut {
@@ -1532,19 +1584,17 @@ final class AppState: NSObject, NSMenuDelegate {
             cycleTargetWindow(forward: !isShift)
             return true
         case kVK_UpArrow:
-            if hasRegisteredLocalShortcut(for: event) {
-                return false
-            }
-            moveLayoutPresetSelection(by: -1)
+            cycleTargetWindow(forward: false)
             return true
         case kVK_DownArrow:
-            if hasRegisteredLocalShortcut(for: event) {
-                return false
-            }
-            moveLayoutPresetSelection(by: 1)
+            cycleTargetWindow(forward: true)
             return true
-        case kVK_Return, kVK_ANSI_KeypadEnter:
-            return applySelectedLayoutPreset()
+        case kVK_Return:
+            raiseCurrentTargetWindow()
+            return true
+        case kVK_ANSI_F where event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
+            // Handled in MainWindowController.performKeyEquivalent which checks first responder.
+            return false
         default:
             return false
         }
@@ -1645,4 +1695,5 @@ private enum UserDefaultsKey {
     static let didPromptLaunchAtLogin = "didPromptLaunchAtLogin"
     static let menuIconVisible = "menuIconVisible"
     static let dockIconVisible = "dockIconVisible"
+    static let windowListSidebarVisible = "windowListSidebarVisible"
 }

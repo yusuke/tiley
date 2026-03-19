@@ -94,6 +94,7 @@
 "Add Global Shortcut" = "전역 단축키 추가";
 "No windows available" = "사용 가능한 창이 없습니다";
 "Tab is reserved for switching target windows." = "Tab은 대상 창 전환에 사용됩니다.";
+"Return is reserved for raising the selected window." = "Return은 선택한 창을 앞으로 가져오는 데 사용됩니다.";
 "Edit Layout" = "레이아웃 편집";
 "Done Editing" = "편집 완료";
 "Delete Shortcut" = "단축키 삭제";
@@ -104,5 +105,6 @@
 "Are you sure you want to delete the layout \"%@\"?" = "레이아웃 \"%@\"을(를) 삭제하시겠습니까?";
 "Filter windows..." = "윈도우 필터링...";
 "No matching windows" = "일치하는 윈도우 없음";
-"Tab: next window · %@: window list" = "Tab: 다음 윈도우 · %@: 윈도우 목록";
-"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab: 다음 윈도우 · ⇧Tab: 이전 윈도우 · %@: 윈도우 목록";
+"Windows" = "윈도우";
+"Toggle window list (%@)" = "윈도우 목록 표시/숨기기 (%@)";
+"⌘F is reserved for searching the window list." = "⌘F는 윈도우 목록 검색에 예약되어 있습니다.";

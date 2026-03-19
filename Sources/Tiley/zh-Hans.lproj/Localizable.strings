@@ -94,6 +94,7 @@
 "Add Global Shortcut" = "添加全局快捷键";
 "No windows available" = "没有可用的窗口";
 "Tab is reserved for switching target windows." = "Tab 已用于切换目标窗口。";
+"Return is reserved for raising the selected window." = "Return 已用于将选定窗口置于最前面。";
 "Edit Layout" = "编辑布局";
 "Done Editing" = "完成编辑";
 "Delete Shortcut" = "删除快捷键";
@@ -104,5 +105,6 @@
 "Are you sure you want to delete the layout \"%@\"?" = "确定要删除布局\U201C%@\U201D吗？";
 "Filter windows..." = "筛选窗口…";
 "No matching windows" = "没有匹配的窗口";
-"Tab: next window · %@: window list" = "Tab：下一个窗口 · %@：窗口列表";
-"Tab: next window · ⇧Tab: previous · %@: window list" = "Tab：下一个窗口 · ⇧Tab：上一个窗口 · %@：窗口列表";
+"Windows" = "窗口";
+"Toggle window list (%@)" = "显示/隐藏窗口列表 (%@)";
+"⌘F is reserved for searching the window list." = "⌘F 已被保留用于搜索窗口列表。";

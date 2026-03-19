@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Il menu a tendina per la selezione della finestra di destinazione è stato sostituito con un pannello laterale con Liquid Glass (macOS Tahoe); include un campo di ricerca con supporto completo IME, navigazione con tasti freccia e Tab/Maiusc+Tab, e Cmd+F per attivare/disattivare la visibilità
+
 ### Migliorato
 
-- Il menu a tendina per la selezione delle finestre è ora raggruppato per applicazione, ordinato in base all'ultimo utilizzo in primo piano; le finestre all'interno di ogni gruppo sono elencate in ordine Z
-- Le finestre non standard (palette, barre degli strumenti, ecc.) sono state filtrate dall'elenco delle finestre in modo da mostrare solo le finestre documento ridimensionabili
-- Aggiunto campo di ricerca per filtrare digitando nel menu a tendina di selezione delle finestre; corrispondenza parziale per nome dell'app o titolo della finestra con supporto per il cambio della sorgente di input IME
+- Le finestre nel pannello laterale sono elencate in ordine Z (dal fronte al retro) anziché raggruppate per applicazione
+- Le finestre non standard (palette, barre degli strumenti, ecc.) sono state filtrate dall'elenco delle finestre di destinazione in modo da mostrare solo le finestre documento ridimensionabili
 
 ## [1.2.7] - 2026-03-18
 
