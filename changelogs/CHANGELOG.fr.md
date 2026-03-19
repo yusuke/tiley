@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.3] - 2026-03-19
+
 ### Ajouté
 
 - Rappels de mise à jour discrets de Sparkle : lorsqu'une vérification en arrière-plan trouve une nouvelle version, un point rouge apparaît sur l'icône de la barre des menus et des labels « Mise à jour disponible » s'affichent à côté du bouton engrenage et du bouton « Vérifier les mises à jour » dans les réglages

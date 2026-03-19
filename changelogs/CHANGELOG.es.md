@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.3] - 2026-03-19
+
 ### Añadido
 
 - Recordatorios suaves de actualización de Sparkle: cuando una comprobación en segundo plano encuentra una nueva versión, aparece un punto rojo en el icono de la barra de menús y etiquetas "Actualización disponible" junto al botón de engranaje y el botón "Buscar actualizaciones" en los ajustes

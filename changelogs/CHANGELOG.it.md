@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.3] - 2026-03-19
+
 ### Aggiunto
 
 - Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni

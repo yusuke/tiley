@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.3] - 2026-03-19
+
 ### Added
 
 - Sparkle gentle scheduled update reminders: when a background update check finds a new version, a red badge dot appears on the menu bar icon and "Update available" labels appear next to the gear button and the "Check for Updates" button in settings
@@ -216,7 +218,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v2.0.2...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v2.0.3...HEAD
+[2.0.3]: https://github.com/yusuke/tiley/releases/tag/v2.0.3
 [2.0.2]: https://github.com/yusuke/tiley/releases/tag/v2.0.2
 [2.0.1]: https://github.com/yusuke/tiley/releases/tag/v2.0.1
 [2.0.0]: https://github.com/yusuke/tiley/releases/tag/v2.0.0
