@@ -4,6 +4,17 @@
 
 ### Alterado
 
+- Painel de configurações redesenhado no estilo Tahoe: seções com fundo de vidro (Liquid Glass no macOS 26+), barra de ferramentas compacta com botões voltar/sair e linhas agrupadas estilo iOS com controles em linha
+
+### Corrigido
+
+- Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta
+- Corrigido um problema onde a janela não se movia para a posição selecionada quando o app de destino reposiciona sua janela durante o redimensionamento; a última operação AX agora é sempre uma definição de posição
+
+## [2.0.0] - 2026-03-19
+
+### Alterado
+
 - O menu suspenso de seleção de janela alvo foi substituído por um painel lateral com Liquid Glass (macOS Tahoe); inclui campo de busca com suporte completo a IME, navegação por teclas de seta e Tab/Shift+Tab, e Cmd+F para alternar a visibilidade
 
 ### Melhorado

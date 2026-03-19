@@ -4,6 +4,17 @@
 
 ### Geändert
 
+- Einstellungspanel im Tahoe-Stil neu gestaltet: Abschnitte mit Glas-Hintergrund (Liquid Glass ab macOS 26+), kompakte Symbolleiste mit Zurück-/Beenden-Buttons und iOS-ähnliche gruppierte Zeilen mit Inline-Steuerelementen
+
+### Behoben
+
+- Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde
+- Fenster wurde nicht an die ausgewählte Position verschoben, wenn die Ziel-App die Fensterposition bei Größenänderung neu berechnet; die letzte AX-Operation ist jetzt immer eine Positionssetzung
+
+## [2.0.0] - 2026-03-19
+
+### Geändert
+
 - Das Dropdown-Menü zur Fensterzielauswahl wurde durch ein Seitenleisten-Panel mit Liquid Glass (macOS Tahoe) ersetzt; enthält ein Suchfeld mit vollständiger IME-Unterstützung, Navigation per Pfeiltasten und Tab/Umschalt+Tab sowie Cmd+F zum Ein-/Ausblenden
 
 ### Verbessert

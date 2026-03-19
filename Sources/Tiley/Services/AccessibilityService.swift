@@ -217,9 +217,11 @@ final class AccessibilityService {
         // To work around this we apply the geometry in multiple passes:
         // 1. Set position to move the window onto the destination screen.
         // 2. Set size — the app now accepts the larger dimensions.
-        // 3. Re-apply position to correct any drift from the resize.
-        // 4. Re-apply size once more in case the first resize was still
-        //    constrained by the old screen (belt-and-suspenders).
+        // 3. Re-apply size once more in case the first resize was still
+        //    constrained by the old screen.
+        // 4. Re-apply position LAST to correct any drift caused by the
+        //    resize — some apps reposition the window during a size change,
+        //    so the final operation must be a position set.
         let positionResult = AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
         guard positionResult == .success else {
             throw WindowAccessError.positionSetFailed
@@ -230,9 +232,10 @@ final class AccessibilityService {
             throw WindowAccessError.sizeSetFailed
         }
 
-        // Re-apply position then size to handle apps that need a second pass.
-        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+        // Re-apply size then position. Ending with position ensures apps
+        // that adjust window position during resize don't override our target.
         AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
 
         // Give the app a moment to apply its own constraints before reading
         // back the actual size.  A short run-loop spin is enough for most apps.

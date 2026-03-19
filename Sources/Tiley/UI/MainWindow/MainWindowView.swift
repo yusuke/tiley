@@ -195,46 +195,61 @@ struct MainWindowView: View {
     }
 
     private func settingsPanel(size: CGSize) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(alignment: .top) {
-                    HStack(alignment: .bottom, spacing: 10) {
-                        Image(nsImage: NSApp.applicationIconImage)
-                            .resizable()
-                            .interpolation(.high)
-                            .frame(width: 36, height: 36)
-                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        VStack(spacing: 0) {
+            // Tahoe-style title bar
+            HStack {
+                Button {
+                    dismissPresetNameEditingIfNeeded()
+                    appState.apply(settings: draftSettings)
+                    draftSettings = appState.settingsSnapshot
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(TahoeToolbarButtonStyle())
+                .help("Back")
 
-                        Text("Tiley")
-                            .font(.system(size: 30, weight: .bold, design: .rounded))
+                Spacer()
 
-                        if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-                            Text("v\(version)")
-                                .font(.system(size: 13, weight: .medium, design: .rounded))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
+                HStack(spacing: 6) {
+                    Image(nsImage: NSApp.applicationIconImage)
+                        .resizable()
+                        .interpolation(.high)
+                        .frame(width: 20, height: 20)
+                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
 
-                    Spacer()
-
-                    Button("Back") {
-                        dismissPresetNameEditingIfNeeded()
-                        appState.apply(settings: draftSettings)
-                        draftSettings = appState.settingsSnapshot
-                    }
-                    .buttonStyle(.borderedProminent)
-
-                    Button("Quit Tiley") {
-                        appState.quitApp()
-                    }
+                    Text("Settings")
+                        .font(.system(size: 13, weight: .semibold))
                 }
 
-                settingsEditor
+                Spacer()
+
+                Button {
+                    appState.quitApp()
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "power")
+                            .font(.system(size: 10, weight: .semibold))
+                        Text(NSLocalizedString("Quit Tiley", comment: "Quit button"))
+                            .font(.system(size: 11, weight: .medium))
+                    }
+                }
+                .buttonStyle(TahoeQuitButtonStyle())
+                .help(NSLocalizedString("Quit Tiley", comment: "Quit button tooltip"))
             }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .padding(.horizontal, 12)
-            .padding(.top, 12)
-            .padding(.bottom, 12)
+            .frame(height: 36)
+            .padding(.horizontal, 8)
+
+            Divider()
+                .opacity(0.5)
+
+            ScrollView {
+                settingsEditor
+                    .padding(.horizontal, 12)
+                    .padding(.top, 12)
+                    .padding(.bottom, 12)
+            }
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
     }
@@ -261,63 +276,74 @@ struct MainWindowView: View {
     }
 
     private func permissionsOnlyPanel(size: CGSize) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(alignment: .top) {
-                    HStack(alignment: .bottom, spacing: 10) {
-                        Image(nsImage: NSApp.applicationIconImage)
-                            .resizable()
-                            .interpolation(.high)
-                            .frame(width: 36, height: 36)
-                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        VStack(spacing: 0) {
+            // Tahoe-style title bar
+            HStack {
+                Spacer()
 
-                        Text("Tiley")
-                            .font(.system(size: 30, weight: .bold, design: .rounded))
+                HStack(spacing: 6) {
+                    Image(nsImage: NSApp.applicationIconImage)
+                        .resizable()
+                        .interpolation(.high)
+                        .frame(width: 20, height: 20)
+                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
 
-                        if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-                            Text("v\(version)")
-                                .font(.system(size: 13, weight: .medium, design: .rounded))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-
-                    Spacer()
-
-                    Button("Quit Tiley") {
-                        appState.quitApp()
-                    }
+                    Text("Tiley")
+                        .font(.system(size: 13, weight: .semibold))
                 }
 
-                GroupBox {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Label(
-                                appState.accessibilityGranted ? "Accessibility enabled" : "Accessibility required",
-                                systemImage: appState.accessibilityGranted ? "checkmark.shield" : "exclamationmark.shield"
-                            )
-                            Spacer()
-                            Button("Open Prompt") {
-                                appState.requestAccessibilityAccess()
-                            }
-                        }
-                        Text("Window movement on macOS requires Accessibility permission.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                Spacer()
 
-                        permissionsScreenshot(named: "dialog")
-                        permissionsScreenshot(named: "system")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                Button {
+                    appState.quitApp()
                 } label: {
-                    Text("Permissions")
-                        .font(.system(size: 16, weight: .semibold))
+                    HStack(spacing: 4) {
+                        Image(systemName: "power")
+                            .font(.system(size: 10, weight: .semibold))
+                        Text(NSLocalizedString("Quit Tiley", comment: "Quit button"))
+                            .font(.system(size: 11, weight: .medium))
+                    }
                 }
+                .buttonStyle(TahoeQuitButtonStyle())
+                .help(NSLocalizedString("Quit Tiley", comment: "Quit button tooltip"))
             }
-            .font(.system(size: 14))
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .padding(.horizontal, 12)
-            .padding(.top, 12)
-            .padding(.bottom, 12)
+            .frame(height: 36)
+            .padding(.horizontal, 8)
+
+            Divider()
+                .opacity(0.5)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    TahoeSettingsSection(title: NSLocalizedString("Permissions", comment: "Settings section")) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Label(
+                                    appState.accessibilityGranted
+                                        ? NSLocalizedString("Accessibility enabled", comment: "")
+                                        : NSLocalizedString("Accessibility required", comment: ""),
+                                    systemImage: appState.accessibilityGranted ? "checkmark.shield" : "exclamationmark.shield"
+                                )
+                                .foregroundStyle(appState.accessibilityGranted ? .green : .orange)
+                                Spacer()
+                                Button("Open Prompt") {
+                                    appState.requestAccessibilityAccess()
+                                }
+                                    }
+                            Text("Window movement on macOS requires Accessibility permission.")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+
+                            permissionsScreenshot(named: "dialog")
+                            permissionsScreenshot(named: "system")
+                        }
+                    }
+                }
+                .font(.system(size: 13))
+                .padding(.horizontal, 12)
+                .padding(.top, 12)
+                .padding(.bottom, 12)
+            }
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
     }
@@ -701,50 +727,56 @@ struct MainWindowView: View {
 
     private var settingsEditor: some View {
         VStack(alignment: .leading, spacing: 16) {
-            GroupBox {
-                VStack(alignment: .leading, spacing: 8) {
-                    Toggle("Launch at login", isOn: Binding(
-                        get: { draftSettings.launchAtLoginEnabled },
-                        set: { newValue in
-                            _ = appState.setLaunchAtLoginEnabled(newValue)
-                            draftSettings.launchAtLoginEnabled = appState.launchAtLoginEnabled
-                        }
-                    ))
-                    .toggleStyle(.switch)
+            TahoeSettingsSection(title: NSLocalizedString("Startup", comment: "Settings section")) {
+                VStack(spacing: 0) {
+                    TahoeSettingsRow(label: NSLocalizedString("Launch at login", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.launchAtLoginEnabled },
+                            set: { newValue in
+                                _ = appState.setLaunchAtLoginEnabled(newValue)
+                                draftSettings.launchAtLoginEnabled = appState.launchAtLoginEnabled
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
 
-                    Toggle("Show menu icon", isOn: Binding(
-                        get: { draftSettings.menuIconVisible },
-                        set: { newValue in
-                            appState.setMenuIconVisible(newValue)
-                            draftSettings.menuIconVisible = appState.menuIconVisible
-                        }
-                    ))
-                    .toggleStyle(.switch)
+                    Divider().opacity(0.4)
 
-                    Toggle("Show Dock icon", isOn: Binding(
-                        get: { draftSettings.dockIconVisible },
-                        set: { newValue in
-                            appState.setDockIconVisible(newValue)
-                            draftSettings.dockIconVisible = appState.dockIconVisible
-                        }
-                    ))
-                    .toggleStyle(.switch)
+                    TahoeSettingsRow(label: NSLocalizedString("Show menu icon", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.menuIconVisible },
+                            set: { newValue in
+                                appState.setMenuIconVisible(newValue)
+                                draftSettings.menuIconVisible = appState.menuIconVisible
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
 
-                    Text("Changes are applied immediately.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Divider().opacity(0.4)
+
+                    TahoeSettingsRow(label: NSLocalizedString("Show Dock icon", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.dockIconVisible },
+                            set: { newValue in
+                                appState.setDockIconVisible(newValue)
+                                draftSettings.dockIconVisible = appState.dockIconVisible
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } label: {
-                Text("Startup")
-                    .font(.system(size: 16, weight: .semibold))
             }
 
-            GroupBox {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("Global shortcut")
-                        Spacer()
+            TahoeSettingsSection(title: NSLocalizedString("Shortcut", comment: "Settings section")) {
+                VStack(spacing: 8) {
+                    TahoeSettingsRow(label: NSLocalizedString("Global shortcut", comment: "")) {
                         ShortcutRecorderField(
                             shortcut: $draftSettings.hotKeyShortcut,
                             onRecordingChange: { isRecording in
@@ -752,39 +784,61 @@ struct MainWindowView: View {
                                 appState.setShortcutRecordingActive(isRecording)
                             }
                         )
-                            .frame(width: 220, height: 32)
+                        .frame(width: 140, height: 22)
                     }
+                    .padding(.vertical, 2)
+
                     HStack {
+                        Text("Click the field, then press the new shortcut.")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
                         Spacer()
                         Button("Reset to Default") {
                             dismissPresetNameEditingIfNeeded()
                             draftSettings.hotKeyShortcut = .default
                         }
                     }
-                    Text("Click the field, then press the new shortcut.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } label: {
-                Text("Shortcut")
-                    .font(.system(size: 16, weight: .semibold))
             }
 
-            GroupBox {
-                VStack(alignment: .leading, spacing: 14) {
-                    Stepper("Columns: \(draftSettings.columns)", value: $draftSettings.columns, in: 2...12)
-                    Stepper("Rows: \(draftSettings.rows)", value: $draftSettings.rows, in: 2...12)
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Gap")
-                            Spacer()
+            TahoeSettingsSection(title: NSLocalizedString("Grid", comment: "Settings section")) {
+                VStack(spacing: 0) {
+                    TahoeSettingsRow(label: NSLocalizedString("Columns", comment: "")) {
+                        Stepper("\(draftSettings.columns)", value: $draftSettings.columns, in: 2...12)
+                            .labelsHidden()
+                        Text("\(draftSettings.columns)")
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                            .frame(width: 20, alignment: .trailing)
+                    }
+                    .padding(.vertical, 4)
+
+                    Divider().opacity(0.4)
+
+                    TahoeSettingsRow(label: NSLocalizedString("Rows", comment: "")) {
+                        Stepper("\(draftSettings.rows)", value: $draftSettings.rows, in: 2...12)
+                            .labelsHidden()
+                        Text("\(draftSettings.rows)")
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                            .frame(width: 20, alignment: .trailing)
+                    }
+                    .padding(.vertical, 4)
+
+                    Divider().opacity(0.4)
+
+                    VStack(spacing: 4) {
+                        TahoeSettingsRow(label: NSLocalizedString("Gap", comment: "")) {
                             Text("\(Int(draftSettings.gap)) pt")
                                 .monospacedDigit()
                                 .foregroundStyle(.secondary)
                         }
                         Slider(value: $draftSettings.gap, in: 0...24, step: 1)
                     }
+                    .padding(.vertical, 4)
+
+                    Divider().opacity(0.4)
+
                     HStack {
                         Spacer()
                         Button("Reset Grid to Default") {
@@ -793,11 +847,8 @@ struct MainWindowView: View {
                             draftSettings.gap = Self.defaultGridGap
                         }
                     }
+                    .padding(.vertical, 4)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } label: {
-                Text("Grid")
-                    .font(.system(size: 16, weight: .semibold))
             }
             .onHover { hovering in
                 isHoveringGridSection = hovering
@@ -808,45 +859,44 @@ struct MainWindowView: View {
                 }
             }
 
-            GroupBox {
+            TahoeSettingsSection(title: NSLocalizedString("Layouts", comment: "Settings section")) {
                 HStack {
                     Text("Reset the layout preset list to the defaults.")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.tertiary)
                     Spacer()
                     Button("Restore Defaults") {
                         dismissPresetNameEditingIfNeeded()
                         appState.resetLayoutPresetsToDefault()
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } label: {
-                Text("Layouts")
-                    .font(.system(size: 16, weight: .semibold))
             }
 
             if let updater = appState.updater {
-                GroupBox {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Toggle("Automatically check for updates", isOn: Binding(
-                            get: { updater.automaticallyChecksForUpdates },
-                            set: { updater.automaticallyChecksForUpdates = $0 }
-                        ))
-                        .toggleStyle(.switch)
+                TahoeSettingsSection(title: NSLocalizedString("Updates", comment: "Settings section")) {
+                    VStack(spacing: 0) {
+                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: "")) {
+                            Toggle("", isOn: Binding(
+                                get: { updater.automaticallyChecksForUpdates },
+                                set: { updater.automaticallyChecksForUpdates = $0 }
+                            ))
+                            .toggleStyle(.switch)
+                            .labelsHidden()
+                        }
+                        .padding(.vertical, 4)
+
+                        Divider().opacity(0.4)
 
                         HStack {
                             Spacer()
                             CheckForUpdatesView(updater: updater)
                         }
+                        .padding(.vertical, 4)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                } label: {
-                    Text("Updates")
-                        .font(.system(size: 16, weight: .semibold))
                 }
             }
         }
-        .font(.system(size: 14))
+        .font(.system(size: 13))
     }
 
     @ViewBuilder
@@ -2038,6 +2088,84 @@ private struct WindowSearchField: NSViewRepresentable {
     }
 }
 
+// MARK: - Tahoe Settings Section
+
+private struct TahoeSettingsSection<Content: View>: View {
+    let title: String
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.secondary)
+                .padding(.leading, 12)
+
+            content()
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .modifier(SettingsSectionBackground(cornerRadius: 10))
+        }
+    }
+}
+
+private struct SettingsSectionBackground: ViewModifier {
+    let cornerRadius: CGFloat
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    func body(content: Content) -> some View {
+        if #available(macOS 26.0, *) {
+            content
+                .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+        } else {
+            content
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(settingsCardFill)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(settingsCardBorder, lineWidth: 0.5)
+                )
+        }
+    }
+
+    private var settingsCardFill: Color {
+        switch colorScheme {
+        case .dark:
+            return Color.white.opacity(0.06)
+        default:
+            return Color.white.opacity(0.65)
+        }
+    }
+
+    private var settingsCardBorder: Color {
+        switch colorScheme {
+        case .dark:
+            return Color.white.opacity(0.10)
+        default:
+            return Color.black.opacity(0.08)
+        }
+    }
+}
+
+// MARK: - Tahoe Settings Row
+
+private struct TahoeSettingsRow<Trailing: View>: View {
+    let label: String
+    @ViewBuilder var trailing: () -> Trailing
+
+    var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            trailing()
+        }
+    }
+}
+
 // MARK: - SidebarGlassBackground
 
 /// Applies Liquid Glass (macOS 26+) or falls back to NSVisualEffectView.
@@ -2080,6 +2208,40 @@ private struct VisualEffectFallbackBackground: NSViewRepresentable {
 }
 
 // MARK: - Tahoe-style Toolbar Button
+
+private struct TahoeQuitButtonStyle: ButtonStyle {
+    @State private var isHovered = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(
+                        configuration.isPressed
+                            ? Color.black.opacity(0.08)
+                            : isHovered
+                                ? Color.white.opacity(0.9)
+                                : Color.clear
+                    )
+                    .shadow(
+                        color: isHovered || configuration.isPressed
+                            ? .black.opacity(0.08) : .clear,
+                        radius: 2, x: 0, y: 0.5
+                    )
+            )
+            .contentShape(Capsule())
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isHovered = hovering
+                }
+            }
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
 
 private struct TahoeToolbarButtonStyle: ButtonStyle {
     @State private var isHovered = false

@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Redesigned the settings panel with a Tahoe-style layout: glass-backed sections (Liquid Glass on macOS 26+), compact toolbar header with back/quit buttons, and iOS-like grouped rows with inline controls
+
+### Fixed
+
+- Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open
+- Fixed window not moving to the selected position when the target app repositions its window during a resize; the final AX operation is now always a position set
+
+## [2.0.0] - 2026-03-19
+
+### Changed
+
 - Replaced the window target dropdown menu with a sidebar panel using Liquid Glass (macOS Tahoe); includes a search field with full IME support, arrow-key and Tab/Shift+Tab navigation, and Cmd+F to toggle visibility
 
 ### Improved
@@ -183,7 +194,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v1.2.7...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/yusuke/tiley/releases/tag/v2.0.0
 [1.2.7]: https://github.com/yusuke/tiley/releases/tag/v1.2.7
 [1.2.6]: https://github.com/yusuke/tiley/releases/tag/v1.2.6
 [1.2.5]: https://github.com/yusuke/tiley/releases/tag/v1.2.5

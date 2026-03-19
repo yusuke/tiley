@@ -4,6 +4,17 @@
 
 ### Modificato
 
+- Pannello impostazioni ridisegnato in stile Tahoe: sezioni con sfondo in vetro (Liquid Glass su macOS 26+), barra degli strumenti compatta con pulsanti indietro/esci e righe raggruppate in stile iOS con controlli in linea
+
+### Corretto
+
+- Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto
+- Corretto un problema in cui la finestra non si spostava nella posizione selezionata quando l'app di destinazione riposiziona la finestra durante il ridimensionamento; l'ultima operazione AX è ora sempre un'impostazione di posizione
+
+## [2.0.0] - 2026-03-19
+
+### Modificato
+
 - Il menu a tendina per la selezione della finestra di destinazione è stato sostituito con un pannello laterale con Liquid Glass (macOS Tahoe); include un campo di ricerca con supporto completo IME, navigazione con tasti freccia e Tab/Maiusc+Tab, e Cmd+F per attivare/disattivare la visibilità
 
 ### Migliorato

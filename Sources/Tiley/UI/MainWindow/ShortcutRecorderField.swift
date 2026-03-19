@@ -124,7 +124,7 @@ final class RecorderTextField: NSTextField {
         isBezeled = false
         drawsBackground = false
         wantsLayer = true
-        font = .systemFont(ofSize: 13, weight: .medium)
+        font = .systemFont(ofSize: 11, weight: .medium)
         focusRingType = .none
         alignment = .center
         applyLabelAppearance()
@@ -143,7 +143,7 @@ final class RecorderTextField: NSTextField {
     }
 
     override var intrinsicContentSize: NSSize {
-        NSSize(width: 220, height: 32)
+        NSSize(width: 140, height: 22)
     }
 
     override var acceptsFirstResponder: Bool { true }

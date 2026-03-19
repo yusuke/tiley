@@ -522,9 +522,19 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func apply(selection: GridSelection, to target: WindowTarget) {
+        // Re-fetch the current visibleFrame from the actual screen to avoid
+        // using stale values captured when the target was resolved. The Dock
+        // or menu bar may have auto-shown/hidden since then.
+        let currentVisibleFrame: CGRect
+        if let screen = NSScreen.screens.first(where: { $0.frame == target.screenFrame }) {
+            currentVisibleFrame = screen.visibleFrame
+        } else {
+            currentVisibleFrame = target.visibleFrame
+        }
+
         let frame = GridCalculator.frame(
             for: selection,
-            in: target.visibleFrame,
+            in: currentVisibleFrame,
             rows: rows,
             columns: columns,
             gap: gap
@@ -551,16 +561,29 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
 
+        // Re-fetch the current visibleFrame from the actual screen to avoid
+        // using stale values captured at overlay-open time. The Dock or menu
+        // bar may have auto-shown/hidden since then, changing visibleFrame.
+        let currentVisibleFrame: CGRect
+        let currentScreenFrame: CGRect
+        if let screen = NSScreen.screens.first(where: { $0.frame == screenFrame }) {
+            currentVisibleFrame = screen.visibleFrame
+            currentScreenFrame = screen.frame
+        } else {
+            currentVisibleFrame = visibleFrame
+            currentScreenFrame = screenFrame
+        }
+
         let frame = GridCalculator.frame(
             for: selection,
-            in: visibleFrame,
+            in: currentVisibleFrame,
             rows: rows,
             columns: columns,
             gap: gap
         )
 
         do {
-            let constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: screenFrame) ?? false
+            let constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
@@ -664,9 +687,18 @@ final class AppState: NSObject, NSMenuDelegate {
 
         let previewScreenFrame: CGRect
         let previewVisibleFrame: CGRect
-        if let ctx = screenContext {
+        if let ctx = screenContext,
+           let screen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame }) {
+            // Use current screen values to avoid stale ScreenContext.
+            previewScreenFrame = screen.frame
+            previewVisibleFrame = screen.visibleFrame
+        } else if let ctx = screenContext {
             previewScreenFrame = ctx.screenFrame
             previewVisibleFrame = ctx.visibleFrame
+        } else if let target = activeLayoutTarget,
+                  let screen = NSScreen.screens.first(where: { $0.frame == target.screenFrame }) {
+            previewScreenFrame = screen.frame
+            previewVisibleFrame = screen.visibleFrame
         } else if let target = activeLayoutTarget {
             previewScreenFrame = target.screenFrame
             previewVisibleFrame = target.visibleFrame
