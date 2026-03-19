@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-03-19
+
 ### Modifié
 
 - Panneau de réglages redessiné dans le style Tahoe : sections avec fond en verre (Liquid Glass sur macOS 26+), barre d'outils compacte avec boutons retour/quitter, et lignes groupées style iOS avec contrôles intégrés
