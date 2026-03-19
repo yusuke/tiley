@@ -3,6 +3,131 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>2.0.0</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Выпадающее меню выбора целевого окна заменено боковой панелью с Liquid Glass (macOS Tahoe); включает поле поиска с полной поддержкой IME, навигацию клавишами-стрелками и Tab/Shift+Tab, а также Cmd+F для переключения видимости</li>
+</ul>
+<h3>Улучшено</h3>
+<ul>
+<li>Окна в боковой панели перечислены в Z-порядке (от переднего к заднему), а не сгруппированы по приложениям</li>
+<li>Нестандартные окна (палитры, панели инструментов и т. д.) исключены из списка целевых окон — отображаются только масштабируемые окна документов</li>
+</ul>
+]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>O menu suspenso de seleção de janela alvo foi substituído por um painel lateral com Liquid Glass (macOS Tahoe); inclui campo de busca com suporte completo a IME, navegação por teclas de seta e Tab/Shift+Tab, e Cmd+F para alternar a visibilidade</li>
+</ul>
+<h3>Melhorado</h3>
+<ul>
+<li>As janelas no painel lateral são listadas em ordem Z (da frente para trás) em vez de agrupadas por aplicativo</li>
+<li>Janelas não padrão (paletas, barras de ferramentas, etc.) foram filtradas da lista de janelas alvo para exibir apenas janelas de documento redimensionáveis</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Il menu a tendina per la selezione della finestra di destinazione è stato sostituito con un pannello laterale con Liquid Glass (macOS Tahoe); include un campo di ricerca con supporto completo IME, navigazione con tasti freccia e Tab/Maiusc+Tab, e Cmd+F per attivare/disattivare la visibilità</li>
+</ul>
+<h3>Migliorato</h3>
+<ul>
+<li>Le finestre nel pannello laterale sono elencate in ordine Z (dal fronte al retro) anziché raggruppate per applicazione</li>
+<li>Le finestre non standard (palette, barre degli strumenti, ecc.) sono state filtrate dall'elenco delle finestre di destinazione in modo da mostrare solo le finestre documento ridimensionabili</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Le menu déroulant de sélection de fenêtre cible a été remplacé par un panneau latéral avec Liquid Glass (macOS Tahoe) ; comprend un champ de recherche avec prise en charge complète de l'IME, navigation par touches fléchées et Tab/Maj+Tab, et Cmd+F pour basculer la visibilité</li>
+</ul>
+<h3>Amélioré</h3>
+<ul>
+<li>Les fenêtres dans le panneau latéral sont listées en ordre Z (avant vers arrière) plutôt que regroupées par application</li>
+<li>Les fenêtres non standard (palettes, barres d'outils, etc.) sont filtrées de la liste des fenêtres cibles afin de n'afficher que les fenêtres de document redimensionnables</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Se reemplazó el menú desplegable de ventana objetivo por un panel lateral con Liquid Glass (macOS Tahoe); incluye un campo de búsqueda con soporte completo de IME, navegación con teclas de flecha y Tab/Mayús+Tab, y Cmd+F para alternar la visibilidad</li>
+</ul>
+<h3>Mejorado</h3>
+<ul>
+<li>Las ventanas en el panel lateral se listan en orden Z (de adelante hacia atrás) en lugar de agruparse por aplicación</li>
+<li>Se filtraron las ventanas no estándar (paletas, barras de herramientas, etc.) de la lista de ventanas objetivo para mostrar solo ventanas de documento redimensionables</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Das Dropdown-Menü zur Fensterzielauswahl wurde durch ein Seitenleisten-Panel mit Liquid Glass (macOS Tahoe) ersetzt; enthält ein Suchfeld mit vollständiger IME-Unterstützung, Navigation per Pfeiltasten und Tab/Umschalt+Tab sowie Cmd+F zum Ein-/Ausblenden</li>
+</ul>
+<h3>Verbessert</h3>
+<ul>
+<li>Fenster in der Seitenleiste werden in Z-Reihenfolge (vorne nach hinten) aufgelistet statt nach Anwendung gruppiert</li>
+<li>Nicht-Standard-Fenster (Paletten, Symbolleisten usw.) werden aus der Fensterziel-Liste gefiltert, sodass nur größenveränderbare Dokumentfenster angezeigt werden</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>將視窗目標下拉選單替換為基於 Liquid Glass（macOS Tahoe）的側邊欄面板；包含支援完整 IME 的搜尋欄位、方向鍵和 Tab/Shift+Tab 導覽，以及 Cmd+F 切換顯示/隱藏</li>
+</ul>
+<h3>改進</h3>
+<ul>
+<li>側邊欄中的視窗按 Z 順序（從前到後）列出，而非按應用程式分組</li>
+<li>從視窗目標列表中過濾掉非標準視窗（調色盤、工具列等），僅顯示可調整大小的文件視窗</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>将窗口目标下拉菜单替换为基于 Liquid Glass（macOS Tahoe）的侧边栏面板；包含支持完整 IME 的搜索框、方向键和 Tab/Shift+Tab 导航，以及 Cmd+F 切换显示/隐藏</li>
+</ul>
+<h3>改进</h3>
+<ul>
+<li>侧边栏中的窗口按 Z 顺序（从前到后）列出，而非按应用程序分组</li>
+<li>从窗口目标列表中过滤掉非标准窗口（调色板、工具栏等），仅显示可调整大小的文档窗口</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>창 대상 드롭다운 메뉴를 Liquid Glass(macOS Tahoe) 기반 사이드바 패널로 교체. 완전한 IME 지원 검색 필드, 화살표 키 및 Tab/Shift+Tab 탐색, Cmd+F로 표시/숨기기 전환 기능 포함</li>
+</ul>
+<h3>개선</h3>
+<ul>
+<li>사이드바의 창 목록이 애플리케이션별 그룹이 아닌 Z 순서(앞에서 뒤로)로 표시</li>
+<li>비표준 창(팔레트, 도구 모음 등)을 창 대상 목록에서 제외하여 크기 조절 가능한 문서 창만 표시</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>ウインドウ選択をプルダウンメニューからサイドバーパネルに変更。Liquid Glass（macOS Tahoe）対応。検索フィールドでの日本語IME入力、矢印キー・Tab/Shift+Tabによるナビゲーション、Cmd+Fでの表示/非表示切り替えに対応</li>
+</ul>
+<h3>改善</h3>
+<ul>
+<li>サイドバーのウインドウ一覧をz-index順（前面から背面）に表示するように変更</li>
+<li>パレット・ツールバー等の非標準ウインドウをウインドウリストから除外し、リサイズ可能なドキュメントウインドウのみを表示するように改善</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Replaced the window target dropdown menu with a sidebar panel using Liquid Glass (macOS Tahoe); includes a search field with full IME support, arrow-key and Tab/Shift+Tab navigation, and Cmd+F to toggle visibility</li>
+</ul>
+<h3>Improved</h3>
+<ul>
+<li>Windows in the sidebar are listed in z-order (front-to-back) rather than grouped by application</li>
+<li>Filtered out non-standard windows (palettes, toolbars, etc.) from the window target list so only resizable document windows are shown</li>
+</ul>
+]]></description>
+            <pubDate>Thu, 19 Mar 2026 12:25:28 +0900</pubDate>
+            <sparkle:version>200</sparkle:version>
+            <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley-2.0.0.zip" length="4594852" type="application/octet-stream" sparkle:edSignature="KhJKJcUigeGWUh8dAQjngE03Vmjajz5lbFPrJXH0SjdRGHf6lN+TvMjFdFCcYBJM5ZHhg8+1y+pM3Ph2mhPyBg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-127.delta" sparkle:deltaFrom="127" length="260138" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="jPsSB8qrM0hCswfjxc+Rmp8ZrgpDfV2izIr+Rmn2HNknsl4BDDkSzzUnUuQEJy6xi7eOfRHNk6P/X54VvQj9AA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-126.delta" sparkle:deltaFrom="126" length="267962" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="rjC+fN0EcBTIpCWcXWaQcw+qHMsAsBYFMYoFk52MRoovfm+rmq5x0vgofRib/BiqHMjtzawlL+eW2403BG3mBw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-125.delta" sparkle:deltaFrom="125" length="268422" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="DBz9qXFlNxq+NsCS2Mz4NVCxuKxhG15pcRJopaZ+7ZHvKYnRCS5Y8p8YwjU5oRuoJVcDX4xlQ8wPgJGEgkOYDg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-124.delta" sparkle:deltaFrom="124" length="578938" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="fTAEk2zuBUFIwrKN6xRthsr2GnMUJ1GmYVRwEx9y0gvjT/JL4ODMEMjEBKQHyr1FD6kJRjlmuxrPltxzUcaRCw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley200-123.delta" sparkle:deltaFrom="123" length="602570" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="sqxZUMR7X2LCNWqDXLgvie+tbKwm3pVIDjab+PNxwoAneGC04lGGH8WhAELGQPHhNNynfl/yACIoKd6VvDJgAw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.2.7</title>
             <description xml:lang="ru"><![CDATA[<h3>Улучшено</h3>
 <ul>
@@ -103,11 +228,101 @@
 <li>Eliminated visible seams in the resize constraint preview overlay when both horizontal and vertical overflow (red) or underflow (yellow) regions are displayed simultaneously</li>
 </ul>
 ]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Melhorado</h3>
+<ul>
+<li>A janela principal é fechada automaticamente quando o Sparkle começa a baixar uma atualização</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Eliminadas as emendas visíveis na pré-visualização de restrições de redimensionamento quando as regiões de estouro (vermelho) ou insuficiência (amarelo) são exibidas simultaneamente em ambas as direções</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Migliorato</h3>
+<ul>
+<li>La finestra principale viene chiusa automaticamente quando Sparkle inizia a scaricare un aggiornamento</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Eliminate le giunture visibili nell'anteprima dei vincoli di ridimensionamento quando le regioni di overflow (rosso) o underflow (giallo) vengono visualizzate contemporaneamente in entrambe le direzioni</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Amélioré</h3>
+<ul>
+<li>La fenêtre principale se ferme automatiquement lorsque Sparkle commence à télécharger une mise à jour</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Suppression des jointures visibles dans l'aperçu des contraintes de redimensionnement lorsque les zones de dépassement (rouge) ou de sous-capacité (jaune) sont affichées simultanément dans les deux directions</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Mejorado</h3>
+<ul>
+<li>La ventana principal se cierra automáticamente cuando Sparkle comienza a descargar una actualización</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Se eliminaron las costuras visibles en la vista previa de restricciones de redimensionamiento cuando se muestran simultáneamente regiones de desbordamiento (rojo) o insuficiencia (amarillo) en ambas direcciones</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Verbessert</h3>
+<ul>
+<li>Das Hauptfenster wird jetzt automatisch geschlossen, wenn Sparkle mit dem Herunterladen eines Updates beginnt</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Sichtbare Nahtstellen in der Vorschau der Größenänderungsbeschränkungen behoben, wenn gleichzeitig horizontale und vertikale Überlauf- (rot) oder Unterlaufbereiche (gelb) angezeigt werden</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>改進</h3>
+<ul>
+<li>當 Sparkle 開始下載更新時自動關閉主視窗</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了調整大小約束預覽中同時顯示水平和垂直溢出（紅色）或不足（黃色）區域時出現接縫的問題</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>改进</h3>
+<ul>
+<li>当 Sparkle 开始下载更新时自动关闭主窗口</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了调整大小约束预览中同时显示水平和垂直溢出（红色）或不足（黄色）区域时出现接缝的问题</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>개선</h3>
+<ul>
+<li>Sparkle이 업데이트 다운로드를 시작할 때 메인 창을 자동으로 닫도록 개선</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>크기 조절 제약 미리보기에서 가로·세로 양방향 오버플로(빨간색) 또는 언더플로(노란색) 영역이 동시에 표시될 때 이음새가 보이던 문제 수정</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>改善</h3>
+<ul>
+<li>Sparkleがアップデートのダウンロードを開始した際にメインウインドウを自動的に閉じるように改善</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>リサイズ制約プレビューで水平・垂直の両方向にオーバーフロー（赤）またはアンダーフロー（黄）領域が表示される場合に継ぎ目が見えていた問題を修正</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Improved</h3>
+<ul>
+<li>Automatically close the main window when Sparkle begins downloading an update</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Eliminated visible seams in the resize constraint preview overlay when both horizontal and vertical overflow (red) or underflow (yellow) regions are displayed simultaneously</li>
+</ul>
+]]></description>
             <pubDate>Wed, 18 Mar 2026 12:40:33 +0900</pubDate>
             <sparkle:version>127</sparkle:version>
             <sparkle:shortVersionString>1.2.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.7/Tiley-1.2.7.dmg" length="4685065" type="application/octet-stream" sparkle:edSignature="TLHP0CTPgV333A1dVYy6Nt33+M9oinWYTKRn67z2K0zGScZ8gW0OPIIPF4rwh6bZ3IC40iG2RL8HH7al/qNMCg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley-1.2.7.dmg" length="4685065" type="application/octet-stream" sparkle:edSignature="TLHP0CTPgV333A1dVYy6Nt33+M9oinWYTKRn67z2K0zGScZ8gW0OPIIPF4rwh6bZ3IC40iG2RL8HH7al/qNMCg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.7/Tiley127-126.delta" sparkle:deltaFrom="126" length="85054" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="gJ/P75Kv3d9iBtrGiivy2ptykKyo4Cbkns3bcPUERje9MjsjkUuuOObWFu2MjbpD5bjVVYajuwhMmwfnXQ6vDA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.7/Tiley127-125.delta" sparkle:deltaFrom="125" length="112490" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mC8toZN9rmDsfj7qET/IU8sjv3ITLS2cES95cKpxzW0jSkLEDQSBoZK37/JVIcvCVEaqn9Q23gLZ9UCV+3NNCw=="/>
@@ -223,218 +438,67 @@
 <li>When resizing a background window of the same application via Tab cycling, the window is now brought to the front if it would be hidden behind other windows of that application</li>
 </ul>
 ]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Ao redimensionar uma janela em segundo plano do mesmo aplicativo via ciclo com Tab, a janela agora é trazida para a frente se ficaria oculta atrás de outras janelas desse aplicativo</li>
+</ul>
+]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Quando si ridimensiona una finestra in background della stessa applicazione tramite il ciclo Tab, la finestra viene ora portata in primo piano se risulterebbe nascosta dietro altre finestre di quella applicazione</li>
+</ul>
+]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Lors du redimensionnement d'une fenêtre d'arrière-plan de la même application via le cycle Tab, la fenêtre est désormais mise au premier plan si elle serait masquée par d'autres fenêtres de cette application</li>
+</ul>
+]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Al redimensionar una ventana en segundo plano de la misma aplicación mediante el ciclo con Tab, la ventana ahora se trae al frente si quedaría oculta detrás de otras ventanas de esa aplicación</li>
+</ul>
+]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Beim Ändern der Größe eines Hintergrundfensters derselben Anwendung über Tab-Wechsel wird das Fenster jetzt in den Vordergrund gebracht, wenn es hinter anderen Fenstern dieser Anwendung verdeckt wäre</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>透過 Tab 切換對同一應用程式的背景視窗進行大小調整時，如果視窗會被該應用程式的其他視窗遮擋，現在會將其置於最前面</li>
+</ul>
+]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>通过 Tab 切换对同一应用程序的后台窗口进行大小调整时，如果窗口会被该应用程序的其他窗口遮挡，现在会将其置于最前面</li>
+</ul>
+]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>Tab 전환으로 같은 애플리케이션의 백그라운드 창 크기를 변경할 때, 해당 애플리케이션의 다른 창에 가려지는 경우 창을 최전면으로 표시하도록 수정</li>
+</ul>
+]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>Tab切り替えで同じアプリケーションのバックグラウンドウインドウをリサイズした際、他のウインドウに隠れてしまう場合はウインドウを最前面に表示するように修正</li>
+</ul>
+]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>When resizing a background window of the same application via Tab cycling, the window is now brought to the front if it would be hidden behind other windows of that application</li>
+</ul>
+]]></description>
             <pubDate>Wed, 18 Mar 2026 10:09:36 +0900</pubDate>
             <sparkle:version>126</sparkle:version>
             <sparkle:shortVersionString>1.2.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.7/Tiley-1.2.6.dmg" length="4674745" type="application/octet-stream" sparkle:edSignature="9+VuDRYBHbbvFjyNbB4s4wLL1E+jgABIKPzR9NEaklidGAwxWeQItmX8ffuMr9L5DqAalGUggfhUkviXVs5YAQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.0/Tiley-1.2.6.dmg" length="4674745" type="application/octet-stream" sparkle:edSignature="9+VuDRYBHbbvFjyNbB4s4wLL1E+jgABIKPzR9NEaklidGAwxWeQItmX8ffuMr9L5DqAalGUggfhUkviXVs5YAQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.6/Tiley126-125.delta" sparkle:deltaFrom="125" length="97146" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="wEaJU1yTJD1wSrtgHAnoqMlz8D1kLoIHhdxPIAyccrGMSS0oDopZ5xbv0NZgmXgPbABosvtSpdUiAQCiFqdmAA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.6/Tiley126-124.delta" sparkle:deltaFrom="124" length="432486" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="MZLgcUm+7M2geHOB9wjOPzK3bYdGXbOLmoMhHDJ28vIIi36nhN8iLy/eEBZiva+rSPFxAYGPkGnwcncWuS/OBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.6/Tiley126-123.delta" sparkle:deltaFrom="123" length="479582" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zKVzL2pX4yPHbtAk1g4cFYu4UtJq0j8V870q0jZ9rfxW/K4iVq1ONuiXGo+ba+ol16f+wygrBNdjR78Qwz+lDA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.6/Tiley126-122.delta" sparkle:deltaFrom="122" length="485774" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="npSbVUio7V0TDV5aukurQnB625SAhMXWF7yZzQ8iBu0BYCGTFBxOP3YxIbmRuF5DLix2bKTwy43y/MpOjquVCQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.6/Tiley126-121.delta" sparkle:deltaFrom="121" length="555410" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="xCsXTDHo5/M6lnsX6BL0MQWPSLf/KKXncpKklWwq+fOfbiPFQAIe3PW+ofCVWslrM7PdBg+EIiicnyIafl0LDA=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.2.5</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Обнаружение ограничений изменения размера окон: автоматическое определение возможности изменения размера по осям с помощью быстрой 3-уровневой проверки (неизменяемый размер → кнопка полноэкранного режима → проба 1px как запасной вариант)</li>
-<li>Предварительный просмотр макета теперь показывает красные области, где окно не может быть увеличено, и жёлтые области, где оно не может быть уменьшено, обеспечивая визуальную обратную связь об ограничениях размера перед применением</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Detecção de restrições de redimensionamento de janelas: detecta automaticamente a capacidade de redimensionamento por eixo através de uma verificação rápida em 3 etapas (não redimensionável → botão de tela cheia → sonda de 1px como fallback)</li>
-<li>A visualização de layout agora mostra regiões vermelhas onde a janela não pode expandir e regiões amarelas onde não pode encolher, fornecendo feedback visual sobre restrições de tamanho antes da aplicação</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Rilevamento dei vincoli di ridimensionamento delle finestre: rileva automaticamente la ridimensionabilità per asse tramite un controllo rapido a 3 livelli (non ridimensionabile → pulsante schermo intero → sonda da 1px come fallback)</li>
-<li>L'anteprima del layout ora mostra aree rosse dove la finestra non può espandersi e aree gialle dove non può ridursi, fornendo un feedback visivo sui vincoli di dimensione prima dell'applicazione</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Détection des contraintes de redimensionnement des fenêtres : détecte automatiquement la possibilité de redimensionnement par axe grâce à une vérification rapide en 3 étapes (non redimensionnable → bouton plein écran → sonde de 1px en dernier recours)</li>
-<li>L'aperçu de disposition affiche désormais des zones rouges là où la fenêtre ne peut pas s'agrandir et des zones jaunes là où elle ne peut pas se réduire, offrant un retour visuel sur les contraintes de taille avant application</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Detección de restricciones de redimensionamiento de ventanas: detecta automáticamente la capacidad de redimensionamiento por eje mediante una verificación rápida de 3 niveles (no redimensionable → botón de pantalla completa → prueba de 1px como respaldo)</li>
-<li>La vista previa de diseño ahora muestra regiones rojas donde la ventana no puede expandirse y regiones amarillas donde no puede reducirse, proporcionando retroalimentación visual sobre las restricciones de tamaño antes de aplicar</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Erkennung von Fenstergrößenbeschränkungen: Automatische Erkennung der achsenweisen Größenänderbarkeit durch eine schnelle 3-stufige Prüfung (nicht änderbar → Vollbildtaste → 1px-Probe als Rückfall)</li>
-<li>Layout-Vorschau-Overlay zeigt jetzt rote Bereiche, in denen das Fenster nicht vergrößert werden kann, und gelbe Bereiche, in denen es nicht verkleinert werden kann – visuelle Rückmeldung zu Größenbeschränkungen vor der Anwendung</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>視窗大小調整約束偵測：透過3級快速檢查（不可調整大小 → 全螢幕按鈕 → 1px探測回退）自動判斷每個軸的可調整性</li>
-<li>佈局預覽疊加層新增大小約束視覺化：視窗無法擴展的區域顯示為紅色，無法縮小的區域顯示為黃色，在套用前即可確認大小約束</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>窗口大小调整约束检测：通过3级快速检查（不可调整大小 → 全屏按钮 → 1px探测回退）自动判断每个轴的可调整性</li>
-<li>布局预览叠加层新增大小约束可视化：窗口无法扩展的区域显示为红色，无法缩小的区域显示为黄色，在应用前即可确认大小约束</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>창 크기 조절 제약 감지: 3단계 고속 확인(크기 조절 불가 → 전체 화면 버튼 → 1px 프로브 폴백)으로 축별 크기 조절 가능 여부를 자동 판별</li>
-<li>레이아웃 미리보기 오버레이에 크기 조절 제약 시각화 추가: 창이 확장할 수 없는 영역은 빨간색, 축소할 수 없는 영역은 노란색으로 표시하여 적용 전에 크기 제약을 확인 가능</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>ウインドウのリサイズ制約検出: 3段階の高速チェック（非リサイズ → フルスクリーンボタン → 1pxプローブ）で軸ごとのリサイズ可否を自動判定</li>
-<li>レイアウトプレビューオーバーレイにリサイズ制約の可視化を追加: ウインドウが拡張できない領域を赤色、縮小できない領域を黄色で表示し、適用前にサイズ制約を確認可能に</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Window resize constraint detection: automatically detects per-axis resizability using a fast 3-tier check (non-resizable → full-screen button → 1px probe fallback)</li>
-<li>Layout preview overlay now shows red regions where the window cannot expand and yellow regions where the window cannot shrink, giving visual feedback on resize constraints before applying</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Detecção de restrições de redimensionamento de janelas: detecta automaticamente a capacidade de redimensionamento por eixo através de uma verificação rápida em 3 etapas (não redimensionável → botão de tela cheia → sonda de 1px como fallback)</li>
-<li>A visualização de layout agora mostra regiões vermelhas onde a janela não pode expandir e regiões amarelas onde não pode encolher, fornecendo feedback visual sobre restrições de tamanho antes da aplicação</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Rilevamento dei vincoli di ridimensionamento delle finestre: rileva automaticamente la ridimensionabilità per asse tramite un controllo rapido a 3 livelli (non ridimensionabile → pulsante schermo intero → sonda da 1px come fallback)</li>
-<li>L'anteprima del layout ora mostra aree rosse dove la finestra non può espandersi e aree gialle dove non può ridursi, fornendo un feedback visivo sui vincoli di dimensione prima dell'applicazione</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Détection des contraintes de redimensionnement des fenêtres : détecte automatiquement la possibilité de redimensionnement par axe grâce à une vérification rapide en 3 étapes (non redimensionnable → bouton plein écran → sonde de 1px en dernier recours)</li>
-<li>L'aperçu de disposition affiche désormais des zones rouges là où la fenêtre ne peut pas s'agrandir et des zones jaunes là où elle ne peut pas se réduire, offrant un retour visuel sur les contraintes de taille avant application</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Detección de restricciones de redimensionamiento de ventanas: detecta automáticamente la capacidad de redimensionamiento por eje mediante una verificación rápida de 3 niveles (no redimensionable → botón de pantalla completa → prueba de 1px como respaldo)</li>
-<li>La vista previa de diseño ahora muestra regiones rojas donde la ventana no puede expandirse y regiones amarillas donde no puede reducirse, proporcionando retroalimentación visual sobre las restricciones de tamaño antes de aplicar</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Erkennung von Fenstergrößenbeschränkungen: Automatische Erkennung der achsenweisen Größenänderbarkeit durch eine schnelle 3-stufige Prüfung (nicht änderbar → Vollbildtaste → 1px-Probe als Rückfall)</li>
-<li>Layout-Vorschau-Overlay zeigt jetzt rote Bereiche, in denen das Fenster nicht vergrößert werden kann, und gelbe Bereiche, in denen es nicht verkleinert werden kann – visuelle Rückmeldung zu Größenbeschränkungen vor der Anwendung</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>視窗大小調整約束偵測：透過3級快速檢查（不可調整大小 → 全螢幕按鈕 → 1px探測回退）自動判斷每個軸的可調整性</li>
-<li>佈局預覽疊加層新增大小約束視覺化：視窗無法擴展的區域顯示為紅色，無法縮小的區域顯示為黃色，在套用前即可確認大小約束</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>窗口大小调整约束检测：通过3级快速检查（不可调整大小 → 全屏按钮 → 1px探测回退）自动判断每个轴的可调整性</li>
-<li>布局预览叠加层新增大小约束可视化：窗口无法扩展的区域显示为红色，无法缩小的区域显示为黄色，在应用前即可确认大小约束</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>창 크기 조절 제약 감지: 3단계 고속 확인(크기 조절 불가 → 전체 화면 버튼 → 1px 프로브 폴백)으로 축별 크기 조절 가능 여부를 자동 판별</li>
-<li>레이아웃 미리보기 오버레이에 크기 조절 제약 시각화 추가: 창이 확장할 수 없는 영역은 빨간색, 축소할 수 없는 영역은 노란색으로 표시하여 적용 전에 크기 제약을 확인 가능</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>ウインドウのリサイズ制約検出: 3段階の高速チェック（非リサイズ → フルスクリーンボタン → 1pxプローブ）で軸ごとのリサイズ可否を自動判定</li>
-<li>レイアウトプレビューオーバーレイにリサイズ制約の可視化を追加: ウインドウが拡張できない領域を赤色、縮小できない領域を黄色で表示し、適用前にサイズ制約を確認可能に</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Window resize constraint detection: automatically detects per-axis resizability using a fast 3-tier check (non-resizable → full-screen button → 1px probe fallback)</li>
-<li>Layout preview overlay now shows red regions where the window cannot expand and yellow regions where the window cannot shrink, giving visual feedback on resize constraints before applying</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Detecção de restrições de redimensionamento de janelas: detecta automaticamente a capacidade de redimensionamento por eixo através de uma verificação rápida em 3 etapas (não redimensionável → botão de tela cheia → sonda de 1px como fallback)</li>
-<li>A visualização de layout agora mostra regiões vermelhas onde a janela não pode expandir e regiões amarelas onde não pode encolher, fornecendo feedback visual sobre restrições de tamanho antes da aplicação</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Rilevamento dei vincoli di ridimensionamento delle finestre: rileva automaticamente la ridimensionabilità per asse tramite un controllo rapido a 3 livelli (non ridimensionabile → pulsante schermo intero → sonda da 1px come fallback)</li>
-<li>L'anteprima del layout ora mostra aree rosse dove la finestra non può espandersi e aree gialle dove non può ridursi, fornendo un feedback visivo sui vincoli di dimensione prima dell'applicazione</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Détection des contraintes de redimensionnement des fenêtres : détecte automatiquement la possibilité de redimensionnement par axe grâce à une vérification rapide en 3 étapes (non redimensionnable → bouton plein écran → sonde de 1px en dernier recours)</li>
-<li>L'aperçu de disposition affiche désormais des zones rouges là où la fenêtre ne peut pas s'agrandir et des zones jaunes là où elle ne peut pas se réduire, offrant un retour visuel sur les contraintes de taille avant application</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Detección de restricciones de redimensionamiento de ventanas: detecta automáticamente la capacidad de redimensionamiento por eje mediante una verificación rápida de 3 niveles (no redimensionable → botón de pantalla completa → prueba de 1px como respaldo)</li>
-<li>La vista previa de diseño ahora muestra regiones rojas donde la ventana no puede expandirse y regiones amarillas donde no puede reducirse, proporcionando retroalimentación visual sobre las restricciones de tamaño antes de aplicar</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Erkennung von Fenstergrößenbeschränkungen: Automatische Erkennung der achsenweisen Größenänderbarkeit durch eine schnelle 3-stufige Prüfung (nicht änderbar → Vollbildtaste → 1px-Probe als Rückfall)</li>
-<li>Layout-Vorschau-Overlay zeigt jetzt rote Bereiche, in denen das Fenster nicht vergrößert werden kann, und gelbe Bereiche, in denen es nicht verkleinert werden kann – visuelle Rückmeldung zu Größenbeschränkungen vor der Anwendung</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>視窗大小調整約束偵測：透過3級快速檢查（不可調整大小 → 全螢幕按鈕 → 1px探測回退）自動判斷每個軸的可調整性</li>
-<li>佈局預覽疊加層新增大小約束視覺化：視窗無法擴展的區域顯示為紅色，無法縮小的區域顯示為黃色，在套用前即可確認大小約束</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>窗口大小调整约束检测：通过3级快速检查（不可调整大小 → 全屏按钮 → 1px探测回退）自动判断每个轴的可调整性</li>
-<li>布局预览叠加层新增大小约束可视化：窗口无法扩展的区域显示为红色，无法缩小的区域显示为黄色，在应用前即可确认大小约束</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>창 크기 조절 제약 감지: 3단계 고속 확인(크기 조절 불가 → 전체 화면 버튼 → 1px 프로브 폴백)으로 축별 크기 조절 가능 여부를 자동 판별</li>
-<li>레이아웃 미리보기 오버레이에 크기 조절 제약 시각화 추가: 창이 확장할 수 없는 영역은 빨간색, 축소할 수 없는 영역은 노란색으로 표시하여 적용 전에 크기 제약을 확인 가능</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>ウインドウのリサイズ制約検出: 3段階の高速チェック（非リサイズ → フルスクリーンボタン → 1pxプローブ）で軸ごとのリサイズ可否を自動判定</li>
-<li>レイアウトプレビューオーバーレイにリサイズ制約の可視化を追加: ウインドウが拡張できない領域を赤色、縮小できない領域を黄色で表示し、適用前にサイズ制約を確認可能に</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Window resize constraint detection: automatically detects per-axis resizability using a fast 3-tier check (non-resizable → full-screen button → 1px probe fallback)</li>
-<li>Layout preview overlay now shows red regions where the window cannot expand and yellow regions where the window cannot shrink, giving visual feedback on resize constraints before applying</li>
-</ul>
-]]></description>
-            <pubDate>Wed, 18 Mar 2026 08:29:47 +0900</pubDate>
-            <sparkle:version>125</sparkle:version>
-            <sparkle:shortVersionString>1.2.5</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.7/Tiley-1.2.5.dmg" length="4671196" type="application/octet-stream" sparkle:edSignature="7zDNFMHqiLb+FKQ/1qDMVDb9TxQAHKZtzJek80lyYpShqU6+pCBkd+EBpByEwHg5DKk9b17A8dCmSikdx64RBQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-124.delta" sparkle:deltaFrom="124" length="426746" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="w0Pz6IHf42fJsmRFcOihBlYZGfg5287YRF8/1OI9ndrTdudt4BH6H/6eFelcTyPJc7zRrABeUUArHBogi8nMDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-123.delta" sparkle:deltaFrom="123" length="471966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="HbwHOO3V1C84CCf5E5CdJpqxNugfBlRwRRzrlgsYtvWJJlwDL6uDL0zOC5JlP65LzrTFdtgGhI8s1OLfBp25Aw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-122.delta" sparkle:deltaFrom="122" length="481994" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="W1eJJUk+//JhBSbB8Ggnc2xL53p/5bQrADARPP3TcM/F2O0zUjy+xwwZR5IcbwP6dFyuzzrP5Vlm2sE/Qcj+CQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-121.delta" sparkle:deltaFrom="121" length="549222" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="03M/3Lq+a+U4fTtLWkF4Mc8euLzgvUtfCNoX7cJaQZoWgvxURypNO5Qe2Oac4tb2bP6sC0IjFGEizTvr9bAwAg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v1.2.5/Tiley125-120.delta" sparkle:deltaFrom="120" length="552286" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="7IDx1dt16jR5RVhRZ2KQm+14hTMEVbFxRXfP4J4+A45F8wxJbII7wXQiUtXF4xHlZs+xQrNu0GYr8Hnokt8uCg=="/>
             </sparkle:deltas>
         </item>
     </channel>
