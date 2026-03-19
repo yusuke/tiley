@@ -429,16 +429,15 @@ struct MainWindowView: View {
 
     private var keyboardHintsBar: some View {
         HStack(spacing: 12) {
+            hintLabel("↓ Tab", NSLocalizedString("Next window", comment: "Status bar hint for next window"))
+            hintLabel("↑ ⇧Tab", NSLocalizedString("Previous window", comment: "Status bar hint for previous window"))
             if isSearchFieldFocused {
                 hintLabel("↩", NSLocalizedString("Confirm search criteria", comment: "Status bar hint for confirming search criteria"))
                 hintLabel("Esc", NSLocalizedString("Clear search criteria", comment: "Status bar hint for clearing search criteria"))
             } else {
                 hintLabel("↩", NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
-            }
-            hintLabel("↓ Tab", NSLocalizedString("Next window", comment: "Status bar hint for next window"))
-            hintLabel("↑ ⇧Tab", NSLocalizedString("Previous window", comment: "Status bar hint for previous window"))
-            if !isSearchFieldFocused {
                 hintLabel("⌘F", NSLocalizedString("Search windows", comment: "Status bar hint for Cmd+F window search"))
+                hintLabel("Esc", NSLocalizedString("Close Tiley", comment: "Status bar hint for Escape to close"))
             }
         }
         .frame(maxWidth: .infinity)
