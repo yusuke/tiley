@@ -30,10 +30,7 @@
 "Failed to set the window position." = "Impossibile impostare la posizione della finestra.";
 "Failed to set the window size." = "Impossibile impostare la dimensione della finestra.";
 "App" = "App";
-"Record Global" = "Registra globale";
-"Type shortcut" = "Digita la scorciatoia";
 "Back" = "Indietro";
-"Edit Settings" = "Modifica impostazioni";
 "Layouts" = "Layout";
 "Grid" = "Griglia";
 "Name" = "Nome";
@@ -49,7 +46,6 @@
 "Show Dock icon" = "Mostra icona nel Dock";
 "Windows" = "Finestre";
 "Quit app when closing last window" = "Esci dall'app alla chiusura dell'ultima finestra";
-"Changes are applied immediately." = "Le modifiche vengono applicate immediatamente.";
 "Global shortcut" = "Scorciatoia globale";
 "Reset to Default" = "Ripristina predefiniti";
 "Click the field, then press the new shortcut." = "Fai clic sul campo e premi la nuova scorciatoia.";
@@ -102,7 +98,6 @@
 "Bring to front" = "Porta in primo piano";
 "Next window" = "Finestra successiva";
 "Previous window" = "Finestra precedente";
-"Search windows" = "Cerca finestre";
 "Confirm search criteria" = "Conferma criteri di ricerca";
 "Clear search criteria" = "Cancella criteri di ricerca";
 "Close Tiley" = "Chiudi Tiley";

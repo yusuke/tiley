@@ -30,10 +30,7 @@
 "Failed to set the window position." = "Не удалось задать позицию окна.";
 "Failed to set the window size." = "Не удалось задать размер окна.";
 "App" = "Приложение";
-"Record Global" = "Записать глобальное";
-"Type shortcut" = "Введите сочетание";
 "Back" = "Назад";
-"Edit Settings" = "Изменить настройки";
 "Layouts" = "Компоновки";
 "Grid" = "Сетка";
 "Name" = "Название";
@@ -49,7 +46,6 @@
 "Show Dock icon" = "Показывать значок в Dock";
 "Windows" = "Окна";
 "Quit app when closing last window" = "Завершать приложение при закрытии последнего окна";
-"Changes are applied immediately." = "Изменения применяются сразу.";
 "Global shortcut" = "Глобальное сочетание";
 "Reset to Default" = "Сбросить";
 "Click the field, then press the new shortcut." = "Нажмите на поле и введите новое сочетание клавиш.";
@@ -102,7 +98,6 @@
 "Bring to front" = "На передний план";
 "Next window" = "Следующее окно";
 "Previous window" = "Предыдущее окно";
-"Search windows" = "Поиск окон";
 "Confirm search criteria" = "Подтвердить условия поиска";
 "Clear search criteria" = "Очистить условия поиска";
 "Close Tiley" = "Закрыть Tiley";

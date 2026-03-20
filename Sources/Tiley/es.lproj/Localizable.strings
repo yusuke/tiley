@@ -30,10 +30,7 @@
 "Failed to set the window position." = "No se pudo establecer la posición de la ventana.";
 "Failed to set the window size." = "No se pudo establecer el tamaño de la ventana.";
 "App" = "App";
-"Record Global" = "Grabar global";
-"Type shortcut" = "Escribe el atajo";
 "Back" = "Atrás";
-"Edit Settings" = "Editar ajustes";
 "Layouts" = "Diseños";
 "Grid" = "Cuadrícula";
 "Name" = "Nombre";
@@ -49,7 +46,6 @@
 "Show Dock icon" = "Mostrar icono en el Dock";
 "Windows" = "Ventanas";
 "Quit app when closing last window" = "Cerrar la app al cerrar la última ventana";
-"Changes are applied immediately." = "Los cambios se aplican de inmediato.";
 "Global shortcut" = "Atajo global";
 "Reset to Default" = "Restablecer valores";
 "Click the field, then press the new shortcut." = "Haz clic en el campo y pulsa el nuevo atajo.";
@@ -102,7 +98,6 @@
 "Bring to front" = "Traer al frente";
 "Next window" = "Siguiente ventana";
 "Previous window" = "Ventana anterior";
-"Search windows" = "Buscar ventanas";
 "Confirm search criteria" = "Confirmar criterios de búsqueda";
 "Clear search criteria" = "Borrar criterios de búsqueda";
 "Close Tiley" = "Cerrar Tiley";

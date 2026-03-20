@@ -30,10 +30,7 @@
 "Failed to set the window position." = "Die Fensterposition konnte nicht gesetzt werden.";
 "Failed to set the window size." = "Die Fenstergröße konnte nicht gesetzt werden.";
 "App" = "App";
-"Record Global" = "Global aufnehmen";
-"Type shortcut" = "Tastenkürzel eingeben";
 "Back" = "Zurück";
-"Edit Settings" = "Einstellungen bearbeiten";
 "Layouts" = "Layouts";
 "Grid" = "Raster";
 "Name" = "Name";
@@ -49,7 +46,6 @@
 "Show Dock icon" = "Dock-Symbol anzeigen";
 "Windows" = "Fenster";
 "Quit app when closing last window" = "App beenden beim Schließen des letzten Fensters";
-"Changes are applied immediately." = "Änderungen werden sofort übernommen.";
 "Global shortcut" = "Globales Tastenkürzel";
 "Reset to Default" = "Auf Standard zurücksetzen";
 "Click the field, then press the new shortcut." = "Klicke auf das Feld und drücke das neue Tastenkürzel.";
@@ -102,7 +98,6 @@
 "Bring to front" = "In den Vordergrund";
 "Next window" = "Nächstes Fenster";
 "Previous window" = "Vorheriges Fenster";
-"Search windows" = "Fenster suchen";
 "Confirm search criteria" = "Suchkriterien bestätigen";
 "Clear search criteria" = "Suchkriterien löschen";
 "Close Tiley" = "Tiley schließen";

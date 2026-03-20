@@ -30,10 +30,7 @@
 "Failed to set the window position." = "Failed to set the window position.";
 "Failed to set the window size." = "Failed to set the window size.";
 "App" = "App";
-"Record Global" = "Record Global";
-"Type shortcut" = "Type shortcut";
 "Back" = "Back";
-"Edit Settings" = "Edit Settings";
 "Layouts" = "Layouts";
 "Grid" = "Grid";
 "Name" = "Name";
@@ -49,7 +46,6 @@
 "Show Dock icon" = "Show Dock icon";
 "Windows" = "Windows";
 "Quit app when closing last window" = "Quit app when closing last window";
-"Changes are applied immediately." = "Changes are applied immediately.";
 "Global shortcut" = "Global shortcut";
 "Reset to Default" = "Reset to Default";
 "Click the field, then press the new shortcut." = "Click the field, then press the new shortcut.";
@@ -102,7 +98,6 @@
 "Bring to front" = "Bring to front";
 "Next window" = "Next window";
 "Previous window" = "Previous window";
-"Search windows" = "Search windows";
 "Confirm search criteria" = "Confirm search criteria";
 "Clear search criteria" = "Clear search criteria";
 "Close Tiley" = "Close Tiley";

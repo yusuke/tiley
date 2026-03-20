@@ -30,10 +30,7 @@
 "Failed to set the window position." = "ウインドウ位置の設定に失敗しました。";
 "Failed to set the window size." = "ウインドウサイズの設定に失敗しました。";
 "App" = "アプリ";
-"Record Global" = "グローバルを記録";
-"Type shortcut" = "ショートカットを入力";
 "Back" = "戻る";
-"Edit Settings" = "設定を編集";
 "Layouts" = "レイアウト";
 "Grid" = "グリッド";
 "Name" = "名前";
@@ -49,7 +46,6 @@
 "Show Dock icon" = "Dockアイコンを表示";
 "Windows" = "ウインドウ";
 "Quit app when closing last window" = "最後のウインドウを閉じるときアプリを終了";
-"Changes are applied immediately." = "変更はすぐに反映されます。";
 "Global shortcut" = "グローバルショートカット";
 "Reset to Default" = "デフォルトに戻す";
 "Click the field, then press the new shortcut." = "新しいショートカットを設定するにはフィールドをクリックして入力してください。";
@@ -102,7 +98,6 @@
 "Bring to front" = "最前面へ";
 "Next window" = "次のウインドウ";
 "Previous window" = "前のウインドウ";
-"Search windows" = "ウインドウを検索";
 "Confirm search criteria" = "検索条件を確定";
 "Clear search criteria" = "検索条件をクリア";
 "Close Tiley" = "Tileyを閉じる";

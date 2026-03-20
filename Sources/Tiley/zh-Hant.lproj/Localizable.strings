@@ -30,10 +30,7 @@
 "Failed to set the window position." = "設定視窗位置失敗。";
 "Failed to set the window size." = "設定視窗大小失敗。";
 "App" = "App";
-"Record Global" = "記錄全域";
-"Type shortcut" = "輸入快捷鍵";
 "Back" = "返回";
-"Edit Settings" = "編輯設定";
 "Layouts" = "版面";
 "Grid" = "網格";
 "Name" = "名稱";
@@ -49,7 +46,6 @@
 "Show Dock icon" = "顯示 Dock 圖示";
 "Windows" = "視窗";
 "Quit app when closing last window" = "關閉最後一個視窗時結束應用程式";
-"Changes are applied immediately." = "變更會立即套用。";
 "Global shortcut" = "全域快捷鍵";
 "Reset to Default" = "重設為預設值";
 "Click the field, then press the new shortcut." = "點擊欄位後按下新的快捷鍵。";
@@ -102,7 +98,6 @@
 "Bring to front" = "移至最前";
 "Next window" = "下一個視窗";
 "Previous window" = "上一個視窗";
-"Search windows" = "搜尋視窗";
 "Confirm search criteria" = "確認搜尋條件";
 "Clear search criteria" = "清除搜尋條件";
 "Close Tiley" = "關閉 Tiley";
