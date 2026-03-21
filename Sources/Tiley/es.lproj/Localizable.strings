@@ -46,6 +46,7 @@
 "Show Dock icon" = "Mostrar icono en el Dock";
 "Windows" = "Ventanas";
 "Quit app when closing last window" = "Cerrar la app al cerrar la última ventana";
+"Save resize debug scripts" = "Guardar scripts de depuración de redimensionamiento";
 "Global shortcut" = "Atajo global";
 "Reset to Default" = "Restablecer valores";
 "Click the field, then press the new shortcut." = "Haz clic en el campo y pulsa el nuevo atajo.";
@@ -64,6 +65,7 @@
 "Check for Updates…" = "Buscar actualizaciones…";
 "Automatically check for updates" = "Buscar actualizaciones automáticamente";
 "Updates" = "Actualizaciones";
+"Debug" = "Depuración";
 "Move to Applications folder?" = "¿Mover a la carpeta Aplicaciones?";
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley no está en la carpeta Aplicaciones. ¿Deseas moverlo allí?";
 "Move to Applications" = "Mover a Aplicaciones";

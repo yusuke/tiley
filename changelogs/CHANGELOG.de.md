@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde
+- AX-Debug-Skript-Generierung hinzugefügt (`~/tileyScripts/`), die jeden Schritt der Position-/Größenänderung protokolliert, zur Diagnose intermittierender Fensterplatzierungsprobleme
+
 ## [2.1.0] - 2026-03-20
 
 ### Hinzugefügt
@@ -41,11 +46,6 @@
 ### Geändert
 
 - Einstellungspanel im Tahoe-Stil neu gestaltet: Abschnitte mit Glas-Hintergrund (Liquid Glass ab macOS 26+), kompakte Symbolleiste mit Zurück-/Beenden-Buttons und iOS-ähnliche gruppierte Zeilen mit Inline-Steuerelementen
-
-### Behoben
-
-- Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde
-- Fensterposition oder -größe wurde nicht angewendet, wenn die Ziel-App ihre Geometrie nach einer AX-Änderung asynchron anpasst; eine Hintergrund-Überprüfungsschleife wendet abweichende Attribute nun automatisch erneut an
 
 ## [2.0.0] - 2026-03-19
 

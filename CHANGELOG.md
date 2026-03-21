@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open
+- Added AX debug script generation (`~/tileyScripts/`) that logs each step of position/size changes for diagnosing intermittent window placement failures
+
 ## [2.1.0] - 2026-03-20
 
 ### Added
@@ -46,11 +51,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Redesigned the settings panel with a Tahoe-style layout: glass-backed sections (Liquid Glass on macOS 26+), compact toolbar header with back/quit buttons, and iOS-like grouped rows with inline controls
-
-### Fixed
-
-- Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open
-- Fixed window position or size not being applied when the target app asynchronously adjusts its geometry after an AX change; a background verify-and-retry loop now re-applies any drifted attribute
 
 ## [2.0.0] - 2026-03-19
 

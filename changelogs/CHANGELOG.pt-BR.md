@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta
+- Adicionada geração de scripts de depuração AX (`~/tileyScripts/`) que registra cada etapa das alterações de posição/tamanho para diagnosticar falhas intermitentes de posicionamento de janelas
+
 ## [2.1.0] - 2026-03-20
 
 ### Adicionado
@@ -41,11 +46,6 @@
 ### Alterado
 
 - Painel de configurações redesenhado no estilo Tahoe: seções com fundo de vidro (Liquid Glass no macOS 26+), barra de ferramentas compacta com botões voltar/sair e linhas agrupadas estilo iOS com controles em linha
-
-### Corrigido
-
-- Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta
-- Corrigido um problema onde a posição ou o tamanho da janela não eram aplicados quando o app de destino ajusta sua geometria de forma assíncrona após uma alteração AX; um loop de verificação em segundo plano agora reaaplica automaticamente os atributos desviados
 
 ## [2.0.0] - 2026-03-19
 

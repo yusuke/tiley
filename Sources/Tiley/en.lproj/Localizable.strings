@@ -46,6 +46,7 @@
 "Show Dock icon" = "Show Dock icon";
 "Windows" = "Windows";
 "Quit app when closing last window" = "Quit app when closing last window";
+"Save resize debug scripts" = "Save resize debug scripts";
 "Global shortcut" = "Global shortcut";
 "Reset to Default" = "Reset to Default";
 "Click the field, then press the new shortcut." = "Click the field, then press the new shortcut.";
@@ -64,6 +65,7 @@
 "Check for Updates…" = "Check for Updates…";
 "Automatically check for updates" = "Automatically check for updates";
 "Updates" = "Updates";
+"Debug" = "Debug";
 "Move to Applications folder?" = "Move to Applications folder?";
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley is not in the Applications folder. Would you like to move it there?";
 "Move to Applications" = "Move to Applications";

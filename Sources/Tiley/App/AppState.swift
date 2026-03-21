@@ -69,6 +69,7 @@ final class AppState: NSObject, NSMenuDelegate {
         var menuIconVisible: Bool
         var dockIconVisible: Bool
         var quitAppOnLastWindowClose: Bool
+        var useAppleScriptResize: Bool
     }
 
     var accessibilityGranted = false
@@ -95,6 +96,9 @@ final class AppState: NSObject, NSMenuDelegate {
     var dockIconVisible = false
     var quitAppOnLastWindowClose = true {
         didSet { UserDefaults.standard.set(quitAppOnLastWindowClose, forKey: UserDefaultsKey.quitAppOnLastWindowClose) }
+    }
+    var useAppleScriptResize = false {
+        didSet { UserDefaults.standard.set(useAppleScriptResize, forKey: UserDefaultsKey.useAppleScriptResize) }
     }
     var layoutPresets: [LayoutPreset] = []
     var selectedLayoutPresetID: UUID?
@@ -154,7 +158,8 @@ final class AppState: NSObject, NSMenuDelegate {
             launchAtLoginEnabled: launchAtLoginEnabled,
             menuIconVisible: menuIconVisible,
             dockIconVisible: dockIconVisible,
-            quitAppOnLastWindowClose: quitAppOnLastWindowClose
+            quitAppOnLastWindowClose: quitAppOnLastWindowClose,
+            useAppleScriptResize: useAppleScriptResize
         )
     }
 
@@ -320,6 +325,7 @@ final class AppState: NSObject, NSMenuDelegate {
         setMenuIconVisible(settings.menuIconVisible)
         setDockIconVisible(settings.dockIconVisible)
         quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
+        useAppleScriptResize = settings.useAppleScriptResize
         sanitizePresetGlobalShortcutEligibility()
         // Only register the main toggle hotkey; keep preset global hotkeys
         // unregistered while the layout grid is visible so local shortcuts work.
@@ -697,10 +703,18 @@ final class AppState: NSObject, NSMenuDelegate {
         )
 
         do {
-            let constrained = try windowManager?.move(target: target, to: frame) ?? false
+            let constrained: Bool
+            NSLog("[Tiley] apply(selection:to:) useAppleScriptResize=%d", useAppleScriptResize ? 1 : 0)
+            if useAppleScriptResize {
+                try windowManager?.moveViaScript(target: target, to: frame, on: target.screenFrame)
+                constrained = false
+            } else {
+                constrained = try windowManager?.move(target: target, to: frame) ?? false
+            }
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
+            NSLog("[Tiley] apply(selection:to:) error: %@", error.localizedDescription)
             launchMessage = error.localizedDescription
         }
     }
@@ -741,7 +755,13 @@ final class AppState: NSObject, NSMenuDelegate {
         )
 
         do {
-            let constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
+            let constrained: Bool
+            if useAppleScriptResize {
+                try windowManager?.moveViaScript(target: target, to: frame, on: currentScreenFrame)
+                constrained = false
+            } else {
+                constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
+            }
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
@@ -1541,6 +1561,9 @@ final class AppState: NSObject, NSMenuDelegate {
         if let storedQuitAppOnLastWindowClose = defaults.object(forKey: UserDefaultsKey.quitAppOnLastWindowClose) as? Bool {
             quitAppOnLastWindowClose = storedQuitAppOnLastWindowClose
         }
+        if let storedUseAppleScriptResize = defaults.object(forKey: UserDefaultsKey.useAppleScriptResize) as? Bool {
+            useAppleScriptResize = storedUseAppleScriptResize
+        }
         refreshLaunchAtLoginState()
     }
 
@@ -1996,6 +2019,7 @@ private enum UserDefaultsKey {
     static let dockIconVisible = "dockIconVisible"
     static let windowListSidebarVisible = "windowListSidebarVisible"
     static let quitAppOnLastWindowClose = "quitAppOnLastWindowClose"
+    static let useAppleScriptResize = "useAppleScriptResize"
 }
 
 private final class TaggableView: NSView {

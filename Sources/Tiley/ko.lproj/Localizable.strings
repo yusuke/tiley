@@ -46,6 +46,7 @@
 "Show Dock icon" = "Dock 아이콘 표시";
 "Windows" = "윈도우";
 "Quit app when closing last window" = "마지막 윈도우를 닫을 때 앱 종료";
+"Save resize debug scripts" = "크기 조절 디버그 스크립트 저장";
 "Global shortcut" = "전역 단축키";
 "Reset to Default" = "기본값으로 재설정";
 "Click the field, then press the new shortcut." = "필드를 클릭한 뒤 새 단축키를 누르세요.";
@@ -64,6 +65,7 @@
 "Check for Updates…" = "업데이트 확인…";
 "Automatically check for updates" = "자동으로 업데이트 확인";
 "Updates" = "업데이트";
+"Debug" = "디버그";
 "Move to Applications folder?" = "응용 프로그램 폴더로 이동할까요?";
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley가 응용 프로그램 폴더에 없습니다. 이동하시겠습니까?";
 "Move to Applications" = "응용 프로그램으로 이동";

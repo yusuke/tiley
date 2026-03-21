@@ -46,6 +46,7 @@
 "Show Dock icon" = "Dockアイコンを表示";
 "Windows" = "ウインドウ";
 "Quit app when closing last window" = "最後のウインドウを閉じるときアプリを終了";
+"Save resize debug scripts" = "リサイズのデバッグスクリプトを保存";
 "Global shortcut" = "グローバルショートカット";
 "Reset to Default" = "デフォルトに戻す";
 "Click the field, then press the new shortcut." = "新しいショートカットを設定するにはフィールドをクリックして入力してください。";
@@ -64,6 +65,7 @@
 "Check for Updates…" = "アップデートを確認…";
 "Automatically check for updates" = "自動的にアップデートを確認";
 "Updates" = "アップデート";
+"Debug" = "デバッグ";
 "Move to Applications folder?" = "アプリケーションフォルダに移動しますか？";
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley はアプリケーションフォルダにありません。移動しますか？";
 "Move to Applications" = "アプリケーションに移動";

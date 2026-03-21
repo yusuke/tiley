@@ -903,6 +903,7 @@ struct MainWindowView: View {
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
+
                 }
             }
 
@@ -1004,6 +1005,23 @@ struct MainWindowView: View {
                         }
                         .padding(.vertical, 4)
                     }
+                }
+            }
+
+            TahoeSettingsSection(title: NSLocalizedString("Debug", comment: "Settings section")) {
+                VStack(spacing: 0) {
+                    TahoeSettingsRow(label: NSLocalizedString("Save resize debug scripts", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.useAppleScriptResize },
+                            set: { newValue in
+                                draftSettings.useAppleScriptResize = newValue
+                                appState.useAppleScriptResize = newValue
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
                 }
             }
         }

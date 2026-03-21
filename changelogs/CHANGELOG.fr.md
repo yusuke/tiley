@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte
+- Ajout de la génération de scripts de débogage AX (`~/tileyScripts/`) enregistrant chaque étape des changements de position/taille pour diagnostiquer les échecs intermittents de placement de fenêtres
+
 ## [2.1.0] - 2026-03-20
 
 ### Ajouté
@@ -41,11 +46,6 @@
 ### Modifié
 
 - Panneau de réglages redessiné dans le style Tahoe : sections avec fond en verre (Liquid Glass sur macOS 26+), barre d'outils compacte avec boutons retour/quitter, et lignes groupées style iOS avec contrôles intégrés
-
-### Corrigé
-
-- Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte
-- Correction d'un problème où la position ou la taille de la fenêtre n'était pas appliquée lorsque l'app cible ajuste sa géométrie de manière asynchrone après un changement AX ; une boucle de vérification en arrière-plan réapplique désormais automatiquement les attributs déviés
 
 ## [2.0.0] - 2026-03-19
 

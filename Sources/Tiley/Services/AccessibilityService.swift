@@ -212,42 +212,6 @@ final class AccessibilityService {
         return false
     }
 
-    /// Verifies the window matches the expected frame and re-applies any
-    /// attribute that drifted.  Designed to run on a background thread
-    /// after the UI has been dismissed.
-    func verifyAndCorrectFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) {
-        let (targetOrigin, targetSize) = axOriginAndSize(for: frame, screenFrame: screenFrame)
-        let tolerance: CGFloat = 2
-        let maxRetries = 5
-
-        for _ in 0..<maxRetries {
-            usleep(200_000) // 200 ms
-
-            guard let (actualOrigin, actualSize) = try? readPositionAndSize(of: window) else { return }
-
-            let positionOK = abs(actualOrigin.x - targetOrigin.x) <= tolerance
-                && abs(actualOrigin.y - targetOrigin.y) <= tolerance
-            let sizeOK = abs(actualSize.width - targetSize.width) <= tolerance
-                && abs(actualSize.height - targetSize.height) <= tolerance
-
-            if positionOK && sizeOK { return }
-
-            // Re-apply only the attributes that drifted.
-            if !sizeOK {
-                var sz = targetSize
-                if let v = AXValueCreate(.cgSize, &sz) {
-                    AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, v)
-                }
-            }
-            if !positionOK {
-                var org = targetOrigin
-                if let v = AXValueCreate(.cgPoint, &org) {
-                    AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
-                }
-            }
-        }
-    }
-
     /// Converts an AppKit frame to AX origin + size.
     private func axOriginAndSize(for frame: CGRect, screenFrame: CGRect) -> (origin: CGPoint, size: CGSize) {
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
@@ -255,7 +219,21 @@ final class AccessibilityService {
         return (origin, frame.size)
     }
 
-    /// Applies position then size in two passes for cross-screen compatibility.
+    /// Applies size then position.
+    ///
+    /// Some apps (notably Ghostty) revert the window position when a size
+    /// change arrives, and then silently ignore subsequent position-set calls
+    /// for the same coordinates (AX de-duplication).  To work around both
+    /// issues we:
+    ///   1. Set size first so the app's relayout happens in-place.
+    ///   2. Nudge the position 1px away from the target so the AX subsystem
+    ///      treats the *real* position set in step 3 as a genuine change.
+    ///   3. Set the final position.
+    ///
+    /// For cross-screen moves the position must be set *before* the size so
+    /// the window lands on the destination display first.  We detect this
+    /// case by checking whether the window's current screen differs from the
+    /// target origin.
     private func applyPositionAndSize(_ origin: CGPoint, _ size: CGSize, for window: AXUIElement) throws {
         var org = origin
         var sz = size
@@ -266,34 +244,44 @@ final class AccessibilityService {
             throw WindowAccessError.sizeSetFailed
         }
 
-        // 1. Set position to move the window onto the destination screen.
-        let positionResult = AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
-        guard positionResult == .success else {
-            throw WindowAccessError.positionSetFailed
+        // Check if this is a cross-screen move by comparing the window's
+        // current screen with the target origin.
+        let isCrossScreen: Bool = {
+            guard let posVal = try? copyAXValueAttribute(window, attribute: kAXPositionAttribute) else { return false }
+            var currentOrigin = CGPoint.zero
+            AXValueGetValue(posVal, .cgPoint, &currentOrigin)
+            let currentScreen = NSScreen.screens.first { $0.frame.contains(currentOrigin) }
+            let targetScreen = NSScreen.screens.first { $0.frame.contains(origin) }
+            return currentScreen != nil && targetScreen != nil && currentScreen != targetScreen
+        }()
+
+        if isCrossScreen {
+            // Cross-screen: position first so the window lands on the
+            // destination display, then size.
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         }
 
-        // 2. Set size — the app now accepts the dimensions for the new screen.
+        // 1. Set size first — the app may relayout but position stays
+        //    at its current (or original) location.
         let sizeResult = AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         guard sizeResult == .success else {
             throw WindowAccessError.sizeSetFailed
         }
 
-        // 3. Re-apply both to handle apps that need a second pass.
-        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
-        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
-    }
-
-    /// Reads back the current AX position and size of a window.
-    private func readPositionAndSize(of window: AXUIElement) throws -> (origin: CGPoint, size: CGSize) {
-        let posValue = try copyAXValueAttribute(window, attribute: kAXPositionAttribute)
-        let szValue = try copyAXValueAttribute(window, attribute: kAXSizeAttribute)
-        var origin = CGPoint.zero
-        var size = CGSize.zero
-        guard AXValueGetValue(posValue, .cgPoint, &origin),
-              AXValueGetValue(szValue, .cgSize, &size) else {
-            throw WindowAccessError.unsupportedWindow
+        // 2. Nudge position 1px off-target so the AX subsystem won't
+        //    de-duplicate the real set in step 3.
+        var nudged = origin
+        nudged.y += 1
+        if let nudgeVal = AXValueCreate(.cgPoint, &nudged) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, nudgeVal)
         }
-        return (origin, size)
+
+        // 3. Set final position.
+        let positionResult = AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+        guard positionResult == .success else {
+            throw WindowAccessError.positionSetFailed
+        }
     }
 
     /// Raises a window to the front of its application's window stack.

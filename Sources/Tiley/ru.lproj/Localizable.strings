@@ -46,6 +46,7 @@
 "Show Dock icon" = "Показывать значок в Dock";
 "Windows" = "Окна";
 "Quit app when closing last window" = "Завершать приложение при закрытии последнего окна";
+"Save resize debug scripts" = "Сохранять отладочные скрипты изменения размера";
 "Global shortcut" = "Глобальное сочетание";
 "Reset to Default" = "Сбросить";
 "Click the field, then press the new shortcut." = "Нажмите на поле и введите новое сочетание клавиш.";
@@ -64,6 +65,7 @@
 "Check for Updates…" = "Проверить обновления…";
 "Automatically check for updates" = "Автоматически проверять обновления";
 "Updates" = "Обновления";
+"Debug" = "Отладка";
 "Move to Applications folder?" = "Переместить в папку «Программы»?";
 "Tiley is not in the Applications folder. Would you like to move it there?" = "Tiley не находится в папке «Программы». Переместить его туда?";
 "Move to Applications" = "Переместить в Программы";

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto
+- Aggiunta generazione di script di debug AX (`~/tileyScripts/`) che registra ogni passaggio delle modifiche di posizione/dimensione per diagnosticare problemi intermittenti di posizionamento finestre
+
 ## [2.1.0] - 2026-03-20
 
 ### Aggiunto
@@ -41,11 +46,6 @@
 ### Modificato
 
 - Pannello impostazioni ridisegnato in stile Tahoe: sezioni con sfondo in vetro (Liquid Glass su macOS 26+), barra degli strumenti compatta con pulsanti indietro/esci e righe raggruppate in stile iOS con controlli in linea
-
-### Corretto
-
-- Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto
-- Corretto un problema in cui la posizione o la dimensione della finestra non venivano applicate quando l'app di destinazione regola la geometria in modo asincrono dopo una modifica AX; un ciclo di verifica in background ora riapplica automaticamente gli attributi deviati
 
 ## [2.0.0] - 2026-03-19
 
