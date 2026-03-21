@@ -3,6 +3,263 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>2.2.0</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Невыбранные ячейки сетки теперь прозрачны</li>
+<li>Пропорции сетки теперь соответствуют видимой области экрана (без строки меню и Dock); если сетка оказывается слишком высокой, её ширина пропорционально уменьшается, чтобы оставалось место для не менее 4 пресетов</li>
+<li>Фон сетки макета теперь отображает изображение рабочего стола (полупрозрачное, с закруглёнными углами)</li>
+<li>Ячейки, выбранные перетаскиванием, теперь полупрозрачны — изображение рабочего стола просвечивает сквозь них</li>
+<li>Подсветка при наведении на пресет в сетке теперь использует тот же стиль, что и выбор перетаскиванием</li>
+</ul>
+<h3>Добавлено</h3>
+<ul>
+<li>Боковая панель списка окон теперь отображается на всех экранах в многомониторных конфигурациях, а не только на целевом экране</li>
+<li>Состояние боковой панели (видимость, выбранный элемент, текст поиска) синхронизируется между всеми окнами на экранах</li>
+<li>Необязательный лог отладки изменения размера (`~/tiley.log`) (Настройки &gt; Отладка)</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена проблема, при которой размещение окна использовало устаревшую геометрию экрана, когда Dock или строка меню автоматически показывались/скрывались во время отображения оверлея</li>
+<li>Исправлено изменение размера окон на неосновных экранах в конфигурациях со смешанным DPI; окно временно перемещается на основной дисплей для изменения размера, затем помещается в целевую позицию</li>
+<li>Исправлена проблема, при которой позиция не применялась после изменения размера, когда некоторые приложения молча отменяют изменения позиции (обход дедупликации AX)</li>
+<li>Когда минимальный размер окна приложения не позволяет установить запрошенный размер, позиция окна пересчитывается, чтобы оно оставалось в видимой области экрана</li>
+<li>Устранено видимое мерцание окон при переключении целевого окна между экранами; окна больше не пересоздаются при смене экрана</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>As células da grade não selecionadas agora são transparentes</li>
+<li>A proporção da grade agora corresponde à área visível da tela (excluindo barra de menus e Dock); se a grade for alta demais, a largura é reduzida proporcionalmente para garantir que pelo menos 4 presets fiquem visíveis</li>
+<li>O fundo da grade de layout agora exibe a imagem de área de trabalho (semitransparente, cantos arredondados)</li>
+<li>As células selecionadas por arrasto agora são semitransparentes, mostrando a imagem de área de trabalho abaixo</li>
+<li>O destaque ao passar o cursor sobre presets na grade agora usa o mesmo estilo da seleção por arrasto</li>
+</ul>
+<h3>Adicionado</h3>
+<ul>
+<li>A barra lateral da lista de janelas agora é exibida em todas as telas em configurações de múltiplos monitores, não apenas na tela de destino</li>
+<li>O estado da barra lateral (visibilidade, item selecionado, texto de pesquisa) é sincronizado entre todas as janelas de tela</li>
+<li>Log de depuração de redimensionamento opcional (`~/tiley.log`) (Configurações &gt; Depuração)</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta</li>
+<li>Corrigido o redimensionamento de janelas falhando em telas não primárias em configurações de DPI misto; a janela é temporariamente movida para a tela primária para redimensionar e então posicionada no local de destino</li>
+<li>Corrigida a posição não sendo aplicada após redimensionamento quando alguns apps revertem silenciosamente as alterações de posição (contorno de deduplicação AX)</li>
+<li>Quando o tamanho mínimo de janela de um app impede o tamanho solicitado, a posição é recalculada para que a janela permaneça dentro da área visível da tela</li>
+<li>Eliminada a oscilação visível das janelas ao alternar janelas de destino entre telas; as janelas não são mais recriadas na mudança de tela</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Le celle della griglia non selezionate sono ora trasparenti</li>
+<li>Le proporzioni della griglia corrispondono ora all'area visibile dello schermo (escluse barra dei menu e Dock); se la griglia risultasse troppo alta, la larghezza viene ridotta proporzionalmente per garantire la visibilità di almeno 4 preset</li>
+<li>Lo sfondo della griglia di layout mostra ora l'immagine del desktop (semitrasparente, angoli arrotondati)</li>
+<li>Le celle selezionate con trascinamento sono ora semitrasparenti, mostrando l'immagine del desktop sottostante</li>
+<li>L'evidenziazione al passaggio del cursore sui preset nella griglia usa ora lo stesso stile della selezione con trascinamento</li>
+</ul>
+<h3>Aggiunto</h3>
+<ul>
+<li>La barra laterale dell'elenco finestre viene ora visualizzata su tutti gli schermi nelle configurazioni multi-monitor, non solo sullo schermo di destinazione</li>
+<li>Lo stato della barra laterale (visibilità, elemento selezionato, testo di ricerca) viene sincronizzato tra tutte le finestre degli schermi</li>
+<li>Log di debug del ridimensionamento opzionale (`~/tiley.log`) (Impostazioni &gt; Debug)</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto</li>
+<li>Corretto il ridimensionamento delle finestre che falliva sugli schermi non primari nelle configurazioni DPI miste; la finestra viene temporaneamente spostata sullo schermo primario per il ridimensionamento e poi posizionata nella posizione target</li>
+<li>Corretta la posizione non applicata dopo il ridimensionamento quando alcune app annullano silenziosamente le modifiche alla posizione (soluzione alternativa alla deduplicazione AX)</li>
+<li>Quando la dimensione minima della finestra di un'app impedisce la dimensione richiesta, la posizione viene ricalcolata affinché la finestra rimanga nell'area visibile dello schermo</li>
+<li>Eliminato lo sfarfallio visibile delle finestre quando si cambia la finestra di destinazione tra schermi; le finestre non vengono più ricreate al cambio di schermo</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Les cellules de grille non sélectionnées sont désormais transparentes</li>
+<li>Le rapport d'aspect de la grille correspond maintenant à la zone visible de l'écran (sans barre de menus ni Dock) ; si la grille serait trop haute, sa largeur est réduite proportionnellement pour garantir l'affichage d'au moins 4 presets</li>
+<li>L'arrière-plan de la grille de mise en page affiche désormais l'image du bureau (semi-transparent, coins arrondis)</li>
+<li>Les cellules sélectionnées par glissement sont désormais semi-transparentes, laissant apparaître l'image du bureau</li>
+<li>La surbrillance au survol des presets dans la grille utilise désormais le même style que la sélection par glissement</li>
+</ul>
+<h3>Ajouté</h3>
+<ul>
+<li>La barre latérale de liste de fenêtres est désormais affichée sur tous les écrans dans les configurations multi-moniteurs, pas seulement sur l'écran cible</li>
+<li>L'état de la barre latérale (visibilité, élément sélectionné, texte de recherche) est synchronisé entre toutes les fenêtres d'écran</li>
+<li>Journal de débogage de redimensionnement optionnel (`~/tiley.log`) (Réglages &gt; Débogage)</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte</li>
+<li>Correction du redimensionnement échouant sur les écrans non principaux dans les configurations DPI mixtes ; la fenêtre est temporairement déplacée vers l'écran principal pour le redimensionnement puis placée à la position cible</li>
+<li>Correction de la position non appliquée après redimensionnement lorsque certaines apps annulent silencieusement les changements de position (contournement de la déduplication AX)</li>
+<li>Lorsque la taille minimale de fenêtre d'une app empêche la taille demandée, la position est recalculée pour que la fenêtre reste dans la zone visible de l'écran</li>
+<li>Suppression du scintillement visible des fenêtres lors du changement de fenêtre cible entre écrans ; les fenêtres ne sont plus recréées lors du changement d'écran</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Las celdas de la cuadrícula no seleccionadas ahora son transparentes</li>
+<li>La relación de aspecto de la cuadrícula ahora coincide con el área visible de la pantalla (sin barra de menú ni Dock); si la cuadrícula sería demasiado alta, su ancho se reduce proporcionalmente para garantizar que al menos 4 presets sean visibles</li>
+<li>El fondo de la cuadrícula de diseño ahora muestra la imagen de escritorio (semitransparente, esquinas redondeadas)</li>
+<li>Las celdas seleccionadas con arrastre ahora son semitransparentes, mostrando la imagen de escritorio por debajo</li>
+<li>El resaltado al pasar el cursor sobre un preset en la cuadrícula ahora usa el mismo estilo que la selección con arrastre</li>
+</ul>
+<h3>Añadido</h3>
+<ul>
+<li>La barra lateral de lista de ventanas ahora se muestra en todas las pantallas en configuraciones de múltiples monitores, no solo en la pantalla objetivo</li>
+<li>El estado de la barra lateral (visibilidad, elemento seleccionado, texto de búsqueda) se sincroniza entre todas las ventanas de pantalla</li>
+<li>Registro de depuración de redimensionamiento opcional (`~/tiley.log`) (Ajustes &gt; Depuración)</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta</li>
+<li>Corregido el redimensionamiento de ventanas fallando en pantallas no primarias en configuraciones de DPI mixto; la ventana se mueve temporalmente a la pantalla primaria para redimensionar y luego se coloca en la posición objetivo</li>
+<li>Corregida la posición no aplicada después del redimensionamiento cuando algunas apps revierten silenciosamente los cambios de posición (solución alternativa de deduplicación AX)</li>
+<li>Cuando el tamaño mínimo de ventana de una app impide el tamaño solicitado, la posición se recalcula para que la ventana permanezca dentro del área visible de la pantalla</li>
+<li>Eliminado el parpadeo visible de ventanas al cambiar ventanas objetivo entre pantallas; las ventanas ya no se recrean al cambiar de pantalla</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Nicht ausgewählte Rasterkacheln sind jetzt transparent</li>
+<li>Das Seitenverhältnis des Rasters entspricht jetzt dem sichtbaren Bildschirmbereich (ohne Menüleiste und Dock); wird das Raster zu hoch, wird die Breite proportional reduziert, damit mindestens 4 Presets sichtbar bleiben</li>
+<li>Der Hintergrund des Layout-Rasters zeigt jetzt das Desktop-Bild (halbtransparent, abgerundete Ecken)</li>
+<li>Per Drag ausgewählte Zellen sind jetzt halbtransparent, sodass das Desktop-Bild darunter sichtbar ist</li>
+<li>Der Vorschau-Hover-Highlight im Raster verwendet jetzt denselben Stil wie die Drag-Auswahl</li>
+</ul>
+<h3>Hinzugefügt</h3>
+<ul>
+<li>Die Fensterlisten-Seitenleiste wird jetzt bei Multi-Monitor-Setups auf allen Bildschirmen angezeigt, nicht nur auf dem Zielbildschirm</li>
+<li>Seitenleistenstatus (Sichtbarkeit, ausgewähltes Element, Suchtext) wird zwischen allen Bildschirmfenstern synchronisiert</li>
+<li>Optionales Debug-Log für Größenänderungen (`~/tiley.log`) (Einstellungen &gt; Fehlersuche)</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde</li>
+<li>Fenstergrößenänderung schlug auf Nicht-Primärbildschirmen in gemischten DPI-Konfigurationen fehl; das Fenster wird jetzt vorübergehend zum Primärbildschirm verschoben und dann an der Zielposition platziert</li>
+<li>Position wurde nach Größenänderung nicht angewendet, wenn Apps die Positionsänderung stillschweigend rückgängig machen (AX-Deduplizierungs-Workaround)</li>
+<li>Wenn die Mindestfenstergröße einer App die angeforderte Größe verhindert, wird die Fensterposition neu berechnet, damit es im sichtbaren Bildschirmbereich bleibt</li>
+<li>Sichtbares Fensterflackern beim Wechseln des Zielfensters zwischen Bildschirmen behoben; Fenster werden beim Bildschirmwechsel nicht mehr neu erstellt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>未選取的格線方格改為透明顯示</li>
+<li>格線長寬比現在與去除選單列和 Dock 後的螢幕尺寸一致。若格線過高，將在保持比例的前提下縮小寬度，確保至少顯示 4 個預設方案</li>
+<li>版面格線背景現在顯示桌面圖片（半透明、圓角）</li>
+<li>拖曳選取的方格改為半透明，背景桌面圖片透過顯示</li>
+<li>格線內預設懸停高亮樣式統一為與拖曳選取時相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多螢幕環境中，視窗列表側邊欄現在顯示在所有螢幕上，而不僅僅是目標螢幕</li>
+<li>側邊欄狀態（顯示/隱藏、選取項目、搜尋文字）在所有螢幕的視窗之間同步</li>
+<li>調整大小除錯日誌輸出選項（`~/tiley.log`）（設定 &gt; 除錯）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了在覆蓋層顯示期間 Dock 或選單列自動顯示/隱藏時，使用過時的螢幕資訊導致視窗被放置在錯誤位置的問題</li>
+<li>修正了在混合 DPI 顯示器配置中，非主螢幕上的視窗無法調整大小的問題。調整大小時視窗會暫時移動到主顯示器，然後放置到目標位置</li>
+<li>修正了調整大小時部分應用程式將視窗位置還原，導致無法移動到指定位置的問題（AX 去重規避）</li>
+<li>當應用程式的最小視窗大小限制導致無法縮小到指定大小時，自動重新計算視窗位置以避免超出螢幕邊緣</li>
+<li>修正了將目標視窗切換到其他螢幕的視窗時，視窗短暫閃爍的問題（取消螢幕切換時的視窗重建）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>未选中的网格方块改为透明显示</li>
+<li>网格长宽比现在与去除菜单栏和 Dock 后的屏幕尺寸一致。若网格过高，将在保持比例的前提下缩小宽度，确保至少显示 4 个预设方案</li>
+<li>布局网格背景现在显示桌面壁纸（半透明、圆角）</li>
+<li>拖拽选中的方块改为半透明，背景桌面壁纸透过显示</li>
+<li>网格内预设悬停高亮样式统一为与拖拽选择时相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多显示器环境中，窗口列表侧边栏现在显示在所有屏幕上，而不仅仅是目标屏幕</li>
+<li>侧边栏状态（显示/隐藏、选中项目、搜索文本）在所有屏幕的窗口之间同步</li>
+<li>调整大小调试日志输出选项（`~/tiley.log`）（设置 &gt; 调试）</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了在覆盖层显示期间 Dock 或菜单栏自动显示/隐藏时，使用过时的屏幕信息导致窗口被放置在错误位置的问题</li>
+<li>修复了在混合 DPI 显示器配置中，非主屏幕上的窗口无法调整大小的问题。调整大小时窗口会临时移动到主显示器，然后放置到目标位置</li>
+<li>修复了调整大小时部分应用将窗口位置恢复原位，导致无法移动到指定位置的问题（AX 去重规避）</li>
+<li>当应用的最小窗口大小限制导致无法缩小到指定大小时，自动重新计算窗口位置以避免超出屏幕边缘</li>
+<li>修复了将目标窗口切换到其他屏幕的窗口时，窗口短暂闪烁的问题（取消屏幕切换时的窗口重建）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>선택되지 않은 그리드 타일을 투명하게 변경</li>
+<li>그리드 가로세로 비율을 메뉴 바 및 Dock을 제외한 화면 크기에 맞게 조정. 그리드가 너무 높아질 경우 비율을 유지하면서 너비를 축소하여 최소 4개의 프리셋이 항상 표시되도록 개선</li>
+<li>레이아웃 그리드 배경에 데스크탑 사진 표시 (반투명, 모서리 둥글게)</li>
+<li>드래그 선택 중인 셀을 반투명으로 변경하여 배경 데스크탑 사진이 비쳐 보이도록 개선</li>
+<li>그리드 내 프리셋 호버 하이라이트를 드래그 선택 시와 동일한 스타일로 통일</li>
+</ul>
+<h3>추가</h3>
+<ul>
+<li>멀티 모니터 환경에서 윈도우 목록 사이드바를 대상 화면뿐만 아니라 모든 화면에 표시</li>
+<li>사이드바 상태(표시/숨김, 선택된 항목, 검색 텍스트)를 모든 화면의 윈도우 간에 동기화</li>
+<li>리사이즈 디버그 로그 출력 옵션 (`~/tiley.log`) 추가 (설정 &gt; 디버그)</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>오버레이 표시 중 Dock 또는 메뉴 막대가 자동으로 표시/숨김되면 이전 화면 정보를 사용하여 윈도우가 잘못된 위치에 배치되는 문제를 수정</li>
+<li>DPI가 다른 디스플레이 구성에서 비프라이머리 스크린의 윈도우가 리사이즈되지 않는 문제를 수정. 리사이즈 시 윈도우를 일시적으로 프라이머리 디스플레이로 이동한 후 목표 위치에 배치</li>
+<li>리사이즈 시 일부 앱이 윈도우 위치를 원래대로 되돌려 지정한 위치로 이동되지 않는 문제를 수정 (AX 중복 제거 우회)</li>
+<li>앱의 최소 윈도우 크기로 인해 지정 크기까지 축소할 수 없을 경우, 화면 밖으로 나가지 않도록 윈도우 위치를 자동으로 재계산</li>
+<li>대상 윈도우를 다른 화면의 윈도우로 전환할 때 윈도우가 순간적으로 깜빡이는 문제를 수정 (화면 변경 시 윈도우 재생성 폐지)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>非選択状態のグリッドタイルを透過表示に変更</li>
+<li>グリッドのアスペクト比をメニューバーおよびDockを除いたスクリーンサイズに合わせて調整。グリッドが縦に長くなりすぎる場合は、アスペクト比を保ったまま横幅を縮小し、最低4つのプリセットが常に表示されるよう対応</li>
+<li>レイアウトグリッドの背景にデスクトップピクチャを表示（透過・角丸）</li>
+<li>ドラッグ選択中のセルを半透明にし、背景のデスクトップピクチャが透けて見えるように変更</li>
+<li>グリッド内のプリセットホバーハイライトをドラッグ選択時と同じスタイルに統一</li>
+</ul>
+<h3>追加</h3>
+<ul>
+<li>マルチモニター環境で、ウインドウ一覧サイドバーをターゲット画面だけでなく全画面に表示</li>
+<li>サイドバーの状態（表示/非表示、選択中のアイテム、検索テキスト）を全画面のウインドウ間で同期</li>
+<li>リサイズのデバッグログ出力オプション（`~/tiley.log`）を追加（設定 &gt; デバッグ）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>オーバーレイ表示中にDockやメニューバーが自動的に表示/非表示されると、古い画面情報を使ってウインドウが配置される問題を修正</li>
+<li>DPI が異なるディスプレイ構成で、非プライマリスクリーン上のウインドウがリサイズされない問題を修正。リサイズ時にウインドウを一時的にプライマリディスプレイに移動してから目標位置に配置</li>
+<li>リサイズ時に一部のアプリがウインドウ位置を元に戻してしまい、指定した位置に移動できない問題を修正（AX 重複排除の回避）</li>
+<li>アプリの最小ウインドウサイズにより指定サイズまで縮小できない場合、画面端からはみ出さないようウインドウ位置を自動的に再計算するよう改善</li>
+<li>ターゲットウインドウを別画面のウインドウに切り替えた際にウインドウが一瞬ちらつく問題を修正（画面変更時のウインドウ再作成を廃止）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Grid tiles are now transparent when not selected</li>
+<li>Grid aspect ratio now matches the screen's visible area (excluding menu bar and Dock); if the grid would be too tall, its width is reduced proportionally to ensure at least 4 presets remain visible</li>
+<li>Desktop picture is now displayed as the background of the layout grid (with transparency and rounded corners)</li>
+<li>Drag-selected cells are now semi-transparent, showing the desktop picture beneath</li>
+<li>Preset hover highlight in the grid now uses the same style as the drag selection</li>
+</ul>
+<h3>Added</h3>
+<ul>
+<li>Window list sidebar is now displayed on all screens in multi-monitor setups, not just the target screen</li>
+<li>Sidebar state (visibility, selected item, search text) is synchronized across all screen windows</li>
+<li>Optional resize debug log (`~/tiley.log`) for diagnosing window placement issues (Settings &gt; Debug)</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open</li>
+<li>Fixed window resize failing on non-primary screens in mixed-DPI setups; the window is now temporarily moved to the primary display for resizing, then placed at the target position</li>
+<li>Fixed position not being applied after resize when some apps silently revert position changes (AX de-duplication workaround via 1px nudge)</li>
+<li>When an app's minimum window size prevents the requested size, the window position is now recalculated so it stays within the visible screen area instead of extending beyond the edge</li>
+<li>Eliminated visible window flicker when switching target windows across screens; windows are no longer recreated on screen change</li>
+</ul>]]></description>
+            <pubDate>Sat, 21 Mar 2026 16:13:17 +0900</pubDate>
+            <sparkle:version>220</sparkle:version>
+            <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley-2.2.0.zip" length="4695080" type="application/octet-stream" sparkle:edSignature="JlObKOKWn9UyvdgRv3pRg0a3WxG56qRJ/wG6lR6vy8eKt4KzsHWU42Da395PSG84K7o/il0mcFCSazJHLYsJBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley220-210.delta" sparkle:deltaFrom="210" length="222598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="pVVu4+qjE1UG3M/LojCfpQvJvkgdNQKu1gqaCXEiISPo/z5Dygi28a2vTVgFFhdHZieUw0VTO5Fa4OOOkOdQDA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley220-203.delta" sparkle:deltaFrom="203" length="282386" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="hIifOxl5vdmmBdJZusnOSwn7jsLp1WG4cwoj8J0Ckrx7ZxMSqjeuNvx2QZRB8UBMIJhSuxOMco1WbwiFyX1sDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley220-202.delta" sparkle:deltaFrom="202" length="300930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="/R0PkPktDHnaEnJ/wqsIS9lWpeRWl1QViOnLmSstBBdNIiLAmlwM7Jrzw/a6LRxc4o4c95ddVyrjHVKg1GvvCQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley220-201.delta" sparkle:deltaFrom="201" length="332850" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zipHdX02zth6rUY7MB+EL7kO6/d+tUVwcNfXcq7LA2Zosn2AO8TLVjlElKAleZyjsmNzl7ArG8Kyth+2gvxaBw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley220-200.delta" sparkle:deltaFrom="200" length="375778" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="/nihdmlUKnO8DB6HRXQKl9mrrqPeqWgokKTWAX/+gSsjHbjVdrGwgr7THYLsbPyHTKqjLGQPeUfuc85rtZL7DQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.1.0</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -13,8 +270,7 @@
   - «Скрыть окна кроме [Приложения]» — скрывает все остальные приложения (аналог Cmd-H), отображает выбранное приложение, если оно было скрыто
 <li>Скрытые (Cmd-H) приложения теперь отображаются в боковой панели как записи-заполнители (только имя приложения) с 50% непрозрачностью</li>
 <li>При выборе скрытого приложения (Enter, двойной клик, изменение размера через сетку/компоновку) оно автоматически отображается и операция выполняется над его передним окном</li>
-</ul>
-]]></description>
+</ul>]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
 <ul>
 <li>Duplo clique em uma janela na barra lateral para trazê-la para o primeiro plano e fechar a grade de layout</li>
@@ -24,8 +280,97 @@
   - "Ocultar janelas exceto [App]" — oculta todos os outros aplicativos (equivalente a Cmd-H), exibe o app selecionado se estava oculto
 <li>Aplicativos ocultos (Cmd-H) agora aparecem na barra lateral como entradas de espaço reservado (apenas nome do app) e são exibidos com 50% de opacidade</li>
 <li>Ao selecionar um app oculto (Enter, duplo clique, redimensionar com grade/layout) ele é automaticamente exibido e a operação é realizada na sua janela principal</li>
-</ul>
-]]></description>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Doppio clic su una finestra nella barra laterale per portarla in primo piano e chiudere la griglia di layout</li>
+<li>Menu contestuale (pulsante puntini di sospensione) sulle righe delle finestre nella barra laterale con tre azioni:</li>
+  - "Chiudi altre finestre di [App]" — chiude le altre finestre della stessa app (mostrato solo quando l'app ha più finestre)
+  - "Esci da [App]" — termina l'applicazione
+  - "Nascondi finestre tranne [App]" — nasconde tutte le altre applicazioni (equivalente di Cmd-H), mostra l'app selezionata se era nascosta
+<li>Le applicazioni nascoste (Cmd-H) appaiono ora nella barra laterale come voci segnaposto (solo nome dell'app) e vengono visualizzate al 50% di opacità</li>
+<li>Selezionando un'app nascosta (Invio, doppio clic, ridimensionamento griglia/layout) viene automaticamente mostrata e si opera sulla sua finestra in primo piano</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Double-clic sur une fenêtre dans la barre latérale pour la mettre au premier plan et fermer la grille de disposition</li>
+<li>Menu contextuel (bouton points de suspension) sur les lignes de fenêtres de la barre latérale avec trois actions :</li>
+  - « Fermer les autres fenêtres de [App] » — ferme les autres fenêtres de la même app (affiché uniquement quand l'app a plusieurs fenêtres)
+  - « Quitter [App] » — ferme l'application
+  - « Masquer les fenêtres sauf [App] » — masque toutes les autres applications (équivalent Cmd-H), affiche l'app sélectionnée si elle était masquée
+<li>Les applications masquées (Cmd-H) apparaissent désormais dans la barre latérale comme entrées de remplacement (nom de l'app uniquement) et sont affichées à 50 % d'opacité</li>
+<li>La sélection d'une app masquée (Entrée, double-clic, redimensionnement grille/disposition) la rend automatiquement visible et opère sur sa fenêtre au premier plan</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Doble clic en una ventana de la barra lateral para traerla al frente y cerrar la cuadrícula de diseño</li>
+<li>Menú contextual (botón de puntos suspensivos) en las filas de ventanas de la barra lateral con tres acciones:</li>
+  - "Cerrar otras ventanas de [App]" — cierra otras ventanas de la misma app (solo se muestra cuando la app tiene múltiples ventanas)
+  - "Salir de [App]" — cierra la aplicación
+  - "Ocultar ventanas excepto [App]" — oculta todas las demás aplicaciones (equivalente a Cmd-H), muestra la app seleccionada si estaba oculta
+<li>Las aplicaciones ocultas (Cmd-H) ahora aparecen en la barra lateral como entradas de marcador (solo nombre de la app) y se muestran con 50 % de opacidad</li>
+<li>Al seleccionar una app oculta (Enter, doble clic, redimensionar con cuadrícula/diseño) se muestra automáticamente y se opera sobre su ventana principal</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Doppelklick auf ein Fenster in der Seitenleiste bringt es in den Vordergrund und schließt das Layout-Raster</li>
+<li>Kontextmenü (Auslassungspunkte-Taste) in den Fensterzeilen der Seitenleiste mit drei Aktionen:</li>
+  - „Andere Fenster von [App] schließen" — schließt andere Fenster derselben App (nur angezeigt, wenn die App mehrere Fenster hat)
+  - „[App] beenden" — beendet die Anwendung
+  - „Fenster außer [App] ausblenden" — blendet alle anderen Anwendungen aus (Cmd-H-Äquivalent), blendet die ausgewählte App wieder ein, falls sie ausgeblendet war
+<li>Ausgeblendete (Cmd-H) Anwendungen erscheinen jetzt als Platzhaltereinträge in der Seitenleiste (nur App-Name) und werden mit 50 % Deckkraft angezeigt</li>
+<li>Beim Auswählen einer ausgeblendeten App (Enter, Doppelklick, Raster-/Layout-Größenänderung) wird sie automatisch eingeblendet und das vorderste Fenster wird verwendet</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在側邊欄視窗列表中雙擊可將該視窗置於最前面並關閉佈局網格</li>
+<li>側邊欄視窗列的右鍵選單（省略號按鈕），提供三個操作：</li>
+  - 「關閉 [應用程式] 的其他視窗」— 關閉同一應用程式的其他視窗（僅當應用程式有多個視窗時顯示）
+  - 「結束 [應用程式]」— 終止應用程式
+  - 「隱藏 [應用程式] 以外的視窗」— 隱藏所有其他應用程式（相當於 Cmd-H），若所選應用程式已被隱藏則取消隱藏
+<li>隱藏的（Cmd-H）應用程式現在在側邊欄中顯示為佔位項目（僅顯示應用程式名稱），以 50% 不透明度顯示</li>
+<li>選擇隱藏的應用程式（Enter、雙擊、網格/佈局調整大小）會自動取消隱藏並操作其最前面的視窗</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在侧边栏窗口列表中双击可将该窗口置于最前面并关闭布局网格</li>
+<li>侧边栏窗口行的上下文菜单（省略号按钮），提供三个操作：</li>
+  - "关闭 [应用] 的其他窗口" — 关闭同一应用的其他窗口（仅当应用有多个窗口时显示）
+  - "退出 [应用]" — 终止应用程序
+  - "隐藏 [应用] 以外的窗口" — 隐藏所有其他应用程序（相当于 Cmd-H），如果所选应用已被隐藏则取消隐藏
+<li>隐藏的（Cmd-H）应用程序现在在侧边栏中显示为占位条目（仅显示应用名称），以 50% 不透明度显示</li>
+<li>选择隐藏的应用（Enter、双击、网格/布局调整大小）会自动取消隐藏并操作其最前面的窗口</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바 창 목록에서 더블 클릭하면 해당 창을 최전면으로 가져오고 레이아웃 그리드를 닫음</li>
+<li>사이드바 창 행의 컨텍스트 메뉴(말줄임표 버튼)에 세 가지 동작 추가:</li>
+  - "[앱]의 다른 창 닫기" — 같은 앱의 다른 창을 닫음 (앱에 여러 창이 있을 때만 표시)
+  - "[앱] 종료" — 애플리케이션을 종료
+  - "[앱] 외 창 숨기기" — 다른 모든 애플리케이션을 숨김 (Cmd-H 동작), 선택한 앱이 숨겨져 있으면 숨김 해제
+<li>숨겨진 (Cmd-H) 애플리케이션이 사이드바에 플레이스홀더 항목으로 표시되며 (앱 이름만) 50% 불투명도로 표시</li>
+<li>숨겨진 앱을 선택하면 (Enter, 더블 클릭, 그리드/레이아웃 리사이즈) 자동으로 숨김 해제되고 해당 앱의 최전면 창에 대해 작동</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーのウインドウ一覧でダブルクリックすると、そのウインドウを最前面に表示してレイアウトグリッドを閉じるように</li>
+<li>サイドバーのウインドウ行にコンテキストメニュー（…ボタン）を追加。3つのアクションを提供：</li>
+  - 「[アプリ名]の他のウインドウを閉じる」— 同じアプリの他のウインドウを閉じる（複数ウインドウがある場合のみ表示）
+  - 「[アプリ名]を終了」— アプリケーションを終了
+  - 「[アプリ名]以外を隠す」— 他の全アプリケーションを隠す（Cmd-H相当）。選択アプリが隠れている場合は解除
+<li>隠れている（Cmd-H）アプリケーションをサイドバーにアプリ名のみで半透明表示</li>
+<li>隠れているアプリを選択（Enter、ダブルクリック、グリッド/レイアウトリサイズ）すると自動的に表示を解除し、最前面ウインドウを操作対象に設定</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Double-click a window in the sidebar list to bring it to the foreground and dismiss the layout grid</li>
+<li>Context menu (ellipsis button) on sidebar window rows with three actions:</li>
+  - "Close other windows of [App]" — closes other windows of the same app (shown only when the app has multiple windows)
+  - "Quit [App]" — terminates the application
+  - "Hide windows besides [App]" — hides all other applications (Cmd-H equivalent), unhides the selected app if it was hidden
+<li>Hidden (Cmd-H) applications now appear in the sidebar as placeholder entries (app name only) and are displayed at 50% opacity</li>
+<li>Selecting a hidden app (Enter, double-click, grid/layout resize) automatically unhides it and operates on its frontmost window</li>
+</ul>]]></description>
             <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
 <ul>
 <li>Doppio clic su una finestra nella barra laterale per portarla in primo piano e chiudere la griglia di layout</li>
@@ -129,7 +474,7 @@
             <sparkle:version>210</sparkle:version>
             <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley-2.1.0.zip" length="4679366" type="application/octet-stream" sparkle:edSignature="2ZswtCYgZ10rwh2Le/khcsHUjwxfZP90YwOtOQV/pX5LLqVSJFysI7bZ5phZveU/Xrb6AlgbwmYLJjH0UrtvCg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley-2.1.0.zip" length="4679366" type="application/octet-stream" sparkle:edSignature="2ZswtCYgZ10rwh2Le/khcsHUjwxfZP90YwOtOQV/pX5LLqVSJFysI7bZ5phZveU/Xrb6AlgbwmYLJjH0UrtvCg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley210-203.delta" sparkle:deltaFrom="203" length="216618" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Ed57TlscmNA8uJDRgIPFsv+rdwQNEpFo23pU2P5siWgyymKoI77J9dTDrhm/P0hJj9r/ku9GCJAd74PfSwQ6Aw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley210-202.delta" sparkle:deltaFrom="202" length="244806" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PpGYI4Wza1pLd8l9uzdptpt7ZMMAHp2kmYd0bfEL8RbdD1zsibbhNoFoNOyWYS52N5Z0dzOo9GfHwcJ/BcjhAg=="/>
@@ -150,8 +495,7 @@
 <li>Окно настроек теперь скрывается, когда Sparkle находит обновление (ранее — только при начале загрузки), и восстанавливается при отмене</li>
 <li>Заголовок окна настроек теперь локализован на всех поддерживаемых языках</li>
 <li>Номер версии перемещён из заголовка настроек в раздел обновлений, рядом с кнопкой «Проверить обновления»</li>
-</ul>
-]]></description>
+</ul>]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
 <ul>
 <li>Lembretes suaves de atualização do Sparkle: quando uma verificação em segundo plano encontra uma nova versão, um ponto vermelho aparece no ícone da barra de menus e rótulos "Atualização disponível" são exibidos ao lado do botão de engrenagem e do botão "Verificar atualizações" nas configurações</li>
@@ -162,8 +506,106 @@
 <li>A janela de configurações é ocultada quando o Sparkle encontra uma atualização (antes apenas no início do download) e restaurada ao cancelar</li>
 <li>O título da janela de configurações agora é localizado em todos os idiomas suportados</li>
 <li>O número da versão foi movido do título das configurações para a seção de atualizações, ao lado do botão "Verificar atualizações"</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni</li>
+<li>Se l'icona della barra dei menu è nascosta, viene mostrata temporaneamente con il badge al rilevamento di un aggiornamento e nascosta nuovamente al termine della sessione</li>
 </ul>
-]]></description>
+<h3>Modificato</h3>
+<ul>
+<li>La finestra delle impostazioni viene ora nascosta quando Sparkle trova un aggiornamento (in precedenza solo all'inizio del download) e ripristinata in caso di annullamento</li>
+<li>Il titolo della finestra delle impostazioni è ora localizzato in tutte le lingue supportate</li>
+<li>Il numero di versione è stato spostato dal titolo delle impostazioni alla sezione Aggiornamenti, accanto al pulsante "Verifica aggiornamenti"</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Rappels de mise à jour discrets de Sparkle : lorsqu'une vérification en arrière-plan trouve une nouvelle version, un point rouge apparaît sur l'icône de la barre des menus et des labels « Mise à jour disponible » s'affichent à côté du bouton engrenage et du bouton « Vérifier les mises à jour » dans les réglages</li>
+<li>Si l'icône de la barre des menus est masquée, elle s'affiche temporairement avec le badge lors de la détection d'une mise à jour, puis se masque à nouveau à la fin de la session</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>La fenêtre des réglages est désormais masquée lorsque Sparkle trouve une mise à jour (auparavant uniquement au début du téléchargement) et restaurée en cas d'annulation</li>
+<li>Le titre de la fenêtre des réglages est maintenant localisé dans toutes les langues prises en charge</li>
+<li>Le numéro de version a été déplacé du titre des réglages vers la section Mises à jour, à côté du bouton « Vérifier les mises à jour »</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Recordatorios suaves de actualización de Sparkle: cuando una comprobación en segundo plano encuentra una nueva versión, aparece un punto rojo en el icono de la barra de menús y etiquetas "Actualización disponible" junto al botón de engranaje y el botón "Buscar actualizaciones" en los ajustes</li>
+<li>Si el icono de la barra de menús está oculto, se muestra temporalmente con la insignia al detectar una actualización y se oculta de nuevo al finalizar la sesión</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>La ventana de ajustes se oculta cuando Sparkle encuentra una actualización (antes solo al iniciar la descarga) y se restaura al cancelar</li>
+<li>El título de la ventana de ajustes está ahora localizado en todos los idiomas soportados</li>
+<li>El número de versión se movió del título de ajustes a la sección de actualizaciones, junto al botón "Buscar actualizaciones"</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Sanfte Sparkle-Update-Erinnerungen: Wenn eine Hintergrundprüfung eine neue Version findet, erscheint ein roter Badge-Punkt am Menüleistensymbol und „Update verfügbar"-Labels neben dem Zahnrad-Button und dem „Nach Updates suchen"-Button in den Einstellungen</li>
+<li>Wenn das Menüleistensymbol ausgeblendet ist, wird es bei Update-Erkennung vorübergehend mit Badge angezeigt und nach Ende der Update-Sitzung wieder ausgeblendet</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Das Einstellungsfenster wird jetzt ausgeblendet, wenn Sparkle ein Update findet (zuvor erst beim Download-Start), und beim Abbrechen wiederhergestellt</li>
+<li>Der Titel des Einstellungsfensters ist jetzt in allen unterstützten Sprachen lokalisiert</li>
+<li>Versionsnummer vom Einstellungstitel in den Update-Bereich neben den „Nach Updates suchen"-Button verschoben</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>Sparkle 溫和更新提醒：背景檢測到新版本時，選單列圖示顯示紅色徽章圓點，齒輪按鈕和設定中「檢查更新」按鈕旁顯示「有可用更新」標籤</li>
+<li>選單列圖示被隱藏時，檢測到更新會暫時顯示帶徽章的圖示，更新作業結束後恢復隱藏</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>Sparkle 發現更新時立即隱藏設定視窗（之前僅在開始下載時隱藏），取消時恢復顯示</li>
+<li>設定視窗標題已支援所有語言的在地化</li>
+<li>版本號從設定標題移至更新區段的「檢查更新」按鈕旁</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>Sparkle 温和更新提醒：后台检测到新版本时，菜单栏图标显示红色徽章圆点，齿轮按钮和设置中"检查更新"按钮旁显示"有可用更新"标签</li>
+<li>菜单栏图标被隐藏时，检测到更新会临时显示带徽章的图标，更新会话结束后恢复隐藏</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>Sparkle 发现更新时立即隐藏设置窗口（之前仅在开始下载时隐藏），取消时恢复显示</li>
+<li>设置窗口标题已支持所有语言的本地化</li>
+<li>版本号从设置标题移至更新部分的"检查更新"按钮旁</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>Sparkle 부드러운 업데이트 알림: 백그라운드에서 새 버전을 감지하면 메뉴 막대 아이콘에 빨간 배지 점이 나타나고, 기어 버튼 및 설정의 "업데이트 확인" 버튼 옆에 "업데이트 있음" 라벨 표시</li>
+<li>메뉴 막대 아이콘이 숨겨져 있을 때 업데이트 감지 시 배지와 함께 일시적으로 표시, 세션 종료 후 다시 숨김</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>Sparkle가 업데이트를 찾으면 설정 창을 숨기도록 변경(이전에는 다운로드 시작 시에만 숨김), 취소 시 복원</li>
+<li>설정 창 제목을 모든 지원 언어로 현지화</li>
+<li>버전 번호를 설정 제목에서 업데이트 섹션의 "업데이트 확인" 버튼 옆으로 이동</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>Sparkleのジェントルリマインダー対応：バックグラウンドでアップデートを検出した際、メニューバーアイコンに赤いバッジドットを表示。ギアボタンおよび設定画面の「アップデートを確認」ボタン横に「アップデートがあります」ラベルを表示</li>
+<li>メニューバーアイコンが非表示の場合、アップデート検出時にバッジ付きで一時的に表示し、アップデートセッション終了後に再び非表示に戻す</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>Sparkleがアップデートを検出した時点で設定ウインドウを非表示にするよう変更（以前はダウンロード開始時）。キャンセル時に設定ウインドウを復元</li>
+<li>設定画面のタイトルを全対応言語でローカライズ</li>
+<li>バージョン番号を設定画面のタイトルからアップデートセクションの「アップデートを確認」ボタン横に移動</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Sparkle gentle scheduled update reminders: when a background update check finds a new version, a red badge dot appears on the menu bar icon and "Update available" labels appear next to the gear button and the "Check for Updates" button in settings</li>
+<li>If the menu bar icon is hidden when an update is detected, it is temporarily shown with the badge and hidden again after the update session ends</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Settings window is now hidden when Sparkle finds an update (previously only when download started), and restored when the user cancels</li>
+<li>Settings window title is now localized across all supported languages</li>
+<li>Version number moved from the settings title to the Updates section, displayed next to the "Check for Updates" button</li>
+</ul>]]></description>
             <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
 <ul>
 <li>Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni</li>
@@ -396,276 +838,13 @@
             <sparkle:version>203</sparkle:version>
             <sparkle:shortVersionString>2.0.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley-2.0.3.zip" length="4650558" type="application/octet-stream" sparkle:edSignature="pGJ3AQMBNsL2Bf5kGm7CU0iw6CRvAVlInFLg604V/5UkJ9vIkobPwKjSIHmUtOpJ7Kvchkv2tAWS+pW0iFuTAQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley-2.0.3.zip" length="4650558" type="application/octet-stream" sparkle:edSignature="pGJ3AQMBNsL2Bf5kGm7CU0iw6CRvAVlInFLg604V/5UkJ9vIkobPwKjSIHmUtOpJ7Kvchkv2tAWS+pW0iFuTAQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-202.delta" sparkle:deltaFrom="202" length="163078" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yLd3kDSJ7f6yX6ZWO6HA4H2tTBw8s9hXi/RWVGkl0Is3Mk1qN/S0uIw4W+jTMqBVYGavnm96rBB3FUzl2YGBDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-201.delta" sparkle:deltaFrom="201" length="233782" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="knjPUxBLvanpIylxioHgqqsAAwd+HPkV4DU+sf4Mtbqqn9d/5vwamcLUC/tLn/XCAxRHn4r4HDkP4Gcg0WX5Bg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-200.delta" sparkle:deltaFrom="200" length="280958" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mcp6gv/U3coQilQOJKagOSEBMnqiqL5sgK0G4fJ/YGGm0B3Qos8lSbDyzZruIkD2VvEjEAF6N3KzDMKuA4EkAg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-127.delta" sparkle:deltaFrom="127" length="351142" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="P/V5he8STtxTefTXsf5nL4F6+WeJf2hKqH0sCjLdYA0V6yYjmWcWWmq/U9PbqgNCDl0YCt8UAhRofNfKkiKuDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-126.delta" sparkle:deltaFrom="126" length="359710" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mKpl0URQK+T+/uY2t/X6ATfw2M8KjC5kErZKHdZMCmtvpWliXuWB12MBsXBq6L2YmPzCym8YOP+6kVl7RedWAA=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>2.0.2</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Кнопка закрытия в строках боковой панели списка окон: при наведении на название окна появляется кнопка ×, позволяющая закрыть окно</li>
-<li>Настройка «Завершать приложение при закрытии последнего окна» (Настройки &gt; Окна): при включении (по умолчанию) закрытие последнего окна приложения завершает его; при отключении закрывается только окно</li>
-<li>Подсказка кнопки закрытия показывает название окна; когда действие завершит приложение, показывается название приложения</li>
-<li>Клавиша «/» для закрытия выбранного окна (или завершения приложения, если это последнее окно и настройка включена)</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Botão de fechar nas linhas da barra lateral de janelas: ao passar o mouse sobre o nome de uma janela, um botão × aparece para fechá-la</li>
-<li>Configuração "Encerrar o app ao fechar a última janela" (Configurações &gt; Janelas): quando ativada (padrão), fechar a última janela de um app encerra o app; quando desativada, apenas a janela é fechada</li>
-<li>O tooltip do botão de fechar mostra o nome da janela; quando a ação encerrará o app, mostra o nome do app</li>
-<li>Atalho de teclado "/" para fechar a janela selecionada (ou encerrar o app se for a última janela e a configuração estiver ativada)</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Pulsante di chiusura nelle righe della barra laterale delle finestre: passando il mouse sul nome di una finestra appare un pulsante × per chiuderla</li>
-<li>Impostazione "Esci dall'app alla chiusura dell'ultima finestra" (Impostazioni &gt; Finestre): quando attiva (predefinito), chiudere l'ultima finestra di un'app chiude l'app; quando disattivata, viene chiusa solo la finestra</li>
-<li>Il tooltip del pulsante di chiusura mostra il nome della finestra; quando l'azione chiuderà l'app, mostra il nome dell'app</li>
-<li>Scorciatoia da tastiera "/" per chiudere la finestra selezionata (o uscire dall'app se è l'ultima finestra e l'impostazione è attiva)</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Bouton de fermeture dans les lignes de la barre latérale des fenêtres : au survol du nom d'une fenêtre, un bouton × apparaît pour la fermer</li>
-<li>Réglage « Quitter l'app en fermant la dernière fenêtre » (Réglages &gt; Fenêtres) : lorsqu'il est activé (par défaut), fermer la dernière fenêtre d'une app quitte l'app ; lorsqu'il est désactivé, seule la fenêtre est fermée</li>
-<li>L'infobulle du bouton de fermeture affiche le nom de la fenêtre ; lorsque l'action quittera l'app, le nom de l'app est affiché</li>
-<li>Raccourci clavier « / » pour fermer la fenêtre sélectionnée (ou quitter l'app s'il s'agit de la dernière fenêtre et que le réglage est activé)</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Botón de cierre en las filas de la barra lateral de ventanas: al pasar el cursor sobre el nombre de una ventana aparece un botón × para cerrarla</li>
-<li>Ajuste "Cerrar la app al cerrar la última ventana" (Ajustes &gt; Ventanas): cuando está activado (por defecto), cerrar la última ventana de una app cierra la app; cuando está desactivado, solo se cierra la ventana</li>
-<li>El tooltip del botón de cierre muestra el nombre de la ventana; cuando la acción cerrará la app, muestra el nombre de la app</li>
-<li>Atajo de teclado "/" para cerrar la ventana seleccionada (o cerrar la app si es la última ventana y el ajuste está activado)</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Schließen-Button in der Fensterlisten-Seitenleiste: Beim Überfahren eines Fensternamens erscheint ein ×-Button zum Schließen des Fensters</li>
-<li>Einstellung „App beenden beim Schließen des letzten Fensters" (Einstellungen &gt; Fenster): Bei Aktivierung (Standard) wird die App beim Schließen des letzten Fensters beendet; bei Deaktivierung wird nur das Fenster geschlossen</li>
-<li>Tooltip des Schließen-Buttons zeigt den Fensternamen; wenn die App beendet wird, wird der App-Name angezeigt</li>
-<li>„/" Tastenkürzel zum Schließen des ausgewählten Fensters (oder Beenden der App, wenn es das letzte Fenster ist und die Einstellung aktiviert ist)</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>視窗列表側邊欄新增關閉按鈕：將滑鼠懸停在視窗名稱上時會顯示 × 按鈕，點擊可關閉視窗</li>
-<li>新增「關閉最後一個視窗時結束應用程式」設定（設定 &gt; 視窗）：啟用時（預設），關閉應用程式的最後一個視窗將結束應用程式；停用時僅關閉視窗</li>
-<li>關閉按鈕的工具提示顯示視窗名稱；當操作將結束應用程式時顯示應用程式名稱</li>
-<li>「/」鍵盤快捷鍵關閉所選視窗（當為最後一個視窗且設定已啟用時結束應用程式）</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>窗口列表侧边栏添加关闭按钮：鼠标悬停在窗口名称上时显示 × 按钮，点击可关闭窗口</li>
-<li>添加"关闭最后一个窗口时退出应用"设置（设置 &gt; 窗口）：启用时（默认），关闭应用的最后一个窗口将退出应用；禁用时仅关闭窗口</li>
-<li>关闭按钮的工具提示显示窗口名称；当操作将退出应用时显示应用名称</li>
-<li>"/" 快捷键关闭选中的窗口（当为最后一个窗口且设置已启用时退出应用）</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>윈도우 목록 사이드바에 닫기 버튼 추가: 윈도우 이름에 마우스를 올리면 × 버튼이 나타나며 클릭하면 윈도우를 닫을 수 있음</li>
-<li>"마지막 윈도우를 닫을 때 앱 종료" 설정 추가 (설정 &gt; 윈도우): 활성화 시(기본값) 앱의 마지막 윈도우를 닫으면 앱이 종료되고, 비활성화 시 윈도우만 닫힘</li>
-<li>닫기 버튼 툴팁에 윈도우 이름을 표시. 앱이 종료되는 경우 앱 이름을 표시</li>
-<li>"/" 키보드 단축키로 선택한 윈도우 닫기 (마지막 윈도우이고 설정이 활성화된 경우 앱 종료)</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>ウインドウ一覧サイドバーに閉じるボタンを追加：ウインドウ名にホバーすると×ボタンが表示され、クリックでウインドウを閉じられるように</li>
-<li>「最後のウインドウを閉じるときアプリを終了」設定を追加（設定 &gt; ウインドウ）：有効時（デフォルト）はアプリの最後のウインドウを閉じるとアプリを終了、無効時はウインドウのみを閉じる</li>
-<li>閉じるボタンのツールチップにウインドウ名を表示。アプリを終了する場合はアプリ名を表示</li>
-<li>「/」キーで選択中のウインドウを閉じるショートカットを追加（最後のウインドウかつ設定が有効な場合はアプリを終了）</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Close button on window list sidebar rows: hover over a window name to reveal an × button that closes the window</li>
-<li>"Quit app when closing last window" setting (Settings &gt; Windows): when enabled (default), closing an app's last window terminates the app; when disabled, only the window is closed</li>
-<li>Close button tooltip shows the window name, or the app name when it will quit the app</li>
-<li>"/" keyboard shortcut to close the selected window (or quit the app if it's the last window and the setting is enabled)</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Botão de fechar nas linhas da barra lateral de janelas: ao passar o mouse sobre o nome de uma janela, um botão × aparece para fechá-la</li>
-<li>Configuração "Encerrar o app ao fechar a última janela" (Configurações &gt; Janelas): quando ativada (padrão), fechar a última janela de um app encerra o app; quando desativada, apenas a janela é fechada</li>
-<li>O tooltip do botão de fechar mostra o nome da janela; quando a ação encerrará o app, mostra o nome do app</li>
-<li>Atalho de teclado "/" para fechar a janela selecionada (ou encerrar o app se for a última janela e a configuração estiver ativada)</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Pulsante di chiusura nelle righe della barra laterale delle finestre: passando il mouse sul nome di una finestra appare un pulsante × per chiuderla</li>
-<li>Impostazione "Esci dall'app alla chiusura dell'ultima finestra" (Impostazioni &gt; Finestre): quando attiva (predefinito), chiudere l'ultima finestra di un'app chiude l'app; quando disattivata, viene chiusa solo la finestra</li>
-<li>Il tooltip del pulsante di chiusura mostra il nome della finestra; quando l'azione chiuderà l'app, mostra il nome dell'app</li>
-<li>Scorciatoia da tastiera "/" per chiudere la finestra selezionata (o uscire dall'app se è l'ultima finestra e l'impostazione è attiva)</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Bouton de fermeture dans les lignes de la barre latérale des fenêtres : au survol du nom d'une fenêtre, un bouton × apparaît pour la fermer</li>
-<li>Réglage « Quitter l'app en fermant la dernière fenêtre » (Réglages &gt; Fenêtres) : lorsqu'il est activé (par défaut), fermer la dernière fenêtre d'une app quitte l'app ; lorsqu'il est désactivé, seule la fenêtre est fermée</li>
-<li>L'infobulle du bouton de fermeture affiche le nom de la fenêtre ; lorsque l'action quittera l'app, le nom de l'app est affiché</li>
-<li>Raccourci clavier « / » pour fermer la fenêtre sélectionnée (ou quitter l'app s'il s'agit de la dernière fenêtre et que le réglage est activé)</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Botón de cierre en las filas de la barra lateral de ventanas: al pasar el cursor sobre el nombre de una ventana aparece un botón × para cerrarla</li>
-<li>Ajuste "Cerrar la app al cerrar la última ventana" (Ajustes &gt; Ventanas): cuando está activado (por defecto), cerrar la última ventana de una app cierra la app; cuando está desactivado, solo se cierra la ventana</li>
-<li>El tooltip del botón de cierre muestra el nombre de la ventana; cuando la acción cerrará la app, muestra el nombre de la app</li>
-<li>Atajo de teclado "/" para cerrar la ventana seleccionada (o cerrar la app si es la última ventana y el ajuste está activado)</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Schließen-Button in der Fensterlisten-Seitenleiste: Beim Überfahren eines Fensternamens erscheint ein ×-Button zum Schließen des Fensters</li>
-<li>Einstellung „App beenden beim Schließen des letzten Fensters" (Einstellungen &gt; Fenster): Bei Aktivierung (Standard) wird die App beim Schließen des letzten Fensters beendet; bei Deaktivierung wird nur das Fenster geschlossen</li>
-<li>Tooltip des Schließen-Buttons zeigt den Fensternamen; wenn die App beendet wird, wird der App-Name angezeigt</li>
-<li>„/" Tastenkürzel zum Schließen des ausgewählten Fensters (oder Beenden der App, wenn es das letzte Fenster ist und die Einstellung aktiviert ist)</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>視窗列表側邊欄新增關閉按鈕：將滑鼠懸停在視窗名稱上時會顯示 × 按鈕，點擊可關閉視窗</li>
-<li>新增「關閉最後一個視窗時結束應用程式」設定（設定 &gt; 視窗）：啟用時（預設），關閉應用程式的最後一個視窗將結束應用程式；停用時僅關閉視窗</li>
-<li>關閉按鈕的工具提示顯示視窗名稱；當操作將結束應用程式時顯示應用程式名稱</li>
-<li>「/」鍵盤快捷鍵關閉所選視窗（當為最後一個視窗且設定已啟用時結束應用程式）</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>窗口列表侧边栏添加关闭按钮：鼠标悬停在窗口名称上时显示 × 按钮，点击可关闭窗口</li>
-<li>添加"关闭最后一个窗口时退出应用"设置（设置 &gt; 窗口）：启用时（默认），关闭应用的最后一个窗口将退出应用；禁用时仅关闭窗口</li>
-<li>关闭按钮的工具提示显示窗口名称；当操作将退出应用时显示应用名称</li>
-<li>"/" 快捷键关闭选中的窗口（当为最后一个窗口且设置已启用时退出应用）</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>윈도우 목록 사이드바에 닫기 버튼 추가: 윈도우 이름에 마우스를 올리면 × 버튼이 나타나며 클릭하면 윈도우를 닫을 수 있음</li>
-<li>"마지막 윈도우를 닫을 때 앱 종료" 설정 추가 (설정 &gt; 윈도우): 활성화 시(기본값) 앱의 마지막 윈도우를 닫으면 앱이 종료되고, 비활성화 시 윈도우만 닫힘</li>
-<li>닫기 버튼 툴팁에 윈도우 이름을 표시. 앱이 종료되는 경우 앱 이름을 표시</li>
-<li>"/" 키보드 단축키로 선택한 윈도우 닫기 (마지막 윈도우이고 설정이 활성화된 경우 앱 종료)</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>ウインドウ一覧サイドバーに閉じるボタンを追加：ウインドウ名にホバーすると×ボタンが表示され、クリックでウインドウを閉じられるように</li>
-<li>「最後のウインドウを閉じるときアプリを終了」設定を追加（設定 &gt; ウインドウ）：有効時（デフォルト）はアプリの最後のウインドウを閉じるとアプリを終了、無効時はウインドウのみを閉じる</li>
-<li>閉じるボタンのツールチップにウインドウ名を表示。アプリを終了する場合はアプリ名を表示</li>
-<li>「/」キーで選択中のウインドウを閉じるショートカットを追加（最後のウインドウかつ設定が有効な場合はアプリを終了）</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Close button on window list sidebar rows: hover over a window name to reveal an × button that closes the window</li>
-<li>"Quit app when closing last window" setting (Settings &gt; Windows): when enabled (default), closing an app's last window terminates the app; when disabled, only the window is closed</li>
-<li>Close button tooltip shows the window name, or the app name when it will quit the app</li>
-<li>"/" keyboard shortcut to close the selected window (or quit the app if it's the last window and the setting is enabled)</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Botão de fechar nas linhas da barra lateral de janelas: ao passar o mouse sobre o nome de uma janela, um botão × aparece para fechá-la</li>
-<li>Configuração "Encerrar o app ao fechar a última janela" (Configurações &gt; Janelas): quando ativada (padrão), fechar a última janela de um app encerra o app; quando desativada, apenas a janela é fechada</li>
-<li>O tooltip do botão de fechar mostra o nome da janela; quando a ação encerrará o app, mostra o nome do app</li>
-<li>Atalho de teclado "/" para fechar a janela selecionada (ou encerrar o app se for a última janela e a configuração estiver ativada)</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Pulsante di chiusura nelle righe della barra laterale delle finestre: passando il mouse sul nome di una finestra appare un pulsante × per chiuderla</li>
-<li>Impostazione "Esci dall'app alla chiusura dell'ultima finestra" (Impostazioni &gt; Finestre): quando attiva (predefinito), chiudere l'ultima finestra di un'app chiude l'app; quando disattivata, viene chiusa solo la finestra</li>
-<li>Il tooltip del pulsante di chiusura mostra il nome della finestra; quando l'azione chiuderà l'app, mostra il nome dell'app</li>
-<li>Scorciatoia da tastiera "/" per chiudere la finestra selezionata (o uscire dall'app se è l'ultima finestra e l'impostazione è attiva)</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Bouton de fermeture dans les lignes de la barre latérale des fenêtres : au survol du nom d'une fenêtre, un bouton × apparaît pour la fermer</li>
-<li>Réglage « Quitter l'app en fermant la dernière fenêtre » (Réglages &gt; Fenêtres) : lorsqu'il est activé (par défaut), fermer la dernière fenêtre d'une app quitte l'app ; lorsqu'il est désactivé, seule la fenêtre est fermée</li>
-<li>L'infobulle du bouton de fermeture affiche le nom de la fenêtre ; lorsque l'action quittera l'app, le nom de l'app est affiché</li>
-<li>Raccourci clavier « / » pour fermer la fenêtre sélectionnée (ou quitter l'app s'il s'agit de la dernière fenêtre et que le réglage est activé)</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Botón de cierre en las filas de la barra lateral de ventanas: al pasar el cursor sobre el nombre de una ventana aparece un botón × para cerrarla</li>
-<li>Ajuste "Cerrar la app al cerrar la última ventana" (Ajustes &gt; Ventanas): cuando está activado (por defecto), cerrar la última ventana de una app cierra la app; cuando está desactivado, solo se cierra la ventana</li>
-<li>El tooltip del botón de cierre muestra el nombre de la ventana; cuando la acción cerrará la app, muestra el nombre de la app</li>
-<li>Atajo de teclado "/" para cerrar la ventana seleccionada (o cerrar la app si es la última ventana y el ajuste está activado)</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Schließen-Button in der Fensterlisten-Seitenleiste: Beim Überfahren eines Fensternamens erscheint ein ×-Button zum Schließen des Fensters</li>
-<li>Einstellung „App beenden beim Schließen des letzten Fensters" (Einstellungen &gt; Fenster): Bei Aktivierung (Standard) wird die App beim Schließen des letzten Fensters beendet; bei Deaktivierung wird nur das Fenster geschlossen</li>
-<li>Tooltip des Schließen-Buttons zeigt den Fensternamen; wenn die App beendet wird, wird der App-Name angezeigt</li>
-<li>„/" Tastenkürzel zum Schließen des ausgewählten Fensters (oder Beenden der App, wenn es das letzte Fenster ist und die Einstellung aktiviert ist)</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>視窗列表側邊欄新增關閉按鈕：將滑鼠懸停在視窗名稱上時會顯示 × 按鈕，點擊可關閉視窗</li>
-<li>新增「關閉最後一個視窗時結束應用程式」設定（設定 &gt; 視窗）：啟用時（預設），關閉應用程式的最後一個視窗將結束應用程式；停用時僅關閉視窗</li>
-<li>關閉按鈕的工具提示顯示視窗名稱；當操作將結束應用程式時顯示應用程式名稱</li>
-<li>「/」鍵盤快捷鍵關閉所選視窗（當為最後一個視窗且設定已啟用時結束應用程式）</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>窗口列表侧边栏添加关闭按钮：鼠标悬停在窗口名称上时显示 × 按钮，点击可关闭窗口</li>
-<li>添加"关闭最后一个窗口时退出应用"设置（设置 &gt; 窗口）：启用时（默认），关闭应用的最后一个窗口将退出应用；禁用时仅关闭窗口</li>
-<li>关闭按钮的工具提示显示窗口名称；当操作将退出应用时显示应用名称</li>
-<li>"/" 快捷键关闭选中的窗口（当为最后一个窗口且设置已启用时退出应用）</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>윈도우 목록 사이드바에 닫기 버튼 추가: 윈도우 이름에 마우스를 올리면 × 버튼이 나타나며 클릭하면 윈도우를 닫을 수 있음</li>
-<li>"마지막 윈도우를 닫을 때 앱 종료" 설정 추가 (설정 &gt; 윈도우): 활성화 시(기본값) 앱의 마지막 윈도우를 닫으면 앱이 종료되고, 비활성화 시 윈도우만 닫힘</li>
-<li>닫기 버튼 툴팁에 윈도우 이름을 표시. 앱이 종료되는 경우 앱 이름을 표시</li>
-<li>"/" 키보드 단축키로 선택한 윈도우 닫기 (마지막 윈도우이고 설정이 활성화된 경우 앱 종료)</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>ウインドウ一覧サイドバーに閉じるボタンを追加：ウインドウ名にホバーすると×ボタンが表示され、クリックでウインドウを閉じられるように</li>
-<li>「最後のウインドウを閉じるときアプリを終了」設定を追加（設定 &gt; ウインドウ）：有効時（デフォルト）はアプリの最後のウインドウを閉じるとアプリを終了、無効時はウインドウのみを閉じる</li>
-<li>閉じるボタンのツールチップにウインドウ名を表示。アプリを終了する場合はアプリ名を表示</li>
-<li>「/」キーで選択中のウインドウを閉じるショートカットを追加（最後のウインドウかつ設定が有効な場合はアプリを終了）</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Close button on window list sidebar rows: hover over a window name to reveal an × button that closes the window</li>
-<li>"Quit app when closing last window" setting (Settings &gt; Windows): when enabled (default), closing an app's last window terminates the app; when disabled, only the window is closed</li>
-<li>Close button tooltip shows the window name, or the app name when it will quit the app</li>
-<li>"/" keyboard shortcut to close the selected window (or quit the app if it's the last window and the setting is enabled)</li>
-</ul>
-]]></description>
-            <pubDate>Thu, 19 Mar 2026 20:41:33 +0900</pubDate>
-            <sparkle:version>202</sparkle:version>
-            <sparkle:shortVersionString>2.0.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley-2.0.2.zip" length="4636916" type="application/octet-stream" sparkle:edSignature="MRf6dmrTZA9BQuETXqvs7Ml9C3ZYX+KIQUXeFAVFnenMRKBdNvHFJm/Jy9Hb0vTR/CtKBux6fhDdlxl3ZBg7BA=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley202-201.delta" sparkle:deltaFrom="201" length="208366" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="qfBzRxOFNbN8y/ITk/jJ/Yltr9tGgE3Xbq/iLpdr1shajQ8vsYP1N6dUUBFUDZkpaENuFNcd98K+8/0BituABw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley202-200.delta" sparkle:deltaFrom="200" length="266086" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bVg1HY2PbGmcajlQCI6FJda2jyJMvKU3axr2GkAR4IP/WqgnpD1cLMJRVOGDQMu9EP7EeG47zdumrC6ebMnqCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley202-127.delta" sparkle:deltaFrom="127" length="337322" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="pwscoC/jd/cfhndvmO8sKhzaSgrWvKZgcmvkoBsYShE146Xlzck2Tk6+2nMeXwj9WHOurRhCgNUzXKxAhXdsCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley202-126.delta" sparkle:deltaFrom="126" length="345730" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="m4qLIun0le29yPnE8yEktMSpn34CqC2CjcwaJ4OKCPP0c2kMBE3zFMrZXFx2nYSMiY0UNKLegkpTosIOkI+iAg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.2/Tiley202-125.delta" sparkle:deltaFrom="125" length="346226" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="C5ef5woubBFRn3/ppg/o/W8rEx9tk6wv0YYLUHf0wbo8Zr+vddCktqk167owUwPbOeXtm5UfW26azt+gIrWiAA=="/>
             </sparkle:deltas>
         </item>
     </channel>
