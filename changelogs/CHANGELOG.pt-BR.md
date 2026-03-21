@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- As células da grade não selecionadas agora são transparentes
+- A proporção da grade agora corresponde à área visível da tela (excluindo barra de menus e Dock)
+- O fundo da grade de layout agora exibe a imagem de área de trabalho (semitransparente, cantos arredondados)
+- As células selecionadas por arrasto agora são semitransparentes, mostrando a imagem de área de trabalho abaixo
+- O destaque ao passar o cursor sobre presets na grade agora usa o mesmo estilo da seleção por arrasto
+
 ### Adicionado
 
 - A barra lateral da lista de janelas agora é exibida em todas as telas em configurações de múltiplos monitores, não apenas na tela de destino

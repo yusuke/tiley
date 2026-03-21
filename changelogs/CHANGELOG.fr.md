@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Les cellules de grille non sélectionnées sont désormais transparentes
+- Le rapport d'aspect de la grille correspond maintenant à la zone visible de l'écran (sans barre de menus ni Dock)
+- L'arrière-plan de la grille de mise en page affiche désormais l'image du bureau (semi-transparent, coins arrondis)
+- Les cellules sélectionnées par glissement sont désormais semi-transparentes, laissant apparaître l'image du bureau
+- La surbrillance au survol des presets dans la grille utilise désormais le même style que la sélection par glissement
+
 ### Ajouté
 
 - La barre latérale de liste de fenêtres est désormais affichée sur tous les écrans dans les configurations multi-moniteurs, pas seulement sur l'écran cible

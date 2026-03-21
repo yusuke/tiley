@@ -15,20 +15,15 @@ enum ThemeColors {
     // MARK: - Grid Workspace
 
     static func gridCellFill(for colorScheme: ColorScheme) -> Color {
-        switch colorScheme {
-        case .dark:
-            return Color(red: 0.22, green: 0.24, blue: 0.28)
-        default:
-            return Color(red: 0.90, green: 0.92, blue: 0.96)
-        }
+        return Color.clear
     }
 
     static func gridCellSelectedFill(for colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .dark:
-            return Color(red: 0.22, green: 0.55, blue: 1.0)
+            return Color(red: 0.22, green: 0.55, blue: 1.0).opacity(0.45)
         default:
-            return Color(red: 0.16, green: 0.49, blue: 0.93)
+            return Color(red: 0.16, green: 0.49, blue: 0.93).opacity(0.45)
         }
     }
 
@@ -64,16 +59,11 @@ enum ThemeColors {
     }
 
     static func gridCellHighlightFill(for colorScheme: ColorScheme) -> Color {
-        gridCellSelectedFill(for: colorScheme).opacity(0.25)
+        gridCellSelectedFill(for: colorScheme)
     }
 
     static func gridCellHighlightBorder(for colorScheme: ColorScheme) -> Color {
-        switch colorScheme {
-        case .dark:
-            return Color.white.opacity(0.25)
-        default:
-            return Color.white.opacity(0.4)
-        }
+        gridCellSelectedBorder(for: colorScheme)
     }
 
     // MARK: - Grid Preview (Settings)

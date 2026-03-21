@@ -87,6 +87,17 @@ struct MainWindowView: View {
         _draftSettings = State(initialValue: appState.settingsSnapshot)
     }
 
+    private var desktopPictureURL: URL? {
+        let screen: NSScreen?
+        if let ctx = screenContext {
+            screen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
+        } else {
+            screen = NSScreen.main
+        }
+        guard let screen else { return nil }
+        return NSWorkspace.shared.desktopImageURL(for: screen)
+    }
+
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
@@ -361,7 +372,13 @@ struct MainWindowView: View {
         let hasSidebar = appState.isSidebarVisible
         let mainContentWidth = hasSidebar ? size.width - Self.sidebarWidth - 1 : size.width
         let gridWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
-        let gridHeight = gridWidth * Self.layoutGridAspectHeightRatio
+        let aspectRatio: CGFloat
+        if let ctx = screenContext, ctx.visibleFrame.width > 0 {
+            aspectRatio = ctx.visibleFrame.height / ctx.visibleFrame.width
+        } else {
+            aspectRatio = Self.layoutGridAspectHeightRatio
+        }
+        let gridHeight = gridWidth * aspectRatio
         let availablePresetsHeight = max(
             0,
             size.height
@@ -390,6 +407,7 @@ struct MainWindowView: View {
                     columns: appState.columns,
                     gap: appState.gap,
                     highlightSelection: editingPresetHighlightSelection,
+                    desktopPictureURL: desktopPictureURL,
                     onSelectionChange: { selection in
                         if editingPresetID == nil {
                             dismissPresetNameEditingIfNeeded()

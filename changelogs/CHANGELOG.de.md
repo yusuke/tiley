@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Nicht ausgewählte Rasterkacheln sind jetzt transparent
+- Das Seitenverhältnis des Rasters entspricht jetzt dem sichtbaren Bildschirmbereich (ohne Menüleiste und Dock)
+- Der Hintergrund des Layout-Rasters zeigt jetzt das Desktop-Bild (halbtransparent, abgerundete Ecken)
+- Per Drag ausgewählte Zellen sind jetzt halbtransparent, sodass das Desktop-Bild darunter sichtbar ist
+- Der Vorschau-Hover-Highlight im Raster verwendet jetzt denselben Stil wie die Drag-Auswahl
+
 ### Hinzugefügt
 
 - Die Fensterlisten-Seitenleiste wird jetzt bei Multi-Monitor-Setups auf allen Bildschirmen angezeigt, nicht nur auf dem Zielbildschirm

@@ -5,6 +5,7 @@ struct LayoutGridWorkspaceView: View {
     let columns: Int
     let gap: CGFloat
     var highlightSelection: GridSelection?
+    var desktopPictureURL: URL?
     let onSelectionChange: (GridSelection?) -> Void
     let onHoverChange: ((GridSelection?) -> Void)?
     let onSelectionCommit: (GridSelection) -> Void
@@ -21,6 +22,16 @@ struct LayoutGridWorkspaceView: View {
             let cellWidth = (geometry.size.width - gap * CGFloat(columns - 1)) / CGFloat(columns)
             let cellHeight = (geometry.size.height - gap * CGFloat(rows - 1)) / CGFloat(rows)
             ZStack(alignment: .topLeading) {
+                if let url = desktopPictureURL,
+                   let nsImage = NSImage(contentsOf: url) {
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .opacity(0.5)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                }
+
                 ForEach(0..<rows, id: \.self) { row in
                     ForEach(0..<columns, id: \.self) { column in
                         let frame = rectForCell(row: row, column: column, width: cellWidth, height: cellHeight)

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Le celle della griglia non selezionate sono ora trasparenti
+- Le proporzioni della griglia corrispondono ora all'area visibile dello schermo (escluse barra dei menu e Dock)
+- Lo sfondo della griglia di layout mostra ora l'immagine del desktop (semitrasparente, angoli arrotondati)
+- Le celle selezionate con trascinamento sono ora semitrasparenti, mostrando l'immagine del desktop sottostante
+- L'evidenziazione al passaggio del cursore sui preset nella griglia usa ora lo stesso stile della selezione con trascinamento
+
 ### Aggiunto
 
 - La barra laterale dell'elenco finestre viene ora visualizzata su tutti gli schermi nelle configurazioni multi-monitor, non solo sullo schermo di destinazione

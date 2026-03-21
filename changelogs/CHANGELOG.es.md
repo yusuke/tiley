@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Las celdas de la cuadrícula no seleccionadas ahora son transparentes
+- La relación de aspecto de la cuadrícula ahora coincide con el área visible de la pantalla (sin barra de menú ni Dock)
+- El fondo de la cuadrícula de diseño ahora muestra la imagen de escritorio (semitransparente, esquinas redondeadas)
+- Las celdas seleccionadas con arrastre ahora son semitransparentes, mostrando la imagen de escritorio por debajo
+- El resaltado al pasar el cursor sobre un preset en la cuadrícula ahora usa el mismo estilo que la selección con arrastre
+
 ### Añadido
 
 - La barra lateral de lista de ventanas ahora se muestra en todas las pantallas en configuraciones de múltiples monitores, no solo en la pantalla objetivo
