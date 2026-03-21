@@ -344,42 +344,58 @@ final class AccessibilityService {
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
     }
 
-    /// For non-primary screens: move the window to the primary screen first,
-    /// resize there (where AX size changes are reliable), then move to the
-    /// final position on the target screen.
+    /// For non-primary screens: try resizing in-place first (size-only,
+    /// no position changes).  If the size doesn't change at all (AX bug
+    /// on mixed-DPI setups), bounce to the primary screen as a last resort.
+    /// The window stays on the secondary screen for the common cases
+    /// (full resize or app-constrained partial resize), avoiding flicker.
     private func applyViaPrimaryBounce(_ origin: CGPoint, _ size: CGSize,
                                         position: AXValue, sizeValue: AXValue,
                                         for window: AXUIElement) throws {
-        // 1. Move window off-screen so the resize happens on the primary
-        //    display without being visible.  We pick a Y coordinate below
-        //    ALL screens so the window isn't visible on any display.
-        let maxAXBottom = NSScreen.screens.reduce(into: CGFloat(0)) { result, screen in
-            let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
-            let axBottom = primaryMaxY - screen.frame.minY  // bottom edge in AX coords
-            result = max(result, axBottom)
-        }
-        var offscreenOrigin = CGPoint(x: 0, y: maxAXBottom + 100)
-        if let offscreenPos = AXValueCreate(.cgPoint, &offscreenOrigin) {
-            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, offscreenPos)
+        let (_, beforeSize) = readPositionAndSize(of: window)
+
+        // 1. Try setting size in-place (no position change).
+        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+
+        let (_, afterSize) = readPositionAndSize(of: window)
+        let sizeChanged = abs(afterSize.width - beforeSize.width) > 2
+                        || abs(afterSize.height - beforeSize.height) > 2
+
+        if !sizeChanged {
+            // Size didn't change at all on the secondary screen.
+            // Move the window to the very bottom of the primary screen
+            // (mostly off-screen) and try resizing there.
+            let primaryHeight = NSScreen.screens.first?.frame.height ?? 1200
+            var bottomOfPrimary = CGPoint(x: 0, y: primaryHeight - 1)
+            if let v = AXValueCreate(.cgPoint, &bottomOfPrimary) {
+                AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
+            }
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         }
 
-        // 2. Set target size on the primary screen.
-        let sizeResult = AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
-        guard sizeResult == .success else {
-            throw WindowAccessError.sizeSetFailed
+        // 2. Set position with nudge to defeat AX de-duplication.
+        var nudged = origin
+        nudged.y += 1
+        if let nudgeVal = AXValueCreate(.cgPoint, &nudged) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, nudgeVal)
         }
 
-        // 3. Move to the final position on the target screen.
-        let positionResult = AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
-        guard positionResult == .success else {
-            throw WindowAccessError.positionSetFailed
-        }
+        // 3. Set final position.
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
 
-        // 4. Re-raise the window — the bounce may have changed the
-        //    z-order among the app's windows.
-        //    No nudge needed: the window moved from off-screen so the
-        //    position is always a genuine change (no AX de-duplication).
+        // 4. Re-raise in case the bounce changed z-order.
         raiseWindow(window)
+    }
+
+    /// Returns the largest AX-Y value that is still below all screens.
+    private func allScreensMaxAXBottom() -> CGFloat {
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 1200
+        var maxBottom: CGFloat = 0
+        for screen in NSScreen.screens {
+            let axBottom = primaryMaxY - screen.frame.minY
+            if axBottom > maxBottom { maxBottom = axBottom }
+        }
+        return maxBottom
     }
 
     /// Raises a window to the front of its application's window stack.
