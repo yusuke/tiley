@@ -5,7 +5,13 @@
 ### Corrigido
 
 - Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta
-- Adicionada geração de scripts de depuração AX (`~/tileyScripts/`) que registra cada etapa das alterações de posição/tamanho para diagnosticar falhas intermitentes de posicionamento de janelas
+- Corrigido o redimensionamento de janelas falhando em telas não primárias em configurações de DPI misto; a janela é temporariamente movida para a tela primária para redimensionar e então posicionada no local de destino
+- Corrigida a posição não sendo aplicada após redimensionamento quando alguns apps revertem silenciosamente as alterações de posição (contorno de deduplicação AX)
+- Quando o tamanho mínimo de janela de um app impede o tamanho solicitado, a posição é recalculada para que a janela permaneça dentro da área visível da tela
+
+### Adicionado
+
+- Log de depuração de redimensionamento opcional (`~/tiley.log`) (Configurações > Depuração)
 
 ## [2.1.0] - 2026-03-20
 

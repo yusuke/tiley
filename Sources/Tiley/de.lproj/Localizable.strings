@@ -46,7 +46,7 @@
 "Show Dock icon" = "Dock-Symbol anzeigen";
 "Windows" = "Fenster";
 "Quit app when closing last window" = "App beenden beim Schließen des letzten Fensters";
-"Save resize debug scripts" = "Debug-Skripte für Größenänderung speichern";
+"Write resize debug log to ~/tiley.log" = "Debug-Log für Größenänderung in ~/tiley.log schreiben";
 "Global shortcut" = "Globales Tastenkürzel";
 "Reset to Default" = "Auf Standard zurücksetzen";
 "Click the field, then press the new shortcut." = "Klicke auf das Feld und drücke das neue Tastenkürzel.";

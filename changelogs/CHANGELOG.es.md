@@ -5,7 +5,13 @@
 ### Corregido
 
 - Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta
-- Añadida generación de scripts de depuración AX (`~/tileyScripts/`) que registra cada paso de los cambios de posición/tamaño para diagnosticar fallos intermitentes de colocación de ventanas
+- Corregido el redimensionamiento de ventanas fallando en pantallas no primarias en configuraciones de DPI mixto; la ventana se mueve temporalmente a la pantalla primaria para redimensionar y luego se coloca en la posición objetivo
+- Corregida la posición no aplicada después del redimensionamiento cuando algunas apps revierten silenciosamente los cambios de posición (solución alternativa de deduplicación AX)
+- Cuando el tamaño mínimo de ventana de una app impide el tamaño solicitado, la posición se recalcula para que la ventana permanezca dentro del área visible de la pantalla
+
+### Añadido
+
+- Registro de depuración de redimensionamiento opcional (`~/tiley.log`) (Ajustes > Depuración)
 
 ## [2.1.0] - 2026-03-20
 

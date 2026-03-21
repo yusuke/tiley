@@ -5,7 +5,13 @@
 ### Corrigé
 
 - Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte
-- Ajout de la génération de scripts de débogage AX (`~/tileyScripts/`) enregistrant chaque étape des changements de position/taille pour diagnostiquer les échecs intermittents de placement de fenêtres
+- Correction du redimensionnement échouant sur les écrans non principaux dans les configurations DPI mixtes ; la fenêtre est temporairement déplacée vers l'écran principal pour le redimensionnement puis placée à la position cible
+- Correction de la position non appliquée après redimensionnement lorsque certaines apps annulent silencieusement les changements de position (contournement de la déduplication AX)
+- Lorsque la taille minimale de fenêtre d'une app empêche la taille demandée, la position est recalculée pour que la fenêtre reste dans la zone visible de l'écran
+
+### Ajouté
+
+- Journal de débogage de redimensionnement optionnel (`~/tiley.log`) (Réglages > Débogage)
 
 ## [2.1.0] - 2026-03-20
 

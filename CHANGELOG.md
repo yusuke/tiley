@@ -10,7 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open
-- Added AX debug script generation (`~/tileyScripts/`) that logs each step of position/size changes for diagnosing intermittent window placement failures
+- Fixed window resize failing on non-primary screens in mixed-DPI setups; the window is now temporarily moved to the primary display for resizing, then placed at the target position
+- Fixed position not being applied after resize when some apps silently revert position changes (AX de-duplication workaround via 1px nudge)
+- When an app's minimum window size prevents the requested size, the window position is now recalculated so it stays within the visible screen area instead of extending beyond the edge
+
+### Added
+
+- Optional resize debug log (`~/tiley.log`) for diagnosing window placement issues (Settings > Debug)
 
 ## [2.1.0] - 2026-03-20
 

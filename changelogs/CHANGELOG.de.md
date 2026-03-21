@@ -5,7 +5,13 @@
 ### Behoben
 
 - Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde
-- AX-Debug-Skript-Generierung hinzugefügt (`~/tileyScripts/`), die jeden Schritt der Position-/Größenänderung protokolliert, zur Diagnose intermittierender Fensterplatzierungsprobleme
+- Fenstergrößenänderung schlug auf Nicht-Primärbildschirmen in gemischten DPI-Konfigurationen fehl; das Fenster wird jetzt vorübergehend zum Primärbildschirm verschoben und dann an der Zielposition platziert
+- Position wurde nach Größenänderung nicht angewendet, wenn Apps die Positionsänderung stillschweigend rückgängig machen (AX-Deduplizierungs-Workaround)
+- Wenn die Mindestfenstergröße einer App die angeforderte Größe verhindert, wird die Fensterposition neu berechnet, damit es im sichtbaren Bildschirmbereich bleibt
+
+### Hinzugefügt
+
+- Optionales Debug-Log für Größenänderungen (`~/tiley.log`) (Einstellungen > Fehlersuche)
 
 ## [2.1.0] - 2026-03-20
 

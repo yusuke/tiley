@@ -46,7 +46,7 @@
 "Show Dock icon" = "Afficher l'icône dans le Dock";
 "Windows" = "Fenêtres";
 "Quit app when closing last window" = "Quitter l'app en fermant la dernière fenêtre";
-"Save resize debug scripts" = "Enregistrer les scripts de débogage de redimensionnement";
+"Write resize debug log to ~/tiley.log" = "Écrire le journal de débogage de redimensionnement dans ~/tiley.log";
 "Global shortcut" = "Raccourci global";
 "Reset to Default" = "Réinitialiser";
 "Click the field, then press the new shortcut." = "Cliquez sur le champ, puis appuyez sur le nouveau raccourci.";

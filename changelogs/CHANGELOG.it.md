@@ -5,7 +5,13 @@
 ### Corretto
 
 - Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto
-- Aggiunta generazione di script di debug AX (`~/tileyScripts/`) che registra ogni passaggio delle modifiche di posizione/dimensione per diagnosticare problemi intermittenti di posizionamento finestre
+- Corretto il ridimensionamento delle finestre che falliva sugli schermi non primari nelle configurazioni DPI miste; la finestra viene temporaneamente spostata sullo schermo primario per il ridimensionamento e poi posizionata nella posizione target
+- Corretta la posizione non applicata dopo il ridimensionamento quando alcune app annullano silenziosamente le modifiche alla posizione (soluzione alternativa alla deduplicazione AX)
+- Quando la dimensione minima della finestra di un'app impedisce la dimensione richiesta, la posizione viene ricalcolata affinché la finestra rimanga nell'area visibile dello schermo
+
+### Aggiunto
+
+- Log di debug del ridimensionamento opzionale (`~/tiley.log`) (Impostazioni > Debug)
 
 ## [2.1.0] - 2026-03-20
 

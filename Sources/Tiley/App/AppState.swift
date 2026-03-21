@@ -704,13 +704,10 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             let constrained: Bool
-            NSLog("[Tiley] apply(selection:to:) useAppleScriptResize=%d", useAppleScriptResize ? 1 : 0)
             if useAppleScriptResize {
-                try windowManager?.moveViaScript(target: target, to: frame, on: target.screenFrame)
-                constrained = false
-            } else {
-                constrained = try windowManager?.move(target: target, to: frame) ?? false
+                try windowManager?.moveWithLog(target: target, to: frame, on: target.screenFrame)
             }
+            constrained = try windowManager?.move(target: target, to: frame) ?? false
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
@@ -757,11 +754,9 @@ final class AppState: NSObject, NSMenuDelegate {
         do {
             let constrained: Bool
             if useAppleScriptResize {
-                try windowManager?.moveViaScript(target: target, to: frame, on: currentScreenFrame)
-                constrained = false
-            } else {
-                constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
+                try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
             }
+            constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {

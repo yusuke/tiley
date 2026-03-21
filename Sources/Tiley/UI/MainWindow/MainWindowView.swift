@@ -1010,7 +1010,7 @@ struct MainWindowView: View {
 
             TahoeSettingsSection(title: NSLocalizedString("Debug", comment: "Settings section")) {
                 VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Save resize debug scripts", comment: "")) {
+                    TahoeSettingsRow(label: NSLocalizedString("Write resize debug log to ~/tiley.log", comment: "")) {
                         Toggle("", isOn: Binding(
                             get: { draftSettings.useAppleScriptResize },
                             set: { newValue in
