@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Der Gitterhintergrund spiegelt nun die macOS-Hintergrundbild-Anzeigeeinstellungen korrekt wider (Füllen, Anpassen, Strecken, Zentrieren und Kacheln), einschließlich korrekter Kachelskalierung, physischem Pixelverhältnis für den Zentrierung-Modus und Füllfarbe für Letterbox-Bereiche
+
 ## [2.2.0] - 2026-03-21
 
 ### Geändert

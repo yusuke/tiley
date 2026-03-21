@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- O fundo da grade agora reflete com precisão as configurações de exibição do papel de parede do macOS (preencher, ajustar, esticar, centralizar e mosaico), incluindo dimensionamento correto dos blocos, proporção de pixels físicos para o modo centralizado e cor de preenchimento para áreas de letterbox
+
 ## [2.2.0] - 2026-03-21
 
 ### Alterado

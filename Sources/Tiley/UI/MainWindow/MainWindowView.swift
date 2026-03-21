@@ -87,7 +87,26 @@ struct MainWindowView: View {
         _draftSettings = State(initialValue: appState.settingsSnapshot)
     }
 
-    private var desktopPictureURL: URL? {
+    struct DesktopPictureInfo {
+        let url: URL
+        // NSImageScaling raw value
+        let scaling: Int
+        // allowClipping option
+        let allowClipping: Bool
+        // true when both scaling and allowClipping are absent (macOS tile mode)
+        let isTiled: Bool
+        // Physical screen size in points
+        let screenSize: CGSize
+        // Retina scale factor (e.g. 2.0 for Retina); macOS tiles wallpapers at 1 image pixel per physical pixel
+        let screenScale: CGFloat
+        // Background fill color shown in letterbox areas (fit/center modes)
+        let fillColor: Color?
+        // Pixel dimensions of the original wallpaper (may differ from url's image size when a thumbnail is used)
+        let originalImageSize: CGSize?
+    }
+
+    private var desktopPictureInfo: DesktopPictureInfo? {
+        _ = appState.desktopImageVersion  // Invalidate when wallpaper changes
         let screen: NSScreen?
         if let ctx = screenContext {
             screen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
@@ -95,8 +114,222 @@ struct MainWindowView: View {
             screen = NSScreen.main
         }
         guard let screen else { return nil }
-        return NSWorkspace.shared.desktopImageURL(for: screen)
+        guard let rawURL = NSWorkspace.shared.desktopImageURL(for: screen) else { return nil }
+        let opts = NSWorkspace.shared.desktopImageOptions(for: screen)
+        Self.tileyLog("rawURL=\(rawURL.lastPathComponent) opts=\(String(describing: opts))")
+
+        // On macOS 15+, desktopImageURL always returns DefaultDesktop.heic for system
+        // wallpapers. Try to resolve the actual image and display mode via the wallpaper Store.
+        let storeInfo = Self.resolvedWallpaperInfo(for: rawURL)
+
+        // Use thumbnail when available (aerial wallpapers with assetID); otherwise fall back to
+        // the raw URL (DefaultDesktop.heic for preset wallpapers like "Lake Tahoe").
+        // DefaultDesktop.heic is not the actual preset image, but Fill mode covers the grid
+        // regardless of aspect ratio, so no gaps will appear.
+        let url = storeInfo?.thumbnailURL ?? rawURL
+
+        // When we use a thumbnail, read the actual wallpaper's pixel dimensions from the
+        // original .heic so that tile/center size calculations are based on the real image size.
+        var originalImageSize: CGSize? = nil
+        if storeInfo?.thumbnailURL != nil {
+            if let src = CGImageSourceCreateWithURL(rawURL as CFURL, nil),
+               let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any],
+               let pixelWidth = props[kCGImagePropertyPixelWidth] as? CGFloat,
+               let pixelHeight = props[kCGImagePropertyPixelHeight] as? CGFloat {
+                originalImageSize = CGSize(width: pixelWidth, height: pixelHeight)
+            }
+        }
+
+        // Whether rawURL points to a custom user image (not DefaultDesktop.heic system symlink).
+        // On macOS 15+, custom images still have their actual path in desktopImageURL.
+        let isCustomImage = rawURL.lastPathComponent != "DefaultDesktop.heic"
+
+        // Determine display mode.
+        // Known placement values from the Store plist:
+        //   "Fill"      – proportional fill (clipping allowed)
+        //   "SizeToFit" – proportional fit (no clipping)
+        //   "Stretch"   – stretch to fill axes independently
+        //   "Centered"  – center at 1:1 pixel ratio
+        //   "Tiled"     – tile at 1 image pixel per physical pixel
+        //
+        // NOTE: macOS preset wallpapers (landscapes, cityscapes, etc.) always render as Fill
+        // regardless of what the Store plist records. The plist placement field is only
+        // meaningful when the user has explicitly set a custom wallpaper image.
+        let scalingRaw: Int?
+        let allowClipping: Bool
+        let isTiled: Bool
+        if storeInfo?.thumbnailURL != nil {
+            // Aerial wallpaper with thumbnail — always render as fill to cover.
+            // The plist placement value is unreliable: macOS records "Centered" even for
+            // wallpapers that display as fill/cover. Only "Tile" is preserved because
+            // tiling is visually distinct.
+            if storeInfo?.placement == "Tile" {
+                scalingRaw = nil
+                allowClipping = false
+                isTiled = true
+            } else {
+                scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
+                allowClipping = true
+                isTiled = false
+            }
+        } else if let scalingRawOpt = opts?[.imageScaling] as? Int {
+            // Custom image with explicit desktopImageOptions (older macOS) — use them directly
+            scalingRaw = scalingRawOpt
+            allowClipping = opts?[.allowClipping] as? Bool ?? false
+            isTiled = false
+        } else if isCustomImage, let placement = storeInfo?.placement {
+            // Custom image on macOS 15+ where desktopImageOptions no longer includes imageScaling.
+            // Read the placement from the wallpaper Store plist instead.
+            switch placement {
+            case "Tile":
+                scalingRaw = nil
+                allowClipping = false
+                isTiled = true
+            case "Stretch":
+                scalingRaw = Int(NSImageScaling.scaleAxesIndependently.rawValue)
+                allowClipping = false
+                isTiled = false
+            case "Centered":
+                scalingRaw = Int(NSImageScaling.scaleNone.rawValue)
+                allowClipping = false
+                isTiled = false
+            case "SizeToFit":
+                scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
+                allowClipping = false
+                isTiled = false
+            default: // "Fill" and anything else
+                scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
+                allowClipping = true
+                isTiled = false
+            }
+        } else {
+            // System preset wallpaper (landscapes, cityscapes, etc.) with no useful metadata.
+            // macOS always renders these as proportional fill (scale to cover, clip sides).
+            scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
+            allowClipping = true
+            isTiled = false
+        }
+        let scaling = scalingRaw ?? Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
+
+        // Fill color: prefer Store plist value, fall back to desktopImageOptions
+        let fillColor: Color?
+        if let c = storeInfo?.fillColor {
+            fillColor = c
+        } else if let nsColor = opts?[.fillColor] as? NSColor,
+                  let srgb = nsColor.usingColorSpace(.sRGB) {
+            fillColor = Color(red: srgb.redComponent, green: srgb.greenComponent, blue: srgb.blueComponent)
+        } else {
+            fillColor = nil
+        }
+        let info = DesktopPictureInfo(url: url, scaling: scaling, allowClipping: allowClipping, isTiled: isTiled, screenSize: screen.frame.size, screenScale: screen.backingScaleFactor, fillColor: fillColor, originalImageSize: originalImageSize)
+        Self.tileyLog("desktopPictureInfo: url=\(url.lastPathComponent) scaling=\(scaling) allowClipping=\(allowClipping) isTiled=\(isTiled) screenSize=\(screen.frame.size) screenScale=\(screen.backingScaleFactor) originalImageSize=\(String(describing: originalImageSize)) storeInfo.thumbnailURL=\(String(describing: storeInfo?.thumbnailURL?.lastPathComponent)) storeInfo.placement=\(String(describing: storeInfo?.placement))")
+        return info
     }
+
+    static func tileyLog(_ message: String) {
+        let logURL = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("tiley.log")
+        let line = "\(Date()) \(message)\n"
+        if let data = line.data(using: .utf8) {
+            if FileManager.default.fileExists(atPath: logURL.path) {
+                if let fh = try? FileHandle(forWritingTo: logURL) {
+                    fh.seekToEndOfFile()
+                    fh.write(data)
+                    try? fh.close()
+                }
+            } else {
+                try? data.write(to: logURL)
+            }
+        }
+    }
+
+    /// Resolved wallpaper information read from the macOS 15+ wallpaper Store plist.
+    private struct WallpaperStoreInfo {
+        /// Thumbnail image URL (only available for aerial/system wallpapers with an assetID)
+        let thumbnailURL: URL?
+        /// Placement string from EncodedOptionValues:
+        /// "Fill", "SizeToFit", "Stretch", "Centered", "Tiled"
+        let placement: String?
+        /// Background fill color from EncodedOptionValues
+        let fillColor: Color?
+    }
+
+    /// On macOS 15+, desktopImageURL always returns DefaultDesktop.heic for system wallpapers.
+    /// This method reads the wallpaper Store plist and returns the placement mode and fill color
+    /// (and a thumbnail URL when available for aerial wallpapers with an assetID).
+    private static func resolvedWallpaperInfo(for rawURL: URL) -> WallpaperStoreInfo? {
+        let storeURL = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Application Support/com.apple.wallpaper/Store/Index.plist")
+        guard let data = try? Data(contentsOf: storeURL),
+              let root = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+        else { return nil }
+        // Walk: AllSpacesAndDisplays > Desktop > Content
+        guard let allSpaces = root["AllSpacesAndDisplays"] as? [String: Any],
+              let desktop = allSpaces["Desktop"] as? [String: Any],
+              let content = desktop["Content"] as? [String: Any],
+              let choices = content["Choices"] as? [[String: Any]],
+              let first = choices.first
+        else { return nil }
+
+        // For custom image wallpapers the choice Configuration has type="imageFile" and a URL.
+        // Check if it matches rawURL to confirm this is a custom (user-provided) image.
+        var isCustomImage = false
+        if let configData = first["Configuration"] as? Data,
+           let config = try? PropertyListSerialization.propertyList(from: configData, format: nil) as? [String: Any],
+           let typeStr = config["type"] as? String,
+           typeStr == "imageFile",
+           let urlDict = config["url"] as? [String: Any],
+           let relativeStr = urlDict["relative"] as? String,
+           let configURL = URL(string: relativeStr) {
+            isCustomImage = (configURL.path == rawURL.path)
+        }
+
+        // Try to get thumbnail from Configuration > assetID (aerials only, not custom images)
+        var thumbnailURL: URL? = nil
+        if !isCustomImage,
+           let configData = first["Configuration"] as? Data,
+           let config = try? PropertyListSerialization.propertyList(from: configData, format: nil) as? [String: Any],
+           let assetID = config["assetID"] as? String {
+            let candidate = FileManager.default.homeDirectoryForCurrentUser
+                .appendingPathComponent("Library/Application Support/com.apple.wallpaper/aerials/thumbnails/\(assetID).png")
+            if FileManager.default.fileExists(atPath: candidate.path) {
+                thumbnailURL = candidate
+            }
+        }
+
+        // Read placement and fill color from EncodedOptionValues
+        var placement: String? = nil
+        var fillColor: Color? = nil
+        if let encodedData = content["EncodedOptionValues"] as? Data,
+           let encoded = try? PropertyListSerialization.propertyList(from: encodedData, format: nil) as? [String: Any],
+           let values = encoded["values"] as? [String: Any] {
+            // placement: values > placement > picker > _0 > id
+            // Known values: "Fill", "SizeToFit", "Stretch", "Centered", "Tiled"
+            if let placementDict = values["placement"] as? [String: Any],
+               let picker = placementDict["picker"] as? [String: Any],
+               let inner = picker["_0"] as? [String: Any],
+               let id = inner["id"] as? String {
+                placement = id
+            }
+            // fill color: values > color > color > _0 > color > components [r, g, b, a]
+            // Components may be Double (modern plist) or String (older encoding)
+            if let colorDict = values["color"] as? [String: Any],
+               let colorInner = colorDict["color"] as? [String: Any],
+               let color0 = colorInner["_0"] as? [String: Any],
+               let colorData = color0["color"] as? [String: Any],
+               let components = colorData["components"] as? [Any],
+               components.count >= 3 {
+                let r = (components[0] as? Double) ?? Double(components[0] as? String ?? "NaN") ?? 0
+                let g = (components[1] as? Double) ?? Double(components[1] as? String ?? "NaN") ?? 0
+                let b = (components[2] as? Double) ?? Double(components[2] as? String ?? "NaN") ?? 0
+                fillColor = Color(red: r, green: g, blue: b)
+            }
+        }
+
+        Self.tileyLog("resolvedWallpaperInfo: isCustomImage=\(isCustomImage) placement=\(String(describing: placement)) thumbnailURL=\(String(describing: thumbnailURL?.lastPathComponent))")
+        return WallpaperStoreInfo(thumbnailURL: thumbnailURL, placement: placement, fillColor: fillColor)
+    }
+
 
     var body: some View {
         GeometryReader { geometry in
@@ -430,7 +663,7 @@ struct MainWindowView: View {
                     columns: appState.columns,
                     gap: appState.gap,
                     highlightSelection: editingPresetHighlightSelection,
-                    desktopPictureURL: desktopPictureURL,
+                    desktopPictureInfo: desktopPictureInfo,
                     onSelectionChange: { selection in
                         if editingPresetID == nil {
                             dismissPresetNameEditingIfNeeded()

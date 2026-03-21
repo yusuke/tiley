@@ -72,6 +72,7 @@ final class AppState: NSObject, NSMenuDelegate {
         var useAppleScriptResize: Bool
     }
 
+    var desktopImageVersion: Int = 0
     var accessibilityGranted = false
     var isEditingSettings = false
     var isShowingPermissionsOnly = false
@@ -1977,6 +1978,18 @@ final class AppState: NSObject, NSMenuDelegate {
                 guard !Task.isCancelled else { break }
                 await MainActor.run { [weak self] in
                     self?.handleScreenConfigurationChange()
+                }
+            }
+        }
+
+        Task { [weak self] in
+            let notifications = NotificationCenter.default.notifications(
+                named: Notification.Name("NSWorkspaceDidChangeDesktopImageNotification")
+            )
+            for await _ in notifications {
+                guard !Task.isCancelled else { break }
+                await MainActor.run { [weak self] in
+                    self?.desktopImageVersion += 1
                 }
             }
         }
