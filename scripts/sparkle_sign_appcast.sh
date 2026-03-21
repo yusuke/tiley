@@ -209,13 +209,12 @@ for version in "${APPCAST_VERSIONS[@]}"; do
       continue
     fi
 
-    ESCAPED_HTML=$(echo "$HTML_NOTES" | sed -e 's/[\/&]/\\&/g' | tr '\n' '\a')
-    sed -i '' "/<title>${version}<\/title>/a\\
-            <description xml:lang=\"${lang}\"><![CDATA[${ESCAPED_HTML}]]></description>
-" "$APPCAST_XML"
-    # Restore newlines from \a placeholders
-    sed -i '' "s/$(printf '\a')/\\
-/g" "$APPCAST_XML"
+    export __SPARKLE_DESC="            <description xml:lang=\"${lang}\"><![CDATA[${HTML_NOTES}]]></description>"
+    export __SPARKLE_VER="$version"
+    perl -i -0777 -pe '
+      BEGIN { $desc = $ENV{__SPARKLE_DESC}; $ver = $ENV{__SPARKLE_VER}; }
+      s|(<title>\Q$ver\E</title>)|$1\n$desc|;
+    ' "$APPCAST_XML"
     EMBEDDED_COUNT=$((EMBEDDED_COUNT + 1))
   done
 done

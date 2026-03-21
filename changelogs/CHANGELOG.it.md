@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-03-21
+
 ### Modificato
 
 - Le celle della griglia non selezionate sono ora trasparenti

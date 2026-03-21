@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-03-21
+
 ### Alterado
 
 - As células da grade não selecionadas agora são transparentes

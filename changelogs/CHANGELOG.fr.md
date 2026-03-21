@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-03-21
+
 ### Modifié
 
 - Les cellules de grille non sélectionnées sont désormais transparentes
