@@ -371,14 +371,37 @@ struct MainWindowView: View {
     private func layoutGridPanel(size: CGSize) -> some View {
         let hasSidebar = appState.isSidebarVisible
         let mainContentWidth = hasSidebar ? size.width - Self.sidebarWidth - 1 : size.width
-        let gridWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
+        let fullGridWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
         let aspectRatio: CGFloat
         if let ctx = screenContext, ctx.visibleFrame.width > 0 {
             aspectRatio = ctx.visibleFrame.height / ctx.visibleFrame.width
         } else {
             aspectRatio = Self.layoutGridAspectHeightRatio
         }
-        let gridHeight = gridWidth * aspectRatio
+        // Calculate the maximum grid height that still shows at least 4 preset rows.
+        let minPresetCount: CGFloat = min(CGFloat(appState.displayedLayoutPresets.count), 4)
+        let minPresetsHeight = minPresetCount * Self.presetRowHeight
+            + max(0, minPresetCount - 1) * Self.presetRowSpacing
+        let nonGridHeight = Self.layoutFooterTopPadding
+            + Self.footerHeight
+            + Self.layoutFooterBottomPadding
+            + Self.layoutGridTopPadding
+            + Self.layoutPresetsTopPadding
+            + Self.presetsPanelChromeHeight
+            + minPresetsHeight
+            + Self.footerBottomPadding
+        let maxGridHeight = size.height - nonGridHeight
+        let fullGridHeight = fullGridWidth * aspectRatio
+        // If the full grid is too tall, shrink width proportionally to fit (preserving aspect ratio).
+        let gridHeight: CGFloat
+        let gridWidth: CGFloat
+        if fullGridHeight > maxGridHeight && maxGridHeight > 0 {
+            gridHeight = maxGridHeight
+            gridWidth = gridHeight / aspectRatio
+        } else {
+            gridHeight = fullGridHeight
+            gridWidth = fullGridWidth
+        }
         let availablePresetsHeight = max(
             0,
             size.height

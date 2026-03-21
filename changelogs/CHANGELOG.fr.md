@@ -5,7 +5,7 @@
 ### Modifié
 
 - Les cellules de grille non sélectionnées sont désormais transparentes
-- Le rapport d'aspect de la grille correspond maintenant à la zone visible de l'écran (sans barre de menus ni Dock)
+- Le rapport d'aspect de la grille correspond maintenant à la zone visible de l'écran (sans barre de menus ni Dock) ; si la grille serait trop haute, sa largeur est réduite proportionnellement pour garantir l'affichage d'au moins 4 presets
 - L'arrière-plan de la grille de mise en page affiche désormais l'image du bureau (semi-transparent, coins arrondis)
 - Les cellules sélectionnées par glissement sont désormais semi-transparentes, laissant apparaître l'image du bureau
 - La surbrillance au survol des presets dans la grille utilise désormais le même style que la sélection par glissement

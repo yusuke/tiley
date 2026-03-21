@@ -5,7 +5,7 @@
 ### Geändert
 
 - Nicht ausgewählte Rasterkacheln sind jetzt transparent
-- Das Seitenverhältnis des Rasters entspricht jetzt dem sichtbaren Bildschirmbereich (ohne Menüleiste und Dock)
+- Das Seitenverhältnis des Rasters entspricht jetzt dem sichtbaren Bildschirmbereich (ohne Menüleiste und Dock); wird das Raster zu hoch, wird die Breite proportional reduziert, damit mindestens 4 Presets sichtbar bleiben
 - Der Hintergrund des Layout-Rasters zeigt jetzt das Desktop-Bild (halbtransparent, abgerundete Ecken)
 - Per Drag ausgewählte Zellen sind jetzt halbtransparent, sodass das Desktop-Bild darunter sichtbar ist
 - Der Vorschau-Hover-Highlight im Raster verwendet jetzt denselben Stil wie die Drag-Auswahl

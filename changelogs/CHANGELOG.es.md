@@ -5,7 +5,7 @@
 ### Cambiado
 
 - Las celdas de la cuadrícula no seleccionadas ahora son transparentes
-- La relación de aspecto de la cuadrícula ahora coincide con el área visible de la pantalla (sin barra de menú ni Dock)
+- La relación de aspecto de la cuadrícula ahora coincide con el área visible de la pantalla (sin barra de menú ni Dock); si la cuadrícula sería demasiado alta, su ancho se reduce proporcionalmente para garantizar que al menos 4 presets sean visibles
 - El fondo de la cuadrícula de diseño ahora muestra la imagen de escritorio (semitransparente, esquinas redondeadas)
 - Las celdas seleccionadas con arrastre ahora son semitransparentes, mostrando la imagen de escritorio por debajo
 - El resaltado al pasar el cursor sobre un preset en la cuadrícula ahora usa el mismo estilo que la selección con arrastre

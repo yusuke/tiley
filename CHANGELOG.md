@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Grid tiles are now transparent when not selected
-- Grid aspect ratio now matches the screen's visible area (excluding menu bar and Dock)
+- Grid aspect ratio now matches the screen's visible area (excluding menu bar and Dock); if the grid would be too tall, its width is reduced proportionally to ensure at least 4 presets remain visible
 - Desktop picture is now displayed as the background of the layout grid (with transparency and rounded corners)
 - Drag-selected cells are now semi-transparent, showing the desktop picture beneath
 - Preset hover highlight in the grid now uses the same style as the drag selection

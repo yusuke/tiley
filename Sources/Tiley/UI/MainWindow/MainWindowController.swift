@@ -307,18 +307,39 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let showSidebar = appState?.isEditingSettings != true
         let totalWidth = showSidebar ? windowWidth + sidebarWidth + 1 : windowWidth
         let presetCount = CGFloat(appState?.displayedLayoutPresets.count ?? 0)
-        let gridWidth = windowWidth - (layoutPanelHorizontalPadding * 2)
-        let layoutGridHeight = gridWidth * layoutGridAspectHeightRatio
+        let maxHeight = maxAllowedHeight(in: visibleFrame)
+
+        // Compute the aspect ratio of the usable screen area.
+        let aspectRatio: CGFloat
+        if let vf = visibleFrame, vf.width > 0 {
+            aspectRatio = vf.height / vf.width
+        } else {
+            aspectRatio = layoutGridAspectHeightRatio
+        }
+
+        // Minimum height needed to show at least 4 preset rows plus all chrome.
+        let minPresetCount: CGFloat = min(presetCount, 4)
+        let minPresetsHeight = minPresetCount * layoutPresetRowHeight
+            + max(0, minPresetCount - 1) * layoutPresetRowSpacing
+        let minNonGridHeight = contentVerticalPadding + footerHeight + layoutPresetsHeaderHeight + minPresetsHeight
+
+        // Maximum grid height that still leaves room for 4 presets within maxHeight.
+        let maxGridHeight = maxHeight - extraWindowHeight - minNonGridHeight
+        let fullGridWidth = windowWidth - (layoutPanelHorizontalPadding * 2)
+        let fullGridHeight = fullGridWidth * aspectRatio
+        // If grid would be too tall, shrink width to fit (keeping aspect ratio).
+        let gridHeight = min(fullGridHeight, max(0, maxGridHeight))
+        let gridWidth = gridHeight / aspectRatio
+
         let layoutRowsHeight = presetCount * layoutPresetRowHeight
         let layoutSpacingHeight = max(0, presetCount - 1) * layoutPresetRowSpacing
         let layoutHeight = contentVerticalPadding
-            + layoutGridHeight
+            + gridHeight
             + footerHeight
             + layoutPresetsHeaderHeight
             + layoutRowsHeight
             + layoutSpacingHeight
         let idealHeight = max(minimumWindowHeight, settingsHeight, layoutHeight) + extraWindowHeight
-        let maxHeight = maxAllowedHeight(in: visibleFrame)
         let height = min(idealHeight, maxHeight)
         return NSSize(width: totalWidth, height: height)
     }

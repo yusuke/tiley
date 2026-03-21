@@ -5,7 +5,7 @@
 ### Modificato
 
 - Le celle della griglia non selezionate sono ora trasparenti
-- Le proporzioni della griglia corrispondono ora all'area visibile dello schermo (escluse barra dei menu e Dock)
+- Le proporzioni della griglia corrispondono ora all'area visibile dello schermo (escluse barra dei menu e Dock); se la griglia risultasse troppo alta, la larghezza viene ridotta proporzionalmente per garantire la visibilità di almeno 4 preset
 - Lo sfondo della griglia di layout mostra ora l'immagine del desktop (semitrasparente, angoli arrotondati)
 - Le celle selezionate con trascinamento sono ora semitrasparenti, mostrando l'immagine del desktop sottostante
 - L'evidenziazione al passaggio del cursore sui preset nella griglia usa ora lo stesso stile della selezione con trascinamento
