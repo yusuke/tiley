@@ -59,8 +59,8 @@
 "This shortcut is already used by another layout." = "Ce raccourci est déjà utilisé par une autre disposition.";
 "This shortcut is already assigned to this layout." = "Ce raccourci est déjà attribué à cette disposition.";
 "Cancel" = "Annuler";
-"Close \"%@\"" = "Fermer « %@ »";
-"Quit \"%@\"" = "Quitter « %@ »";
+"Close %@" = "Fermer %@";
+"Quit %@" = "Quitter %@";
 "Sample placement" = "Aperçu du placement";
 "Check for Updates…" = "Rechercher les mises à jour…";
 "Automatically check for updates" = "Rechercher automatiquement les mises à jour";
@@ -108,5 +108,5 @@
 "Settings (⌘,)" = "Réglages (⌘,)";
 "Settings" = "Réglages";
 "Update available" = "Mise à jour disponible";
-"Close other windows of \"%@\"" = "Fermer les autres fenêtres de %@";
-"Hide windows besides \"%@\"" = "Masquer les fenêtres sauf \"%@\"";
+"Close other windows of %@" = "Fermer les autres fenêtres de %@";
+"Hide windows besides %@" = "Masquer les fenêtres sauf %@";

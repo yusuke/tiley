@@ -59,8 +59,8 @@
 "This shortcut is already used by another layout." = "이 단축키는 다른 레이아웃에서 이미 사용 중입니다.";
 "This shortcut is already assigned to this layout." = "이 단축키는 이미 이 레이아웃에 할당되어 있습니다.";
 "Cancel" = "취소";
-"Close \"%@\"" = "\"%@\" 닫기";
-"Quit \"%@\"" = "\"%@\" 종료";
+"Close %@" = "%@ 닫기";
+"Quit %@" = "%@ 종료";
 "Sample placement" = "배치 예시";
 "Check for Updates…" = "업데이트 확인…";
 "Automatically check for updates" = "자동으로 업데이트 확인";
@@ -108,5 +108,5 @@
 "Settings (⌘,)" = "설정 (⌘,)";
 "Settings" = "설정";
 "Update available" = "업데이트 있음";
-"Close other windows of \"%@\"" = "%@의 다른 윈도우 닫기";
-"Hide windows besides \"%@\"" = "\"%@\" 외 모든 윈도우 숨기기";
+"Close other windows of %@" = "%@의 다른 윈도우 닫기";
+"Hide windows besides %@" = "%@ 외 모든 윈도우 숨기기";

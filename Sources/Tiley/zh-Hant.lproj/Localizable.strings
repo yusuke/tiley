@@ -59,8 +59,8 @@
 "This shortcut is already used by another layout." = "此快捷鍵已被其他版面使用。";
 "This shortcut is already assigned to this layout." = "此快捷鍵已指派給此版面。";
 "Cancel" = "取消";
-"Close \"%@\"" = "關閉\U201C%@\U201D";
-"Quit \"%@\"" = "結束\U201C%@\U201D";
+"Close %@" = "關閉%@";
+"Quit %@" = "結束%@";
 "Sample placement" = "示例配置";
 "Check for Updates…" = "檢查更新…";
 "Automatically check for updates" = "自動檢查更新";
@@ -108,5 +108,5 @@
 "Settings (⌘,)" = "設定 (⌘,)";
 "Settings" = "設定";
 "Update available" = "有可用更新";
-"Close other windows of \"%@\"" = "關閉%@的其他視窗";
-"Hide windows besides \"%@\"" = "隱藏「%@」以外的視窗";
+"Close other windows of %@" = "關閉%@的其他視窗";
+"Hide windows besides %@" = "隱藏%@以外的視窗";

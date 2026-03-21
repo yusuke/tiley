@@ -59,8 +59,8 @@
 "This shortcut is already used by another layout." = "This shortcut is already used by another layout.";
 "This shortcut is already assigned to this layout." = "This shortcut is already assigned to this layout.";
 "Cancel" = "Cancel";
-"Close \"%@\"" = "Close \"%@\"";
-"Quit \"%@\"" = "Quit \"%@\"";
+"Close %@" = "Close %@";
+"Quit %@" = "Quit %@";
 "Sample placement" = "Sample placement";
 "Check for Updates…" = "Check for Updates…";
 "Automatically check for updates" = "Automatically check for updates";
@@ -108,5 +108,5 @@
 "Settings (⌘,)" = "Settings (⌘,)";
 "Settings" = "Settings";
 "Update available" = "Update available";
-"Close other windows of \"%@\"" = "Close other %@ windows";
-"Hide windows besides \"%@\"" = "Hide windows besides \"%@\"";
+"Close other windows of %@" = "Close other %@ windows";
+"Hide windows besides %@" = "Hide windows besides %@";

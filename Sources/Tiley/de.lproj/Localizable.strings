@@ -59,8 +59,8 @@
 "This shortcut is already used by another layout." = "Dieses Tastenkürzel wird bereits von einem anderen Layout verwendet.";
 "This shortcut is already assigned to this layout." = "Dieses Tastenkürzel ist diesem Layout bereits zugewiesen.";
 "Cancel" = "Abbrechen";
-"Close \"%@\"" = "\U201E%@\U201C schließen";
-"Quit \"%@\"" = "\U201E%@\U201C beenden";
+"Close %@" = "%@ schließen";
+"Quit %@" = "%@ beenden";
 "Sample placement" = "Beispielplatzierung";
 "Check for Updates…" = "Nach Updates suchen …";
 "Automatically check for updates" = "Automatisch nach Updates suchen";
@@ -108,5 +108,5 @@
 "Settings (⌘,)" = "Einstellungen (⌘,)";
 "Settings" = "Einstellungen";
 "Update available" = "Update verfügbar";
-"Close other windows of \"%@\"" = "Andere %@-Fenster schließen";
-"Hide windows besides \"%@\"" = "Fenster außer \"%@\" ausblenden";
+"Close other windows of %@" = "Andere %@-Fenster schließen";
+"Hide windows besides %@" = "Fenster außer %@ ausblenden";

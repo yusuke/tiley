@@ -59,8 +59,8 @@
 "This shortcut is already used by another layout." = "Это сочетание уже используется другой компоновкой.";
 "This shortcut is already assigned to this layout." = "Это сочетание уже назначено этой компоновке.";
 "Cancel" = "Отмена";
-"Close \"%@\"" = "Закрыть «%@»";
-"Quit \"%@\"" = "Завершить «%@»";
+"Close %@" = "Закрыть %@";
+"Quit %@" = "Завершить %@";
 "Sample placement" = "Предварительный просмотр";
 "Check for Updates…" = "Проверить обновления…";
 "Automatically check for updates" = "Автоматически проверять обновления";
@@ -108,5 +108,5 @@
 "Settings (⌘,)" = "Настройки (⌘,)";
 "Settings" = "Настройки";
 "Update available" = "Доступно обновление";
-"Close other windows of \"%@\"" = "Закрыть другие окна %@";
-"Hide windows besides \"%@\"" = "Скрыть окна, кроме «%@»";
+"Close other windows of %@" = "Закрыть другие окна %@";
+"Hide windows besides %@" = "Скрыть окна, кроме %@";

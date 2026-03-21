@@ -59,8 +59,8 @@
 "This shortcut is already used by another layout." = "このショートカットは他のレイアウトで既に使われています。";
 "This shortcut is already assigned to this layout." = "このショートカットはこのレイアウトに既に割り当てられています。";
 "Cancel" = "キャンセル";
-"Close \"%@\"" = "\U201C%@\U201Dを閉じる";
-"Quit \"%@\"" = "\U201C%@\U201Dを終了";
+"Close %@" = "%@を閉じる";
+"Quit %@" = "%@を終了";
 "Sample placement" = "配置サンプル";
 "Check for Updates…" = "アップデートを確認…";
 "Automatically check for updates" = "自動的にアップデートを確認";
@@ -108,5 +108,5 @@
 "Settings (⌘,)" = "設定 (⌘,)";
 "Settings" = "設定";
 "Update available" = "アップデートがあります";
-"Close other windows of \"%@\"" = "%@の他のウインドウを閉じる";
-"Hide windows besides \"%@\"" = "\"%@\"以外のウインドウを隠す";
+"Close other windows of %@" = "%@の他のウインドウを閉じる";
+"Hide windows besides %@" = "%@以外のウインドウを隠す";

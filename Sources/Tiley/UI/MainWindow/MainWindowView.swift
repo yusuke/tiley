@@ -745,12 +745,12 @@ struct MainWindowView: View {
                         .instantTooltip({
                             if item.isLastWindowOfApp && appState.quitAppOnLastWindowClose {
                                 return String(
-                                    format: NSLocalizedString("Quit \"%@\"", comment: "Tooltip for closing the last window of an app (quits the app)"),
+                                    format: NSLocalizedString("Quit %@", comment: "Tooltip for closing the last window of an app (quits the app)"),
                                     item.appName
                                 )
                             } else {
                                 return String(
-                                    format: NSLocalizedString("Close \"%@\"", comment: "Tooltip for close window button with window name"),
+                                    format: NSLocalizedString("Close %@", comment: "Tooltip for close window button with window name"),
                                     item.windowTitle.isEmpty ? item.appName : item.windowTitle
                                 )
                             }
@@ -773,10 +773,10 @@ struct MainWindowView: View {
                         }
                     }
                     .padding(.trailing, 4)
-                    .transition(.opacity)
+                    .transition(.identity)
                 }
             }
-            .animation(.easeInOut(duration: 0.15), value: isHovered)
+            .animation(nil, value: isHovered)
         }
         .buttonStyle(.plain)
         .opacity(item.isHidden ? 0.5 : 1.0)
@@ -2432,8 +2432,15 @@ private struct WindowListMoreButton: NSViewRepresentable {
     let onQuit: () -> Void
     let onHideOthers: () -> Void
 
-    func makeNSView(context: Context) -> NSButton {
-        let button = NSButton(frame: NSRect(x: 0, y: 0, width: 16, height: 16))
+    func makeNSView(context: Context) -> NSView {
+        let container = NSView(frame: NSRect(x: 0, y: 0, width: 16, height: 16))
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.wantsLayer = true
+        container.layer?.cornerRadius = 8
+        container.layer?.masksToBounds = true
+
+        let button = NSButton(frame: .zero)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.bezelStyle = .inline
         button.isBordered = false
         button.image = NSImage(systemSymbolName: "ellipsis", accessibilityDescription: nil)?
@@ -2441,16 +2448,23 @@ private struct WindowListMoreButton: NSViewRepresentable {
         button.imagePosition = .imageOnly
         button.target = context.coordinator
         button.action = #selector(Coordinator.showMenu(_:))
-        button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setContentHuggingPriority(.required, for: .vertical)
-        button.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        button.wantsLayer = true
-        button.layer?.cornerRadius = 8
-        return button
+        button.tag = 1
+
+        container.addSubview(button)
+
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: 16),
+            container.heightAnchor.constraint(equalToConstant: 16),
+            button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 16),
+            button.heightAnchor.constraint(equalToConstant: 16),
+        ])
+
+        return container
     }
 
-    func updateNSView(_ button: NSButton, context: Context) {
+    func updateNSView(_ container: NSView, context: Context) {
         let coord = context.coordinator
         coord.sameAppWindowCount = sameAppWindowCount
         coord.appName = appName
@@ -2465,8 +2479,11 @@ private struct WindowListMoreButton: NSViewRepresentable {
         } else {
             bgColor = NSColor(white: colorScheme == .dark ? 0.3 : 0.7, alpha: 1)
         }
-        button.layer?.backgroundColor = bgColor.cgColor
-        button.contentTintColor = isHovered ? .labelColor : .tertiaryLabelColor
+        container.layer?.backgroundColor = bgColor.cgColor
+
+        if let button = container.viewWithTag(1) as? NSButton {
+            button.contentTintColor = isHovered ? .labelColor : .tertiaryLabelColor
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -2505,7 +2522,7 @@ private struct WindowListMoreButton: NSViewRepresentable {
             if sameAppWindowCount > 1 {
                 let closeOthersItem = NSMenuItem(
                     title: String(
-                        format: NSLocalizedString("Close other windows of \"%@\"", comment: "Menu item to close other windows of the same app"),
+                        format: NSLocalizedString("Close other windows of %@", comment: "Menu item to close other windows of the same app"),
                         appName
                     ),
                     action: #selector(closeOthersAction),
@@ -2518,7 +2535,7 @@ private struct WindowListMoreButton: NSViewRepresentable {
 
             let quitItem = NSMenuItem(
                 title: String(
-                    format: NSLocalizedString("Quit \"%@\"", comment: "Menu item to quit the application"),
+                    format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"),
                     appName
                 ),
                 action: #selector(quitAction),
@@ -2530,7 +2547,7 @@ private struct WindowListMoreButton: NSViewRepresentable {
 
             let hideItem = NSMenuItem(
                 title: String(
-                    format: NSLocalizedString("Hide windows besides \"%@\"", comment: "Menu item to hide all windows except the selected app"),
+                    format: NSLocalizedString("Hide windows besides %@", comment: "Menu item to hide all windows except the selected app"),
                     appName
                 ),
                 action: #selector(hideOthersAction),
