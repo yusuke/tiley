@@ -148,6 +148,12 @@ final class AppState: NSObject, NSMenuDelegate {
     var windowSearchHideRequestVersion: Int = 0
     /// Current window search query, synced from the UI for filtered cycling.
     var windowSearchQuery: String = ""
+    /// Whether the window list sidebar is visible (shared across all windows).
+    var isSidebarVisible: Bool = UserDefaults.standard.object(forKey: UserDefaultsKey.windowListSidebarVisible) != nil
+        ? UserDefaults.standard.bool(forKey: UserDefaultsKey.windowListSidebarVisible)
+        : true {
+        didSet { UserDefaults.standard.set(isSidebarVisible, forKey: UserDefaultsKey.windowListSidebarVisible) }
+    }
 
     var settingsSnapshot: SettingsSnapshot {
         SettingsSnapshot(
@@ -506,11 +512,14 @@ final class AppState: NSObject, NSMenuDelegate {
             newTarget.appName
         )
 
-        // Only recreate windows when the target moves to a different screen.
-        // Recreating every time causes a visible flicker ("ヒュン").
+        // When the target moves to a different screen, update the target
+        // display ID without recreating windows (which causes visible flicker).
         let screenChanged = previousScreenFrame != newTarget.screenFrame
         if screenChanged {
-            openMainWindow()
+            if let screenFrame = newTarget.screenFrame as CGRect?,
+               let screen = NSScreen.screen(containing: screenFrame) {
+                targetScreenDisplayID = screen.displayID
+            }
         }
     }
 

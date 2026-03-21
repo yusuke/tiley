@@ -2,16 +2,19 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- La barra laterale dell'elenco finestre viene ora visualizzata su tutti gli schermi nelle configurazioni multi-monitor, non solo sullo schermo di destinazione
+- Lo stato della barra laterale (visibilità, elemento selezionato, testo di ricerca) viene sincronizzato tra tutte le finestre degli schermi
+- Log di debug del ridimensionamento opzionale (`~/tiley.log`) (Impostazioni > Debug)
+
 ### Corretto
 
 - Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto
 - Corretto il ridimensionamento delle finestre che falliva sugli schermi non primari nelle configurazioni DPI miste; la finestra viene temporaneamente spostata sullo schermo primario per il ridimensionamento e poi posizionata nella posizione target
 - Corretta la posizione non applicata dopo il ridimensionamento quando alcune app annullano silenziosamente le modifiche alla posizione (soluzione alternativa alla deduplicazione AX)
 - Quando la dimensione minima della finestra di un'app impedisce la dimensione richiesta, la posizione viene ricalcolata affinché la finestra rimanga nell'area visibile dello schermo
-
-### Aggiunto
-
-- Log di debug del ridimensionamento opzionale (`~/tiley.log`) (Impostazioni > Debug)
+- Eliminato lo sfarfallio visibile delle finestre quando si cambia la finestra di destinazione tra schermi; le finestre non vengono più ricreate al cambio di schermo
 
 ## [2.1.0] - 2026-03-20
 

@@ -80,9 +80,6 @@ struct MainWindowView: View {
     @State private var hoveredCloseButtonIndex: Int?
     @State private var hoveredKebabButtonIndex: Int?
     @State private var isSearchFieldFocused = false
-    @State private var isSidebarVisible = UserDefaults.standard.object(forKey: "windowListSidebarVisible") != nil
-        ? UserDefaults.standard.bool(forKey: "windowListSidebarVisible")
-        : true
 
     init(appState: AppState, screenRole: ScreenRole = .target) {
         self.appState = appState
@@ -139,42 +136,38 @@ struct MainWindowView: View {
             guard appState.isEditingSettings, isHoveringGridSection else { return }
             appState.updateSettingsPreview(newValue)
         }
-        .onChange(of: isSidebarVisible) { _, newValue in
-            UserDefaults.standard.set(newValue, forKey: "windowListSidebarVisible")
-        }
         .onChange(of: appState.windowTargetMenuRequestVersion) { _, _ in
-            if screenRole.isTarget {
-                if !isSidebarVisible {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isSidebarVisible = true
-                    }
+            if !appState.isSidebarVisible {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    appState.isSidebarVisible = true
                 }
-                windowSearchFocusTrigger += 1
             }
+            windowSearchFocusTrigger += 1
         }
         .onChange(of: appState.windowSearchFocusRequestVersion) { _, _ in
-            if screenRole.isTarget {
-                if !isSidebarVisible {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isSidebarVisible = true
-                    }
+            if !appState.isSidebarVisible {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    appState.isSidebarVisible = true
                 }
-                windowSearchFocusTrigger += 1
             }
+            windowSearchFocusTrigger += 1
         }
         .onChange(of: appState.windowSearchHideRequestVersion) { _, _ in
-            if screenRole.isTarget {
-                windowSearchBlurTrigger += 1
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isSidebarVisible = false
-                }
+            windowSearchBlurTrigger += 1
+            withAnimation(.easeInOut(duration: 0.2)) {
+                appState.isSidebarVisible = false
             }
         }
         .onChange(of: windowSearchText) { _, newValue in
             appState.windowSearchQuery = newValue
         }
+        .onChange(of: appState.windowSearchQuery) { _, newValue in
+            if windowSearchText != newValue {
+                windowSearchText = newValue
+            }
+        }
         .onChange(of: appState.windowTargetListVersion) { _, _ in
-            if screenRole.isTarget, appState.hasUsedTabCycling {
+            if appState.hasUsedTabCycling {
                 showSidebarIfNeeded()
             }
         }
@@ -365,7 +358,7 @@ struct MainWindowView: View {
     }
 
     private func layoutGridPanel(size: CGSize) -> some View {
-        let hasSidebar = screenRole.isTarget && isSidebarVisible
+        let hasSidebar = appState.isSidebarVisible
         let mainContentWidth = hasSidebar ? size.width - Self.sidebarWidth - 1 : size.width
         let gridWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
         let gridHeight = gridWidth * Self.layoutGridAspectHeightRatio
@@ -493,21 +486,19 @@ struct MainWindowView: View {
 
     private var layoutGridFooterBar: some View {
         HStack(spacing: 8) {
-            if screenRole.isTarget {
-                // Leading: sidebar toggle button
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isSidebarVisible.toggle()
-                    }
-                } label: {
-                    Image(systemName: "sidebar.left")
-                        .font(.system(size: 13, weight: .medium))
+            // Leading: sidebar toggle button
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    appState.isSidebarVisible.toggle()
                 }
-                .buttonStyle(TahoeToolbarButtonStyle())
-                .instantTooltip(isSidebarVisible
-                    ? NSLocalizedString("Hide sidebar", comment: "Sidebar toggle tooltip when visible")
-                    : NSLocalizedString("Show sidebar", comment: "Sidebar toggle tooltip when hidden"))
+            } label: {
+                Image(systemName: "sidebar.left")
+                    .font(.system(size: 13, weight: .medium))
             }
+            .buttonStyle(TahoeToolbarButtonStyle())
+            .instantTooltip(appState.isSidebarVisible
+                ? NSLocalizedString("Hide sidebar", comment: "Sidebar toggle tooltip when visible")
+                : NSLocalizedString("Show sidebar", comment: "Sidebar toggle tooltip when hidden"))
 
             targetInfoContent
 
@@ -676,7 +667,9 @@ struct MainWindowView: View {
         .padding(.vertical, 8)
         .frame(width: Self.sidebarWidth, height: height)
         .onAppear {
-            appState.refreshAvailableWindows()
+            if screenRole.isTarget {
+                appState.refreshAvailableWindows()
+            }
         }
     }
 
@@ -1616,9 +1609,9 @@ struct MainWindowView: View {
     }
 
     private func showSidebarIfNeeded() {
-        if !isSidebarVisible {
+        if !appState.isSidebarVisible {
             withAnimation(.easeInOut(duration: 0.2)) {
-                isSidebarVisible = true
+                appState.isSidebarVisible = true
             }
         }
     }

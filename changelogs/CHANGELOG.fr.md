@@ -2,16 +2,19 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- La barre latérale de liste de fenêtres est désormais affichée sur tous les écrans dans les configurations multi-moniteurs, pas seulement sur l'écran cible
+- L'état de la barre latérale (visibilité, élément sélectionné, texte de recherche) est synchronisé entre toutes les fenêtres d'écran
+- Journal de débogage de redimensionnement optionnel (`~/tiley.log`) (Réglages > Débogage)
+
 ### Corrigé
 
 - Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte
 - Correction du redimensionnement échouant sur les écrans non principaux dans les configurations DPI mixtes ; la fenêtre est temporairement déplacée vers l'écran principal pour le redimensionnement puis placée à la position cible
 - Correction de la position non appliquée après redimensionnement lorsque certaines apps annulent silencieusement les changements de position (contournement de la déduplication AX)
 - Lorsque la taille minimale de fenêtre d'une app empêche la taille demandée, la position est recalculée pour que la fenêtre reste dans la zone visible de l'écran
-
-### Ajouté
-
-- Journal de débogage de redimensionnement optionnel (`~/tiley.log`) (Réglages > Débogage)
+- Suppression du scintillement visible des fenêtres lors du changement de fenêtre cible entre écrans ; les fenêtres ne sont plus recréées lors du changement d'écran
 
 ## [2.1.0] - 2026-03-20
 

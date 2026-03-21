@@ -2,16 +2,19 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Die Fensterlisten-Seitenleiste wird jetzt bei Multi-Monitor-Setups auf allen Bildschirmen angezeigt, nicht nur auf dem Zielbildschirm
+- Seitenleistenstatus (Sichtbarkeit, ausgewähltes Element, Suchtext) wird zwischen allen Bildschirmfenstern synchronisiert
+- Optionales Debug-Log für Größenänderungen (`~/tiley.log`) (Einstellungen > Fehlersuche)
+
 ### Behoben
 
 - Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde
 - Fenstergrößenänderung schlug auf Nicht-Primärbildschirmen in gemischten DPI-Konfigurationen fehl; das Fenster wird jetzt vorübergehend zum Primärbildschirm verschoben und dann an der Zielposition platziert
 - Position wurde nach Größenänderung nicht angewendet, wenn Apps die Positionsänderung stillschweigend rückgängig machen (AX-Deduplizierungs-Workaround)
 - Wenn die Mindestfenstergröße einer App die angeforderte Größe verhindert, wird die Fensterposition neu berechnet, damit es im sichtbaren Bildschirmbereich bleibt
-
-### Hinzugefügt
-
-- Optionales Debug-Log für Größenänderungen (`~/tiley.log`) (Einstellungen > Fehlersuche)
+- Sichtbares Fensterflackern beim Wechseln des Zielfensters zwischen Bildschirmen behoben; Fenster werden beim Bildschirmwechsel nicht mehr neu erstellt
 
 ## [2.1.0] - 2026-03-20
 

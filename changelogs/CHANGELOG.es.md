@@ -2,16 +2,19 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- La barra lateral de lista de ventanas ahora se muestra en todas las pantallas en configuraciones de múltiples monitores, no solo en la pantalla objetivo
+- El estado de la barra lateral (visibilidad, elemento seleccionado, texto de búsqueda) se sincroniza entre todas las ventanas de pantalla
+- Registro de depuración de redimensionamiento opcional (`~/tiley.log`) (Ajustes > Depuración)
+
 ### Corregido
 
 - Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta
 - Corregido el redimensionamiento de ventanas fallando en pantallas no primarias en configuraciones de DPI mixto; la ventana se mueve temporalmente a la pantalla primaria para redimensionar y luego se coloca en la posición objetivo
 - Corregida la posición no aplicada después del redimensionamiento cuando algunas apps revierten silenciosamente los cambios de posición (solución alternativa de deduplicación AX)
 - Cuando el tamaño mínimo de ventana de una app impide el tamaño solicitado, la posición se recalcula para que la ventana permanezca dentro del área visible de la pantalla
-
-### Añadido
-
-- Registro de depuración de redimensionamiento opcional (`~/tiley.log`) (Ajustes > Depuración)
+- Eliminado el parpadeo visible de ventanas al cambiar ventanas objetivo entre pantallas; las ventanas ya no se recrean al cambiar de pantalla
 
 ## [2.1.0] - 2026-03-20
 

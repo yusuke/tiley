@@ -210,14 +210,24 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         guard let window else { return }
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
         let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenRole: screenRole)
-        window.minSize = targetSize
-        window.maxSize = targetSize
-        window.alphaValue = (appState?.isEditingSettings == true || appState?.isShowingPermissionsOnly == true) ? Self.settingsModeWindowAlpha : Self.layoutModeWindowAlpha
+        let targetAlpha = (appState?.isEditingSettings == true || appState?.isShowingPermissionsOnly == true) ? Self.settingsModeWindowAlpha : Self.layoutModeWindowAlpha
 
         var frame = window.frame
         frame.size = targetSize
         frame.origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
-        window.setFrame(frame, display: true, animate: animated)
+
+        let sizeChanged = window.minSize != targetSize || window.maxSize != targetSize
+        let frameChanged = !window.frame.equalTo(frame)
+        let alphaChanged = window.alphaValue != targetAlpha
+
+        guard sizeChanged || frameChanged || alphaChanged else { return }
+
+        window.minSize = targetSize
+        window.maxSize = targetSize
+        window.alphaValue = targetAlpha
+        if frameChanged {
+            window.setFrame(frame, display: true, animate: animated)
+        }
     }
 
     private func positionWindow(preferredScreen: NSScreen? = nil) {
@@ -294,7 +304,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         if appState?.isShowingPermissionsOnly == true {
             return NSSize(width: windowWidth, height: permissionsOnlyHeight)
         }
-        let showSidebar = screenRole.isTarget && appState?.isEditingSettings != true
+        let showSidebar = appState?.isEditingSettings != true
         let totalWidth = showSidebar ? windowWidth + sidebarWidth + 1 : windowWidth
         let presetCount = CGFloat(appState?.displayedLayoutPresets.count ?? 0)
         let gridWidth = windowWidth - (layoutPanelHorizontalPadding * 2)

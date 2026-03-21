@@ -2,16 +2,19 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- A barra lateral da lista de janelas agora é exibida em todas as telas em configurações de múltiplos monitores, não apenas na tela de destino
+- O estado da barra lateral (visibilidade, item selecionado, texto de pesquisa) é sincronizado entre todas as janelas de tela
+- Log de depuração de redimensionamento opcional (`~/tiley.log`) (Configurações > Depuração)
+
 ### Corrigido
 
 - Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta
 - Corrigido o redimensionamento de janelas falhando em telas não primárias em configurações de DPI misto; a janela é temporariamente movida para a tela primária para redimensionar e então posicionada no local de destino
 - Corrigida a posição não sendo aplicada após redimensionamento quando alguns apps revertem silenciosamente as alterações de posição (contorno de deduplicação AX)
 - Quando o tamanho mínimo de janela de um app impede o tamanho solicitado, a posição é recalculada para que a janela permaneça dentro da área visível da tela
-
-### Adicionado
-
-- Log de depuração de redimensionamento opcional (`~/tiley.log`) (Configurações > Depuração)
+- Eliminada a oscilação visível das janelas ao alternar janelas de destino entre telas; as janelas não são mais recriadas na mudança de tela
 
 ## [2.1.0] - 2026-03-20
 
