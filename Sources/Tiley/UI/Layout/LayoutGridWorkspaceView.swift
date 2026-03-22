@@ -24,6 +24,7 @@ struct LayoutGridWorkspaceView: View {
         GeometryReader { geometry in
             let cellWidth = (geometry.size.width - gap * CGFloat(columns - 1)) / CGFloat(columns)
             let cellHeight = (geometry.size.height - gap * CGFloat(rows - 1)) / CGFloat(rows)
+            let cellCornerRadius = max(2, min(cellWidth, cellHeight) * 0.02)
             ZStack(alignment: .topLeading) {
                 if showDesktopPicture,
                    let info = desktopPictureInfo,
@@ -31,21 +32,61 @@ struct LayoutGridWorkspaceView: View {
                     DesktopPictureBackgroundView(nsImage: nsImage, info: info, size: geometry.size)
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .opacity(0.5)
-                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous))
                 }
 
+                // Base grid cells (non-selected appearance only)
                 ForEach(0..<rows, id: \.self) { row in
                     ForEach(0..<columns, id: \.self) { column in
                         let frame = rectForCell(row: row, column: column, width: cellWidth, height: cellHeight)
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(fillColor(forRow: row, column: column))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(borderColor(forRow: row, column: column), lineWidth: 1.5)
-                            )
-                            .frame(width: frame.width, height: frame.height)
-                            .position(x: frame.midX, y: frame.midY)
+                        let isInSelection = isSelected(row: row, column: column)
+                        let isInHighlight = isHighlighted(row: row, column: column)
+                        if !isInSelection && !isInHighlight {
+                            RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
+                                .fill(isHovered(row: row, column: column)
+                                      ? ThemeColors.gridCellHoverFill(for: colorScheme)
+                                      : ThemeColors.gridCellFill(for: colorScheme))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
+                                        .stroke(isHovered(row: row, column: column)
+                                                ? ThemeColors.gridCellHoverBorder(for: colorScheme)
+                                                : ThemeColors.gridCellBorder(for: colorScheme), lineWidth: 1.5)
+                                )
+                                .frame(width: frame.width, height: frame.height)
+                                .position(x: frame.midX, y: frame.midY)
+                        } else {
+                            // Transparent placeholder so the grid spacing is preserved
+                            Color.clear
+                                .frame(width: frame.width, height: frame.height)
+                                .position(x: frame.midX, y: frame.midY)
+                        }
                     }
+                }
+
+                // Unified highlight rectangle (from highlightSelection)
+                if let hl = highlightSelection?.normalized, activeSelection == nil {
+                    let selRect = rectForSelection(hl, cellWidth: cellWidth, cellHeight: cellHeight)
+                    selectionRectangle(
+                        sel: hl, selRect: selRect,
+                        cellWidth: cellWidth, cellHeight: cellHeight,
+                        cornerRadius: cellCornerRadius,
+                        fill: ThemeColors.gridCellHighlightFill(for: colorScheme),
+                        border: ThemeColors.gridCellHighlightBorder(for: colorScheme),
+                        divider: ThemeColors.gridCellHighlightBorder(for: colorScheme).opacity(0.3)
+                    )
+                }
+
+                // Unified drag selection rectangle
+                if let sel = activeSelection?.normalized {
+                    let selRect = rectForSelection(sel, cellWidth: cellWidth, cellHeight: cellHeight)
+                    selectionRectangle(
+                        sel: sel, selRect: selRect,
+                        cellWidth: cellWidth, cellHeight: cellHeight,
+                        cornerRadius: cellCornerRadius,
+                        fill: ThemeColors.gridCellSelectedFill(for: colorScheme),
+                        border: ThemeColors.gridCellSelectedBorder(for: colorScheme),
+                        divider: ThemeColors.gridCellSelectedBorder(for: colorScheme).opacity(0.3)
+                    )
                 }
             }
             .contentShape(Rectangle())
@@ -122,6 +163,19 @@ struct LayoutGridWorkspaceView: View {
         )
     }
 
+    /// Returns a single rectangle spanning from the top-left of the start cell
+    /// to the bottom-right of the end cell (inclusive of gaps between cells).
+    private func rectForSelection(_ sel: GridSelection, cellWidth: CGFloat, cellHeight: CGFloat) -> CGRect {
+        let topLeft = rectForCell(row: sel.startRow, column: sel.startColumn, width: cellWidth, height: cellHeight)
+        let bottomRight = rectForCell(row: sel.endRow, column: sel.endColumn, width: cellWidth, height: cellHeight)
+        return CGRect(
+            x: topLeft.minX,
+            y: topLeft.minY,
+            width: bottomRight.maxX - topLeft.minX,
+            height: bottomRight.maxY - topLeft.minY
+        )
+    }
+
     private func cell(at location: CGPoint, cellWidth: CGFloat, cellHeight: CGFloat) -> (row: Int, column: Int) {
         let column = min(columns - 1, max(0, Int(location.x / (cellWidth + gap))))
         let row = min(rows - 1, max(0, Int(location.y / (cellHeight + gap))))
@@ -148,6 +202,58 @@ struct LayoutGridWorkspaceView: View {
 
 
 
+    /// Draws a unified selection rectangle with thin internal cell divider lines.
+    @ViewBuilder
+    private func selectionRectangle(
+        sel: GridSelection,
+        selRect: CGRect,
+        cellWidth: CGFloat,
+        cellHeight: CGFloat,
+        cornerRadius: CGFloat,
+        fill: Color,
+        border: Color,
+        divider: Color
+    ) -> some View {
+        let spanCols = sel.endColumn - sel.startColumn + 1
+        let spanRows = sel.endRow - sel.startRow + 1
+
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .fill(fill)
+            .overlay(
+                // Internal cell divider lines (clipped to the rounded rect)
+                Canvas { context, size in
+                    // Vertical dividers
+                    for i in 1..<spanCols {
+                        let x = CGFloat(i) * (cellWidth + gap) - gap / 2
+                        var path = Path()
+                        path.move(to: CGPoint(x: x, y: 0))
+                        path.addLine(to: CGPoint(x: x, y: size.height))
+                        context.stroke(path, with: .color(divider), lineWidth: 0.5)
+                    }
+                    // Horizontal dividers
+                    for i in 1..<spanRows {
+                        let y = CGFloat(i) * (cellHeight + gap) - gap / 2
+                        var path = Path()
+                        path.move(to: CGPoint(x: 0, y: y))
+                        path.addLine(to: CGPoint(x: size.width, y: y))
+                        context.stroke(path, with: .color(divider), lineWidth: 0.5)
+                    }
+                }
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(border, lineWidth: 1.5)
+            )
+            .frame(width: selRect.width, height: selRect.height)
+            .position(x: selRect.midX, y: selRect.midY)
+    }
+
+    private func isSelected(row: Int, column: Int) -> Bool {
+        guard let sel = activeSelection?.normalized else { return false }
+        return sel.startRow...sel.endRow ~= row && sel.startColumn...sel.endColumn ~= column
+    }
+
     private func isHovered(row: Int, column: Int) -> Bool {
         guard let hover = hoverCell, !isDragging else { return false }
         return hover.row == row && hover.column == column
@@ -156,36 +262,6 @@ struct LayoutGridWorkspaceView: View {
     private func isHighlighted(row: Int, column: Int) -> Bool {
         guard let hl = highlightSelection?.normalized, activeSelection == nil else { return false }
         return hl.startRow...hl.endRow ~= row && hl.startColumn...hl.endColumn ~= column
-    }
-
-    private func fillColor(forRow row: Int, column: Int) -> Color {
-        if let selection = activeSelection?.normalized,
-           selection.startRow...selection.endRow ~= row,
-           selection.startColumn...selection.endColumn ~= column {
-            return ThemeColors.gridCellSelectedFill(for: colorScheme)
-        }
-        if isHovered(row: row, column: column) {
-            return ThemeColors.gridCellHoverFill(for: colorScheme)
-        }
-        if isHighlighted(row: row, column: column) {
-            return ThemeColors.gridCellHighlightFill(for: colorScheme)
-        }
-        return ThemeColors.gridCellFill(for: colorScheme)
-    }
-
-    private func borderColor(forRow row: Int, column: Int) -> Color {
-        if let selection = activeSelection?.normalized,
-           selection.startRow...selection.endRow ~= row,
-           selection.startColumn...selection.endColumn ~= column {
-            return ThemeColors.gridCellSelectedBorder(for: colorScheme)
-        }
-        if isHovered(row: row, column: column) {
-            return ThemeColors.gridCellHoverBorder(for: colorScheme)
-        }
-        if isHighlighted(row: row, column: column) {
-            return ThemeColors.gridCellHighlightBorder(for: colorScheme)
-        }
-        return ThemeColors.gridCellBorder(for: colorScheme)
     }
 
 }

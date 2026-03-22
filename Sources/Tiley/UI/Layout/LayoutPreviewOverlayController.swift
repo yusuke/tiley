@@ -126,10 +126,10 @@ private struct SelectionPreviewOverlayView: View {
                 let displayHeight = min(effectiveHeight, localFrame.height)
 
                 // Accepted region at the top-left.
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
                             .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
                     )
                     .frame(width: displayWidth, height: displayHeight)
@@ -188,10 +188,10 @@ private struct SelectionPreviewOverlayView: View {
                 }
             } else {
                 // Fully resizable — normal display.
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
                             .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
                     )
                     .frame(width: localFrame.width, height: localFrame.height)
@@ -237,10 +237,10 @@ private struct GridPreviewOverlayView: View {
                         width: cellWidth,
                         height: cellHeight
                     )
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(ThemeColors.overlayCellFill(for: colorScheme))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
                                 .stroke(ThemeColors.overlayCellBorder(for: colorScheme), lineWidth: 1.25)
                         )
                         .frame(width: rect.width, height: rect.height)

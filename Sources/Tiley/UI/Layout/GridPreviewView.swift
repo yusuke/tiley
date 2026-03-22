@@ -14,6 +14,11 @@ struct GridPreviewView: View {
             let visibleFrame = CGRect(x: 0, y: 0, width: canvas.width, height: canvas.height)
             let selection = sampleSelection
             let ghost = GridCalculator.frame(for: selection, in: visibleFrame, rows: rows, columns: columns, gap: gap)
+            let totalHGap = gap * CGFloat(max(0, columns - 1))
+            let totalVGap = gap * CGFloat(max(0, rows - 1))
+            let previewCellW = (canvas.width - totalHGap) / CGFloat(columns)
+            let previewCellH = (canvas.height - totalVGap) / CGFloat(rows)
+            let previewCellRadius = max(2, min(previewCellW, previewCellH) * 0.02)
 
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
@@ -34,10 +39,10 @@ struct GridPreviewView: View {
                 ForEach(0..<rows, id: \.self) { row in
                     ForEach(0..<columns, id: \.self) { column in
                         let rect = cellRect(row: row, column: column, in: canvas)
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        RoundedRectangle(cornerRadius: previewCellRadius, style: .continuous)
                             .fill(ThemeColors.previewCellFill(for: colorScheme))
                             .overlay(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                RoundedRectangle(cornerRadius: previewCellRadius, style: .continuous)
                                     .stroke(ThemeColors.previewCellBorder(for: colorScheme), lineWidth: 1.5)
                             )
                             .frame(width: rect.width, height: rect.height)
@@ -45,10 +50,10 @@ struct GridPreviewView: View {
                     }
                 }
 
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: previewCellRadius, style: .continuous)
                     .fill(ThemeColors.previewSelectionFill(for: colorScheme))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        RoundedRectangle(cornerRadius: previewCellRadius, style: .continuous)
                             .stroke(ThemeColors.previewSelectionBorder(for: colorScheme), lineWidth: 2)
                     )
                     .frame(width: ghost.width, height: ghost.height)
