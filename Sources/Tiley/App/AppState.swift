@@ -248,6 +248,9 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         // Drop the Apple menu (first item, always "Apple" or empty)
         if !titles.isEmpty { titles.removeFirst() }
+        // Drop the application name menu (second item) — it's already shown
+        // separately as bold text in the menu bar composite view.
+        if !titles.isEmpty { titles.removeFirst() }
         return titles
     }
 

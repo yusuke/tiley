@@ -835,21 +835,25 @@ struct MainWindowView: View {
                         }
                         // Left-aligned menu items clipped to left auxiliary area
                         HStack(spacing: 0) {
-                            HStack(spacing: fontSize * 0.6) {
+                            HStack(alignment: .center, spacing: fontSize * 0.6) {
                                 Image(systemName: "apple.logo")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: fontSize)
+                                    .font(.system(size: fontSize))
                                 Text(appState.currentLayoutTargetPrimaryText)
                                     .font(.system(size: fontSize, weight: .bold))
+                                    .lineLimit(1)
+                                    .fixedSize(horizontal: true, vertical: false)
                                 ForEach(appState.targetMenuBarTitles, id: \.self) { title in
                                     Text(title)
                                         .font(.system(size: fontSize))
+                                        .lineLimit(1)
+                                        .fixedSize(horizontal: true, vertical: false)
                                 }
                                 Spacer()
                             }
                             .padding(.leading, menuBarHeight * 0.4 + fontSize * 0.5)
-                            .frame(width: leftAreaWidth, height: menuBarHeight)
+                            .fixedSize(horizontal: true, vertical: false)
+                            .minimumScaleFactor(0.5)
+                            .frame(width: leftAreaWidth, height: menuBarHeight, alignment: .leading)
                             .clipped()
                             Spacer()
                         }
