@@ -38,24 +38,77 @@ extension EnvironmentValues {
     }
 }
 
-/// Renders the notch shape (black, bottom corners rounded) centered in the menu bar.
+/// Renders the notch shape (black, bottom corners convex-rounded, top corners concave-rounded)
+/// centered in the menu bar.  The concave corners at the top replicate the real MacBook notch
+/// where the wallpaper area meets the notch with rounded transitions.
 private struct NotchMenuBarCanvas: View {
     let compositeWidth: CGFloat
     let height: CGFloat
     let notchWidth: CGFloat
 
-    private var cornerR: CGFloat { notchWidth * 0.08 }
+    private var cornerR: CGFloat { notchWidth * 0.03 }
 
     var body: some View {
-        UnevenRoundedRectangle(
-            topLeadingRadius: 0,
-            bottomLeadingRadius: cornerR,
-            bottomTrailingRadius: cornerR,
-            topTrailingRadius: 0,
-            style: .continuous
-        )
-        .fill(Color.black)
-        .frame(width: notchWidth, height: height)
+        NotchShape(cornerR: cornerR)
+            .fill(Color.black)
+            .frame(width: notchWidth + 2 * cornerR, height: height)
+    }
+}
+
+/// Custom shape that draws the notch outline with concave corners at the top
+/// (where the wallpaper meets the notch) and convex corners at the bottom.
+private struct NotchShape: Shape {
+    let cornerR: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let r = cornerR
+        let h = rect.height
+        let bodyLeft = r
+        let bodyRight = rect.width - r
+
+        var path = Path()
+
+        // Start at top-left (extended area for concave corner)
+        path.move(to: CGPoint(x: 0, y: 0))
+
+        // Top edge across the full width (including concave extensions)
+        path.addLine(to: CGPoint(x: rect.width, y: 0))
+
+        // Top-right concave corner: center at inner corner (rect.width, r)
+        path.addArc(center: CGPoint(x: rect.width, y: r),
+                    radius: r,
+                    startAngle: .degrees(-90),
+                    endAngle: .degrees(180),
+                    clockwise: true)
+
+        // Right side of notch body
+        path.addLine(to: CGPoint(x: bodyRight, y: h - r))
+
+        // Bottom-right convex corner
+        path.addArc(tangent1End: CGPoint(x: bodyRight, y: h),
+                    tangent2End: CGPoint(x: bodyRight - r, y: h),
+                    radius: r)
+
+        // Bottom edge
+        path.addLine(to: CGPoint(x: bodyLeft + r, y: h))
+
+        // Bottom-left convex corner
+        path.addArc(tangent1End: CGPoint(x: bodyLeft, y: h),
+                    tangent2End: CGPoint(x: bodyLeft, y: h - r),
+                    radius: r)
+
+        // Left side of notch body
+        path.addLine(to: CGPoint(x: bodyLeft, y: r))
+
+        // Top-left concave corner: center at inner corner (0, r)
+        path.addArc(center: CGPoint(x: 0, y: r),
+                    radius: r,
+                    startAngle: .degrees(0),
+                    endAngle: .degrees(-90),
+                    clockwise: true)
+
+        path.closeSubpath()
+        return path
     }
 }
 
