@@ -166,7 +166,7 @@ struct MainWindowView: View {
     @State private var hoveredAppHeaderClosePID: pid_t?
     @State private var hoveredAppHeaderKebabPID: pid_t?
     @State private var hoveredScreenHeaderID: CGDirectDisplayID?
-    @State private var hoveredScreenHeaderKebabID: CGDirectDisplayID?
+    @State private var hoveredEmptyScreenID: CGDirectDisplayID?
     @State private var isSearchFieldFocused = false
 
     init(appState: AppState, screenRole: ScreenRole = .target) {
@@ -1223,12 +1223,14 @@ struct MainWindowView: View {
 
     private enum SidebarRow: Identifiable {
         case screenHeader(displayID: CGDirectDisplayID, name: String)
+        case emptyScreen(displayID: CGDirectDisplayID, name: String)
         case appHeader(pid: pid_t, appName: String)
         case window(WindowListItem)
 
         var id: String {
             switch self {
             case .screenHeader(let displayID, _): return "screen-\(displayID)"
+            case .emptyScreen(let displayID, _): return "empty-screen-\(displayID)"
             case .appHeader(let pid, _): return "app-\(pid)"
             case .window(let item): return "window-\(item.id)"
             }
@@ -1332,22 +1334,32 @@ struct MainWindowView: View {
             }
         }
 
-        // Frontmost window's screen first, then stable order by display ID.
-        let frontmostDisplayID: CGDirectDisplayID? = targets.first.flatMap {
-            NSScreen.screen(containing: $0.screenFrame)?.displayID
-        }
+        // This Tiley window's screen first, then stable order by display ID.
+        let thisDisplayID: CGDirectDisplayID? = {
+            switch screenRole {
+            case .secondary(let screen):
+                return screen.displayID
+            case .target:
+                guard let screenContext else { return nil }
+                return NSScreen.screen(containing: screenContext.screenFrame)?.displayID
+            }
+        }()
         screenGroups.sort { a, b in
-            let aIsFront = a.displayID == frontmostDisplayID
-            let bIsFront = b.displayID == frontmostDisplayID
-            if aIsFront != bIsFront { return aIsFront }
+            let aIsThis = a.displayID == thisDisplayID
+            let bIsThis = b.displayID == thisDisplayID
+            if aIsThis != bIsThis { return aIsThis }
             return a.displayID < b.displayID
         }
 
         // Flatten into SidebarRow array with screen headers and app grouping.
         var rows: [SidebarRow] = []
         for group in screenGroups {
-            rows.append(.screenHeader(displayID: group.displayID, name: group.name))
-            rows.append(contentsOf: appGroupedRows(from: group.items))
+            if group.items.isEmpty {
+                rows.append(.emptyScreen(displayID: group.displayID, name: group.name))
+            } else {
+                rows.append(.screenHeader(displayID: group.displayID, name: group.name))
+                rows.append(contentsOf: appGroupedRows(from: group.items))
+            }
         }
         return rows
     }
@@ -1383,6 +1395,8 @@ struct MainWindowView: View {
                             switch row {
                             case .screenHeader(let displayID, let name):
                                 screenHeaderRow(displayID: displayID, name: name)
+                            case .emptyScreen(let displayID, let name):
+                                emptyScreenRow(displayID: displayID, name: name)
                             case .appHeader(let pid, let appName):
                                 appHeaderRow(pid: pid, appName: appName)
                             case .window(let item):
@@ -1428,53 +1442,90 @@ struct MainWindowView: View {
     private func screenHeaderRow(displayID: CGDirectDisplayID, name: String) -> some View {
         let isHovered = hoveredScreenHeaderID == displayID
         let otherScreens = otherScreensForDisplay(displayID)
-
-        return HStack {
-            Text(name)
-                .font(.system(size: 10, weight: .medium))
-                .foregroundStyle(.tertiary)
-                .lineLimit(1)
-            Spacer()
+        let hasWindowsOnOtherScreens = appState.windowTargetList.contains { target in
+            let targetDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
+            return targetDisplayID != nil && targetDisplayID != displayID
         }
-        .overlay(alignment: .trailing) {
-            if isHovered && !otherScreens.isEmpty {
-                let isKebabHovered = hoveredScreenHeaderKebabID == displayID
-                let hasWindowsOnOtherScreens = appState.windowTargetList.contains { target in
-                    let targetDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
-                    return targetDisplayID != nil && targetDisplayID != displayID
-                }
-                let hasWindowsOnThisScreen = appState.windowTargetList.contains { target in
-                    NSScreen.screen(containing: target.screenFrame)?.displayID == displayID
-                }
-                ScreenHeaderMoreButton(
-                    isHovered: isKebabHovered,
-                    colorScheme: colorScheme,
-                    screenName: name,
-                    displayID: displayID,
-                    otherScreens: otherScreens,
-                    canGather: hasWindowsOnOtherScreens,
-                    hasWindowsOnThisScreen: hasWindowsOnThisScreen,
-                    onGather: {
-                        if let screen = screenForDisplay(displayID) {
-                            appState.gatherWindowsToScreen(screen)
-                        }
-                    },
-                    onMoveToScreen: { destScreen in
-                        appState.moveScreenWindowsToScreen(from: displayID, to: destScreen)
+        let hasWindowsOnThisScreen = appState.windowTargetList.contains { target in
+            NSScreen.screen(containing: target.screenFrame)?.displayID == displayID
+        }
+
+        return HStack(spacing: 6) {
+            ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
+            Text(name)
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 6)
+        .padding(.vertical, 3)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(isHovered
+                      ? ThemeColors.presetRowBackground(selected: true, for: colorScheme)
+                      : Color.clear)
+        )
+        .overlay {
+            ScreenHeaderMenuAnchor(
+                screenName: name,
+                otherScreens: otherScreens,
+                canGather: hasWindowsOnOtherScreens,
+                hasWindowsOnThisScreen: hasWindowsOnThisScreen,
+                onGather: {
+                    if let screen = screenForDisplay(displayID) {
+                        appState.gatherWindowsToScreen(screen)
+                        appState.hideMainWindow()
                     }
-                )
-                .onHover { hovering in
-                    hoveredScreenHeaderKebabID = hovering ? displayID : nil
+                },
+                onMoveToScreen: { destScreen in
+                    appState.moveScreenWindowsToScreen(from: displayID, to: destScreen)
+                    appState.hideMainWindow()
                 }
-                .transition(.identity)
-            }
+            )
         }
         .contentShape(Rectangle())
-        .animation(nil, value: isHovered)
-        .padding(.horizontal, 6)
-        .padding(.top, 6)
-        .padding(.bottom, 2)
         .onHover { hovering in hoveredScreenHeaderID = hovering ? displayID : nil }
+    }
+
+    private func emptyScreenRow(displayID: CGDirectDisplayID, name: String) -> some View {
+        let isHovered = hoveredEmptyScreenID == displayID
+        return Button {
+            if let screen = screenForDisplay(displayID) {
+                appState.gatherWindowsToScreen(screen)
+                appState.hideMainWindow()
+            }
+        } label: {
+            HStack(spacing: 6) {
+                ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(name)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                    Text(isHovered
+                         ? NSLocalizedString("Gather windows", comment: "Label shown on hover to gather windows to an empty screen")
+                         : NSLocalizedString("No windows", comment: "Placeholder shown when a screen has no windows"))
+                        .font(.system(size: 10))
+                        .foregroundStyle(isHovered ? .secondary : .tertiary)
+                        .lineLimit(1)
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(isHovered
+                          ? ThemeColors.presetRowBackground(selected: true, for: colorScheme)
+                          : Color.clear)
+            )
+        }
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .onHover { hovering in hoveredEmptyScreenID = hovering ? displayID : nil }
     }
 
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
@@ -2934,6 +2985,67 @@ private final class TooltipHoverView: NSView {
     }
 }
 
+// MARK: - Screen Arrangement Icon
+
+/// Draws a miniature representation of the screen arrangement, highlighting the
+/// specified display. Each screen is drawn as a rounded rectangle whose position
+/// and size reflect the actual display layout, scaled to fit within the given
+/// frame.
+private struct ScreenArrangementIcon: View {
+    let highlightDisplayID: CGDirectDisplayID
+    let size: CGFloat
+
+    var body: some View {
+        Canvas { context, canvasSize in
+            let screens = NSScreen.screens
+            guard !screens.isEmpty else { return }
+
+            // Compute the bounding rect of all screens.
+            var union = CGRect.null
+            for screen in screens {
+                union = union.union(screen.frame)
+            }
+            guard union.width > 0, union.height > 0 else { return }
+
+            // Inset slightly so strokes don't clip.
+            let inset: CGFloat = 0.5
+            let available = CGSize(width: canvasSize.width - inset * 2,
+                                   height: canvasSize.height - inset * 2)
+            let scale = min(available.width / union.width,
+                            available.height / union.height)
+
+            // Center the arrangement within the canvas.
+            let scaledWidth = union.width * scale
+            let scaledHeight = union.height * scale
+            let offsetX = (canvasSize.width - scaledWidth) / 2
+            let offsetY = (canvasSize.height - scaledHeight) / 2
+
+            let gap: CGFloat = 0.5  // visual gap between screens
+
+            for screen in screens {
+                let f = screen.frame
+                // NSScreen uses bottom-left origin; flip Y for Canvas (top-left).
+                let x = (f.minX - union.minX) * scale + offsetX + gap
+                let y = (union.maxY - f.maxY) * scale + offsetY + gap
+                let w = f.width * scale - gap * 2
+                let h = f.height * scale - gap * 2
+
+                let rect = CGRect(x: x, y: y, width: max(w, 1), height: max(h, 1))
+                let cornerRadius: CGFloat = 1.5
+                let path = Path(roundedRect: rect, cornerRadius: cornerRadius)
+
+                let isHighlight = screen.displayID == highlightDisplayID
+                if isHighlight {
+                    context.fill(path, with: .color(.secondary))
+                } else {
+                    context.stroke(path, with: .color(.secondary), lineWidth: 0.75)
+                }
+            }
+        }
+        .frame(width: size, height: size)
+    }
+}
+
 extension View {
     fileprivate func instantTooltip(_ text: String) -> some View {
         modifier(InstantBubbleTooltip(text: text))
@@ -3610,6 +3722,118 @@ private struct WindowListMoreButton: NSViewRepresentable {
         @objc private func closeAction() { onClose() }
         @objc private func hideOthersAction() { onHideOthers() }
         @objc private func quitAction() { onQuit() }
+    }
+}
+
+/// Transparent click target that anchors an NSMenu to a SwiftUI view.
+private struct ScreenHeaderMenuAnchor: NSViewRepresentable {
+    let screenName: String
+    let otherScreens: [NSScreen]
+    let canGather: Bool
+    let hasWindowsOnThisScreen: Bool
+    let onGather: () -> Void
+    let onMoveToScreen: (NSScreen) -> Void
+
+    func makeNSView(context: Context) -> ClickableTransparentView {
+        let view = ClickableTransparentView()
+        view.coordinator = context.coordinator
+        return view
+    }
+
+    func updateNSView(_ nsView: ClickableTransparentView, context: Context) {
+        let coord = context.coordinator
+        coord.screenName = screenName
+        coord.otherScreens = otherScreens
+        coord.canGather = canGather
+        coord.hasWindowsOnThisScreen = hasWindowsOnThisScreen
+        coord.onGather = onGather
+        coord.onMoveToScreen = onMoveToScreen
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(
+            screenName: screenName,
+            otherScreens: otherScreens,
+            canGather: canGather,
+            hasWindowsOnThisScreen: hasWindowsOnThisScreen,
+            onGather: onGather,
+            onMoveToScreen: onMoveToScreen
+        )
+    }
+
+    final class ClickableTransparentView: NSView {
+        weak var coordinator: Coordinator?
+
+        override func mouseDown(with event: NSEvent) {
+            coordinator?.showMenu(in: self)
+        }
+    }
+
+    class Coordinator: NSObject {
+        var screenName: String
+        var otherScreens: [NSScreen]
+        var canGather: Bool
+        var hasWindowsOnThisScreen: Bool
+        var onGather: () -> Void
+        var onMoveToScreen: (NSScreen) -> Void
+
+        init(screenName: String, otherScreens: [NSScreen],
+             canGather: Bool, hasWindowsOnThisScreen: Bool,
+             onGather: @escaping () -> Void,
+             onMoveToScreen: @escaping (NSScreen) -> Void) {
+            self.screenName = screenName
+            self.otherScreens = otherScreens
+            self.canGather = canGather
+            self.hasWindowsOnThisScreen = hasWindowsOnThisScreen
+            self.onGather = onGather
+            self.onMoveToScreen = onMoveToScreen
+        }
+
+        func showMenu(in view: NSView) {
+            let menu = NSMenu()
+
+            let gatherItem = NSMenuItem(
+                title: String(
+                    format: NSLocalizedString("Gather windows to %@", comment: "Menu item to gather all windows from other screens to this screen"),
+                    screenName
+                ),
+                action: canGather ? #selector(gatherAction) : nil,
+                keyEquivalent: ""
+            )
+            gatherItem.image = NSImage(systemSymbolName: "rectangle.compress.vertical", accessibilityDescription: nil)
+            gatherItem.target = self
+            gatherItem.isEnabled = canGather
+            menu.addItem(gatherItem)
+
+            if !otherScreens.isEmpty {
+                menu.addItem(.separator())
+            }
+
+            for screen in otherScreens {
+                let displayName = screen.localizedName
+                let moveItem = NSMenuItem(
+                    title: String(
+                        format: NSLocalizedString("Move %1$@ windows to %2$@", comment: "Menu item to move all windows from one screen to another. First arg is source screen, second is destination screen"),
+                        screenName, displayName
+                    ),
+                    action: hasWindowsOnThisScreen ? #selector(moveToScreenAction(_:)) : nil,
+                    keyEquivalent: ""
+                )
+                moveItem.image = NSImage(systemSymbolName: "rectangle.portrait.and.arrow.right", accessibilityDescription: nil)
+                moveItem.target = self
+                moveItem.representedObject = screen
+                moveItem.isEnabled = hasWindowsOnThisScreen
+                menu.addItem(moveItem)
+            }
+
+            menu.popUp(positioning: nil, at: NSPoint(x: 0, y: view.bounds.height), in: view)
+        }
+
+        @objc private func gatherAction() { onGather() }
+        @objc private func moveToScreenAction(_ sender: NSMenuItem) {
+            guard let screen = sender.representedObject as? NSScreen else { return }
+            onMoveToScreen(screen)
+        }
     }
 }
 

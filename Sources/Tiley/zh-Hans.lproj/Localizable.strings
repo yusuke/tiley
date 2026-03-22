@@ -118,3 +118,5 @@
 "menu.bar.fallback.view" = "显示";
 "Gather windows to %@" = "将窗口聚集到%@";
 "Move %1$@ windows to %2$@" = "将%1$@的窗口移到%2$@";
+"No windows" = "无窗口";
+"Gather windows" = "聚集窗口";

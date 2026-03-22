@@ -118,3 +118,5 @@
 "menu.bar.fallback.view" = "Visualizar";
 "Gather windows to %@" = "Reunir janelas em %@";
 "Move %1$@ windows to %2$@" = "Mover janelas de %1$@ para %2$@";
+"No windows" = "Sem janelas";
+"Gather windows" = "Reunir janelas";

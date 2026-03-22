@@ -118,3 +118,5 @@
 "menu.bar.fallback.view" = "Вид";
 "Gather windows to %@" = "Собрать окна на %@";
 "Move %1$@ windows to %2$@" = "Переместить окна с %1$@ на %2$@";
+"No windows" = "Нет окон";
+"Gather windows" = "Собрать окна";

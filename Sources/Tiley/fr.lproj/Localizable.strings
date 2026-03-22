@@ -118,3 +118,5 @@
 "menu.bar.fallback.view" = "Présentation";
 "Gather windows to %@" = "Rassembler les fenêtres sur %@";
 "Move %1$@ windows to %2$@" = "Déplacer les fenêtres de %1$@ vers %2$@";
+"No windows" = "Aucune fenêtre";
+"Gather windows" = "Rassembler les fenêtres";

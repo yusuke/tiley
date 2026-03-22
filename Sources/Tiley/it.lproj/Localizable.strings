@@ -118,3 +118,5 @@
 "menu.bar.fallback.view" = "Visualizza";
 "Gather windows to %@" = "Raccogli le finestre su %@";
 "Move %1$@ windows to %2$@" = "Sposta le finestre da %1$@ su %2$@";
+"No windows" = "Nessuna finestra";
+"Gather windows" = "Raccogli le finestre";
