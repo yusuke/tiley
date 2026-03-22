@@ -1275,9 +1275,6 @@ struct MainWindowView: View {
         let isMultiScreen = screens.count > 1
         guard isMultiScreen else { return appGroupedRows(from: items) }
 
-        // Determine target screen (show it first).
-        let targetDisplayID = appState.currentTargetScreenDisplayID
-
         // Build screen groups: [displayID: (screenName, [WindowListItem])]
         var screenGroups: [(displayID: CGDirectDisplayID, name: String, items: [WindowListItem])] = []
         var groupMap: [CGDirectDisplayID: Int] = [:]  // displayID → index in screenGroups
@@ -1297,11 +1294,14 @@ struct MainWindowView: View {
             }
         }
 
-        // Sort: target screen first, then stable order by display ID.
+        // Frontmost window's screen first, then stable order by display ID.
+        let frontmostDisplayID: CGDirectDisplayID? = targets.first.flatMap {
+            NSScreen.screen(containing: $0.screenFrame)?.displayID
+        }
         screenGroups.sort { a, b in
-            let aIsTarget = a.displayID == targetDisplayID
-            let bIsTarget = b.displayID == targetDisplayID
-            if aIsTarget != bIsTarget { return aIsTarget }
+            let aIsFront = a.displayID == frontmostDisplayID
+            let bIsFront = b.displayID == frontmostDisplayID
+            if aIsFront != bIsFront { return aIsFront }
             return a.displayID < b.displayID
         }
 
@@ -1349,17 +1349,18 @@ struct MainWindowView: View {
                                 appHeaderRow(pid: pid, appName: appName)
                             case .window(let item):
                                 windowListRow(item: item)
-                                    .id(item.id)
                             }
                         }
                     }
-                    .padding(.vertical, 4)
+                    .id(appState.windowTargetListVersion)
+                    .padding(.top, 4)
+                    .padding(.bottom, 40)
                     .padding(.horizontal, 6)
                 }
                 .scrollIndicators(.automatic)
                 .onChange(of: appState.currentWindowTargetIndex) { _, newIndex in
                     withAnimation(.easeInOut(duration: 0.15)) {
-                        proxy.scrollTo(newIndex, anchor: .center)
+                        proxy.scrollTo("window-\(newIndex)", anchor: .center)
                     }
                 }
             }
