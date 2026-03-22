@@ -95,8 +95,9 @@
 "Type to filter" = "Type to filter";
 "Type to filter (⌘F)" = "Type to filter (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F is reserved for searching the window list.";
-"/ is reserved for closing the selected window." = "/ is reserved for closing the selected window.";
-"Close window" = "Close window";
+"/ is reserved for closing/quitting the selected window." = "/ is reserved for closing/quitting the selected window.";
+"Close" = "Close";
+"Quit" = "Quit";
 "Bring to front" = "Bring to front";
 "Next window" = "Next window";
 "Previous window" = "Previous window";
@@ -110,6 +111,7 @@
 "Update available" = "Update available";
 "Close other windows of %@" = "Close other %@ windows";
 "Hide windows besides %@" = "Hide windows besides %@";
+"Move %1$@ to %2$@" = "Move %1$@ to %2$@";
 
 "menu.bar.fallback.file" = "File";
 "menu.bar.fallback.edit" = "Edit";

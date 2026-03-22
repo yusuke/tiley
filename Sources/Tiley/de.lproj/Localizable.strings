@@ -95,8 +95,9 @@
 "Type to filter" = "Tippen zum Filtern";
 "Type to filter (⌘F)" = "Tippen zum Filtern (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F ist für die Suche in der Fensterliste reserviert.";
-"/ is reserved for closing the selected window." = "/ ist zum Schließen des ausgewählten Fensters reserviert.";
-"Close window" = "Fenster schließen";
+"/ is reserved for closing/quitting the selected window." = "/ ist zum Schließen/Beenden des ausgewählten Fensters reserviert.";
+"Close" = "Schließen";
+"Quit" = "Beenden";
 "Bring to front" = "In den Vordergrund";
 "Next window" = "Nächstes Fenster";
 "Previous window" = "Vorheriges Fenster";
@@ -110,6 +111,7 @@
 "Update available" = "Update verfügbar";
 "Close other windows of %@" = "Andere %@-Fenster schließen";
 "Hide windows besides %@" = "Fenster außer %@ ausblenden";
+"Move %1$@ to %2$@" = "%1$@ auf %2$@ verschieben";
 
 "menu.bar.fallback.file" = "Ablage";
 "menu.bar.fallback.edit" = "Bearbeiten";

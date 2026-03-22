@@ -95,8 +95,9 @@
 "Type to filter" = "輸入以篩選";
 "Type to filter (⌘F)" = "輸入以篩選 (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F 已保留用於搜尋視窗列表。";
-"/ is reserved for closing the selected window." = "/ 已保留用於關閉所選視窗。";
-"Close window" = "關閉視窗";
+"/ is reserved for closing/quitting the selected window." = "/ 鍵用於關閉/結束所選視窗。";
+"Close" = "關閉";
+"Quit" = "結束";
 "Bring to front" = "移至最前";
 "Next window" = "下一個視窗";
 "Previous window" = "上一個視窗";
@@ -110,6 +111,7 @@
 "Update available" = "有可用更新";
 "Close other windows of %@" = "關閉%@的其他視窗";
 "Hide windows besides %@" = "隱藏%@以外的視窗";
+"Move %1$@ to %2$@" = "將%1$@移到%2$@";
 
 "menu.bar.fallback.file" = "檔案";
 "menu.bar.fallback.edit" = "編輯";

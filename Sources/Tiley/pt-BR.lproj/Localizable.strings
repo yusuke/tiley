@@ -95,8 +95,9 @@
 "Type to filter" = "Digite para filtrar";
 "Type to filter (⌘F)" = "Digite para filtrar (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F está reservado para pesquisar a lista de janelas.";
-"/ is reserved for closing the selected window." = "/ está reservado para fechar a janela selecionada.";
-"Close window" = "Fechar janela";
+"/ is reserved for closing/quitting the selected window." = "/ é reservado para fechar/encerrar a janela selecionada.";
+"Close" = "Fechar";
+"Quit" = "Encerrar";
 "Bring to front" = "Trazer para frente";
 "Next window" = "Próxima janela";
 "Previous window" = "Janela anterior";
@@ -110,6 +111,7 @@
 "Update available" = "Atualização disponível";
 "Close other windows of %@" = "Fechar outras janelas de %@";
 "Hide windows besides %@" = "Ocultar janelas exceto %@";
+"Move %1$@ to %2$@" = "Mover %1$@ para %2$@";
 
 "menu.bar.fallback.file" = "Arquivo";
 "menu.bar.fallback.edit" = "Editar";

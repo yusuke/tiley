@@ -95,8 +95,9 @@
 "Type to filter" = "タイプして絞り込む";
 "Type to filter (⌘F)" = "タイプして絞り込む (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘Fはウインドウリストの検索に予約されています。";
-"/ is reserved for closing the selected window." = "/は選択中のウインドウを閉じるために予約されています。";
-"Close window" = "ウインドウを閉じる";
+"/ is reserved for closing/quitting the selected window." = "/ は選択中のウインドウを閉じる/終了するために予約されています。";
+"Close" = "閉じる";
+"Quit" = "終了";
 "Bring to front" = "最前面へ";
 "Next window" = "次のウインドウ";
 "Previous window" = "前のウインドウ";
@@ -110,6 +111,7 @@
 "Update available" = "アップデートがあります";
 "Close other windows of %@" = "%@の他のウインドウを閉じる";
 "Hide windows besides %@" = "%@以外のウインドウを隠す";
+"Move %1$@ to %2$@" = "%1$@を%2$@に移動";
 
 "menu.bar.fallback.file" = "ファイル";
 "menu.bar.fallback.edit" = "編集";

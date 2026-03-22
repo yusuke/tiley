@@ -95,8 +95,9 @@
 "Type to filter" = "입력하여 필터링";
 "Type to filter (⌘F)" = "입력하여 필터링 (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F는 윈도우 목록 검색에 예약되어 있습니다.";
-"/ is reserved for closing the selected window." = "/는 선택한 윈도우를 닫는 데 예약되어 있습니다.";
-"Close window" = "윈도우 닫기";
+"/ is reserved for closing/quitting the selected window." = "/ 키는 선택한 윈도우를 닫거나 종료하는 데 사용됩니다.";
+"Close" = "닫기";
+"Quit" = "종료";
 "Bring to front" = "앞으로 가져오기";
 "Next window" = "다음 창";
 "Previous window" = "이전 창";
@@ -110,6 +111,7 @@
 "Update available" = "업데이트 있음";
 "Close other windows of %@" = "%@의 다른 윈도우 닫기";
 "Hide windows besides %@" = "%@ 외 모든 윈도우 숨기기";
+"Move %1$@ to %2$@" = "%1$@을(를) %2$@(으)로 이동";
 
 "menu.bar.fallback.file" = "파일";
 "menu.bar.fallback.edit" = "편집";

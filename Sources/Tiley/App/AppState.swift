@@ -680,19 +680,12 @@ final class AppState: NSObject, NSMenuDelegate {
         guard index >= 0, index < availableWindowTargets.count else { return }
         let target = availableWindowTargets[index]
 
-        // Check if this is the last window of its app.
-        let isLastWindow = availableWindowTargets.filter {
-            $0.processIdentifier == target.processIdentifier
-        }.count == 1
-
         // Remember where the selection should land after the window disappears.
         // The closed window will be removed, so `index` will point at the next one.
         // If it was the last item, clamp to the new last item.
         pendingTargetIndexAfterClose = index
 
-        if isLastWindow && quitAppOnLastWindowClose {
-            NSRunningApplication(processIdentifier: target.processIdentifier)?.terminate()
-        } else if let window = target.windowElement {
+        if let window = target.windowElement {
             accessibilityService.closeWindow(window)
         }
 
@@ -758,6 +751,67 @@ final class AppState: NSObject, NSMenuDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self?.refreshAvailableWindows()
             }
+        }
+    }
+
+    /// Hide all other apps except the one with the given PID.
+    func hideOtherApps(exceptPID keepPID: pid_t) {
+        let selfPID = getpid()
+        let keepApp = NSRunningApplication(processIdentifier: keepPID)
+        if keepApp?.isHidden == true {
+            keepApp?.unhide()
+        }
+        keepApp?.activate()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+            for app in NSWorkspace.shared.runningApplications
+                where app.activationPolicy == .regular
+                    && app.processIdentifier != keepPID
+                    && app.processIdentifier != selfPID {
+                app.hide()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self?.refreshAvailableWindows()
+            }
+        }
+    }
+
+    /// Move a single window (by index) to the center of the given screen.
+    func moveWindowToScreen(at index: Int, screen: NSScreen) {
+        guard index >= 0, index < availableWindowTargets.count else { return }
+        let target = availableWindowTargets[index]
+        guard let window = target.windowElement else { return }
+
+        let windowSize = target.frame.size
+        let destVisible = screen.visibleFrame
+        // Center the window on the destination screen's visible area.
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
+        let newX = destVisible.midX - windowSize.width / 2
+        let newY = primaryMaxY - destVisible.maxY + (destVisible.height - windowSize.height) / 2
+        var origin = CGPoint(x: newX, y: newY)
+        if let posVal = AXValueCreate(.cgPoint, &origin) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, posVal)
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
+        }
+    }
+
+    /// Move all windows belonging to the given PID to the given screen.
+    func moveAllAppWindowsToScreen(pid: pid_t, screen: NSScreen) {
+        let indices = availableWindowTargets.enumerated()
+            .filter { $0.element.processIdentifier == pid }
+            .map(\.offset)
+        for index in indices {
+            moveWindowToScreen(at: index, screen: screen)
+        }
+    }
+
+    /// Quit the application with the given PID.
+    func quitApp(pid: pid_t) {
+        NSRunningApplication(processIdentifier: pid)?.terminate()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
         }
     }
 
@@ -1149,7 +1203,7 @@ final class AppState: NSObject, NSMenuDelegate {
         // "/" is reserved for closing the selected window.
         if shortcut.keyCode == UInt32(kVK_ANSI_Slash),
            shortcut.modifiers == 0 {
-            return NSLocalizedString("/ is reserved for closing the selected window.", comment: "Slash shortcut reserved for closing window")
+            return NSLocalizedString("/ is reserved for closing/quitting the selected window.", comment: "Slash shortcut reserved for closing window or quitting app")
         }
 
         // Cmd+F is reserved for the window search field.
@@ -2027,7 +2081,19 @@ final class AppState: NSObject, NSMenuDelegate {
             raiseCurrentTargetWindow()
             return true
         case kVK_ANSI_Slash where event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty:
-            closeWindowTarget(at: activeTargetIndex)
+            let idx = activeTargetIndex
+            if idx >= 0, idx < availableWindowTargets.count {
+                let target = availableWindowTargets[idx]
+                let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
+                let windowCount = availableWindowTargets.filter { $0.processIdentifier == target.processIdentifier }.count
+                if isFinder || windowCount > 1 {
+                    // Finder or multi-window app: close this window
+                    closeWindowTarget(at: idx)
+                } else {
+                    // Single-window non-Finder app: quit the app
+                    quitApp(at: idx)
+                }
+            }
             return true
         case kVK_ANSI_F where event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
             // Handled in MainWindowController.performKeyEquivalent which checks first responder.

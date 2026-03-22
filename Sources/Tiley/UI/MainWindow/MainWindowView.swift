@@ -162,6 +162,9 @@ struct MainWindowView: View {
     @State private var hoveredWindowIndex: Int?
     @State private var hoveredCloseButtonIndex: Int?
     @State private var hoveredKebabButtonIndex: Int?
+    @State private var hoveredAppHeaderPID: pid_t?
+    @State private var hoveredAppHeaderClosePID: pid_t?
+    @State private var hoveredAppHeaderKebabPID: pid_t?
     @State private var isSearchFieldFocused = false
 
     init(appState: AppState, screenRole: ScreenRole = .target) {
@@ -1051,6 +1054,26 @@ struct MainWindowView: View {
         return CGDisplayIsBuiltin(screenNumber) != 0
     }
 
+    /// Returns "Close" if the selected window belongs to a multi-window app or Finder, "Quit" if single-window non-Finder app.
+    private var slashKeyHintLabel: String {
+        let targets = appState.windowTargetList
+        let idx = appState.currentWindowTargetIndex
+        guard idx >= 0, idx < targets.count else {
+            return NSLocalizedString("Close", comment: "Status bar hint for slash key to close window")
+        }
+        let pid = targets[idx].processIdentifier
+        let isFinder = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder"
+        if isFinder {
+            return NSLocalizedString("Close", comment: "Status bar hint for slash key to close window")
+        }
+        let count = targets.filter { $0.processIdentifier == pid }.count
+        if count > 1 {
+            return NSLocalizedString("Close", comment: "Status bar hint for slash key to close window")
+        } else {
+            return NSLocalizedString("Quit", comment: "Status bar hint for slash key to quit app")
+        }
+    }
+
     private var keyboardHintsBar: some View {
         HStack(spacing: 12) {
             hintLabel("↓ Tab", NSLocalizedString("Next window", comment: "Status bar hint for next window"))
@@ -1060,7 +1083,7 @@ struct MainWindowView: View {
                 hintLabel("Esc", NSLocalizedString("Clear search criteria", comment: "Status bar hint for clearing search criteria"))
             } else {
                 hintLabel("↩", NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
-                hintLabel("/", NSLocalizedString("Close window", comment: "Status bar hint for slash key to close window"))
+                hintLabel("/", slashKeyHintLabel)
                 hintLabel("Esc", NSLocalizedString("Close Tiley", comment: "Status bar hint for Escape to close"))
             }
         }
@@ -1191,6 +1214,7 @@ struct MainWindowView: View {
         let isLastWindowOfApp: Bool
         let sameAppWindowCount: Int
         let isHidden: Bool
+        let isFinder: Bool
         /// True when this item appears under an app header (multi-window app group).
         var isUnderAppHeader: Bool = false
     }
@@ -1228,6 +1252,7 @@ struct MainWindowView: View {
                 let matchesTitle = title.lowercased().contains(query)
                 if !matchesApp && !matchesTitle { continue }
             }
+            let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
             items.append(WindowListItem(
                 id: index,
                 appName: target.appName,
@@ -1235,7 +1260,8 @@ struct MainWindowView: View {
                 pid: target.processIdentifier,
                 isLastWindowOfApp: windowCountByPID[target.processIdentifier] == 1,
                 sameAppWindowCount: windowCountByPID[target.processIdentifier] ?? 1,
-                isHidden: target.isHidden
+                isHidden: target.isHidden,
+                isFinder: isFinder
             ))
         }
 
@@ -1391,7 +1417,8 @@ struct MainWindowView: View {
     }
 
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
-        HStack(spacing: 6) {
+        let isHovered = hoveredAppHeaderPID == pid
+        return HStack(spacing: 6) {
             if let icon = NSRunningApplication(processIdentifier: pid)?.icon {
                 Image(nsImage: icon)
                     .resizable()
@@ -1404,10 +1431,57 @@ struct MainWindowView: View {
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
             Spacer()
+            HStack(spacing: 2) {
+                // More menu button
+                let isKebabHovered = hoveredAppHeaderKebabPID == pid
+                AppHeaderMoreButton(
+                    isHovered: isKebabHovered,
+                    colorScheme: colorScheme,
+                    appName: appName,
+                    pid: pid,
+                    otherScreens: otherScreensForApp(pid: pid),
+                    onMoveToScreen: { screen in
+                        appState.moveAllAppWindowsToScreen(pid: pid, screen: screen)
+                    },
+                    onHideOthers: {
+                        appState.hideOtherApps(exceptPID: pid)
+                    },
+                    onQuit: {
+                        appState.quitApp(pid: pid)
+                    }
+                )
+                .onHover { hovering in
+                    hoveredAppHeaderKebabPID = hovering ? pid : nil
+                }
+            }
+            .opacity(isHovered ? 1 : 0)
         }
         .padding(.horizontal, 6)
         .padding(.top, 4)
         .padding(.bottom, 1)
+        .contentShape(Rectangle())
+        .onHover { hovering in hoveredAppHeaderPID = hovering ? pid : nil }
+    }
+
+    /// Returns all other screens (for moving all app windows to a different screen).
+    private func otherScreensForApp(pid: pid_t) -> [NSScreen] {
+        let screens = NSScreen.screens
+        guard screens.count > 1 else { return [] }
+        // Use the screen of the first window of this app as "current".
+        let targets = appState.windowTargetList
+        let firstTarget = targets.first { $0.processIdentifier == pid }
+        let currentDisplayID = firstTarget.flatMap { NSScreen.screen(containing: $0.screenFrame)?.displayID }
+        return screens.filter { $0.displayID != currentDisplayID }
+    }
+
+    /// Returns screens that are different from where a specific window is.
+    private func otherScreensForWindow(at index: Int) -> [NSScreen] {
+        guard NSScreen.screens.count > 1 else { return [] }
+        let targets = appState.windowTargetList
+        guard index >= 0, index < targets.count else { return [] }
+        let target = targets[index]
+        let currentDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
+        return NSScreen.screens.filter { $0.displayID != currentDisplayID }
     }
 
     private func windowListRow(item: WindowListItem) -> some View {
@@ -1460,54 +1534,53 @@ struct MainWindowView: View {
             .overlay(alignment: .trailing) {
                 if isHovered {
                     HStack(spacing: 2) {
-                        // Close button
-                        let isCloseHovered = hoveredCloseButtonIndex == item.id
-                        Button {
-                            appState.closeWindowTarget(at: item.id)
-                        } label: {
-                            Image(systemName: "xmark")
-                                .font(.system(size: 8, weight: .bold))
-                                .foregroundStyle(isCloseHovered ? .primary : .tertiary)
-                                .frame(width: 16, height: 16)
-                                .background(
-                                    Circle()
-                                        .fill(isCloseHovered
-                                              ? Color(white: colorScheme == .dark ? 0.45 : 0.55)
-                                              : Color(white: colorScheme == .dark ? 0.3 : 0.7))
-                                )
-                        }
-                        .buttonStyle(.plain)
-                        .onHover { hovering in
-                            hoveredCloseButtonIndex = hovering ? item.id : nil
-                        }
-                        .instantTooltip({
-                            if item.isLastWindowOfApp && appState.quitAppOnLastWindowClose {
-                                return String(
-                                    format: NSLocalizedString("Quit %@", comment: "Tooltip for closing the last window of an app (quits the app)"),
-                                    item.appName
-                                )
-                            } else {
-                                return String(
+                        if item.isUnderAppHeader {
+                            // Multi-window app: close button only
+                            let isCloseHovered = hoveredCloseButtonIndex == item.id
+                            Button {
+                                appState.closeWindowTarget(at: item.id)
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 8, weight: .bold))
+                                    .foregroundStyle(isCloseHovered ? .primary : .tertiary)
+                                    .frame(width: 16, height: 16)
+                                    .background(
+                                        Circle()
+                                            .fill(isCloseHovered
+                                                  ? Color(white: colorScheme == .dark ? 0.45 : 0.55)
+                                                  : Color(white: colorScheme == .dark ? 0.3 : 0.7))
+                                    )
+                            }
+                            .buttonStyle(.plain)
+                            .onHover { hovering in
+                                hoveredCloseButtonIndex = hovering ? item.id : nil
+                            }
+                            .instantTooltip(
+                                String(
                                     format: NSLocalizedString("Close %@", comment: "Tooltip for close window button with window name"),
                                     item.windowTitle.isEmpty ? item.appName : item.windowTitle
                                 )
+                            )
+                        } else {
+                            // Single-window app: kebab menu only
+                            let isKebabHovered = hoveredKebabButtonIndex == item.id
+                            WindowListMoreButton(
+                                isHovered: isKebabHovered,
+                                colorScheme: colorScheme,
+                                appName: item.appName,
+                                windowTitle: item.windowTitle,
+                                otherScreens: otherScreensForWindow(at: item.id),
+                                isFinder: item.isFinder,
+                                onMoveToScreen: { screen in
+                                    appState.moveWindowToScreen(at: item.id, screen: screen)
+                                },
+                                onClose: { appState.closeWindowTarget(at: item.id) },
+                                onHideOthers: { appState.hideOtherApps(except: item.id) },
+                                onQuit: { appState.quitApp(at: item.id) }
+                            )
+                            .onHover { hovering in
+                                hoveredKebabButtonIndex = hovering ? item.id : nil
                             }
-                        }())
-
-                        // More menu button
-                        let isKebabHovered = hoveredKebabButtonIndex == item.id
-                        WindowListMoreButton(
-                            isHovered: isKebabHovered,
-                            colorScheme: colorScheme,
-                            sameAppWindowCount: item.sameAppWindowCount,
-                            appName: item.appName,
-                            windowTitle: item.windowTitle,
-                            onCloseOthers: { appState.closeOtherWindowTargets(except: item.id) },
-                            onQuit: { appState.quitApp(at: item.id) },
-                            onHideOthers: { appState.hideOtherApps(except: item.id) }
-                        )
-                        .onHover { hovering in
-                            hoveredKebabButtonIndex = hovering ? item.id : nil
                         }
                     }
                     .padding(.trailing, 4)
@@ -1624,24 +1697,6 @@ struct MainWindowView: View {
                             draftSettings.hotKeyShortcut = .default
                         }
                     }
-                }
-            }
-
-            TahoeSettingsSection(title: NSLocalizedString("Windows", comment: "Settings section")) {
-                VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Quit app when closing last window", comment: "")) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.quitAppOnLastWindowClose },
-                            set: { newValue in
-                                draftSettings.quitAppOnLastWindowClose = newValue
-                                appState.quitAppOnLastWindowClose = newValue
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
-
                 }
             }
 
@@ -3160,15 +3215,15 @@ private struct UpdateAvailableBadge: View {
 /// A circular "…" button that shows a context menu via NSMenu.
 /// Using NSViewRepresentable avoids SwiftUI Menu rendering issues
 /// where the Circle background gets stripped by borderlessButton style.
-private struct WindowListMoreButton: NSViewRepresentable {
+private struct AppHeaderMoreButton: NSViewRepresentable {
     let isHovered: Bool
     let colorScheme: ColorScheme
-    let sameAppWindowCount: Int
     let appName: String
-    let windowTitle: String
-    let onCloseOthers: () -> Void
-    let onQuit: () -> Void
+    let pid: pid_t
+    let otherScreens: [NSScreen]
+    let onMoveToScreen: (NSScreen) -> Void
     let onHideOthers: () -> Void
+    let onQuit: () -> Void
 
     func makeNSView(context: Context) -> NSView {
         let container = NSView(frame: NSRect(x: 0, y: 0, width: 16, height: 16))
@@ -3204,12 +3259,162 @@ private struct WindowListMoreButton: NSViewRepresentable {
 
     func updateNSView(_ container: NSView, context: Context) {
         let coord = context.coordinator
-        coord.sameAppWindowCount = sameAppWindowCount
+        coord.appName = appName
+        coord.otherScreens = otherScreens
+        coord.onMoveToScreen = onMoveToScreen
+        coord.onHideOthers = onHideOthers
+        coord.onQuit = onQuit
+
+        let bgColor: NSColor
+        if isHovered {
+            bgColor = NSColor(white: colorScheme == .dark ? 0.45 : 0.55, alpha: 1)
+        } else {
+            bgColor = NSColor(white: colorScheme == .dark ? 0.3 : 0.7, alpha: 1)
+        }
+        container.layer?.backgroundColor = bgColor.cgColor
+
+        if let button = container.viewWithTag(1) as? NSButton {
+            button.contentTintColor = isHovered ? .labelColor : .tertiaryLabelColor
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(appName: appName, otherScreens: otherScreens,
+                    onMoveToScreen: onMoveToScreen, onHideOthers: onHideOthers, onQuit: onQuit)
+    }
+
+    class Coordinator: NSObject {
+        var appName: String
+        var otherScreens: [NSScreen]
+        var onMoveToScreen: (NSScreen) -> Void
+        var onHideOthers: () -> Void
+        var onQuit: () -> Void
+
+        init(appName: String, otherScreens: [NSScreen],
+             onMoveToScreen: @escaping (NSScreen) -> Void, onHideOthers: @escaping () -> Void, onQuit: @escaping () -> Void) {
+            self.appName = appName
+            self.otherScreens = otherScreens
+            self.onMoveToScreen = onMoveToScreen
+            self.onHideOthers = onHideOthers
+            self.onQuit = onQuit
+        }
+
+        @objc func showMenu(_ sender: NSButton) {
+            let menu = NSMenu()
+
+            // Move all windows to screen
+            for screen in otherScreens {
+                let displayName = screen.localizedName
+                let moveItem = NSMenuItem(
+                    title: String(
+                        format: NSLocalizedString("Move %1$@ to %2$@", comment: "Menu item to move a window/app to another screen. First arg is window/app name, second is screen name"),
+                        appName, displayName
+                    ),
+                    action: #selector(moveToScreenAction(_:)),
+                    keyEquivalent: ""
+                )
+                moveItem.image = NSImage(systemSymbolName: "rectangle.portrait.and.arrow.right", accessibilityDescription: nil)
+                moveItem.target = self
+                moveItem.representedObject = screen
+                menu.addItem(moveItem)
+            }
+
+            if !otherScreens.isEmpty {
+                menu.addItem(.separator())
+            }
+
+            let hideOthersItem = NSMenuItem(
+                title: String(
+                    format: NSLocalizedString("Hide windows besides %@", comment: "Menu item to hide all windows except the selected app"),
+                    appName
+                ),
+                action: #selector(hideOthersAction),
+                keyEquivalent: ""
+            )
+            hideOthersItem.image = NSImage(systemSymbolName: "eye.slash", accessibilityDescription: nil)
+            hideOthersItem.target = self
+            menu.addItem(hideOthersItem)
+
+            menu.addItem(.separator())
+
+            let quitItem = NSMenuItem(
+                title: String(
+                    format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"),
+                    appName
+                ),
+                action: #selector(quitAction),
+                keyEquivalent: ""
+            )
+            quitItem.image = NSImage(systemSymbolName: "power", accessibilityDescription: nil)
+            quitItem.target = self
+            menu.addItem(quitItem)
+
+            menu.popUp(positioning: nil, at: NSPoint(x: 0, y: sender.bounds.height), in: sender)
+        }
+
+        @objc private func moveToScreenAction(_ sender: NSMenuItem) {
+            guard let screen = sender.representedObject as? NSScreen else { return }
+            onMoveToScreen(screen)
+        }
+        @objc private func hideOthersAction() { onHideOthers() }
+        @objc private func quitAction() { onQuit() }
+    }
+}
+
+private struct WindowListMoreButton: NSViewRepresentable {
+    let isHovered: Bool
+    let colorScheme: ColorScheme
+    let appName: String
+    let windowTitle: String
+    let otherScreens: [NSScreen]
+    let isFinder: Bool
+    let onMoveToScreen: (NSScreen) -> Void
+    let onClose: () -> Void
+    let onHideOthers: () -> Void
+    let onQuit: () -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let container = NSView(frame: NSRect(x: 0, y: 0, width: 16, height: 16))
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.wantsLayer = true
+        container.layer?.cornerRadius = 8
+        container.layer?.masksToBounds = true
+
+        let button = NSButton(frame: .zero)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.bezelStyle = .inline
+        button.isBordered = false
+        button.image = NSImage(systemSymbolName: "ellipsis", accessibilityDescription: nil)?
+            .withSymbolConfiguration(.init(pointSize: 8, weight: .bold))
+        button.imagePosition = .imageOnly
+        button.target = context.coordinator
+        button.action = #selector(Coordinator.showMenu(_:))
+        button.tag = 1
+
+        container.addSubview(button)
+
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: 16),
+            container.heightAnchor.constraint(equalToConstant: 16),
+            button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 16),
+            button.heightAnchor.constraint(equalToConstant: 16),
+        ])
+
+        return container
+    }
+
+    func updateNSView(_ container: NSView, context: Context) {
+        let coord = context.coordinator
         coord.appName = appName
         coord.windowTitle = windowTitle
-        coord.onCloseOthers = onCloseOthers
-        coord.onQuit = onQuit
+        coord.otherScreens = otherScreens
+        coord.isFinder = isFinder
+        coord.onMoveToScreen = onMoveToScreen
+        coord.onClose = onClose
         coord.onHideOthers = onHideOthers
+        coord.onQuit = onQuit
 
         let bgColor: NSColor
         if isHovered {
@@ -3226,63 +3431,85 @@ private struct WindowListMoreButton: NSViewRepresentable {
 
     func makeCoordinator() -> Coordinator {
         Coordinator(
-            sameAppWindowCount: sameAppWindowCount,
             appName: appName,
             windowTitle: windowTitle,
-            onCloseOthers: onCloseOthers,
-            onQuit: onQuit,
-            onHideOthers: onHideOthers
+            otherScreens: otherScreens,
+            isFinder: isFinder,
+            onMoveToScreen: onMoveToScreen,
+            onClose: onClose,
+            onHideOthers: onHideOthers,
+            onQuit: onQuit
         )
     }
 
     class Coordinator: NSObject {
-        var sameAppWindowCount: Int
         var appName: String
         var windowTitle: String
-        var onCloseOthers: () -> Void
-        var onQuit: () -> Void
+        var otherScreens: [NSScreen]
+        var isFinder: Bool
+        var onMoveToScreen: (NSScreen) -> Void
+        var onClose: () -> Void
         var onHideOthers: () -> Void
+        var onQuit: () -> Void
 
-        init(sameAppWindowCount: Int, appName: String, windowTitle: String,
-             onCloseOthers: @escaping () -> Void, onQuit: @escaping () -> Void,
-             onHideOthers: @escaping () -> Void) {
-            self.sameAppWindowCount = sameAppWindowCount
+        init(appName: String, windowTitle: String,
+             otherScreens: [NSScreen],
+             isFinder: Bool,
+             onMoveToScreen: @escaping (NSScreen) -> Void,
+             onClose: @escaping () -> Void,
+             onHideOthers: @escaping () -> Void,
+             onQuit: @escaping () -> Void) {
             self.appName = appName
             self.windowTitle = windowTitle
-            self.onCloseOthers = onCloseOthers
-            self.onQuit = onQuit
+            self.otherScreens = otherScreens
+            self.isFinder = isFinder
+            self.onMoveToScreen = onMoveToScreen
+            self.onClose = onClose
             self.onHideOthers = onHideOthers
+            self.onQuit = onQuit
         }
 
         @objc func showMenu(_ sender: NSButton) {
             let menu = NSMenu()
 
-            if sameAppWindowCount > 1 {
-                let closeOthersItem = NSMenuItem(
+            // Move to screen items
+            for screen in otherScreens {
+                let displayName = screen.localizedName
+                let windowName = windowTitle.isEmpty ? appName : windowTitle
+                let moveItem = NSMenuItem(
                     title: String(
-                        format: NSLocalizedString("Close other windows of %@", comment: "Menu item to close other windows of the same app"),
-                        appName
+                        format: NSLocalizedString("Move %1$@ to %2$@", comment: "Menu item to move a window/app to another screen. First arg is window/app name, second is screen name"),
+                        windowName, displayName
                     ),
-                    action: #selector(closeOthersAction),
+                    action: #selector(moveToScreenAction(_:)),
                     keyEquivalent: ""
                 )
-                closeOthersItem.image = NSImage(systemSymbolName: "xmark", accessibilityDescription: nil)
-                closeOthersItem.target = self
-                menu.addItem(closeOthersItem)
+                moveItem.image = NSImage(systemSymbolName: "rectangle.portrait.and.arrow.right", accessibilityDescription: nil)
+                moveItem.target = self
+                moveItem.representedObject = screen
+                menu.addItem(moveItem)
             }
 
-            let quitItem = NSMenuItem(
-                title: String(
-                    format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"),
-                    appName
-                ),
-                action: #selector(quitAction),
-                keyEquivalent: ""
-            )
-            quitItem.image = NSImage(systemSymbolName: "power", accessibilityDescription: nil)
-            quitItem.target = self
-            menu.addItem(quitItem)
+            if !otherScreens.isEmpty {
+                menu.addItem(.separator())
+            }
 
+            // Finder: show "Close [window]" instead of "Quit"
+            if isFinder {
+                let closeItem = NSMenuItem(
+                    title: String(
+                        format: NSLocalizedString("Close %@", comment: "Menu item to close a window"),
+                        windowTitle.isEmpty ? appName : windowTitle
+                    ),
+                    action: #selector(closeAction),
+                    keyEquivalent: ""
+                )
+                closeItem.image = NSImage(systemSymbolName: "xmark", accessibilityDescription: nil)
+                closeItem.target = self
+                menu.addItem(closeItem)
+            }
+
+            // Hide others
             let hideItem = NSMenuItem(
                 title: String(
                     format: NSLocalizedString("Hide windows besides %@", comment: "Menu item to hide all windows except the selected app"),
@@ -3295,12 +3522,33 @@ private struct WindowListMoreButton: NSViewRepresentable {
             hideItem.target = self
             menu.addItem(hideItem)
 
+            // Non-Finder: show "Quit" at the end
+            if !isFinder {
+                menu.addItem(.separator())
+
+                let quitItem = NSMenuItem(
+                    title: String(
+                        format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"),
+                        appName
+                    ),
+                    action: #selector(quitAction),
+                    keyEquivalent: ""
+                )
+                quitItem.image = NSImage(systemSymbolName: "power", accessibilityDescription: nil)
+                quitItem.target = self
+                menu.addItem(quitItem)
+            }
+
             menu.popUp(positioning: nil, at: NSPoint(x: 0, y: sender.bounds.height), in: sender)
         }
 
-        @objc private func closeOthersAction() { onCloseOthers() }
-        @objc private func quitAction() { onQuit() }
+        @objc private func moveToScreenAction(_ sender: NSMenuItem) {
+            guard let screen = sender.representedObject as? NSScreen else { return }
+            onMoveToScreen(screen)
+        }
+        @objc private func closeAction() { onClose() }
         @objc private func hideOthersAction() { onHideOthers() }
+        @objc private func quitAction() { onQuit() }
     }
 }
 
