@@ -15,6 +15,12 @@
 - El fondo de la cuadrícula ahora refleja con precisión la configuración de visualización del fondo de pantalla de macOS (rellenar, ajustar, estirar, centrar y mosaico), incluyendo la escala correcta del mosaico, la proporción de píxeles físicos para el modo centrado y el color de relleno para las áreas de letterbox
 - La vista previa de la cuadrícula de diseño ahora muestra la barra de menú, el Dock y la muesca, ofreciendo una representación más precisa de la pantalla real
 
+### Corregido
+
+- Corregido un problema donde la ventana se movía a una posición inesperada después de redimensionar cuando ya estaba en la posición de destino. Evasión de la deduplicación AX mediante pre-desplazamiento
+- Reducido el parpadeo al redimensionar en pantallas no principales. Primero se intenta redimensionar en el lugar; solo se recurre a la pantalla principal si falla completamente
+- Al recurrir a la pantalla principal, la ventana ahora se coloca en el borde inferior (casi fuera de pantalla) en lugar de en la esquina superior izquierda, minimizando el parpadeo
+
 ## [2.2.0] - 2026-03-21
 
 ### Cambiado

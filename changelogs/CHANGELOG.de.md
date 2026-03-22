@@ -15,6 +15,12 @@
 - Der Gitterhintergrund spiegelt nun die macOS-Hintergrundbild-Anzeigeeinstellungen korrekt wider (Füllen, Anpassen, Strecken, Zentrieren und Kacheln), einschließlich korrekter Kachelskalierung, physischem Pixelverhältnis für den Zentrierung-Modus und Füllfarbe für Letterbox-Bereiche
 - Die Layout-Rastervorschau zeigt nun Menüleiste, Dock und Notch und vermittelt so ein realistischeres Bild der tatsächlichen Anzeige
 
+### Behoben
+
+- Fenster wurde nach Größenänderung an eine unerwartete Position verschoben, wenn die aktuelle Position bereits der Zielposition entsprach. Umgehung der AX-Deduplizierung durch Vor-Verschiebung
+- Reduziertes Flackern beim Ändern der Fenstergröße auf Nicht-Primärbildschirmen. Größenänderung wird zuerst vor Ort versucht; nur bei vollständigem Fehlschlag wird auf den Primärbildschirm ausgewichen
+- Beim Ausweichen auf den Primärbildschirm wird das Fenster jetzt am unteren Bildschirmrand (fast außerhalb des sichtbaren Bereichs) statt an der oberen linken Ecke platziert, um Flackern zu minimieren
+
 ## [2.2.0] - 2026-03-21
 
 ### Geändert

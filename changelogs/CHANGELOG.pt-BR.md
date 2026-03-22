@@ -15,6 +15,12 @@
 - O fundo da grade agora reflete com precisão as configurações de exibição do papel de parede do macOS (preencher, ajustar, esticar, centralizar e mosaico), incluindo dimensionamento correto dos blocos, proporção de pixels físicos para o modo centralizado e cor de preenchimento para áreas de letterbox
 - A pré-visualização da grade de layout agora exibe a barra de menus, o Dock e o entalhe, proporcionando uma representação mais fiel da tela real
 
+### Corrigido
+
+- Corrigido um problema onde a janela se movia para uma posição inesperada após o redimensionamento quando já estava na posição de destino. Contorno da deduplicação AX via pré-deslocamento
+- Reduzida a cintilação ao redimensionar em telas não principais. O redimensionamento é primeiro tentado no local; o salto para a tela principal só ocorre em caso de falha completa
+- Ao saltar para a tela principal, a janela agora é posicionada na borda inferior (quase fora da tela) em vez do canto superior esquerdo, minimizando a cintilação
+
 ## [2.2.0] - 2026-03-21
 
 ### Alterado

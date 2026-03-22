@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Grid background now accurately reflects the macOS wallpaper display settings (fill, fit, stretch, center, and tile modes), including correct tile scaling, physical pixel ratio for center mode, and fill color for letterbox areas
 - Layout grid preview now shows the full screen frame including the menu bar, Dock, and notch, giving a more accurate representation of the actual display
 
+### Fixed
+
+- Fixed window position not being applied when the window is already at the target position before resize; AX de-duplication now defeated via pre-nudge
+- Reduced visible flicker when resizing on non-primary screens; resize is now attempted in-place first, and the primary-screen bounce only occurs when the in-place resize has no effect at all
+- When bouncing to the primary screen for resize, the window is now placed at the bottom edge (mostly off-screen) instead of at the origin, minimizing visible flicker
+
 ## [2.2.0] - 2026-03-21
 
 ### Changed

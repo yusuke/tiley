@@ -318,6 +318,20 @@ final class AccessibilityService {
     private func applyOnCurrentScreen(_ origin: CGPoint, _ size: CGSize,
                                        position: AXValue, sizeValue: AXValue,
                                        for window: AXUIElement) throws {
+        // 0. If the window is already at the target position, pre-nudge
+        //    so that step 1 is not de-duplicated by AX.  Without this,
+        //    apps that revert position on a size change (step 2) leave
+        //    the window stuck at the reverted position because AX thinks
+        //    steps 3–4 are no-ops.
+        let (currentPos, _) = readPositionAndSize(of: window)
+        if abs(currentPos.x - origin.x) <= 1 && abs(currentPos.y - origin.y) <= 1 {
+            var preNudge = origin
+            preNudge.y += 1
+            if let v = AXValueCreate(.cgPoint, &preNudge) {
+                AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
+            }
+        }
+
         // 1. Move to target position first so the subsequent resize has
         //    room to expand (e.g. maximise from a centred window).
         let positionResult = AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)

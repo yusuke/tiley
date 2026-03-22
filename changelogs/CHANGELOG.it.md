@@ -15,6 +15,12 @@
 - Lo sfondo della griglia ora riflette accuratamente le impostazioni di visualizzazione dello sfondo macOS (riempimento, adattamento, allungamento, centro e mosaico), inclusa la corretta scalatura delle tessere, il rapporto pixel fisico per la modalità centrata e il colore di riempimento per le aree letterbox
 - L'anteprima della griglia di layout ora mostra la barra dei menu, il Dock e il notch, offrendo una rappresentazione più fedele dello schermo reale
 
+### Corretto
+
+- Corretto un problema in cui la finestra si spostava in una posizione inattesa dopo il ridimensionamento quando era già nella posizione di destinazione. Aggiramento della deduplicazione AX tramite pre-spostamento
+- Ridotto lo sfarfallio durante il ridimensionamento su schermi non principali. Il ridimensionamento viene prima tentato sul posto; il rimbalzo allo schermo principale avviene solo in caso di fallimento completo
+- Durante il rimbalzo allo schermo principale, la finestra viene ora posizionata sul bordo inferiore (quasi fuori schermo) anziché nell'angolo superiore sinistro, minimizzando lo sfarfallio
+
 ## [2.2.0] - 2026-03-21
 
 ### Modificato
