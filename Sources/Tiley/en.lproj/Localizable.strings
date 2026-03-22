@@ -116,3 +116,5 @@
 "menu.bar.fallback.file" = "File";
 "menu.bar.fallback.edit" = "Edit";
 "menu.bar.fallback.view" = "View";
+"Gather windows to %@" = "Gather windows to %@";
+"Move %1$@ windows to %2$@" = "Move %1$@ windows to %2$@";

@@ -116,3 +116,5 @@
 "menu.bar.fallback.file" = "文件";
 "menu.bar.fallback.edit" = "编辑";
 "menu.bar.fallback.view" = "显示";
+"Gather windows to %@" = "将窗口聚集到%@";
+"Move %1$@ windows to %2$@" = "将%1$@的窗口移到%2$@";

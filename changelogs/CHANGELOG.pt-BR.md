@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- As janelas na barra lateral agora são agrupadas por tela e por aplicativo; apps com múltiplas janelas mostram um cabeçalho com as janelas recuadas
+- Os cabeçalhos de tela na barra lateral agora têm um menu com ações para "Reunir janelas" e "Mover janelas para" para gerenciar janelas entre telas
+- Menu do cabeçalho de aplicativo com "Mover todas as janelas para outra tela", "Ocultar outros" e "Encerrar"
+- Menu de apps com janela única com "Mover para outra tela", "Ocultar outros" e "Encerrar"
+- Telas vazias (sem janelas) agora são mostradas na barra lateral com seu cabeçalho
+
 ### Alterado
 
 - O fundo da grade agora reflete com precisão as configurações de exibição do papel de parede do macOS (preencher, ajustar, esticar, centralizar e mosaico), incluindo dimensionamento correto dos blocos, proporção de pixels físicos para o modo centralizado e cor de preenchimento para áreas de letterbox

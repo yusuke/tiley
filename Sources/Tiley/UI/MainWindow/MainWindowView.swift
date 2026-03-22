@@ -165,6 +165,8 @@ struct MainWindowView: View {
     @State private var hoveredAppHeaderPID: pid_t?
     @State private var hoveredAppHeaderClosePID: pid_t?
     @State private var hoveredAppHeaderKebabPID: pid_t?
+    @State private var hoveredScreenHeaderID: CGDirectDisplayID?
+    @State private var hoveredScreenHeaderKebabID: CGDirectDisplayID?
     @State private var isSearchFieldFocused = false
 
     init(appState: AppState, screenRole: ScreenRole = .target) {
@@ -1305,15 +1307,25 @@ struct MainWindowView: View {
         var screenGroups: [(displayID: CGDirectDisplayID, name: String, items: [WindowListItem])] = []
         var groupMap: [CGDirectDisplayID: Int] = [:]  // displayID → index in screenGroups
 
+        // Pre-populate all connected screens so that empty screens also appear.
+        for screen in screens {
+            let displayID = screen.displayID
+            if groupMap[displayID] == nil {
+                let idx = screenGroups.count
+                groupMap[displayID] = idx
+                screenGroups.append((displayID: displayID, name: screen.localizedName, items: []))
+            }
+        }
+
         for item in items {
             let target = targets[item.id]
             let screen = NSScreen.screen(containing: target.screenFrame)
             let displayID = screen?.displayID ?? 0
-            let screenName = screen?.localizedName ?? NSLocalizedString("Unknown Display", comment: "Fallback screen name")
 
             if let groupIdx = groupMap[displayID] {
                 screenGroups[groupIdx].items.append(item)
             } else {
+                let screenName = screen?.localizedName ?? NSLocalizedString("Unknown Display", comment: "Fallback screen name")
                 let idx = screenGroups.count
                 groupMap[displayID] = idx
                 screenGroups.append((displayID: displayID, name: screenName, items: [item]))
@@ -1369,8 +1381,8 @@ struct MainWindowView: View {
                     VStack(spacing: 2) {
                         ForEach(filteredSidebarRows) { row in
                             switch row {
-                            case .screenHeader(_, let name):
-                                screenHeaderRow(name: name)
+                            case .screenHeader(let displayID, let name):
+                                screenHeaderRow(displayID: displayID, name: name)
                             case .appHeader(let pid, let appName):
                                 appHeaderRow(pid: pid, appName: appName)
                             case .window(let item):
@@ -1403,17 +1415,66 @@ struct MainWindowView: View {
         }
     }
 
-    private func screenHeaderRow(name: String) -> some View {
-        HStack {
+    private func otherScreensForDisplay(_ displayID: CGDirectDisplayID) -> [NSScreen] {
+        let screens = NSScreen.screens
+        guard screens.count > 1 else { return [] }
+        return screens.filter { $0.displayID != displayID }
+    }
+
+    private func screenForDisplay(_ displayID: CGDirectDisplayID) -> NSScreen? {
+        NSScreen.screens.first { $0.displayID == displayID }
+    }
+
+    private func screenHeaderRow(displayID: CGDirectDisplayID, name: String) -> some View {
+        let isHovered = hoveredScreenHeaderID == displayID
+        let otherScreens = otherScreensForDisplay(displayID)
+
+        return HStack {
             Text(name)
                 .font(.system(size: 10, weight: .medium))
                 .foregroundStyle(.tertiary)
                 .lineLimit(1)
             Spacer()
         }
+        .overlay(alignment: .trailing) {
+            if isHovered && !otherScreens.isEmpty {
+                let isKebabHovered = hoveredScreenHeaderKebabID == displayID
+                let hasWindowsOnOtherScreens = appState.windowTargetList.contains { target in
+                    let targetDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
+                    return targetDisplayID != nil && targetDisplayID != displayID
+                }
+                let hasWindowsOnThisScreen = appState.windowTargetList.contains { target in
+                    NSScreen.screen(containing: target.screenFrame)?.displayID == displayID
+                }
+                ScreenHeaderMoreButton(
+                    isHovered: isKebabHovered,
+                    colorScheme: colorScheme,
+                    screenName: name,
+                    displayID: displayID,
+                    otherScreens: otherScreens,
+                    canGather: hasWindowsOnOtherScreens,
+                    hasWindowsOnThisScreen: hasWindowsOnThisScreen,
+                    onGather: {
+                        if let screen = screenForDisplay(displayID) {
+                            appState.gatherWindowsToScreen(screen)
+                        }
+                    },
+                    onMoveToScreen: { destScreen in
+                        appState.moveScreenWindowsToScreen(from: displayID, to: destScreen)
+                    }
+                )
+                .onHover { hovering in
+                    hoveredScreenHeaderKebabID = hovering ? displayID : nil
+                }
+                .transition(.identity)
+            }
+        }
+        .contentShape(Rectangle())
+        .animation(nil, value: isHovered)
         .padding(.horizontal, 6)
         .padding(.top, 6)
         .padding(.bottom, 2)
+        .onHover { hovering in hoveredScreenHeaderID = hovering ? displayID : nil }
     }
 
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
@@ -3549,6 +3610,152 @@ private struct WindowListMoreButton: NSViewRepresentable {
         @objc private func closeAction() { onClose() }
         @objc private func hideOthersAction() { onHideOthers() }
         @objc private func quitAction() { onQuit() }
+    }
+}
+
+private struct ScreenHeaderMoreButton: NSViewRepresentable {
+    let isHovered: Bool
+    let colorScheme: ColorScheme
+    let screenName: String
+    let displayID: CGDirectDisplayID
+    let otherScreens: [NSScreen]
+    let canGather: Bool
+    let hasWindowsOnThisScreen: Bool
+    let onGather: () -> Void
+    let onMoveToScreen: (NSScreen) -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let container = NSView(frame: NSRect(x: 0, y: 0, width: 16, height: 16))
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.wantsLayer = true
+        container.layer?.cornerRadius = 8
+        container.layer?.masksToBounds = true
+
+        let button = NSButton(frame: .zero)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.bezelStyle = .inline
+        button.isBordered = false
+        button.image = NSImage(systemSymbolName: "ellipsis", accessibilityDescription: nil)?
+            .withSymbolConfiguration(.init(pointSize: 8, weight: .bold))
+        button.imagePosition = .imageOnly
+        button.target = context.coordinator
+        button.action = #selector(Coordinator.showMenu(_:))
+        button.tag = 1
+
+        container.addSubview(button)
+
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: 16),
+            container.heightAnchor.constraint(equalToConstant: 16),
+            button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 16),
+            button.heightAnchor.constraint(equalToConstant: 16),
+        ])
+
+        return container
+    }
+
+    func updateNSView(_ container: NSView, context: Context) {
+        let coord = context.coordinator
+        coord.screenName = screenName
+        coord.otherScreens = otherScreens
+        coord.canGather = canGather
+        coord.hasWindowsOnThisScreen = hasWindowsOnThisScreen
+        coord.onGather = onGather
+        coord.onMoveToScreen = onMoveToScreen
+
+        let bgColor: NSColor
+        if isHovered {
+            bgColor = NSColor(white: colorScheme == .dark ? 0.45 : 0.55, alpha: 1)
+        } else {
+            bgColor = NSColor(white: colorScheme == .dark ? 0.3 : 0.7, alpha: 1)
+        }
+        container.layer?.backgroundColor = bgColor.cgColor
+
+        if let button = container.viewWithTag(1) as? NSButton {
+            button.contentTintColor = isHovered ? .labelColor : .tertiaryLabelColor
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(
+            screenName: screenName,
+            otherScreens: otherScreens,
+            canGather: canGather,
+            hasWindowsOnThisScreen: hasWindowsOnThisScreen,
+            onGather: onGather,
+            onMoveToScreen: onMoveToScreen
+        )
+    }
+
+    class Coordinator: NSObject {
+        var screenName: String
+        var otherScreens: [NSScreen]
+        var canGather: Bool
+        var hasWindowsOnThisScreen: Bool
+        var onGather: () -> Void
+        var onMoveToScreen: (NSScreen) -> Void
+
+        init(screenName: String, otherScreens: [NSScreen],
+             canGather: Bool, hasWindowsOnThisScreen: Bool,
+             onGather: @escaping () -> Void,
+             onMoveToScreen: @escaping (NSScreen) -> Void) {
+            self.screenName = screenName
+            self.otherScreens = otherScreens
+            self.canGather = canGather
+            self.hasWindowsOnThisScreen = hasWindowsOnThisScreen
+            self.onGather = onGather
+            self.onMoveToScreen = onMoveToScreen
+        }
+
+        @objc func showMenu(_ sender: NSButton) {
+            let menu = NSMenu()
+
+            // Gather windows to this screen
+            let gatherItem = NSMenuItem(
+                title: String(
+                    format: NSLocalizedString("Gather windows to %@", comment: "Menu item to gather all windows from other screens to this screen"),
+                    screenName
+                ),
+                action: canGather ? #selector(gatherAction) : nil,
+                keyEquivalent: ""
+            )
+            gatherItem.image = NSImage(systemSymbolName: "rectangle.compress.vertical", accessibilityDescription: nil)
+            gatherItem.target = self
+            gatherItem.isEnabled = canGather
+            menu.addItem(gatherItem)
+
+            if !otherScreens.isEmpty {
+                menu.addItem(.separator())
+            }
+
+            // Move windows from this screen to another
+            for screen in otherScreens {
+                let displayName = screen.localizedName
+                let moveItem = NSMenuItem(
+                    title: String(
+                        format: NSLocalizedString("Move %1$@ windows to %2$@", comment: "Menu item to move all windows from one screen to another. First arg is source screen, second is destination screen"),
+                        screenName, displayName
+                    ),
+                    action: hasWindowsOnThisScreen ? #selector(moveToScreenAction(_:)) : nil,
+                    keyEquivalent: ""
+                )
+                moveItem.image = NSImage(systemSymbolName: "rectangle.portrait.and.arrow.right", accessibilityDescription: nil)
+                moveItem.target = self
+                moveItem.representedObject = screen
+                moveItem.isEnabled = hasWindowsOnThisScreen
+                menu.addItem(moveItem)
+            }
+
+            menu.popUp(positioning: nil, at: NSPoint(x: 0, y: sender.bounds.height), in: sender)
+        }
+
+        @objc private func gatherAction() { onGather() }
+        @objc private func moveToScreenAction(_ sender: NSMenuItem) {
+            guard let screen = sender.representedObject as? NSScreen else { return }
+            onMoveToScreen(screen)
+        }
     }
 }
 

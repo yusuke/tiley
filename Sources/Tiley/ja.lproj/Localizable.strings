@@ -116,3 +116,5 @@
 "menu.bar.fallback.file" = "ファイル";
 "menu.bar.fallback.edit" = "編集";
 "menu.bar.fallback.view" = "表示";
+"Gather windows to %@" = "ウインドウを%@に集める";
+"Move %1$@ windows to %2$@" = "%1$@のウインドウを%2$@に移動";

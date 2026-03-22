@@ -807,6 +807,27 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
+    /// Gather all windows from other screens to the given screen.
+    func gatherWindowsToScreen(_ screen: NSScreen) {
+        let destDisplayID = screen.displayID
+        for (index, target) in availableWindowTargets.enumerated() {
+            let targetScreen = NSScreen.screen(containing: target.screenFrame)
+            if targetScreen?.displayID != destDisplayID {
+                moveWindowToScreen(at: index, screen: screen)
+            }
+        }
+    }
+
+    /// Move all windows on the given screen to the destination screen.
+    func moveScreenWindowsToScreen(from sourceDisplayID: CGDirectDisplayID, to destScreen: NSScreen) {
+        for (index, target) in availableWindowTargets.enumerated() {
+            let targetScreen = NSScreen.screen(containing: target.screenFrame)
+            if targetScreen?.displayID == sourceDisplayID {
+                moveWindowToScreen(at: index, screen: destScreen)
+            }
+        }
+    }
+
     /// Quit the application with the given PID.
     func quitApp(pid: pid_t) {
         NSRunningApplication(processIdentifier: pid)?.terminate()

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Le finestre nella barra laterale sono raggruppate per schermo e per applicazione; le app con più finestre mostrano un'intestazione con le righe rientrate
+- Le intestazioni dello schermo nella barra laterale hanno un menu con le azioni "Raccogli finestre" e "Sposta finestre su" per gestire le finestre tra schermi
+- Menu dell'intestazione app con "Sposta tutte le finestre su un altro schermo", "Nascondi altre" e "Esci"
+- Menu delle app a finestra singola con "Sposta su un altro schermo", "Nascondi altre" e "Esci"
+- Gli schermi vuoti (senza finestre) sono mostrati nella barra laterale con la loro intestazione
+
 ### Modificato
 
 - Lo sfondo della griglia ora riflette accuratamente le impostazioni di visualizzazione dello sfondo macOS (riempimento, adattamento, allungamento, centro e mosaico), inclusa la corretta scalatura delle tessere, il rapporto pixel fisico per la modalità centrata e il colore di riempimento per le aree letterbox

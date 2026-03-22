@@ -116,3 +116,5 @@
 "menu.bar.fallback.file" = "檔案";
 "menu.bar.fallback.edit" = "編輯";
 "menu.bar.fallback.view" = "顯示";
+"Gather windows to %@" = "將視窗聚集到%@";
+"Move %1$@ windows to %2$@" = "將%1$@的視窗移到%2$@";

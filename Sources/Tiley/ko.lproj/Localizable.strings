@@ -116,3 +116,5 @@
 "menu.bar.fallback.file" = "파일";
 "menu.bar.fallback.edit" = "편집";
 "menu.bar.fallback.view" = "보기";
+"Gather windows to %@" = "%@(으)로 윈도우 모으기";
+"Move %1$@ windows to %2$@" = "%1$@ 윈도우를 %2$@(으)로 이동";

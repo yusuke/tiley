@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Les fenêtres de la barre latérale sont regroupées par écran et par application ; les apps multi-fenêtres affichent un en-tête avec des lignes indentées
+- Les en-têtes d'écran dans la barre latérale disposent d'un menu avec les actions « Rassembler les fenêtres » et « Déplacer les fenêtres vers » pour gérer les fenêtres entre écrans
+- Menu de l'en-tête d'application avec « Déplacer toutes les fenêtres vers un autre écran », « Masquer les autres » et « Quitter »
+- Menu des apps à fenêtre unique avec « Déplacer vers un autre écran », « Masquer les autres » et « Quitter »
+- Les écrans vides (sans fenêtres) sont affichés dans la barre latérale avec leur en-tête
+
 ### Modifié
 
 - L'arrière-plan de la grille reflète désormais fidèlement les paramètres d'affichage du fond d'écran macOS (remplir, ajuster, étirer, centrer et mosaïque), avec une mise à l'échelle correcte des tuiles, le ratio de pixels physiques pour le mode centré et la couleur de remplissage pour les zones letterbox

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Las ventanas de la barra lateral ahora se agrupan por pantalla y por aplicación; las apps con múltiples ventanas muestran un encabezado con las ventanas indentadas
+- Los encabezados de pantalla en la barra lateral ahora tienen un menú con acciones para "Reunir ventanas" y "Mover ventanas a" para gestionar ventanas entre pantallas
+- Menú del encabezado de aplicación con "Mover todas las ventanas a otra pantalla", "Ocultar otras" y "Salir"
+- Menú de apps con una sola ventana con "Mover a otra pantalla", "Ocultar otras" y "Salir"
+- Las pantallas vacías (sin ventanas) ahora se muestran en la barra lateral con su encabezado
+
 ### Cambiado
 
 - El fondo de la cuadrícula ahora refleja con precisión la configuración de visualización del fondo de pantalla de macOS (rellenar, ajustar, estirar, centrar y mosaico), incluyendo la escala correcta del mosaico, la proporción de píxeles físicos para el modo centrado y el color de relleno para las áreas de letterbox

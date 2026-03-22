@@ -116,3 +116,5 @@
 "menu.bar.fallback.file" = "Archivo";
 "menu.bar.fallback.edit" = "Edición";
 "menu.bar.fallback.view" = "Visualización";
+"Gather windows to %@" = "Reunir ventanas en %@";
+"Move %1$@ windows to %2$@" = "Mover ventanas de %1$@ a %2$@";

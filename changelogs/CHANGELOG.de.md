@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Fenster in der Seitenleiste werden nach Bildschirm und Anwendung gruppiert; Apps mit mehreren Fenstern zeigen einen App-Header mit eingerückten Fensterzeilen
+- Bildschirm-Header in der Seitenleiste haben ein Menü mit „Fenster sammeln" und „Fenster verschieben" zum Verwalten von Fenstern über Bildschirme hinweg
+- App-Header-Menü mit „Alle Fenster auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"
+- Menü für Einzelfenster-Apps mit „Auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"
+- Leere Bildschirme (ohne Fenster) werden in der Seitenleiste mit ihrem Bildschirm-Header angezeigt
+
 ### Geändert
 
 - Der Gitterhintergrund spiegelt nun die macOS-Hintergrundbild-Anzeigeeinstellungen korrekt wider (Füllen, Anpassen, Strecken, Zentrieren und Kacheln), einschließlich korrekter Kachelskalierung, physischem Pixelverhältnis für den Zentrierung-Modus und Füllfarbe für Letterbox-Bereiche

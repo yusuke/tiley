@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Sidebar windows are now grouped by screen and by application; multi-window apps show an app header with indented window rows
+- Screen header rows in the sidebar now have a kebab menu with "Gather windows" and "Move windows to" actions for managing windows across screens
+- App header kebab menu with "Move all windows to screen", "Hide others", and "Quit" actions
+- Single-window app kebab menu with "Move to screen", "Hide others", and "Quit" actions
+- Empty screens (with no windows) are now shown in the sidebar with their screen header
+
 ### Changed
 
 - Grid background now accurately reflects the macOS wallpaper display settings (fill, fit, stretch, center, and tile modes), including correct tile scaling, physical pixel ratio for center mode, and fill color for letterbox areas
