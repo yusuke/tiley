@@ -1071,6 +1071,7 @@ struct MainWindowView: View {
                     setIsPerformingDrop: { isPerformingDrop = $0 }
                 ))
             }
+            .scrollIndicators(.automatic)
             .frame(height: min(presetsListHeight, max(0, availableHeight - Self.presetsPanelChromeHeight)), alignment: .top)
         }
         .frame(height: min(presetsPanelHeight, availableHeight), alignment: .top)
@@ -1165,6 +1166,7 @@ struct MainWindowView: View {
                     .padding(.vertical, 4)
                     .padding(.horizontal, 6)
                 }
+                .scrollIndicators(.automatic)
                 .onChange(of: appState.currentWindowTargetIndex) { _, newIndex in
                     withAnimation(.easeInOut(duration: 0.15)) {
                         proxy.scrollTo(newIndex, anchor: .center)
