@@ -785,9 +785,7 @@ struct MainWindowView: View {
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
         .overlay(alignment: .bottom) {
-            if screenRole.isTarget {
-                keyboardHintsBar
-            }
+            keyboardHintsBar
         }
     }
 
