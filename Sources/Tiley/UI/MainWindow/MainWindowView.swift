@@ -1191,9 +1191,25 @@ struct MainWindowView: View {
         let isLastWindowOfApp: Bool
         let sameAppWindowCount: Int
         let isHidden: Bool
+        /// True when this item appears under an app header (multi-window app group).
+        var isUnderAppHeader: Bool = false
     }
 
-    private var filteredWindowTargets: [WindowListItem] {
+    private enum SidebarRow: Identifiable {
+        case screenHeader(displayID: CGDirectDisplayID, name: String)
+        case appHeader(pid: pid_t, appName: String)
+        case window(WindowListItem)
+
+        var id: String {
+            switch self {
+            case .screenHeader(let displayID, _): return "screen-\(displayID)"
+            case .appHeader(let pid, _): return "app-\(pid)"
+            case .window(let item): return "window-\(item.id)"
+            }
+        }
+    }
+
+    private var filteredSidebarRows: [SidebarRow] {
         let targets = appState.windowTargetList
         let query = windowSearchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
@@ -1203,6 +1219,7 @@ struct MainWindowView: View {
             windowCountByPID[target.processIdentifier, default: 0] += 1
         }
 
+        // Build WindowListItems with search filtering.
         var items: [WindowListItem] = []
         for (index, target) in targets.enumerated() {
             let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -1221,7 +1238,80 @@ struct MainWindowView: View {
                 isHidden: target.isHidden
             ))
         }
-        return items
+
+        // Helper: group items by app (PID), emitting app headers for multi-window apps.
+        func appGroupedRows(from groupItems: [WindowListItem]) -> [SidebarRow] {
+            // Preserve original order: group consecutive items with same PID,
+            // but also merge non-consecutive items of the same app.
+            var appOrder: [pid_t] = []
+            var appItems: [pid_t: [WindowListItem]] = [:]
+            for item in groupItems {
+                if appItems[item.pid] == nil {
+                    appOrder.append(item.pid)
+                }
+                appItems[item.pid, default: []].append(item)
+            }
+
+            var rows: [SidebarRow] = []
+            for pid in appOrder {
+                guard let windows = appItems[pid] else { continue }
+                if windows.count == 1 {
+                    // Single window: show as a normal row (icon + app name + title).
+                    rows.append(.window(windows[0]))
+                } else {
+                    // Multiple windows: app header + window-only rows.
+                    rows.append(.appHeader(pid: pid, appName: windows[0].appName))
+                    for var item in windows {
+                        item.isUnderAppHeader = true
+                        rows.append(.window(item))
+                    }
+                }
+            }
+            return rows
+        }
+
+        // Group items by screen.
+        let screens = NSScreen.screens
+        let isMultiScreen = screens.count > 1
+        guard isMultiScreen else { return appGroupedRows(from: items) }
+
+        // Determine target screen (show it first).
+        let targetDisplayID = appState.currentTargetScreenDisplayID
+
+        // Build screen groups: [displayID: (screenName, [WindowListItem])]
+        var screenGroups: [(displayID: CGDirectDisplayID, name: String, items: [WindowListItem])] = []
+        var groupMap: [CGDirectDisplayID: Int] = [:]  // displayID → index in screenGroups
+
+        for item in items {
+            let target = targets[item.id]
+            let screen = NSScreen.screen(containing: target.screenFrame)
+            let displayID = screen?.displayID ?? 0
+            let screenName = screen?.localizedName ?? NSLocalizedString("Unknown Display", comment: "Fallback screen name")
+
+            if let groupIdx = groupMap[displayID] {
+                screenGroups[groupIdx].items.append(item)
+            } else {
+                let idx = screenGroups.count
+                groupMap[displayID] = idx
+                screenGroups.append((displayID: displayID, name: screenName, items: [item]))
+            }
+        }
+
+        // Sort: target screen first, then stable order by display ID.
+        screenGroups.sort { a, b in
+            let aIsTarget = a.displayID == targetDisplayID
+            let bIsTarget = b.displayID == targetDisplayID
+            if aIsTarget != bIsTarget { return aIsTarget }
+            return a.displayID < b.displayID
+        }
+
+        // Flatten into SidebarRow array with screen headers and app grouping.
+        var rows: [SidebarRow] = []
+        for group in screenGroups {
+            rows.append(.screenHeader(displayID: group.displayID, name: group.name))
+            rows.append(contentsOf: appGroupedRows(from: group.items))
+        }
+        return rows
     }
 
     private func windowListSidebar(height: CGFloat) -> some View {
@@ -1251,9 +1341,16 @@ struct MainWindowView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(spacing: 2) {
-                        ForEach(filteredWindowTargets) { item in
-                            windowListRow(item: item)
-                                .id(item.id)
+                        ForEach(filteredSidebarRows) { row in
+                            switch row {
+                            case .screenHeader(_, let name):
+                                screenHeaderRow(name: name)
+                            case .appHeader(let pid, let appName):
+                                appHeaderRow(pid: pid, appName: appName)
+                            case .window(let item):
+                                windowListRow(item: item)
+                                    .id(item.id)
+                            }
                         }
                     }
                     .padding(.vertical, 4)
@@ -1279,6 +1376,39 @@ struct MainWindowView: View {
         }
     }
 
+    private func screenHeaderRow(name: String) -> some View {
+        HStack {
+            Text(name)
+                .font(.system(size: 10, weight: .medium))
+                .foregroundStyle(.tertiary)
+                .lineLimit(1)
+            Spacer()
+        }
+        .padding(.horizontal, 6)
+        .padding(.top, 6)
+        .padding(.bottom, 2)
+    }
+
+    private func appHeaderRow(pid: pid_t, appName: String) -> some View {
+        HStack(spacing: 6) {
+            if let icon = NSRunningApplication(processIdentifier: pid)?.icon {
+                Image(nsImage: icon)
+                    .resizable()
+                    .interpolation(.high)
+                    .frame(width: 14, height: 14)
+                    .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+            }
+            Text(appName)
+                .font(.system(size: 10, weight: .medium))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+            Spacer()
+        }
+        .padding(.horizontal, 6)
+        .padding(.top, 4)
+        .padding(.bottom, 1)
+    }
+
     private func windowListRow(item: WindowListItem) -> some View {
         let isSelected = item.id == appState.currentWindowTargetIndex
         let isHovered = hoveredWindowIndex == item.id
@@ -1287,22 +1417,30 @@ struct MainWindowView: View {
             appState.selectWindowTarget(at: item.id)
         } label: {
             HStack(spacing: 6) {
-                if let icon = NSRunningApplication(processIdentifier: item.pid)?.icon {
-                    Image(nsImage: icon)
-                        .resizable()
-                        .interpolation(.high)
-                        .frame(width: 16, height: 16)
-                        .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
-                }
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(item.appName)
+                if item.isUnderAppHeader {
+                    // Under an app header: show only window title, indented.
+                    Text(item.windowTitle.isEmpty ? item.appName : item.windowTitle)
                         .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
                         .lineLimit(1)
-                    if !item.windowTitle.isEmpty {
-                        Text(item.windowTitle)
-                            .font(.system(size: 10))
-                            .foregroundStyle(.secondary)
+                        .padding(.leading, 20)
+                } else {
+                    if let icon = NSRunningApplication(processIdentifier: item.pid)?.icon {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .frame(width: 16, height: 16)
+                            .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                    }
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(item.appName)
+                            .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
                             .lineLimit(1)
+                        if !item.windowTitle.isEmpty {
+                            Text(item.windowTitle)
+                                .font(.system(size: 10))
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
                     }
                 }
                 Spacer(minLength: 0)

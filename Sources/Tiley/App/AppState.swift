@@ -264,6 +264,11 @@ final class AppState: NSObject, NSMenuDelegate {
         return activeTargetIndex
     }
 
+    /// The display ID of the screen currently hosting the layout target.
+    var currentTargetScreenDisplayID: CGDirectDisplayID? {
+        targetScreenDisplayID
+    }
+
     var displayedLayoutPresets: [LayoutPreset] {
         if let transientLayoutPreset {
             return layoutPresets + [transientLayoutPreset]
@@ -515,18 +520,21 @@ final class AppState: NSObject, NSMenuDelegate {
 
         // Build filtered index list based on search query.
         let query = windowSearchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        let filteredIndices: [Int]
+        var baseIndices: [Int]
         if query.isEmpty {
-            filteredIndices = Array(availableWindowTargets.indices)
+            baseIndices = Array(availableWindowTargets.indices)
         } else {
-            filteredIndices = availableWindowTargets.indices.filter { i in
+            baseIndices = availableWindowTargets.indices.filter { i in
                 let target = availableWindowTargets[i]
                 let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
                 return target.appName.lowercased().contains(query)
                     || title.lowercased().contains(query)
             }
         }
-        guard !filteredIndices.isEmpty else { return }
+        guard !baseIndices.isEmpty else { return }
+
+        // Order indices by screen group: mouse cursor screen first.
+        let filteredIndices = screenOrderedIndices(baseIndices)
 
         if let currentPos = filteredIndices.firstIndex(of: activeTargetIndex) {
             let nextPos = forward
@@ -538,6 +546,34 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         applyTargetAtCurrentIndex()
+    }
+
+    /// Reorders a list of window-target indices so that windows on the mouse
+    /// cursor's screen come first, followed by windows on other screens.
+    private func screenOrderedIndices(_ indices: [Int]) -> [Int] {
+        let mouseLocation = NSEvent.mouseLocation
+        let mouseScreenID = NSScreen.screens
+            .first(where: { $0.frame.contains(mouseLocation) })?.displayID
+
+        // Partition into mouse-screen group and other groups.
+        var mouseScreenGroup: [Int] = []
+        var otherGroups: [CGDirectDisplayID: [Int]] = [:]
+        for i in indices {
+            let target = availableWindowTargets[i]
+            let screenID = NSScreen.screen(containing: target.screenFrame)?.displayID
+            if screenID == mouseScreenID {
+                mouseScreenGroup.append(i)
+            } else {
+                otherGroups[screenID ?? 0, default: []].append(i)
+            }
+        }
+
+        // Mouse screen first, then other screens in stable order.
+        var result = mouseScreenGroup
+        for (_, group) in otherGroups.sorted(by: { $0.key < $1.key }) {
+            result.append(contentsOf: group)
+        }
+        return result
     }
 
     func selectWindowTarget(at index: Int) {
