@@ -421,6 +421,14 @@ final class AppState: NSObject, NSMenuDelegate {
         openMainWindow()
     }
 
+    func beginSettingsEditing(on screen: NSScreen) {
+        activeLayoutTarget = initialLayoutTarget()
+        unregisterAllHotKeys()
+        isShowingLayoutGrid = false
+        isEditingSettings = true
+        openTargetScreenWindow(on: screen)
+    }
+
     func toggleOverlay() {
         refreshAccessibilityState()
         guard accessibilityGranted else {
@@ -1843,7 +1851,10 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func openTargetScreenWindow() {
-        let targetScreen = targetScreenForWindow()
+        openTargetScreenWindow(on: targetScreenForWindow())
+    }
+
+    private func openTargetScreenWindow(on targetScreen: NSScreen) {
         let displayID = targetScreen.displayID
         targetScreenDisplayID = displayID
 

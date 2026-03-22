@@ -1068,24 +1068,26 @@ struct MainWindowView: View {
 
             Spacer(minLength: 0)
 
-            if screenRole.isTarget {
-                // Trailing: gear button
-                Button {
-                    dismissPresetNameEditingIfNeeded()
-                    draftSettings = appState.settingsSnapshot
+            // Trailing: gear button (shown on all screens)
+            Button {
+                dismissPresetNameEditingIfNeeded()
+                draftSettings = appState.settingsSnapshot
+                if case .secondary(let screen) = screenRole {
+                    appState.beginSettingsEditing(on: screen)
+                } else {
                     appState.beginSettingsEditing()
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .font(.system(size: 13, weight: .medium))
                 }
-                .buttonStyle(TahoeToolbarButtonStyle())
-                .instantTooltip(NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
-                .overlay(alignment: .trailing) {
-                    if appState.hasUpdateBadge {
-                        UpdateAvailableBadge()
-                            .fixedSize()
-                            .offset(x: -28)
-                    }
+            } label: {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 13, weight: .medium))
+            }
+            .buttonStyle(TahoeToolbarButtonStyle())
+            .instantTooltip(NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
+            .overlay(alignment: .trailing) {
+                if appState.hasUpdateBadge {
+                    UpdateAvailableBadge()
+                        .fixedSize()
+                        .offset(x: -28)
                 }
             }
         }
