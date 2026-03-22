@@ -3,6 +3,631 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>3.0.0</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Интеграция SDK TelemetryDeck для сбора статистики использования с соблюдением конфиденциальности (открытие оверлея, применение макета, применение пресета, изменение настроек)</li>
+<li>Окна в боковой панели группируются по экранам и приложениям; приложения с несколькими окнами отображают заголовок с вложенными строками окон</li>
+<li>Заголовки экранов в боковой панели имеют меню с действиями «Собрать окна» и «Переместить окна на» для управления окнами между экранами</li>
+<li>Меню заголовка приложения с «Переместить все окна на другой экран», «Скрыть остальные» и «Завершить»</li>
+<li>Меню приложений с одним окном с «Переместить на другой экран», «Скрыть остальные» и «Завершить»</li>
+<li>Пустые экраны (без окон) отображаются в боковой панели с заголовком экрана</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Фон сетки теперь точно отражает настройки отображения обоев macOS (заполнение, вписать, растянуть, по центру и мозаика), включая правильное масштабирование плиток, физическое соотношение пикселей для режима по центру и цвет заливки для областей letterbox</li>
+<li>Предпросмотр сетки макета теперь отображает строку меню, Dock и вырез, обеспечивая более точное представление реального экрана</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена проблема, при которой окно перемещалось в неожиданную позицию после изменения размера, когда оно уже находилось в целевой позиции. Обход дедупликации AX через предварительное смещение</li>
+<li>Уменьшено мерцание при изменении размера на неосновных экранах. Сначала размер изменяется на месте; переброс на основной экран происходит только при полном отказе</li>
+<li>При перебросе на основной экран окно теперь размещается у нижнего края (почти за пределами экрана) вместо верхнего левого угла, минимизируя мерцание</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Integração do SDK TelemetryDeck para análise de uso com respeito à privacidade (abertura da sobreposição, aplicação de layout, aplicação de preset, alteração de configurações)</li>
+<li>As janelas na barra lateral agora são agrupadas por tela e por aplicativo; apps com múltiplas janelas mostram um cabeçalho com as janelas recuadas</li>
+<li>Os cabeçalhos de tela na barra lateral agora têm um menu com ações para "Reunir janelas" e "Mover janelas para" para gerenciar janelas entre telas</li>
+<li>Menu do cabeçalho de aplicativo com "Mover todas as janelas para outra tela", "Ocultar outros" e "Encerrar"</li>
+<li>Menu de apps com janela única com "Mover para outra tela", "Ocultar outros" e "Encerrar"</li>
+<li>Telas vazias (sem janelas) agora são mostradas na barra lateral com seu cabeçalho</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>O fundo da grade agora reflete com precisão as configurações de exibição do papel de parede do macOS (preencher, ajustar, esticar, centralizar e mosaico), incluindo dimensionamento correto dos blocos, proporção de pixels físicos para o modo centralizado e cor de preenchimento para áreas de letterbox</li>
+<li>A pré-visualização da grade de layout agora exibe a barra de menus, o Dock e o entalhe, proporcionando uma representação mais fiel da tela real</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde a janela se movia para uma posição inesperada após o redimensionamento quando já estava na posição de destino. Contorno da deduplicação AX via pré-deslocamento</li>
+<li>Reduzida a cintilação ao redimensionar em telas não principais. O redimensionamento é primeiro tentado no local; o salto para a tela principal só ocorre em caso de falha completa</li>
+<li>Ao saltar para a tela principal, a janela agora é posicionada na borda inferior (quase fora da tela) em vez do canto superior esquerdo, minimizando a cintilação</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Integrazione dell'SDK TelemetryDeck per statistiche d'uso rispettose della privacy (apertura overlay, applicazione layout, applicazione preset, modifica impostazioni)</li>
+<li>Le finestre nella barra laterale sono raggruppate per schermo e per applicazione; le app con più finestre mostrano un'intestazione con le righe rientrate</li>
+<li>Le intestazioni dello schermo nella barra laterale hanno un menu con le azioni "Raccogli finestre" e "Sposta finestre su" per gestire le finestre tra schermi</li>
+<li>Menu dell'intestazione app con "Sposta tutte le finestre su un altro schermo", "Nascondi altre" e "Esci"</li>
+<li>Menu delle app a finestra singola con "Sposta su un altro schermo", "Nascondi altre" e "Esci"</li>
+<li>Gli schermi vuoti (senza finestre) sono mostrati nella barra laterale con la loro intestazione</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Lo sfondo della griglia ora riflette accuratamente le impostazioni di visualizzazione dello sfondo macOS (riempimento, adattamento, allungamento, centro e mosaico), inclusa la corretta scalatura delle tessere, il rapporto pixel fisico per la modalità centrata e il colore di riempimento per le aree letterbox</li>
+<li>L'anteprima della griglia di layout ora mostra la barra dei menu, il Dock e il notch, offrendo una rappresentazione più fedele dello schermo reale</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui la finestra si spostava in una posizione inattesa dopo il ridimensionamento quando era già nella posizione di destinazione. Aggiramento della deduplicazione AX tramite pre-spostamento</li>
+<li>Ridotto lo sfarfallio durante il ridimensionamento su schermi non principali. Il ridimensionamento viene prima tentato sul posto; il rimbalzo allo schermo principale avviene solo in caso di fallimento completo</li>
+<li>Durante il rimbalzo allo schermo principale, la finestra viene ora posizionata sul bordo inferiore (quasi fuori schermo) anziché nell'angolo superiore sinistro, minimizzando lo sfarfallio</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Intégration du SDK TelemetryDeck pour des statistiques d'utilisation respectueuses de la vie privée (ouverture de la grille, application de disposition, application de préréglage, modification des paramètres)</li>
+<li>Les fenêtres de la barre latérale sont regroupées par écran et par application ; les apps multi-fenêtres affichent un en-tête avec des lignes indentées</li>
+<li>Les en-têtes d'écran dans la barre latérale disposent d'un menu avec les actions « Rassembler les fenêtres » et « Déplacer les fenêtres vers » pour gérer les fenêtres entre écrans</li>
+<li>Menu de l'en-tête d'application avec « Déplacer toutes les fenêtres vers un autre écran », « Masquer les autres » et « Quitter »</li>
+<li>Menu des apps à fenêtre unique avec « Déplacer vers un autre écran », « Masquer les autres » et « Quitter »</li>
+<li>Les écrans vides (sans fenêtres) sont affichés dans la barre latérale avec leur en-tête</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>L'arrière-plan de la grille reflète désormais fidèlement les paramètres d'affichage du fond d'écran macOS (remplir, ajuster, étirer, centrer et mosaïque), avec une mise à l'échelle correcte des tuiles, le ratio de pixels physiques pour le mode centré et la couleur de remplissage pour les zones letterbox</li>
+<li>L'aperçu de la grille de mise en page affiche désormais la barre des menus, le Dock et l'encoche, offrant une représentation plus fidèle de l'écran réel</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un problème où la fenêtre se déplaçait vers une position inattendue après redimensionnement lorsqu'elle était déjà à la position cible. Contournement de la déduplication AX par pré-décalage</li>
+<li>Réduction du scintillement lors du redimensionnement sur les écrans non principaux. Le redimensionnement est d'abord tenté sur place ; le rebond vers l'écran principal n'a lieu qu'en cas d'échec complet</li>
+<li>Lors du rebond vers l'écran principal, la fenêtre est désormais placée en bas de l'écran (presque hors champ) au lieu du coin supérieur gauche, minimisant le scintillement</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Integración del SDK TelemetryDeck para análisis de uso respetuoso con la privacidad (apertura de superposición, aplicación de diseño, aplicación de preajuste, cambio de ajustes)</li>
+<li>Las ventanas de la barra lateral ahora se agrupan por pantalla y por aplicación; las apps con múltiples ventanas muestran un encabezado con las ventanas indentadas</li>
+<li>Los encabezados de pantalla en la barra lateral ahora tienen un menú con acciones para "Reunir ventanas" y "Mover ventanas a" para gestionar ventanas entre pantallas</li>
+<li>Menú del encabezado de aplicación con "Mover todas las ventanas a otra pantalla", "Ocultar otras" y "Salir"</li>
+<li>Menú de apps con una sola ventana con "Mover a otra pantalla", "Ocultar otras" y "Salir"</li>
+<li>Las pantallas vacías (sin ventanas) ahora se muestran en la barra lateral con su encabezado</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>El fondo de la cuadrícula ahora refleja con precisión la configuración de visualización del fondo de pantalla de macOS (rellenar, ajustar, estirar, centrar y mosaico), incluyendo la escala correcta del mosaico, la proporción de píxeles físicos para el modo centrado y el color de relleno para las áreas de letterbox</li>
+<li>La vista previa de la cuadrícula de diseño ahora muestra la barra de menú, el Dock y la muesca, ofreciendo una representación más precisa de la pantalla real</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la ventana se movía a una posición inesperada después de redimensionar cuando ya estaba en la posición de destino. Evasión de la deduplicación AX mediante pre-desplazamiento</li>
+<li>Reducido el parpadeo al redimensionar en pantallas no principales. Primero se intenta redimensionar en el lugar; solo se recurre a la pantalla principal si falla completamente</li>
+<li>Al recurrir a la pantalla principal, la ventana ahora se coloca en el borde inferior (casi fuera de pantalla) en lugar de en la esquina superior izquierda, minimizando el parpadeo</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>TelemetryDeck Analytics SDK für datenschutzfreundliche Nutzungsstatistiken integriert (Overlay geöffnet, Layout angewendet, Preset angewendet, Einstellungen geändert)</li>
+<li>Fenster in der Seitenleiste werden nach Bildschirm und Anwendung gruppiert; Apps mit mehreren Fenstern zeigen einen App-Header mit eingerückten Fensterzeilen</li>
+<li>Bildschirm-Header in der Seitenleiste haben ein Menü mit „Fenster sammeln" und „Fenster verschieben" zum Verwalten von Fenstern über Bildschirme hinweg</li>
+<li>App-Header-Menü mit „Alle Fenster auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"</li>
+<li>Menü für Einzelfenster-Apps mit „Auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"</li>
+<li>Leere Bildschirme (ohne Fenster) werden in der Seitenleiste mit ihrem Bildschirm-Header angezeigt</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Der Gitterhintergrund spiegelt nun die macOS-Hintergrundbild-Anzeigeeinstellungen korrekt wider (Füllen, Anpassen, Strecken, Zentrieren und Kacheln), einschließlich korrekter Kachelskalierung, physischem Pixelverhältnis für den Zentrierung-Modus und Füllfarbe für Letterbox-Bereiche</li>
+<li>Die Layout-Rastervorschau zeigt nun Menüleiste, Dock und Notch und vermittelt so ein realistischeres Bild der tatsächlichen Anzeige</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fenster wurde nach Größenänderung an eine unerwartete Position verschoben, wenn die aktuelle Position bereits der Zielposition entsprach. Umgehung der AX-Deduplizierung durch Vor-Verschiebung</li>
+<li>Reduziertes Flackern beim Ändern der Fenstergröße auf Nicht-Primärbildschirmen. Größenänderung wird zuerst vor Ort versucht; nur bei vollständigem Fehlschlag wird auf den Primärbildschirm ausgewichen</li>
+<li>Beim Ausweichen auf den Primärbildschirm wird das Fenster jetzt am unteren Bildschirmrand (fast außerhalb des sichtbaren Bereichs) statt an der oberen linken Ecke platziert, um Flackern zu minimieren</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>整合 TelemetryDeck SDK，以注重隱私的方式收集使用數據（開啟疊加層、套用佈局、套用預設、變更設定）</li>
+<li>側邊欄視窗按螢幕和應用程式分組顯示；多視窗應用在應用標題下縮排排列</li>
+<li>側邊欄螢幕標題新增更多選單，支援「將視窗聚集到此螢幕」和「將視窗移至其他螢幕」操作</li>
+<li>應用標題更多選單新增「將所有視窗移至其他螢幕」、「隱藏其他」和「結束」操作</li>
+<li>單視窗應用更多選單新增「移至其他螢幕」、「隱藏其他」和「結束」操作</li>
+<li>沒有視窗的螢幕也會在側邊欄顯示螢幕標題</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>網格背景現在能準確反映 macOS 桌布顯示設定（填滿、符合、延伸、置中和拼貼模式），包含正確的拼貼縮放、置中模式的實體像素比例以及信箱區域的填充顏色</li>
+<li>版面格線預覽現在顯示選單列、Dock 及瀏海，更貼近實際螢幕的外觀</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了調整大小前視窗位置與目標位置相同時，調整大小後視窗移動到非預期位置的問題。透過預偏移規避 AX 去重</li>
+<li>減少在非主螢幕上調整大小時的閃爍。先嘗試就地調整大小，僅在完全失敗時才彈回主螢幕</li>
+<li>彈回主螢幕時，視窗現在放置在螢幕最底部（幾乎在螢幕外）而非左上角(0,0)，最大程度減少閃爍</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>集成 TelemetryDeck SDK，以隐私友好的方式收集使用数据（打开叠加层、应用布局、应用预设、更改设置）</li>
+<li>侧边栏窗口按屏幕和应用分组显示；多窗口应用在应用标题下缩进排列</li>
+<li>侧边栏屏幕标题新增更多菜单，支持"将窗口聚集到此屏幕"和"将窗口移至其他屏幕"操作</li>
+<li>应用标题更多菜单新增"将所有窗口移至其他屏幕"、"隐藏其他"和"退出"操作</li>
+<li>单窗口应用更多菜单新增"移至其他屏幕"、"隐藏其他"和"退出"操作</li>
+<li>没有窗口的屏幕也会在侧边栏显示屏幕标题</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>网格背景现在能准确反映 macOS 壁纸显示设置（填充、适应、拉伸、居中和平铺模式），包括正确的平铺缩放、居中模式的物理像素比例以及信箱区域的填充颜色</li>
+<li>布局网格预览现在显示菜单栏、Dock 和刘海，更真实地还原实际显示效果</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了调整大小前窗口位置与目标位置相同时，调整大小后窗口移动到意外位置的问题。通过预偏移规避 AX 去重</li>
+<li>减少在非主屏幕上调整大小时的闪烁。先尝试就地调整大小，仅在完全失败时才弹回主屏幕</li>
+<li>弹回主屏幕时，窗口现在放置在屏幕最底部（几乎在屏幕外）而非左上角(0,0)，最大程度减少闪烁</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>프라이버시를 고려한 사용 통계 수집을 위해 TelemetryDeck SDK 통합 (오버레이 열기, 레이아웃 적용, 프리셋 적용, 설정 변경)</li>
+<li>사이드바 윈도우를 화면별·앱별로 그룹화. 다중 윈도우 앱은 앱 헤더 아래에 들여쓰기 표시</li>
+<li>사이드바의 화면 헤더에 케밥 메뉴 추가. "윈도우 모으기" 및 "윈도우를 다른 화면으로 이동" 작업 가능</li>
+<li>앱 헤더 케밥 메뉴에 "모든 윈도우를 다른 화면으로 이동", "다른 앱 숨기기", "종료" 추가</li>
+<li>단일 윈도우 앱 케밥 메뉴에 "다른 화면으로 이동", "다른 앱 숨기기", "종료" 추가</li>
+<li>윈도우가 없는 화면도 사이드바에 화면 헤더 표시</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>그리드 배경이 macOS 배경화면 표시 설정(전체 화면 채우기, 화면에 맞게, 늘이기, 가운데, 타일)을 올바르게 반영하도록 개선. 타일 크기 조정, 가운데 모드의 물리적 픽셀 비율, 레터박스 영역의 채우기 색상 지원</li>
+<li>레이아웃 그리드 미리보기에 메뉴 바, Dock, 노치가 표시되어 실제 화면과 더 유사하게 재현</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>리사이즈 전 윈도우 위치가 타겟 위치와 동일할 때 리사이즈 후 윈도우가 의도하지 않은 위치로 이동하는 문제 수정. 사전 넛지를 통한 AX 중복 제거 회피</li>
+<li>비프라이머리 스크린에서 리사이즈 시 깜빡임 감소. 먼저 현재 위치에서 리사이즈를 시도하고, 완전히 실패한 경우에만 프라이머리 스크린으로 바운스</li>
+<li>프라이머리 스크린으로 바운스 시 윈도우를 화면 상단(0,0) 대신 화면 최하단(거의 화면 밖)에 배치하여 깜빡임 최소화</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>プライバシーに配慮した利用状況の計測のため TelemetryDeck SDK を統合（オーバーレイ表示・レイアウト適用・プリセット適用・設定変更）</li>
+<li>サイドバーのウインドウをスクリーン別・アプリケーション別にグループ化。複数ウインドウのアプリはアプリヘッダーの下にインデント表示</li>
+<li>サイドバーのスクリーンヘッダーにケバブメニューを追加。「ウインドウを集める」「ウインドウを別スクリーンに移動」の操作が可能</li>
+<li>アプリヘッダーのケバブメニューに「全ウインドウを別スクリーンに移動」「他を隠す」「終了」を追加</li>
+<li>単一ウインドウアプリのケバブメニューに「別スクリーンに移動」「他を隠す」「終了」を追加</li>
+<li>ウインドウがないスクリーンもサイドバーにスクリーンヘッダーを表示</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>グリッドの背景がmacOSの壁紙表示設定（画面全体に表示・収まるサイズで表示・引き伸ばして表示・中央に表示・タイル状に配置）を正しく反映するように改善。タイルの縮尺・中央表示の物理ピクセル比・レターボックス部分の塗りつぶし色にも対応</li>
+<li>レイアウトグリッドのプレビューにメニューバー・Dock・ノッチを表示し、実際の画面に近い見た目を再現</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>リサイズ前のウインドウ位置がターゲット位置と同じ場合に、リサイズ後にウインドウが意図しない位置に移動する問題を修正。事前ナッジによるAX重複排除の回避</li>
+<li>非プライマリスクリーンでのリサイズ時のチラつきを軽減。まずその場でリサイズを試み、完全に失敗した場合のみプライマリスクリーンにバウンス</li>
+<li>プライマリスクリーンへのバウンス時、ウインドウを画面上部(0,0)ではなく画面最下端（ほぼ画面外）に配置し、チラつきを最小化</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Integrated TelemetryDeck analytics SDK for privacy-friendly usage tracking (overlay opened, layout applied, preset applied, settings changed)</li>
+<li>Sidebar windows are now grouped by screen and by application; multi-window apps show an app header with indented window rows</li>
+<li>Screen header rows in the sidebar now have a kebab menu with "Gather windows" and "Move windows to" actions for managing windows across screens</li>
+<li>App header kebab menu with "Move all windows to screen", "Hide others", and "Quit" actions</li>
+<li>Single-window app kebab menu with "Move to screen", "Hide others", and "Quit" actions</li>
+<li>Empty screens (with no windows) are now shown in the sidebar with their screen header</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Grid background now accurately reflects the macOS wallpaper display settings (fill, fit, stretch, center, and tile modes), including correct tile scaling, physical pixel ratio for center mode, and fill color for letterbox areas</li>
+<li>Layout grid preview now shows the full screen frame including the menu bar, Dock, and notch, giving a more accurate representation of the actual display</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window position not being applied when the window is already at the target position before resize; AX de-duplication now defeated via pre-nudge</li>
+<li>Reduced visible flicker when resizing on non-primary screens; resize is now attempted in-place first, and the primary-screen bounce only occurs when the in-place resize has no effect at all</li>
+<li>When bouncing to the primary screen for resize, the window is now placed at the bottom edge (mostly off-screen) instead of at the origin, minimizing visible flicker</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Integração do SDK TelemetryDeck para análise de uso com respeito à privacidade (abertura da sobreposição, aplicação de layout, aplicação de preset, alteração de configurações)</li>
+<li>As janelas na barra lateral agora são agrupadas por tela e por aplicativo; apps com múltiplas janelas mostram um cabeçalho com as janelas recuadas</li>
+<li>Os cabeçalhos de tela na barra lateral agora têm um menu com ações para "Reunir janelas" e "Mover janelas para" para gerenciar janelas entre telas</li>
+<li>Menu do cabeçalho de aplicativo com "Mover todas as janelas para outra tela", "Ocultar outros" e "Encerrar"</li>
+<li>Menu de apps com janela única com "Mover para outra tela", "Ocultar outros" e "Encerrar"</li>
+<li>Telas vazias (sem janelas) agora são mostradas na barra lateral com seu cabeçalho</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>O fundo da grade agora reflete com precisão as configurações de exibição do papel de parede do macOS (preencher, ajustar, esticar, centralizar e mosaico), incluindo dimensionamento correto dos blocos, proporção de pixels físicos para o modo centralizado e cor de preenchimento para áreas de letterbox</li>
+<li>A pré-visualização da grade de layout agora exibe a barra de menus, o Dock e o entalhe, proporcionando uma representação mais fiel da tela real</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde a janela se movia para uma posição inesperada após o redimensionamento quando já estava na posição de destino. Contorno da deduplicação AX via pré-deslocamento</li>
+<li>Reduzida a cintilação ao redimensionar em telas não principais. O redimensionamento é primeiro tentado no local; o salto para a tela principal só ocorre em caso de falha completa</li>
+<li>Ao saltar para a tela principal, a janela agora é posicionada na borda inferior (quase fora da tela) em vez do canto superior esquerdo, minimizando a cintilação</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Integrazione dell'SDK TelemetryDeck per statistiche d'uso rispettose della privacy (apertura overlay, applicazione layout, applicazione preset, modifica impostazioni)</li>
+<li>Le finestre nella barra laterale sono raggruppate per schermo e per applicazione; le app con più finestre mostrano un'intestazione con le righe rientrate</li>
+<li>Le intestazioni dello schermo nella barra laterale hanno un menu con le azioni "Raccogli finestre" e "Sposta finestre su" per gestire le finestre tra schermi</li>
+<li>Menu dell'intestazione app con "Sposta tutte le finestre su un altro schermo", "Nascondi altre" e "Esci"</li>
+<li>Menu delle app a finestra singola con "Sposta su un altro schermo", "Nascondi altre" e "Esci"</li>
+<li>Gli schermi vuoti (senza finestre) sono mostrati nella barra laterale con la loro intestazione</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Lo sfondo della griglia ora riflette accuratamente le impostazioni di visualizzazione dello sfondo macOS (riempimento, adattamento, allungamento, centro e mosaico), inclusa la corretta scalatura delle tessere, il rapporto pixel fisico per la modalità centrata e il colore di riempimento per le aree letterbox</li>
+<li>L'anteprima della griglia di layout ora mostra la barra dei menu, il Dock e il notch, offrendo una rappresentazione più fedele dello schermo reale</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui la finestra si spostava in una posizione inattesa dopo il ridimensionamento quando era già nella posizione di destinazione. Aggiramento della deduplicazione AX tramite pre-spostamento</li>
+<li>Ridotto lo sfarfallio durante il ridimensionamento su schermi non principali. Il ridimensionamento viene prima tentato sul posto; il rimbalzo allo schermo principale avviene solo in caso di fallimento completo</li>
+<li>Durante il rimbalzo allo schermo principale, la finestra viene ora posizionata sul bordo inferiore (quasi fuori schermo) anziché nell'angolo superiore sinistro, minimizzando lo sfarfallio</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Intégration du SDK TelemetryDeck pour des statistiques d'utilisation respectueuses de la vie privée (ouverture de la grille, application de disposition, application de préréglage, modification des paramètres)</li>
+<li>Les fenêtres de la barre latérale sont regroupées par écran et par application ; les apps multi-fenêtres affichent un en-tête avec des lignes indentées</li>
+<li>Les en-têtes d'écran dans la barre latérale disposent d'un menu avec les actions « Rassembler les fenêtres » et « Déplacer les fenêtres vers » pour gérer les fenêtres entre écrans</li>
+<li>Menu de l'en-tête d'application avec « Déplacer toutes les fenêtres vers un autre écran », « Masquer les autres » et « Quitter »</li>
+<li>Menu des apps à fenêtre unique avec « Déplacer vers un autre écran », « Masquer les autres » et « Quitter »</li>
+<li>Les écrans vides (sans fenêtres) sont affichés dans la barre latérale avec leur en-tête</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>L'arrière-plan de la grille reflète désormais fidèlement les paramètres d'affichage du fond d'écran macOS (remplir, ajuster, étirer, centrer et mosaïque), avec une mise à l'échelle correcte des tuiles, le ratio de pixels physiques pour le mode centré et la couleur de remplissage pour les zones letterbox</li>
+<li>L'aperçu de la grille de mise en page affiche désormais la barre des menus, le Dock et l'encoche, offrant une représentation plus fidèle de l'écran réel</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un problème où la fenêtre se déplaçait vers une position inattendue après redimensionnement lorsqu'elle était déjà à la position cible. Contournement de la déduplication AX par pré-décalage</li>
+<li>Réduction du scintillement lors du redimensionnement sur les écrans non principaux. Le redimensionnement est d'abord tenté sur place ; le rebond vers l'écran principal n'a lieu qu'en cas d'échec complet</li>
+<li>Lors du rebond vers l'écran principal, la fenêtre est désormais placée en bas de l'écran (presque hors champ) au lieu du coin supérieur gauche, minimisant le scintillement</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Integración del SDK TelemetryDeck para análisis de uso respetuoso con la privacidad (apertura de superposición, aplicación de diseño, aplicación de preajuste, cambio de ajustes)</li>
+<li>Las ventanas de la barra lateral ahora se agrupan por pantalla y por aplicación; las apps con múltiples ventanas muestran un encabezado con las ventanas indentadas</li>
+<li>Los encabezados de pantalla en la barra lateral ahora tienen un menú con acciones para "Reunir ventanas" y "Mover ventanas a" para gestionar ventanas entre pantallas</li>
+<li>Menú del encabezado de aplicación con "Mover todas las ventanas a otra pantalla", "Ocultar otras" y "Salir"</li>
+<li>Menú de apps con una sola ventana con "Mover a otra pantalla", "Ocultar otras" y "Salir"</li>
+<li>Las pantallas vacías (sin ventanas) ahora se muestran en la barra lateral con su encabezado</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>El fondo de la cuadrícula ahora refleja con precisión la configuración de visualización del fondo de pantalla de macOS (rellenar, ajustar, estirar, centrar y mosaico), incluyendo la escala correcta del mosaico, la proporción de píxeles físicos para el modo centrado y el color de relleno para las áreas de letterbox</li>
+<li>La vista previa de la cuadrícula de diseño ahora muestra la barra de menú, el Dock y la muesca, ofreciendo una representación más precisa de la pantalla real</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la ventana se movía a una posición inesperada después de redimensionar cuando ya estaba en la posición de destino. Evasión de la deduplicación AX mediante pre-desplazamiento</li>
+<li>Reducido el parpadeo al redimensionar en pantallas no principales. Primero se intenta redimensionar en el lugar; solo se recurre a la pantalla principal si falla completamente</li>
+<li>Al recurrir a la pantalla principal, la ventana ahora se coloca en el borde inferior (casi fuera de pantalla) en lugar de en la esquina superior izquierda, minimizando el parpadeo</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>TelemetryDeck Analytics SDK für datenschutzfreundliche Nutzungsstatistiken integriert (Overlay geöffnet, Layout angewendet, Preset angewendet, Einstellungen geändert)</li>
+<li>Fenster in der Seitenleiste werden nach Bildschirm und Anwendung gruppiert; Apps mit mehreren Fenstern zeigen einen App-Header mit eingerückten Fensterzeilen</li>
+<li>Bildschirm-Header in der Seitenleiste haben ein Menü mit „Fenster sammeln" und „Fenster verschieben" zum Verwalten von Fenstern über Bildschirme hinweg</li>
+<li>App-Header-Menü mit „Alle Fenster auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"</li>
+<li>Menü für Einzelfenster-Apps mit „Auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"</li>
+<li>Leere Bildschirme (ohne Fenster) werden in der Seitenleiste mit ihrem Bildschirm-Header angezeigt</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Der Gitterhintergrund spiegelt nun die macOS-Hintergrundbild-Anzeigeeinstellungen korrekt wider (Füllen, Anpassen, Strecken, Zentrieren und Kacheln), einschließlich korrekter Kachelskalierung, physischem Pixelverhältnis für den Zentrierung-Modus und Füllfarbe für Letterbox-Bereiche</li>
+<li>Die Layout-Rastervorschau zeigt nun Menüleiste, Dock und Notch und vermittelt so ein realistischeres Bild der tatsächlichen Anzeige</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fenster wurde nach Größenänderung an eine unerwartete Position verschoben, wenn die aktuelle Position bereits der Zielposition entsprach. Umgehung der AX-Deduplizierung durch Vor-Verschiebung</li>
+<li>Reduziertes Flackern beim Ändern der Fenstergröße auf Nicht-Primärbildschirmen. Größenänderung wird zuerst vor Ort versucht; nur bei vollständigem Fehlschlag wird auf den Primärbildschirm ausgewichen</li>
+<li>Beim Ausweichen auf den Primärbildschirm wird das Fenster jetzt am unteren Bildschirmrand (fast außerhalb des sichtbaren Bereichs) statt an der oberen linken Ecke platziert, um Flackern zu minimieren</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>整合 TelemetryDeck SDK，以注重隱私的方式收集使用數據（開啟疊加層、套用佈局、套用預設、變更設定）</li>
+<li>側邊欄視窗按螢幕和應用程式分組顯示；多視窗應用在應用標題下縮排排列</li>
+<li>側邊欄螢幕標題新增更多選單，支援「將視窗聚集到此螢幕」和「將視窗移至其他螢幕」操作</li>
+<li>應用標題更多選單新增「將所有視窗移至其他螢幕」、「隱藏其他」和「結束」操作</li>
+<li>單視窗應用更多選單新增「移至其他螢幕」、「隱藏其他」和「結束」操作</li>
+<li>沒有視窗的螢幕也會在側邊欄顯示螢幕標題</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>網格背景現在能準確反映 macOS 桌布顯示設定（填滿、符合、延伸、置中和拼貼模式），包含正確的拼貼縮放、置中模式的實體像素比例以及信箱區域的填充顏色</li>
+<li>版面格線預覽現在顯示選單列、Dock 及瀏海，更貼近實際螢幕的外觀</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了調整大小前視窗位置與目標位置相同時，調整大小後視窗移動到非預期位置的問題。透過預偏移規避 AX 去重</li>
+<li>減少在非主螢幕上調整大小時的閃爍。先嘗試就地調整大小，僅在完全失敗時才彈回主螢幕</li>
+<li>彈回主螢幕時，視窗現在放置在螢幕最底部（幾乎在螢幕外）而非左上角(0,0)，最大程度減少閃爍</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>集成 TelemetryDeck SDK，以隐私友好的方式收集使用数据（打开叠加层、应用布局、应用预设、更改设置）</li>
+<li>侧边栏窗口按屏幕和应用分组显示；多窗口应用在应用标题下缩进排列</li>
+<li>侧边栏屏幕标题新增更多菜单，支持"将窗口聚集到此屏幕"和"将窗口移至其他屏幕"操作</li>
+<li>应用标题更多菜单新增"将所有窗口移至其他屏幕"、"隐藏其他"和"退出"操作</li>
+<li>单窗口应用更多菜单新增"移至其他屏幕"、"隐藏其他"和"退出"操作</li>
+<li>没有窗口的屏幕也会在侧边栏显示屏幕标题</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>网格背景现在能准确反映 macOS 壁纸显示设置（填充、适应、拉伸、居中和平铺模式），包括正确的平铺缩放、居中模式的物理像素比例以及信箱区域的填充颜色</li>
+<li>布局网格预览现在显示菜单栏、Dock 和刘海，更真实地还原实际显示效果</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了调整大小前窗口位置与目标位置相同时，调整大小后窗口移动到意外位置的问题。通过预偏移规避 AX 去重</li>
+<li>减少在非主屏幕上调整大小时的闪烁。先尝试就地调整大小，仅在完全失败时才弹回主屏幕</li>
+<li>弹回主屏幕时，窗口现在放置在屏幕最底部（几乎在屏幕外）而非左上角(0,0)，最大程度减少闪烁</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>프라이버시를 고려한 사용 통계 수집을 위해 TelemetryDeck SDK 통합 (오버레이 열기, 레이아웃 적용, 프리셋 적용, 설정 변경)</li>
+<li>사이드바 윈도우를 화면별·앱별로 그룹화. 다중 윈도우 앱은 앱 헤더 아래에 들여쓰기 표시</li>
+<li>사이드바의 화면 헤더에 케밥 메뉴 추가. "윈도우 모으기" 및 "윈도우를 다른 화면으로 이동" 작업 가능</li>
+<li>앱 헤더 케밥 메뉴에 "모든 윈도우를 다른 화면으로 이동", "다른 앱 숨기기", "종료" 추가</li>
+<li>단일 윈도우 앱 케밥 메뉴에 "다른 화면으로 이동", "다른 앱 숨기기", "종료" 추가</li>
+<li>윈도우가 없는 화면도 사이드바에 화면 헤더 표시</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>그리드 배경이 macOS 배경화면 표시 설정(전체 화면 채우기, 화면에 맞게, 늘이기, 가운데, 타일)을 올바르게 반영하도록 개선. 타일 크기 조정, 가운데 모드의 물리적 픽셀 비율, 레터박스 영역의 채우기 색상 지원</li>
+<li>레이아웃 그리드 미리보기에 메뉴 바, Dock, 노치가 표시되어 실제 화면과 더 유사하게 재현</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>리사이즈 전 윈도우 위치가 타겟 위치와 동일할 때 리사이즈 후 윈도우가 의도하지 않은 위치로 이동하는 문제 수정. 사전 넛지를 통한 AX 중복 제거 회피</li>
+<li>비프라이머리 스크린에서 리사이즈 시 깜빡임 감소. 먼저 현재 위치에서 리사이즈를 시도하고, 완전히 실패한 경우에만 프라이머리 스크린으로 바운스</li>
+<li>프라이머리 스크린으로 바운스 시 윈도우를 화면 상단(0,0) 대신 화면 최하단(거의 화면 밖)에 배치하여 깜빡임 최소화</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>プライバシーに配慮した利用状況の計測のため TelemetryDeck SDK を統合（オーバーレイ表示・レイアウト適用・プリセット適用・設定変更）</li>
+<li>サイドバーのウインドウをスクリーン別・アプリケーション別にグループ化。複数ウインドウのアプリはアプリヘッダーの下にインデント表示</li>
+<li>サイドバーのスクリーンヘッダーにケバブメニューを追加。「ウインドウを集める」「ウインドウを別スクリーンに移動」の操作が可能</li>
+<li>アプリヘッダーのケバブメニューに「全ウインドウを別スクリーンに移動」「他を隠す」「終了」を追加</li>
+<li>単一ウインドウアプリのケバブメニューに「別スクリーンに移動」「他を隠す」「終了」を追加</li>
+<li>ウインドウがないスクリーンもサイドバーにスクリーンヘッダーを表示</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>グリッドの背景がmacOSの壁紙表示設定（画面全体に表示・収まるサイズで表示・引き伸ばして表示・中央に表示・タイル状に配置）を正しく反映するように改善。タイルの縮尺・中央表示の物理ピクセル比・レターボックス部分の塗りつぶし色にも対応</li>
+<li>レイアウトグリッドのプレビューにメニューバー・Dock・ノッチを表示し、実際の画面に近い見た目を再現</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>リサイズ前のウインドウ位置がターゲット位置と同じ場合に、リサイズ後にウインドウが意図しない位置に移動する問題を修正。事前ナッジによるAX重複排除の回避</li>
+<li>非プライマリスクリーンでのリサイズ時のチラつきを軽減。まずその場でリサイズを試み、完全に失敗した場合のみプライマリスクリーンにバウンス</li>
+<li>プライマリスクリーンへのバウンス時、ウインドウを画面上部(0,0)ではなく画面最下端（ほぼ画面外）に配置し、チラつきを最小化</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Integrated TelemetryDeck analytics SDK for privacy-friendly usage tracking (overlay opened, layout applied, preset applied, settings changed)</li>
+<li>Sidebar windows are now grouped by screen and by application; multi-window apps show an app header with indented window rows</li>
+<li>Screen header rows in the sidebar now have a kebab menu with "Gather windows" and "Move windows to" actions for managing windows across screens</li>
+<li>App header kebab menu with "Move all windows to screen", "Hide others", and "Quit" actions</li>
+<li>Single-window app kebab menu with "Move to screen", "Hide others", and "Quit" actions</li>
+<li>Empty screens (with no windows) are now shown in the sidebar with their screen header</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Grid background now accurately reflects the macOS wallpaper display settings (fill, fit, stretch, center, and tile modes), including correct tile scaling, physical pixel ratio for center mode, and fill color for letterbox areas</li>
+<li>Layout grid preview now shows the full screen frame including the menu bar, Dock, and notch, giving a more accurate representation of the actual display</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window position not being applied when the window is already at the target position before resize; AX de-duplication now defeated via pre-nudge</li>
+<li>Reduced visible flicker when resizing on non-primary screens; resize is now attempted in-place first, and the primary-screen bounce only occurs when the in-place resize has no effect at all</li>
+<li>When bouncing to the primary screen for resize, the window is now placed at the bottom edge (mostly off-screen) instead of at the origin, minimizing visible flicker</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>As janelas na barra lateral agora são agrupadas por tela e por aplicativo; apps com múltiplas janelas mostram um cabeçalho com as janelas recuadas</li>
+<li>Os cabeçalhos de tela na barra lateral agora têm um menu com ações para "Reunir janelas" e "Mover janelas para" para gerenciar janelas entre telas</li>
+<li>Menu do cabeçalho de aplicativo com "Mover todas as janelas para outra tela", "Ocultar outros" e "Encerrar"</li>
+<li>Menu de apps com janela única com "Mover para outra tela", "Ocultar outros" e "Encerrar"</li>
+<li>Telas vazias (sem janelas) agora são mostradas na barra lateral com seu cabeçalho</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>O fundo da grade agora reflete com precisão as configurações de exibição do papel de parede do macOS (preencher, ajustar, esticar, centralizar e mosaico), incluindo dimensionamento correto dos blocos, proporção de pixels físicos para o modo centralizado e cor de preenchimento para áreas de letterbox</li>
+<li>A pré-visualização da grade de layout agora exibe a barra de menus, o Dock e o entalhe, proporcionando uma representação mais fiel da tela real</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde a janela se movia para uma posição inesperada após o redimensionamento quando já estava na posição de destino. Contorno da deduplicação AX via pré-deslocamento</li>
+<li>Reduzida a cintilação ao redimensionar em telas não principais. O redimensionamento é primeiro tentado no local; o salto para a tela principal só ocorre em caso de falha completa</li>
+<li>Ao saltar para a tela principal, a janela agora é posicionada na borda inferior (quase fora da tela) em vez do canto superior esquerdo, minimizando a cintilação</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Le finestre nella barra laterale sono raggruppate per schermo e per applicazione; le app con più finestre mostrano un'intestazione con le righe rientrate</li>
+<li>Le intestazioni dello schermo nella barra laterale hanno un menu con le azioni "Raccogli finestre" e "Sposta finestre su" per gestire le finestre tra schermi</li>
+<li>Menu dell'intestazione app con "Sposta tutte le finestre su un altro schermo", "Nascondi altre" e "Esci"</li>
+<li>Menu delle app a finestra singola con "Sposta su un altro schermo", "Nascondi altre" e "Esci"</li>
+<li>Gli schermi vuoti (senza finestre) sono mostrati nella barra laterale con la loro intestazione</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Lo sfondo della griglia ora riflette accuratamente le impostazioni di visualizzazione dello sfondo macOS (riempimento, adattamento, allungamento, centro e mosaico), inclusa la corretta scalatura delle tessere, il rapporto pixel fisico per la modalità centrata e il colore di riempimento per le aree letterbox</li>
+<li>L'anteprima della griglia di layout ora mostra la barra dei menu, il Dock e il notch, offrendo una rappresentazione più fedele dello schermo reale</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui la finestra si spostava in una posizione inattesa dopo il ridimensionamento quando era già nella posizione di destinazione. Aggiramento della deduplicazione AX tramite pre-spostamento</li>
+<li>Ridotto lo sfarfallio durante il ridimensionamento su schermi non principali. Il ridimensionamento viene prima tentato sul posto; il rimbalzo allo schermo principale avviene solo in caso di fallimento completo</li>
+<li>Durante il rimbalzo allo schermo principale, la finestra viene ora posizionata sul bordo inferiore (quasi fuori schermo) anziché nell'angolo superiore sinistro, minimizzando lo sfarfallio</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Les fenêtres de la barre latérale sont regroupées par écran et par application ; les apps multi-fenêtres affichent un en-tête avec des lignes indentées</li>
+<li>Les en-têtes d'écran dans la barre latérale disposent d'un menu avec les actions « Rassembler les fenêtres » et « Déplacer les fenêtres vers » pour gérer les fenêtres entre écrans</li>
+<li>Menu de l'en-tête d'application avec « Déplacer toutes les fenêtres vers un autre écran », « Masquer les autres » et « Quitter »</li>
+<li>Menu des apps à fenêtre unique avec « Déplacer vers un autre écran », « Masquer les autres » et « Quitter »</li>
+<li>Les écrans vides (sans fenêtres) sont affichés dans la barre latérale avec leur en-tête</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>L'arrière-plan de la grille reflète désormais fidèlement les paramètres d'affichage du fond d'écran macOS (remplir, ajuster, étirer, centrer et mosaïque), avec une mise à l'échelle correcte des tuiles, le ratio de pixels physiques pour le mode centré et la couleur de remplissage pour les zones letterbox</li>
+<li>L'aperçu de la grille de mise en page affiche désormais la barre des menus, le Dock et l'encoche, offrant une représentation plus fidèle de l'écran réel</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un problème où la fenêtre se déplaçait vers une position inattendue après redimensionnement lorsqu'elle était déjà à la position cible. Contournement de la déduplication AX par pré-décalage</li>
+<li>Réduction du scintillement lors du redimensionnement sur les écrans non principaux. Le redimensionnement est d'abord tenté sur place ; le rebond vers l'écran principal n'a lieu qu'en cas d'échec complet</li>
+<li>Lors du rebond vers l'écran principal, la fenêtre est désormais placée en bas de l'écran (presque hors champ) au lieu du coin supérieur gauche, minimisant le scintillement</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Las ventanas de la barra lateral ahora se agrupan por pantalla y por aplicación; las apps con múltiples ventanas muestran un encabezado con las ventanas indentadas</li>
+<li>Los encabezados de pantalla en la barra lateral ahora tienen un menú con acciones para "Reunir ventanas" y "Mover ventanas a" para gestionar ventanas entre pantallas</li>
+<li>Menú del encabezado de aplicación con "Mover todas las ventanas a otra pantalla", "Ocultar otras" y "Salir"</li>
+<li>Menú de apps con una sola ventana con "Mover a otra pantalla", "Ocultar otras" y "Salir"</li>
+<li>Las pantallas vacías (sin ventanas) ahora se muestran en la barra lateral con su encabezado</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>El fondo de la cuadrícula ahora refleja con precisión la configuración de visualización del fondo de pantalla de macOS (rellenar, ajustar, estirar, centrar y mosaico), incluyendo la escala correcta del mosaico, la proporción de píxeles físicos para el modo centrado y el color de relleno para las áreas de letterbox</li>
+<li>La vista previa de la cuadrícula de diseño ahora muestra la barra de menú, el Dock y la muesca, ofreciendo una representación más precisa de la pantalla real</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la ventana se movía a una posición inesperada después de redimensionar cuando ya estaba en la posición de destino. Evasión de la deduplicación AX mediante pre-desplazamiento</li>
+<li>Reducido el parpadeo al redimensionar en pantallas no principales. Primero se intenta redimensionar en el lugar; solo se recurre a la pantalla principal si falla completamente</li>
+<li>Al recurrir a la pantalla principal, la ventana ahora se coloca en el borde inferior (casi fuera de pantalla) en lugar de en la esquina superior izquierda, minimizando el parpadeo</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Fenster in der Seitenleiste werden nach Bildschirm und Anwendung gruppiert; Apps mit mehreren Fenstern zeigen einen App-Header mit eingerückten Fensterzeilen</li>
+<li>Bildschirm-Header in der Seitenleiste haben ein Menü mit „Fenster sammeln" und „Fenster verschieben" zum Verwalten von Fenstern über Bildschirme hinweg</li>
+<li>App-Header-Menü mit „Alle Fenster auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"</li>
+<li>Menü für Einzelfenster-Apps mit „Auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"</li>
+<li>Leere Bildschirme (ohne Fenster) werden in der Seitenleiste mit ihrem Bildschirm-Header angezeigt</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Der Gitterhintergrund spiegelt nun die macOS-Hintergrundbild-Anzeigeeinstellungen korrekt wider (Füllen, Anpassen, Strecken, Zentrieren und Kacheln), einschließlich korrekter Kachelskalierung, physischem Pixelverhältnis für den Zentrierung-Modus und Füllfarbe für Letterbox-Bereiche</li>
+<li>Die Layout-Rastervorschau zeigt nun Menüleiste, Dock und Notch und vermittelt so ein realistischeres Bild der tatsächlichen Anzeige</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fenster wurde nach Größenänderung an eine unerwartete Position verschoben, wenn die aktuelle Position bereits der Zielposition entsprach. Umgehung der AX-Deduplizierung durch Vor-Verschiebung</li>
+<li>Reduziertes Flackern beim Ändern der Fenstergröße auf Nicht-Primärbildschirmen. Größenänderung wird zuerst vor Ort versucht; nur bei vollständigem Fehlschlag wird auf den Primärbildschirm ausgewichen</li>
+<li>Beim Ausweichen auf den Primärbildschirm wird das Fenster jetzt am unteren Bildschirmrand (fast außerhalb des sichtbaren Bereichs) statt an der oberen linken Ecke platziert, um Flackern zu minimieren</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>側邊欄視窗按螢幕和應用程式分組顯示；多視窗應用在應用標題下縮排排列</li>
+<li>側邊欄螢幕標題新增更多選單，支援「將視窗聚集到此螢幕」和「將視窗移至其他螢幕」操作</li>
+<li>應用標題更多選單新增「將所有視窗移至其他螢幕」、「隱藏其他」和「結束」操作</li>
+<li>單視窗應用更多選單新增「移至其他螢幕」、「隱藏其他」和「結束」操作</li>
+<li>沒有視窗的螢幕也會在側邊欄顯示螢幕標題</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>網格背景現在能準確反映 macOS 桌布顯示設定（填滿、符合、延伸、置中和拼貼模式），包含正確的拼貼縮放、置中模式的實體像素比例以及信箱區域的填充顏色</li>
+<li>版面格線預覽現在顯示選單列、Dock 及瀏海，更貼近實際螢幕的外觀</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了調整大小前視窗位置與目標位置相同時，調整大小後視窗移動到非預期位置的問題。透過預偏移規避 AX 去重</li>
+<li>減少在非主螢幕上調整大小時的閃爍。先嘗試就地調整大小，僅在完全失敗時才彈回主螢幕</li>
+<li>彈回主螢幕時，視窗現在放置在螢幕最底部（幾乎在螢幕外）而非左上角(0,0)，最大程度減少閃爍</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>侧边栏窗口按屏幕和应用分组显示；多窗口应用在应用标题下缩进排列</li>
+<li>侧边栏屏幕标题新增更多菜单，支持"将窗口聚集到此屏幕"和"将窗口移至其他屏幕"操作</li>
+<li>应用标题更多菜单新增"将所有窗口移至其他屏幕"、"隐藏其他"和"退出"操作</li>
+<li>单窗口应用更多菜单新增"移至其他屏幕"、"隐藏其他"和"退出"操作</li>
+<li>没有窗口的屏幕也会在侧边栏显示屏幕标题</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>网格背景现在能准确反映 macOS 壁纸显示设置（填充、适应、拉伸、居中和平铺模式），包括正确的平铺缩放、居中模式的物理像素比例以及信箱区域的填充颜色</li>
+<li>布局网格预览现在显示菜单栏、Dock 和刘海，更真实地还原实际显示效果</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了调整大小前窗口位置与目标位置相同时，调整大小后窗口移动到意外位置的问题。通过预偏移规避 AX 去重</li>
+<li>减少在非主屏幕上调整大小时的闪烁。先尝试就地调整大小，仅在完全失败时才弹回主屏幕</li>
+<li>弹回主屏幕时，窗口现在放置在屏幕最底部（几乎在屏幕外）而非左上角(0,0)，最大程度减少闪烁</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바 윈도우를 화면별·앱별로 그룹화. 다중 윈도우 앱은 앱 헤더 아래에 들여쓰기 표시</li>
+<li>사이드바의 화면 헤더에 케밥 메뉴 추가. "윈도우 모으기" 및 "윈도우를 다른 화면으로 이동" 작업 가능</li>
+<li>앱 헤더 케밥 메뉴에 "모든 윈도우를 다른 화면으로 이동", "다른 앱 숨기기", "종료" 추가</li>
+<li>단일 윈도우 앱 케밥 메뉴에 "다른 화면으로 이동", "다른 앱 숨기기", "종료" 추가</li>
+<li>윈도우가 없는 화면도 사이드바에 화면 헤더 표시</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>그리드 배경이 macOS 배경화면 표시 설정(전체 화면 채우기, 화면에 맞게, 늘이기, 가운데, 타일)을 올바르게 반영하도록 개선. 타일 크기 조정, 가운데 모드의 물리적 픽셀 비율, 레터박스 영역의 채우기 색상 지원</li>
+<li>레이아웃 그리드 미리보기에 메뉴 바, Dock, 노치가 표시되어 실제 화면과 더 유사하게 재현</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>리사이즈 전 윈도우 위치가 타겟 위치와 동일할 때 리사이즈 후 윈도우가 의도하지 않은 위치로 이동하는 문제 수정. 사전 넛지를 통한 AX 중복 제거 회피</li>
+<li>비프라이머리 스크린에서 리사이즈 시 깜빡임 감소. 먼저 현재 위치에서 리사이즈를 시도하고, 완전히 실패한 경우에만 프라이머리 스크린으로 바운스</li>
+<li>프라이머리 스크린으로 바운스 시 윈도우를 화면 상단(0,0) 대신 화면 최하단(거의 화면 밖)에 배치하여 깜빡임 최소화</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーのウインドウをスクリーン別・アプリケーション別にグループ化。複数ウインドウのアプリはアプリヘッダーの下にインデント表示</li>
+<li>サイドバーのスクリーンヘッダーにケバブメニューを追加。「ウインドウを集める」「ウインドウを別スクリーンに移動」の操作が可能</li>
+<li>アプリヘッダーのケバブメニューに「全ウインドウを別スクリーンに移動」「他を隠す」「終了」を追加</li>
+<li>単一ウインドウアプリのケバブメニューに「別スクリーンに移動」「他を隠す」「終了」を追加</li>
+<li>ウインドウがないスクリーンもサイドバーにスクリーンヘッダーを表示</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>グリッドの背景がmacOSの壁紙表示設定（画面全体に表示・収まるサイズで表示・引き伸ばして表示・中央に表示・タイル状に配置）を正しく反映するように改善。タイルの縮尺・中央表示の物理ピクセル比・レターボックス部分の塗りつぶし色にも対応</li>
+<li>レイアウトグリッドのプレビューにメニューバー・Dock・ノッチを表示し、実際の画面に近い見た目を再現</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>リサイズ前のウインドウ位置がターゲット位置と同じ場合に、リサイズ後にウインドウが意図しない位置に移動する問題を修正。事前ナッジによるAX重複排除の回避</li>
+<li>非プライマリスクリーンでのリサイズ時のチラつきを軽減。まずその場でリサイズを試み、完全に失敗した場合のみプライマリスクリーンにバウンス</li>
+<li>プライマリスクリーンへのバウンス時、ウインドウを画面上部(0,0)ではなく画面最下端（ほぼ画面外）に配置し、チラつきを最小化</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Sidebar windows are now grouped by screen and by application; multi-window apps show an app header with indented window rows</li>
+<li>Screen header rows in the sidebar now have a kebab menu with "Gather windows" and "Move windows to" actions for managing windows across screens</li>
+<li>App header kebab menu with "Move all windows to screen", "Hide others", and "Quit" actions</li>
+<li>Single-window app kebab menu with "Move to screen", "Hide others", and "Quit" actions</li>
+<li>Empty screens (with no windows) are now shown in the sidebar with their screen header</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Grid background now accurately reflects the macOS wallpaper display settings (fill, fit, stretch, center, and tile modes), including correct tile scaling, physical pixel ratio for center mode, and fill color for letterbox areas</li>
+<li>Layout grid preview now shows the full screen frame including the menu bar, Dock, and notch, giving a more accurate representation of the actual display</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window position not being applied when the window is already at the target position before resize; AX de-duplication now defeated via pre-nudge</li>
+<li>Reduced visible flicker when resizing on non-primary screens; resize is now attempted in-place first, and the primary-screen bounce only occurs when the in-place resize has no effect at all</li>
+<li>When bouncing to the primary screen for resize, the window is now placed at the bottom edge (mostly off-screen) instead of at the origin, minimizing visible flicker</li>
+</ul>]]></description>
+            <pubDate>Mon, 23 Mar 2026 00:29:38 +0900</pubDate>
+            <sparkle:version>300</sparkle:version>
+            <sparkle:shortVersionString>3.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley-3.0.0.zip" length="5067945" type="application/octet-stream" sparkle:edSignature="3ha+ifesuOHx8rsKJ/3HTW+qNriaL3S+Q5rVGmdDfcLEoDqFa9Iv0m7ABeAQ3JtnNIlGdLQNcnfTvviU3XwWAQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley300-220.delta" sparkle:deltaFrom="220" length="458294" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="qbiZjdDB0MDQcb+EzXyBYQM6oUgeDWTKq8ZaF884F4No4NEDZOkjK/LzWsmmTA3UyiIhpW9nnDAQkLTFEwtMCA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley300-210.delta" sparkle:deltaFrom="210" length="489178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="P8s/00pX8hty1rvYZhme1KymFZuXEJ6A52a6f4nfMHXB3nBkv6ci8gbuHCIv8BIv5U9svPFc5TtVKk3bAqCbCQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley300-203.delta" sparkle:deltaFrom="203" length="517090" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="+Vvu8mQtRFWj8D0/EDrp4mMoxbOQiADCmXu0MB/k+cHhTUXLPMjQHmY6sMnYzwb01E/dB2ko6UW7R5XdFi/EBQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley300-202.delta" sparkle:deltaFrom="202" length="528254" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OnJX4x3Urg9bTRTph8Q6TqpPe91sdSe09wvYwTPd9953lQWLe2iqQjip4oraZZhHRoEpOKmYwCUByLeih69sBw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley300-201.delta" sparkle:deltaFrom="201" length="542086" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="g60YELsjTBTzrMv+5m4jtQSjacZvM13eApYnB1CyyT7GbzdA+Qy8GCrPg0IZkgtsGpgG22d96AGHdEiAB5d3CA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.2.0</title>
             <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
 <ul>
@@ -246,11 +871,671 @@
 <li>When an app's minimum window size prevents the requested size, the window position is now recalculated so it stays within the visible screen area instead of extending beyond the edge</li>
 <li>Eliminated visible window flicker when switching target windows across screens; windows are no longer recreated on screen change</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>As células da grade não selecionadas agora são transparentes</li>
+<li>A proporção da grade agora corresponde à área visível da tela (excluindo barra de menus e Dock); se a grade for alta demais, a largura é reduzida proporcionalmente para garantir que pelo menos 4 presets fiquem visíveis</li>
+<li>O fundo da grade de layout agora exibe a imagem de área de trabalho (semitransparente, cantos arredondados)</li>
+<li>As células selecionadas por arrasto agora são semitransparentes, mostrando a imagem de área de trabalho abaixo</li>
+<li>O destaque ao passar o cursor sobre presets na grade agora usa o mesmo estilo da seleção por arrasto</li>
+</ul>
+<h3>Adicionado</h3>
+<ul>
+<li>A barra lateral da lista de janelas agora é exibida em todas as telas em configurações de múltiplos monitores, não apenas na tela de destino</li>
+<li>O estado da barra lateral (visibilidade, item selecionado, texto de pesquisa) é sincronizado entre todas as janelas de tela</li>
+<li>Log de depuração de redimensionamento opcional (`~/tiley.log`) (Configurações &gt; Depuração)</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta</li>
+<li>Corrigido o redimensionamento de janelas falhando em telas não primárias em configurações de DPI misto; a janela é temporariamente movida para a tela primária para redimensionar e então posicionada no local de destino</li>
+<li>Corrigida a posição não sendo aplicada após redimensionamento quando alguns apps revertem silenciosamente as alterações de posição (contorno de deduplicação AX)</li>
+<li>Quando o tamanho mínimo de janela de um app impede o tamanho solicitado, a posição é recalculada para que a janela permaneça dentro da área visível da tela</li>
+<li>Eliminada a oscilação visível das janelas ao alternar janelas de destino entre telas; as janelas não são mais recriadas na mudança de tela</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Le celle della griglia non selezionate sono ora trasparenti</li>
+<li>Le proporzioni della griglia corrispondono ora all'area visibile dello schermo (escluse barra dei menu e Dock); se la griglia risultasse troppo alta, la larghezza viene ridotta proporzionalmente per garantire la visibilità di almeno 4 preset</li>
+<li>Lo sfondo della griglia di layout mostra ora l'immagine del desktop (semitrasparente, angoli arrotondati)</li>
+<li>Le celle selezionate con trascinamento sono ora semitrasparenti, mostrando l'immagine del desktop sottostante</li>
+<li>L'evidenziazione al passaggio del cursore sui preset nella griglia usa ora lo stesso stile della selezione con trascinamento</li>
+</ul>
+<h3>Aggiunto</h3>
+<ul>
+<li>La barra laterale dell'elenco finestre viene ora visualizzata su tutti gli schermi nelle configurazioni multi-monitor, non solo sullo schermo di destinazione</li>
+<li>Lo stato della barra laterale (visibilità, elemento selezionato, testo di ricerca) viene sincronizzato tra tutte le finestre degli schermi</li>
+<li>Log di debug del ridimensionamento opzionale (`~/tiley.log`) (Impostazioni &gt; Debug)</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto</li>
+<li>Corretto il ridimensionamento delle finestre che falliva sugli schermi non primari nelle configurazioni DPI miste; la finestra viene temporaneamente spostata sullo schermo primario per il ridimensionamento e poi posizionata nella posizione target</li>
+<li>Corretta la posizione non applicata dopo il ridimensionamento quando alcune app annullano silenziosamente le modifiche alla posizione (soluzione alternativa alla deduplicazione AX)</li>
+<li>Quando la dimensione minima della finestra di un'app impedisce la dimensione richiesta, la posizione viene ricalcolata affinché la finestra rimanga nell'area visibile dello schermo</li>
+<li>Eliminato lo sfarfallio visibile delle finestre quando si cambia la finestra di destinazione tra schermi; le finestre non vengono più ricreate al cambio di schermo</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Les cellules de grille non sélectionnées sont désormais transparentes</li>
+<li>Le rapport d'aspect de la grille correspond maintenant à la zone visible de l'écran (sans barre de menus ni Dock) ; si la grille serait trop haute, sa largeur est réduite proportionnellement pour garantir l'affichage d'au moins 4 presets</li>
+<li>L'arrière-plan de la grille de mise en page affiche désormais l'image du bureau (semi-transparent, coins arrondis)</li>
+<li>Les cellules sélectionnées par glissement sont désormais semi-transparentes, laissant apparaître l'image du bureau</li>
+<li>La surbrillance au survol des presets dans la grille utilise désormais le même style que la sélection par glissement</li>
+</ul>
+<h3>Ajouté</h3>
+<ul>
+<li>La barre latérale de liste de fenêtres est désormais affichée sur tous les écrans dans les configurations multi-moniteurs, pas seulement sur l'écran cible</li>
+<li>L'état de la barre latérale (visibilité, élément sélectionné, texte de recherche) est synchronisé entre toutes les fenêtres d'écran</li>
+<li>Journal de débogage de redimensionnement optionnel (`~/tiley.log`) (Réglages &gt; Débogage)</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte</li>
+<li>Correction du redimensionnement échouant sur les écrans non principaux dans les configurations DPI mixtes ; la fenêtre est temporairement déplacée vers l'écran principal pour le redimensionnement puis placée à la position cible</li>
+<li>Correction de la position non appliquée après redimensionnement lorsque certaines apps annulent silencieusement les changements de position (contournement de la déduplication AX)</li>
+<li>Lorsque la taille minimale de fenêtre d'une app empêche la taille demandée, la position est recalculée pour que la fenêtre reste dans la zone visible de l'écran</li>
+<li>Suppression du scintillement visible des fenêtres lors du changement de fenêtre cible entre écrans ; les fenêtres ne sont plus recréées lors du changement d'écran</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Las celdas de la cuadrícula no seleccionadas ahora son transparentes</li>
+<li>La relación de aspecto de la cuadrícula ahora coincide con el área visible de la pantalla (sin barra de menú ni Dock); si la cuadrícula sería demasiado alta, su ancho se reduce proporcionalmente para garantizar que al menos 4 presets sean visibles</li>
+<li>El fondo de la cuadrícula de diseño ahora muestra la imagen de escritorio (semitransparente, esquinas redondeadas)</li>
+<li>Las celdas seleccionadas con arrastre ahora son semitransparentes, mostrando la imagen de escritorio por debajo</li>
+<li>El resaltado al pasar el cursor sobre un preset en la cuadrícula ahora usa el mismo estilo que la selección con arrastre</li>
+</ul>
+<h3>Añadido</h3>
+<ul>
+<li>La barra lateral de lista de ventanas ahora se muestra en todas las pantallas en configuraciones de múltiples monitores, no solo en la pantalla objetivo</li>
+<li>El estado de la barra lateral (visibilidad, elemento seleccionado, texto de búsqueda) se sincroniza entre todas las ventanas de pantalla</li>
+<li>Registro de depuración de redimensionamiento opcional (`~/tiley.log`) (Ajustes &gt; Depuración)</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta</li>
+<li>Corregido el redimensionamiento de ventanas fallando en pantallas no primarias en configuraciones de DPI mixto; la ventana se mueve temporalmente a la pantalla primaria para redimensionar y luego se coloca en la posición objetivo</li>
+<li>Corregida la posición no aplicada después del redimensionamiento cuando algunas apps revierten silenciosamente los cambios de posición (solución alternativa de deduplicación AX)</li>
+<li>Cuando el tamaño mínimo de ventana de una app impide el tamaño solicitado, la posición se recalcula para que la ventana permanezca dentro del área visible de la pantalla</li>
+<li>Eliminado el parpadeo visible de ventanas al cambiar ventanas objetivo entre pantallas; las ventanas ya no se recrean al cambiar de pantalla</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Nicht ausgewählte Rasterkacheln sind jetzt transparent</li>
+<li>Das Seitenverhältnis des Rasters entspricht jetzt dem sichtbaren Bildschirmbereich (ohne Menüleiste und Dock); wird das Raster zu hoch, wird die Breite proportional reduziert, damit mindestens 4 Presets sichtbar bleiben</li>
+<li>Der Hintergrund des Layout-Rasters zeigt jetzt das Desktop-Bild (halbtransparent, abgerundete Ecken)</li>
+<li>Per Drag ausgewählte Zellen sind jetzt halbtransparent, sodass das Desktop-Bild darunter sichtbar ist</li>
+<li>Der Vorschau-Hover-Highlight im Raster verwendet jetzt denselben Stil wie die Drag-Auswahl</li>
+</ul>
+<h3>Hinzugefügt</h3>
+<ul>
+<li>Die Fensterlisten-Seitenleiste wird jetzt bei Multi-Monitor-Setups auf allen Bildschirmen angezeigt, nicht nur auf dem Zielbildschirm</li>
+<li>Seitenleistenstatus (Sichtbarkeit, ausgewähltes Element, Suchtext) wird zwischen allen Bildschirmfenstern synchronisiert</li>
+<li>Optionales Debug-Log für Größenänderungen (`~/tiley.log`) (Einstellungen &gt; Fehlersuche)</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde</li>
+<li>Fenstergrößenänderung schlug auf Nicht-Primärbildschirmen in gemischten DPI-Konfigurationen fehl; das Fenster wird jetzt vorübergehend zum Primärbildschirm verschoben und dann an der Zielposition platziert</li>
+<li>Position wurde nach Größenänderung nicht angewendet, wenn Apps die Positionsänderung stillschweigend rückgängig machen (AX-Deduplizierungs-Workaround)</li>
+<li>Wenn die Mindestfenstergröße einer App die angeforderte Größe verhindert, wird die Fensterposition neu berechnet, damit es im sichtbaren Bildschirmbereich bleibt</li>
+<li>Sichtbares Fensterflackern beim Wechseln des Zielfensters zwischen Bildschirmen behoben; Fenster werden beim Bildschirmwechsel nicht mehr neu erstellt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>未選取的格線方格改為透明顯示</li>
+<li>格線長寬比現在與去除選單列和 Dock 後的螢幕尺寸一致。若格線過高，將在保持比例的前提下縮小寬度，確保至少顯示 4 個預設方案</li>
+<li>版面格線背景現在顯示桌面圖片（半透明、圓角）</li>
+<li>拖曳選取的方格改為半透明，背景桌面圖片透過顯示</li>
+<li>格線內預設懸停高亮樣式統一為與拖曳選取時相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多螢幕環境中，視窗列表側邊欄現在顯示在所有螢幕上，而不僅僅是目標螢幕</li>
+<li>側邊欄狀態（顯示/隱藏、選取項目、搜尋文字）在所有螢幕的視窗之間同步</li>
+<li>調整大小除錯日誌輸出選項（`~/tiley.log`）（設定 &gt; 除錯）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了在覆蓋層顯示期間 Dock 或選單列自動顯示/隱藏時，使用過時的螢幕資訊導致視窗被放置在錯誤位置的問題</li>
+<li>修正了在混合 DPI 顯示器配置中，非主螢幕上的視窗無法調整大小的問題。調整大小時視窗會暫時移動到主顯示器，然後放置到目標位置</li>
+<li>修正了調整大小時部分應用程式將視窗位置還原，導致無法移動到指定位置的問題（AX 去重規避）</li>
+<li>當應用程式的最小視窗大小限制導致無法縮小到指定大小時，自動重新計算視窗位置以避免超出螢幕邊緣</li>
+<li>修正了將目標視窗切換到其他螢幕的視窗時，視窗短暫閃爍的問題（取消螢幕切換時的視窗重建）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>未选中的网格方块改为透明显示</li>
+<li>网格长宽比现在与去除菜单栏和 Dock 后的屏幕尺寸一致。若网格过高，将在保持比例的前提下缩小宽度，确保至少显示 4 个预设方案</li>
+<li>布局网格背景现在显示桌面壁纸（半透明、圆角）</li>
+<li>拖拽选中的方块改为半透明，背景桌面壁纸透过显示</li>
+<li>网格内预设悬停高亮样式统一为与拖拽选择时相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多显示器环境中，窗口列表侧边栏现在显示在所有屏幕上，而不仅仅是目标屏幕</li>
+<li>侧边栏状态（显示/隐藏、选中项目、搜索文本）在所有屏幕的窗口之间同步</li>
+<li>调整大小调试日志输出选项（`~/tiley.log`）（设置 &gt; 调试）</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了在覆盖层显示期间 Dock 或菜单栏自动显示/隐藏时，使用过时的屏幕信息导致窗口被放置在错误位置的问题</li>
+<li>修复了在混合 DPI 显示器配置中，非主屏幕上的窗口无法调整大小的问题。调整大小时窗口会临时移动到主显示器，然后放置到目标位置</li>
+<li>修复了调整大小时部分应用将窗口位置恢复原位，导致无法移动到指定位置的问题（AX 去重规避）</li>
+<li>当应用的最小窗口大小限制导致无法缩小到指定大小时，自动重新计算窗口位置以避免超出屏幕边缘</li>
+<li>修复了将目标窗口切换到其他屏幕的窗口时，窗口短暂闪烁的问题（取消屏幕切换时的窗口重建）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>선택되지 않은 그리드 타일을 투명하게 변경</li>
+<li>그리드 가로세로 비율을 메뉴 바 및 Dock을 제외한 화면 크기에 맞게 조정. 그리드가 너무 높아질 경우 비율을 유지하면서 너비를 축소하여 최소 4개의 프리셋이 항상 표시되도록 개선</li>
+<li>레이아웃 그리드 배경에 데스크탑 사진 표시 (반투명, 모서리 둥글게)</li>
+<li>드래그 선택 중인 셀을 반투명으로 변경하여 배경 데스크탑 사진이 비쳐 보이도록 개선</li>
+<li>그리드 내 프리셋 호버 하이라이트를 드래그 선택 시와 동일한 스타일로 통일</li>
+</ul>
+<h3>추가</h3>
+<ul>
+<li>멀티 모니터 환경에서 윈도우 목록 사이드바를 대상 화면뿐만 아니라 모든 화면에 표시</li>
+<li>사이드바 상태(표시/숨김, 선택된 항목, 검색 텍스트)를 모든 화면의 윈도우 간에 동기화</li>
+<li>리사이즈 디버그 로그 출력 옵션 (`~/tiley.log`) 추가 (설정 &gt; 디버그)</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>오버레이 표시 중 Dock 또는 메뉴 막대가 자동으로 표시/숨김되면 이전 화면 정보를 사용하여 윈도우가 잘못된 위치에 배치되는 문제를 수정</li>
+<li>DPI가 다른 디스플레이 구성에서 비프라이머리 스크린의 윈도우가 리사이즈되지 않는 문제를 수정. 리사이즈 시 윈도우를 일시적으로 프라이머리 디스플레이로 이동한 후 목표 위치에 배치</li>
+<li>리사이즈 시 일부 앱이 윈도우 위치를 원래대로 되돌려 지정한 위치로 이동되지 않는 문제를 수정 (AX 중복 제거 우회)</li>
+<li>앱의 최소 윈도우 크기로 인해 지정 크기까지 축소할 수 없을 경우, 화면 밖으로 나가지 않도록 윈도우 위치를 자동으로 재계산</li>
+<li>대상 윈도우를 다른 화면의 윈도우로 전환할 때 윈도우가 순간적으로 깜빡이는 문제를 수정 (화면 변경 시 윈도우 재생성 폐지)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>非選択状態のグリッドタイルを透過表示に変更</li>
+<li>グリッドのアスペクト比をメニューバーおよびDockを除いたスクリーンサイズに合わせて調整。グリッドが縦に長くなりすぎる場合は、アスペクト比を保ったまま横幅を縮小し、最低4つのプリセットが常に表示されるよう対応</li>
+<li>レイアウトグリッドの背景にデスクトップピクチャを表示（透過・角丸）</li>
+<li>ドラッグ選択中のセルを半透明にし、背景のデスクトップピクチャが透けて見えるように変更</li>
+<li>グリッド内のプリセットホバーハイライトをドラッグ選択時と同じスタイルに統一</li>
+</ul>
+<h3>追加</h3>
+<ul>
+<li>マルチモニター環境で、ウインドウ一覧サイドバーをターゲット画面だけでなく全画面に表示</li>
+<li>サイドバーの状態（表示/非表示、選択中のアイテム、検索テキスト）を全画面のウインドウ間で同期</li>
+<li>リサイズのデバッグログ出力オプション（`~/tiley.log`）を追加（設定 &gt; デバッグ）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>オーバーレイ表示中にDockやメニューバーが自動的に表示/非表示されると、古い画面情報を使ってウインドウが配置される問題を修正</li>
+<li>DPI が異なるディスプレイ構成で、非プライマリスクリーン上のウインドウがリサイズされない問題を修正。リサイズ時にウインドウを一時的にプライマリディスプレイに移動してから目標位置に配置</li>
+<li>リサイズ時に一部のアプリがウインドウ位置を元に戻してしまい、指定した位置に移動できない問題を修正（AX 重複排除の回避）</li>
+<li>アプリの最小ウインドウサイズにより指定サイズまで縮小できない場合、画面端からはみ出さないようウインドウ位置を自動的に再計算するよう改善</li>
+<li>ターゲットウインドウを別画面のウインドウに切り替えた際にウインドウが一瞬ちらつく問題を修正（画面変更時のウインドウ再作成を廃止）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Grid tiles are now transparent when not selected</li>
+<li>Grid aspect ratio now matches the screen's visible area (excluding menu bar and Dock); if the grid would be too tall, its width is reduced proportionally to ensure at least 4 presets remain visible</li>
+<li>Desktop picture is now displayed as the background of the layout grid (with transparency and rounded corners)</li>
+<li>Drag-selected cells are now semi-transparent, showing the desktop picture beneath</li>
+<li>Preset hover highlight in the grid now uses the same style as the drag selection</li>
+</ul>
+<h3>Added</h3>
+<ul>
+<li>Window list sidebar is now displayed on all screens in multi-monitor setups, not just the target screen</li>
+<li>Sidebar state (visibility, selected item, search text) is synchronized across all screen windows</li>
+<li>Optional resize debug log (`~/tiley.log`) for diagnosing window placement issues (Settings &gt; Debug)</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open</li>
+<li>Fixed window resize failing on non-primary screens in mixed-DPI setups; the window is now temporarily moved to the primary display for resizing, then placed at the target position</li>
+<li>Fixed position not being applied after resize when some apps silently revert position changes (AX de-duplication workaround via 1px nudge)</li>
+<li>When an app's minimum window size prevents the requested size, the window position is now recalculated so it stays within the visible screen area instead of extending beyond the edge</li>
+<li>Eliminated visible window flicker when switching target windows across screens; windows are no longer recreated on screen change</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>As células da grade não selecionadas agora são transparentes</li>
+<li>A proporção da grade agora corresponde à área visível da tela (excluindo barra de menus e Dock); se a grade for alta demais, a largura é reduzida proporcionalmente para garantir que pelo menos 4 presets fiquem visíveis</li>
+<li>O fundo da grade de layout agora exibe a imagem de área de trabalho (semitransparente, cantos arredondados)</li>
+<li>As células selecionadas por arrasto agora são semitransparentes, mostrando a imagem de área de trabalho abaixo</li>
+<li>O destaque ao passar o cursor sobre presets na grade agora usa o mesmo estilo da seleção por arrasto</li>
+</ul>
+<h3>Adicionado</h3>
+<ul>
+<li>A barra lateral da lista de janelas agora é exibida em todas as telas em configurações de múltiplos monitores, não apenas na tela de destino</li>
+<li>O estado da barra lateral (visibilidade, item selecionado, texto de pesquisa) é sincronizado entre todas as janelas de tela</li>
+<li>Log de depuração de redimensionamento opcional (`~/tiley.log`) (Configurações &gt; Depuração)</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta</li>
+<li>Corrigido o redimensionamento de janelas falhando em telas não primárias em configurações de DPI misto; a janela é temporariamente movida para a tela primária para redimensionar e então posicionada no local de destino</li>
+<li>Corrigida a posição não sendo aplicada após redimensionamento quando alguns apps revertem silenciosamente as alterações de posição (contorno de deduplicação AX)</li>
+<li>Quando o tamanho mínimo de janela de um app impede o tamanho solicitado, a posição é recalculada para que a janela permaneça dentro da área visível da tela</li>
+<li>Eliminada a oscilação visível das janelas ao alternar janelas de destino entre telas; as janelas não são mais recriadas na mudança de tela</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Le celle della griglia non selezionate sono ora trasparenti</li>
+<li>Le proporzioni della griglia corrispondono ora all'area visibile dello schermo (escluse barra dei menu e Dock); se la griglia risultasse troppo alta, la larghezza viene ridotta proporzionalmente per garantire la visibilità di almeno 4 preset</li>
+<li>Lo sfondo della griglia di layout mostra ora l'immagine del desktop (semitrasparente, angoli arrotondati)</li>
+<li>Le celle selezionate con trascinamento sono ora semitrasparenti, mostrando l'immagine del desktop sottostante</li>
+<li>L'evidenziazione al passaggio del cursore sui preset nella griglia usa ora lo stesso stile della selezione con trascinamento</li>
+</ul>
+<h3>Aggiunto</h3>
+<ul>
+<li>La barra laterale dell'elenco finestre viene ora visualizzata su tutti gli schermi nelle configurazioni multi-monitor, non solo sullo schermo di destinazione</li>
+<li>Lo stato della barra laterale (visibilità, elemento selezionato, testo di ricerca) viene sincronizzato tra tutte le finestre degli schermi</li>
+<li>Log di debug del ridimensionamento opzionale (`~/tiley.log`) (Impostazioni &gt; Debug)</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto</li>
+<li>Corretto il ridimensionamento delle finestre che falliva sugli schermi non primari nelle configurazioni DPI miste; la finestra viene temporaneamente spostata sullo schermo primario per il ridimensionamento e poi posizionata nella posizione target</li>
+<li>Corretta la posizione non applicata dopo il ridimensionamento quando alcune app annullano silenziosamente le modifiche alla posizione (soluzione alternativa alla deduplicazione AX)</li>
+<li>Quando la dimensione minima della finestra di un'app impedisce la dimensione richiesta, la posizione viene ricalcolata affinché la finestra rimanga nell'area visibile dello schermo</li>
+<li>Eliminato lo sfarfallio visibile delle finestre quando si cambia la finestra di destinazione tra schermi; le finestre non vengono più ricreate al cambio di schermo</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Les cellules de grille non sélectionnées sont désormais transparentes</li>
+<li>Le rapport d'aspect de la grille correspond maintenant à la zone visible de l'écran (sans barre de menus ni Dock) ; si la grille serait trop haute, sa largeur est réduite proportionnellement pour garantir l'affichage d'au moins 4 presets</li>
+<li>L'arrière-plan de la grille de mise en page affiche désormais l'image du bureau (semi-transparent, coins arrondis)</li>
+<li>Les cellules sélectionnées par glissement sont désormais semi-transparentes, laissant apparaître l'image du bureau</li>
+<li>La surbrillance au survol des presets dans la grille utilise désormais le même style que la sélection par glissement</li>
+</ul>
+<h3>Ajouté</h3>
+<ul>
+<li>La barre latérale de liste de fenêtres est désormais affichée sur tous les écrans dans les configurations multi-moniteurs, pas seulement sur l'écran cible</li>
+<li>L'état de la barre latérale (visibilité, élément sélectionné, texte de recherche) est synchronisé entre toutes les fenêtres d'écran</li>
+<li>Journal de débogage de redimensionnement optionnel (`~/tiley.log`) (Réglages &gt; Débogage)</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte</li>
+<li>Correction du redimensionnement échouant sur les écrans non principaux dans les configurations DPI mixtes ; la fenêtre est temporairement déplacée vers l'écran principal pour le redimensionnement puis placée à la position cible</li>
+<li>Correction de la position non appliquée après redimensionnement lorsque certaines apps annulent silencieusement les changements de position (contournement de la déduplication AX)</li>
+<li>Lorsque la taille minimale de fenêtre d'une app empêche la taille demandée, la position est recalculée pour que la fenêtre reste dans la zone visible de l'écran</li>
+<li>Suppression du scintillement visible des fenêtres lors du changement de fenêtre cible entre écrans ; les fenêtres ne sont plus recréées lors du changement d'écran</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Las celdas de la cuadrícula no seleccionadas ahora son transparentes</li>
+<li>La relación de aspecto de la cuadrícula ahora coincide con el área visible de la pantalla (sin barra de menú ni Dock); si la cuadrícula sería demasiado alta, su ancho se reduce proporcionalmente para garantizar que al menos 4 presets sean visibles</li>
+<li>El fondo de la cuadrícula de diseño ahora muestra la imagen de escritorio (semitransparente, esquinas redondeadas)</li>
+<li>Las celdas seleccionadas con arrastre ahora son semitransparentes, mostrando la imagen de escritorio por debajo</li>
+<li>El resaltado al pasar el cursor sobre un preset en la cuadrícula ahora usa el mismo estilo que la selección con arrastre</li>
+</ul>
+<h3>Añadido</h3>
+<ul>
+<li>La barra lateral de lista de ventanas ahora se muestra en todas las pantallas en configuraciones de múltiples monitores, no solo en la pantalla objetivo</li>
+<li>El estado de la barra lateral (visibilidad, elemento seleccionado, texto de búsqueda) se sincroniza entre todas las ventanas de pantalla</li>
+<li>Registro de depuración de redimensionamiento opcional (`~/tiley.log`) (Ajustes &gt; Depuración)</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta</li>
+<li>Corregido el redimensionamiento de ventanas fallando en pantallas no primarias en configuraciones de DPI mixto; la ventana se mueve temporalmente a la pantalla primaria para redimensionar y luego se coloca en la posición objetivo</li>
+<li>Corregida la posición no aplicada después del redimensionamiento cuando algunas apps revierten silenciosamente los cambios de posición (solución alternativa de deduplicación AX)</li>
+<li>Cuando el tamaño mínimo de ventana de una app impide el tamaño solicitado, la posición se recalcula para que la ventana permanezca dentro del área visible de la pantalla</li>
+<li>Eliminado el parpadeo visible de ventanas al cambiar ventanas objetivo entre pantallas; las ventanas ya no se recrean al cambiar de pantalla</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Nicht ausgewählte Rasterkacheln sind jetzt transparent</li>
+<li>Das Seitenverhältnis des Rasters entspricht jetzt dem sichtbaren Bildschirmbereich (ohne Menüleiste und Dock); wird das Raster zu hoch, wird die Breite proportional reduziert, damit mindestens 4 Presets sichtbar bleiben</li>
+<li>Der Hintergrund des Layout-Rasters zeigt jetzt das Desktop-Bild (halbtransparent, abgerundete Ecken)</li>
+<li>Per Drag ausgewählte Zellen sind jetzt halbtransparent, sodass das Desktop-Bild darunter sichtbar ist</li>
+<li>Der Vorschau-Hover-Highlight im Raster verwendet jetzt denselben Stil wie die Drag-Auswahl</li>
+</ul>
+<h3>Hinzugefügt</h3>
+<ul>
+<li>Die Fensterlisten-Seitenleiste wird jetzt bei Multi-Monitor-Setups auf allen Bildschirmen angezeigt, nicht nur auf dem Zielbildschirm</li>
+<li>Seitenleistenstatus (Sichtbarkeit, ausgewähltes Element, Suchtext) wird zwischen allen Bildschirmfenstern synchronisiert</li>
+<li>Optionales Debug-Log für Größenänderungen (`~/tiley.log`) (Einstellungen &gt; Fehlersuche)</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde</li>
+<li>Fenstergrößenänderung schlug auf Nicht-Primärbildschirmen in gemischten DPI-Konfigurationen fehl; das Fenster wird jetzt vorübergehend zum Primärbildschirm verschoben und dann an der Zielposition platziert</li>
+<li>Position wurde nach Größenänderung nicht angewendet, wenn Apps die Positionsänderung stillschweigend rückgängig machen (AX-Deduplizierungs-Workaround)</li>
+<li>Wenn die Mindestfenstergröße einer App die angeforderte Größe verhindert, wird die Fensterposition neu berechnet, damit es im sichtbaren Bildschirmbereich bleibt</li>
+<li>Sichtbares Fensterflackern beim Wechseln des Zielfensters zwischen Bildschirmen behoben; Fenster werden beim Bildschirmwechsel nicht mehr neu erstellt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>未選取的格線方格改為透明顯示</li>
+<li>格線長寬比現在與去除選單列和 Dock 後的螢幕尺寸一致。若格線過高，將在保持比例的前提下縮小寬度，確保至少顯示 4 個預設方案</li>
+<li>版面格線背景現在顯示桌面圖片（半透明、圓角）</li>
+<li>拖曳選取的方格改為半透明，背景桌面圖片透過顯示</li>
+<li>格線內預設懸停高亮樣式統一為與拖曳選取時相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多螢幕環境中，視窗列表側邊欄現在顯示在所有螢幕上，而不僅僅是目標螢幕</li>
+<li>側邊欄狀態（顯示/隱藏、選取項目、搜尋文字）在所有螢幕的視窗之間同步</li>
+<li>調整大小除錯日誌輸出選項（`~/tiley.log`）（設定 &gt; 除錯）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了在覆蓋層顯示期間 Dock 或選單列自動顯示/隱藏時，使用過時的螢幕資訊導致視窗被放置在錯誤位置的問題</li>
+<li>修正了在混合 DPI 顯示器配置中，非主螢幕上的視窗無法調整大小的問題。調整大小時視窗會暫時移動到主顯示器，然後放置到目標位置</li>
+<li>修正了調整大小時部分應用程式將視窗位置還原，導致無法移動到指定位置的問題（AX 去重規避）</li>
+<li>當應用程式的最小視窗大小限制導致無法縮小到指定大小時，自動重新計算視窗位置以避免超出螢幕邊緣</li>
+<li>修正了將目標視窗切換到其他螢幕的視窗時，視窗短暫閃爍的問題（取消螢幕切換時的視窗重建）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>未选中的网格方块改为透明显示</li>
+<li>网格长宽比现在与去除菜单栏和 Dock 后的屏幕尺寸一致。若网格过高，将在保持比例的前提下缩小宽度，确保至少显示 4 个预设方案</li>
+<li>布局网格背景现在显示桌面壁纸（半透明、圆角）</li>
+<li>拖拽选中的方块改为半透明，背景桌面壁纸透过显示</li>
+<li>网格内预设悬停高亮样式统一为与拖拽选择时相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多显示器环境中，窗口列表侧边栏现在显示在所有屏幕上，而不仅仅是目标屏幕</li>
+<li>侧边栏状态（显示/隐藏、选中项目、搜索文本）在所有屏幕的窗口之间同步</li>
+<li>调整大小调试日志输出选项（`~/tiley.log`）（设置 &gt; 调试）</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了在覆盖层显示期间 Dock 或菜单栏自动显示/隐藏时，使用过时的屏幕信息导致窗口被放置在错误位置的问题</li>
+<li>修复了在混合 DPI 显示器配置中，非主屏幕上的窗口无法调整大小的问题。调整大小时窗口会临时移动到主显示器，然后放置到目标位置</li>
+<li>修复了调整大小时部分应用将窗口位置恢复原位，导致无法移动到指定位置的问题（AX 去重规避）</li>
+<li>当应用的最小窗口大小限制导致无法缩小到指定大小时，自动重新计算窗口位置以避免超出屏幕边缘</li>
+<li>修复了将目标窗口切换到其他屏幕的窗口时，窗口短暂闪烁的问题（取消屏幕切换时的窗口重建）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>선택되지 않은 그리드 타일을 투명하게 변경</li>
+<li>그리드 가로세로 비율을 메뉴 바 및 Dock을 제외한 화면 크기에 맞게 조정. 그리드가 너무 높아질 경우 비율을 유지하면서 너비를 축소하여 최소 4개의 프리셋이 항상 표시되도록 개선</li>
+<li>레이아웃 그리드 배경에 데스크탑 사진 표시 (반투명, 모서리 둥글게)</li>
+<li>드래그 선택 중인 셀을 반투명으로 변경하여 배경 데스크탑 사진이 비쳐 보이도록 개선</li>
+<li>그리드 내 프리셋 호버 하이라이트를 드래그 선택 시와 동일한 스타일로 통일</li>
+</ul>
+<h3>추가</h3>
+<ul>
+<li>멀티 모니터 환경에서 윈도우 목록 사이드바를 대상 화면뿐만 아니라 모든 화면에 표시</li>
+<li>사이드바 상태(표시/숨김, 선택된 항목, 검색 텍스트)를 모든 화면의 윈도우 간에 동기화</li>
+<li>리사이즈 디버그 로그 출력 옵션 (`~/tiley.log`) 추가 (설정 &gt; 디버그)</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>오버레이 표시 중 Dock 또는 메뉴 막대가 자동으로 표시/숨김되면 이전 화면 정보를 사용하여 윈도우가 잘못된 위치에 배치되는 문제를 수정</li>
+<li>DPI가 다른 디스플레이 구성에서 비프라이머리 스크린의 윈도우가 리사이즈되지 않는 문제를 수정. 리사이즈 시 윈도우를 일시적으로 프라이머리 디스플레이로 이동한 후 목표 위치에 배치</li>
+<li>리사이즈 시 일부 앱이 윈도우 위치를 원래대로 되돌려 지정한 위치로 이동되지 않는 문제를 수정 (AX 중복 제거 우회)</li>
+<li>앱의 최소 윈도우 크기로 인해 지정 크기까지 축소할 수 없을 경우, 화면 밖으로 나가지 않도록 윈도우 위치를 자동으로 재계산</li>
+<li>대상 윈도우를 다른 화면의 윈도우로 전환할 때 윈도우가 순간적으로 깜빡이는 문제를 수정 (화면 변경 시 윈도우 재생성 폐지)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>非選択状態のグリッドタイルを透過表示に変更</li>
+<li>グリッドのアスペクト比をメニューバーおよびDockを除いたスクリーンサイズに合わせて調整。グリッドが縦に長くなりすぎる場合は、アスペクト比を保ったまま横幅を縮小し、最低4つのプリセットが常に表示されるよう対応</li>
+<li>レイアウトグリッドの背景にデスクトップピクチャを表示（透過・角丸）</li>
+<li>ドラッグ選択中のセルを半透明にし、背景のデスクトップピクチャが透けて見えるように変更</li>
+<li>グリッド内のプリセットホバーハイライトをドラッグ選択時と同じスタイルに統一</li>
+</ul>
+<h3>追加</h3>
+<ul>
+<li>マルチモニター環境で、ウインドウ一覧サイドバーをターゲット画面だけでなく全画面に表示</li>
+<li>サイドバーの状態（表示/非表示、選択中のアイテム、検索テキスト）を全画面のウインドウ間で同期</li>
+<li>リサイズのデバッグログ出力オプション（`~/tiley.log`）を追加（設定 &gt; デバッグ）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>オーバーレイ表示中にDockやメニューバーが自動的に表示/非表示されると、古い画面情報を使ってウインドウが配置される問題を修正</li>
+<li>DPI が異なるディスプレイ構成で、非プライマリスクリーン上のウインドウがリサイズされない問題を修正。リサイズ時にウインドウを一時的にプライマリディスプレイに移動してから目標位置に配置</li>
+<li>リサイズ時に一部のアプリがウインドウ位置を元に戻してしまい、指定した位置に移動できない問題を修正（AX 重複排除の回避）</li>
+<li>アプリの最小ウインドウサイズにより指定サイズまで縮小できない場合、画面端からはみ出さないようウインドウ位置を自動的に再計算するよう改善</li>
+<li>ターゲットウインドウを別画面のウインドウに切り替えた際にウインドウが一瞬ちらつく問題を修正（画面変更時のウインドウ再作成を廃止）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Grid tiles are now transparent when not selected</li>
+<li>Grid aspect ratio now matches the screen's visible area (excluding menu bar and Dock); if the grid would be too tall, its width is reduced proportionally to ensure at least 4 presets remain visible</li>
+<li>Desktop picture is now displayed as the background of the layout grid (with transparency and rounded corners)</li>
+<li>Drag-selected cells are now semi-transparent, showing the desktop picture beneath</li>
+<li>Preset hover highlight in the grid now uses the same style as the drag selection</li>
+</ul>
+<h3>Added</h3>
+<ul>
+<li>Window list sidebar is now displayed on all screens in multi-monitor setups, not just the target screen</li>
+<li>Sidebar state (visibility, selected item, search text) is synchronized across all screen windows</li>
+<li>Optional resize debug log (`~/tiley.log`) for diagnosing window placement issues (Settings &gt; Debug)</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open</li>
+<li>Fixed window resize failing on non-primary screens in mixed-DPI setups; the window is now temporarily moved to the primary display for resizing, then placed at the target position</li>
+<li>Fixed position not being applied after resize when some apps silently revert position changes (AX de-duplication workaround via 1px nudge)</li>
+<li>When an app's minimum window size prevents the requested size, the window position is now recalculated so it stays within the visible screen area instead of extending beyond the edge</li>
+<li>Eliminated visible window flicker when switching target windows across screens; windows are no longer recreated on screen change</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>As células da grade não selecionadas agora são transparentes</li>
+<li>A proporção da grade agora corresponde à área visível da tela (excluindo barra de menus e Dock); se a grade for alta demais, a largura é reduzida proporcionalmente para garantir que pelo menos 4 presets fiquem visíveis</li>
+<li>O fundo da grade de layout agora exibe a imagem de área de trabalho (semitransparente, cantos arredondados)</li>
+<li>As células selecionadas por arrasto agora são semitransparentes, mostrando a imagem de área de trabalho abaixo</li>
+<li>O destaque ao passar o cursor sobre presets na grade agora usa o mesmo estilo da seleção por arrasto</li>
+</ul>
+<h3>Adicionado</h3>
+<ul>
+<li>A barra lateral da lista de janelas agora é exibida em todas as telas em configurações de múltiplos monitores, não apenas na tela de destino</li>
+<li>O estado da barra lateral (visibilidade, item selecionado, texto de pesquisa) é sincronizado entre todas as janelas de tela</li>
+<li>Log de depuração de redimensionamento opcional (`~/tiley.log`) (Configurações &gt; Depuração)</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde o posicionamento de janelas usava geometria de tela desatualizada quando o Dock ou a barra de menus eram exibidos/ocultados automaticamente enquanto a sobreposição estava aberta</li>
+<li>Corrigido o redimensionamento de janelas falhando em telas não primárias em configurações de DPI misto; a janela é temporariamente movida para a tela primária para redimensionar e então posicionada no local de destino</li>
+<li>Corrigida a posição não sendo aplicada após redimensionamento quando alguns apps revertem silenciosamente as alterações de posição (contorno de deduplicação AX)</li>
+<li>Quando o tamanho mínimo de janela de um app impede o tamanho solicitado, a posição é recalculada para que a janela permaneça dentro da área visível da tela</li>
+<li>Eliminada a oscilação visível das janelas ao alternar janelas de destino entre telas; as janelas não são mais recriadas na mudança de tela</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Le celle della griglia non selezionate sono ora trasparenti</li>
+<li>Le proporzioni della griglia corrispondono ora all'area visibile dello schermo (escluse barra dei menu e Dock); se la griglia risultasse troppo alta, la larghezza viene ridotta proporzionalmente per garantire la visibilità di almeno 4 preset</li>
+<li>Lo sfondo della griglia di layout mostra ora l'immagine del desktop (semitrasparente, angoli arrotondati)</li>
+<li>Le celle selezionate con trascinamento sono ora semitrasparenti, mostrando l'immagine del desktop sottostante</li>
+<li>L'evidenziazione al passaggio del cursore sui preset nella griglia usa ora lo stesso stile della selezione con trascinamento</li>
+</ul>
+<h3>Aggiunto</h3>
+<ul>
+<li>La barra laterale dell'elenco finestre viene ora visualizzata su tutti gli schermi nelle configurazioni multi-monitor, non solo sullo schermo di destinazione</li>
+<li>Lo stato della barra laterale (visibilità, elemento selezionato, testo di ricerca) viene sincronizzato tra tutte le finestre degli schermi</li>
+<li>Log di debug del ridimensionamento opzionale (`~/tiley.log`) (Impostazioni &gt; Debug)</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema in cui il posizionamento della finestra utilizzava la geometria dello schermo obsoleta quando il Dock o la barra dei menu si mostravano/nascondevano automaticamente mentre l'overlay era aperto</li>
+<li>Corretto il ridimensionamento delle finestre che falliva sugli schermi non primari nelle configurazioni DPI miste; la finestra viene temporaneamente spostata sullo schermo primario per il ridimensionamento e poi posizionata nella posizione target</li>
+<li>Corretta la posizione non applicata dopo il ridimensionamento quando alcune app annullano silenziosamente le modifiche alla posizione (soluzione alternativa alla deduplicazione AX)</li>
+<li>Quando la dimensione minima della finestra di un'app impedisce la dimensione richiesta, la posizione viene ricalcolata affinché la finestra rimanga nell'area visibile dello schermo</li>
+<li>Eliminato lo sfarfallio visibile delle finestre quando si cambia la finestra di destinazione tra schermi; le finestre non vengono più ricreate al cambio di schermo</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Les cellules de grille non sélectionnées sont désormais transparentes</li>
+<li>Le rapport d'aspect de la grille correspond maintenant à la zone visible de l'écran (sans barre de menus ni Dock) ; si la grille serait trop haute, sa largeur est réduite proportionnellement pour garantir l'affichage d'au moins 4 presets</li>
+<li>L'arrière-plan de la grille de mise en page affiche désormais l'image du bureau (semi-transparent, coins arrondis)</li>
+<li>Les cellules sélectionnées par glissement sont désormais semi-transparentes, laissant apparaître l'image du bureau</li>
+<li>La surbrillance au survol des presets dans la grille utilise désormais le même style que la sélection par glissement</li>
+</ul>
+<h3>Ajouté</h3>
+<ul>
+<li>La barre latérale de liste de fenêtres est désormais affichée sur tous les écrans dans les configurations multi-moniteurs, pas seulement sur l'écran cible</li>
+<li>L'état de la barre latérale (visibilité, élément sélectionné, texte de recherche) est synchronisé entre toutes les fenêtres d'écran</li>
+<li>Journal de débogage de redimensionnement optionnel (`~/tiley.log`) (Réglages &gt; Débogage)</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du placement de fenêtre utilisant une géométrie d'écran obsolète lorsque le Dock ou la barre des menus s'affichait/masquait automatiquement pendant que la superposition était ouverte</li>
+<li>Correction du redimensionnement échouant sur les écrans non principaux dans les configurations DPI mixtes ; la fenêtre est temporairement déplacée vers l'écran principal pour le redimensionnement puis placée à la position cible</li>
+<li>Correction de la position non appliquée après redimensionnement lorsque certaines apps annulent silencieusement les changements de position (contournement de la déduplication AX)</li>
+<li>Lorsque la taille minimale de fenêtre d'une app empêche la taille demandée, la position est recalculée pour que la fenêtre reste dans la zone visible de l'écran</li>
+<li>Suppression du scintillement visible des fenêtres lors du changement de fenêtre cible entre écrans ; les fenêtres ne sont plus recréées lors du changement d'écran</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Las celdas de la cuadrícula no seleccionadas ahora son transparentes</li>
+<li>La relación de aspecto de la cuadrícula ahora coincide con el área visible de la pantalla (sin barra de menú ni Dock); si la cuadrícula sería demasiado alta, su ancho se reduce proporcionalmente para garantizar que al menos 4 presets sean visibles</li>
+<li>El fondo de la cuadrícula de diseño ahora muestra la imagen de escritorio (semitransparente, esquinas redondeadas)</li>
+<li>Las celdas seleccionadas con arrastre ahora son semitransparentes, mostrando la imagen de escritorio por debajo</li>
+<li>El resaltado al pasar el cursor sobre un preset en la cuadrícula ahora usa el mismo estilo que la selección con arrastre</li>
+</ul>
+<h3>Añadido</h3>
+<ul>
+<li>La barra lateral de lista de ventanas ahora se muestra en todas las pantallas en configuraciones de múltiples monitores, no solo en la pantalla objetivo</li>
+<li>El estado de la barra lateral (visibilidad, elemento seleccionado, texto de búsqueda) se sincroniza entre todas las ventanas de pantalla</li>
+<li>Registro de depuración de redimensionamiento opcional (`~/tiley.log`) (Ajustes &gt; Depuración)</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde la colocación de ventanas usaba geometría de pantalla obsoleta cuando el Dock o la barra de menús se mostraban/ocultaban automáticamente mientras la superposición estaba abierta</li>
+<li>Corregido el redimensionamiento de ventanas fallando en pantallas no primarias en configuraciones de DPI mixto; la ventana se mueve temporalmente a la pantalla primaria para redimensionar y luego se coloca en la posición objetivo</li>
+<li>Corregida la posición no aplicada después del redimensionamiento cuando algunas apps revierten silenciosamente los cambios de posición (solución alternativa de deduplicación AX)</li>
+<li>Cuando el tamaño mínimo de ventana de una app impide el tamaño solicitado, la posición se recalcula para que la ventana permanezca dentro del área visible de la pantalla</li>
+<li>Eliminado el parpadeo visible de ventanas al cambiar ventanas objetivo entre pantallas; las ventanas ya no se recrean al cambiar de pantalla</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Nicht ausgewählte Rasterkacheln sind jetzt transparent</li>
+<li>Das Seitenverhältnis des Rasters entspricht jetzt dem sichtbaren Bildschirmbereich (ohne Menüleiste und Dock); wird das Raster zu hoch, wird die Breite proportional reduziert, damit mindestens 4 Presets sichtbar bleiben</li>
+<li>Der Hintergrund des Layout-Rasters zeigt jetzt das Desktop-Bild (halbtransparent, abgerundete Ecken)</li>
+<li>Per Drag ausgewählte Zellen sind jetzt halbtransparent, sodass das Desktop-Bild darunter sichtbar ist</li>
+<li>Der Vorschau-Hover-Highlight im Raster verwendet jetzt denselben Stil wie die Drag-Auswahl</li>
+</ul>
+<h3>Hinzugefügt</h3>
+<ul>
+<li>Die Fensterlisten-Seitenleiste wird jetzt bei Multi-Monitor-Setups auf allen Bildschirmen angezeigt, nicht nur auf dem Zielbildschirm</li>
+<li>Seitenleistenstatus (Sichtbarkeit, ausgewähltes Element, Suchtext) wird zwischen allen Bildschirmfenstern synchronisiert</li>
+<li>Optionales Debug-Log für Größenänderungen (`~/tiley.log`) (Einstellungen &gt; Fehlersuche)</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fensterplatzierung verwendete veraltete Bildschirmgeometrie, wenn das Dock oder die Menüleiste während der Overlay-Anzeige automatisch ein-/ausgeblendet wurde</li>
+<li>Fenstergrößenänderung schlug auf Nicht-Primärbildschirmen in gemischten DPI-Konfigurationen fehl; das Fenster wird jetzt vorübergehend zum Primärbildschirm verschoben und dann an der Zielposition platziert</li>
+<li>Position wurde nach Größenänderung nicht angewendet, wenn Apps die Positionsänderung stillschweigend rückgängig machen (AX-Deduplizierungs-Workaround)</li>
+<li>Wenn die Mindestfenstergröße einer App die angeforderte Größe verhindert, wird die Fensterposition neu berechnet, damit es im sichtbaren Bildschirmbereich bleibt</li>
+<li>Sichtbares Fensterflackern beim Wechseln des Zielfensters zwischen Bildschirmen behoben; Fenster werden beim Bildschirmwechsel nicht mehr neu erstellt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>未選取的格線方格改為透明顯示</li>
+<li>格線長寬比現在與去除選單列和 Dock 後的螢幕尺寸一致。若格線過高，將在保持比例的前提下縮小寬度，確保至少顯示 4 個預設方案</li>
+<li>版面格線背景現在顯示桌面圖片（半透明、圓角）</li>
+<li>拖曳選取的方格改為半透明，背景桌面圖片透過顯示</li>
+<li>格線內預設懸停高亮樣式統一為與拖曳選取時相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多螢幕環境中，視窗列表側邊欄現在顯示在所有螢幕上，而不僅僅是目標螢幕</li>
+<li>側邊欄狀態（顯示/隱藏、選取項目、搜尋文字）在所有螢幕的視窗之間同步</li>
+<li>調整大小除錯日誌輸出選項（`~/tiley.log`）（設定 &gt; 除錯）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了在覆蓋層顯示期間 Dock 或選單列自動顯示/隱藏時，使用過時的螢幕資訊導致視窗被放置在錯誤位置的問題</li>
+<li>修正了在混合 DPI 顯示器配置中，非主螢幕上的視窗無法調整大小的問題。調整大小時視窗會暫時移動到主顯示器，然後放置到目標位置</li>
+<li>修正了調整大小時部分應用程式將視窗位置還原，導致無法移動到指定位置的問題（AX 去重規避）</li>
+<li>當應用程式的最小視窗大小限制導致無法縮小到指定大小時，自動重新計算視窗位置以避免超出螢幕邊緣</li>
+<li>修正了將目標視窗切換到其他螢幕的視窗時，視窗短暫閃爍的問題（取消螢幕切換時的視窗重建）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>未选中的网格方块改为透明显示</li>
+<li>网格长宽比现在与去除菜单栏和 Dock 后的屏幕尺寸一致。若网格过高，将在保持比例的前提下缩小宽度，确保至少显示 4 个预设方案</li>
+<li>布局网格背景现在显示桌面壁纸（半透明、圆角）</li>
+<li>拖拽选中的方块改为半透明，背景桌面壁纸透过显示</li>
+<li>网格内预设悬停高亮样式统一为与拖拽选择时相同</li>
+</ul>
+<h3>新增</h3>
+<ul>
+<li>在多显示器环境中，窗口列表侧边栏现在显示在所有屏幕上，而不仅仅是目标屏幕</li>
+<li>侧边栏状态（显示/隐藏、选中项目、搜索文本）在所有屏幕的窗口之间同步</li>
+<li>调整大小调试日志输出选项（`~/tiley.log`）（设置 &gt; 调试）</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了在覆盖层显示期间 Dock 或菜单栏自动显示/隐藏时，使用过时的屏幕信息导致窗口被放置在错误位置的问题</li>
+<li>修复了在混合 DPI 显示器配置中，非主屏幕上的窗口无法调整大小的问题。调整大小时窗口会临时移动到主显示器，然后放置到目标位置</li>
+<li>修复了调整大小时部分应用将窗口位置恢复原位，导致无法移动到指定位置的问题（AX 去重规避）</li>
+<li>当应用的最小窗口大小限制导致无法缩小到指定大小时，自动重新计算窗口位置以避免超出屏幕边缘</li>
+<li>修复了将目标窗口切换到其他屏幕的窗口时，窗口短暂闪烁的问题（取消屏幕切换时的窗口重建）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>선택되지 않은 그리드 타일을 투명하게 변경</li>
+<li>그리드 가로세로 비율을 메뉴 바 및 Dock을 제외한 화면 크기에 맞게 조정. 그리드가 너무 높아질 경우 비율을 유지하면서 너비를 축소하여 최소 4개의 프리셋이 항상 표시되도록 개선</li>
+<li>레이아웃 그리드 배경에 데스크탑 사진 표시 (반투명, 모서리 둥글게)</li>
+<li>드래그 선택 중인 셀을 반투명으로 변경하여 배경 데스크탑 사진이 비쳐 보이도록 개선</li>
+<li>그리드 내 프리셋 호버 하이라이트를 드래그 선택 시와 동일한 스타일로 통일</li>
+</ul>
+<h3>추가</h3>
+<ul>
+<li>멀티 모니터 환경에서 윈도우 목록 사이드바를 대상 화면뿐만 아니라 모든 화면에 표시</li>
+<li>사이드바 상태(표시/숨김, 선택된 항목, 검색 텍스트)를 모든 화면의 윈도우 간에 동기화</li>
+<li>리사이즈 디버그 로그 출력 옵션 (`~/tiley.log`) 추가 (설정 &gt; 디버그)</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>오버레이 표시 중 Dock 또는 메뉴 막대가 자동으로 표시/숨김되면 이전 화면 정보를 사용하여 윈도우가 잘못된 위치에 배치되는 문제를 수정</li>
+<li>DPI가 다른 디스플레이 구성에서 비프라이머리 스크린의 윈도우가 리사이즈되지 않는 문제를 수정. 리사이즈 시 윈도우를 일시적으로 프라이머리 디스플레이로 이동한 후 목표 위치에 배치</li>
+<li>리사이즈 시 일부 앱이 윈도우 위치를 원래대로 되돌려 지정한 위치로 이동되지 않는 문제를 수정 (AX 중복 제거 우회)</li>
+<li>앱의 최소 윈도우 크기로 인해 지정 크기까지 축소할 수 없을 경우, 화면 밖으로 나가지 않도록 윈도우 위치를 자동으로 재계산</li>
+<li>대상 윈도우를 다른 화면의 윈도우로 전환할 때 윈도우가 순간적으로 깜빡이는 문제를 수정 (화면 변경 시 윈도우 재생성 폐지)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>非選択状態のグリッドタイルを透過表示に変更</li>
+<li>グリッドのアスペクト比をメニューバーおよびDockを除いたスクリーンサイズに合わせて調整。グリッドが縦に長くなりすぎる場合は、アスペクト比を保ったまま横幅を縮小し、最低4つのプリセットが常に表示されるよう対応</li>
+<li>レイアウトグリッドの背景にデスクトップピクチャを表示（透過・角丸）</li>
+<li>ドラッグ選択中のセルを半透明にし、背景のデスクトップピクチャが透けて見えるように変更</li>
+<li>グリッド内のプリセットホバーハイライトをドラッグ選択時と同じスタイルに統一</li>
+</ul>
+<h3>追加</h3>
+<ul>
+<li>マルチモニター環境で、ウインドウ一覧サイドバーをターゲット画面だけでなく全画面に表示</li>
+<li>サイドバーの状態（表示/非表示、選択中のアイテム、検索テキスト）を全画面のウインドウ間で同期</li>
+<li>リサイズのデバッグログ出力オプション（`~/tiley.log`）を追加（設定 &gt; デバッグ）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>オーバーレイ表示中にDockやメニューバーが自動的に表示/非表示されると、古い画面情報を使ってウインドウが配置される問題を修正</li>
+<li>DPI が異なるディスプレイ構成で、非プライマリスクリーン上のウインドウがリサイズされない問題を修正。リサイズ時にウインドウを一時的にプライマリディスプレイに移動してから目標位置に配置</li>
+<li>リサイズ時に一部のアプリがウインドウ位置を元に戻してしまい、指定した位置に移動できない問題を修正（AX 重複排除の回避）</li>
+<li>アプリの最小ウインドウサイズにより指定サイズまで縮小できない場合、画面端からはみ出さないようウインドウ位置を自動的に再計算するよう改善</li>
+<li>ターゲットウインドウを別画面のウインドウに切り替えた際にウインドウが一瞬ちらつく問題を修正（画面変更時のウインドウ再作成を廃止）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Grid tiles are now transparent when not selected</li>
+<li>Grid aspect ratio now matches the screen's visible area (excluding menu bar and Dock); if the grid would be too tall, its width is reduced proportionally to ensure at least 4 presets remain visible</li>
+<li>Desktop picture is now displayed as the background of the layout grid (with transparency and rounded corners)</li>
+<li>Drag-selected cells are now semi-transparent, showing the desktop picture beneath</li>
+<li>Preset hover highlight in the grid now uses the same style as the drag selection</li>
+</ul>
+<h3>Added</h3>
+<ul>
+<li>Window list sidebar is now displayed on all screens in multi-monitor setups, not just the target screen</li>
+<li>Sidebar state (visibility, selected item, search text) is synchronized across all screen windows</li>
+<li>Optional resize debug log (`~/tiley.log`) for diagnosing window placement issues (Settings &gt; Debug)</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window placement using stale screen geometry when the Dock or menu bar auto-shows/hides while the overlay is open</li>
+<li>Fixed window resize failing on non-primary screens in mixed-DPI setups; the window is now temporarily moved to the primary display for resizing, then placed at the target position</li>
+<li>Fixed position not being applied after resize when some apps silently revert position changes (AX de-duplication workaround via 1px nudge)</li>
+<li>When an app's minimum window size prevents the requested size, the window position is now recalculated so it stays within the visible screen area instead of extending beyond the edge</li>
+<li>Eliminated visible window flicker when switching target windows across screens; windows are no longer recreated on screen change</li>
+</ul>]]></description>
             <pubDate>Sat, 21 Mar 2026 16:13:17 +0900</pubDate>
             <sparkle:version>220</sparkle:version>
             <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley-2.2.0.zip" length="4695080" type="application/octet-stream" sparkle:edSignature="JlObKOKWn9UyvdgRv3pRg0a3WxG56qRJ/wG6lR6vy8eKt4KzsHWU42Da395PSG84K7o/il0mcFCSazJHLYsJBA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley-2.2.0.zip" length="4695080" type="application/octet-stream" sparkle:edSignature="JlObKOKWn9UyvdgRv3pRg0a3WxG56qRJ/wG6lR6vy8eKt4KzsHWU42Da395PSG84K7o/il0mcFCSazJHLYsJBA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley220-210.delta" sparkle:deltaFrom="210" length="222598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="pVVu4+qjE1UG3M/LojCfpQvJvkgdNQKu1gqaCXEiISPo/z5Dygi28a2vTVgFFhdHZieUw0VTO5Fa4OOOkOdQDA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley220-203.delta" sparkle:deltaFrom="203" length="282386" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="hIifOxl5vdmmBdJZusnOSwn7jsLp1WG4cwoj8J0Ckrx7ZxMSqjeuNvx2QZRB8UBMIJhSuxOMco1WbwiFyX1sDQ=="/>
@@ -270,6 +1555,306 @@
   - «Скрыть окна кроме [Приложения]» — скрывает все остальные приложения (аналог Cmd-H), отображает выбранное приложение, если оно было скрыто
 <li>Скрытые (Cmd-H) приложения теперь отображаются в боковой панели как записи-заполнители (только имя приложения) с 50% непрозрачностью</li>
 <li>При выборе скрытого приложения (Enter, двойной клик, изменение размера через сетку/компоновку) оно автоматически отображается и операция выполняется над его передним окном</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Duplo clique em uma janela na barra lateral para trazê-la para o primeiro plano e fechar a grade de layout</li>
+<li>Menu de contexto (botão de reticências) nas linhas de janelas da barra lateral com três ações:</li>
+  - "Fechar outras janelas do [App]" — fecha outras janelas do mesmo app (exibido apenas quando o app tem múltiplas janelas)
+  - "Encerrar [App]" — encerra o aplicativo
+  - "Ocultar janelas exceto [App]" — oculta todos os outros aplicativos (equivalente a Cmd-H), exibe o app selecionado se estava oculto
+<li>Aplicativos ocultos (Cmd-H) agora aparecem na barra lateral como entradas de espaço reservado (apenas nome do app) e são exibidos com 50% de opacidade</li>
+<li>Ao selecionar um app oculto (Enter, duplo clique, redimensionar com grade/layout) ele é automaticamente exibido e a operação é realizada na sua janela principal</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Doppio clic su una finestra nella barra laterale per portarla in primo piano e chiudere la griglia di layout</li>
+<li>Menu contestuale (pulsante puntini di sospensione) sulle righe delle finestre nella barra laterale con tre azioni:</li>
+  - "Chiudi altre finestre di [App]" — chiude le altre finestre della stessa app (mostrato solo quando l'app ha più finestre)
+  - "Esci da [App]" — termina l'applicazione
+  - "Nascondi finestre tranne [App]" — nasconde tutte le altre applicazioni (equivalente di Cmd-H), mostra l'app selezionata se era nascosta
+<li>Le applicazioni nascoste (Cmd-H) appaiono ora nella barra laterale come voci segnaposto (solo nome dell'app) e vengono visualizzate al 50% di opacità</li>
+<li>Selezionando un'app nascosta (Invio, doppio clic, ridimensionamento griglia/layout) viene automaticamente mostrata e si opera sulla sua finestra in primo piano</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Double-clic sur une fenêtre dans la barre latérale pour la mettre au premier plan et fermer la grille de disposition</li>
+<li>Menu contextuel (bouton points de suspension) sur les lignes de fenêtres de la barre latérale avec trois actions :</li>
+  - « Fermer les autres fenêtres de [App] » — ferme les autres fenêtres de la même app (affiché uniquement quand l'app a plusieurs fenêtres)
+  - « Quitter [App] » — ferme l'application
+  - « Masquer les fenêtres sauf [App] » — masque toutes les autres applications (équivalent Cmd-H), affiche l'app sélectionnée si elle était masquée
+<li>Les applications masquées (Cmd-H) apparaissent désormais dans la barre latérale comme entrées de remplacement (nom de l'app uniquement) et sont affichées à 50 % d'opacité</li>
+<li>La sélection d'une app masquée (Entrée, double-clic, redimensionnement grille/disposition) la rend automatiquement visible et opère sur sa fenêtre au premier plan</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Doble clic en una ventana de la barra lateral para traerla al frente y cerrar la cuadrícula de diseño</li>
+<li>Menú contextual (botón de puntos suspensivos) en las filas de ventanas de la barra lateral con tres acciones:</li>
+  - "Cerrar otras ventanas de [App]" — cierra otras ventanas de la misma app (solo se muestra cuando la app tiene múltiples ventanas)
+  - "Salir de [App]" — cierra la aplicación
+  - "Ocultar ventanas excepto [App]" — oculta todas las demás aplicaciones (equivalente a Cmd-H), muestra la app seleccionada si estaba oculta
+<li>Las aplicaciones ocultas (Cmd-H) ahora aparecen en la barra lateral como entradas de marcador (solo nombre de la app) y se muestran con 50 % de opacidad</li>
+<li>Al seleccionar una app oculta (Enter, doble clic, redimensionar con cuadrícula/diseño) se muestra automáticamente y se opera sobre su ventana principal</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Doppelklick auf ein Fenster in der Seitenleiste bringt es in den Vordergrund und schließt das Layout-Raster</li>
+<li>Kontextmenü (Auslassungspunkte-Taste) in den Fensterzeilen der Seitenleiste mit drei Aktionen:</li>
+  - „Andere Fenster von [App] schließen" — schließt andere Fenster derselben App (nur angezeigt, wenn die App mehrere Fenster hat)
+  - „[App] beenden" — beendet die Anwendung
+  - „Fenster außer [App] ausblenden" — blendet alle anderen Anwendungen aus (Cmd-H-Äquivalent), blendet die ausgewählte App wieder ein, falls sie ausgeblendet war
+<li>Ausgeblendete (Cmd-H) Anwendungen erscheinen jetzt als Platzhaltereinträge in der Seitenleiste (nur App-Name) und werden mit 50 % Deckkraft angezeigt</li>
+<li>Beim Auswählen einer ausgeblendeten App (Enter, Doppelklick, Raster-/Layout-Größenänderung) wird sie automatisch eingeblendet und das vorderste Fenster wird verwendet</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在側邊欄視窗列表中雙擊可將該視窗置於最前面並關閉佈局網格</li>
+<li>側邊欄視窗列的右鍵選單（省略號按鈕），提供三個操作：</li>
+  - 「關閉 [應用程式] 的其他視窗」— 關閉同一應用程式的其他視窗（僅當應用程式有多個視窗時顯示）
+  - 「結束 [應用程式]」— 終止應用程式
+  - 「隱藏 [應用程式] 以外的視窗」— 隱藏所有其他應用程式（相當於 Cmd-H），若所選應用程式已被隱藏則取消隱藏
+<li>隱藏的（Cmd-H）應用程式現在在側邊欄中顯示為佔位項目（僅顯示應用程式名稱），以 50% 不透明度顯示</li>
+<li>選擇隱藏的應用程式（Enter、雙擊、網格/佈局調整大小）會自動取消隱藏並操作其最前面的視窗</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在侧边栏窗口列表中双击可将该窗口置于最前面并关闭布局网格</li>
+<li>侧边栏窗口行的上下文菜单（省略号按钮），提供三个操作：</li>
+  - "关闭 [应用] 的其他窗口" — 关闭同一应用的其他窗口（仅当应用有多个窗口时显示）
+  - "退出 [应用]" — 终止应用程序
+  - "隐藏 [应用] 以外的窗口" — 隐藏所有其他应用程序（相当于 Cmd-H），如果所选应用已被隐藏则取消隐藏
+<li>隐藏的（Cmd-H）应用程序现在在侧边栏中显示为占位条目（仅显示应用名称），以 50% 不透明度显示</li>
+<li>选择隐藏的应用（Enter、双击、网格/布局调整大小）会自动取消隐藏并操作其最前面的窗口</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바 창 목록에서 더블 클릭하면 해당 창을 최전면으로 가져오고 레이아웃 그리드를 닫음</li>
+<li>사이드바 창 행의 컨텍스트 메뉴(말줄임표 버튼)에 세 가지 동작 추가:</li>
+  - "[앱]의 다른 창 닫기" — 같은 앱의 다른 창을 닫음 (앱에 여러 창이 있을 때만 표시)
+  - "[앱] 종료" — 애플리케이션을 종료
+  - "[앱] 외 창 숨기기" — 다른 모든 애플리케이션을 숨김 (Cmd-H 동작), 선택한 앱이 숨겨져 있으면 숨김 해제
+<li>숨겨진 (Cmd-H) 애플리케이션이 사이드바에 플레이스홀더 항목으로 표시되며 (앱 이름만) 50% 불투명도로 표시</li>
+<li>숨겨진 앱을 선택하면 (Enter, 더블 클릭, 그리드/레이아웃 리사이즈) 자동으로 숨김 해제되고 해당 앱의 최전면 창에 대해 작동</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーのウインドウ一覧でダブルクリックすると、そのウインドウを最前面に表示してレイアウトグリッドを閉じるように</li>
+<li>サイドバーのウインドウ行にコンテキストメニュー（…ボタン）を追加。3つのアクションを提供：</li>
+  - 「[アプリ名]の他のウインドウを閉じる」— 同じアプリの他のウインドウを閉じる（複数ウインドウがある場合のみ表示）
+  - 「[アプリ名]を終了」— アプリケーションを終了
+  - 「[アプリ名]以外を隠す」— 他の全アプリケーションを隠す（Cmd-H相当）。選択アプリが隠れている場合は解除
+<li>隠れている（Cmd-H）アプリケーションをサイドバーにアプリ名のみで半透明表示</li>
+<li>隠れているアプリを選択（Enter、ダブルクリック、グリッド/レイアウトリサイズ）すると自動的に表示を解除し、最前面ウインドウを操作対象に設定</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Double-click a window in the sidebar list to bring it to the foreground and dismiss the layout grid</li>
+<li>Context menu (ellipsis button) on sidebar window rows with three actions:</li>
+  - "Close other windows of [App]" — closes other windows of the same app (shown only when the app has multiple windows)
+  - "Quit [App]" — terminates the application
+  - "Hide windows besides [App]" — hides all other applications (Cmd-H equivalent), unhides the selected app if it was hidden
+<li>Hidden (Cmd-H) applications now appear in the sidebar as placeholder entries (app name only) and are displayed at 50% opacity</li>
+<li>Selecting a hidden app (Enter, double-click, grid/layout resize) automatically unhides it and operates on its frontmost window</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Duplo clique em uma janela na barra lateral para trazê-la para o primeiro plano e fechar a grade de layout</li>
+<li>Menu de contexto (botão de reticências) nas linhas de janelas da barra lateral com três ações:</li>
+  - "Fechar outras janelas do [App]" — fecha outras janelas do mesmo app (exibido apenas quando o app tem múltiplas janelas)
+  - "Encerrar [App]" — encerra o aplicativo
+  - "Ocultar janelas exceto [App]" — oculta todos os outros aplicativos (equivalente a Cmd-H), exibe o app selecionado se estava oculto
+<li>Aplicativos ocultos (Cmd-H) agora aparecem na barra lateral como entradas de espaço reservado (apenas nome do app) e são exibidos com 50% de opacidade</li>
+<li>Ao selecionar um app oculto (Enter, duplo clique, redimensionar com grade/layout) ele é automaticamente exibido e a operação é realizada na sua janela principal</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Doppio clic su una finestra nella barra laterale per portarla in primo piano e chiudere la griglia di layout</li>
+<li>Menu contestuale (pulsante puntini di sospensione) sulle righe delle finestre nella barra laterale con tre azioni:</li>
+  - "Chiudi altre finestre di [App]" — chiude le altre finestre della stessa app (mostrato solo quando l'app ha più finestre)
+  - "Esci da [App]" — termina l'applicazione
+  - "Nascondi finestre tranne [App]" — nasconde tutte le altre applicazioni (equivalente di Cmd-H), mostra l'app selezionata se era nascosta
+<li>Le applicazioni nascoste (Cmd-H) appaiono ora nella barra laterale come voci segnaposto (solo nome dell'app) e vengono visualizzate al 50% di opacità</li>
+<li>Selezionando un'app nascosta (Invio, doppio clic, ridimensionamento griglia/layout) viene automaticamente mostrata e si opera sulla sua finestra in primo piano</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Double-clic sur une fenêtre dans la barre latérale pour la mettre au premier plan et fermer la grille de disposition</li>
+<li>Menu contextuel (bouton points de suspension) sur les lignes de fenêtres de la barre latérale avec trois actions :</li>
+  - « Fermer les autres fenêtres de [App] » — ferme les autres fenêtres de la même app (affiché uniquement quand l'app a plusieurs fenêtres)
+  - « Quitter [App] » — ferme l'application
+  - « Masquer les fenêtres sauf [App] » — masque toutes les autres applications (équivalent Cmd-H), affiche l'app sélectionnée si elle était masquée
+<li>Les applications masquées (Cmd-H) apparaissent désormais dans la barre latérale comme entrées de remplacement (nom de l'app uniquement) et sont affichées à 50 % d'opacité</li>
+<li>La sélection d'une app masquée (Entrée, double-clic, redimensionnement grille/disposition) la rend automatiquement visible et opère sur sa fenêtre au premier plan</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Doble clic en una ventana de la barra lateral para traerla al frente y cerrar la cuadrícula de diseño</li>
+<li>Menú contextual (botón de puntos suspensivos) en las filas de ventanas de la barra lateral con tres acciones:</li>
+  - "Cerrar otras ventanas de [App]" — cierra otras ventanas de la misma app (solo se muestra cuando la app tiene múltiples ventanas)
+  - "Salir de [App]" — cierra la aplicación
+  - "Ocultar ventanas excepto [App]" — oculta todas las demás aplicaciones (equivalente a Cmd-H), muestra la app seleccionada si estaba oculta
+<li>Las aplicaciones ocultas (Cmd-H) ahora aparecen en la barra lateral como entradas de marcador (solo nombre de la app) y se muestran con 50 % de opacidad</li>
+<li>Al seleccionar una app oculta (Enter, doble clic, redimensionar con cuadrícula/diseño) se muestra automáticamente y se opera sobre su ventana principal</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Doppelklick auf ein Fenster in der Seitenleiste bringt es in den Vordergrund und schließt das Layout-Raster</li>
+<li>Kontextmenü (Auslassungspunkte-Taste) in den Fensterzeilen der Seitenleiste mit drei Aktionen:</li>
+  - „Andere Fenster von [App] schließen" — schließt andere Fenster derselben App (nur angezeigt, wenn die App mehrere Fenster hat)
+  - „[App] beenden" — beendet die Anwendung
+  - „Fenster außer [App] ausblenden" — blendet alle anderen Anwendungen aus (Cmd-H-Äquivalent), blendet die ausgewählte App wieder ein, falls sie ausgeblendet war
+<li>Ausgeblendete (Cmd-H) Anwendungen erscheinen jetzt als Platzhaltereinträge in der Seitenleiste (nur App-Name) und werden mit 50 % Deckkraft angezeigt</li>
+<li>Beim Auswählen einer ausgeblendeten App (Enter, Doppelklick, Raster-/Layout-Größenänderung) wird sie automatisch eingeblendet und das vorderste Fenster wird verwendet</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在側邊欄視窗列表中雙擊可將該視窗置於最前面並關閉佈局網格</li>
+<li>側邊欄視窗列的右鍵選單（省略號按鈕），提供三個操作：</li>
+  - 「關閉 [應用程式] 的其他視窗」— 關閉同一應用程式的其他視窗（僅當應用程式有多個視窗時顯示）
+  - 「結束 [應用程式]」— 終止應用程式
+  - 「隱藏 [應用程式] 以外的視窗」— 隱藏所有其他應用程式（相當於 Cmd-H），若所選應用程式已被隱藏則取消隱藏
+<li>隱藏的（Cmd-H）應用程式現在在側邊欄中顯示為佔位項目（僅顯示應用程式名稱），以 50% 不透明度顯示</li>
+<li>選擇隱藏的應用程式（Enter、雙擊、網格/佈局調整大小）會自動取消隱藏並操作其最前面的視窗</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在侧边栏窗口列表中双击可将该窗口置于最前面并关闭布局网格</li>
+<li>侧边栏窗口行的上下文菜单（省略号按钮），提供三个操作：</li>
+  - "关闭 [应用] 的其他窗口" — 关闭同一应用的其他窗口（仅当应用有多个窗口时显示）
+  - "退出 [应用]" — 终止应用程序
+  - "隐藏 [应用] 以外的窗口" — 隐藏所有其他应用程序（相当于 Cmd-H），如果所选应用已被隐藏则取消隐藏
+<li>隐藏的（Cmd-H）应用程序现在在侧边栏中显示为占位条目（仅显示应用名称），以 50% 不透明度显示</li>
+<li>选择隐藏的应用（Enter、双击、网格/布局调整大小）会自动取消隐藏并操作其最前面的窗口</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바 창 목록에서 더블 클릭하면 해당 창을 최전면으로 가져오고 레이아웃 그리드를 닫음</li>
+<li>사이드바 창 행의 컨텍스트 메뉴(말줄임표 버튼)에 세 가지 동작 추가:</li>
+  - "[앱]의 다른 창 닫기" — 같은 앱의 다른 창을 닫음 (앱에 여러 창이 있을 때만 표시)
+  - "[앱] 종료" — 애플리케이션을 종료
+  - "[앱] 외 창 숨기기" — 다른 모든 애플리케이션을 숨김 (Cmd-H 동작), 선택한 앱이 숨겨져 있으면 숨김 해제
+<li>숨겨진 (Cmd-H) 애플리케이션이 사이드바에 플레이스홀더 항목으로 표시되며 (앱 이름만) 50% 불투명도로 표시</li>
+<li>숨겨진 앱을 선택하면 (Enter, 더블 클릭, 그리드/레이아웃 리사이즈) 자동으로 숨김 해제되고 해당 앱의 최전면 창에 대해 작동</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーのウインドウ一覧でダブルクリックすると、そのウインドウを最前面に表示してレイアウトグリッドを閉じるように</li>
+<li>サイドバーのウインドウ行にコンテキストメニュー（…ボタン）を追加。3つのアクションを提供：</li>
+  - 「[アプリ名]の他のウインドウを閉じる」— 同じアプリの他のウインドウを閉じる（複数ウインドウがある場合のみ表示）
+  - 「[アプリ名]を終了」— アプリケーションを終了
+  - 「[アプリ名]以外を隠す」— 他の全アプリケーションを隠す（Cmd-H相当）。選択アプリが隠れている場合は解除
+<li>隠れている（Cmd-H）アプリケーションをサイドバーにアプリ名のみで半透明表示</li>
+<li>隠れているアプリを選択（Enter、ダブルクリック、グリッド/レイアウトリサイズ）すると自動的に表示を解除し、最前面ウインドウを操作対象に設定</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Double-click a window in the sidebar list to bring it to the foreground and dismiss the layout grid</li>
+<li>Context menu (ellipsis button) on sidebar window rows with three actions:</li>
+  - "Close other windows of [App]" — closes other windows of the same app (shown only when the app has multiple windows)
+  - "Quit [App]" — terminates the application
+  - "Hide windows besides [App]" — hides all other applications (Cmd-H equivalent), unhides the selected app if it was hidden
+<li>Hidden (Cmd-H) applications now appear in the sidebar as placeholder entries (app name only) and are displayed at 50% opacity</li>
+<li>Selecting a hidden app (Enter, double-click, grid/layout resize) automatically unhides it and operates on its frontmost window</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Duplo clique em uma janela na barra lateral para trazê-la para o primeiro plano e fechar a grade de layout</li>
+<li>Menu de contexto (botão de reticências) nas linhas de janelas da barra lateral com três ações:</li>
+  - "Fechar outras janelas do [App]" — fecha outras janelas do mesmo app (exibido apenas quando o app tem múltiplas janelas)
+  - "Encerrar [App]" — encerra o aplicativo
+  - "Ocultar janelas exceto [App]" — oculta todos os outros aplicativos (equivalente a Cmd-H), exibe o app selecionado se estava oculto
+<li>Aplicativos ocultos (Cmd-H) agora aparecem na barra lateral como entradas de espaço reservado (apenas nome do app) e são exibidos com 50% de opacidade</li>
+<li>Ao selecionar um app oculto (Enter, duplo clique, redimensionar com grade/layout) ele é automaticamente exibido e a operação é realizada na sua janela principal</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Doppio clic su una finestra nella barra laterale per portarla in primo piano e chiudere la griglia di layout</li>
+<li>Menu contestuale (pulsante puntini di sospensione) sulle righe delle finestre nella barra laterale con tre azioni:</li>
+  - "Chiudi altre finestre di [App]" — chiude le altre finestre della stessa app (mostrato solo quando l'app ha più finestre)
+  - "Esci da [App]" — termina l'applicazione
+  - "Nascondi finestre tranne [App]" — nasconde tutte le altre applicazioni (equivalente di Cmd-H), mostra l'app selezionata se era nascosta
+<li>Le applicazioni nascoste (Cmd-H) appaiono ora nella barra laterale come voci segnaposto (solo nome dell'app) e vengono visualizzate al 50% di opacità</li>
+<li>Selezionando un'app nascosta (Invio, doppio clic, ridimensionamento griglia/layout) viene automaticamente mostrata e si opera sulla sua finestra in primo piano</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Double-clic sur une fenêtre dans la barre latérale pour la mettre au premier plan et fermer la grille de disposition</li>
+<li>Menu contextuel (bouton points de suspension) sur les lignes de fenêtres de la barre latérale avec trois actions :</li>
+  - « Fermer les autres fenêtres de [App] » — ferme les autres fenêtres de la même app (affiché uniquement quand l'app a plusieurs fenêtres)
+  - « Quitter [App] » — ferme l'application
+  - « Masquer les fenêtres sauf [App] » — masque toutes les autres applications (équivalent Cmd-H), affiche l'app sélectionnée si elle était masquée
+<li>Les applications masquées (Cmd-H) apparaissent désormais dans la barre latérale comme entrées de remplacement (nom de l'app uniquement) et sont affichées à 50 % d'opacité</li>
+<li>La sélection d'une app masquée (Entrée, double-clic, redimensionnement grille/disposition) la rend automatiquement visible et opère sur sa fenêtre au premier plan</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Doble clic en una ventana de la barra lateral para traerla al frente y cerrar la cuadrícula de diseño</li>
+<li>Menú contextual (botón de puntos suspensivos) en las filas de ventanas de la barra lateral con tres acciones:</li>
+  - "Cerrar otras ventanas de [App]" — cierra otras ventanas de la misma app (solo se muestra cuando la app tiene múltiples ventanas)
+  - "Salir de [App]" — cierra la aplicación
+  - "Ocultar ventanas excepto [App]" — oculta todas las demás aplicaciones (equivalente a Cmd-H), muestra la app seleccionada si estaba oculta
+<li>Las aplicaciones ocultas (Cmd-H) ahora aparecen en la barra lateral como entradas de marcador (solo nombre de la app) y se muestran con 50 % de opacidad</li>
+<li>Al seleccionar una app oculta (Enter, doble clic, redimensionar con cuadrícula/diseño) se muestra automáticamente y se opera sobre su ventana principal</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Doppelklick auf ein Fenster in der Seitenleiste bringt es in den Vordergrund und schließt das Layout-Raster</li>
+<li>Kontextmenü (Auslassungspunkte-Taste) in den Fensterzeilen der Seitenleiste mit drei Aktionen:</li>
+  - „Andere Fenster von [App] schließen" — schließt andere Fenster derselben App (nur angezeigt, wenn die App mehrere Fenster hat)
+  - „[App] beenden" — beendet die Anwendung
+  - „Fenster außer [App] ausblenden" — blendet alle anderen Anwendungen aus (Cmd-H-Äquivalent), blendet die ausgewählte App wieder ein, falls sie ausgeblendet war
+<li>Ausgeblendete (Cmd-H) Anwendungen erscheinen jetzt als Platzhaltereinträge in der Seitenleiste (nur App-Name) und werden mit 50 % Deckkraft angezeigt</li>
+<li>Beim Auswählen einer ausgeblendeten App (Enter, Doppelklick, Raster-/Layout-Größenänderung) wird sie automatisch eingeblendet und das vorderste Fenster wird verwendet</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在側邊欄視窗列表中雙擊可將該視窗置於最前面並關閉佈局網格</li>
+<li>側邊欄視窗列的右鍵選單（省略號按鈕），提供三個操作：</li>
+  - 「關閉 [應用程式] 的其他視窗」— 關閉同一應用程式的其他視窗（僅當應用程式有多個視窗時顯示）
+  - 「結束 [應用程式]」— 終止應用程式
+  - 「隱藏 [應用程式] 以外的視窗」— 隱藏所有其他應用程式（相當於 Cmd-H），若所選應用程式已被隱藏則取消隱藏
+<li>隱藏的（Cmd-H）應用程式現在在側邊欄中顯示為佔位項目（僅顯示應用程式名稱），以 50% 不透明度顯示</li>
+<li>選擇隱藏的應用程式（Enter、雙擊、網格/佈局調整大小）會自動取消隱藏並操作其最前面的視窗</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在侧边栏窗口列表中双击可将该窗口置于最前面并关闭布局网格</li>
+<li>侧边栏窗口行的上下文菜单（省略号按钮），提供三个操作：</li>
+  - "关闭 [应用] 的其他窗口" — 关闭同一应用的其他窗口（仅当应用有多个窗口时显示）
+  - "退出 [应用]" — 终止应用程序
+  - "隐藏 [应用] 以外的窗口" — 隐藏所有其他应用程序（相当于 Cmd-H），如果所选应用已被隐藏则取消隐藏
+<li>隐藏的（Cmd-H）应用程序现在在侧边栏中显示为占位条目（仅显示应用名称），以 50% 不透明度显示</li>
+<li>选择隐藏的应用（Enter、双击、网格/布局调整大小）会自动取消隐藏并操作其最前面的窗口</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바 창 목록에서 더블 클릭하면 해당 창을 최전면으로 가져오고 레이아웃 그리드를 닫음</li>
+<li>사이드바 창 행의 컨텍스트 메뉴(말줄임표 버튼)에 세 가지 동작 추가:</li>
+  - "[앱]의 다른 창 닫기" — 같은 앱의 다른 창을 닫음 (앱에 여러 창이 있을 때만 표시)
+  - "[앱] 종료" — 애플리케이션을 종료
+  - "[앱] 외 창 숨기기" — 다른 모든 애플리케이션을 숨김 (Cmd-H 동작), 선택한 앱이 숨겨져 있으면 숨김 해제
+<li>숨겨진 (Cmd-H) 애플리케이션이 사이드바에 플레이스홀더 항목으로 표시되며 (앱 이름만) 50% 불투명도로 표시</li>
+<li>숨겨진 앱을 선택하면 (Enter, 더블 클릭, 그리드/레이아웃 리사이즈) 자동으로 숨김 해제되고 해당 앱의 최전면 창에 대해 작동</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーのウインドウ一覧でダブルクリックすると、そのウインドウを最前面に表示してレイアウトグリッドを閉じるように</li>
+<li>サイドバーのウインドウ行にコンテキストメニュー（…ボタン）を追加。3つのアクションを提供：</li>
+  - 「[アプリ名]の他のウインドウを閉じる」— 同じアプリの他のウインドウを閉じる（複数ウインドウがある場合のみ表示）
+  - 「[アプリ名]を終了」— アプリケーションを終了
+  - 「[アプリ名]以外を隠す」— 他の全アプリケーションを隠す（Cmd-H相当）。選択アプリが隠れている場合は解除
+<li>隠れている（Cmd-H）アプリケーションをサイドバーにアプリ名のみで半透明表示</li>
+<li>隠れているアプリを選択（Enter、ダブルクリック、グリッド/レイアウトリサイズ）すると自動的に表示を解除し、最前面ウインドウを操作対象に設定</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Double-click a window in the sidebar list to bring it to the foreground and dismiss the layout grid</li>
+<li>Context menu (ellipsis button) on sidebar window rows with three actions:</li>
+  - "Close other windows of [App]" — closes other windows of the same app (shown only when the app has multiple windows)
+  - "Quit [App]" — terminates the application
+  - "Hide windows besides [App]" — hides all other applications (Cmd-H equivalent), unhides the selected app if it was hidden
+<li>Hidden (Cmd-H) applications now appear in the sidebar as placeholder entries (app name only) and are displayed at 50% opacity</li>
+<li>Selecting a hidden app (Enter, double-click, grid/layout resize) automatically unhides it and operates on its frontmost window</li>
 </ul>]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
 <ul>
@@ -474,377 +2059,13 @@
             <sparkle:version>210</sparkle:version>
             <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley-2.1.0.zip" length="4679366" type="application/octet-stream" sparkle:edSignature="2ZswtCYgZ10rwh2Le/khcsHUjwxfZP90YwOtOQV/pX5LLqVSJFysI7bZ5phZveU/Xrb6AlgbwmYLJjH0UrtvCg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.0/Tiley-2.1.0.zip" length="4679366" type="application/octet-stream" sparkle:edSignature="2ZswtCYgZ10rwh2Le/khcsHUjwxfZP90YwOtOQV/pX5LLqVSJFysI7bZ5phZveU/Xrb6AlgbwmYLJjH0UrtvCg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley210-203.delta" sparkle:deltaFrom="203" length="216618" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Ed57TlscmNA8uJDRgIPFsv+rdwQNEpFo23pU2P5siWgyymKoI77J9dTDrhm/P0hJj9r/ku9GCJAd74PfSwQ6Aw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley210-202.delta" sparkle:deltaFrom="202" length="244806" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PpGYI4Wza1pLd8l9uzdptpt7ZMMAHp2kmYd0bfEL8RbdD1zsibbhNoFoNOyWYS52N5Z0dzOo9GfHwcJ/BcjhAg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley210-201.delta" sparkle:deltaFrom="201" length="284134" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="DtyNlG3GM2qsiIlXrpMY8egKf9crDoZQhoHb5eL/HXBXk7dLS+MTCpbZn11JeYdlGS1SMx6MpLxy+E7+li2qBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley210-200.delta" sparkle:deltaFrom="200" length="330618" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="iRb4mIwTvh5LyUBg8BOEeK7OKl0qbWIe1spo60PjiLc8fY0V1cUPpKsahPOQ23rYlpkJe8gsL31JYL43Bf9GDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.1.0/Tiley210-127.delta" sparkle:deltaFrom="127" length="388930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Mid+wVNHgd19G4EbN6KpYomwae4q0mYwrGpT57iWtQBzKaVI1jCVnNNbytg/I4UPoVVaBCWq3MF0+S/JpB+kBA=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>2.0.3</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Мягкие напоминания об обновлениях Sparkle: при обнаружении новой версии в фоновом режиме на значке в строке меню появляется красная точка, а рядом с кнопкой шестерёнки и кнопкой «Проверить обновления» в настройках отображается метка «Доступно обновление»</li>
-<li>Если значок в строке меню скрыт, он временно отображается с индикатором при обнаружении обновления и снова скрывается после завершения сеанса</li>
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Окно настроек теперь скрывается, когда Sparkle находит обновление (ранее — только при начале загрузки), и восстанавливается при отмене</li>
-<li>Заголовок окна настроек теперь локализован на всех поддерживаемых языках</li>
-<li>Номер версии перемещён из заголовка настроек в раздел обновлений, рядом с кнопкой «Проверить обновления»</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Lembretes suaves de atualização do Sparkle: quando uma verificação em segundo plano encontra uma nova versão, um ponto vermelho aparece no ícone da barra de menus e rótulos "Atualização disponível" são exibidos ao lado do botão de engrenagem e do botão "Verificar atualizações" nas configurações</li>
-<li>Se o ícone da barra de menus estiver oculto, ele é exibido temporariamente com o emblema ao detectar uma atualização e ocultado novamente ao final da sessão</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A janela de configurações é ocultada quando o Sparkle encontra uma atualização (antes apenas no início do download) e restaurada ao cancelar</li>
-<li>O título da janela de configurações agora é localizado em todos os idiomas suportados</li>
-<li>O número da versão foi movido do título das configurações para a seção de atualizações, ao lado do botão "Verificar atualizações"</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni</li>
-<li>Se l'icona della barra dei menu è nascosta, viene mostrata temporaneamente con il badge al rilevamento di un aggiornamento e nascosta nuovamente al termine della sessione</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La finestra delle impostazioni viene ora nascosta quando Sparkle trova un aggiornamento (in precedenza solo all'inizio del download) e ripristinata in caso di annullamento</li>
-<li>Il titolo della finestra delle impostazioni è ora localizzato in tutte le lingue supportate</li>
-<li>Il numero di versione è stato spostato dal titolo delle impostazioni alla sezione Aggiornamenti, accanto al pulsante "Verifica aggiornamenti"</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Rappels de mise à jour discrets de Sparkle : lorsqu'une vérification en arrière-plan trouve une nouvelle version, un point rouge apparaît sur l'icône de la barre des menus et des labels « Mise à jour disponible » s'affichent à côté du bouton engrenage et du bouton « Vérifier les mises à jour » dans les réglages</li>
-<li>Si l'icône de la barre des menus est masquée, elle s'affiche temporairement avec le badge lors de la détection d'une mise à jour, puis se masque à nouveau à la fin de la session</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La fenêtre des réglages est désormais masquée lorsque Sparkle trouve une mise à jour (auparavant uniquement au début du téléchargement) et restaurée en cas d'annulation</li>
-<li>Le titre de la fenêtre des réglages est maintenant localisé dans toutes les langues prises en charge</li>
-<li>Le numéro de version a été déplacé du titre des réglages vers la section Mises à jour, à côté du bouton « Vérifier les mises à jour »</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Recordatorios suaves de actualización de Sparkle: cuando una comprobación en segundo plano encuentra una nueva versión, aparece un punto rojo en el icono de la barra de menús y etiquetas "Actualización disponible" junto al botón de engranaje y el botón "Buscar actualizaciones" en los ajustes</li>
-<li>Si el icono de la barra de menús está oculto, se muestra temporalmente con la insignia al detectar una actualización y se oculta de nuevo al finalizar la sesión</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La ventana de ajustes se oculta cuando Sparkle encuentra una actualización (antes solo al iniciar la descarga) y se restaura al cancelar</li>
-<li>El título de la ventana de ajustes está ahora localizado en todos los idiomas soportados</li>
-<li>El número de versión se movió del título de ajustes a la sección de actualizaciones, junto al botón "Buscar actualizaciones"</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Sanfte Sparkle-Update-Erinnerungen: Wenn eine Hintergrundprüfung eine neue Version findet, erscheint ein roter Badge-Punkt am Menüleistensymbol und „Update verfügbar"-Labels neben dem Zahnrad-Button und dem „Nach Updates suchen"-Button in den Einstellungen</li>
-<li>Wenn das Menüleistensymbol ausgeblendet ist, wird es bei Update-Erkennung vorübergehend mit Badge angezeigt und nach Ende der Update-Sitzung wieder ausgeblendet</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Das Einstellungsfenster wird jetzt ausgeblendet, wenn Sparkle ein Update findet (zuvor erst beim Download-Start), und beim Abbrechen wiederhergestellt</li>
-<li>Der Titel des Einstellungsfensters ist jetzt in allen unterstützten Sprachen lokalisiert</li>
-<li>Versionsnummer vom Einstellungstitel in den Update-Bereich neben den „Nach Updates suchen"-Button verschoben</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>Sparkle 溫和更新提醒：背景檢測到新版本時，選單列圖示顯示紅色徽章圓點，齒輪按鈕和設定中「檢查更新」按鈕旁顯示「有可用更新」標籤</li>
-<li>選單列圖示被隱藏時，檢測到更新會暫時顯示帶徽章的圖示，更新作業結束後恢復隱藏</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>Sparkle 發現更新時立即隱藏設定視窗（之前僅在開始下載時隱藏），取消時恢復顯示</li>
-<li>設定視窗標題已支援所有語言的在地化</li>
-<li>版本號從設定標題移至更新區段的「檢查更新」按鈕旁</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>Sparkle 温和更新提醒：后台检测到新版本时，菜单栏图标显示红色徽章圆点，齿轮按钮和设置中"检查更新"按钮旁显示"有可用更新"标签</li>
-<li>菜单栏图标被隐藏时，检测到更新会临时显示带徽章的图标，更新会话结束后恢复隐藏</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>Sparkle 发现更新时立即隐藏设置窗口（之前仅在开始下载时隐藏），取消时恢复显示</li>
-<li>设置窗口标题已支持所有语言的本地化</li>
-<li>版本号从设置标题移至更新部分的"检查更新"按钮旁</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>Sparkle 부드러운 업데이트 알림: 백그라운드에서 새 버전을 감지하면 메뉴 막대 아이콘에 빨간 배지 점이 나타나고, 기어 버튼 및 설정의 "업데이트 확인" 버튼 옆에 "업데이트 있음" 라벨 표시</li>
-<li>메뉴 막대 아이콘이 숨겨져 있을 때 업데이트 감지 시 배지와 함께 일시적으로 표시, 세션 종료 후 다시 숨김</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>Sparkle가 업데이트를 찾으면 설정 창을 숨기도록 변경(이전에는 다운로드 시작 시에만 숨김), 취소 시 복원</li>
-<li>설정 창 제목을 모든 지원 언어로 현지화</li>
-<li>버전 번호를 설정 제목에서 업데이트 섹션의 "업데이트 확인" 버튼 옆으로 이동</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>Sparkleのジェントルリマインダー対応：バックグラウンドでアップデートを検出した際、メニューバーアイコンに赤いバッジドットを表示。ギアボタンおよび設定画面の「アップデートを確認」ボタン横に「アップデートがあります」ラベルを表示</li>
-<li>メニューバーアイコンが非表示の場合、アップデート検出時にバッジ付きで一時的に表示し、アップデートセッション終了後に再び非表示に戻す</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>Sparkleがアップデートを検出した時点で設定ウインドウを非表示にするよう変更（以前はダウンロード開始時）。キャンセル時に設定ウインドウを復元</li>
-<li>設定画面のタイトルを全対応言語でローカライズ</li>
-<li>バージョン番号を設定画面のタイトルからアップデートセクションの「アップデートを確認」ボタン横に移動</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Sparkle gentle scheduled update reminders: when a background update check finds a new version, a red badge dot appears on the menu bar icon and "Update available" labels appear next to the gear button and the "Check for Updates" button in settings</li>
-<li>If the menu bar icon is hidden when an update is detected, it is temporarily shown with the badge and hidden again after the update session ends</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Settings window is now hidden when Sparkle finds an update (previously only when download started), and restored when the user cancels</li>
-<li>Settings window title is now localized across all supported languages</li>
-<li>Version number moved from the settings title to the Updates section, displayed next to the "Check for Updates" button</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni</li>
-<li>Se l'icona della barra dei menu è nascosta, viene mostrata temporaneamente con il badge al rilevamento di un aggiornamento e nascosta nuovamente al termine della sessione</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La finestra delle impostazioni viene ora nascosta quando Sparkle trova un aggiornamento (in precedenza solo all'inizio del download) e ripristinata in caso di annullamento</li>
-<li>Il titolo della finestra delle impostazioni è ora localizzato in tutte le lingue supportate</li>
-<li>Il numero di versione è stato spostato dal titolo delle impostazioni alla sezione Aggiornamenti, accanto al pulsante "Verifica aggiornamenti"</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Rappels de mise à jour discrets de Sparkle : lorsqu'une vérification en arrière-plan trouve une nouvelle version, un point rouge apparaît sur l'icône de la barre des menus et des labels « Mise à jour disponible » s'affichent à côté du bouton engrenage et du bouton « Vérifier les mises à jour » dans les réglages</li>
-<li>Si l'icône de la barre des menus est masquée, elle s'affiche temporairement avec le badge lors de la détection d'une mise à jour, puis se masque à nouveau à la fin de la session</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La fenêtre des réglages est désormais masquée lorsque Sparkle trouve une mise à jour (auparavant uniquement au début du téléchargement) et restaurée en cas d'annulation</li>
-<li>Le titre de la fenêtre des réglages est maintenant localisé dans toutes les langues prises en charge</li>
-<li>Le numéro de version a été déplacé du titre des réglages vers la section Mises à jour, à côté du bouton « Vérifier les mises à jour »</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Recordatorios suaves de actualización de Sparkle: cuando una comprobación en segundo plano encuentra una nueva versión, aparece un punto rojo en el icono de la barra de menús y etiquetas "Actualización disponible" junto al botón de engranaje y el botón "Buscar actualizaciones" en los ajustes</li>
-<li>Si el icono de la barra de menús está oculto, se muestra temporalmente con la insignia al detectar una actualización y se oculta de nuevo al finalizar la sesión</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La ventana de ajustes se oculta cuando Sparkle encuentra una actualización (antes solo al iniciar la descarga) y se restaura al cancelar</li>
-<li>El título de la ventana de ajustes está ahora localizado en todos los idiomas soportados</li>
-<li>El número de versión se movió del título de ajustes a la sección de actualizaciones, junto al botón "Buscar actualizaciones"</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Sanfte Sparkle-Update-Erinnerungen: Wenn eine Hintergrundprüfung eine neue Version findet, erscheint ein roter Badge-Punkt am Menüleistensymbol und „Update verfügbar"-Labels neben dem Zahnrad-Button und dem „Nach Updates suchen"-Button in den Einstellungen</li>
-<li>Wenn das Menüleistensymbol ausgeblendet ist, wird es bei Update-Erkennung vorübergehend mit Badge angezeigt und nach Ende der Update-Sitzung wieder ausgeblendet</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Das Einstellungsfenster wird jetzt ausgeblendet, wenn Sparkle ein Update findet (zuvor erst beim Download-Start), und beim Abbrechen wiederhergestellt</li>
-<li>Der Titel des Einstellungsfensters ist jetzt in allen unterstützten Sprachen lokalisiert</li>
-<li>Versionsnummer vom Einstellungstitel in den Update-Bereich neben den „Nach Updates suchen"-Button verschoben</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>Sparkle 溫和更新提醒：背景檢測到新版本時，選單列圖示顯示紅色徽章圓點，齒輪按鈕和設定中「檢查更新」按鈕旁顯示「有可用更新」標籤</li>
-<li>選單列圖示被隱藏時，檢測到更新會暫時顯示帶徽章的圖示，更新作業結束後恢復隱藏</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>Sparkle 發現更新時立即隱藏設定視窗（之前僅在開始下載時隱藏），取消時恢復顯示</li>
-<li>設定視窗標題已支援所有語言的在地化</li>
-<li>版本號從設定標題移至更新區段的「檢查更新」按鈕旁</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>Sparkle 温和更新提醒：后台检测到新版本时，菜单栏图标显示红色徽章圆点，齿轮按钮和设置中"检查更新"按钮旁显示"有可用更新"标签</li>
-<li>菜单栏图标被隐藏时，检测到更新会临时显示带徽章的图标，更新会话结束后恢复隐藏</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>Sparkle 发现更新时立即隐藏设置窗口（之前仅在开始下载时隐藏），取消时恢复显示</li>
-<li>设置窗口标题已支持所有语言的本地化</li>
-<li>版本号从设置标题移至更新部分的"检查更新"按钮旁</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>Sparkle 부드러운 업데이트 알림: 백그라운드에서 새 버전을 감지하면 메뉴 막대 아이콘에 빨간 배지 점이 나타나고, 기어 버튼 및 설정의 "업데이트 확인" 버튼 옆에 "업데이트 있음" 라벨 표시</li>
-<li>메뉴 막대 아이콘이 숨겨져 있을 때 업데이트 감지 시 배지와 함께 일시적으로 표시, 세션 종료 후 다시 숨김</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>Sparkle가 업데이트를 찾으면 설정 창을 숨기도록 변경(이전에는 다운로드 시작 시에만 숨김), 취소 시 복원</li>
-<li>설정 창 제목을 모든 지원 언어로 현지화</li>
-<li>버전 번호를 설정 제목에서 업데이트 섹션의 "업데이트 확인" 버튼 옆으로 이동</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>Sparkleのジェントルリマインダー対応：バックグラウンドでアップデートを検出した際、メニューバーアイコンに赤いバッジドットを表示。ギアボタンおよび設定画面の「アップデートを確認」ボタン横に「アップデートがあります」ラベルを表示</li>
-<li>メニューバーアイコンが非表示の場合、アップデート検出時にバッジ付きで一時的に表示し、アップデートセッション終了後に再び非表示に戻す</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>Sparkleがアップデートを検出した時点で設定ウインドウを非表示にするよう変更（以前はダウンロード開始時）。キャンセル時に設定ウインドウを復元</li>
-<li>設定画面のタイトルを全対応言語でローカライズ</li>
-<li>バージョン番号を設定画面のタイトルからアップデートセクションの「アップデートを確認」ボタン横に移動</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Sparkle gentle scheduled update reminders: when a background update check finds a new version, a red badge dot appears on the menu bar icon and "Update available" labels appear next to the gear button and the "Check for Updates" button in settings</li>
-<li>If the menu bar icon is hidden when an update is detected, it is temporarily shown with the badge and hidden again after the update session ends</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Settings window is now hidden when Sparkle finds an update (previously only when download started), and restored when the user cancels</li>
-<li>Settings window title is now localized across all supported languages</li>
-<li>Version number moved from the settings title to the Updates section, displayed next to the "Check for Updates" button</li>
-</ul>
-]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Lembretes suaves de atualização do Sparkle: quando uma verificação em segundo plano encontra uma nova versão, um ponto vermelho aparece no ícone da barra de menus e rótulos "Atualização disponível" são exibidos ao lado do botão de engrenagem e do botão "Verificar atualizações" nas configurações</li>
-<li>Se o ícone da barra de menus estiver oculto, ele é exibido temporariamente com o emblema ao detectar uma atualização e ocultado novamente ao final da sessão</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A janela de configurações é ocultada quando o Sparkle encontra uma atualização (antes apenas no início do download) e restaurada ao cancelar</li>
-<li>O título da janela de configurações agora é localizado em todos os idiomas suportados</li>
-<li>O número da versão foi movido do título das configurações para a seção de atualizações, ao lado do botão "Verificar atualizações"</li>
-</ul>
-]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Promemoria di aggiornamento discreti di Sparkle: quando un controllo in background trova una nuova versione, appare un punto rosso sull'icona della barra dei menu e etichette "Aggiornamento disponibile" accanto al pulsante ingranaggio e al pulsante "Verifica aggiornamenti" nelle impostazioni</li>
-<li>Se l'icona della barra dei menu è nascosta, viene mostrata temporaneamente con il badge al rilevamento di un aggiornamento e nascosta nuovamente al termine della sessione</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La finestra delle impostazioni viene ora nascosta quando Sparkle trova un aggiornamento (in precedenza solo all'inizio del download) e ripristinata in caso di annullamento</li>
-<li>Il titolo della finestra delle impostazioni è ora localizzato in tutte le lingue supportate</li>
-<li>Il numero di versione è stato spostato dal titolo delle impostazioni alla sezione Aggiornamenti, accanto al pulsante "Verifica aggiornamenti"</li>
-</ul>
-]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Rappels de mise à jour discrets de Sparkle : lorsqu'une vérification en arrière-plan trouve une nouvelle version, un point rouge apparaît sur l'icône de la barre des menus et des labels « Mise à jour disponible » s'affichent à côté du bouton engrenage et du bouton « Vérifier les mises à jour » dans les réglages</li>
-<li>Si l'icône de la barre des menus est masquée, elle s'affiche temporairement avec le badge lors de la détection d'une mise à jour, puis se masque à nouveau à la fin de la session</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La fenêtre des réglages est désormais masquée lorsque Sparkle trouve une mise à jour (auparavant uniquement au début du téléchargement) et restaurée en cas d'annulation</li>
-<li>Le titre de la fenêtre des réglages est maintenant localisé dans toutes les langues prises en charge</li>
-<li>Le numéro de version a été déplacé du titre des réglages vers la section Mises à jour, à côté du bouton « Vérifier les mises à jour »</li>
-</ul>
-]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Recordatorios suaves de actualización de Sparkle: cuando una comprobación en segundo plano encuentra una nueva versión, aparece un punto rojo en el icono de la barra de menús y etiquetas "Actualización disponible" junto al botón de engranaje y el botón "Buscar actualizaciones" en los ajustes</li>
-<li>Si el icono de la barra de menús está oculto, se muestra temporalmente con la insignia al detectar una actualización y se oculta de nuevo al finalizar la sesión</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La ventana de ajustes se oculta cuando Sparkle encuentra una actualización (antes solo al iniciar la descarga) y se restaura al cancelar</li>
-<li>El título de la ventana de ajustes está ahora localizado en todos los idiomas soportados</li>
-<li>El número de versión se movió del título de ajustes a la sección de actualizaciones, junto al botón "Buscar actualizaciones"</li>
-</ul>
-]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Sanfte Sparkle-Update-Erinnerungen: Wenn eine Hintergrundprüfung eine neue Version findet, erscheint ein roter Badge-Punkt am Menüleistensymbol und „Update verfügbar"-Labels neben dem Zahnrad-Button und dem „Nach Updates suchen"-Button in den Einstellungen</li>
-<li>Wenn das Menüleistensymbol ausgeblendet ist, wird es bei Update-Erkennung vorübergehend mit Badge angezeigt und nach Ende der Update-Sitzung wieder ausgeblendet</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Das Einstellungsfenster wird jetzt ausgeblendet, wenn Sparkle ein Update findet (zuvor erst beim Download-Start), und beim Abbrechen wiederhergestellt</li>
-<li>Der Titel des Einstellungsfensters ist jetzt in allen unterstützten Sprachen lokalisiert</li>
-<li>Versionsnummer vom Einstellungstitel in den Update-Bereich neben den „Nach Updates suchen"-Button verschoben</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>Sparkle 溫和更新提醒：背景檢測到新版本時，選單列圖示顯示紅色徽章圓點，齒輪按鈕和設定中「檢查更新」按鈕旁顯示「有可用更新」標籤</li>
-<li>選單列圖示被隱藏時，檢測到更新會暫時顯示帶徽章的圖示，更新作業結束後恢復隱藏</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>Sparkle 發現更新時立即隱藏設定視窗（之前僅在開始下載時隱藏），取消時恢復顯示</li>
-<li>設定視窗標題已支援所有語言的在地化</li>
-<li>版本號從設定標題移至更新區段的「檢查更新」按鈕旁</li>
-</ul>
-]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>Sparkle 温和更新提醒：后台检测到新版本时，菜单栏图标显示红色徽章圆点，齿轮按钮和设置中"检查更新"按钮旁显示"有可用更新"标签</li>
-<li>菜单栏图标被隐藏时，检测到更新会临时显示带徽章的图标，更新会话结束后恢复隐藏</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>Sparkle 发现更新时立即隐藏设置窗口（之前仅在开始下载时隐藏），取消时恢复显示</li>
-<li>设置窗口标题已支持所有语言的本地化</li>
-<li>版本号从设置标题移至更新部分的"检查更新"按钮旁</li>
-</ul>
-]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>Sparkle 부드러운 업데이트 알림: 백그라운드에서 새 버전을 감지하면 메뉴 막대 아이콘에 빨간 배지 점이 나타나고, 기어 버튼 및 설정의 "업데이트 확인" 버튼 옆에 "업데이트 있음" 라벨 표시</li>
-<li>메뉴 막대 아이콘이 숨겨져 있을 때 업데이트 감지 시 배지와 함께 일시적으로 표시, 세션 종료 후 다시 숨김</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>Sparkle가 업데이트를 찾으면 설정 창을 숨기도록 변경(이전에는 다운로드 시작 시에만 숨김), 취소 시 복원</li>
-<li>설정 창 제목을 모든 지원 언어로 현지화</li>
-<li>버전 번호를 설정 제목에서 업데이트 섹션의 "업데이트 확인" 버튼 옆으로 이동</li>
-</ul>
-]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>Sparkleのジェントルリマインダー対応：バックグラウンドでアップデートを検出した際、メニューバーアイコンに赤いバッジドットを表示。ギアボタンおよび設定画面の「アップデートを確認」ボタン横に「アップデートがあります」ラベルを表示</li>
-<li>メニューバーアイコンが非表示の場合、アップデート検出時にバッジ付きで一時的に表示し、アップデートセッション終了後に再び非表示に戻す</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>Sparkleがアップデートを検出した時点で設定ウインドウを非表示にするよう変更（以前はダウンロード開始時）。キャンセル時に設定ウインドウを復元</li>
-<li>設定画面のタイトルを全対応言語でローカライズ</li>
-<li>バージョン番号を設定画面のタイトルからアップデートセクションの「アップデートを確認」ボタン横に移動</li>
-</ul>
-]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Sparkle gentle scheduled update reminders: when a background update check finds a new version, a red badge dot appears on the menu bar icon and "Update available" labels appear next to the gear button and the "Check for Updates" button in settings</li>
-<li>If the menu bar icon is hidden when an update is detected, it is temporarily shown with the badge and hidden again after the update session ends</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Settings window is now hidden when Sparkle finds an update (previously only when download started), and restored when the user cancels</li>
-<li>Settings window title is now localized across all supported languages</li>
-<li>Version number moved from the settings title to the Updates section, displayed next to the "Check for Updates" button</li>
-</ul>
-]]></description>
-            <pubDate>Thu, 19 Mar 2026 21:40:09 +0900</pubDate>
-            <sparkle:version>203</sparkle:version>
-            <sparkle:shortVersionString>2.0.3</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.2.0/Tiley-2.0.3.zip" length="4650558" type="application/octet-stream" sparkle:edSignature="pGJ3AQMBNsL2Bf5kGm7CU0iw6CRvAVlInFLg604V/5UkJ9vIkobPwKjSIHmUtOpJ7Kvchkv2tAWS+pW0iFuTAQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-202.delta" sparkle:deltaFrom="202" length="163078" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yLd3kDSJ7f6yX6ZWO6HA4H2tTBw8s9hXi/RWVGkl0Is3Mk1qN/S0uIw4W+jTMqBVYGavnm96rBB3FUzl2YGBDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-201.delta" sparkle:deltaFrom="201" length="233782" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="knjPUxBLvanpIylxioHgqqsAAwd+HPkV4DU+sf4Mtbqqn9d/5vwamcLUC/tLn/XCAxRHn4r4HDkP4Gcg0WX5Bg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-200.delta" sparkle:deltaFrom="200" length="280958" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mcp6gv/U3coQilQOJKagOSEBMnqiqL5sgK0G4fJ/YGGm0B3Qos8lSbDyzZruIkD2VvEjEAF6N3KzDMKuA4EkAg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-127.delta" sparkle:deltaFrom="127" length="351142" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="P/V5he8STtxTefTXsf5nL4F6+WeJf2hKqH0sCjLdYA0V6yYjmWcWWmq/U9PbqgNCDl0YCt8UAhRofNfKkiKuDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v2.0.3/Tiley203-126.delta" sparkle:deltaFrom="126" length="359710" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="mKpl0URQK+T+/uY2t/X6ATfw2M8KjC5kErZKHdZMCmtvpWliXuWB12MBsXBq6L2YmPzCym8YOP+6kVl7RedWAA=="/>
             </sparkle:deltas>
         </item>
     </channel>
