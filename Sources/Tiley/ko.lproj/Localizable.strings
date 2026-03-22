@@ -110,3 +110,7 @@
 "Update available" = "업데이트 있음";
 "Close other windows of %@" = "%@의 다른 윈도우 닫기";
 "Hide windows besides %@" = "%@ 외 모든 윈도우 숨기기";
+
+"menu.bar.fallback.file" = "파일";
+"menu.bar.fallback.edit" = "편집";
+"menu.bar.fallback.view" = "보기";

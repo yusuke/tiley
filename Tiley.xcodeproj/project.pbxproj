@@ -14,6 +14,12 @@
 		7012E0622F65B653003EC442 /* LayoutGridWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0562F65B653003EC442 /* LayoutGridWorkspaceView.swift */; };
 		7012E0632F65B653003EC442 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E05A2F65B653003EC442 /* MainWindowView.swift */; };
 		7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0662F65B796003EC442 /* ThemeColors.swift */; };
+		701526162F6EECE3001E8095 /* DesktopPictureBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526152F6EECE3001E8095 /* DesktopPictureBackgroundView.swift */; };
+		701526292F6EF349001E8095 /* DockReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526262F6EF349001E8095 /* DockReader.swift */; };
+		7015262A2F6EF349001E8095 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526272F6EF349001E8095 /* WindowManager.swift */; };
+		7015262B2F6EF349001E8095 /* AccessibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526252F6EF349001E8095 /* AccessibilityService.swift */; };
+		7015262F2F6EF356001E8095 /* GridModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262C2F6EF356001E8095 /* GridModels.swift */; };
+		701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */; };
 		70840E2F2F61111100DF0607 /* menu-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E302F61111200DF0607 /* menu-icon.pdf */; };
 		70840E312F61111300DF0607 /* en.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E322F61111400DF0607 /* en.lproj/Localizable.strings */; };
 		70840E332F61111500DF0607 /* ja.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */; };
@@ -30,16 +36,6 @@
 		70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A652F64347E005173A5 /* AppDelegate.swift */; };
 		70B56A6C2F64347E005173A5 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A662F64347E005173A5 /* AppState.swift */; };
 		70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A682F64347E005173A5 /* UpdaterSupport.swift */; };
-		A00000000000000000000004 /* Services/AccessibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000024 /* Services/AccessibilityService.swift */; };
-		A00000000000000000000005 /* Services/WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000025 /* Services/WindowManager.swift */; };
-		A00000000000000000000006 /* Models/GridModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000026 /* Models/GridModels.swift */; };
-		A0000000000000000000000B /* UI/MainWindow/MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002B /* UI/MainWindow/MainWindowController.swift */; };
-		A0000000000000000000000C /* UI/MainWindow/MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002C /* UI/MainWindow/MainWindowView.swift */; };
-		A0000000000000000000000D /* UI/Layout/GridPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002D /* UI/Layout/GridPreviewView.swift */; };
-		A0000000000000000000000E /* UI/Layout/LayoutGridWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002E /* UI/Layout/LayoutGridWorkspaceView.swift */; };
-		A0000000000000000000000F /* UI/Layout/LayoutPreviewOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000002F /* UI/Layout/LayoutPreviewOverlayController.swift */; };
-		A00000000000000000000040 /* Models/HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000041 /* Models/HotKeyShortcut.swift */; };
-		A00000000000000000000042 /* UI/MainWindow/ShortcutRecorderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000043 /* UI/MainWindow/ShortcutRecorderField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +46,12 @@
 		7012E05A2F65B653003EC442 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
 		7012E05B2F65B653003EC442 /* ShortcutRecorderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRecorderField.swift; sourceTree = "<group>"; };
 		7012E0662F65B796003EC442 /* ThemeColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
+		701526152F6EECE3001E8095 /* DesktopPictureBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopPictureBackgroundView.swift; sourceTree = "<group>"; };
+		701526252F6EF349001E8095 /* AccessibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityService.swift; sourceTree = "<group>"; };
+		701526262F6EF349001E8095 /* DockReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockReader.swift; sourceTree = "<group>"; };
+		701526272F6EF349001E8095 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		7015262C2F6EF356001E8095 /* GridModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridModels.swift; sourceTree = "<group>"; };
+		7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyShortcut.swift; sourceTree = "<group>"; };
 		70840E302F61111200DF0607 /* menu-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "menu-icon.pdf"; sourceTree = "<group>"; };
 		70840E322F61111400DF0607 /* en.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -67,16 +69,6 @@
 		70B56A682F64347E005173A5 /* UpdaterSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSupport.swift; sourceTree = "<group>"; };
 		A00000000000000000000011 /* Tiley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tiley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000000000000000000012 /* Tiley-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tiley-Info.plist"; sourceTree = "<group>"; };
-		A00000000000000000000024 /* Services/AccessibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AccessibilityService.swift; sourceTree = "<group>"; };
-		A00000000000000000000025 /* Services/WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/WindowManager.swift; sourceTree = "<group>"; };
-		A00000000000000000000026 /* Models/GridModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/GridModels.swift; sourceTree = "<group>"; };
-		A0000000000000000000002B /* UI/MainWindow/MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/MainWindow/MainWindowController.swift; sourceTree = "<group>"; };
-		A0000000000000000000002C /* UI/MainWindow/MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/MainWindow/MainWindowView.swift; sourceTree = "<group>"; };
-		A0000000000000000000002D /* UI/Layout/GridPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Layout/GridPreviewView.swift; sourceTree = "<group>"; };
-		A0000000000000000000002E /* UI/Layout/LayoutGridWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Layout/LayoutGridWorkspaceView.swift; sourceTree = "<group>"; };
-		A0000000000000000000002F /* UI/Layout/LayoutPreviewOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Layout/LayoutPreviewOverlayController.swift; sourceTree = "<group>"; };
-		A00000000000000000000041 /* Models/HotKeyShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/HotKeyShortcut.swift; sourceTree = "<group>"; };
-		A00000000000000000000043 /* UI/MainWindow/ShortcutRecorderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/MainWindow/ShortcutRecorderField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +86,7 @@
 		7012E0582F65B653003EC442 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
+				701526152F6EECE3001E8095 /* DesktopPictureBackgroundView.swift */,
 				7012E0662F65B796003EC442 /* ThemeColors.swift */,
 				7012E0552F65B653003EC442 /* GridPreviewView.swift */,
 				7012E0562F65B653003EC442 /* LayoutGridWorkspaceView.swift */,
@@ -119,6 +112,25 @@
 				7012E05C2F65B653003EC442 /* MainWindow */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		701526282F6EF349001E8095 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				701526252F6EF349001E8095 /* AccessibilityService.swift */,
+				701526262F6EF349001E8095 /* DockReader.swift */,
+				701526272F6EF349001E8095 /* WindowManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		7015262E2F6EF356001E8095 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7015262C2F6EF356001E8095 /* GridModels.swift */,
+				7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		70B56A4C2F63E456005173A5 /* Images */ = {
@@ -163,6 +175,8 @@
 		A00000000000000000000017 /* Sources/Tiley */ = {
 			isa = PBXGroup;
 			children = (
+				7015262E2F6EF356001E8095 /* Models */,
+				701526282F6EF349001E8095 /* Services */,
 				7012E05D2F65B653003EC442 /* UI */,
 				70B56A692F64347E005173A5 /* App */,
 				70B56A4C2F63E456005173A5 /* Images */,
@@ -172,16 +186,6 @@
 				70840E362F61111800DF0607 /* ko.lproj/Localizable.strings */,
 				70840E382F61111A00DF0607 /* zh-Hans.lproj/Localizable.strings */,
 				70840E3A2F61111C00DF0607 /* zh-Hant.lproj/Localizable.strings */,
-				A00000000000000000000024 /* Services/AccessibilityService.swift */,
-				A00000000000000000000025 /* Services/WindowManager.swift */,
-				A00000000000000000000026 /* Models/GridModels.swift */,
-				A00000000000000000000041 /* Models/HotKeyShortcut.swift */,
-				A0000000000000000000002B /* UI/MainWindow/MainWindowController.swift */,
-				A0000000000000000000002C /* UI/MainWindow/MainWindowView.swift */,
-				A00000000000000000000043 /* UI/MainWindow/ShortcutRecorderField.swift */,
-				A0000000000000000000002D /* UI/Layout/GridPreviewView.swift */,
-				A0000000000000000000002E /* UI/Layout/LayoutGridWorkspaceView.swift */,
-				A0000000000000000000002F /* UI/Layout/LayoutPreviewOverlayController.swift */,
 			);
 			path = Sources/Tiley;
 			sourceTree = SOURCE_ROOT;
@@ -276,21 +280,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A00000000000000000000004 /* Services/AccessibilityService.swift in Sources */,
-				A00000000000000000000005 /* Services/WindowManager.swift in Sources */,
-				A00000000000000000000006 /* Models/GridModels.swift in Sources */,
-				A00000000000000000000040 /* Models/HotKeyShortcut.swift in Sources */,
-				A0000000000000000000000B /* UI/MainWindow/MainWindowController.swift in Sources */,
-				A0000000000000000000000C /* UI/MainWindow/MainWindowView.swift in Sources */,
+				701526162F6EECE3001E8095 /* DesktopPictureBackgroundView.swift in Sources */,
 				70B56A6A2F64347E005173A5 /* TileyApp.swift in Sources */,
 				70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */,
+				701526292F6EF349001E8095 /* DockReader.swift in Sources */,
+				7015262F2F6EF356001E8095 /* GridModels.swift in Sources */,
+				701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */,
+				7015262A2F6EF349001E8095 /* WindowManager.swift in Sources */,
+				7015262B2F6EF349001E8095 /* AccessibilityService.swift in Sources */,
 				70B56A6C2F64347E005173A5 /* AppState.swift in Sources */,
 				70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */,
-				A00000000000000000000042 /* UI/MainWindow/ShortcutRecorderField.swift in Sources */,
 				7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */,
-				A0000000000000000000000D /* UI/Layout/GridPreviewView.swift in Sources */,
-				A0000000000000000000000E /* UI/Layout/LayoutGridWorkspaceView.swift in Sources */,
-				A0000000000000000000000F /* UI/Layout/LayoutPreviewOverlayController.swift in Sources */,
 				7012E05E2F65B653003EC442 /* LayoutPreviewOverlayController.swift in Sources */,
 				7012E05F2F65B653003EC442 /* MainWindowController.swift in Sources */,
 				7012E0602F65B653003EC442 /* GridPreviewView.swift in Sources */,

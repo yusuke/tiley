@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Grid background now accurately reflects the macOS wallpaper display settings (fill, fit, stretch, center, and tile modes), including correct tile scaling, physical pixel ratio for center mode, and fill color for letterbox areas
+- Layout grid preview now shows the full screen frame including the menu bar, Dock, and notch, giving a more accurate representation of the actual display
 
 ## [2.2.0] - 2026-03-21
 

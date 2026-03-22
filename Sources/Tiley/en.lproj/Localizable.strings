@@ -110,3 +110,7 @@
 "Update available" = "Update available";
 "Close other windows of %@" = "Close other %@ windows";
 "Hide windows besides %@" = "Hide windows besides %@";
+
+"menu.bar.fallback.file" = "File";
+"menu.bar.fallback.edit" = "Edit";
+"menu.bar.fallback.view" = "View";

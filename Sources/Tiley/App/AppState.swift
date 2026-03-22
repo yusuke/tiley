@@ -198,6 +198,59 @@ final class AppState: NSObject, NSMenuDelegate {
         return title
     }
 
+    /// Menu bar titles fetched asynchronously from the target app via Accessibility API.
+    /// Falls back to localized placeholder strings until the fetch completes.
+    var targetMenuBarTitles: [String] = [
+        NSLocalizedString("menu.bar.fallback.file", comment: "Fallback menu title: File"),
+        NSLocalizedString("menu.bar.fallback.edit", comment: "Fallback menu title: Edit"),
+        NSLocalizedString("menu.bar.fallback.view", comment: "Fallback menu title: View"),
+    ]
+
+    /// Fetches the menu bar item titles from the target app using Accessibility API.
+    /// Updates targetMenuBarTitles on the main actor when done.
+    func fetchTargetMenuBarTitles() {
+        let pid = activeLayoutTarget?.processIdentifier ?? lastTargetPID
+        guard let pid else {
+            targetMenuBarTitles = [
+                NSLocalizedString("menu.bar.fallback.file", comment: "Fallback menu title: File"),
+                NSLocalizedString("menu.bar.fallback.edit", comment: "Fallback menu title: Edit"),
+                NSLocalizedString("menu.bar.fallback.view", comment: "Fallback menu title: View"),
+            ]
+            return
+        }
+        Task.detached(priority: .userInitiated) { [weak self] in
+            let titles = Self.readMenuBarTitles(pid: pid)
+            await MainActor.run { [weak self] in
+                if !titles.isEmpty {
+                    self?.targetMenuBarTitles = titles
+                }
+            }
+        }
+    }
+
+    /// Reads menu bar item titles synchronously via AX (call from a background task).
+    private nonisolated static func readMenuBarTitles(pid: pid_t) -> [String] {
+        let axApp = AXUIElementCreateApplication(pid)
+        var menuBarRef: AnyObject?
+        guard AXUIElementCopyAttributeValue(axApp, kAXMenuBarAttribute as CFString, &menuBarRef) == .success,
+              let menuBar = menuBarRef else { return [] }
+        var childrenRef: AnyObject?
+        guard AXUIElementCopyAttributeValue(menuBar as! AXUIElement, kAXChildrenAttribute as CFString, &childrenRef) == .success,
+              let children = childrenRef as? [AXUIElement] else { return [] }
+        var titles: [String] = []
+        for child in children {
+            var titleRef: AnyObject?
+            if AXUIElementCopyAttributeValue(child, kAXTitleAttribute as CFString, &titleRef) == .success,
+               let title = titleRef as? String,
+               !title.isEmpty {
+                titles.append(title)
+            }
+        }
+        // Drop the Apple menu (first item, always "Apple" or empty)
+        if !titles.isEmpty { titles.removeFirst() }
+        return titles
+    }
+
     var windowTargetList: [WindowTarget] {
         _ = windowTargetListVersion
         return availableWindowTargets
@@ -400,6 +453,8 @@ final class AppState: NSObject, NSMenuDelegate {
         // Bump version after the window is open so the view picks up the latest
         // target info and window list.
         windowTargetListVersion += 1
+        // Asynchronously fetch the actual menu bar titles from the target app.
+        fetchTargetMenuBarTitles()
         launchMessage = String(
             format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
             target.appName

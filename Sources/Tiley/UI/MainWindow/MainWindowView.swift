@@ -16,6 +16,15 @@ enum ScreenRole {
 struct ScreenContext {
     let visibleFrame: CGRect
     let screenFrame: CGRect
+    /// Width of the notch area in the menu bar (0 if no notch).
+    /// Derived from auxiliaryTopLeftArea / auxiliaryTopRightArea.
+    let notchWidth: CGFloat
+
+    init(visibleFrame: CGRect, screenFrame: CGRect, notchWidth: CGFloat = 0) {
+        self.visibleFrame = visibleFrame
+        self.screenFrame = screenFrame
+        self.notchWidth = notchWidth
+    }
 }
 
 private struct ScreenContextKey: EnvironmentKey {
@@ -26,6 +35,27 @@ extension EnvironmentValues {
     var screenContext: ScreenContext? {
         get { self[ScreenContextKey.self] }
         set { self[ScreenContextKey.self] = newValue }
+    }
+}
+
+/// Renders the notch shape (black, bottom corners rounded) centered in the menu bar.
+private struct NotchMenuBarCanvas: View {
+    let compositeWidth: CGFloat
+    let height: CGFloat
+    let notchWidth: CGFloat
+
+    private var cornerR: CGFloat { notchWidth * 0.08 }
+
+    var body: some View {
+        UnevenRoundedRectangle(
+            topLeadingRadius: 0,
+            bottomLeadingRadius: cornerR,
+            bottomTrailingRadius: cornerR,
+            topTrailingRadius: 0,
+            style: .continuous
+        )
+        .fill(Color.black)
+        .frame(width: notchWidth, height: height)
     }
 }
 
@@ -116,7 +146,6 @@ struct MainWindowView: View {
         guard let screen else { return nil }
         guard let rawURL = NSWorkspace.shared.desktopImageURL(for: screen) else { return nil }
         let opts = NSWorkspace.shared.desktopImageOptions(for: screen)
-        Self.tileyLog("rawURL=\(rawURL.lastPathComponent) opts=\(String(describing: opts))")
 
         // On macOS 15+, desktopImageURL always returns DefaultDesktop.heic for system
         // wallpapers. Try to resolve the actual image and display mode via the wallpaper Store.
@@ -222,25 +251,7 @@ struct MainWindowView: View {
             fillColor = nil
         }
         let info = DesktopPictureInfo(url: url, scaling: scaling, allowClipping: allowClipping, isTiled: isTiled, screenSize: screen.frame.size, screenScale: screen.backingScaleFactor, fillColor: fillColor, originalImageSize: originalImageSize)
-        Self.tileyLog("desktopPictureInfo: url=\(url.lastPathComponent) scaling=\(scaling) allowClipping=\(allowClipping) isTiled=\(isTiled) screenSize=\(screen.frame.size) screenScale=\(screen.backingScaleFactor) originalImageSize=\(String(describing: originalImageSize)) storeInfo.thumbnailURL=\(String(describing: storeInfo?.thumbnailURL?.lastPathComponent)) storeInfo.placement=\(String(describing: storeInfo?.placement))")
         return info
-    }
-
-    static func tileyLog(_ message: String) {
-        let logURL = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("tiley.log")
-        let line = "\(Date()) \(message)\n"
-        if let data = line.data(using: .utf8) {
-            if FileManager.default.fileExists(atPath: logURL.path) {
-                if let fh = try? FileHandle(forWritingTo: logURL) {
-                    fh.seekToEndOfFile()
-                    fh.write(data)
-                    try? fh.close()
-                }
-            } else {
-                try? data.write(to: logURL)
-            }
-        }
     }
 
     /// Resolved wallpaper information read from the macOS 15+ wallpaper Store plist.
@@ -326,7 +337,6 @@ struct MainWindowView: View {
             }
         }
 
-        Self.tileyLog("resolvedWallpaperInfo: isCustomImage=\(isCustomImage) placement=\(String(describing: placement)) thumbnailURL=\(String(describing: thumbnailURL?.lastPathComponent))")
         return WallpaperStoreInfo(thumbnailURL: thumbnailURL, placement: placement, fillColor: fillColor)
     }
 
@@ -604,18 +614,47 @@ struct MainWindowView: View {
     private func layoutGridPanel(size: CGSize) -> some View {
         let hasSidebar = appState.isSidebarVisible
         let mainContentWidth = hasSidebar ? size.width - Self.sidebarWidth - 1 : size.width
-        let fullGridWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
-        let aspectRatio: CGFloat
-        if let ctx = screenContext, ctx.visibleFrame.width > 0 {
-            aspectRatio = ctx.visibleFrame.height / ctx.visibleFrame.width
+        let fullCompositeWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
+
+        // Use the full screen aspect ratio so the composite area (menu bar + grid + Dock)
+        // matches the screen's proportions.
+        let compositeAspectRatio: CGFloat
+        if let ctx = screenContext, ctx.screenFrame.width > 0 {
+            compositeAspectRatio = ctx.screenFrame.height / ctx.screenFrame.width
         } else {
-            aspectRatio = Self.layoutGridAspectHeightRatio
+            compositeAspectRatio = Self.layoutGridAspectHeightRatio
         }
-        // Calculate the maximum grid height that still shows at least 4 preset rows.
+
+        // Compute chrome inset ratios from the screen geometry.
+        // Only show chrome when the inset is large enough to be a real menu bar / Dock.
+        let chromeThreshold: CGFloat = 5.0
+        let menuBarHeightRatio: CGFloat
+        let dockBottomRatio: CGFloat
+        let dockLeftRatio: CGFloat
+        let dockRightRatio: CGFloat
+        let notchWidthRatio: CGFloat
+        if let ctx = screenContext, ctx.screenFrame.height > 0 {
+            let sf = ctx.screenFrame
+            let vf = ctx.visibleFrame
+            let mbH = sf.maxY - vf.maxY
+            let dbH = vf.minY - sf.minY
+            let dlW = vf.minX - sf.minX
+            let drW = sf.maxX - vf.maxX
+            menuBarHeightRatio = mbH > chromeThreshold ? mbH / sf.height : 0
+            dockBottomRatio    = dbH > chromeThreshold ? dbH / sf.height : 0
+            dockLeftRatio      = dlW > chromeThreshold ? dlW / sf.width  : 0
+            dockRightRatio     = drW > chromeThreshold ? drW / sf.width  : 0
+            notchWidthRatio    = sf.width > 0 ? ctx.notchWidth / sf.width : 0
+        } else {
+            menuBarHeightRatio = 0; dockBottomRatio = 0; dockLeftRatio = 0; dockRightRatio = 0
+            notchWidthRatio = 0
+        }
+
+        // Calculate the maximum composite height that still shows at least 4 preset rows.
         let minPresetCount: CGFloat = min(CGFloat(appState.displayedLayoutPresets.count), 4)
         let minPresetsHeight = minPresetCount * Self.presetRowHeight
             + max(0, minPresetCount - 1) * Self.presetRowSpacing
-        let nonGridHeight = Self.layoutFooterTopPadding
+        let nonCompositeHeight = Self.layoutFooterTopPadding
             + Self.footerHeight
             + Self.layoutFooterBottomPadding
             + Self.layoutGridTopPadding
@@ -623,18 +662,28 @@ struct MainWindowView: View {
             + Self.presetsPanelChromeHeight
             + minPresetsHeight
             + Self.footerBottomPadding
-        let maxGridHeight = size.height - nonGridHeight
-        let fullGridHeight = fullGridWidth * aspectRatio
-        // If the full grid is too tall, shrink width proportionally to fit (preserving aspect ratio).
-        let gridHeight: CGFloat
-        let gridWidth: CGFloat
-        if fullGridHeight > maxGridHeight && maxGridHeight > 0 {
-            gridHeight = maxGridHeight
-            gridWidth = gridHeight / aspectRatio
+        let maxCompositeHeight = size.height - nonCompositeHeight
+        let fullCompositeHeight = fullCompositeWidth * compositeAspectRatio
+        // If the full composite is too tall, shrink width proportionally.
+        let compositeHeight: CGFloat
+        let compositeWidth: CGFloat
+        if fullCompositeHeight > maxCompositeHeight && maxCompositeHeight > 0 {
+            compositeHeight = maxCompositeHeight
+            compositeWidth = compositeHeight / compositeAspectRatio
         } else {
-            gridHeight = fullGridHeight
-            gridWidth = fullGridWidth
+            compositeHeight = fullCompositeHeight
+            compositeWidth = fullCompositeWidth
         }
+
+        // Subdivide composite area into chrome + grid.
+        let menuBarDisplayHeight = compositeHeight * menuBarHeightRatio
+        let dockBottomDisplayHeight = compositeHeight * dockBottomRatio
+        let dockLeftDisplayWidth = compositeWidth * dockLeftRatio
+        let dockRightDisplayWidth = compositeWidth * dockRightRatio
+        let notchDisplayWidth = compositeWidth * notchWidthRatio
+        let gridWidth = compositeWidth - dockLeftDisplayWidth - dockRightDisplayWidth
+        let gridHeight = compositeHeight - menuBarDisplayHeight - dockBottomDisplayHeight
+
         let availablePresetsHeight = max(
             0,
             size.height
@@ -642,7 +691,7 @@ struct MainWindowView: View {
                 - Self.footerHeight
                 - Self.layoutFooterBottomPadding
                 - Self.layoutGridTopPadding
-                - gridHeight
+                - compositeHeight
                 - Self.layoutPresetsTopPadding
                 - Self.footerBottomPadding
         )
@@ -658,51 +707,17 @@ struct MainWindowView: View {
                     .padding(.top, Self.layoutFooterTopPadding)
                     .padding(.bottom, Self.layoutFooterBottomPadding)
 
-                LayoutGridWorkspaceView(
-                    rows: appState.rows,
-                    columns: appState.columns,
-                    gap: appState.gap,
-                    highlightSelection: editingPresetHighlightSelection,
-                    desktopPictureInfo: desktopPictureInfo,
-                    onSelectionChange: { selection in
-                        if editingPresetID == nil {
-                            dismissPresetNameEditingIfNeeded()
-                            dismissShortcutEditingIfNeeded()
-                            hoveredPresetID = nil
-                            appState.selectedLayoutPresetID = nil
-                        }
-                        activeLayoutSelection = selection
-                        if let ctx = screenContext {
-                            appState.updateLayoutPreview(selection, screenContext: ctx)
-                        } else {
-                            appState.updateLayoutPreview(selection)
-                        }
-                    },
-                    onHoverChange: { selection in
-                        guard activeLayoutSelection == nil else { return }
-                        if let ctx = screenContext {
-                            appState.updateLayoutPreview(selection, screenContext: ctx)
-                        } else {
-                            appState.updateLayoutPreview(selection)
-                        }
-                    },
-                    onSelectionCommit: { selection in
-                        activeLayoutSelection = nil
-                        if let editingID = editingPresetID {
-                            appState.updateLayoutPreset(editingID) { preset in
-                                preset.selection = selection
-                                preset.baseRows = appState.rows
-                                preset.baseColumns = appState.columns
-                            }
-                            appState.updateLayoutPreview(nil)
-                        } else if let ctx = screenContext {
-                            appState.commitLayoutSelectionOnScreen(selection, visibleFrame: ctx.visibleFrame, screenFrame: ctx.screenFrame)
-                        } else {
-                            appState.commitLayoutSelection(selection)
-                        }
-                    }
+                screenCompositeView(
+                    compositeWidth: compositeWidth,
+                    compositeHeight: compositeHeight,
+                    menuBarHeight: menuBarDisplayHeight,
+                    dockBottomHeight: dockBottomDisplayHeight,
+                    dockLeftWidth: dockLeftDisplayWidth,
+                    dockRightWidth: dockRightDisplayWidth,
+                    notchWidth: notchDisplayWidth,
+                    gridWidth: gridWidth,
+                    gridHeight: gridHeight
                 )
-                .frame(width: gridWidth, height: gridHeight, alignment: .topLeading)
                 .padding(.horizontal, Self.layoutPanelHorizontalPadding)
                 .padding(.top, 8)
 
@@ -721,6 +736,228 @@ struct MainWindowView: View {
                 keyboardHintsBar
             }
         }
+    }
+
+    /// Composites the wallpaper, menu bar chrome, Dock chrome, and grid workspace
+    /// into a single view that represents the full screen area proportionally.
+    @ViewBuilder
+    private func screenCompositeView(
+        compositeWidth: CGFloat,
+        compositeHeight: CGFloat,
+        menuBarHeight: CGFloat,
+        dockBottomHeight: CGFloat,
+        dockLeftWidth: CGFloat,
+        dockRightWidth: CGFloat,
+        notchWidth: CGFloat,
+        gridWidth: CGFloat,
+        gridHeight: CGFloat
+    ) -> some View {
+        let compositeSize = CGSize(width: compositeWidth, height: compositeHeight)
+        ZStack(alignment: .topLeading) {
+            // Layer 1: Wallpaper spanning the full composite area (menu bar + grid + Dock)
+            if let info = desktopPictureInfo,
+               let nsImage = NSImage(contentsOf: info.url) {
+                DesktopPictureBackgroundView(nsImage: nsImage, info: info, size: compositeSize)
+                    .frame(width: compositeWidth, height: compositeHeight)
+                    .opacity(0.5)
+            }
+
+            // Layer 2: Menu bar + Dock chrome overlays + grid workspace
+            VStack(spacing: 0) {
+                // Menu bar — no background bar, just menu items rendered on top of wallpaper
+                if menuBarHeight > 0 {
+                    let menuItemOpacity: CGFloat = screenRole.isTarget ? 1.0 : 0.5
+                    let fontSize = max(5, menuBarHeight * 0.35)
+                    // When a notch is present, constrain menu items to the left auxiliary area
+                    // so they don't overlap the notch. Left area ends at (compositeWidth - notchWidth) / 2.
+                    let leftAreaWidth = notchWidth > 0
+                        ? (compositeWidth - notchWidth) / 2
+                        : compositeWidth
+                    ZStack {
+                        // Notch: full-width canvas drawing only the notch region in black
+                        if notchWidth > 0 {
+                            NotchMenuBarCanvas(
+                                compositeWidth: compositeWidth,
+                                height: menuBarHeight,
+                                notchWidth: notchWidth
+                            )
+                        }
+                        // Left-aligned menu items clipped to left auxiliary area
+                        HStack(spacing: 0) {
+                            HStack(spacing: fontSize * 0.6) {
+                                Image(systemName: "apple.logo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: fontSize)
+                                Text(appState.currentLayoutTargetPrimaryText)
+                                    .font(.system(size: fontSize, weight: .bold))
+                                ForEach(appState.targetMenuBarTitles, id: \.self) { title in
+                                    Text(title)
+                                        .font(.system(size: fontSize))
+                                }
+                                Spacer()
+                            }
+                            .padding(.leading, menuBarHeight * 0.4 + fontSize * 0.5)
+                            .frame(width: leftAreaWidth, height: menuBarHeight)
+                            .clipped()
+                            Spacer()
+                        }
+                        .foregroundColor(.white)
+                        .opacity(menuItemOpacity)
+                        .frame(width: compositeWidth, height: menuBarHeight)
+                    }
+                    .frame(width: compositeWidth, height: menuBarHeight)
+                }
+
+                // Middle row: optional left Dock, grid, optional right Dock
+                HStack(spacing: 0) {
+                    if dockLeftWidth > 0 {
+                        // Left Dock: rounded rect sized to fit Dock app icons, centered vertically
+                        let leftDockApps = DockReader.readApps()
+                        let leftDockIconSize = dockLeftWidth * 0.7
+                        let leftDockIconSpacing = leftDockIconSize * 0.1
+                        let leftDockRectHeight = min(
+                            leftDockIconSize * CGFloat(leftDockApps.count)
+                                + leftDockIconSpacing * CGFloat(max(0, leftDockApps.count - 1))
+                                + leftDockIconSize * 0.3,
+                            gridHeight * 0.9
+                        )
+                        VStack {
+                            Spacer()
+                            ZStack(alignment: .top) {
+                                RoundedRectangle(cornerRadius: dockLeftWidth * 0.25, style: .continuous)
+                                    .fill(Color.white.opacity(0.50))
+                                    .frame(width: dockLeftWidth * 0.85, height: leftDockRectHeight)
+                                VStack(spacing: leftDockIconSpacing) {
+                                    ForEach(leftDockApps.indices, id: \.self) { i in
+                                        Image(nsImage: leftDockApps[i].icon)
+                                            .resizable()
+                                            .frame(width: leftDockIconSize, height: leftDockIconSize)
+                                    }
+                                }
+                                .offset(y: leftDockIconSize * 0.15)
+                            }
+                            .clipped()
+                            Spacer()
+                        }
+                        .frame(width: dockLeftWidth, height: gridHeight)
+                    }
+
+                    LayoutGridWorkspaceView(
+                        rows: appState.rows,
+                        columns: appState.columns,
+                        gap: appState.gap,
+                        highlightSelection: editingPresetHighlightSelection,
+                        desktopPictureInfo: desktopPictureInfo,
+                        showDesktopPicture: false,
+                        onSelectionChange: { selection in
+                            if editingPresetID == nil {
+                                dismissPresetNameEditingIfNeeded()
+                                dismissShortcutEditingIfNeeded()
+                                hoveredPresetID = nil
+                                appState.selectedLayoutPresetID = nil
+                            }
+                            activeLayoutSelection = selection
+                            if let ctx = screenContext {
+                                appState.updateLayoutPreview(selection, screenContext: ctx)
+                            } else {
+                                appState.updateLayoutPreview(selection)
+                            }
+                        },
+                        onHoverChange: { selection in
+                            guard activeLayoutSelection == nil else { return }
+                            if let ctx = screenContext {
+                                appState.updateLayoutPreview(selection, screenContext: ctx)
+                            } else {
+                                appState.updateLayoutPreview(selection)
+                            }
+                        },
+                        onSelectionCommit: { selection in
+                            activeLayoutSelection = nil
+                            if let editingID = editingPresetID {
+                                appState.updateLayoutPreset(editingID) { preset in
+                                    preset.selection = selection
+                                    preset.baseRows = appState.rows
+                                    preset.baseColumns = appState.columns
+                                }
+                                appState.updateLayoutPreview(nil)
+                            } else if let ctx = screenContext {
+                                appState.commitLayoutSelectionOnScreen(selection, visibleFrame: ctx.visibleFrame, screenFrame: ctx.screenFrame)
+                            } else {
+                                appState.commitLayoutSelection(selection)
+                            }
+                        }
+                    )
+                    .frame(width: gridWidth, height: gridHeight, alignment: .topLeading)
+
+                    if dockRightWidth > 0 {
+                        // Right Dock: rounded rect sized to fit Dock app icons, centered vertically
+                        let rightDockApps = DockReader.readApps()
+                        let rightDockIconSize = dockRightWidth * 0.7
+                        let rightDockIconSpacing = rightDockIconSize * 0.1
+                        let rightDockRectHeight = min(
+                            rightDockIconSize * CGFloat(rightDockApps.count)
+                                + rightDockIconSpacing * CGFloat(max(0, rightDockApps.count - 1))
+                                + rightDockIconSize * 0.3,
+                            gridHeight * 0.9
+                        )
+                        VStack {
+                            Spacer()
+                            ZStack(alignment: .top) {
+                                RoundedRectangle(cornerRadius: dockRightWidth * 0.25, style: .continuous)
+                                    .fill(Color.white.opacity(0.50))
+                                    .frame(width: dockRightWidth * 0.85, height: rightDockRectHeight)
+                                VStack(spacing: rightDockIconSpacing) {
+                                    ForEach(rightDockApps.indices, id: \.self) { i in
+                                        Image(nsImage: rightDockApps[i].icon)
+                                            .resizable()
+                                            .frame(width: rightDockIconSize, height: rightDockIconSize)
+                                    }
+                                }
+                                .offset(y: rightDockIconSize * 0.15)
+                            }
+                            .clipped()
+                            Spacer()
+                        }
+                        .frame(width: dockRightWidth, height: gridHeight)
+                    }
+                }
+
+                // Bottom Dock: rounded rect sized to fit Dock app icons, centered horizontally
+                if dockBottomHeight > 0 {
+                    let bottomDockApps = DockReader.readApps()
+                    let bottomDockIconSize = dockBottomHeight * 0.75
+                    let bottomDockIconSpacing = bottomDockIconSize * 0.1
+                    let bottomDockRectWidth = min(
+                        bottomDockIconSize * CGFloat(bottomDockApps.count)
+                            + bottomDockIconSpacing * CGFloat(max(0, bottomDockApps.count - 1))
+                            + bottomDockIconSize * 0.3,
+                        compositeWidth * 0.9
+                    )
+                    HStack {
+                        Spacer()
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: dockBottomHeight * 0.4, style: .continuous)
+                                .fill(Color.white.opacity(0.50))
+                                .frame(width: bottomDockRectWidth, height: dockBottomHeight * 0.85)
+                            HStack(spacing: bottomDockIconSpacing) {
+                                ForEach(bottomDockApps.indices, id: \.self) { i in
+                                    Image(nsImage: bottomDockApps[i].icon)
+                                        .resizable()
+                                        .frame(width: bottomDockIconSize, height: bottomDockIconSize)
+                                }
+                            }
+                            .offset(x: bottomDockIconSize * 0.15)
+                        }
+                        .clipped()
+                        Spacer()
+                    }
+                    .frame(width: compositeWidth, height: dockBottomHeight)
+                }
+            }
+        }
+        .frame(width: compositeWidth, height: compositeHeight)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
     private var keyboardHintsBar: some View {
@@ -2831,4 +3068,10 @@ private struct WindowListMoreButton: NSViewRepresentable {
         @objc private func quitAction() { onQuit() }
         @objc private func hideOthersAction() { onHideOthers() }
     }
+}
+
+#Preview("NotchShape") {
+    NotchMenuBarCanvas(compositeWidth: 300, height: 30, notchWidth: 120)
+        .background(Color.blue)
+        .frame(width: 300, height: 30)
 }

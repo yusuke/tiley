@@ -5,6 +5,7 @@
 ### Modificato
 
 - Lo sfondo della griglia ora riflette accuratamente le impostazioni di visualizzazione dello sfondo macOS (riempimento, adattamento, allungamento, centro e mosaico), inclusa la corretta scalatura delle tessere, il rapporto pixel fisico per la modalità centrata e il colore di riempimento per le aree letterbox
+- L'anteprima della griglia di layout ora mostra la barra dei menu, il Dock e il notch, offrendo una rappresentazione più fedele dello schermo reale
 
 ## [2.2.0] - 2026-03-21
 

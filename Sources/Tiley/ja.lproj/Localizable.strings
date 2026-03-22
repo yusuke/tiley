@@ -110,3 +110,7 @@
 "Update available" = "アップデートがあります";
 "Close other windows of %@" = "%@の他のウインドウを閉じる";
 "Hide windows besides %@" = "%@以外のウインドウを隠す";
+
+"menu.bar.fallback.file" = "ファイル";
+"menu.bar.fallback.edit" = "編集";
+"menu.bar.fallback.view" = "表示";

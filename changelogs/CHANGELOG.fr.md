@@ -5,6 +5,7 @@
 ### Modifié
 
 - L'arrière-plan de la grille reflète désormais fidèlement les paramètres d'affichage du fond d'écran macOS (remplir, ajuster, étirer, centrer et mosaïque), avec une mise à l'échelle correcte des tuiles, le ratio de pixels physiques pour le mode centré et la couleur de remplissage pour les zones letterbox
+- L'aperçu de la grille de mise en page affiche désormais la barre des menus, le Dock et l'encoche, offrant une représentation plus fidèle de l'écran réel
 
 ## [2.2.0] - 2026-03-21
 

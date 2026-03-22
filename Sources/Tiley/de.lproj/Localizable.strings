@@ -110,3 +110,7 @@
 "Update available" = "Update verfügbar";
 "Close other windows of %@" = "Andere %@-Fenster schließen";
 "Hide windows besides %@" = "Fenster außer %@ ausblenden";
+
+"menu.bar.fallback.file" = "Ablage";
+"menu.bar.fallback.edit" = "Bearbeiten";
+"menu.bar.fallback.view" = "Darstellung";

@@ -110,3 +110,7 @@
 "Update available" = "有可用更新";
 "Close other windows of %@" = "关闭%@的其他窗口";
 "Hide windows besides %@" = "隐藏%@以外的窗口";
+
+"menu.bar.fallback.file" = "文件";
+"menu.bar.fallback.edit" = "编辑";
+"menu.bar.fallback.view" = "显示";

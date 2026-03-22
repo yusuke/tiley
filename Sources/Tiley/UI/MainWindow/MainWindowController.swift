@@ -41,10 +41,12 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         self.onLocalShortcut = onLocalShortcut
         self.onKeyCommand = onKeyCommand
         let initialVisibleFrame = self.targetScreen.visibleFrame
-        let initialSize = Self.windowSize(for: appState, visibleFrame: initialVisibleFrame, screenRole: screenRole)
+        let initialScreenFrame = self.targetScreen.frame
+        let initialSize = Self.windowSize(for: appState, visibleFrame: initialVisibleFrame, screenFrame: initialScreenFrame, screenRole: screenRole)
         let screenContext = ScreenContext(
             visibleFrame: self.targetScreen.visibleFrame,
-            screenFrame: self.targetScreen.frame
+            screenFrame: self.targetScreen.frame,
+            notchWidth: Self.notchWidth(for: self.targetScreen)
         )
         let view = MainWindowView(appState: appState, screenRole: screenRole)
             .environment(\.screenContext, screenContext)
@@ -209,7 +211,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private func applyWindowMode(animated: Bool, preferredScreen: NSScreen? = nil) {
         guard let window else { return }
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
-        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenRole: screenRole)
+        let screenFrame = currentScreenFrame(for: window, preferredScreen: preferredScreen)
+        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole)
         let targetAlpha = (appState?.isEditingSettings == true || appState?.isShowingPermissionsOnly == true) ? Self.settingsModeWindowAlpha : Self.layoutModeWindowAlpha
 
         var frame = window.frame
@@ -234,7 +237,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         guard let window else { return }
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
         guard !visibleFrame.equalTo(.zero) else { return }
-        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenRole: screenRole)
+        let screenFrame = currentScreenFrame(for: window, preferredScreen: preferredScreen)
+        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole)
         let origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
         window.setFrameOrigin(origin)
     }
@@ -263,6 +267,43 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         }
         if let anyFrame = NSScreen.screens.first?.visibleFrame, !anyFrame.equalTo(.zero) {
             return anyFrame
+        }
+        return .zero
+    }
+
+    /// Returns the notch width for the given screen (0 if no notch).
+    /// On notched Macs, auxiliaryTopLeftArea and auxiliaryTopRightArea are non-nil;
+    /// the notch occupies the space between them.
+    private static func notchWidth(for screen: NSScreen) -> CGFloat {
+        guard let leftArea = screen.auxiliaryTopLeftArea,
+              let rightArea = screen.auxiliaryTopRightArea else {
+            return 0
+        }
+        // notch spans from the right edge of the left auxiliary area
+        // to the left edge of the right auxiliary area
+        let notchLeft = leftArea.maxX
+        let notchRight = rightArea.minX
+        return max(0, notchRight - notchLeft)
+    }
+
+    /// Returns the full screen frame (including menu bar and Dock) for the window's screen.
+    private func currentScreenFrame(for window: NSWindow, preferredScreen: NSScreen? = nil) -> CGRect {
+        if !screenRole.isTarget {
+            let frame = targetScreen.frame
+            if !frame.equalTo(.zero) { return frame }
+        }
+        if let preferredScreen {
+            let frame = preferredScreen.frame
+            if !frame.equalTo(.zero) { return frame }
+        }
+        if let frame = window.screen?.frame, !frame.equalTo(.zero) {
+            return frame
+        }
+        if let frame = NSScreen.main?.frame, !frame.equalTo(.zero) {
+            return frame
+        }
+        if let frame = NSScreen.screens.first?.frame, !frame.equalTo(.zero) {
+            return frame
         }
         return .zero
     }
@@ -300,7 +341,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         return NSScreen.screens.first(where: { $0.frame.contains(center) })
     }
 
-    private static func windowSize(for appState: AppState?, visibleFrame: CGRect?, screenRole: ScreenRole = .target) -> NSSize {
+    private static func windowSize(for appState: AppState?, visibleFrame: CGRect?, screenFrame: CGRect? = nil, screenRole: ScreenRole = .target) -> NSSize {
         if appState?.isShowingPermissionsOnly == true {
             return NSSize(width: windowWidth, height: permissionsOnlyHeight)
         }
@@ -309,9 +350,12 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let presetCount = CGFloat(appState?.displayedLayoutPresets.count ?? 0)
         let maxHeight = maxAllowedHeight(in: visibleFrame)
 
-        // Compute the aspect ratio of the usable screen area.
+        // Use the full screen frame aspect ratio so the composite area (menu bar + grid + Dock)
+        // matches the screen's proportions. Falls back to visibleFrame or default.
         let aspectRatio: CGFloat
-        if let vf = visibleFrame, vf.width > 0 {
+        if let sf = screenFrame, sf.width > 0 {
+            aspectRatio = sf.height / sf.width
+        } else if let vf = visibleFrame, vf.width > 0 {
             aspectRatio = vf.height / vf.width
         } else {
             aspectRatio = layoutGridAspectHeightRatio

@@ -110,3 +110,7 @@
 "Update available" = "Atualização disponível";
 "Close other windows of %@" = "Fechar outras janelas de %@";
 "Hide windows besides %@" = "Ocultar janelas exceto %@";
+
+"menu.bar.fallback.file" = "Arquivo";
+"menu.bar.fallback.edit" = "Editar";
+"menu.bar.fallback.view" = "Visualizar";
