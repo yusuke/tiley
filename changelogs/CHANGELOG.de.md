@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-03-23
+
 ### Hinzugefügt
 
 - TelemetryDeck Analytics SDK für datenschutzfreundliche Nutzungsstatistiken integriert (Overlay geöffnet, Layout angewendet, Preset angewendet, Einstellungen geändert)

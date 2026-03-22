@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-03-23
+
 ### Adicionado
 
 - Integração do SDK TelemetryDeck para análise de uso com respeito à privacidade (abertura da sobreposição, aplicação de layout, aplicação de preset, alteração de configurações)

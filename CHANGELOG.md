@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-03-23
+
 ### Added
 
 - Integrated TelemetryDeck analytics SDK for privacy-friendly usage tracking (overlay opened, layout applied, preset applied, settings changed)
