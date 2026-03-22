@@ -4,6 +4,7 @@
 
 ### Aggiunto
 
+- Integrazione dell'SDK TelemetryDeck per statistiche d'uso rispettose della privacy (apertura overlay, applicazione layout, applicazione preset, modifica impostazioni)
 - Le finestre nella barra laterale sono raggruppate per schermo e per applicazione; le app con più finestre mostrano un'intestazione con le righe rientrate
 - Le intestazioni dello schermo nella barra laterale hanno un menu con le azioni "Raccogli finestre" e "Sposta finestre su" per gestire le finestre tra schermi
 - Menu dell'intestazione app con "Sposta tutte le finestre su un altro schermo", "Nascondi altre" e "Esci"

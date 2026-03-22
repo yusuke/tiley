@@ -4,6 +4,7 @@
 
 ### Hinzugefügt
 
+- TelemetryDeck Analytics SDK für datenschutzfreundliche Nutzungsstatistiken integriert (Overlay geöffnet, Layout angewendet, Preset angewendet, Einstellungen geändert)
 - Fenster in der Seitenleiste werden nach Bildschirm und Anwendung gruppiert; Apps mit mehreren Fenstern zeigen einen App-Header mit eingerückten Fensterzeilen
 - Bildschirm-Header in der Seitenleiste haben ein Menü mit „Fenster sammeln" und „Fenster verschieben" zum Verwalten von Fenstern über Bildschirme hinweg
 - App-Header-Menü mit „Alle Fenster auf anderen Bildschirm verschieben", „Andere ausblenden" und „Beenden"

@@ -4,6 +4,7 @@
 
 ### Añadido
 
+- Integración del SDK TelemetryDeck para análisis de uso respetuoso con la privacidad (apertura de superposición, aplicación de diseño, aplicación de preajuste, cambio de ajustes)
 - Las ventanas de la barra lateral ahora se agrupan por pantalla y por aplicación; las apps con múltiples ventanas muestran un encabezado con las ventanas indentadas
 - Los encabezados de pantalla en la barra lateral ahora tienen un menú con acciones para "Reunir ventanas" y "Mover ventanas a" para gestionar ventanas entre pantallas
 - Menú del encabezado de aplicación con "Mover todas las ventanas a otra pantalla", "Ocultar otras" y "Salir"

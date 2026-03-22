@@ -4,6 +4,7 @@
 
 ### Ajouté
 
+- Intégration du SDK TelemetryDeck pour des statistiques d'utilisation respectueuses de la vie privée (ouverture de la grille, application de disposition, application de préréglage, modification des paramètres)
 - Les fenêtres de la barre latérale sont regroupées par écran et par application ; les apps multi-fenêtres affichent un en-tête avec des lignes indentées
 - Les en-têtes d'écran dans la barre latérale disposent d'un menu avec les actions « Rassembler les fenêtres » et « Déplacer les fenêtres vers » pour gérer les fenêtres entre écrans
 - Menu de l'en-tête d'application avec « Déplacer toutes les fenêtres vers un autre écran », « Masquer les autres » et « Quitter »

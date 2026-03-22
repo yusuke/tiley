@@ -20,6 +20,7 @@
 		7015262B2F6EF349001E8095 /* AccessibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526252F6EF349001E8095 /* AccessibilityService.swift */; };
 		7015262F2F6EF356001E8095 /* GridModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262C2F6EF356001E8095 /* GridModels.swift */; };
 		701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */; };
+		701526332F704490001E8095 /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 701526322F704490001E8095 /* TelemetryClient */; };
 		70840E2F2F61111100DF0607 /* menu-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E302F61111200DF0607 /* menu-icon.pdf */; };
 		70840E312F61111300DF0607 /* en.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E322F61111400DF0607 /* en.lproj/Localizable.strings */; };
 		70840E332F61111500DF0607 /* ja.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */; };
@@ -77,6 +78,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				70B56A532F64336C005173A5 /* Sparkle in Frameworks */,
+				701526332F704490001E8095 /* TelemetryClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +246,7 @@
 			mainGroup = A00000000000000000000013;
 			packageReferences = (
 				70B56A512F64336C005173A5 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				701526312F704490001E8095 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			productRefGroup = A00000000000000000000014 /* Products */;
 			projectDirPath = "";
@@ -440,6 +443,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		701526312F704490001E8095 /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.12.0;
+			};
+		};
 		70B56A512F64336C005173A5 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sparkle-project/Sparkle.git";
@@ -451,6 +462,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		701526322F704490001E8095 /* TelemetryClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 701526312F704490001E8095 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryClient;
+		};
 		70B56A522F64336C005173A5 /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 70B56A512F64336C005173A5 /* XCRemoteSwiftPackageReference "Sparkle" */;

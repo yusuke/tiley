@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- Integração do SDK TelemetryDeck para análise de uso com respeito à privacidade (abertura da sobreposição, aplicação de layout, aplicação de preset, alteração de configurações)
 - As janelas na barra lateral agora são agrupadas por tela e por aplicativo; apps com múltiplas janelas mostram um cabeçalho com as janelas recuadas
 - Os cabeçalhos de tela na barra lateral agora têm um menu com ações para "Reunir janelas" e "Mover janelas para" para gerenciar janelas entre telas
 - Menu do cabeçalho de aplicativo com "Mover todas as janelas para outra tela", "Ocultar outros" e "Encerrar"

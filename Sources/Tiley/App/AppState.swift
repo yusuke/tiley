@@ -4,6 +4,7 @@ import Observation
 import ServiceManagement
 import Sparkle
 import SwiftUI
+import TelemetryDeck
 
 /// Captured at module-load time, before Tiley becomes the frontmost app.
 /// Force-evaluated in AppDelegate init via `AppState.captureLaunchTimeFrontmostPID()`.
@@ -395,6 +396,11 @@ final class AppState: NSObject, NSMenuDelegate {
         quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
         useAppleScriptResize = settings.useAppleScriptResize
         sanitizePresetGlobalShortcutEligibility()
+        TelemetryDeck.signal("settingsChanged", parameters: [
+            "columns": "\(settings.columns)",
+            "rows": "\(settings.rows)",
+            "gap": "\(settings.gap)",
+        ])
         // Only register the main toggle hotkey; keep preset global hotkeys
         // unregistered while the layout grid is visible so local shortcuts work.
         unregisterPresetHotKeys()
@@ -475,6 +481,7 @@ final class AppState: NSObject, NSMenuDelegate {
             format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
             target.appName
         )
+        TelemetryDeck.signal("gridOverlayOpened")
     }
 
     func commitLayoutSelection(_ selection: GridSelection) {
@@ -897,6 +904,11 @@ final class AppState: NSObject, NSMenuDelegate {
             constrained = try windowManager?.move(target: target, to: frame) ?? false
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
+            let norm = selection.normalized
+            TelemetryDeck.signal("layoutApplied", parameters: [
+                "columns": "\(norm.endColumn - norm.startColumn + 1)",
+                "rows": "\(norm.endRow - norm.startRow + 1)",
+            ])
         } catch {
             NSLog("[Tiley] apply(selection:to:) error: %@", error.localizedDescription)
             launchMessage = error.localizedDescription
@@ -1330,6 +1342,7 @@ final class AppState: NSObject, NSMenuDelegate {
         lastTargetPID = target.processIdentifier
         let selection = preset.scaledSelection(toRows: rows, columns: columns)
         apply(selection: selection, to: target)
+        TelemetryDeck.signal("presetApplied", parameters: ["presetName": preset.name])
     }
 
     /// Applies a layout preset on the screen where the mouse cursor is located.

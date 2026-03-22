@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Integrated TelemetryDeck analytics SDK for privacy-friendly usage tracking (overlay opened, layout applied, preset applied, settings changed)
 - Sidebar windows are now grouped by screen and by application; multi-window apps show an app header with indented window rows
 - Screen header rows in the sidebar now have a kebab menu with "Gather windows" and "Move windows to" actions for managing windows across screens
 - App header kebab menu with "Move all windows to screen", "Hide others", and "Quit" actions
@@ -268,7 +269,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/yusuke/tiley/releases/tag/v3.0.0
 [2.2.0]: https://github.com/yusuke/tiley/releases/tag/v2.2.0
 [2.1.0]: https://github.com/yusuke/tiley/releases/tag/v2.1.0
 [2.0.3]: https://github.com/yusuke/tiley/releases/tag/v2.0.3
