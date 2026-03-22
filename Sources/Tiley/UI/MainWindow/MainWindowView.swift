@@ -1008,7 +1008,43 @@ struct MainWindowView: View {
             }
         }
         .frame(width: compositeWidth, height: compositeHeight)
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(compositeClipShape)
+    }
+
+    /// Returns the clip shape for the screen composite view.
+    /// Built-in (laptop) display: rounded top-left and top-right corners only.
+    /// External displays: no corner radius.
+    private var compositeClipShape: UnevenRoundedRectangle {
+        if isBuiltInDisplay {
+            return UnevenRoundedRectangle(
+                topLeadingRadius: 8,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 0,
+                topTrailingRadius: 8,
+                style: .continuous
+            )
+        } else {
+            return UnevenRoundedRectangle(
+                topLeadingRadius: 0,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 0,
+                topTrailingRadius: 0,
+                style: .continuous
+            )
+        }
+    }
+
+    /// Whether the current screen is the built-in laptop display.
+    private var isBuiltInDisplay: Bool {
+        let screen: NSScreen?
+        if let ctx = screenContext {
+            screen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
+        } else {
+            screen = NSScreen.main
+        }
+        guard let screen else { return false }
+        let screenNumber = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID ?? 0
+        return CGDisplayIsBuiltin(screenNumber) != 0
     }
 
     private var keyboardHintsBar: some View {
