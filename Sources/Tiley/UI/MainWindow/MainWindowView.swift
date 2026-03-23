@@ -46,7 +46,7 @@ private struct NotchMenuBarCanvas: View {
     let height: CGFloat
     let notchWidth: CGFloat
 
-    private var cornerR: CGFloat { notchWidth * 0.03 }
+    private var cornerR: CGFloat { notchWidth * 0.05 }
 
     var body: some View {
         NotchShape(cornerR: cornerR)
