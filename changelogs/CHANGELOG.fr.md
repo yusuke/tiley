@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-03-24
+
 ### Modifié
 
 - Remplacement des menus kebab (…) au survol dans la liste des fenêtres par des menus contextuels natifs macOS (clic droit)

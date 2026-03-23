@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-03-24
+
 ### Modificato
 
 - Sostituiti i menu kebab (…) al passaggio del mouse nella lista finestre con menu contestuali nativi macOS (clic destro)
