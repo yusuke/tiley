@@ -1243,14 +1243,14 @@ struct MainWindowView: View {
     }
 
     private enum SidebarRow: Identifiable {
-        case screenHeader(displayID: CGDirectDisplayID, name: String)
+        case screenHeader(displayID: CGDirectDisplayID, name: String, hasWindowsOnOtherScreens: Bool, hasWindowsOnThisScreen: Bool)
         case emptyScreen(displayID: CGDirectDisplayID, name: String)
         case appHeader(pid: pid_t, appName: String)
         case window(WindowListItem)
 
         var id: String {
             switch self {
-            case .screenHeader(let displayID, _): return "screen-\(displayID)"
+            case .screenHeader(let displayID, _, _, _): return "screen-\(displayID)"
             case .emptyScreen(let displayID, _): return "empty-screen-\(displayID)"
             case .appHeader(let pid, _): return "app-\(pid)"
             case .window(let item): return "window-\(item.id)"
@@ -1372,13 +1372,22 @@ struct MainWindowView: View {
             return a.displayID < b.displayID
         }
 
+        // Precompute which screens have windows.
+        let screensWithWindows = Set(screenGroups.compactMap { $0.items.isEmpty ? nil : $0.displayID })
+
         // Flatten into SidebarRow array with screen headers and app grouping.
         var rows: [SidebarRow] = []
         for group in screenGroups {
             if group.items.isEmpty {
                 rows.append(.emptyScreen(displayID: group.displayID, name: group.name))
             } else {
-                rows.append(.screenHeader(displayID: group.displayID, name: group.name))
+                let hasWindowsOnOther = screensWithWindows.contains { $0 != group.displayID }
+                rows.append(.screenHeader(
+                    displayID: group.displayID,
+                    name: group.name,
+                    hasWindowsOnOtherScreens: hasWindowsOnOther,
+                    hasWindowsOnThisScreen: true
+                ))
                 rows.append(contentsOf: appGroupedRows(from: group.items))
             }
         }
@@ -1414,8 +1423,8 @@ struct MainWindowView: View {
                     LazyVStack(spacing: 2) {
                         ForEach(filteredSidebarRows) { row in
                             switch row {
-                            case .screenHeader(let displayID, let name):
-                                screenHeaderRow(displayID: displayID, name: name)
+                            case .screenHeader(let displayID, let name, let hasOther, let hasThis):
+                                screenHeaderRow(displayID: displayID, name: name, hasWindowsOnOtherScreens: hasOther, hasWindowsOnThisScreen: hasThis)
                             case .emptyScreen(let displayID, let name):
                                 emptyScreenRow(displayID: displayID, name: name)
                             case .appHeader(let pid, let appName):
@@ -1474,16 +1483,9 @@ struct MainWindowView: View {
         NSScreen.screens.first { $0.displayID == displayID }
     }
 
-    private func screenHeaderRow(displayID: CGDirectDisplayID, name: String) -> some View {
+    private func screenHeaderRow(displayID: CGDirectDisplayID, name: String, hasWindowsOnOtherScreens: Bool, hasWindowsOnThisScreen: Bool) -> some View {
         let isHovered = hoveredScreenHeaderID == displayID
         let otherScreens = otherScreensForDisplay(displayID)
-        let hasWindowsOnOtherScreens = appState.windowTargetList.contains { target in
-            let targetDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
-            return targetDisplayID != nil && targetDisplayID != displayID
-        }
-        let hasWindowsOnThisScreen = appState.windowTargetList.contains { target in
-            NSScreen.screen(containing: target.screenFrame)?.displayID == displayID
-        }
 
         return HStack(spacing: 6) {
             ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
