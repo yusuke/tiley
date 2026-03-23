@@ -145,6 +145,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         } else {
             window?.orderFront(nil)
         }
+        // Prevent the search field from auto-focusing when the window opens.
+        window?.makeFirstResponder(window?.contentView)
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
         debugLog("MainWindowController.show done asKey=\(asKey ? 1 : 0) (\(String(format: "%.1f", elapsed))ms)")
     }
