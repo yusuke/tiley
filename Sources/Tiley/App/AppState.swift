@@ -124,6 +124,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var shortcutRecordingSessionCount = 0
     var isEditingLayoutPresets = false
     @ObservationIgnored private var hotKeyHandler: EventHandlerRef?
+    @ObservationIgnored private var hotKeysYieldedToDebug = false
     @ObservationIgnored private var lastSelection: GridSelection?
     @ObservationIgnored private var lastSelectionRows: Int?
     @ObservationIgnored private var lastSelectionColumns: Int?
@@ -304,6 +305,7 @@ final class AppState: NSObject, NSMenuDelegate {
         applyStatusItemVisibility()
         applyDockIconVisibility()
         installHotKeyHandler()
+        installDebugHotKeyCoordination()
         registerAllHotKeys()
 
         guard accessibilityGranted else {
@@ -1464,10 +1466,19 @@ final class AppState: NSObject, NSMenuDelegate {
             button.action = #selector(handleStatusItemButtonClick)
             button.sendAction(on: [.leftMouseUp])
         }
-        if let iconURL = resourceBundle.url(forResource: "menu-icon", withExtension: "pdf"),
+        #if DEBUG
+        let menuIconName = "menu-icon-xcode"
+        #else
+        let menuIconName = "menu-icon"
+        #endif
+        if let iconURL = resourceBundle.url(forResource: menuIconName, withExtension: "pdf"),
            let icon = NSImage(contentsOf: iconURL),
            let button = item.button {
+            #if DEBUG
+            icon.isTemplate = false
+            #else
             icon.isTemplate = true
+            #endif
             icon.size = NSSize(width: 18, height: 18)
             button.image = icon
             button.imagePosition = .imageOnly
@@ -1558,6 +1569,10 @@ final class AppState: NSObject, NSMenuDelegate {
             let appState = Unmanaged<AppState>.fromOpaque(userData).takeUnretainedValue()
             var hotKeyID = EventHotKeyID()
             GetEventParameter(event, EventParamName(kEventParamDirectObject), EventParamType(typeEventHotKeyID), nil, MemoryLayout<EventHotKeyID>.size, nil, &hotKeyID)
+            // Release build: skip handling if a debug version is running.
+            if appState.hotKeysYieldedToDebug || appState.isDebugVersionRunning {
+                return noErr
+            }
             if hotKeyID.id == 1 {
                 if appState.isEditingSettings {
                     return noErr
@@ -1575,12 +1590,14 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func registerAllHotKeys() {
+        guard !hotKeysYieldedToDebug else { return }
         guard shortcutRecordingSessionCount == 0 else { return }
         registerMainHotKey()
         registerPresetHotKeys()
     }
 
     private func registerMainHotKey() {
+        guard !hotKeysYieldedToDebug else { return }
         unregisterHotKey()
         let hotKeyID = EventHotKeyID(signature: OSType(0x44565659), id: 1)
         RegisterEventHotKey(
@@ -1594,6 +1611,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func registerPresetHotKeys() {
+        guard !hotKeysYieldedToDebug else { return }
         unregisterPresetHotKeys()
         var nextID: UInt32 = 100
 
@@ -1638,6 +1656,55 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterHotKey()
         unregisterPresetHotKeys()
     }
+
+    // MARK: - Debug/Release hotkey coordination
+
+    private static let debugBundleID = "one.cafebabe.tiley.debug"
+
+    /// Returns true when a debug build of Tiley is running alongside this release build.
+    private var isDebugVersionRunning: Bool {
+        #if DEBUG
+        return false
+        #else
+        return !NSRunningApplication.runningApplications(withBundleIdentifier: Self.debugBundleID).isEmpty
+        #endif
+    }
+
+    /// Release build: observe workspace app launch/terminate to yield hotkeys to the debug build.
+    private func installDebugHotKeyCoordination() {
+        #if DEBUG
+        // Debug version needs no coordination — it always owns hotkeys.
+        #else
+        if isDebugVersionRunning {
+            hotKeysYieldedToDebug = true
+        }
+        let center = NSWorkspace.shared.notificationCenter
+        center.addObserver(
+            self, selector: #selector(handleAppDidLaunch(_:)),
+            name: NSWorkspace.didLaunchApplicationNotification, object: nil
+        )
+        center.addObserver(
+            self, selector: #selector(handleAppDidTerminate(_:)),
+            name: NSWorkspace.didTerminateApplicationNotification, object: nil
+        )
+        #endif
+    }
+
+    #if !DEBUG
+    @objc private func handleAppDidLaunch(_ notification: Notification) {
+        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+              app.bundleIdentifier == Self.debugBundleID else { return }
+        unregisterAllHotKeys()
+        hotKeysYieldedToDebug = true
+    }
+
+    @objc private func handleAppDidTerminate(_ notification: Notification) {
+        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+              app.bundleIdentifier == Self.debugBundleID else { return }
+        hotKeysYieldedToDebug = false
+        registerAllHotKeys()
+    }
+    #endif
 
     private func canEnableGlobalShortcut(for shortcut: HotKeyShortcut) -> Bool {
         // Preset shortcuts accept non-modifier keys as well.
@@ -2248,3 +2315,4 @@ private final class TaggableView: NSView {
     var assignedTag: Int = 0
     override var tag: Int { assignedTag }
 }
+

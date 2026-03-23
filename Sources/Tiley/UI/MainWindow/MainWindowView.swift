@@ -157,6 +157,8 @@ struct MainWindowView: View {
     @State private var dragEndTask: Task<Void, Never>?
     @State private var isHoveringGridSection = false
     @State private var windowSearchText = ""
+    @State private var debouncedSearchText = ""
+    @State private var searchDebounceTask: Task<Void, Never>?
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
@@ -472,6 +474,16 @@ struct MainWindowView: View {
         }
         .onChange(of: windowSearchText) { _, newValue in
             appState.windowSearchQuery = newValue
+            searchDebounceTask?.cancel()
+            if newValue.isEmpty {
+                debouncedSearchText = newValue
+            } else {
+                searchDebounceTask = Task {
+                    try? await Task.sleep(for: .milliseconds(200))
+                    guard !Task.isCancelled else { return }
+                    debouncedSearchText = newValue
+                }
+            }
         }
         .onChange(of: appState.windowSearchQuery) { _, newValue in
             if windowSearchText != newValue {
@@ -1239,7 +1251,7 @@ struct MainWindowView: View {
 
     private var filteredSidebarRows: [SidebarRow] {
         let targets = appState.windowTargetList
-        let query = windowSearchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let query = debouncedSearchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
         // Count windows per PID to determine if a window is the last one for its app.
         var windowCountByPID: [pid_t: Int] = [:]
