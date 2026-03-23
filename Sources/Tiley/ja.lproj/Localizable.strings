@@ -29,7 +29,7 @@
 "The focused window does not expose a standard AX position and size." = "フォーカス中のウインドウが標準の AX 位置・サイズ属性を提供していません。";
 "Failed to set the window position." = "ウインドウ位置の設定に失敗しました。";
 "Failed to set the window size." = "ウインドウサイズの設定に失敗しました。";
-"App" = "アプリ";
+"App" = "アプリケーション";
 "Back" = "戻る";
 "Layouts" = "レイアウト";
 "Grid" = "グリッド";
@@ -122,7 +122,7 @@
 // Action bar tooltips
 "Move to Other Display" = "他のディスプレイに移動";
 "Close Window" = "ウィンドウを閉じる";
-"Quit App" = "アプリを終了";
-"Hide Other Apps" = "他のアプリを隠す";
+"Quit App" = "アプリケーションを終了";
+"Hide Other Apps" = "他のアプリケーションを隠す";
 "Move to %@" = "%@へ移動";
 "Close all %@ windows" = "%@のウインドウをすべて閉じる";
