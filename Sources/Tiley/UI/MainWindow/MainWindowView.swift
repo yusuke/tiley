@@ -1407,7 +1407,7 @@ struct MainWindowView: View {
 
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(spacing: 2) {
+                    LazyVStack(spacing: 2) {
                         ForEach(filteredSidebarRows) { row in
                             switch row {
                             case .screenHeader(let displayID, let name):
