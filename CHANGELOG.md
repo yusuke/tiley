@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Layout preset grid thumbnails now match the aspect ratio of the screen's usable area (excluding menu bar and Dock), reflecting portrait or landscape orientation per screen
+
 ## [3.0.1] - 2026-03-23
 
 ### Added

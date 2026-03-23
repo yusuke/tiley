@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Die Raster-Vorschaubilder der Layout-Voreinstellungen spiegeln nun das Seitenverhältnis des nutzbaren Bildschirmbereichs (ohne Menüleiste und Dock) wider und passen sich an Hoch- oder Querformat an.
+
 ## [3.0.1] - 2026-03-23
 
 ### Hinzugefügt

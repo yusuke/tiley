@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Le miniature della griglia delle preimpostazioni di layout ora riflettono le proporzioni dell'area utilizzabile dello schermo (escludendo barra dei menu e Dock), adattandosi all'orientamento verticale o orizzontale.
+
 ## [3.0.1] - 2026-03-23
 
 ### Aggiunto

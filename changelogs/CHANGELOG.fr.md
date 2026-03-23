@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Les miniatures de grille des préréglages de disposition reflètent désormais le rapport d'aspect de la zone utilisable de l'écran (hors barre de menus et Dock), s'adaptant à l'orientation portrait ou paysage.
+
 ## [3.0.1] - 2026-03-23
 
 ### Ajouté

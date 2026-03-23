@@ -152,6 +152,7 @@ struct MainWindowView: View {
     private static let presetRowSpacing: CGFloat = 8
     private static let presetsPanelChromeHeight: CGFloat = 42
     private static let presetGridColumnWidth: CGFloat = 51
+    private static let presetGridMaxHeight: CGFloat = 28
     private static let presetShortcutColumnWidth: CGFloat = 160
     private static let presetActionColumnWidth: CGFloat = 60
     private static let defaultGridColumns = 6
@@ -610,6 +611,22 @@ struct MainWindowView: View {
         #else
         Bundle.main
         #endif
+    }
+
+    /// Returns the thumbnail size for the preset grid preview, matching the
+    /// visible screen area's aspect ratio (excluding menu bar and Dock).
+    private static func presetGridThumbnailSize(for screenContext: ScreenContext?) -> CGSize {
+        let maxW = presetGridColumnWidth
+        let maxH = presetGridMaxHeight
+        guard let ctx = screenContext,
+              ctx.visibleFrame.width > 0,
+              ctx.visibleFrame.height > 0 else {
+            return CGSize(width: maxW, height: maxH)
+        }
+        let aspect = ctx.visibleFrame.width / ctx.visibleFrame.height
+        let fitW = min(maxW, maxH * aspect)
+        let fitH = fitW / aspect
+        return CGSize(width: fitW, height: fitH)
     }
 
     private static func permissionsImage(named name: String) -> NSImage? {
@@ -1992,13 +2009,15 @@ struct MainWindowView: View {
     @ViewBuilder
     private func layoutPresetRow(_ preset: LayoutPreset) -> some View {
         let isInEditMode = editingPresetID == preset.id
+        let presetGridSize = Self.presetGridThumbnailSize(for: screenContext)
         HStack(spacing: 12) {
             PresetGridPreviewView(
                 rows: appState.rows,
                 columns: appState.columns,
                 selection: preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
             )
-            .frame(width: Self.presetGridColumnWidth, height: 26, alignment: .center)
+            .frame(width: presetGridSize.width, height: presetGridSize.height)
+            .frame(width: Self.presetGridColumnWidth, alignment: .center)
 
             presetNameCell(for: preset)
 

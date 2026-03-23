@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- As miniaturas de grade das predefinições de layout agora refletem a proporção da área utilizável da tela (excluindo a barra de menus e o Dock), adaptando-se à orientação retrato ou paisagem.
+
 ## [3.0.1] - 2026-03-23
 
 ### Adicionado

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Las miniaturas de cuadrícula de los ajustes de diseño ahora reflejan la relación de aspecto del área utilizable de la pantalla (excluyendo la barra de menú y el Dock), adaptándose a la orientación vertical u horizontal.
+
 ## [3.0.1] - 2026-03-23
 
 ### Añadido
