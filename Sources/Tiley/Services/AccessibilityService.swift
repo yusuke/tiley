@@ -401,6 +401,17 @@ final class AccessibilityService {
         raiseWindow(window)
     }
 
+    /// Returns the largest AX-Y value that is still below all screens.
+    private func allScreensMaxAXBottom() -> CGFloat {
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 1200
+        var maxBottom: CGFloat = 0
+        for screen in NSScreen.screens {
+            let axBottom = primaryMaxY - screen.frame.minY
+            if axBottom > maxBottom { maxBottom = axBottom }
+        }
+        return maxBottom
+    }
+
     /// Raises a window to the front of its application's window stack.
     func raiseWindow(_ window: AXUIElement) {
         AXUIElementPerformAction(window, kAXRaiseAction as CFString)
