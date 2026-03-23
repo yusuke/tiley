@@ -2192,7 +2192,7 @@ final class AppState: NSObject, NSMenuDelegate {
             controller.dismissSilently()
         }
 
-        if let existingCtrl = mainWindowControllers[displayID] {
+        if !isEditingSettings, let existingCtrl = mainWindowControllers[displayID] {
             // Reuse existing controller — just update state and show.
             // Discard secondary controllers that are no longer needed.
             mainWindowControllers = mainWindowControllers.filter { $0.key == displayID }
@@ -2201,7 +2201,8 @@ final class AppState: NSObject, NSMenuDelegate {
             selectedLayoutPresetID = nil
             existingCtrl.show()
         } else {
-            // No cached controller for this display — recreate.
+            // Always recreate when entering settings to avoid stale SwiftUI
+            // layout state that causes Toggle switch knobs to render incorrectly.
             mainWindowControllers.removeAll()
             mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
             NSApp.activate(ignoringOtherApps: true)
