@@ -112,6 +112,30 @@ private struct NotchShape: Shape {
     }
 }
 
+private final class AppInfoCache {
+    private var icons: [pid_t: NSImage] = [:]
+    private var bundleIDs: [pid_t: String] = [:]
+
+    func icon(for pid: pid_t) -> NSImage? {
+        if let cached = icons[pid] { return cached }
+        guard let icon = NSRunningApplication(processIdentifier: pid)?.icon else { return nil }
+        icons[pid] = icon
+        return icon
+    }
+
+    func bundleID(for pid: pid_t) -> String? {
+        if let cached = bundleIDs[pid] { return cached }
+        guard let id = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier else { return nil }
+        bundleIDs[pid] = id
+        return id
+    }
+
+    func invalidate() {
+        icons.removeAll(keepingCapacity: true)
+        bundleIDs.removeAll(keepingCapacity: true)
+    }
+}
+
 struct MainWindowView: View {
     private static let windowCornerRadius: CGFloat = 14
     private static let layoutPanelHorizontalPadding: CGFloat = 8
@@ -159,8 +183,7 @@ struct MainWindowView: View {
     @State private var windowSearchText = ""
     @State private var debouncedSearchText = ""
     @State private var searchDebounceTask: Task<Void, Never>?
-    @State private var appIconCache: [pid_t: NSImage] = [:]
-    @State private var bundleIDCache: [pid_t: String] = [:]
+    @State private var appInfoCache = AppInfoCache()
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
@@ -493,8 +516,7 @@ struct MainWindowView: View {
             }
         }
         .onChange(of: appState.windowTargetListVersion) { _, _ in
-            appIconCache.removeAll(keepingCapacity: true)
-            bundleIDCache.removeAll(keepingCapacity: true)
+            appInfoCache.invalidate()
             if appState.hasUsedTabCycling {
                 showSidebarIfNeeded()
             }
@@ -1277,7 +1299,7 @@ struct MainWindowView: View {
                 let matchesTitle = title.lowercased().contains(query)
                 if !matchesApp && !matchesTitle { continue }
             }
-            let isFinder = cachedBundleID(for: target.processIdentifier) == "com.apple.finder"
+            let isFinder = appInfoCache.bundleID(for: target.processIdentifier) == "com.apple.finder"
             items.append(WindowListItem(
                 id: index,
                 appName: target.appName,
@@ -1434,7 +1456,6 @@ struct MainWindowView: View {
                             }
                         }
                     }
-                    .id(appState.windowTargetListVersion)
                     .padding(.top, 4)
                     .padding(.bottom, 40)
                     .padding(.horizontal, 6)
@@ -1459,19 +1480,6 @@ struct MainWindowView: View {
         }
     }
 
-    private func cachedAppIcon(for pid: pid_t) -> NSImage? {
-        if let cached = appIconCache[pid] { return cached }
-        guard let icon = NSRunningApplication(processIdentifier: pid)?.icon else { return nil }
-        appIconCache[pid] = icon
-        return icon
-    }
-
-    private func cachedBundleID(for pid: pid_t) -> String? {
-        if let cached = bundleIDCache[pid] { return cached }
-        guard let id = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier else { return nil }
-        bundleIDCache[pid] = id
-        return id
-    }
 
     private func otherScreensForDisplay(_ displayID: CGDirectDisplayID) -> [NSScreen] {
         let screens = NSScreen.screens
@@ -1568,7 +1576,7 @@ struct MainWindowView: View {
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
         let isHovered = hoveredAppHeaderPID == pid
         return HStack(spacing: 6) {
-            if let icon = cachedAppIcon(for: pid) {
+            if let icon = appInfoCache.icon(for: pid) {
                 Image(nsImage: icon)
                     .resizable()
                     .interpolation(.high)
@@ -1648,7 +1656,7 @@ struct MainWindowView: View {
                         .lineLimit(1)
                         .padding(.leading, 20)
                 } else {
-                    if let icon = cachedAppIcon(for: item.pid) {
+                    if let icon = appInfoCache.icon(for: item.pid) {
                         Image(nsImage: icon)
                             .resizable()
                             .interpolation(.high)
