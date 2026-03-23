@@ -160,6 +160,7 @@ struct MainWindowView: View {
     @State private var debouncedSearchText = ""
     @State private var searchDebounceTask: Task<Void, Never>?
     @State private var appIconCache: [pid_t: NSImage] = [:]
+    @State private var bundleIDCache: [pid_t: String] = [:]
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
@@ -493,6 +494,7 @@ struct MainWindowView: View {
         }
         .onChange(of: appState.windowTargetListVersion) { _, _ in
             appIconCache.removeAll(keepingCapacity: true)
+            bundleIDCache.removeAll(keepingCapacity: true)
             if appState.hasUsedTabCycling {
                 showSidebarIfNeeded()
             }
@@ -1275,7 +1277,7 @@ struct MainWindowView: View {
                 let matchesTitle = title.lowercased().contains(query)
                 if !matchesApp && !matchesTitle { continue }
             }
-            let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
+            let isFinder = cachedBundleID(for: target.processIdentifier) == "com.apple.finder"
             items.append(WindowListItem(
                 id: index,
                 appName: target.appName,
@@ -1453,6 +1455,13 @@ struct MainWindowView: View {
         guard let icon = NSRunningApplication(processIdentifier: pid)?.icon else { return nil }
         appIconCache[pid] = icon
         return icon
+    }
+
+    private func cachedBundleID(for pid: pid_t) -> String? {
+        if let cached = bundleIDCache[pid] { return cached }
+        guard let id = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier else { return nil }
+        bundleIDCache[pid] = id
+        return id
     }
 
     private func otherScreensForDisplay(_ displayID: CGDirectDisplayID) -> [NSScreen] {
