@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - When bringing a window to front via Enter or double-click, the window is now moved to the screen where the mouse pointer is located if it differs from the window's current screen. The window is repositioned to fit within the destination screen, resizing only if necessary.
 
+### Changed
+
+- Improved overlay display performance by ~80% through controller pooling/reuse, deferred window list loading, and prioritized target screen rendering
+
 ## [3.0.0] - 2026-03-23
 
 ### Added

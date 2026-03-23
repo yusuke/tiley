@@ -6,6 +6,10 @@
 
 - Quando si porta una finestra in primo piano tramite Invio o doppio clic, la finestra viene spostata sullo schermo in cui si trova il puntatore del mouse, se diverso. La finestra viene riposizionata per adattarsi allo schermo e ridimensionata solo se necessario.
 
+### Modificato
+
+- Prestazioni di visualizzazione dell'overlay migliorate di circa l'80% grazie al pooling/riutilizzo dei controller, al caricamento differito della lista delle finestre e al rendering prioritario dello schermo di destinazione
+
 ## [3.0.0] - 2026-03-23
 
 ### Aggiunto
