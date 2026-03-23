@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-03-23
+
 ### Hinzugefügt
 
 - Beim Aktivieren eines Fensters per Enter oder Doppelklick wird das Fenster nun auf den Bildschirm verschoben, auf dem sich der Mauszeiger befindet, falls dieser abweicht. Das Fenster wird bevorzugt repositioniert und nur bei Bedarf in der Größe angepasst.

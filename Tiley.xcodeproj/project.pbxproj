@@ -22,12 +22,12 @@
 		701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */; };
 		701526332F704490001E8095 /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 701526322F704490001E8095 /* TelemetryClient */; };
 		70840E2F2F61111100DF0607 /* menu-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E302F61111200DF0607 /* menu-icon.pdf */; };
-		70840E3B2F61111D00DF0607 /* menu-icon-xcode.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E3C2F61111E00DF0607 /* menu-icon-xcode.pdf */; };
 		70840E312F61111300DF0607 /* en.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E322F61111400DF0607 /* en.lproj/Localizable.strings */; };
 		70840E332F61111500DF0607 /* ja.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */; };
 		70840E352F61111700DF0607 /* ko.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E362F61111800DF0607 /* ko.lproj/Localizable.strings */; };
 		70840E372F61111900DF0607 /* zh-Hans.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E382F61111A00DF0607 /* zh-Hans.lproj/Localizable.strings */; };
 		70840E392F61111B00DF0607 /* zh-Hant.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E3A2F61111C00DF0607 /* zh-Hant.lproj/Localizable.strings */; };
+		70840E3B2F61111D00DF0607 /* menu-icon-xcode.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E3C2F61111E00DF0607 /* menu-icon-xcode.pdf */; };
 		70A778692F6183C5002DA5F7 /* TileyIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 70A778682F6183C5002DA5F7 /* TileyIcon.icon */; };
 		70B56A4D2F63E456005173A5 /* system-en.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B56A4A2F63E456005173A5 /* system-en.png */; };
 		70B56A4E2F63E456005173A5 /* dialog-en.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B56A482F63E456005173A5 /* dialog-en.png */; };
@@ -55,12 +55,12 @@
 		7015262C2F6EF356001E8095 /* GridModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridModels.swift; sourceTree = "<group>"; };
 		7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyShortcut.swift; sourceTree = "<group>"; };
 		70840E302F61111200DF0607 /* menu-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "menu-icon.pdf"; sourceTree = "<group>"; };
-		70840E3C2F61111E00DF0607 /* menu-icon-xcode.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "menu-icon-xcode.pdf"; sourceTree = "<group>"; };
 		70840E322F61111400DF0607 /* en.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70840E362F61111800DF0607 /* ko.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70840E382F61111A00DF0607 /* zh-Hans.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		70840E3A2F61111C00DF0607 /* zh-Hant.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		70840E3C2F61111E00DF0607 /* menu-icon-xcode.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "menu-icon-xcode.pdf"; sourceTree = "<group>"; };
 		70A778682F6183C5002DA5F7 /* TileyIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = TileyIcon.icon; sourceTree = "<group>"; };
 		70B56A482F63E456005173A5 /* dialog-en.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dialog-en.png"; sourceTree = "<group>"; };
 		70B56A492F63E456005173A5 /* dialog-ja.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dialog-ja.png"; sourceTree = "<group>"; };
@@ -369,7 +369,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 300;
+				CURRENT_PROJECT_VERSION = 301;
 				DEVELOPMENT_TEAM = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -380,7 +380,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -401,7 +401,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 300;
+				CURRENT_PROJECT_VERSION = 301;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -413,7 +413,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-03-23
+
 ### Ajouté
 
 - Lors de la mise au premier plan d'une fenêtre via Entrée ou double-clic, la fenêtre est désormais déplacée vers l'écran où se trouve le pointeur de la souris si celui-ci diffère. La fenêtre est repositionnée pour s'adapter à l'écran et n'est redimensionnée qu'en cas de nécessité.
