@@ -22,6 +22,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         super.init()
     }
 
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        // Set activation policy early, before SwiftUI shows the anchor window.
+        // This prevents the brief flash of a .regular app (Dock icon + menu bar)
+        // before start() switches to .accessory.
+        //
+        // Skip when the app is not in /Applications (and not a dev build),
+        // because moveToApplicationsFolderIfNeeded() needs .regular policy
+        // to show a modal alert in the foreground.
+        let dockIconVisible = UserDefaults.standard.object(forKey: "dockIconVisible") as? Bool ?? false
+        if !dockIconVisible && !needsMoveToApplicationsFolder() {
+            _ = NSApp.setActivationPolicy(.accessory)
+        }
+    }
+
+    /// Returns `true` when the app is running outside /Applications and is
+    /// not a development build — i.e. moveToApplicationsFolderIfNeeded()
+    /// will present its dialog.
+    private func needsMoveToApplicationsFolder() -> Bool {
+        let bundlePath = Bundle.main.bundlePath
+        if bundlePath.hasPrefix("/Applications/") { return false }
+        if bundlePath.contains("/DerivedData/") || bundlePath.contains("/Build/Products/") || bundlePath.contains("/.build/") { return false }
+        return true
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         let telemetryConfig = TelemetryDeck.Config(appID: "9B33124A-BA08-47CC-9633-935F30737BCF")
         TelemetryDeck.initialize(config: telemetryConfig)

@@ -1563,6 +1563,9 @@ final class AppState: NSObject, NSMenuDelegate {
     private func installStatusItem() {
         guard statusItem == nil else { return }
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        // Hide the item until the icon is fully configured to prevent a
+        // brief flash of an un-themed (black) icon in the menu bar.
+        item.isVisible = false
         if let button = item.button {
             button.target = self
             button.action = #selector(handleStatusItemButtonClick)
@@ -1589,6 +1592,7 @@ final class AppState: NSObject, NSMenuDelegate {
             item.button?.title = NSLocalizedString("Tiley", comment: "App name fallback title")
         }
         item.menu = nil
+        item.isVisible = true
         statusItem = item
         if hasUpdateBadge {
             applyUpdateBadgeIcon()
