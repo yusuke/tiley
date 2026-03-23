@@ -9,7 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Replaced hover-reveal kebab (more) menus in the window list sidebar with native right-click context menus for a more macOS-native experience
+- Added action buttons (Move to Screen, Close/Quit, Hide Others) next to the sidebar search field for quick access to common window operations
 - Layout preset grid thumbnails now match the aspect ratio of the screen's usable area (excluding menu bar and Dock), reflecting portrait or landscape orientation per screen
+
+### Removed
+
+- Removed hover-reveal kebab menu buttons and hover close buttons from sidebar rows (replaced by context menus and action bar)
 
 ### Fixed
 

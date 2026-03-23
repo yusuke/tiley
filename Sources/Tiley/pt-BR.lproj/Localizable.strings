@@ -118,3 +118,11 @@
 "Move %1$@ windows to %2$@" = "Mover janelas de %1$@ para %2$@";
 "No windows" = "Sem janelas";
 "Gather windows" = "Reunir janelas";
+
+// Action bar tooltips
+"Move to Other Display" = "Mover para outro display";
+"Close Window" = "Fechar janela";
+"Quit App" = "Encerrar app";
+"Hide Other Apps" = "Ocultar outros apps";
+"Move to %@" = "Mover para %@";
+"Close all %@ windows" = "Fechar todas as janelas do %@";

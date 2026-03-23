@@ -118,3 +118,11 @@
 "Move %1$@ windows to %2$@" = "Move %1$@ windows to %2$@";
 "No windows" = "No windows";
 "Gather windows" = "Gather windows";
+
+// Action bar tooltips
+"Move to Other Display" = "Move to Other Display";
+"Close Window" = "Close Window";
+"Quit App" = "Quit App";
+"Hide Other Apps" = "Hide Other Apps";
+"Move to %@" = "Move to %@";
+"Close all %@ windows" = "Close all %@ windows";

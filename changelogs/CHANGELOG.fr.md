@@ -4,11 +4,17 @@
 
 ### Modifié
 
+- Remplacement des menus kebab (…) au survol dans la liste des fenêtres par des menus contextuels natifs macOS (clic droit)
+- Ajout de boutons d'action (Déplacer vers l'écran, Fermer/Quitter, Masquer les autres apps) à côté du champ de recherche de la barre latérale
 - Les miniatures de grille des préréglages de disposition reflètent désormais le rapport d'aspect de la zone utilisable de l'écran (hors barre de menus et Dock), s'adaptant à l'orientation portrait ou paysage.
 
 ### Corrigé
 
 - Correction d'un problème où le redimensionnement de fenêtres échouait parfois lors du déplacement vers un autre écran (en particulier vers un moniteur portrait plus haut), grâce à l'introduction d'un mécanisme de nouvelle tentative pour les déplacements inter-écrans
+
+### Supprimé
+
+- Suppression des boutons de menu kebab et de fermeture au survol des lignes de la barre latérale (remplacés par les menus contextuels et la barre d'actions)
 
 ## [3.0.1] - 2026-03-23
 

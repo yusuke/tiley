@@ -4,11 +4,17 @@
 
 ### Cambiado
 
+- Reemplazados los menús kebab (…) al pasar el ratón en la lista de ventanas por menús contextuales nativos de macOS (clic derecho)
+- Añadidos botones de acción (Mover a pantalla, Cerrar/Salir, Ocultar otras apps) junto al campo de búsqueda de la barra lateral
 - Las miniaturas de cuadrícula de los ajustes de diseño ahora reflejan la relación de aspecto del área utilizable de la pantalla (excluyendo la barra de menú y el Dock), adaptándose a la orientación vertical u horizontal.
 
 ### Corregido
 
 - Corregido un problema donde el redimensionamiento de ventanas fallaba a veces al mover una ventana a otra pantalla (especialmente a un monitor vertical más alto), mediante la introducción de un mecanismo de reintento en movimientos entre pantallas
+
+### Eliminado
+
+- Eliminados los botones de menú kebab y de cierre que aparecían al pasar el ratón en las filas de la barra lateral (reemplazados por menús contextuales y barra de acciones)
 
 ## [3.0.1] - 2026-03-23
 

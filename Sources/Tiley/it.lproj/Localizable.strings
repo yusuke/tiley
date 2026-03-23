@@ -118,3 +118,11 @@
 "Move %1$@ windows to %2$@" = "Sposta le finestre da %1$@ su %2$@";
 "No windows" = "Nessuna finestra";
 "Gather windows" = "Raccogli le finestre";
+
+// Action bar tooltips
+"Move to Other Display" = "Sposta su altro display";
+"Close Window" = "Chiudi finestra";
+"Quit App" = "Esci dall'app";
+"Hide Other Apps" = "Nascondi altre app";
+"Move to %@" = "Sposta su %@";
+"Close all %@ windows" = "Chiudi tutte le finestre di %@";

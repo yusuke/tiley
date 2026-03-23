@@ -4,11 +4,17 @@
 
 ### Geändert
 
+- Hover-Kebab-Menüs (…) in der Fensterliste durch native macOS-Kontextmenüs (Rechtsklick) ersetzt
+- Aktionsschaltflächen (Auf Bildschirm verschieben, Schließen/Beenden, Andere Apps ausblenden) neben dem Suchfeld der Seitenleiste hinzugefügt
 - Die Raster-Vorschaubilder der Layout-Voreinstellungen spiegeln nun das Seitenverhältnis des nutzbaren Bildschirmbereichs (ohne Menüleiste und Dock) wider und passen sich an Hoch- oder Querformat an.
 
 ### Behoben
 
 - Fenstergrößenänderung schlug manchmal fehl, wenn ein Fenster auf einen anderen Bildschirm verschoben wurde (insbesondere auf einen höheren Hochformat-Monitor). Behoben durch einen Wiederholungsmechanismus bei bildschirmübergreifenden Verschiebungen.
+
+### Entfernt
+
+- Hover-Kebab-Menü-Schaltflächen und Hover-Schließen-Schaltflächen aus den Seitenleistenzeilen entfernt (durch Kontextmenüs und Aktionsleiste ersetzt)
 
 ## [3.0.1] - 2026-03-23
 

@@ -118,3 +118,11 @@
 "Move %1$@ windows to %2$@" = "%1$@ 윈도우를 %2$@(으)로 이동";
 "No windows" = "윈도우 없음";
 "Gather windows" = "윈도우 모으기";
+
+// Action bar tooltips
+"Move to Other Display" = "다른 디스플레이로 이동";
+"Close Window" = "윈도우 닫기";
+"Quit App" = "앱 종료";
+"Hide Other Apps" = "다른 앱 가리기";
+"Move to %@" = "%@(으)로 이동";
+"Close all %@ windows" = "%@의 모든 윈도우 닫기";

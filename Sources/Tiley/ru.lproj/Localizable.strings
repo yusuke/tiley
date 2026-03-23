@@ -118,3 +118,11 @@
 "Move %1$@ windows to %2$@" = "Переместить окна с %1$@ на %2$@";
 "No windows" = "Нет окон";
 "Gather windows" = "Собрать окна";
+
+// Action bar tooltips
+"Move to Other Display" = "Переместить на другой дисплей";
+"Close Window" = "Закрыть окно";
+"Quit App" = "Завершить приложение";
+"Hide Other Apps" = "Скрыть другие приложения";
+"Move to %@" = "Переместить на %@";
+"Close all %@ windows" = "Закрыть все окна %@";

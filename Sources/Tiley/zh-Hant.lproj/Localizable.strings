@@ -118,3 +118,11 @@
 "Move %1$@ windows to %2$@" = "將%1$@的視窗移到%2$@";
 "No windows" = "無視窗";
 "Gather windows" = "聚集視窗";
+
+// Action bar tooltips
+"Move to Other Display" = "移動到其他顯示器";
+"Close Window" = "關閉視窗";
+"Quit App" = "結束應用程式";
+"Hide Other Apps" = "隱藏其他應用程式";
+"Move to %@" = "移動到%@";
+"Close all %@ windows" = "關閉所有%@視窗";

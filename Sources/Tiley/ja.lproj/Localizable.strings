@@ -118,3 +118,11 @@
 "Move %1$@ windows to %2$@" = "%1$@のウインドウを%2$@に移動";
 "No windows" = "ウインドウなし";
 "Gather windows" = "ウインドウを集める";
+
+// Action bar tooltips
+"Move to Other Display" = "他のディスプレイに移動";
+"Close Window" = "ウィンドウを閉じる";
+"Quit App" = "アプリを終了";
+"Hide Other Apps" = "他のアプリを隠す";
+"Move to %@" = "%@へ移動";
+"Close all %@ windows" = "%@のウインドウをすべて閉じる";

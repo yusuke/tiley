@@ -885,16 +885,7 @@ final class AppState: NSObject, NSMenuDelegate {
         let target = availableWindowTargets[index]
         guard let window = target.windowElement else { return }
 
-        let windowSize = target.frame.size
-        let destVisible = screen.visibleFrame
-        // Center the window on the destination screen's visible area.
-        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
-        let newX = destVisible.midX - windowSize.width / 2
-        let newY = primaryMaxY - destVisible.maxY + (destVisible.height - windowSize.height) / 2
-        var origin = CGPoint(x: newX, y: newY)
-        if let posVal = AXValueCreate(.cgPoint, &origin) {
-            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, posVal)
-        }
+        moveWindowToDestinationScreen(window: window, destination: screen)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             self?.refreshAvailableWindows()
@@ -908,6 +899,18 @@ final class AppState: NSObject, NSMenuDelegate {
             .map(\.offset)
         for index in indices {
             moveWindowToScreen(at: index, screen: screen)
+        }
+    }
+
+    /// Close all windows belonging to the given PID (e.g., for Finder which cannot be quit).
+    func closeAllWindows(pid: pid_t) {
+        for target in availableWindowTargets where target.processIdentifier == pid {
+            if let window = target.windowElement {
+                accessibilityService.closeWindow(window)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
         }
     }
 

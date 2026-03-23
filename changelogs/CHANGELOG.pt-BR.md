@@ -4,11 +4,17 @@
 
 ### Alterado
 
+- Substituídos os menus kebab (…) ao passar o mouse na lista de janelas por menus de contexto nativos do macOS (clique direito)
+- Adicionados botões de ação (Mover para tela, Fechar/Encerrar, Ocultar outros apps) ao lado do campo de busca da barra lateral
 - As miniaturas de grade das predefinições de layout agora refletem a proporção da área utilizável da tela (excluindo a barra de menus e o Dock), adaptando-se à orientação retrato ou paisagem.
 
 ### Corrigido
 
 - Corrigido um problema onde o redimensionamento de janelas falhava às vezes ao mover uma janela para outra tela (especialmente para um monitor vertical mais alto), através da introdução de um mecanismo de nova tentativa em movimentações entre telas
+
+### Removido
+
+- Removidos os botões de menu kebab e de fechar ao passar o mouse nas linhas da barra lateral (substituídos por menus de contexto e barra de ações)
 
 ## [3.0.1] - 2026-03-23
 
