@@ -9,6 +9,11 @@
 ### Modifié
 
 - Amélioration des performances d'affichage de la superposition d'environ 80 % grâce au pooling/réutilisation des contrôleurs, au chargement différé de la liste des fenêtres et au rendu prioritaire de l'écran cible
+- Renommage du paramètre interne de journal de débogage de `useAppleScriptResize` en `enableDebugLog` pour mieux refléter son utilité
+
+### Corrigé
+
+- Correction du redimensionnement de fenêtre échouant silencieusement sur l'écran principal pour certaines applications (ex. Chrome). Le mécanisme de rebond utilisé pour les écrans secondaires est désormais appliqué à l'écran principal
 
 ## [3.0.0] - 2026-03-23
 

@@ -356,6 +356,22 @@ final class AccessibilityService {
             throw WindowAccessError.sizeSetFailed
         }
 
+        // 2b. Verify that the size actually changed.  Some apps (e.g. Chrome)
+        //     return .success but silently ignore the size change.  In that
+        //     case, bounce the window to the bottom of the primary screen,
+        //     resize there, then let steps 3–4 move it to the final position.
+        let (_, afterSize) = readPositionAndSize(of: window)
+        let sizeUnchanged = abs(afterSize.width - size.width) > 2
+                         || abs(afterSize.height - size.height) > 2
+        if sizeUnchanged {
+            let primaryHeight = NSScreen.screens.first?.frame.height ?? 1200
+            var bottomOfPrimary = CGPoint(x: 0, y: primaryHeight - 1)
+            if let v = AXValueCreate(.cgPoint, &bottomOfPrimary) {
+                AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
+            }
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+        }
+
         // 3. Nudge position 1px off-target so the AX subsystem won't
         //    de-duplicate the real set in step 4.
         var nudged = origin

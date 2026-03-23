@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Improved overlay display performance by ~80% through controller pooling/reuse, deferred window list loading, and prioritized target screen rendering
+- Renamed internal debug log setting from `useAppleScriptResize` to `enableDebugLog` to better reflect its purpose
+
+### Fixed
+
+- Fixed window resize silently failing on the primary screen for some apps (e.g. Chrome) by adding size verification and bounce retry, matching the existing workaround used for secondary screens
 
 ## [3.0.0] - 2026-03-23
 

@@ -9,6 +9,11 @@
 ### Cambiado
 
 - Rendimiento de visualización de la superposición mejorado en ~80% mediante agrupación/reutilización de controladores, carga diferida de la lista de ventanas y renderizado prioritario de la pantalla objetivo
+- Se renombró la configuración interna de registro de depuración de `useAppleScriptResize` a `enableDebugLog` para reflejar mejor su propósito
+
+### Corregido
+
+- Se corrigió el redimensionamiento de ventanas que fallaba silenciosamente en la pantalla principal para algunas aplicaciones (p. ej., Chrome). Se aplica el mecanismo de reintento con rebote de las pantallas secundarias también a la pantalla principal
 
 ## [3.0.0] - 2026-03-23
 

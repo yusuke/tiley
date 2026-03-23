@@ -1973,10 +1973,10 @@ struct MainWindowView: View {
                 VStack(spacing: 0) {
                     TahoeSettingsRow(label: NSLocalizedString("Write debug log to ~/tiley.log", comment: "")) {
                         Toggle("", isOn: Binding(
-                            get: { draftSettings.useAppleScriptResize },
+                            get: { draftSettings.enableDebugLog },
                             set: { newValue in
-                                draftSettings.useAppleScriptResize = newValue
-                                appState.useAppleScriptResize = newValue
+                                draftSettings.enableDebugLog = newValue
+                                appState.enableDebugLog = newValue
                             }
                         ))
                         .toggleStyle(.switch)

@@ -9,6 +9,11 @@
 ### Alterado
 
 - Desempenho de exibição da sobreposição melhorado em ~80% por meio de pooling/reutilização de controladores, carregamento adiado da lista de janelas e renderização prioritária da tela de destino
+- Configuração interna de log de depuração renomeada de `useAppleScriptResize` para `enableDebugLog` para melhor refletir sua finalidade
+
+### Corrigido
+
+- Corrigido o redimensionamento de janela falhando silenciosamente na tela principal para alguns aplicativos (ex.: Chrome). O mecanismo de bounce retry usado para telas secundárias agora é aplicado também na tela principal
 
 ## [3.0.0] - 2026-03-23
 

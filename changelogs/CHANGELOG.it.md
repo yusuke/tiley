@@ -9,6 +9,11 @@
 ### Modificato
 
 - Prestazioni di visualizzazione dell'overlay migliorate di circa l'80% grazie al pooling/riutilizzo dei controller, al caricamento differito della lista delle finestre e al rendering prioritario dello schermo di destinazione
+- Rinominata l'impostazione interna del log di debug da `useAppleScriptResize` a `enableDebugLog` per riflettere meglio il suo scopo
+
+### Corretto
+
+- Corretto il ridimensionamento della finestra che falliva silenziosamente sullo schermo principale per alcune app (es. Chrome). Il meccanismo di rimbalzo utilizzato per gli schermi secondari viene ora applicato anche allo schermo principale
 
 ## [3.0.0] - 2026-03-23
 

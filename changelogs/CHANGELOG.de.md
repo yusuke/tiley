@@ -9,6 +9,11 @@
 ### Geändert
 
 - Overlay-Anzeigeleistung um ~80 % verbessert durch Controller-Pooling/-Wiederverwendung, verzögertes Laden der Fensterliste und priorisiertes Rendern des Zielbildschirms
+- Interne Debug-Log-Einstellung von `useAppleScriptResize` in `enableDebugLog` umbenannt, um den tatsächlichen Zweck besser widerzuspiegeln
+
+### Behoben
+
+- Fenstergrößenänderung auf dem primären Bildschirm bei einigen Apps (z. B. Chrome) wurde stillschweigend ignoriert. Der für sekundäre Bildschirme verwendete Bounce-Retry-Mechanismus wird nun auch auf dem primären Bildschirm angewendet
 
 ## [3.0.0] - 2026-03-23
 

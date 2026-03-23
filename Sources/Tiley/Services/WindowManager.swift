@@ -6,7 +6,7 @@ import AppKit
 /// Replaces the `NSLog("[Tiley:perf] …")` calls so that performance traces are
 /// only emitted when the user has explicitly opted in.
 func debugLog(_ message: String) {
-    guard UserDefaults.standard.bool(forKey: "useAppleScriptResize") else { return }
+    guard UserDefaults.standard.bool(forKey: "enableDebugLog") else { return }
     let logURL = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent("tiley.log")
     let timestamp = ISO8601DateFormatter.shared.string(from: Date())

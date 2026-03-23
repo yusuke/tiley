@@ -70,7 +70,7 @@ final class AppState: NSObject, NSMenuDelegate {
         var menuIconVisible: Bool
         var dockIconVisible: Bool
         var quitAppOnLastWindowClose: Bool
-        var useAppleScriptResize: Bool
+        var enableDebugLog: Bool
     }
 
     var desktopImageVersion: Int = 0
@@ -99,8 +99,8 @@ final class AppState: NSObject, NSMenuDelegate {
     var quitAppOnLastWindowClose = true {
         didSet { UserDefaults.standard.set(quitAppOnLastWindowClose, forKey: UserDefaultsKey.quitAppOnLastWindowClose) }
     }
-    var useAppleScriptResize = false {
-        didSet { UserDefaults.standard.set(useAppleScriptResize, forKey: UserDefaultsKey.useAppleScriptResize) }
+    var enableDebugLog = false {
+        didSet { UserDefaults.standard.set(enableDebugLog, forKey: UserDefaultsKey.enableDebugLog) }
     }
     var layoutPresets: [LayoutPreset] = []
     var selectedLayoutPresetID: UUID?
@@ -170,7 +170,7 @@ final class AppState: NSObject, NSMenuDelegate {
             menuIconVisible: menuIconVisible,
             dockIconVisible: dockIconVisible,
             quitAppOnLastWindowClose: quitAppOnLastWindowClose,
-            useAppleScriptResize: useAppleScriptResize
+            enableDebugLog: enableDebugLog
         )
     }
 
@@ -400,7 +400,7 @@ final class AppState: NSObject, NSMenuDelegate {
         setMenuIconVisible(settings.menuIconVisible)
         setDockIconVisible(settings.dockIconVisible)
         quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
-        useAppleScriptResize = settings.useAppleScriptResize
+        enableDebugLog = settings.enableDebugLog
         sanitizePresetGlobalShortcutEligibility()
         TelemetryDeck.signal("settingsChanged", parameters: [
             "columns": "\(settings.columns)",
@@ -996,7 +996,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             let constrained: Bool
-            if useAppleScriptResize {
+            if enableDebugLog {
                 try windowManager?.moveWithLog(target: target, to: frame, on: target.screenFrame)
             }
             constrained = try windowManager?.move(target: target, to: frame) ?? false
@@ -1050,7 +1050,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         do {
             let constrained: Bool
-            if useAppleScriptResize {
+            if enableDebugLog {
                 try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
             }
             constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
@@ -1921,8 +1921,8 @@ final class AppState: NSObject, NSMenuDelegate {
         if let storedQuitAppOnLastWindowClose = defaults.object(forKey: UserDefaultsKey.quitAppOnLastWindowClose) as? Bool {
             quitAppOnLastWindowClose = storedQuitAppOnLastWindowClose
         }
-        if let storedUseAppleScriptResize = defaults.object(forKey: UserDefaultsKey.useAppleScriptResize) as? Bool {
-            useAppleScriptResize = storedUseAppleScriptResize
+        if let storedEnableDebugLog = defaults.object(forKey: UserDefaultsKey.enableDebugLog) as? Bool {
+            enableDebugLog = storedEnableDebugLog
         }
         refreshLaunchAtLoginState()
     }
@@ -2493,7 +2493,7 @@ private enum UserDefaultsKey {
     static let dockIconVisible = "dockIconVisible"
     static let windowListSidebarVisible = "windowListSidebarVisible"
     static let quitAppOnLastWindowClose = "quitAppOnLastWindowClose"
-    static let useAppleScriptResize = "useAppleScriptResize"
+    static let enableDebugLog = "enableDebugLog"
 }
 
 private final class TaggableView: NSView {
