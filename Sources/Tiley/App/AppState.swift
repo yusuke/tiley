@@ -143,6 +143,8 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Whether the user has cycled the target window at least once via Tab.
     var hasUsedTabCycling: Bool { originalFrontmostPID != nil }
     var windowTargetListVersion: Int = 0
+    /// True while the deferred `refreshAvailableWindows` is pending.
+    var isLoadingWindowList = false
     /// Incremented to signal the UI to toggle the window list sidebar.
     var windowTargetMenuRequestVersion: Int = 0
     /// Incremented to signal Cmd+F when search field is NOT focused: show sidebar and focus search.
@@ -346,6 +348,8 @@ final class AppState: NSObject, NSMenuDelegate {
         Task { @MainActor [weak self] in
             if showMainWindowOnLaunch {
                 self?.openMainWindow()
+            } else {
+                self?.warmUpSwiftUIHostingView()
             }
             self?.promptLaunchAtLoginIfNeeded()
         }
@@ -446,7 +450,14 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func toggleOverlay() {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        func perfLog(_ label: String) {
+            let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+            debugLog("\(label) (t=\(String(format: "%.1f", elapsed))ms)")
+        }
+        debugLog("toggleOverlay start")
         refreshAccessibilityState()
+        perfLog("refreshAccessibilityState done")
         guard accessibilityGranted else {
             showPermissionsOnly()
             return
@@ -458,14 +469,18 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
 
-        guard let target = resolveWindowTarget() else { return }
+        guard let target = resolveWindowTarget() else {
+            perfLog("resolveWindowTarget returned nil")
+            return
+        }
+        perfLog("resolveWindowTarget done")
 
         activeLayoutTarget = target
         layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: target)
+        perfLog("makeLayoutPreviewController done")
         lastTargetPID = target.processIdentifier
         originalFrontmostPID = nil
-        refreshAvailableWindows()
         isEditingSettings = false
         // Unregister preset global hotkeys while the overlay is visible so that
         // key events reach the NSWindow's performKeyEquivalent and can be handled
@@ -474,16 +489,26 @@ final class AppState: NSObject, NSMenuDelegate {
         windowSearchQuery = ""
         isShowingLayoutGrid = true
         openMainWindow()
+        perfLog("openMainWindow done")
         // Bump version after the window is open so the view picks up the latest
         // target info and window list.
         windowTargetListVersion += 1
         // Asynchronously fetch the actual menu bar titles from the target app.
         fetchTargetMenuBarTitles()
+        // Defer window list population so it doesn't block overlay appearance.
+        isLoadingWindowList = true
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.refreshAvailableWindows()
+            self.isLoadingWindowList = false
+            debugLog("refreshAvailableWindows done (deferred)")
+        }
         launchMessage = String(
             format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
             target.appName
         )
         TelemetryDeck.signal("gridOverlayOpened")
+        perfLog("toggleOverlay end")
     }
 
     func commitLayoutSelection(_ selection: GridSelection) {
@@ -847,9 +872,10 @@ final class AppState: NSObject, NSMenuDelegate {
 
     private func clearWindowCyclingState() {
         originalFrontmostPID = nil
-        availableWindowTargets = []
+        // Keep availableWindowTargets so the sidebar can show the previous
+        // window list immediately on the next overlay open while the deferred
+        // refresh is still pending.
         activeTargetIndex = 0
-        windowTargetListVersion += 1
     }
 
     /// If the target's app is hidden (Cmd-H), unhide it so the window becomes
@@ -1023,6 +1049,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     @objc private func handleStatusItemButtonClick() {
+        debugLog("handleStatusItemButtonClick start")
         if isEditingSettings {
             cancelSettingsEditing()
             openMainWindow()
@@ -1574,6 +1601,7 @@ final class AppState: NSObject, NSMenuDelegate {
                 return noErr
             }
             if hotKeyID.id == 1 {
+                debugLog("hotkey triggered")
                 if appState.isEditingSettings {
                     return noErr
                 }
@@ -1862,6 +1890,38 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
+    /// Pre-warm SwiftUI's rendering pipeline by creating a temporary hosting view
+    /// off-screen. The first `NSHostingView.contentView =` assignment is expensive
+    /// (~200 ms) because SwiftUI initialises its render backend; subsequent ones are
+    /// fast (~40 ms). Calling this at login-item launch amortises the cost so the
+    /// first overlay open feels instant.
+    private func warmUpSwiftUIHostingView() {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        let screen = NSScreen.main ?? NSScreen.screens.first!
+        let screenContext = ScreenContext(
+            visibleFrame: screen.visibleFrame,
+            screenFrame: screen.frame
+        )
+        let view = MainWindowView(appState: self, screenRole: .target)
+            .environment(\.screenContext, screenContext)
+        let hostingView = NSHostingView(rootView: view)
+        // Create a tiny off-screen window and assign the hosting view to trigger
+        // SwiftUI's first layout pass, then immediately discard both.
+        let window = NSWindow(
+            contentRect: NSRect(x: -9999, y: -9999, width: 1, height: 1),
+            styleMask: [.borderless],
+            backing: .buffered,
+            defer: true
+        )
+        window.contentView = hostingView
+        // Force a layout pass so the SwiftUI render pipeline is fully initialised.
+        hostingView.layoutSubtreeIfNeeded()
+        window.contentView = nil
+        window.close()
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("warmUpSwiftUIHostingView done (\(String(format: "%.1f", elapsed))ms)")
+    }
+
     private func refreshLaunchAtLoginState() {
         launchAtLoginEnabled = (SMAppService.mainApp.status == .enabled)
     }
@@ -2034,6 +2094,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func openMainWindow() {
+        debugLog("openMainWindow start (isShowingLayoutGrid=\(isShowingLayoutGrid ? 1 : 0), isEditingSettings=\(isEditingSettings ? 1 : 0))")
         if isEditingSettings || isShowingPermissionsOnly {
             openTargetScreenWindow()
         } else if isShowingLayoutGrid {
@@ -2052,7 +2113,6 @@ final class AppState: NSObject, NSMenuDelegate {
         let displayID = targetScreen.displayID
         targetScreenDisplayID = displayID
 
-        // Always recreate to ensure fresh ScreenContext and correct role.
         // Use dismissSilently() to avoid triggering handleMainWindowHidden
         // which would re-register preset global hotkeys and reset state.
         // Set isRecreatingWindows to suppress windowDidResignKey state resets
@@ -2061,17 +2121,34 @@ final class AppState: NSObject, NSMenuDelegate {
         for controller in mainWindowControllers.values {
             controller.dismissSilently()
         }
-        mainWindowControllers.removeAll()
 
-        mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
-        NSApp.activate(ignoringOtherApps: true)
-        selectedLayoutPresetID = nil
-        mainWindowControllers[displayID]?.show()
+        if let existingCtrl = mainWindowControllers[displayID] {
+            // Reuse existing controller — just update state and show.
+            // Discard secondary controllers that are no longer needed.
+            mainWindowControllers = mainWindowControllers.filter { $0.key == displayID }
+            existingCtrl.prepareForReuse(screenRole: .target, targetScreen: targetScreen)
+            NSApp.activate(ignoringOtherApps: true)
+            selectedLayoutPresetID = nil
+            existingCtrl.show()
+        } else {
+            // No cached controller for this display — recreate.
+            mainWindowControllers.removeAll()
+            mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
+            NSApp.activate(ignoringOtherApps: true)
+            selectedLayoutPresetID = nil
+            mainWindowControllers[displayID]?.show()
+        }
         isRecreatingWindows = false
     }
 
     private func openAllScreenWindows() {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        func perfLog(_ label: String) {
+            let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+            debugLog("openAllScreenWindows: \(label) (t=\(String(format: "%.1f", elapsed))ms)")
+        }
         let screens = NSScreen.screens
+        perfLog("start (screens=\(screens.count))")
         guard !screens.isEmpty else { return }
 
         let targetScreen: NSScreen
@@ -2083,9 +2160,10 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         targetScreenDisplayID = targetScreen.displayID
 
-        // Always recreate all controllers so that ScreenContext (which
-        // captures each screen's visibleFrame at init time) stays fresh
-        // and roles are always correct for the current target screen.
+        let currentDisplayIDs = Set(screens.map { $0.displayID })
+        let cachedDisplayIDs = Set(mainWindowControllers.keys)
+        let canReuse = currentDisplayIDs == cachedDisplayIDs && !cachedDisplayIDs.isEmpty
+
         // Use dismissSilently() to avoid triggering handleMainWindowHidden
         // which would re-register preset global hotkeys and reset state.
         // Set isRecreatingWindows to suppress windowDidResignKey state resets
@@ -2094,23 +2172,56 @@ final class AppState: NSObject, NSMenuDelegate {
         for controller in mainWindowControllers.values {
             controller.dismissSilently()
         }
-        mainWindowControllers.removeAll()
 
-        for screen in screens {
-            let displayID = screen.displayID
-            let isTarget = (displayID == targetScreenDisplayID)
-            mainWindowControllers[displayID] = createWindowController(for: screen, isTarget: isTarget)
-        }
+        if canReuse {
+            // --- Reuse path: same screens, just update state and show ---
+            // prepareForReuse is <1ms so we show ALL windows synchronously.
+            perfLog("reusing controllers")
+            selectedLayoutPresetID = nil
 
-        // Show secondary windows first, then target window last so it gets initial key focus.
-        selectedLayoutPresetID = nil
-        for (displayID, controller) in mainWindowControllers {
-            if displayID != targetScreenDisplayID {
-                controller.show(asKey: true)
+            let targetCtrl = mainWindowControllers[targetScreen.displayID]!
+            targetCtrl.prepareForReuse(screenRole: .target, targetScreen: targetScreen)
+            targetCtrl.show(asKey: true)
+            perfLog("target window shown (reused)")
+
+            for screen in screens where screen.displayID != targetScreen.displayID {
+                if let ctrl = mainWindowControllers[screen.displayID] {
+                    ctrl.prepareForReuse(
+                        screenRole: .secondary(screen: screen),
+                        targetScreen: screen
+                    )
+                    ctrl.show(asKey: false)
+                }
+            }
+            perfLog("all windows shown (reused)")
+            isRecreatingWindows = false
+        } else {
+            // --- Recreate path: screen configuration changed ---
+            mainWindowControllers.removeAll()
+            perfLog("dismissed old controllers (recreate)")
+
+            selectedLayoutPresetID = nil
+            mainWindowControllers[targetScreen.displayID] = createWindowController(for: targetScreen, isTarget: true)
+            mainWindowControllers[targetScreen.displayID]?.show(asKey: true)
+            perfLog("target window shown (new)")
+
+            let secondaryScreens = screens.filter { $0.displayID != targetScreen.displayID }
+            if secondaryScreens.isEmpty {
+                perfLog("all windows shown (single screen, new)")
+                isRecreatingWindows = false
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    for screen in secondaryScreens {
+                        let displayID = screen.displayID
+                        self.mainWindowControllers[displayID] = self.createWindowController(for: screen, isTarget: false)
+                        self.mainWindowControllers[displayID]?.show(asKey: false)
+                    }
+                    perfLog("secondary windows shown (deferred, new)")
+                    self.isRecreatingWindows = false
+                }
             }
         }
-        mainWindowControllers[targetScreenDisplayID ?? 0]?.show(asKey: true)
-        isRecreatingWindows = false
     }
 
     private func closeSecondaryWindows() {
@@ -2137,10 +2248,11 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func createWindowController(for screen: NSScreen, isTarget: Bool) -> MainWindowController {
+        let perfStart = CFAbsoluteTimeGetCurrent()
         let displayID = screen.displayID
         let role: ScreenRole = isTarget ? .target : .secondary(screen: screen)
 
-        return MainWindowController(
+        let controller = MainWindowController(
             appState: self,
             screenRole: role,
             targetScreen: screen,
@@ -2162,6 +2274,9 @@ final class AppState: NSObject, NSMenuDelegate {
                 return self.handleMainWindowKeyCommand(event)
             }
         )
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("createWindowController displayID=\(displayID) isTarget=\(isTarget ? 1 : 0) (\(String(format: "%.1f", elapsed))ms)")
+        return controller
     }
 
     private func handleMainWindowKeyCommand(_ event: NSEvent) -> Bool {

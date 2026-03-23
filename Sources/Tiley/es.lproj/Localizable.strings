@@ -45,7 +45,7 @@
 "Show menu icon" = "Mostrar icono en la barra de menús";
 "Show Dock icon" = "Mostrar icono en el Dock";
 "Windows" = "Ventanas";
-"Write resize debug log to ~/tiley.log" = "Escribir registro de depuración de redimensionamiento en ~/tiley.log";
+"Write debug log to ~/tiley.log" = "Escribir registro de depuración en ~/tiley.log";
 "Global shortcut" = "Atajo global";
 "Reset to Default" = "Restablecer valores";
 "Click the field, then press the new shortcut." = "Haz clic en el campo y pulsa el nuevo atajo.";

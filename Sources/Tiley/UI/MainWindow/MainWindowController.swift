@@ -3,6 +3,27 @@ import Carbon
 import Observation
 import SwiftUI
 
+@Observable
+final class ScreenState {
+    var context: ScreenContext
+    var role: ScreenRole
+
+    init(context: ScreenContext, role: ScreenRole) {
+        self.context = context
+        self.role = role
+    }
+}
+
+private struct MainWindowRootView: View {
+    let appState: AppState
+    var screenState: ScreenState
+
+    var body: some View {
+        MainWindowView(appState: appState, screenRole: screenState.role)
+            .environment(\.screenContext, screenState.context)
+    }
+}
+
 final class MainWindowController: NSWindowController, NSWindowDelegate {
     private static let windowWidth: CGFloat = 559
     private static let sidebarWidth: CGFloat = 180
@@ -23,8 +44,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private static let settingsModeWindowAlpha: CGFloat = 1.0
 
     private weak var appState: AppState?
-    private let screenRole: ScreenRole
-    private let targetScreen: NSScreen
+    private(set) var screenRole: ScreenRole
+    private(set) var targetScreen: NSScreen
+    private let screenState: ScreenState
     private let onHide: () -> Void
     private let onEscape: () -> Bool
     private let onLocalShortcut: (HotKeyShortcut) -> Bool
@@ -33,6 +55,11 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private var isHidingWindow = false
 
     init(appState: AppState, screenRole: ScreenRole = .target, targetScreen: NSScreen? = nil, onHide: @escaping () -> Void, onEscape: @escaping () -> Bool, onLocalShortcut: @escaping (HotKeyShortcut) -> Bool, onKeyCommand: @escaping (NSEvent) -> Bool) {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        func perfLog(_ label: String) {
+            let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+            debugLog("MainWindowController.init: \(label) (t=\(String(format: "%.1f", elapsed))ms)")
+        }
         self.appState = appState
         self.screenRole = screenRole
         self.targetScreen = targetScreen ?? NSScreen.main ?? NSScreen.screens.first!
@@ -48,18 +75,22 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             screenFrame: self.targetScreen.frame,
             notchWidth: Self.notchWidth(for: self.targetScreen)
         )
-        let view = MainWindowView(appState: appState, screenRole: screenRole)
-            .environment(\.screenContext, screenContext)
+        self.screenState = ScreenState(context: screenContext, role: screenRole)
+        perfLog("windowSize + screenContext")
+        let view = MainWindowRootView(appState: appState, screenState: screenState)
+        perfLog("MainWindowRootView created")
         let hostingView = ZeroInsetHostingView(rootView: view)
         hostingView.frame = NSRect(origin: .zero, size: initialSize)
         hostingView.autoresizingMask = [.width, .height]
+        perfLog("NSHostingView created")
 
         let window = MainAppWindow(
             contentRect: NSRect(origin: .zero, size: initialSize),
             styleMask: [.titled, .fullSizeContentView],
             backing: .buffered,
-            defer: false
+            defer: true
         )
+        perfLog("MainAppWindow created")
         window.title = "Tiley"
         window.isOpaque = false
         window.backgroundColor = .clear
@@ -72,6 +103,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.isReleasedWhenClosed = false
         window.autorecalculatesKeyViewLoop = false
         window.contentView = hostingView
+        perfLog("contentView set")
         // Only use autosave for the target window to avoid position conflicts
         if screenRole.isTarget {
             window.setFrameAutosaveName("TileyMainWindow")
@@ -89,9 +121,13 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
         super.init(window: window)
         window.delegate = self
+        perfLog("super.init done")
         bindWindowMode(to: appState)
+        perfLog("bindWindowMode done")
         bindScreenParameterChanges()
+        perfLog("bindScreenParameterChanges done")
         applyWindowMode(animated: false)
+        perfLog("applyWindowMode done")
     }
 
     @available(*, unavailable)
@@ -100,6 +136,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     func show(asKey: Bool = true) {
+        let perfStart = CFAbsoluteTimeGetCurrent()
         let destinationScreen = preferredDisplayScreen(for: window)
         applyWindowMode(animated: false, preferredScreen: destinationScreen)
         positionWindow(preferredScreen: destinationScreen)
@@ -108,6 +145,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         } else {
             window?.orderFront(nil)
         }
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("MainWindowController.show done asKey=\(asKey ? 1 : 0) (\(String(format: "%.1f", elapsed))ms)")
     }
 
     func hide() {
@@ -117,6 +156,24 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window?.orderOut(nil)
         onHide()
         isHidingWindow = false
+    }
+
+    /// Update the controller's screen state for reuse without recreating the
+    /// window or hosting view.  SwiftUI picks up the `ScreenState` changes via
+    /// `@Observable` and performs a lightweight diff instead of a full init.
+    func prepareForReuse(screenRole: ScreenRole, targetScreen: NSScreen) {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        self.screenRole = screenRole
+        self.targetScreen = targetScreen
+        let newContext = ScreenContext(
+            visibleFrame: targetScreen.visibleFrame,
+            screenFrame: targetScreen.frame,
+            notchWidth: Self.notchWidth(for: targetScreen)
+        )
+        screenState.context = newContext
+        screenState.role = screenRole
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("MainWindowController.prepareForReuse (\(String(format: "%.1f", elapsed))ms)")
     }
 
     /// Dismiss the window without firing the onHide callback.

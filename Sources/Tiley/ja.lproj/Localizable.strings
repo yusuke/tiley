@@ -45,7 +45,7 @@
 "Show menu icon" = "メニューアイコンを表示";
 "Show Dock icon" = "Dockアイコンを表示";
 "Windows" = "ウインドウ";
-"Write resize debug log to ~/tiley.log" = "リサイズのデバッグログを ~/tiley.log に書き出す";
+"Write debug log to ~/tiley.log" = "デバッグログを ~/tiley.log に書き出す";
 "Global shortcut" = "グローバルショートカット";
 "Reset to Default" = "デフォルトに戻す";
 "Click the field, then press the new shortcut." = "新しいショートカットを設定するにはフィールドをクリックして入力してください。";

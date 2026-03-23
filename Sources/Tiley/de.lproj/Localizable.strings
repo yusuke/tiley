@@ -45,7 +45,7 @@
 "Show menu icon" = "Menüleistensymbol anzeigen";
 "Show Dock icon" = "Dock-Symbol anzeigen";
 "Windows" = "Fenster";
-"Write resize debug log to ~/tiley.log" = "Debug-Log für Größenänderung in ~/tiley.log schreiben";
+"Write debug log to ~/tiley.log" = "Debug-Log in ~/tiley.log schreiben";
 "Global shortcut" = "Globales Tastenkürzel";
 "Reset to Default" = "Auf Standard zurücksetzen";
 "Click the field, then press the new shortcut." = "Klicke auf das Feld und drücke das neue Tastenkürzel.";

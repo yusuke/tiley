@@ -1,5 +1,38 @@
 import AppKit
 
+// MARK: - Debug log helper
+
+/// Appends a timestamped line to ~/tiley.log when the debug-log setting is on.
+/// Replaces the `NSLog("[Tiley:perf] …")` calls so that performance traces are
+/// only emitted when the user has explicitly opted in.
+func debugLog(_ message: String) {
+    guard UserDefaults.standard.bool(forKey: "useAppleScriptResize") else { return }
+    let logURL = FileManager.default.homeDirectoryForCurrentUser
+        .appendingPathComponent("tiley.log")
+    let timestamp = ISO8601DateFormatter.shared.string(from: Date())
+    let line = "[\(timestamp)] [Tiley:perf] \(message)\n"
+    guard let data = line.data(using: .utf8) else { return }
+    if FileManager.default.fileExists(atPath: logURL.path) {
+        if let handle = try? FileHandle(forWritingTo: logURL) {
+            handle.seekToEndOfFile()
+            handle.write(data)
+            handle.closeFile()
+        }
+    } else {
+        try? data.write(to: logURL)
+    }
+}
+
+private extension ISO8601DateFormatter {
+    static let shared: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return f
+    }()
+}
+
+// MARK: -
+
 final class WindowManager {
     private let accessibilityService: AccessibilityService
 
@@ -8,11 +41,19 @@ final class WindowManager {
     }
 
     func captureFocusedWindow(preferredPID: pid_t? = nil) -> WindowTarget? {
-        try? accessibilityService.focusedWindowTarget(preferredPID: preferredPID)
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        let result = try? accessibilityService.focusedWindowTarget(preferredPID: preferredPID)
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("captureFocusedWindow done (\(String(format: "%.1f", elapsed))ms)")
+        return result
     }
 
     func captureAllWindows() -> [WindowTarget] {
-        accessibilityService.allWindowTargets()
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        let result = accessibilityService.allWindowTargets()
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("captureAllWindows done (\(result.count) windows) (\(String(format: "%.1f", elapsed))ms)")
+        return result
     }
 
     @discardableResult

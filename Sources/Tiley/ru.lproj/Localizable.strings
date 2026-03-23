@@ -45,7 +45,7 @@
 "Show menu icon" = "Показывать значок в строке меню";
 "Show Dock icon" = "Показывать значок в Dock";
 "Windows" = "Окна";
-"Write resize debug log to ~/tiley.log" = "Записывать отладочный лог изменения размера в ~/tiley.log";
+"Write debug log to ~/tiley.log" = "Записывать отладочный лог в ~/tiley.log";
 "Global shortcut" = "Глобальное сочетание";
 "Reset to Default" = "Сбросить";
 "Click the field, then press the new shortcut." = "Нажмите на поле и введите новое сочетание клавиш.";

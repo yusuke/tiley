@@ -1281,6 +1281,9 @@ struct MainWindowView: View {
     }
 
     private var filteredSidebarRows: [SidebarRow] {
+        // While the deferred refresh is pending and there is no cached data
+        // from a previous cycle, return empty so the sidebar shows a spinner.
+        // If previous data exists, keep showing it until the refresh completes.
         let targets = appState.windowTargetList
         let query = debouncedSearchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
@@ -1440,30 +1443,38 @@ struct MainWindowView: View {
             .padding(.top, 8)
             .padding(.bottom, 6)
 
-            ScrollViewReader { proxy in
-                ScrollView {
-                    LazyVStack(spacing: 2) {
-                        ForEach(filteredSidebarRows) { row in
-                            switch row {
-                            case .screenHeader(let displayID, let name, let hasOther, let hasThis):
-                                screenHeaderRow(displayID: displayID, name: name, hasWindowsOnOtherScreens: hasOther, hasWindowsOnThisScreen: hasThis)
-                            case .emptyScreen(let displayID, let name):
-                                emptyScreenRow(displayID: displayID, name: name)
-                            case .appHeader(let pid, let appName):
-                                appHeaderRow(pid: pid, appName: appName)
-                            case .window(let item):
-                                windowListRow(item: item)
+            if appState.isLoadingWindowList && appState.windowTargetList.isEmpty {
+                Spacer()
+                ProgressView()
+                    .controlSize(.small)
+                    .frame(maxWidth: .infinity)
+                Spacer()
+            } else {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(spacing: 2) {
+                            ForEach(filteredSidebarRows) { row in
+                                switch row {
+                                case .screenHeader(let displayID, let name, let hasOther, let hasThis):
+                                    screenHeaderRow(displayID: displayID, name: name, hasWindowsOnOtherScreens: hasOther, hasWindowsOnThisScreen: hasThis)
+                                case .emptyScreen(let displayID, let name):
+                                    emptyScreenRow(displayID: displayID, name: name)
+                                case .appHeader(let pid, let appName):
+                                    appHeaderRow(pid: pid, appName: appName)
+                                case .window(let item):
+                                    windowListRow(item: item)
+                                }
                             }
                         }
+                        .padding(.top, 4)
+                        .padding(.bottom, 40)
+                        .padding(.horizontal, 6)
                     }
-                    .padding(.top, 4)
-                    .padding(.bottom, 40)
-                    .padding(.horizontal, 6)
-                }
-                .scrollIndicators(.automatic)
-                .onChange(of: appState.currentWindowTargetIndex) { _, newIndex in
-                    withAnimation(.easeInOut(duration: 0.15)) {
-                        proxy.scrollTo("window-\(newIndex)", anchor: .center)
+                    .scrollIndicators(.automatic)
+                    .onChange(of: appState.currentWindowTargetIndex) { _, newIndex in
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            proxy.scrollTo("window-\(newIndex)", anchor: .center)
+                        }
                     }
                 }
             }
@@ -1960,7 +1971,7 @@ struct MainWindowView: View {
 
             TahoeSettingsSection(title: NSLocalizedString("Debug", comment: "Settings section")) {
                 VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Write resize debug log to ~/tiley.log", comment: "")) {
+                    TahoeSettingsRow(label: NSLocalizedString("Write debug log to ~/tiley.log", comment: "")) {
                         Toggle("", isOn: Binding(
                             get: { draftSettings.useAppleScriptResize },
                             set: { newValue in

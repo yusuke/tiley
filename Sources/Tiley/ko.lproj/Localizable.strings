@@ -45,7 +45,7 @@
 "Show menu icon" = "메뉴 아이콘 표시";
 "Show Dock icon" = "Dock 아이콘 표시";
 "Windows" = "윈도우";
-"Write resize debug log to ~/tiley.log" = "크기 조절 디버그 로그를 ~/tiley.log에 기록";
+"Write debug log to ~/tiley.log" = "디버그 로그를 ~/tiley.log에 기록";
 "Global shortcut" = "전역 단축키";
 "Reset to Default" = "기본값으로 재설정";
 "Click the field, then press the new shortcut." = "필드를 클릭한 뒤 새 단축키를 누르세요.";

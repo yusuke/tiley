@@ -45,7 +45,7 @@
 "Show menu icon" = "Afficher l'icône dans la barre des menus";
 "Show Dock icon" = "Afficher l'icône dans le Dock";
 "Windows" = "Fenêtres";
-"Write resize debug log to ~/tiley.log" = "Écrire le journal de débogage de redimensionnement dans ~/tiley.log";
+"Write debug log to ~/tiley.log" = "Écrire le journal de débogage dans ~/tiley.log";
 "Global shortcut" = "Raccourci global";
 "Reset to Default" = "Réinitialiser";
 "Click the field, then press the new shortcut." = "Cliquez sur le champ, puis appuyez sur le nouveau raccourci.";

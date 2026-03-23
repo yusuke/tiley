@@ -63,13 +63,17 @@ final class AccessibilityService {
     }
 
     func focusedWindowTarget(preferredPID: pid_t? = nil) throws -> WindowTarget {
+        let perfStart = CFAbsoluteTimeGetCurrent()
         guard checkAccess(prompt: false) else {
             throw WindowAccessError.accessibilityDenied
         }
 
         if let preferredPID, preferredPID != getpid() {
             do {
-                return try windowTarget(for: preferredPID)
+                let target = try windowTarget(for: preferredPID)
+                let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+                debugLog("focusedWindowTarget done (preferred pid=\(preferredPID)) (\(String(format: "%.1f", elapsed))ms)")
+                return target
             } catch {
                 // Fall back to the current frontmost app if the preferred app no longer has a usable window.
             }
@@ -80,10 +84,14 @@ final class AccessibilityService {
             // Tiley is frontmost — never target our own window.
             throw WindowAccessError.focusedWindowUnavailable
         }
-        return try windowTarget(for: frontmostPID)
+        let target = try windowTarget(for: frontmostPID)
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("focusedWindowTarget done (frontmost pid=\(frontmostPID)) (\(String(format: "%.1f", elapsed))ms)")
+        return target
     }
 
     func windowTarget(for pid: pid_t) throws -> WindowTarget {
+        let perfStart = CFAbsoluteTimeGetCurrent()
         let appElement = AXUIElementCreateApplication(pid)
         let windowElement = try copyWindowElement(from: appElement)
         let position = try copyAXValueAttribute(windowElement, attribute: kAXPositionAttribute)
@@ -103,7 +111,7 @@ final class AccessibilityService {
         let appName = NSRunningApplication(processIdentifier: pid)?.localizedName ?? NSLocalizedString("App", comment: "Generic app name fallback")
         let windowTitle = try? copyStringAttribute(windowElement, attribute: kAXTitleAttribute)
 
-        return WindowTarget(
+        let result = WindowTarget(
             appElement: appElement,
             windowElement: windowElement,
             processIdentifier: pid,
@@ -114,6 +122,9 @@ final class AccessibilityService {
             screenFrame: screenFrame,
             isHidden: NSRunningApplication(processIdentifier: pid)?.isHidden ?? false
         )
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("windowTarget(for: \(pid)) done (\(String(format: "%.1f", elapsed))ms)")
+        return result
     }
 
     /// Detects per-axis resize capability of a window using non-destructive
@@ -430,12 +441,18 @@ final class AccessibilityService {
 
     /// Returns all on-screen standard windows (excluding Tiley) in z-order (front to back).
     func allWindowTargets() -> [WindowTarget] {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        func perfLog(_ label: String) {
+            let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+            debugLog("allWindowTargets: \(label) (t=\(String(format: "%.1f", elapsed))ms)")
+        }
         guard checkAccess(prompt: false) else { return [] }
 
         guard let windowList = CGWindowListCopyWindowInfo(
             [.optionOnScreenOnly, .excludeDesktopElements],
             kCGNullWindowID
         ) as? [[CFString: Any]] else { return [] }
+        perfLog("CGWindowListCopyWindowInfo done (\(windowList.count) entries)")
 
         let selfPID = getpid()
 
@@ -482,6 +499,8 @@ final class AccessibilityService {
             let size: CGSize
         }
 
+        perfLog("cgEntries filtered (\(cgEntries.count) entries, \(orderedPIDs.count) unique PIDs)")
+
         var axWindowsByPID: [pid_t: [AXWindowInfo]] = [:]
         for pid in orderedPIDs {
             let appElement = AXUIElementCreateApplication(pid)
@@ -502,6 +521,7 @@ final class AccessibilityService {
             }
             axWindowsByPID[pid] = infos
         }
+        perfLog("AX window enumeration done (\(axWindowsByPID.values.reduce(0) { $0 + $1.count }) AX windows)")
 
         // Match CGWindow entries to AX windows and build results in z-order.
         var results: [WindowTarget] = []
@@ -559,6 +579,8 @@ final class AccessibilityService {
             )
             results.append(target)
         }
+
+        perfLog("CG→AX matching done (\(results.count) matched)")
 
         // Append entries for hidden applications.
         // Hidden apps don't appear in CGWindowListCopyWindowInfo(.optionOnScreenOnly).
@@ -627,6 +649,7 @@ final class AccessibilityService {
             }
         }
 
+        perfLog("hidden apps done (total \(results.count) windows)")
         return results
     }
 

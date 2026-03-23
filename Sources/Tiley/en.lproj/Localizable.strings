@@ -45,7 +45,7 @@
 "Show menu icon" = "Show menu icon";
 "Show Dock icon" = "Show Dock icon";
 "Windows" = "Windows";
-"Write resize debug log to ~/tiley.log" = "Write resize debug log to ~/tiley.log";
+"Write debug log to ~/tiley.log" = "Write debug log to ~/tiley.log";
 "Global shortcut" = "Global shortcut";
 "Reset to Default" = "Reset to Default";
 "Click the field, then press the new shortcut." = "Click the field, then press the new shortcut.";

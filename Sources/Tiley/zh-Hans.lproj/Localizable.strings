@@ -45,7 +45,7 @@
 "Show menu icon" = "显示菜单图标";
 "Show Dock icon" = "显示 Dock 图标";
 "Windows" = "窗口";
-"Write resize debug log to ~/tiley.log" = "将调整大小调试日志写入 ~/tiley.log";
+"Write debug log to ~/tiley.log" = "将调试日志写入 ~/tiley.log";
 "Global shortcut" = "全局快捷键";
 "Reset to Default" = "恢复默认";
 "Click the field, then press the new shortcut." = "点击该字段后按下新的快捷键。";
