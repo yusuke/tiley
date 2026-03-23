@@ -1126,7 +1126,7 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
         if isShowingLayoutGrid {
-            openMainWindow()
+            cancelLayoutGrid()
             return
         }
         toggleOverlay()

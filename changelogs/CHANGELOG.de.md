@@ -14,6 +14,7 @@
 ### Behoben
 
 - Fenstergrößenänderung auf dem primären Bildschirm bei einigen Apps (z. B. Chrome) wurde stillschweigend ignoriert. Der für sekundäre Bildschirme verwendete Bounce-Retry-Mechanismus wird nun auch auf dem primären Bildschirm angewendet
+- Klick auf das Menüleisten-Symbol bei sichtbarem Overlay schließt nun das Overlay (wie ESC), statt das Hauptfenster zu öffnen
 
 ## [3.0.0] - 2026-03-23
 

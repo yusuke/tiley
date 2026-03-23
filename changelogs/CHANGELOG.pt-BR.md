@@ -14,6 +14,7 @@
 ### Corrigido
 
 - Corrigido o redimensionamento de janela falhando silenciosamente na tela principal para alguns aplicativos (ex.: Chrome). O mecanismo de bounce retry usado para telas secundárias agora é aplicado também na tela principal
+- Corrigido: clicar no ícone da barra de menus com a sobreposição visível agora fecha a sobreposição (como ESC) em vez de abrir a janela principal
 
 ## [3.0.0] - 2026-03-23
 

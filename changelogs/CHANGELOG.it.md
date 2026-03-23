@@ -14,6 +14,7 @@
 ### Corretto
 
 - Corretto il ridimensionamento della finestra che falliva silenziosamente sullo schermo principale per alcune app (es. Chrome). Il meccanismo di rimbalzo utilizzato per gli schermi secondari viene ora applicato anche allo schermo principale
+- Corretto: il clic sull'icona della barra dei menu con l'overlay visibile ora chiude l'overlay (come ESC) invece di aprire la finestra principale
 
 ## [3.0.0] - 2026-03-23
 

@@ -14,6 +14,7 @@
 ### Corregido
 
 - Se corrigió el redimensionamiento de ventanas que fallaba silenciosamente en la pantalla principal para algunas aplicaciones (p. ej., Chrome). Se aplica el mecanismo de reintento con rebote de las pantallas secundarias también a la pantalla principal
+- Se corrigió que al hacer clic en el icono de la barra de menú con la superposición visible se abría la ventana principal en lugar de cerrar la superposición (mismo comportamiento que ESC)
 
 ## [3.0.0] - 2026-03-23
 

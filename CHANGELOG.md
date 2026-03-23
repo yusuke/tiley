@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Fixed window resize silently failing on the primary screen for some apps (e.g. Chrome) by adding size verification and bounce retry, matching the existing workaround used for secondary screens
+- Fixed clicking the menu bar icon while the overlay is visible now dismisses the overlay (same as pressing ESC), instead of opening the main window
 
 ## [3.0.0] - 2026-03-23
 

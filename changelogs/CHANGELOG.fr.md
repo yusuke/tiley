@@ -14,6 +14,7 @@
 ### Corrigé
 
 - Correction du redimensionnement de fenêtre échouant silencieusement sur l'écran principal pour certaines applications (ex. Chrome). Le mécanisme de rebond utilisé pour les écrans secondaires est désormais appliqué à l'écran principal
+- Correction : cliquer sur l'icône de la barre de menus lorsque la superposition est visible ferme désormais la superposition (comme ESC) au lieu d'ouvrir la fenêtre principale
 
 ## [3.0.0] - 2026-03-23
 
