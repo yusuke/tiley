@@ -997,9 +997,10 @@ final class AppState: NSObject, NSMenuDelegate {
         do {
             let constrained: Bool
             if enableDebugLog {
-                try windowManager?.moveWithLog(target: target, to: frame, on: target.screenFrame)
+                constrained = try windowManager?.moveWithLog(target: target, to: frame, on: target.screenFrame) ?? false
+            } else {
+                constrained = try windowManager?.move(target: target, to: frame) ?? false
             }
-            constrained = try windowManager?.move(target: target, to: frame) ?? false
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
             let norm = selection.normalized
@@ -1051,9 +1052,10 @@ final class AppState: NSObject, NSMenuDelegate {
         do {
             let constrained: Bool
             if enableDebugLog {
-                try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
+                constrained = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame) ?? false
+            } else {
+                constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
             }
-            constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {

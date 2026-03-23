@@ -70,8 +70,9 @@ final class WindowManager {
 
     /// Moves/resizes a window using the AX API and writes debug info
     /// to `~/tiley.log` when logging is enabled.
-    func moveWithLog(target: WindowTarget, to frame: CGRect, on screenFrame: CGRect) throws {
-        guard let window = target.windowElement else { return }
+    @discardableResult
+    func moveWithLog(target: WindowTarget, to frame: CGRect, on screenFrame: CGRect) throws -> Bool {
+        guard let window = target.windowElement else { return false }
 
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
         let axX = frame.minX
@@ -132,7 +133,7 @@ final class WindowManager {
         logState("[before]")
 
         // Perform the actual resize
-        try accessibilityService.setFrame(frame, on: screenFrame, for: window)
+        let constrained = try accessibilityService.setFrame(frame, on: screenFrame, for: window)
 
         logState("[after]")
 
@@ -149,6 +150,8 @@ final class WindowManager {
         if !posMismatch && !sizeMismatch {
             log("OK")
         }
+
+        return constrained
     }
 
     /// After a move/resize, always raises the window to the front.

@@ -6,6 +6,10 @@
 
 - Le miniature della griglia delle preimpostazioni di layout ora riflettono le proporzioni dell'area utilizzabile dello schermo (escludendo barra dei menu e Dock), adattandosi all'orientamento verticale o orizzontale.
 
+### Corretto
+
+- Corretto un problema per cui il ridimensionamento delle finestre talvolta falliva quando si spostava una finestra su un altro schermo (in particolare su un monitor verticale più alto), introducendo un meccanismo di nuovo tentativo per gli spostamenti tra schermi
+
 ## [3.0.1] - 2026-03-23
 
 ### Aggiunto

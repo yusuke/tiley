@@ -6,6 +6,10 @@
 
 - As miniaturas de grade das predefinições de layout agora refletem a proporção da área utilizável da tela (excluindo a barra de menus e o Dock), adaptando-se à orientação retrato ou paisagem.
 
+### Corrigido
+
+- Corrigido um problema onde o redimensionamento de janelas falhava às vezes ao mover uma janela para outra tela (especialmente para um monitor vertical mais alto), através da introdução de um mecanismo de nova tentativa em movimentações entre telas
+
 ## [3.0.1] - 2026-03-23
 
 ### Adicionado

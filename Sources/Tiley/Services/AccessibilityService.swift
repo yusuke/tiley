@@ -385,43 +385,53 @@ final class AccessibilityService {
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
     }
 
-    /// For non-primary screens: try resizing in-place first (size-only,
-    /// no position changes).  If the size doesn't change at all (AX bug
-    /// on mixed-DPI setups), bounce to the primary screen as a last resort.
-    /// The window stays on the secondary screen for the common cases
-    /// (full resize or app-constrained partial resize), avoiding flicker.
+    /// For non-primary screens: move the window to the target position
+    /// first so it is on the correct screen before resizing.  Apps
+    /// constrain window size based on the current screen, so resizing
+    /// while the window is still on a smaller primary screen would cap
+    /// the height.  After a cross-screen move, some apps need a brief
+    /// pause before they accept the new screen's dimensions, so we
+    /// retry with a short delay if the first attempt is constrained.
     private func applyViaPrimaryBounce(_ origin: CGPoint, _ size: CGSize,
                                         position: AXValue, sizeValue: AXValue,
                                         for window: AXUIElement) throws {
-        let (_, beforeSize) = readPositionAndSize(of: window)
-
-        // 1. Try setting size in-place (no position change).
-        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
-
-        let (_, afterSize) = readPositionAndSize(of: window)
-        let sizeChanged = abs(afterSize.width - beforeSize.width) > 2
-                        || abs(afterSize.height - beforeSize.height) > 2
-
-        if !sizeChanged {
-            // Size didn't change at all on the secondary screen.
-            // Move the window to the very bottom of the primary screen
-            // (mostly off-screen) and try resizing there.
-            let primaryHeight = NSScreen.screens.first?.frame.height ?? 1200
-            var bottomOfPrimary = CGPoint(x: 0, y: primaryHeight - 1)
-            if let v = AXValueCreate(.cgPoint, &bottomOfPrimary) {
+        // 0. Pre-nudge if already at target position to defeat AX
+        //    de-duplication (same logic as applyOnCurrentScreen).
+        let (currentPos, _) = readPositionAndSize(of: window)
+        if abs(currentPos.x - origin.x) <= 1 && abs(currentPos.y - origin.y) <= 1 {
+            var preNudge = origin
+            preNudge.y += 1
+            if let v = AXValueCreate(.cgPoint, &preNudge) {
                 AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
             }
+        }
+
+        // 1. Move to target position first so the window is on the
+        //    correct screen before resizing.
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+
+        // 2. Set size — the window is now on the target screen so the
+        //    app can use the full screen dimensions for constraints.
+        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+
+        // 2b. If the size doesn't match the target (e.g. the app still
+        //     uses the old screen's constraints after a cross-screen
+        //     move), wait briefly and retry up to 2 times.
+        for _ in 0..<2 {
+            let (_, afterSize) = readPositionAndSize(of: window)
+            let sizeMismatch = abs(afterSize.width - size.width) > 2
+                            || abs(afterSize.height - size.height) > 2
+            guard sizeMismatch else { break }
+            usleep(50_000) // 50 ms
             AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         }
 
-        // 2. Set position with nudge to defeat AX de-duplication.
+        // 3. Nudge + final position to defeat AX de-duplication.
         var nudged = origin
         nudged.y += 1
         if let nudgeVal = AXValueCreate(.cgPoint, &nudged) {
             AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, nudgeVal)
         }
-
-        // 3. Set final position.
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
 
         // 4. Re-raise in case the bounce changed z-order.

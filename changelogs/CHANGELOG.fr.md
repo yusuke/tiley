@@ -6,6 +6,10 @@
 
 - Les miniatures de grille des préréglages de disposition reflètent désormais le rapport d'aspect de la zone utilisable de l'écran (hors barre de menus et Dock), s'adaptant à l'orientation portrait ou paysage.
 
+### Corrigé
+
+- Correction d'un problème où le redimensionnement de fenêtres échouait parfois lors du déplacement vers un autre écran (en particulier vers un moniteur portrait plus haut), grâce à l'introduction d'un mécanisme de nouvelle tentative pour les déplacements inter-écrans
+
 ## [3.0.1] - 2026-03-23
 
 ### Ajouté
