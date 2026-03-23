@@ -159,6 +159,7 @@ struct MainWindowView: View {
     @State private var windowSearchText = ""
     @State private var debouncedSearchText = ""
     @State private var searchDebounceTask: Task<Void, Never>?
+    @State private var appIconCache: [pid_t: NSImage] = [:]
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
@@ -491,6 +492,7 @@ struct MainWindowView: View {
             }
         }
         .onChange(of: appState.windowTargetListVersion) { _, _ in
+            appIconCache.removeAll(keepingCapacity: true)
             if appState.hasUsedTabCycling {
                 showSidebarIfNeeded()
             }
@@ -1446,6 +1448,13 @@ struct MainWindowView: View {
         }
     }
 
+    private func cachedAppIcon(for pid: pid_t) -> NSImage? {
+        if let cached = appIconCache[pid] { return cached }
+        guard let icon = NSRunningApplication(processIdentifier: pid)?.icon else { return nil }
+        appIconCache[pid] = icon
+        return icon
+    }
+
     private func otherScreensForDisplay(_ displayID: CGDirectDisplayID) -> [NSScreen] {
         let screens = NSScreen.screens
         guard screens.count > 1 else { return [] }
@@ -1548,7 +1557,7 @@ struct MainWindowView: View {
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
         let isHovered = hoveredAppHeaderPID == pid
         return HStack(spacing: 6) {
-            if let icon = NSRunningApplication(processIdentifier: pid)?.icon {
+            if let icon = cachedAppIcon(for: pid) {
                 Image(nsImage: icon)
                     .resizable()
                     .interpolation(.high)
@@ -1628,7 +1637,7 @@ struct MainWindowView: View {
                         .lineLimit(1)
                         .padding(.leading, 20)
                 } else {
-                    if let icon = NSRunningApplication(processIdentifier: item.pid)?.icon {
+                    if let icon = cachedAppIcon(for: item.pid) {
                         Image(nsImage: icon)
                             .resizable()
                             .interpolation(.high)
