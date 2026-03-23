@@ -1153,8 +1153,13 @@ struct MainWindowView: View {
                     appState.beginSettingsEditing()
                 }
             } label: {
+                #if DEBUG
+                Text("🐛")
+                    .font(.system(size: 13))
+                #else
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: 13, weight: .medium))
+                #endif
             }
             .buttonStyle(TahoeToolbarButtonStyle())
             .instantTooltip(NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
