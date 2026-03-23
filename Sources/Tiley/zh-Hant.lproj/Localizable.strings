@@ -45,7 +45,6 @@
 "Show menu icon" = "顯示選單圖示";
 "Show Dock icon" = "顯示 Dock 圖示";
 "Windows" = "視窗";
-"Quit app when closing last window" = "關閉最後一個視窗時結束應用程式";
 "Write resize debug log to ~/tiley.log" = "將調整大小除錯日誌寫入 ~/tiley.log";
 "Global shortcut" = "全域快捷鍵";
 "Reset to Default" = "重設為預設值";
@@ -109,7 +108,6 @@
 "Settings (⌘,)" = "設定 (⌘,)";
 "Settings" = "設定";
 "Update available" = "有可用更新";
-"Close other windows of %@" = "關閉%@的其他視窗";
 "Hide windows besides %@" = "隱藏%@以外的視窗";
 "Move %1$@ to %2$@" = "將%1$@移到%2$@";
 

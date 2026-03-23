@@ -45,7 +45,6 @@
 "Show menu icon" = "Показывать значок в строке меню";
 "Show Dock icon" = "Показывать значок в Dock";
 "Windows" = "Окна";
-"Quit app when closing last window" = "Завершать приложение при закрытии последнего окна";
 "Write resize debug log to ~/tiley.log" = "Записывать отладочный лог изменения размера в ~/tiley.log";
 "Global shortcut" = "Глобальное сочетание";
 "Reset to Default" = "Сбросить";
@@ -109,7 +108,6 @@
 "Settings (⌘,)" = "Настройки (⌘,)";
 "Settings" = "Настройки";
 "Update available" = "Доступно обновление";
-"Close other windows of %@" = "Закрыть другие окна %@";
 "Hide windows besides %@" = "Скрыть окна, кроме %@";
 "Move %1$@ to %2$@" = "Переместить %1$@ на %2$@";
 

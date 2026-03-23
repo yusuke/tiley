@@ -45,7 +45,6 @@
 "Show menu icon" = "Menüleistensymbol anzeigen";
 "Show Dock icon" = "Dock-Symbol anzeigen";
 "Windows" = "Fenster";
-"Quit app when closing last window" = "App beenden beim Schließen des letzten Fensters";
 "Write resize debug log to ~/tiley.log" = "Debug-Log für Größenänderung in ~/tiley.log schreiben";
 "Global shortcut" = "Globales Tastenkürzel";
 "Reset to Default" = "Auf Standard zurücksetzen";
@@ -109,7 +108,6 @@
 "Settings (⌘,)" = "Einstellungen (⌘,)";
 "Settings" = "Einstellungen";
 "Update available" = "Update verfügbar";
-"Close other windows of %@" = "Andere %@-Fenster schließen";
 "Hide windows besides %@" = "Fenster außer %@ ausblenden";
 "Move %1$@ to %2$@" = "%1$@ auf %2$@ verschieben";
 

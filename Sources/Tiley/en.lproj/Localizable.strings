@@ -45,7 +45,6 @@
 "Show menu icon" = "Show menu icon";
 "Show Dock icon" = "Show Dock icon";
 "Windows" = "Windows";
-"Quit app when closing last window" = "Quit app when closing last window";
 "Write resize debug log to ~/tiley.log" = "Write resize debug log to ~/tiley.log";
 "Global shortcut" = "Global shortcut";
 "Reset to Default" = "Reset to Default";
@@ -109,7 +108,6 @@
 "Settings (⌘,)" = "Settings (⌘,)";
 "Settings" = "Settings";
 "Update available" = "Update available";
-"Close other windows of %@" = "Close other %@ windows";
 "Hide windows besides %@" = "Hide windows besides %@";
 "Move %1$@ to %2$@" = "Move %1$@ to %2$@";
 

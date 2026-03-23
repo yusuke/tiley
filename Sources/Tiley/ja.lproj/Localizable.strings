@@ -45,7 +45,6 @@
 "Show menu icon" = "メニューアイコンを表示";
 "Show Dock icon" = "Dockアイコンを表示";
 "Windows" = "ウインドウ";
-"Quit app when closing last window" = "最後のウインドウを閉じるときアプリを終了";
 "Write resize debug log to ~/tiley.log" = "リサイズのデバッグログを ~/tiley.log に書き出す";
 "Global shortcut" = "グローバルショートカット";
 "Reset to Default" = "デフォルトに戻す";
@@ -109,7 +108,6 @@
 "Settings (⌘,)" = "設定 (⌘,)";
 "Settings" = "設定";
 "Update available" = "アップデートがあります";
-"Close other windows of %@" = "%@の他のウインドウを閉じる";
 "Hide windows besides %@" = "%@以外のウインドウを隠す";
 "Move %1$@ to %2$@" = "%1$@を%2$@に移動";
 
