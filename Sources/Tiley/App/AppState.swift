@@ -623,14 +623,83 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     /// Raises (brings to front) the currently selected target window and activates its app.
+    /// If the mouse pointer is on a different screen than the window, the window is moved
+    /// to the mouse pointer's screen first, preferring repositioning over resizing.
     func raiseCurrentTargetWindow() {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
         guard activeTargetIndex >= 0, activeTargetIndex < availableWindowTargets.count else { return }
         let target = availableWindowTargets[activeTargetIndex]
+
         if let window = target.windowElement {
+            moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
             accessibilityService.raiseWindow(window)
         }
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
+    }
+
+    /// Moves a window to the mouse pointer's screen when they are on different screens.
+    /// Prefers repositioning over resizing; only resizes if the window is larger than the screen.
+    private func moveWindowToMouseScreenIfNeeded(window: AXUIElement, windowScreenFrame: CGRect, windowFrame: CGRect) {
+        let mouseLocation = NSEvent.mouseLocation
+        let mouseScreen = NSScreen.screens.first(where: { $0.frame.contains(mouseLocation) })
+        let windowScreen = NSScreen.screens.first(where: { $0.frame == windowScreenFrame })
+            ?? NSScreen.screen(containing: windowFrame)
+
+        guard let mouseScreen = mouseScreen,
+              let windowScreen = windowScreen,
+              mouseScreen.displayID != windowScreen.displayID else { return }
+
+        moveWindowToDestinationScreen(window: window, destination: mouseScreen)
+    }
+
+    /// Moves a window to the destination screen, keeping its size if possible.
+    /// Prefers repositioning over resizing; only resizes if the window is larger than the screen.
+    private func moveWindowToDestinationScreen(window: AXUIElement, destination: NSScreen) {
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? destination.frame.maxY
+        let (currentPos, currentSize) = accessibilityService.readPositionAndSize(of: window)
+        let destVisible = destination.visibleFrame
+
+        // Visible frame bounds in AX coordinates (top-left origin on primary screen)
+        let visibleAXTop = primaryMaxY - destVisible.maxY
+        let visibleAXLeft = destVisible.minX
+        let visibleAXRight = destVisible.maxX
+        let visibleAXBottom = primaryMaxY - destVisible.minY
+
+        var newPos = currentPos
+        var newSize = currentSize
+
+        // If the window is larger than the destination screen, resize to fit
+        if newSize.width > destVisible.width {
+            newSize.width = destVisible.width
+        }
+        if newSize.height > destVisible.height {
+            newSize.height = destVisible.height
+        }
+
+        // Clamp position so the window stays within the visible area
+        if newPos.x + newSize.width > visibleAXRight {
+            newPos.x = visibleAXRight - newSize.width
+        }
+        newPos.x = max(newPos.x, visibleAXLeft)
+
+        if newPos.y + newSize.height > visibleAXBottom {
+            newPos.y = visibleAXBottom - newSize.height
+        }
+        newPos.y = max(newPos.y, visibleAXTop)
+
+        // Apply size change first if needed, then position
+        let needsResize = abs(newSize.width - currentSize.width) > 1
+                       || abs(newSize.height - currentSize.height) > 1
+        if needsResize {
+            var size = newSize
+            if let sizeVal = AXValueCreate(.cgSize, &size) {
+                AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeVal)
+            }
+        }
+        var pos = newPos
+        if let posVal = AXValueCreate(.cgPoint, &pos) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, posVal)
+        }
     }
 
     private func applyTargetAtCurrentIndex() {
@@ -704,6 +773,7 @@ final class AppState: NSObject, NSMenuDelegate {
         clearResizabilityCache()
         hideAllMainWindows()
         if let window = target.windowElement {
+            moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
             accessibilityService.raiseWindow(window)
         }
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()

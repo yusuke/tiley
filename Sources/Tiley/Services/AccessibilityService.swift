@@ -259,7 +259,7 @@ final class AccessibilityService {
     }
 
     /// Reads the current AX position and size of a window.
-    private func readPositionAndSize(of window: AXUIElement) -> (pos: CGPoint, size: CGSize) {
+    func readPositionAndSize(of window: AXUIElement) -> (pos: CGPoint, size: CGSize) {
         var pos = CGPoint.zero
         var size = CGSize.zero
         if let posVal = try? copyAXValueAttribute(window, attribute: kAXPositionAttribute) {

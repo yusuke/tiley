@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Ao trazer uma janela para frente com Enter ou duplo clique, a janela agora é movida para a tela onde o ponteiro do mouse está localizado, caso seja diferente. A janela é reposicionada para caber na tela e redimensionada apenas se necessário.
+
 ## [3.0.0] - 2026-03-23
 
 ### Adicionado

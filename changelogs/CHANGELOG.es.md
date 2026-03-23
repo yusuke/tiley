@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Al traer una ventana al frente con Enter o doble clic, la ventana se mueve a la pantalla donde se encuentra el puntero del ratón si es diferente. Se reposiciona para ajustarse a la pantalla y solo se redimensiona si es necesario.
+
 ## [3.0.0] - 2026-03-23
 
 ### Añadido
