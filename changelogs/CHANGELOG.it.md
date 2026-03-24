@@ -9,6 +9,7 @@
 ### Modificato
 
 - La scomparsa dell'overlay è ora più reattiva durante l'applicazione dei layout o il passaggio in primo piano delle finestre
+- Le finestre in modalità schermo intero nativa di macOS vengono ora automaticamente riportate alla modalità normale prima del ridimensionamento
 
 ## [3.1.1] - 2026-03-24
 

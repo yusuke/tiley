@@ -209,11 +209,42 @@ final class AccessibilityService {
         return changed
     }
 
+    /// Checks whether the window is in native macOS fullscreen mode and,
+    /// if so, exits fullscreen by pressing the AXFullScreenButton.  Waits
+    /// up to ~1 s for the transition animation to finish before returning.
+    func exitFullScreenIfNeeded(_ window: AXUIElement) {
+        var value: CFTypeRef?
+        let result = AXUIElementCopyAttributeValue(window, "AXFullScreen" as CFString, &value)
+        guard result == .success,
+              let isFullScreen = value as? Bool,
+              isFullScreen else { return }
+
+        // Press the fullscreen button to toggle out of fullscreen.
+        var fsButton: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(window, "AXFullScreenButton" as CFString, &fsButton) == .success,
+              let button = fsButton else { return }
+        AXUIElementPerformAction(button as! AXUIElement, kAXPressAction as CFString)
+
+        // Wait for the fullscreen exit animation to complete (up to ~1s).
+        for _ in 0..<20 {
+            usleep(50_000) // 50 ms
+            var newValue: CFTypeRef?
+            let r = AXUIElementCopyAttributeValue(window, "AXFullScreen" as CFString, &newValue)
+            if r == .success, let stillFS = newValue as? Bool, !stillFS {
+                break
+            }
+        }
+    }
+
     /// Moves and resizes the given window synchronously, then returns.
     /// Call ``verifyAndCorrectFrame(_:for:)`` afterwards (on a background
     /// thread) to handle apps that asynchronously revert position or size.
     @discardableResult
     func setFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) throws -> Bool {
+        // Exit native fullscreen before resizing — fullscreen windows
+        // cannot be moved or resized via the Accessibility API.
+        exitFullScreenIfNeeded(window)
+
         let (targetOrigin, targetSize) = axOriginAndSize(for: frame, screenFrame: screenFrame)
 
         try applyPositionAndSize(targetOrigin, targetSize, for: window)

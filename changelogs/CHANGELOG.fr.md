@@ -9,6 +9,7 @@
 ### Modifié
 
 - La disparition de la superposition est désormais plus réactive lors de l'application de dispositions ou de la mise au premier plan des fenêtres
+- Les fenêtres en mode plein écran natif de macOS quittent désormais automatiquement le plein écran avant le redimensionnement
 
 ## [3.1.1] - 2026-03-24
 

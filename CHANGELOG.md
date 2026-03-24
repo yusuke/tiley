@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Overlay dismissal is now more responsive when applying layouts or bringing windows to front
+- Windows in native macOS fullscreen mode are now automatically exited from fullscreen before resizing
 
 ## [3.1.1] - 2026-03-24
 

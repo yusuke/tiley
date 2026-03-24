@@ -9,6 +9,7 @@
 ### Geändert
 
 - Das Ausblenden des Overlays reagiert nun schneller beim Anwenden von Layouts oder beim In-den-Vordergrund-Bringen von Fenstern
+- Fenster im nativen macOS-Vollbildmodus werden vor der Größenänderung automatisch aus dem Vollbildmodus geholt
 
 ## [3.1.1] - 2026-03-24
 

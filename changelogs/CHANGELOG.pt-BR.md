@@ -9,6 +9,7 @@
 ### Alterado
 
 - A ocultação da sobreposição está agora mais responsiva ao aplicar layouts ou trazer janelas para frente
+- Janelas em modo de tela cheia nativo do macOS agora saem automaticamente da tela cheia antes do redimensionamento
 
 ## [3.1.1] - 2026-03-24
 

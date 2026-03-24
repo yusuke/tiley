@@ -9,6 +9,7 @@
 ### Cambiado
 
 - La ocultación de la superposición es ahora más responsiva al aplicar diseños o traer ventanas al frente
+- Las ventanas en modo de pantalla completa nativo de macOS ahora salen automáticamente de la pantalla completa antes de redimensionarse
 
 ## [3.1.1] - 2026-03-24
 
