@@ -3,6 +3,131 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>3.2.0</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>При наличии нескольких пространств Mission Control боковая панель отображает только окна текущего пространства</li>
+<li>Наложение сетки теперь отображает миниатюрный предпросмотр окна с кнопками светофора, значком приложения и заголовком окна в текущей позиции целевого окна</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Скрытие наложения стало более отзывчивым при применении макетов или переключении окон на передний план</li>
+<li>Окна в нативном полноэкранном режиме macOS теперь автоматически выходят из полноэкранного режима перед изменением размера</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Quando há vários espaços do Mission Control, a barra lateral exibe apenas as janelas do espaço atual</li>
+<li>A sobreposição de grade agora exibe uma pré-visualização da janela em miniatura com botões de semáforo, ícone do app e título da janela na posição atual da janela de destino</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>A ocultação da sobreposição está agora mais responsiva ao aplicar layouts ou trazer janelas para frente</li>
+<li>Janelas em modo de tela cheia nativo do macOS agora saem automaticamente da tela cheia antes do redimensionamento</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Quando sono presenti più spazi Mission Control, la barra laterale mostra solo le finestre dello spazio attuale</li>
+<li>L'overlay a griglia ora mostra un'anteprima della finestra in miniatura con pulsanti semaforo, icona dell'app e titolo della finestra nella posizione attuale della finestra di destinazione</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>La scomparsa dell'overlay è ora più reattiva durante l'applicazione dei layout o il passaggio in primo piano delle finestre</li>
+<li>Le finestre in modalità schermo intero nativa di macOS vengono ora automaticamente riportate alla modalità normale prima del ridimensionamento</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Lorsque plusieurs espaces Mission Control existent, la barre latérale n'affiche que les fenêtres de l'espace actuel</li>
+<li>La grille superposée affiche désormais un aperçu de fenêtre miniature avec les boutons feux tricolores, l'icône de l'app et le titre de la fenêtre à la position actuelle de la fenêtre cible</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>La disparition de la superposition est désormais plus réactive lors de l'application de dispositions ou de la mise au premier plan des fenêtres</li>
+<li>Les fenêtres en mode plein écran natif de macOS quittent désormais automatiquement le plein écran avant le redimensionnement</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Cuando hay varios espacios de Mission Control, la barra lateral muestra solo las ventanas del espacio actual</li>
+<li>La superposición de cuadrícula ahora muestra una vista previa de ventana en miniatura con botones de semáforo, icono de la app y título de la ventana en la posición actual de la ventana de destino</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>La ocultación de la superposición es ahora más responsiva al aplicar diseños o traer ventanas al frente</li>
+<li>Las ventanas en modo de pantalla completa nativo de macOS ahora salen automáticamente de la pantalla completa antes de redimensionarse</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Bei mehreren Mission Control Spaces zeigt die Seitenleiste nur Fenster des aktuellen Space an</li>
+<li>Das Raster-Overlay zeigt jetzt eine Miniatur-Fenstervorschau mit Ampelschaltflächen, App-Symbol und Fenstertitel an der aktuellen Position des Zielfensters an</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Das Ausblenden des Overlays reagiert nun schneller beim Anwenden von Layouts oder beim In-den-Vordergrund-Bringen von Fenstern</li>
+<li>Fenster im nativen macOS-Vollbildmodus werden vor der Größenänderung automatisch aus dem Vollbildmodus geholt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>當存在多個 Mission Control 空間時，側邊欄僅顯示當前空間的視窗</li>
+<li>格線疊層現在在目標視窗的當前位置顯示帶有紅綠燈按鈕、應用程式圖示和視窗標題的微縮視窗預覽</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>套用佈局或將視窗移至最前時，疊層隱藏回應更加迅速</li>
+<li>調整處於 macOS 原生全螢幕模式的視窗大小時，現在會自動退出全螢幕</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>当存在多个 Mission Control 空间时，侧边栏仅显示当前空间的窗口</li>
+<li>网格叠层现在在目标窗口的当前位置显示带有红绿灯按钮、应用图标和窗口标题的微缩窗口预览</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>应用布局或将窗口置于前台时，叠层隐藏响应更加迅速</li>
+<li>调整处于 macOS 原生全屏模式的窗口大小时，现在会自动退出全屏</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>여러 Mission Control 스페이스가 있을 때 사이드바에 현재 스페이스의 윈도우만 표시</li>
+<li>그리드 오버레이에 신호등 버튼, 앱 아이콘, 윈도우 제목이 포함된 미니어처 윈도우 미리보기를 대상 윈도우의 현재 위치에 표시하도록 추가</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>레이아웃 적용 또는 윈도우를 앞으로 가져올 때 오버레이 숨김이 더 빠르게 반응하도록 개선</li>
+<li>macOS 기본 전체 화면 모드의 윈도우 크기를 조정할 때 자동으로 전체 화면을 해제하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>複数のMission Controlスペースがある場合、サイドバーに現在のスペースのウインドウのみ表示するようにした</li>
+<li>グリッドオーバーレイに、信号ボタン・アプリアイコン・ウィンドウタイトル付きのミニチュアウィンドウプレビューを対象ウィンドウの現在位置に表示するようにした</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>レイアウト適用やウィンドウの最前面化の際、オーバーレイの非表示がよりレスポンシブになった</li>
+<li>macOSのフルスクリーン状態のウィンドウをリサイズする際、自動的にフルスクリーンを解除するようにした</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>When multiple Mission Control spaces exist, the sidebar shows only windows on the current space</li>
+<li>Grid overlay now shows a miniature window preview with traffic light buttons, app icon, and window title at the target window's current position</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Overlay dismissal is now more responsive when applying layouts or bringing windows to front</li>
+<li>Windows in native macOS fullscreen mode are now automatically exited from fullscreen before resizing</li>
+</ul>]]></description>
+            <pubDate>Wed, 25 Mar 2026 01:01:37 +0900</pubDate>
+            <sparkle:version>320</sparkle:version>
+            <sparkle:shortVersionString>3.2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley-3.2.0.zip" length="5520920" type="application/octet-stream" sparkle:edSignature="LcsaJmy0WFbFk2CfYP0lOH260miUMnzs/q/FU9f0ez+wV/sulldpoEAgIl1CdwnCVwT5QqfudgHCeAHk5EKODA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-311.delta" sparkle:deltaFrom="311" length="348014" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="f/cWVRcF5merFqEmhVp+IWAw/AgvE4Hqvv039ulSn1UzzGNsFWgq0Uotj4rf7zApxDwcc/CryvBzfIFWOiOCBw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-310.delta" sparkle:deltaFrom="310" length="381686" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2JVPXa2hTGu7KALXt5e//iMORUJGgTRntKIKpAtZjAOJY70mOLBJy78P2nAT+CKt+ubnE2P7DUROfoHTGdyXCQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-301.delta" sparkle:deltaFrom="301" length="504930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="WTps4JwSTzAth+UFDYV4SDDMbsjn/7ug+nfiFCDOvPwYvn6brf7gvSuPaTWmqgo87kXAVfI1pxO50ohnSP0LDw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-300.delta" sparkle:deltaFrom="300" length="869246" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GRBQWxnN9utDOIW4y0+zV/KNd/Aalzrvq8Q/fcOFt63zDBh74oQBaN8Gpqpi8Fhym7uBz8uG7hxVro4flNqBAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-220.delta" sparkle:deltaFrom="220" length="1124798" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bBxaqXgBkEsgXqK6IEQ5/g3Y7WQC8mE3PejZFS2RpOR19PafhRhxFN6y0A0eh1FmZoLhKgCP+sbGXorzMOtEAw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>3.1.1</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -70,11 +195,71 @@
 <li>Fixed wrong wallpaper shown for dynamic wallpapers; added thumbnail support for Sequoia, Sonoma, Ventura, Monterey, and Macintosh provider-based wallpapers</li>
 <li>Menu bar text in the grid preview now adapts to wallpaper brightness (black on light wallpapers, white on dark) matching macOS behavior</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido miniaturas de papéis de parede do sistema exibindo em mosaico em vez de preenchimento</li>
+<li>Corrigida imagem incorreta em papéis de parede dinâmicos; adicionado suporte a miniaturas para papéis de parede baseados em provedores Sequoia, Sonoma, Ventura, Monterey e Macintosh</li>
+<li>O texto da barra de menus na visualização da grade agora se adapta ao brilho do papel de parede (preto em fundos claros, branco em escuros, como no macOS)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretta la visualizzazione a mosaico anziché a riempimento delle miniature degli sfondi di sistema</li>
+<li>Corretta l'immagine errata per gli sfondi dinamici; aggiunto supporto miniature per gli sfondi basati su provider Sequoia, Sonoma, Ventura, Monterey e Macintosh</li>
+<li>Il testo della barra dei menu nell'anteprima della griglia si adatta ora alla luminosità dello sfondo (nero su sfondi chiari, bianco su scuri, come in macOS)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'affichage en mosaïque au lieu du remplissage pour les miniatures des fonds d'écran système</li>
+<li>Correction de l'affichage incorrect des fonds d'écran dynamiques ; ajout de la prise en charge des miniatures pour les fonds d'écran Sequoia, Sonoma, Ventura, Monterey et Macintosh</li>
+<li>Le texte de la barre de menus dans l'aperçu de la grille s'adapte désormais à la luminosité du fond d'écran (noir sur fond clair, blanc sur fond sombre, comme sous macOS)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido que las miniaturas de fondos de pantalla del sistema se mostraran en mosaico en lugar de relleno</li>
+<li>Corregida la imagen incorrecta en fondos de pantalla dinámicos; añadido soporte de miniaturas para fondos de pantalla basados en proveedores Sequoia, Sonoma, Ventura, Monterey y Macintosh</li>
+<li>El texto de la barra de menú en la vista previa de la cuadrícula ahora se adapta al brillo del fondo de pantalla (negro en fondos claros, blanco en oscuros, como en macOS)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Systemhintergrund-Miniaturansichten wurden fälschlicherweise gekachelt statt als Füllung dargestellt</li>
+<li>Falsche Darstellung dynamischer Hintergrundbilder behoben; Miniaturansicht-Unterstützung für Sequoia-, Sonoma-, Ventura-, Monterey- und Macintosh-Provider-Hintergründe hinzugefügt</li>
+<li>Menüleistentext in der Rastervorschau passt sich jetzt der Hintergrundbildhelligkeit an (schwarz bei hellen Hintergründen, weiß bei dunklen, wie in macOS)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正系統桌布縮圖錯誤地以拼貼方式而非填滿方式顯示的問題</li>
+<li>修正動態桌布顯示錯誤圖像的問題；新增 Sequoia、Sonoma、Ventura、Monterey 和 Macintosh 提供者桌布的縮圖支援</li>
+<li>格線預覽中的選單列文字現在會根據桌布亮度自動調整（亮色桌布顯示黑色文字，暗色桌布顯示白色文字，與 macOS 行為一致）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复系统壁纸缩略图错误地以平铺方式而非填充方式显示的问题</li>
+<li>修复动态壁纸显示错误图像的问题；新增 Sequoia、Sonoma、Ventura、Monterey 和 Macintosh 提供者壁纸的缩略图支持</li>
+<li>网格预览中的菜单栏文字现在会根据壁纸亮度自动调整（亮色壁纸显示黑色文字，暗色壁纸显示白色文字，与 macOS 行为一致）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>시스템 배경화면 썸네일이 채우기 대신 타일로 잘못 표시되던 문제를 수정</li>
+<li>다이내믹 배경화면에서 잘못된 이미지가 표시되던 문제를 수정. Sequoia, Sonoma, Ventura, Monterey, Macintosh 프로바이더 기반 배경화면의 썸네일 지원 추가</li>
+<li>그리드 미리보기의 메뉴 막대 텍스트가 배경화면 밝기에 맞게 변경 (밝은 배경화면에서는 검은색, 어두운 배경화면에서는 흰색으로 macOS 동작과 일치)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>システム壁紙のサムネイルがFill表示ではなくタイル表示されていた問題を修正</li>
+<li>ダイナミック壁紙で誤った壁紙が表示される問題を修正。Sequoia・Sonoma・Ventura・Monterey・Macintoshのプロバイダベース壁紙のサムネイル表示に対応</li>
+<li>グリッドプレビューのメニューバーテキストが壁紙の明るさに応じて変化するように（明るい壁紙では黒、暗い壁紙では白に。macOSの動作と一致）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed system wallpaper thumbnails incorrectly rendering as tiled instead of fill</li>
+<li>Fixed wrong wallpaper shown for dynamic wallpapers; added thumbnail support for Sequoia, Sonoma, Ventura, Monterey, and Macintosh provider-based wallpapers</li>
+<li>Menu bar text in the grid preview now adapts to wallpaper brightness (black on light wallpapers, white on dark) matching macOS behavior</li>
+</ul>]]></description>
             <pubDate>Tue, 24 Mar 2026 12:53:07 +0900</pubDate>
             <sparkle:version>311</sparkle:version>
             <sparkle:shortVersionString>3.1.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.1/Tiley-3.1.1.zip" length="5488656" type="application/octet-stream" sparkle:edSignature="5LENIYQ4gL09lsBEl8bxYxF/arAwF7DNY2jMInULLxwf0uzEhtRsJQCSUOEVvVHOLZ5JFY/FGjSfKH5ER4xqDw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley-3.1.1.zip" length="5488656" type="application/octet-stream" sparkle:edSignature="5LENIYQ4gL09lsBEl8bxYxF/arAwF7DNY2jMInULLxwf0uzEhtRsJQCSUOEVvVHOLZ5JFY/FGjSfKH5ER4xqDw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.1/Tiley311-310.delta" sparkle:deltaFrom="310" length="241914" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dMieKTnu1TFYwtRdSi9RVeIiSopXXhWxlZkCiSC9JhqJADvcO5IRqzl2MNdbXPGC51rBq0DAFwn9qJUMJpLeAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.1/Tiley311-301.delta" sparkle:deltaFrom="301" length="396734" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="JBeyoiCbQe/m62BAOhVyNRFueb4kYvtbYN1xT7gD5ANjXXatvzWcroP5RV1l7JDz9Nao99wDH3+H9H7+A4cEDA=="/>
@@ -379,466 +564,157 @@
 <ul>
 <li>Fixed window resizing sometimes failing when moving a window from one screen to another (especially to a taller portrait monitor) by adding a retry mechanism for cross-screen moves</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Substituídos os menus kebab (…) ao passar o mouse na lista de janelas por menus de contexto nativos do macOS (clique direito)</li>
+<li>Adicionados botões de ação (Mover para tela, Fechar/Encerrar, Ocultar outros apps) ao lado do campo de busca da barra lateral</li>
+<li>As miniaturas de grade das predefinições de layout agora refletem a proporção da área utilizável da tela (excluindo a barra de menus e o Dock), adaptando-se à orientação retrato ou paisagem.</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde o redimensionamento de janelas falhava às vezes ao mover uma janela para outra tela (especialmente para um monitor vertical mais alto), através da introdução de um mecanismo de nova tentativa em movimentações entre telas</li>
+</ul>
+<h3>Removido</h3>
+<ul>
+<li>Removidos os botões de menu kebab e de fechar ao passar o mouse nas linhas da barra lateral (substituídos por menus de contexto e barra de ações)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Sostituiti i menu kebab (…) al passaggio del mouse nella lista finestre con menu contestuali nativi macOS (clic destro)</li>
+<li>Aggiunti pulsanti di azione (Sposta sullo schermo, Chiudi/Esci, Nascondi altre app) accanto al campo di ricerca della barra laterale</li>
+<li>Le miniature della griglia delle preimpostazioni di layout ora riflettono le proporzioni dell'area utilizzabile dello schermo (escludendo barra dei menu e Dock), adattandosi all'orientamento verticale o orizzontale.</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema per cui il ridimensionamento delle finestre talvolta falliva quando si spostava una finestra su un altro schermo (in particolare su un monitor verticale più alto), introducendo un meccanismo di nuovo tentativo per gli spostamenti tra schermi</li>
+</ul>
+<h3>Rimosso</h3>
+<ul>
+<li>Rimossi i pulsanti del menu kebab e di chiusura al passaggio del mouse dalle righe della barra laterale (sostituiti da menu contestuali e barra delle azioni)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Remplacement des menus kebab (…) au survol dans la liste des fenêtres par des menus contextuels natifs macOS (clic droit)</li>
+<li>Ajout de boutons d'action (Déplacer vers l'écran, Fermer/Quitter, Masquer les autres apps) à côté du champ de recherche de la barre latérale</li>
+<li>Les miniatures de grille des préréglages de disposition reflètent désormais le rapport d'aspect de la zone utilisable de l'écran (hors barre de menus et Dock), s'adaptant à l'orientation portrait ou paysage.</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un problème où le redimensionnement de fenêtres échouait parfois lors du déplacement vers un autre écran (en particulier vers un moniteur portrait plus haut), grâce à l'introduction d'un mécanisme de nouvelle tentative pour les déplacements inter-écrans</li>
+</ul>
+<h3>Supprimé</h3>
+<ul>
+<li>Suppression des boutons de menu kebab et de fermeture au survol des lignes de la barre latérale (remplacés par les menus contextuels et la barre d'actions)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Reemplazados los menús kebab (…) al pasar el ratón en la lista de ventanas por menús contextuales nativos de macOS (clic derecho)</li>
+<li>Añadidos botones de acción (Mover a pantalla, Cerrar/Salir, Ocultar otras apps) junto al campo de búsqueda de la barra lateral</li>
+<li>Las miniaturas de cuadrícula de los ajustes de diseño ahora reflejan la relación de aspecto del área utilizable de la pantalla (excluyendo la barra de menú y el Dock), adaptándose a la orientación vertical u horizontal.</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde el redimensionamiento de ventanas fallaba a veces al mover una ventana a otra pantalla (especialmente a un monitor vertical más alto), mediante la introducción de un mecanismo de reintento en movimientos entre pantallas</li>
+</ul>
+<h3>Eliminado</h3>
+<ul>
+<li>Eliminados los botones de menú kebab y de cierre que aparecían al pasar el ratón en las filas de la barra lateral (reemplazados por menús contextuales y barra de acciones)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Hover-Kebab-Menüs (…) in der Fensterliste durch native macOS-Kontextmenüs (Rechtsklick) ersetzt</li>
+<li>Aktionsschaltflächen (Auf Bildschirm verschieben, Schließen/Beenden, Andere Apps ausblenden) neben dem Suchfeld der Seitenleiste hinzugefügt</li>
+<li>Die Raster-Vorschaubilder der Layout-Voreinstellungen spiegeln nun das Seitenverhältnis des nutzbaren Bildschirmbereichs (ohne Menüleiste und Dock) wider und passen sich an Hoch- oder Querformat an.</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Fenstergrößenänderung schlug manchmal fehl, wenn ein Fenster auf einen anderen Bildschirm verschoben wurde (insbesondere auf einen höheren Hochformat-Monitor). Behoben durch einen Wiederholungsmechanismus bei bildschirmübergreifenden Verschiebungen.</li>
+</ul>
+<h3>Entfernt</h3>
+<ul>
+<li>Hover-Kebab-Menü-Schaltflächen und Hover-Schließen-Schaltflächen aus den Seitenleistenzeilen entfernt (durch Kontextmenüs und Aktionsleiste ersetzt)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>將側邊欄視窗列表中懸停顯示的省略號(…)選單替換為 macOS 原生右鍵選單</li>
+<li>在側邊欄搜尋欄位旁新增操作按鈕（移動到螢幕、關閉/結束、隱藏其他應用程式）</li>
+<li>佈局預設的格線縮圖現在反映螢幕可用區域（不含選單列和 Dock）的寬高比，可根據直向或橫向螢幕自動調整顯示。</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了將視窗移動到其他螢幕時（尤其是移動到較高的直向顯示器時）調整大小有時會失敗的問題，透過引入跨螢幕移動重試機制解決</li>
+</ul>
+<h3>移除</h3>
+<ul>
+<li>移除側邊欄列懸停時顯示的省略號選單按鈕和關閉按鈕（已替換為右鍵選單和操作列）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>将侧边栏窗口列表中悬停显示的省略号(…)菜单替换为 macOS 原生右键上下文菜单</li>
+<li>在侧边栏搜索字段旁添加操作按钮（移动到屏幕、关闭/退出、隐藏其他应用）</li>
+<li>布局预设的网格缩略图现在反映屏幕可用区域（不含菜单栏和 Dock）的宽高比，可根据竖屏或横屏方向自动调整显示。</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了将窗口移动到其他屏幕时（尤其是移动到较高的竖屏显示器时）调整大小有时会失败的问题，通过引入跨屏幕移动重试机制解决</li>
+</ul>
+<h3>移除</h3>
+<ul>
+<li>移除侧边栏行悬停时显示的省略号菜单按钮和关闭按钮（已替换为上下文菜单和操作栏）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>사이드바 윈도우 목록의 호버 케밥(…) 메뉴를 macOS 기본 우클릭 컨텍스트 메뉴로 교체</li>
+<li>사이드바 검색 필드 옆에 액션 버튼(화면으로 이동, 닫기/종료, 다른 앱 가리기) 추가</li>
+<li>레이아웃 프리셋의 그리드 썸네일이 화면의 사용 가능 영역(메뉴 막대 및 Dock 제외)의 종횡비를 반영하도록 변경되었습니다. 세로 또는 가로 방향 화면에 따라 표시가 달라집니다.</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>창을 다른 화면으로 이동할 때(특히 세로 방향 포트레이트 모니터로 이동 시) 크기 조정이 실패하는 문제를 화면 간 이동 시 재시도 메커니즘을 도입하여 수정</li>
+</ul>
+<h3>삭제</h3>
+<ul>
+<li>사이드바 행의 호버 케밥 메뉴 버튼과 닫기 버튼 제거 (컨텍스트 메뉴와 액션 바로 대체)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>サイドバーのウインドウリストのホバーで表示されるケバブ（…）メニューを、macOSネイティブの右クリックコンテキストメニューに置き換え</li>
+<li>サイドバーの検索フィールド横にアクションボタン（スクリーンに移動、閉じる/終了、他のアプリを隠す）を追加</li>
+<li>レイアウトプリセットのグリッドサムネイルが、スクリーンの使用可能領域（メニューバーとDockを除く）のアスペクト比を反映するように。縦長・横長の画面に応じて表示が変わります。</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>ウインドウを別のスクリーンへ移動する際（特に縦長のポートレートモニターへの移動時）にリサイズが失敗することがある問題を、クロススクリーン移動時のリトライ機構を導入して修正</li>
+</ul>
+<h3>削除</h3>
+<ul>
+<li>サイドバー行のホバー時に表示されるケバブメニューボタンとクローズボタンを削除（コンテキストメニューとアクションバーに置き換え）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Replaced hover-reveal kebab (more) menus in the window list sidebar with native right-click context menus for a more macOS-native experience</li>
+<li>Added action buttons (Move to Screen, Close/Quit, Hide Others) next to the sidebar search field for quick access to common window operations</li>
+<li>Layout preset grid thumbnails now match the aspect ratio of the screen's usable area (excluding menu bar and Dock), reflecting portrait or landscape orientation per screen</li>
+</ul>
+<h3>Removed</h3>
+<ul>
+<li>Removed hover-reveal kebab menu buttons and hover close buttons from sidebar rows (replaced by context menus and action bar)</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed window resizing sometimes failing when moving a window from one screen to another (especially to a taller portrait monitor) by adding a retry mechanism for cross-screen moves</li>
+</ul>]]></description>
             <pubDate>Tue, 24 Mar 2026 00:22:58 +0900</pubDate>
             <sparkle:version>310</sparkle:version>
             <sparkle:shortVersionString>3.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.1/Tiley-3.1.0.zip" length="5480047" type="application/octet-stream" sparkle:edSignature="ksKJ/yzlbBYsDRhysy1yTDL9ZAypmRIZsK8ERBQi+j88c7y1EFxwI2gL5scrL2dOLo/2Pc3h2aLjoA/cr6O4BQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley-3.1.0.zip" length="5480047" type="application/octet-stream" sparkle:edSignature="ksKJ/yzlbBYsDRhysy1yTDL9ZAypmRIZsK8ERBQi+j88c7y1EFxwI2gL5scrL2dOLo/2Pc3h2aLjoA/cr6O4BQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.0/Tiley310-301.delta" sparkle:deltaFrom="301" length="373350" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="/rzXfEqX1H4cP6hzNuQd68K9Aq8b4TC5Ar2Lveek+c2f6/KrPG12gm6ckykCWBOEsCzwb6OsGSzWZsWMkLx6Bg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.0/Tiley310-300.delta" sparkle:deltaFrom="300" length="773206" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nhv4FRjaqoSRDbgClvwX5NYD7nqYVnxqD5GkKRzCA3HUQBpJg5RzxauVg6hQ5aWzT0hRa7lrGtOQD0Y7NkiZDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.0/Tiley310-220.delta" sparkle:deltaFrom="220" length="1072082" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="qijBQxLbI6TbfuTvywBROLA3vn5cN73IqyU39rxwkNKzg4WQg2zy4EDrGWAWYet+qf84xAXDpjUttuagYVtUDw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.0/Tiley310-210.delta" sparkle:deltaFrom="210" length="1094618" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="iwcwfKPHUrHOJIy5Wq6rgN20Ee9UMY1csmIlmnAvzW8YIsEnlmKZLSpwW0TDThS8pleZdT7g749wAxD4F/v5Cw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.0/Tiley310-203.delta" sparkle:deltaFrom="203" length="1108798" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dzkS1eiS+wa012BFrPfh4oAwHcYPiS2thNiZanwD3XLYKMm7bIK/xRd3Fk0vbKhUPaIV/KJ/lBDACu+ASp85BQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>3.0.1</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>При выводе окна на передний план через Enter или двойной клик окно теперь перемещается на экран, где находится указатель мыши, если он отличается. Окно репозиционируется для размещения на экране и изменяет размер только при необходимости.</li>
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Производительность отображения оверлея улучшена примерно на 80% благодаря пулингу/повторному использованию контроллеров, отложенной загрузке списка окон и приоритетному рендерингу целевого экрана</li>
-<li>Внутренняя настройка журнала отладки переименована с `useAppleScriptResize` на `enableDebugLog` для более точного отражения назначения</li>
-</ul>
-<h3>Исправлено</h3>
-<ul>
-<li>Исправлена проблема, при которой изменение размера окна на основном экране для некоторых приложений (например, Chrome) молча игнорировалось. Механизм повторной попытки с перемещением, используемый для дополнительных экранов, теперь применяется и к основному экрану</li>
-<li>Исправлено: нажатие на значок в строке меню при видимом оверлее теперь закрывает оверлей (как ESC) вместо открытия главного окна</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao trazer uma janela para frente com Enter ou duplo clique, a janela agora é movida para a tela onde o ponteiro do mouse está localizado, caso seja diferente. A janela é reposicionada para caber na tela e redimensionada apenas se necessário.</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>Desempenho de exibição da sobreposição melhorado em ~80% por meio de pooling/reutilização de controladores, carregamento adiado da lista de janelas e renderização prioritária da tela de destino</li>
-<li>Configuração interna de log de depuração renomeada de `useAppleScriptResize` para `enableDebugLog` para melhor refletir sua finalidade</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o redimensionamento de janela falhando silenciosamente na tela principal para alguns aplicativos (ex.: Chrome). O mecanismo de bounce retry usado para telas secundárias agora é aplicado também na tela principal</li>
-<li>Corrigido: clicar no ícone da barra de menus com a sobreposição visível agora fecha a sobreposição (como ESC) em vez de abrir a janela principal</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Quando si porta una finestra in primo piano tramite Invio o doppio clic, la finestra viene spostata sullo schermo in cui si trova il puntatore del mouse, se diverso. La finestra viene riposizionata per adattarsi allo schermo e ridimensionata solo se necessario.</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>Prestazioni di visualizzazione dell'overlay migliorate di circa l'80% grazie al pooling/riutilizzo dei controller, al caricamento differito della lista delle finestre e al rendering prioritario dello schermo di destinazione</li>
-<li>Rinominata l'impostazione interna del log di debug da `useAppleScriptResize` a `enableDebugLog` per riflettere meglio il suo scopo</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto il ridimensionamento della finestra che falliva silenziosamente sullo schermo principale per alcune app (es. Chrome). Il meccanismo di rimbalzo utilizzato per gli schermi secondari viene ora applicato anche allo schermo principale</li>
-<li>Corretto: il clic sull'icona della barra dei menu con l'overlay visibile ora chiude l'overlay (come ESC) invece di aprire la finestra principale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Lors de la mise au premier plan d'une fenêtre via Entrée ou double-clic, la fenêtre est désormais déplacée vers l'écran où se trouve le pointeur de la souris si celui-ci diffère. La fenêtre est repositionnée pour s'adapter à l'écran et n'est redimensionnée qu'en cas de nécessité.</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>Amélioration des performances d'affichage de la superposition d'environ 80 % grâce au pooling/réutilisation des contrôleurs, au chargement différé de la liste des fenêtres et au rendu prioritaire de l'écran cible</li>
-<li>Renommage du paramètre interne de journal de débogage de `useAppleScriptResize` en `enableDebugLog` pour mieux refléter son utilité</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du redimensionnement de fenêtre échouant silencieusement sur l'écran principal pour certaines applications (ex. Chrome). Le mécanisme de rebond utilisé pour les écrans secondaires est désormais appliqué à l'écran principal</li>
-<li>Correction : cliquer sur l'icône de la barre de menus lorsque la superposition est visible ferme désormais la superposition (comme ESC) au lieu d'ouvrir la fenêtre principale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al traer una ventana al frente con Enter o doble clic, la ventana se mueve a la pantalla donde se encuentra el puntero del ratón si es diferente. Se reposiciona para ajustarse a la pantalla y solo se redimensiona si es necesario.</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Rendimiento de visualización de la superposición mejorado en ~80% mediante agrupación/reutilización de controladores, carga diferida de la lista de ventanas y renderizado prioritario de la pantalla objetivo</li>
-<li>Se renombró la configuración interna de registro de depuración de `useAppleScriptResize` a `enableDebugLog` para reflejar mejor su propósito</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió el redimensionamiento de ventanas que fallaba silenciosamente en la pantalla principal para algunas aplicaciones (p. ej., Chrome). Se aplica el mecanismo de reintento con rebote de las pantallas secundarias también a la pantalla principal</li>
-<li>Se corrigió que al hacer clic en el icono de la barra de menú con la superposición visible se abría la ventana principal en lugar de cerrar la superposición (mismo comportamiento que ESC)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Beim Aktivieren eines Fensters per Enter oder Doppelklick wird das Fenster nun auf den Bildschirm verschoben, auf dem sich der Mauszeiger befindet, falls dieser abweicht. Das Fenster wird bevorzugt repositioniert und nur bei Bedarf in der Größe angepasst.</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Overlay-Anzeigeleistung um ~80 % verbessert durch Controller-Pooling/-Wiederverwendung, verzögertes Laden der Fensterliste und priorisiertes Rendern des Zielbildschirms</li>
-<li>Interne Debug-Log-Einstellung von `useAppleScriptResize` in `enableDebugLog` umbenannt, um den tatsächlichen Zweck besser widerzuspiegeln</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Fenstergrößenänderung auf dem primären Bildschirm bei einigen Apps (z. B. Chrome) wurde stillschweigend ignoriert. Der für sekundäre Bildschirme verwendete Bounce-Retry-Mechanismus wird nun auch auf dem primären Bildschirm angewendet</li>
-<li>Klick auf das Menüleisten-Symbol bei sichtbarem Overlay schließt nun das Overlay (wie ESC), statt das Hauptfenster zu öffnen</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>透過 Enter 或雙擊將視窗帶到最前面時，如果滑鼠指標位於其他螢幕，視窗將移動到該螢幕。優先調整位置以適應螢幕，僅在必要時調整大小。</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>透過控制器池化/重複使用、視窗列表延遲載入和目標螢幕優先繪製，將疊加層顯示效能提升約 80%</li>
-<li>將內部除錯日誌設定名稱從 `useAppleScriptResize` 更名為 `enableDebugLog`，以更準確地反映其用途</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正在主螢幕上某些應用程式（如 Chrome）視窗調整大小被靜默忽略的問題。將次要螢幕使用的彈跳重試機制套用於主螢幕</li>
-<li>修正在疊加層顯示時點擊選單列圖示會開啟主視窗的問題，現在改為關閉疊加層（與按 ESC 鍵行為一致）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>通过 Enter 或双击将窗口置于最前时，如果鼠标指针位于其他屏幕，窗口将移动到该屏幕。优先调整位置以适应屏幕，仅在必要时调整大小。</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>通过控制器池化/复用、窗口列表延迟加载和目标屏幕优先渲染，将叠加层显示性能提升约 80%</li>
-<li>将内部调试日志设置名称从 `useAppleScriptResize` 更名为 `enableDebugLog`，以更准确地反映其用途</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复在主屏幕上某些应用（如 Chrome）窗口调整大小被静默忽略的问题。将辅助屏幕使用的弹跳重试机制应用于主屏幕</li>
-<li>修复在叠加层显示时点击菜单栏图标会打开主窗口的问题，现在改为关闭叠加层（与按 ESC 键行为一致）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>Enter 또는 더블클릭으로 창을 최전면으로 가져올 때, 마우스 포인터가 다른 화면에 있으면 해당 화면으로 창을 이동합니다. 화면 내에 맞도록 위치를 조정하고, 필요한 경우에만 크기를 조정합니다.</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>컨트롤러 풀링/재사용, 윈도우 리스트 지연 로딩, 타겟 화면 우선 렌더링을 통해 오버레이 표시 성능을 약 80% 개선</li>
-<li>내부 디버그 로그 설정 이름을 `useAppleScriptResize`에서 `enableDebugLog`로 변경하여 실제 용도에 맞춤</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>기본 화면에서 일부 앱(예: Chrome)의 창 크기 조정이 무시되는 문제를 수정. 보조 화면에서 사용하던 바운스 재시도를 기본 화면에도 적용</li>
-<li>오버레이가 표시된 상태에서 메뉴 막대 아이콘을 클릭하면 메인 윈도우가 열리는 대신 오버레이가 닫히도록 수정 (ESC 키와 동일한 동작)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>Enter またはダブルクリックでウインドウを最前面にする際、マウスポインタが別のスクリーンにある場合はそのスクリーンへウインドウを移動するように。画面内に収まるよう位置を調整し、収まらない場合のみリサイズします。</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>コントローラのプール/再利用、ウインドウリストの遅延読み込み、ターゲット画面の優先描画により、オーバーレイ表示のパフォーマンスを約 80% 改善</li>
-<li>内部のデバッグログ設定名を `useAppleScriptResize` から `enableDebugLog` に変更し、実際の用途に合わせた</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>プライマリスクリーンで一部のアプリ（Chrome 等）のウインドウリサイズが無効になる問題を修正。セカンダリスクリーンで使用していたバウンスリトライをプライマリにも適用</li>
-<li>オーバーレイ表示中にメニューバーアイコンをクリックすると、メインウインドウが開く代わりにオーバーレイが閉じるように修正（ESC キーと同じ動作）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>When bringing a window to front via Enter or double-click, the window is now moved to the screen where the mouse pointer is located if it differs from the window's current screen. The window is repositioned to fit within the destination screen, resizing only if necessary.</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Improved overlay display performance by ~80% through controller pooling/reuse, deferred window list loading, and prioritized target screen rendering</li>
-<li>Renamed internal debug log setting from `useAppleScriptResize` to `enableDebugLog` to better reflect its purpose</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed window resize silently failing on the primary screen for some apps (e.g. Chrome) by adding size verification and bounce retry, matching the existing workaround used for secondary screens</li>
-<li>Fixed clicking the menu bar icon while the overlay is visible now dismisses the overlay (same as pressing ESC), instead of opening the main window</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao trazer uma janela para frente com Enter ou duplo clique, a janela agora é movida para a tela onde o ponteiro do mouse está localizado, caso seja diferente. A janela é reposicionada para caber na tela e redimensionada apenas se necessário.</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>Desempenho de exibição da sobreposição melhorado em ~80% por meio de pooling/reutilização de controladores, carregamento adiado da lista de janelas e renderização prioritária da tela de destino</li>
-<li>Configuração interna de log de depuração renomeada de `useAppleScriptResize` para `enableDebugLog` para melhor refletir sua finalidade</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o redimensionamento de janela falhando silenciosamente na tela principal para alguns aplicativos (ex.: Chrome). O mecanismo de bounce retry usado para telas secundárias agora é aplicado também na tela principal</li>
-<li>Corrigido: clicar no ícone da barra de menus com a sobreposição visível agora fecha a sobreposição (como ESC) em vez de abrir a janela principal</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Quando si porta una finestra in primo piano tramite Invio o doppio clic, la finestra viene spostata sullo schermo in cui si trova il puntatore del mouse, se diverso. La finestra viene riposizionata per adattarsi allo schermo e ridimensionata solo se necessario.</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>Prestazioni di visualizzazione dell'overlay migliorate di circa l'80% grazie al pooling/riutilizzo dei controller, al caricamento differito della lista delle finestre e al rendering prioritario dello schermo di destinazione</li>
-<li>Rinominata l'impostazione interna del log di debug da `useAppleScriptResize` a `enableDebugLog` per riflettere meglio il suo scopo</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto il ridimensionamento della finestra che falliva silenziosamente sullo schermo principale per alcune app (es. Chrome). Il meccanismo di rimbalzo utilizzato per gli schermi secondari viene ora applicato anche allo schermo principale</li>
-<li>Corretto: il clic sull'icona della barra dei menu con l'overlay visibile ora chiude l'overlay (come ESC) invece di aprire la finestra principale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Lors de la mise au premier plan d'une fenêtre via Entrée ou double-clic, la fenêtre est désormais déplacée vers l'écran où se trouve le pointeur de la souris si celui-ci diffère. La fenêtre est repositionnée pour s'adapter à l'écran et n'est redimensionnée qu'en cas de nécessité.</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>Amélioration des performances d'affichage de la superposition d'environ 80 % grâce au pooling/réutilisation des contrôleurs, au chargement différé de la liste des fenêtres et au rendu prioritaire de l'écran cible</li>
-<li>Renommage du paramètre interne de journal de débogage de `useAppleScriptResize` en `enableDebugLog` pour mieux refléter son utilité</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du redimensionnement de fenêtre échouant silencieusement sur l'écran principal pour certaines applications (ex. Chrome). Le mécanisme de rebond utilisé pour les écrans secondaires est désormais appliqué à l'écran principal</li>
-<li>Correction : cliquer sur l'icône de la barre de menus lorsque la superposition est visible ferme désormais la superposition (comme ESC) au lieu d'ouvrir la fenêtre principale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al traer una ventana al frente con Enter o doble clic, la ventana se mueve a la pantalla donde se encuentra el puntero del ratón si es diferente. Se reposiciona para ajustarse a la pantalla y solo se redimensiona si es necesario.</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Rendimiento de visualización de la superposición mejorado en ~80% mediante agrupación/reutilización de controladores, carga diferida de la lista de ventanas y renderizado prioritario de la pantalla objetivo</li>
-<li>Se renombró la configuración interna de registro de depuración de `useAppleScriptResize` a `enableDebugLog` para reflejar mejor su propósito</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió el redimensionamiento de ventanas que fallaba silenciosamente en la pantalla principal para algunas aplicaciones (p. ej., Chrome). Se aplica el mecanismo de reintento con rebote de las pantallas secundarias también a la pantalla principal</li>
-<li>Se corrigió que al hacer clic en el icono de la barra de menú con la superposición visible se abría la ventana principal en lugar de cerrar la superposición (mismo comportamiento que ESC)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Beim Aktivieren eines Fensters per Enter oder Doppelklick wird das Fenster nun auf den Bildschirm verschoben, auf dem sich der Mauszeiger befindet, falls dieser abweicht. Das Fenster wird bevorzugt repositioniert und nur bei Bedarf in der Größe angepasst.</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Overlay-Anzeigeleistung um ~80 % verbessert durch Controller-Pooling/-Wiederverwendung, verzögertes Laden der Fensterliste und priorisiertes Rendern des Zielbildschirms</li>
-<li>Interne Debug-Log-Einstellung von `useAppleScriptResize` in `enableDebugLog` umbenannt, um den tatsächlichen Zweck besser widerzuspiegeln</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Fenstergrößenänderung auf dem primären Bildschirm bei einigen Apps (z. B. Chrome) wurde stillschweigend ignoriert. Der für sekundäre Bildschirme verwendete Bounce-Retry-Mechanismus wird nun auch auf dem primären Bildschirm angewendet</li>
-<li>Klick auf das Menüleisten-Symbol bei sichtbarem Overlay schließt nun das Overlay (wie ESC), statt das Hauptfenster zu öffnen</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>透過 Enter 或雙擊將視窗帶到最前面時，如果滑鼠指標位於其他螢幕，視窗將移動到該螢幕。優先調整位置以適應螢幕，僅在必要時調整大小。</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>透過控制器池化/重複使用、視窗列表延遲載入和目標螢幕優先繪製，將疊加層顯示效能提升約 80%</li>
-<li>將內部除錯日誌設定名稱從 `useAppleScriptResize` 更名為 `enableDebugLog`，以更準確地反映其用途</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正在主螢幕上某些應用程式（如 Chrome）視窗調整大小被靜默忽略的問題。將次要螢幕使用的彈跳重試機制套用於主螢幕</li>
-<li>修正在疊加層顯示時點擊選單列圖示會開啟主視窗的問題，現在改為關閉疊加層（與按 ESC 鍵行為一致）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>通过 Enter 或双击将窗口置于最前时，如果鼠标指针位于其他屏幕，窗口将移动到该屏幕。优先调整位置以适应屏幕，仅在必要时调整大小。</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>通过控制器池化/复用、窗口列表延迟加载和目标屏幕优先渲染，将叠加层显示性能提升约 80%</li>
-<li>将内部调试日志设置名称从 `useAppleScriptResize` 更名为 `enableDebugLog`，以更准确地反映其用途</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复在主屏幕上某些应用（如 Chrome）窗口调整大小被静默忽略的问题。将辅助屏幕使用的弹跳重试机制应用于主屏幕</li>
-<li>修复在叠加层显示时点击菜单栏图标会打开主窗口的问题，现在改为关闭叠加层（与按 ESC 键行为一致）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>Enter 또는 더블클릭으로 창을 최전면으로 가져올 때, 마우스 포인터가 다른 화면에 있으면 해당 화면으로 창을 이동합니다. 화면 내에 맞도록 위치를 조정하고, 필요한 경우에만 크기를 조정합니다.</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>컨트롤러 풀링/재사용, 윈도우 리스트 지연 로딩, 타겟 화면 우선 렌더링을 통해 오버레이 표시 성능을 약 80% 개선</li>
-<li>내부 디버그 로그 설정 이름을 `useAppleScriptResize`에서 `enableDebugLog`로 변경하여 실제 용도에 맞춤</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>기본 화면에서 일부 앱(예: Chrome)의 창 크기 조정이 무시되는 문제를 수정. 보조 화면에서 사용하던 바운스 재시도를 기본 화면에도 적용</li>
-<li>오버레이가 표시된 상태에서 메뉴 막대 아이콘을 클릭하면 메인 윈도우가 열리는 대신 오버레이가 닫히도록 수정 (ESC 키와 동일한 동작)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>Enter またはダブルクリックでウインドウを最前面にする際、マウスポインタが別のスクリーンにある場合はそのスクリーンへウインドウを移動するように。画面内に収まるよう位置を調整し、収まらない場合のみリサイズします。</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>コントローラのプール/再利用、ウインドウリストの遅延読み込み、ターゲット画面の優先描画により、オーバーレイ表示のパフォーマンスを約 80% 改善</li>
-<li>内部のデバッグログ設定名を `useAppleScriptResize` から `enableDebugLog` に変更し、実際の用途に合わせた</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>プライマリスクリーンで一部のアプリ（Chrome 等）のウインドウリサイズが無効になる問題を修正。セカンダリスクリーンで使用していたバウンスリトライをプライマリにも適用</li>
-<li>オーバーレイ表示中にメニューバーアイコンをクリックすると、メインウインドウが開く代わりにオーバーレイが閉じるように修正（ESC キーと同じ動作）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>When bringing a window to front via Enter or double-click, the window is now moved to the screen where the mouse pointer is located if it differs from the window's current screen. The window is repositioned to fit within the destination screen, resizing only if necessary.</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Improved overlay display performance by ~80% through controller pooling/reuse, deferred window list loading, and prioritized target screen rendering</li>
-<li>Renamed internal debug log setting from `useAppleScriptResize` to `enableDebugLog` to better reflect its purpose</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed window resize silently failing on the primary screen for some apps (e.g. Chrome) by adding size verification and bounce retry, matching the existing workaround used for secondary screens</li>
-<li>Fixed clicking the menu bar icon while the overlay is visible now dismisses the overlay (same as pressing ESC), instead of opening the main window</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao trazer uma janela para frente com Enter ou duplo clique, a janela agora é movida para a tela onde o ponteiro do mouse está localizado, caso seja diferente. A janela é reposicionada para caber na tela e redimensionada apenas se necessário.</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>Desempenho de exibição da sobreposição melhorado em ~80% por meio de pooling/reutilização de controladores, carregamento adiado da lista de janelas e renderização prioritária da tela de destino</li>
-<li>Configuração interna de log de depuração renomeada de `useAppleScriptResize` para `enableDebugLog` para melhor refletir sua finalidade</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o redimensionamento de janela falhando silenciosamente na tela principal para alguns aplicativos (ex.: Chrome). O mecanismo de bounce retry usado para telas secundárias agora é aplicado também na tela principal</li>
-<li>Corrigido: clicar no ícone da barra de menus com a sobreposição visível agora fecha a sobreposição (como ESC) em vez de abrir a janela principal</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Quando si porta una finestra in primo piano tramite Invio o doppio clic, la finestra viene spostata sullo schermo in cui si trova il puntatore del mouse, se diverso. La finestra viene riposizionata per adattarsi allo schermo e ridimensionata solo se necessario.</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>Prestazioni di visualizzazione dell'overlay migliorate di circa l'80% grazie al pooling/riutilizzo dei controller, al caricamento differito della lista delle finestre e al rendering prioritario dello schermo di destinazione</li>
-<li>Rinominata l'impostazione interna del log di debug da `useAppleScriptResize` a `enableDebugLog` per riflettere meglio il suo scopo</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto il ridimensionamento della finestra che falliva silenziosamente sullo schermo principale per alcune app (es. Chrome). Il meccanismo di rimbalzo utilizzato per gli schermi secondari viene ora applicato anche allo schermo principale</li>
-<li>Corretto: il clic sull'icona della barra dei menu con l'overlay visibile ora chiude l'overlay (come ESC) invece di aprire la finestra principale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Lors de la mise au premier plan d'une fenêtre via Entrée ou double-clic, la fenêtre est désormais déplacée vers l'écran où se trouve le pointeur de la souris si celui-ci diffère. La fenêtre est repositionnée pour s'adapter à l'écran et n'est redimensionnée qu'en cas de nécessité.</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>Amélioration des performances d'affichage de la superposition d'environ 80 % grâce au pooling/réutilisation des contrôleurs, au chargement différé de la liste des fenêtres et au rendu prioritaire de l'écran cible</li>
-<li>Renommage du paramètre interne de journal de débogage de `useAppleScriptResize` en `enableDebugLog` pour mieux refléter son utilité</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du redimensionnement de fenêtre échouant silencieusement sur l'écran principal pour certaines applications (ex. Chrome). Le mécanisme de rebond utilisé pour les écrans secondaires est désormais appliqué à l'écran principal</li>
-<li>Correction : cliquer sur l'icône de la barre de menus lorsque la superposition est visible ferme désormais la superposition (comme ESC) au lieu d'ouvrir la fenêtre principale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al traer una ventana al frente con Enter o doble clic, la ventana se mueve a la pantalla donde se encuentra el puntero del ratón si es diferente. Se reposiciona para ajustarse a la pantalla y solo se redimensiona si es necesario.</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Rendimiento de visualización de la superposición mejorado en ~80% mediante agrupación/reutilización de controladores, carga diferida de la lista de ventanas y renderizado prioritario de la pantalla objetivo</li>
-<li>Se renombró la configuración interna de registro de depuración de `useAppleScriptResize` a `enableDebugLog` para reflejar mejor su propósito</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió el redimensionamiento de ventanas que fallaba silenciosamente en la pantalla principal para algunas aplicaciones (p. ej., Chrome). Se aplica el mecanismo de reintento con rebote de las pantallas secundarias también a la pantalla principal</li>
-<li>Se corrigió que al hacer clic en el icono de la barra de menú con la superposición visible se abría la ventana principal en lugar de cerrar la superposición (mismo comportamiento que ESC)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Beim Aktivieren eines Fensters per Enter oder Doppelklick wird das Fenster nun auf den Bildschirm verschoben, auf dem sich der Mauszeiger befindet, falls dieser abweicht. Das Fenster wird bevorzugt repositioniert und nur bei Bedarf in der Größe angepasst.</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Overlay-Anzeigeleistung um ~80 % verbessert durch Controller-Pooling/-Wiederverwendung, verzögertes Laden der Fensterliste und priorisiertes Rendern des Zielbildschirms</li>
-<li>Interne Debug-Log-Einstellung von `useAppleScriptResize` in `enableDebugLog` umbenannt, um den tatsächlichen Zweck besser widerzuspiegeln</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Fenstergrößenänderung auf dem primären Bildschirm bei einigen Apps (z. B. Chrome) wurde stillschweigend ignoriert. Der für sekundäre Bildschirme verwendete Bounce-Retry-Mechanismus wird nun auch auf dem primären Bildschirm angewendet</li>
-<li>Klick auf das Menüleisten-Symbol bei sichtbarem Overlay schließt nun das Overlay (wie ESC), statt das Hauptfenster zu öffnen</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>透過 Enter 或雙擊將視窗帶到最前面時，如果滑鼠指標位於其他螢幕，視窗將移動到該螢幕。優先調整位置以適應螢幕，僅在必要時調整大小。</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>透過控制器池化/重複使用、視窗列表延遲載入和目標螢幕優先繪製，將疊加層顯示效能提升約 80%</li>
-<li>將內部除錯日誌設定名稱從 `useAppleScriptResize` 更名為 `enableDebugLog`，以更準確地反映其用途</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正在主螢幕上某些應用程式（如 Chrome）視窗調整大小被靜默忽略的問題。將次要螢幕使用的彈跳重試機制套用於主螢幕</li>
-<li>修正在疊加層顯示時點擊選單列圖示會開啟主視窗的問題，現在改為關閉疊加層（與按 ESC 鍵行為一致）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>通过 Enter 或双击将窗口置于最前时，如果鼠标指针位于其他屏幕，窗口将移动到该屏幕。优先调整位置以适应屏幕，仅在必要时调整大小。</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>通过控制器池化/复用、窗口列表延迟加载和目标屏幕优先渲染，将叠加层显示性能提升约 80%</li>
-<li>将内部调试日志设置名称从 `useAppleScriptResize` 更名为 `enableDebugLog`，以更准确地反映其用途</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复在主屏幕上某些应用（如 Chrome）窗口调整大小被静默忽略的问题。将辅助屏幕使用的弹跳重试机制应用于主屏幕</li>
-<li>修复在叠加层显示时点击菜单栏图标会打开主窗口的问题，现在改为关闭叠加层（与按 ESC 键行为一致）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>Enter 또는 더블클릭으로 창을 최전면으로 가져올 때, 마우스 포인터가 다른 화면에 있으면 해당 화면으로 창을 이동합니다. 화면 내에 맞도록 위치를 조정하고, 필요한 경우에만 크기를 조정합니다.</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>컨트롤러 풀링/재사용, 윈도우 리스트 지연 로딩, 타겟 화면 우선 렌더링을 통해 오버레이 표시 성능을 약 80% 개선</li>
-<li>내부 디버그 로그 설정 이름을 `useAppleScriptResize`에서 `enableDebugLog`로 변경하여 실제 용도에 맞춤</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>기본 화면에서 일부 앱(예: Chrome)의 창 크기 조정이 무시되는 문제를 수정. 보조 화면에서 사용하던 바운스 재시도를 기본 화면에도 적용</li>
-<li>오버레이가 표시된 상태에서 메뉴 막대 아이콘을 클릭하면 메인 윈도우가 열리는 대신 오버레이가 닫히도록 수정 (ESC 키와 동일한 동작)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>Enter またはダブルクリックでウインドウを最前面にする際、マウスポインタが別のスクリーンにある場合はそのスクリーンへウインドウを移動するように。画面内に収まるよう位置を調整し、収まらない場合のみリサイズします。</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>コントローラのプール/再利用、ウインドウリストの遅延読み込み、ターゲット画面の優先描画により、オーバーレイ表示のパフォーマンスを約 80% 改善</li>
-<li>内部のデバッグログ設定名を `useAppleScriptResize` から `enableDebugLog` に変更し、実際の用途に合わせた</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>プライマリスクリーンで一部のアプリ（Chrome 等）のウインドウリサイズが無効になる問題を修正。セカンダリスクリーンで使用していたバウンスリトライをプライマリにも適用</li>
-<li>オーバーレイ表示中にメニューバーアイコンをクリックすると、メインウインドウが開く代わりにオーバーレイが閉じるように修正（ESC キーと同じ動作）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>When bringing a window to front via Enter or double-click, the window is now moved to the screen where the mouse pointer is located if it differs from the window's current screen. The window is repositioned to fit within the destination screen, resizing only if necessary.</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Improved overlay display performance by ~80% through controller pooling/reuse, deferred window list loading, and prioritized target screen rendering</li>
-<li>Renamed internal debug log setting from `useAppleScriptResize` to `enableDebugLog` to better reflect its purpose</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed window resize silently failing on the primary screen for some apps (e.g. Chrome) by adding size verification and bounce retry, matching the existing workaround used for secondary screens</li>
-<li>Fixed clicking the menu bar icon while the overlay is visible now dismisses the overlay (same as pressing ESC), instead of opening the main window</li>
-</ul>]]></description>
-            <pubDate>Mon, 23 Mar 2026 18:51:47 +0900</pubDate>
-            <sparkle:version>301</sparkle:version>
-            <sparkle:shortVersionString>3.0.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.1.1/Tiley-3.0.1.zip" length="5423549" type="application/octet-stream" sparkle:edSignature="/2iW/a4ZQ0iRdtFIXNKdzSyAjeVTm6hNaO0vU/VUzXnsVAy8s0o+F+Bnc/ySe8iE3LKQF71lV9VpjIrtBucsDA=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.1/Tiley301-300.delta" sparkle:deltaFrom="300" length="645766" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Es4v4fTS+uW1wSFTMGUrzuJg0kJLWxLMW9TqFX7yJZjCp40uKFQnpXQR2Mt8regP00qZHByxMKC8V+TyPkoBDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.1/Tiley301-220.delta" sparkle:deltaFrom="220" length="1005566" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CvUhDWO9Dha3UNVv+HFEk7YTBSAu+JZq/QcTNVYCui8/eQyaP9KPIAvNL54y2gwKNVD5QB996hR3KfGFrybyDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.1/Tiley301-210.delta" sparkle:deltaFrom="210" length="1031718" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zVEQqAbqALnsz1jmb86wrdWQ/6pu8N0dD8fggrpClnW/olzvlnlOQX06vnBjx8jQlzdhe7ptFIsrgu7Au3AOBg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.1/Tiley301-203.delta" sparkle:deltaFrom="203" length="1048318" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="EHTaDRTXZ26Ilf1+mxPENoDOt1G0Tgb5tHIeRzvfewgr9+xybNwhcDo1RSinnpNpNpX36Yp5Z/WczZyVeJ3nBg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.0.1/Tiley301-202.delta" sparkle:deltaFrom="202" length="1058978" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="N10Ua5yDBf0ZAbApaX+ZahlqK69c9s+5G4QMNbbZn0x6VADcpJok3DRCCTfKTeEFHjhiz5PQJy61yT9AJQ3kBg=="/>
             </sparkle:deltas>
         </item>
     </channel>
