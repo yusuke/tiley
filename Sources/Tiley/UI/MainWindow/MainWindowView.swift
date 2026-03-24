@@ -326,6 +326,13 @@ struct MainWindowView: View {
         } else {
             fillColor = nil
         }
+        // For system wallpapers without a resolvable thumbnail (e.g. programmatic
+        // wallpapers like "Macintosh"), DefaultDesktop.heic is NOT the correct image.
+        // Skip showing the wallpaper entirely rather than displaying the wrong image.
+        if storeInfo?.thumbnailURL == nil && !isCustomImage {
+            return nil
+        }
+
         let info = DesktopPictureInfo(url: url, scaling: scaling, allowClipping: allowClipping, isTiled: isTiled, screenSize: screen.frame.size, screenScale: screen.backingScaleFactor, fillColor: fillColor, originalImageSize: originalImageSize)
         return info
     }
@@ -384,6 +391,13 @@ struct MainWindowView: View {
             }
         }
 
+        // If no assetID thumbnail, try provider-based lookup for dynamic wallpapers
+        // (Sequoia, Sonoma, Ventura, Monterey).
+        if thumbnailURL == nil, !isCustomImage,
+           let provider = first["Provider"] as? String {
+            thumbnailURL = Self.thumbnailForProvider(provider)
+        }
+
         // Read placement and fill color from EncodedOptionValues
         var placement: String? = nil
         var fillColor: Color? = nil
@@ -416,6 +430,56 @@ struct MainWindowView: View {
         return WallpaperStoreInfo(thumbnailURL: thumbnailURL, placement: placement, fillColor: fillColor)
     }
 
+    /// Resolves a thumbnail URL for provider-based dynamic wallpapers.
+    /// Maps known provider strings to system thumbnail files, choosing
+    /// a light or dark variant based on the current system appearance.
+    private static func thumbnailForProvider(_ provider: String) -> URL? {
+        let isDark = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+
+        switch provider {
+        case "com.apple.wallpaper.choice.sequoia":
+            // Sequoia thumbnails live inside the extension bundle.
+            let suffix = isDark ? "thumbnail dark" : "thumbnail light"
+            let base = "/System/Library/ExtensionKit/Extensions/WallpaperSequoiaExtension.appex/Contents/Resources"
+            return firstExisting([
+                "\(base)/\(suffix).heic",
+                "\(base)/thumbnail.heic",
+            ])
+
+        case "com.apple.wallpaper.choice.sonoma":
+            return thumbnailInSystemDir(name: "Sonoma", isDark: isDark)
+
+        case "com.apple.wallpaper.choice.ventura":
+            return thumbnailInSystemDir(name: "Ventura Graphic", isDark: isDark)
+
+        case "com.apple.wallpaper.choice.monterey":
+            return thumbnailInSystemDir(name: "Monterey Graphic", isDark: isDark)
+
+        default:
+            return nil
+        }
+    }
+
+    /// Looks up a wallpaper thumbnail in `/System/Library/Desktop Pictures/.thumbnails/`
+    /// with light/dark variant support.
+    private static func thumbnailInSystemDir(name: String, isDark: Bool) -> URL? {
+        let dir = "/System/Library/Desktop Pictures/.thumbnails"
+        let suffix = isDark ? " Dark" : " Light"
+        return firstExisting([
+            "\(dir)/\(name)\(suffix).heic",
+            "\(dir)/\(name).heic",
+        ])
+    }
+
+    /// Returns the first path that exists on disk as a file URL, or nil.
+    private static func firstExisting(_ paths: [String]) -> URL? {
+        for path in paths {
+            if FileManager.default.fileExists(atPath: path) {
+                return URL(fileURLWithPath: path)
+            }
+        }
+        return nil
+    }
 
     var body: some View {
         GeometryReader { geometry in

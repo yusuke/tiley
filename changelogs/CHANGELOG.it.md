@@ -5,6 +5,7 @@
 ### Corretto
 
 - Corretta la visualizzazione a mosaico anziché a riempimento delle miniature degli sfondi di sistema
+- Corretta l'immagine errata per gli sfondi dinamici; aggiunto supporto miniature per gli sfondi basati su provider Sequoia, Sonoma, Ventura e Monterey (gli sfondi programmatici come "Macintosh" nascondono l'anteprima quando non è disponibile un'immagine statica)
 
 ## [3.1.0] - 2026-03-24
 

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Fixed system wallpaper thumbnails incorrectly rendering as tiled instead of fill
+- Fixed wrong wallpaper shown for dynamic wallpapers; added thumbnail support for Sequoia, Sonoma, Ventura, and Monterey provider-based wallpapers (programmatic wallpapers like "Macintosh" hide the preview when no static image is available)
 
 ## [3.1.0] - 2026-03-24
 

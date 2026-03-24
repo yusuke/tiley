@@ -5,6 +5,7 @@
 ### Corregido
 
 - Corregido que las miniaturas de fondos de pantalla del sistema se mostraran en mosaico en lugar de relleno
+- Corregida la imagen incorrecta en fondos de pantalla dinámicos; añadido soporte de miniaturas para fondos de pantalla basados en proveedores Sequoia, Sonoma, Ventura y Monterey (los fondos programáticos como "Macintosh" ocultan la vista previa cuando no hay imagen estática disponible)
 
 ## [3.1.0] - 2026-03-24
 

@@ -5,6 +5,7 @@
 ### Corrigido
 
 - Corrigido miniaturas de papéis de parede do sistema exibindo em mosaico em vez de preenchimento
+- Corrigida imagem incorreta em papéis de parede dinâmicos; adicionado suporte a miniaturas para papéis de parede baseados em provedores Sequoia, Sonoma, Ventura e Monterey (papéis de parede programáticos como "Macintosh" ocultam a visualização quando não há imagem estática disponível)
 
 ## [3.1.0] - 2026-03-24
 
