@@ -48,7 +48,7 @@ final class WindowManager {
         return result
     }
 
-    func captureAllWindows(includeOtherSpaces: Bool = false) -> (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceID: UInt64?) {
+    func captureAllWindows(includeOtherSpaces: Bool = false) -> (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceIDs: Set<UInt64>) {
         let perfStart = CFAbsoluteTimeGetCurrent()
         let result = accessibilityService.allWindowTargets(includeOtherSpaces: includeOtherSpaces)
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000

@@ -1664,10 +1664,14 @@ struct MainWindowView: View {
             return screenGroupedRows(from: items)
         }
 
-        // Show only windows belonging to the current (active) space.
+        // Show only windows belonging to any of the current (active) spaces (one per display).
         let filteredItems: [WindowListItem]
-        if let activeID = appState.currentActiveSpaceID {
-            filteredItems = items.filter { targets[$0.id].spaceID == activeID }
+        let activeIDs = appState.currentActiveSpaceIDs
+        if !activeIDs.isEmpty {
+            filteredItems = items.filter { item in
+                guard let sid = targets[item.id].spaceID else { return true }
+                return activeIDs.contains(sid)
+            }
         } else {
             filteredItems = items
         }

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction de la barre latérale n'affichant aucune fenêtre dans les environnements multi-écrans car le filtrage des espaces ne prenait en compte que l'espace actif d'un seul écran
+
 ## [3.2.0] - 2026-03-25
 
 ### Ajouté

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed sidebar showing no windows in multi-screen environments due to space filtering only considering a single display's active space
+
 ## [3.2.0] - 2026-03-25
 
 ### Added

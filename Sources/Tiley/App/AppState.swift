@@ -152,8 +152,8 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var availableWindowTargets: [WindowTarget] = []
     /// Mission Control space list (empty when detection is unavailable).
     @ObservationIgnored private(set) var spaceList: [SpaceInfo] = []
-    /// The currently active Mission Control space ID.
-    @ObservationIgnored private(set) var activeSpaceID: UInt64?
+    /// The currently active Mission Control space IDs (one per display).
+    @ObservationIgnored private(set) var activeSpaceIDs: Set<UInt64> = []
     @ObservationIgnored private var activeTargetIndex: Int = 0
     @ObservationIgnored private var originalFrontmostPID: pid_t?
     /// Whether the user has cycled the target window at least once via Tab.
@@ -285,10 +285,10 @@ final class AppState: NSObject, NSMenuDelegate {
         return spaceList
     }
 
-    /// The active Mission Control space ID for the current refresh cycle.
-    var currentActiveSpaceID: UInt64? {
+    /// The active Mission Control space IDs (one per display) for the current refresh cycle.
+    var currentActiveSpaceIDs: Set<UInt64> {
         _ = windowTargetListVersion
-        return activeSpaceID
+        return activeSpaceIDs
     }
 
     var currentWindowTargetIndex: Int {
@@ -790,7 +790,7 @@ final class AppState: NSObject, NSMenuDelegate {
         let captured = windowManager?.captureAllWindows(includeOtherSpaces: true)
         availableWindowTargets = captured?.targets ?? []
         spaceList = captured?.spaceList ?? []
-        activeSpaceID = captured?.activeSpaceID
+        activeSpaceIDs = captured?.activeSpaceIDs ?? []
         windowTargetListVersion += 1
 
         if let pendingIndex = pendingTargetIndexAfterClose {

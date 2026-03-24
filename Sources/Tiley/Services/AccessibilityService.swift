@@ -70,10 +70,14 @@ struct SpaceInfo: Identifiable, Equatable {
 /// Result of parsing CGSCopyManagedDisplaySpaces.
 struct SpaceMapResult {
     let spaceList: [SpaceInfo]
-    let activeSpaceID: UInt64?
+    /// Active space IDs across all displays (one per display).
+    let activeSpaceIDs: Set<UInt64>
     let isAvailable: Bool
 
-    static let empty = SpaceMapResult(spaceList: [], activeSpaceID: nil, isAvailable: false)
+    /// Convenience: first active space ID (for single-display setups).
+    var activeSpaceID: UInt64? { activeSpaceIDs.first }
+
+    static let empty = SpaceMapResult(spaceList: [], activeSpaceIDs: [], isAvailable: false)
 }
 
 enum WindowAccessError: LocalizedError {
@@ -552,13 +556,13 @@ final class AccessibilityService {
     /// Returns all on-screen standard windows (excluding Tiley) in z-order (front to back).
     /// When `includeOtherSpaces` is true and private CGS APIs are available, also returns
     /// windows from non-current Mission Control spaces with `isOnOtherSpace` set.
-    func allWindowTargets(includeOtherSpaces: Bool = false) -> (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceID: UInt64?) {
+    func allWindowTargets(includeOtherSpaces: Bool = false) -> (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceIDs: Set<UInt64>) {
         let perfStart = CFAbsoluteTimeGetCurrent()
         func perfLog(_ label: String) {
             let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
             debugLog("allWindowTargets: \(label) (t=\(String(format: "%.1f", elapsed))ms)")
         }
-        guard checkAccess(prompt: false) else { return ([], [], nil) }
+        guard checkAccess(prompt: false) else { return ([], [], []) }
 
         // Build space map first (before window list) so we know current space.
         let spaceMap = includeOtherSpaces ? Self.buildSpaceMap() : SpaceMapResult.empty
@@ -573,7 +577,7 @@ final class AccessibilityService {
         guard let windowList = CGWindowListCopyWindowInfo(
             cgOptions,
             kCGNullWindowID
-        ) as? [[CFString: Any]] else { return ([], spaceMap.spaceList, spaceMap.activeSpaceID) }
+        ) as? [[CFString: Any]] else { return ([], spaceMap.spaceList, spaceMap.activeSpaceIDs) }
         perfLog("CGWindowListCopyWindowInfo done (\(windowList.count) entries)")
 
         let selfPID = getpid()
@@ -850,7 +854,7 @@ final class AccessibilityService {
         }
 
         perfLog("hidden apps done (total \(results.count) windows)")
-        return (results, spaceMap.spaceList, spaceMap.activeSpaceID)
+        return (results, spaceMap.spaceList, spaceMap.activeSpaceIDs)
     }
 
     // MARK: - Space detection helpers
@@ -878,7 +882,7 @@ final class AccessibilityService {
         }
 
         var spaceList: [SpaceInfo] = []
-        var activeSpaceID: UInt64?
+        var activeSpaceIDs = Set<UInt64>()
 
         for displayDict in displaysArray {
             let displayUUID = displayDict["Display Identifier"] as? String ?? ""
@@ -898,7 +902,7 @@ final class AccessibilityService {
                 let isCurrent = (id64 == currentID)
 
                 if isCurrent {
-                    activeSpaceID = id64
+                    activeSpaceIDs.insert(id64)
                 }
 
                 if !isFullScreen {
@@ -917,7 +921,7 @@ final class AccessibilityService {
 
         return SpaceMapResult(
             spaceList: spaceList,
-            activeSpaceID: activeSpaceID,
+            activeSpaceIDs: activeSpaceIDs,
             isAvailable: true
         )
     }
