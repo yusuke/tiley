@@ -460,6 +460,8 @@ struct MainWindowView: View {
                 windowSearchText = ""
             } else {
                 dismissShortcutEditingIfNeeded()
+                isSearchFieldVisible = false
+                windowSearchText = ""
             }
         }
         .onChange(of: appState.isEditingLayoutPresets) { _, isEditing in
