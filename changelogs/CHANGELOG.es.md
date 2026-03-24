@@ -6,6 +6,7 @@
 
 - Corregido que las miniaturas de fondos de pantalla del sistema se mostraran en mosaico en lugar de relleno
 - Corregida la imagen incorrecta en fondos de pantalla dinámicos; añadido soporte de miniaturas para fondos de pantalla basados en proveedores Sequoia, Sonoma, Ventura, Monterey y Macintosh
+- El texto de la barra de menú en la vista previa de la cuadrícula ahora se adapta al brillo del fondo de pantalla (negro en fondos claros, blanco en oscuros, como en macOS)
 
 ## [3.1.0] - 2026-03-24
 

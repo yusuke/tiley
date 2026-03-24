@@ -6,6 +6,7 @@
 
 - Corretta la visualizzazione a mosaico anziché a riempimento delle miniature degli sfondi di sistema
 - Corretta l'immagine errata per gli sfondi dinamici; aggiunto supporto miniature per gli sfondi basati su provider Sequoia, Sonoma, Ventura, Monterey e Macintosh
+- Il testo della barra dei menu nell'anteprima della griglia si adatta ora alla luminosità dello sfondo (nero su sfondi chiari, bianco su scuri, come in macOS)
 
 ## [3.1.0] - 2026-03-24
 

@@ -6,6 +6,7 @@
 
 - Corrigido miniaturas de papéis de parede do sistema exibindo em mosaico em vez de preenchimento
 - Corrigida imagem incorreta em papéis de parede dinâmicos; adicionado suporte a miniaturas para papéis de parede baseados em provedores Sequoia, Sonoma, Ventura, Monterey e Macintosh
+- O texto da barra de menus na visualização da grade agora se adapta ao brilho do papel de parede (preto em fundos claros, branco em escuros, como no macOS)
 
 ## [3.1.0] - 2026-03-24
 

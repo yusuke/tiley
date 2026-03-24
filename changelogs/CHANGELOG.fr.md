@@ -6,6 +6,7 @@
 
 - Correction de l'affichage en mosaïque au lieu du remplissage pour les miniatures des fonds d'écran système
 - Correction de l'affichage incorrect des fonds d'écran dynamiques ; ajout de la prise en charge des miniatures pour les fonds d'écran Sequoia, Sonoma, Ventura, Monterey et Macintosh
+- Le texte de la barre de menus dans l'aperçu de la grille s'adapte désormais à la luminosité du fond d'écran (noir sur fond clair, blanc sur fond sombre, comme sous macOS)
 
 ## [3.1.0] - 2026-03-24
 

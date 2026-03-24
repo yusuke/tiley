@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Fixed system wallpaper thumbnails incorrectly rendering as tiled instead of fill
 - Fixed wrong wallpaper shown for dynamic wallpapers; added thumbnail support for Sequoia, Sonoma, Ventura, Monterey, and Macintosh provider-based wallpapers
+- Menu bar text in the grid preview now adapts to wallpaper brightness (black on light wallpapers, white on dark) matching macOS behavior
 
 ## [3.1.0] - 2026-03-24
 

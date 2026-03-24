@@ -488,6 +488,127 @@ struct MainWindowView: View {
         return nil
     }
 
+    /// Determines the menu bar text color for the current preview screen.
+    ///
+    /// For the screen where the status item lives, we read the actual macOS menu bar
+    /// appearance (VibrantLight → black, VibrantDark → white).  For other screens we
+    /// fall back to sampling the wallpaper image brightness.
+    private func menuBarForegroundColor(wallpaperImage: NSImage?) -> Color {
+        _ = appState.desktopImageVersion  // re-evaluate when wallpaper changes
+
+        // Determine which screen we are previewing.
+        let previewScreen: NSScreen?
+        if let ctx = screenContext {
+            previewScreen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
+        } else {
+            previewScreen = NSScreen.main
+        }
+
+        // If the status item is on the same screen, use the OS-reported appearance.
+        let statusItemScreen = appState.statusItemScreen
+        if let ps = previewScreen, let ss = statusItemScreen, ps.frame == ss.frame {
+            return appState.menuBarIsDark ? .white : .black
+        }
+
+        // Fall back to image-based luminance for other screens.
+        guard let image = wallpaperImage,
+              let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
+        else { return .white }
+        return Self.menuBarForegroundColorFromImage(cgImage, info: desktopPictureInfo)
+    }
+
+    /// Returns the menu bar text color by sampling the top ~4 % of the image.
+    /// CGContext.draw maps CGImage row 0 (visual top) to the bottom of the
+    /// destination rect, so we draw at y = 0 to capture the visual top.
+    /// Menu bar height in points (macOS standard).
+    private static let menuBarPoints: CGFloat = 25
+
+    private static func menuBarForegroundColorFromImage(
+        _ cgImage: CGImage,
+        info: DesktopPictureInfo?
+    ) -> Color {
+        let imgW = CGFloat(cgImage.width)
+        let imgH = CGFloat(cgImage.height)
+
+        // Compute the image rows that actually appear behind the menu bar.
+        var sampleStart = 0        // first row of the image behind the menu bar
+        var sampleRows  = max(1, Int(imgH) / 25)  // fallback: top 4 %
+
+        if let info {
+            let scrW = info.screenSize.width  * info.screenScale
+            let scrH = info.screenSize.height * info.screenScale
+            let isFill = info.allowClipping   // Fill clips the overflow
+
+            let scale: CGFloat
+            if isFill {
+                scale = max(scrW / imgW, scrH / imgH)
+            } else {
+                scale = min(scrW / imgW, scrH / imgH)
+            }
+
+            // In Fill mode the image is centred and the excess is cropped.
+            let cropTop: CGFloat = isFill
+                ? max(0, (imgH * scale - scrH) / 2.0 / scale)
+                : 0
+
+            let menuBarImageRows = Int(ceil(menuBarPoints * info.screenScale / scale))
+            sampleStart = Int(cropTop)
+            sampleRows  = max(1, min(menuBarImageRows, Int(imgH) - sampleStart))
+        }
+
+        // Crop the image to the menu bar region.
+        // CGImage coordinate system has (0,0) at the top-left, so this
+        // directly selects the visual rows behind the menu bar.
+        guard let cropped = cgImage.cropping(to: CGRect(
+            x: 0, y: sampleStart, width: Int(imgW), height: sampleRows
+        )) else { return .white }
+
+        let width = cropped.width
+        let space = CGColorSpaceCreateDeviceRGB()
+        let bytesPerRow = width * 4
+        guard let context = CGContext(
+            data: nil, width: width, height: cropped.height,
+            bitsPerComponent: 8, bytesPerRow: bytesPerRow,
+            space: space,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else { return .white }
+
+        context.draw(cropped, in: CGRect(x: 0, y: 0,
+                                          width: CGFloat(width),
+                                          height: CGFloat(cropped.height)))
+
+        guard let data = context.data else { return .white }
+        let buffer = data.assumingMemoryBound(to: UInt8.self)
+
+        // Build a luminance histogram and find the median.
+        // The median is robust against small dark elements (icons, silhouettes)
+        // — similar to the Gaussian blur macOS applies behind the menu bar.
+        var histogram = [Int](repeating: 0, count: 256)
+        let pixelCount = width * cropped.height
+        for i in 0..<pixelCount {
+            let offset = i * 4
+            let r = Double(buffer[offset])     / 255.0
+            let g = Double(buffer[offset + 1]) / 255.0
+            let b = Double(buffer[offset + 2]) / 255.0
+            let lum = 0.299 * r + 0.587 * g + 0.114 * b
+            histogram[min(255, Int(lum * 255.0))] += 1
+        }
+        var cumulative = 0
+        let medianTarget = pixelCount / 2
+        var medianBin = 0
+        for bin in 0..<256 {
+            cumulative += histogram[bin]
+            if cumulative >= medianTarget {
+                medianBin = bin
+                break
+            }
+        }
+        let medianLuminance = Double(medianBin) / 255.0
+
+        // Threshold measured to match macOS Sequoia menu bar behaviour.
+        return medianLuminance > 0.7125 ? .black : .white
+    }
+
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
@@ -935,10 +1056,18 @@ struct MainWindowView: View {
         gridHeight: CGFloat
     ) -> some View {
         let compositeSize = CGSize(width: compositeWidth, height: compositeHeight)
+        // Load wallpaper image once for both the background layer and menu bar color.
+        let wallpaperImage: NSImage? = {
+            guard let info = desktopPictureInfo else { return nil }
+            return NSImage(contentsOf: info.url)
+        }()
+        // Determine menu bar text color: OS detection for the active screen,
+        // image luminance fallback for other screens.
+        let menuBarTextColor = menuBarForegroundColor(wallpaperImage: wallpaperImage)
         ZStack(alignment: .topLeading) {
             // Layer 1: Wallpaper spanning the full composite area (menu bar + grid + Dock)
             if let info = desktopPictureInfo,
-               let nsImage = NSImage(contentsOf: info.url) {
+               let nsImage = wallpaperImage {
                 DesktopPictureBackgroundView(nsImage: nsImage, info: info, size: compositeSize)
                     .frame(width: compositeWidth, height: compositeHeight)
                     .opacity(0.5)
@@ -988,7 +1117,7 @@ struct MainWindowView: View {
                             .clipped()
                             Spacer()
                         }
-                        .foregroundColor(.white)
+                        .foregroundColor(menuBarTextColor)
                         .opacity(menuItemOpacity)
                         .frame(width: compositeWidth, height: menuBarHeight)
                     }

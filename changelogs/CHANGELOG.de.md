@@ -6,6 +6,7 @@
 
 - Systemhintergrund-Miniaturansichten wurden fälschlicherweise gekachelt statt als Füllung dargestellt
 - Falsche Darstellung dynamischer Hintergrundbilder behoben; Miniaturansicht-Unterstützung für Sequoia-, Sonoma-, Ventura-, Monterey- und Macintosh-Provider-Hintergründe hinzugefügt
+- Menüleistentext in der Rastervorschau passt sich jetzt der Hintergrundbildhelligkeit an (schwarz bei hellen Hintergründen, weiß bei dunklen, wie in macOS)
 
 ## [3.1.0] - 2026-03-24
 

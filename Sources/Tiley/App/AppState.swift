@@ -74,6 +74,18 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var desktopImageVersion: Int = 0
+
+    /// Whether the macOS menu bar currently uses dark (vibrant dark) appearance.
+    /// Updated whenever the wallpaper changes via desktopImageVersion.
+    var menuBarIsDark: Bool {
+        guard let button = statusItem?.button else { return true }
+        return button.effectiveAppearance.bestMatch(from: [.vibrantDark, .vibrantLight]) == .vibrantDark
+    }
+
+    /// The screen that currently hosts the status item (for per-screen menu bar colour).
+    var statusItemScreen: NSScreen? {
+        statusItem?.button?.window?.screen
+    }
     var accessibilityGranted = false
     var isEditingSettings = false
     var isShowingPermissionsOnly = false
