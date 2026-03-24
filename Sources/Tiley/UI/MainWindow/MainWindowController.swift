@@ -433,7 +433,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let fullGridHeight = fullGridWidth * aspectRatio
         // If grid would be too tall, shrink width to fit (keeping aspect ratio).
         let gridHeight = min(fullGridHeight, max(0, maxGridHeight))
-        let gridWidth = gridHeight / aspectRatio
 
         let layoutRowsHeight = presetCount * layoutPresetRowHeight
         let layoutSpacingHeight = max(0, presetCount - 1) * layoutPresetRowSpacing

@@ -370,8 +370,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             return nil
         }
-        guard let data = try? pipe.fileHandleForReading.readDataToEndOfFile(),
-              let plist = try? PropertyListSerialization.propertyList(
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        guard let plist = try? PropertyListSerialization.propertyList(
                   from: data, format: nil
               ) as? [String: Any],
               let images = plist["images"] as? [[String: Any]]
