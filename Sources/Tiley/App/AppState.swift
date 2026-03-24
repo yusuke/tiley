@@ -300,6 +300,34 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget?.visibleFrame
     }
 
+    var currentLayoutTargetRelativeFrame: WindowFrameRelative? {
+        _ = windowTargetListVersion
+        guard let target = activeLayoutTarget,
+              !target.isHidden,
+              target.visibleFrame.width > 0,
+              target.visibleFrame.height > 0 else { return nil }
+
+        let vf = target.visibleFrame
+        let wf = target.frame
+
+        let relX = (wf.minX - vf.minX) / vf.width
+        let relY = (vf.maxY - wf.maxY) / vf.height
+        let relW = wf.width / vf.width
+        let relH = wf.height / vf.height
+
+        let menuBarHeight = target.screenFrame.height - vf.height - vf.minY + target.screenFrame.minY
+        let menuBarFraction = max(0, menuBarHeight / vf.height)
+
+        let icon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+        return WindowFrameRelative(
+            x: relX, y: relY, width: relW, height: relH,
+            menuBarHeightFraction: menuBarFraction,
+            windowTitle: target.windowTitle,
+            appName: target.appName,
+            appIcon: icon
+        )
+    }
+
     func start(showMainWindowOnLaunch: Bool = true) {
         windowManager = WindowManager(accessibilityService: accessibilityService)
         // Use the PID captured at module-load time (before Tiley became active),

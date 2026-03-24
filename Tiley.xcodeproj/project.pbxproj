@@ -15,6 +15,7 @@
 		7012E0632F65B653003EC442 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E05A2F65B653003EC442 /* MainWindowView.swift */; };
 		7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7012E0662F65B796003EC442 /* ThemeColors.swift */; };
 		701526162F6EECE3001E8095 /* DesktopPictureBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526152F6EECE3001E8095 /* DesktopPictureBackgroundView.swift */; };
+		70A1B2C42F80A000003EC442 /* MiniatureWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1B2C32F80A000003EC442 /* MiniatureWindowView.swift */; };
 		701526292F6EF349001E8095 /* DockReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526262F6EF349001E8095 /* DockReader.swift */; };
 		7015262A2F6EF349001E8095 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526272F6EF349001E8095 /* WindowManager.swift */; };
 		7015262B2F6EF349001E8095 /* AccessibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526252F6EF349001E8095 /* AccessibilityService.swift */; };
@@ -49,6 +50,7 @@
 		7012E05B2F65B653003EC442 /* ShortcutRecorderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRecorderField.swift; sourceTree = "<group>"; };
 		7012E0662F65B796003EC442 /* ThemeColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
 		701526152F6EECE3001E8095 /* DesktopPictureBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopPictureBackgroundView.swift; sourceTree = "<group>"; };
+		70A1B2C32F80A000003EC442 /* MiniatureWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniatureWindowView.swift; sourceTree = "<group>"; };
 		701526252F6EF349001E8095 /* AccessibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityService.swift; sourceTree = "<group>"; };
 		701526262F6EF349001E8095 /* DockReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockReader.swift; sourceTree = "<group>"; };
 		701526272F6EF349001E8095 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				7012E0552F65B653003EC442 /* GridPreviewView.swift */,
 				7012E0562F65B653003EC442 /* LayoutGridWorkspaceView.swift */,
 				7012E0572F65B653003EC442 /* LayoutPreviewOverlayController.swift */,
+				70A1B2C32F80A000003EC442 /* MiniatureWindowView.swift */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				7012E0602F65B653003EC442 /* GridPreviewView.swift in Sources */,
 				7012E0612F65B653003EC442 /* ShortcutRecorderField.swift in Sources */,
 				7012E0622F65B653003EC442 /* LayoutGridWorkspaceView.swift in Sources */,
+				70A1B2C42F80A000003EC442 /* MiniatureWindowView.swift in Sources */,
 				7012E0632F65B653003EC442 /* MainWindowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

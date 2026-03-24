@@ -9,6 +9,7 @@ struct LayoutGridWorkspaceView: View {
     /// When false, wallpaper background is not rendered (used when the parent
     /// composite view renders the wallpaper at a larger scale).
     var showDesktopPicture: Bool = true
+    var windowFrameRelative: WindowFrameRelative?
     let onSelectionChange: (GridSelection?) -> Void
     let onHoverChange: ((GridSelection?) -> Void)?
     let onSelectionCommit: (GridSelection) -> Void
@@ -33,6 +34,25 @@ struct LayoutGridWorkspaceView: View {
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .opacity(0.5)
                         .clipShape(RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous))
+                }
+
+                // Miniature window showing current window position
+                if let wf = windowFrameRelative, wf.width > 0, wf.height > 0 {
+                    let winW = wf.width * geometry.size.width
+                    let winH = wf.height * geometry.size.height
+                    let winX = wf.x * geometry.size.width + winW / 2
+                    let winY = wf.y * geometry.size.height + winH / 2
+                    let titleBarPx = max(4, wf.menuBarHeightFraction * geometry.size.height)
+                    MiniatureWindowView(
+                        titleBarHeight: titleBarPx,
+                        appIcon: wf.appIcon,
+                        windowTitle: wf.windowTitle,
+                        appName: wf.appName
+                    )
+                    .frame(width: winW, height: winH)
+                    .position(x: winX, y: winY)
+                    .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
+                    .allowsHitTesting(false)
                 }
 
                 // Base grid cells (non-selected appearance only)

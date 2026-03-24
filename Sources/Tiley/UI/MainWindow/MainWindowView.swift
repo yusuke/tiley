@@ -1165,6 +1165,7 @@ struct MainWindowView: View {
                         highlightSelection: editingPresetHighlightSelection,
                         desktopPictureInfo: desktopPictureInfo,
                         showDesktopPicture: false,
+                        windowFrameRelative: screenRole.isTarget ? appState.currentLayoutTargetRelativeFrame : nil,
                         onSelectionChange: { selection in
                             if editingPresetID == nil {
                                 dismissPresetNameEditingIfNeeded()

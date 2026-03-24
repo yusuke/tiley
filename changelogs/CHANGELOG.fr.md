@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- La grille superposée affiche désormais un aperçu de fenêtre miniature avec les boutons feux tricolores, l'icône de l'app et le titre de la fenêtre à la position actuelle de la fenêtre cible
+
 ## [3.1.1] - 2026-03-24
 
 ### Corrigé

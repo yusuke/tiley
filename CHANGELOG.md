@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Grid overlay now shows a miniature window preview with traffic light buttons, app icon, and window title at the target window's current position
+
 ## [3.1.1] - 2026-03-24
 
 ### Fixed

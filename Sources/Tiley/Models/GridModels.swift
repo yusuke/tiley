@@ -199,6 +199,29 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
     }
 }
 
+/// Relative window position within the visible frame (all values 0.0–1.0).
+struct WindowFrameRelative: Equatable {
+    let x: CGFloat
+    let y: CGFloat
+    let width: CGFloat
+    let height: CGFloat
+    /// Menu bar height as a fraction of the visible frame height.
+    let menuBarHeightFraction: CGFloat
+    /// The title of the window (e.g. document name).
+    let windowTitle: String?
+    /// The name of the owning application.
+    let appName: String?
+    /// The icon of the owning application.
+    let appIcon: NSImage?
+
+    static func == (lhs: WindowFrameRelative, rhs: WindowFrameRelative) -> Bool {
+        lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width && lhs.height == rhs.height
+            && lhs.menuBarHeightFraction == rhs.menuBarHeightFraction
+            && lhs.windowTitle == rhs.windowTitle && lhs.appName == rhs.appName
+            && lhs.appIcon === rhs.appIcon
+    }
+}
+
 enum GridCalculator {
     static func frame(for selection: GridSelection, in visibleFrame: CGRect, rows: Int, columns: Int, gap: CGFloat) -> CGRect {
         let n = selection.normalized
