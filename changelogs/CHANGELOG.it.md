@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.1] - 2026-03-25
+
 ### Corretto
 
 - Corretta la barra laterale che non mostrava finestre in ambienti multi-schermo perché il filtro degli spazi considerava solo lo spazio attivo di un singolo display

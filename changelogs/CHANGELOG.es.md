@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.1] - 2026-03-25
+
 ### Corregido
 
 - Corregido el problema donde la barra lateral no mostraba ventanas en entornos de múltiples pantallas porque el filtrado de espacios solo consideraba el espacio activo de una única pantalla

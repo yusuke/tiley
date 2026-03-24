@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.1] - 2026-03-25
+
 ### Behoben
 
 - Seitenleiste zeigte in Multi-Screen-Umgebungen keine Fenster an, da die Space-Filterung nur den aktiven Space eines einzelnen Displays berücksichtigte
