@@ -5,7 +5,7 @@
 ### 修复
 
 - 修复系统壁纸缩略图错误地以平铺方式而非填充方式显示的问题
-- 修复动态壁纸显示错误图像的问题；新增 Sequoia、Sonoma、Ventura 和 Monterey 提供者壁纸的缩略图支持（"Macintosh"等无静态图像的程序化壁纸会隐藏预览）
+- 修复动态壁纸显示错误图像的问题；新增 Sequoia、Sonoma、Ventura、Monterey 和 Macintosh 提供者壁纸的缩略图支持
 
 ## [3.1.0] - 2026-03-24
 

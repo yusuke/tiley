@@ -5,7 +5,7 @@
 ### Behoben
 
 - Systemhintergrund-Miniaturansichten wurden fälschlicherweise gekachelt statt als Füllung dargestellt
-- Falsche Darstellung dynamischer Hintergrundbilder behoben; Miniaturansicht-Unterstützung für Sequoia-, Sonoma-, Ventura- und Monterey-Provider-Hintergründe hinzugefügt (programmatische Hintergründe wie „Macintosh" blenden die Vorschau aus, wenn kein statisches Bild verfügbar ist)
+- Falsche Darstellung dynamischer Hintergrundbilder behoben; Miniaturansicht-Unterstützung für Sequoia-, Sonoma-, Ventura-, Monterey- und Macintosh-Provider-Hintergründe hinzugefügt
 
 ## [3.1.0] - 2026-03-24
 

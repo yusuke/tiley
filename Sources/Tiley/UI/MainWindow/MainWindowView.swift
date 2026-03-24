@@ -455,6 +455,13 @@ struct MainWindowView: View {
         case "com.apple.wallpaper.choice.monterey":
             return thumbnailInSystemDir(name: "Monterey Graphic", isDark: isDark)
 
+        case "com.apple.wallpaper.choice.macintosh":
+            // The Macintosh wallpaper is fully programmatic (Metal-rendered), but the
+            // extension bundle contains IconGarden.png — the iconic scattered classic
+            // Mac icons that form the wallpaper's main visual.
+            let path = "/System/Library/ExtensionKit/Extensions/WallpaperMacintoshExtension.appex/Contents/Resources/IconGarden.png"
+            return firstExisting([path])
+
         default:
             return nil
         }
