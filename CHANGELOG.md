@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed system wallpaper thumbnails incorrectly rendering as tiled instead of fill
+
 ## [3.1.0] - 2026-03-24
 
 ### Changed

@@ -272,18 +272,11 @@ struct MainWindowView: View {
         let isTiled: Bool
         if storeInfo?.thumbnailURL != nil {
             // Aerial wallpaper with thumbnail — always render as fill to cover.
-            // The plist placement value is unreliable: macOS records "Centered" even for
-            // wallpapers that display as fill/cover. Only "Tile" is preserved because
-            // tiling is visually distinct.
-            if storeInfo?.placement == "Tile" {
-                scalingRaw = nil
-                allowClipping = false
-                isTiled = true
-            } else {
-                scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
-                allowClipping = true
-                isTiled = false
-            }
+            // The plist placement value is unreliable for system wallpapers: macOS
+            // always renders presets as Fill regardless of what the Store records.
+            scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
+            allowClipping = true
+            isTiled = false
         } else if let scalingRawOpt = opts?[.imageScaling] as? Int {
             // Custom image with explicit desktopImageOptions (older macOS) — use them directly
             scalingRaw = scalingRawOpt

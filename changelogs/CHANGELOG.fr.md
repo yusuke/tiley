@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction de l'affichage en mosaïque au lieu du remplissage pour les miniatures des fonds d'écran système
+
 ## [3.1.0] - 2026-03-24
 
 ### Modifié

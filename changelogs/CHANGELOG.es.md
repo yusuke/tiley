@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Corregido que las miniaturas de fondos de pantalla del sistema se mostraran en mosaico en lugar de relleno
+
 ## [3.1.0] - 2026-03-24
 
 ### Cambiado

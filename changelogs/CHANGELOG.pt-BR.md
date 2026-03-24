@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Corrigido miniaturas de papéis de parede do sistema exibindo em mosaico em vez de preenchimento
+
 ## [3.1.0] - 2026-03-24
 
 ### Alterado
