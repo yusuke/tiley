@@ -4,6 +4,7 @@
 
 ### Añadido
 
+- Cuando hay varios espacios de Mission Control, la barra lateral muestra solo las ventanas del espacio actual
 - La superposición de cuadrícula ahora muestra una vista previa de ventana en miniatura con botones de semáforo, icono de la app y título de la ventana en la posición actual de la ventana de destino
 
 ### Cambiado

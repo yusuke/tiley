@@ -100,6 +100,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.isMovableByWindowBackground = false
         let displayID = self.targetScreen.displayID
         window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
+        window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary]
         window.isReleasedWhenClosed = false
         window.autorecalculatesKeyViewLoop = false
         window.contentView = hostingView

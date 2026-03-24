@@ -4,6 +4,7 @@
 
 ### Ajouté
 
+- Lorsque plusieurs espaces Mission Control existent, la barre latérale n'affiche que les fenêtres de l'espace actuel
 - La grille superposée affiche désormais un aperçu de fenêtre miniature avec les boutons feux tricolores, l'icône de l'app et le titre de la fenêtre à la position actuelle de la fenêtre cible
 
 ### Modifié

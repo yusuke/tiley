@@ -19,6 +19,7 @@
 		701526292F6EF349001E8095 /* DockReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526262F6EF349001E8095 /* DockReader.swift */; };
 		7015262A2F6EF349001E8095 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526272F6EF349001E8095 /* WindowManager.swift */; };
 		7015262B2F6EF349001E8095 /* AccessibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701526252F6EF349001E8095 /* AccessibilityService.swift */; };
+		70AABB022F900001001E8095 /* CGSPrivate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AABB012F900001001E8095 /* CGSPrivate.swift */; };
 		7015262F2F6EF356001E8095 /* GridModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262C2F6EF356001E8095 /* GridModels.swift */; };
 		701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */; };
 		701526332F704490001E8095 /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 701526322F704490001E8095 /* TelemetryClient */; };
@@ -52,6 +53,7 @@
 		701526152F6EECE3001E8095 /* DesktopPictureBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopPictureBackgroundView.swift; sourceTree = "<group>"; };
 		70A1B2C32F80A000003EC442 /* MiniatureWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniatureWindowView.swift; sourceTree = "<group>"; };
 		701526252F6EF349001E8095 /* AccessibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityService.swift; sourceTree = "<group>"; };
+		70AABB012F900001001E8095 /* CGSPrivate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSPrivate.swift; sourceTree = "<group>"; };
 		701526262F6EF349001E8095 /* DockReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockReader.swift; sourceTree = "<group>"; };
 		701526272F6EF349001E8095 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		7015262C2F6EF356001E8095 /* GridModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridModels.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				701526252F6EF349001E8095 /* AccessibilityService.swift */,
+				70AABB012F900001001E8095 /* CGSPrivate.swift */,
 				701526262F6EF349001E8095 /* DockReader.swift */,
 				701526272F6EF349001E8095 /* WindowManager.swift */,
 			);
@@ -298,6 +301,7 @@
 				701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */,
 				7015262A2F6EF349001E8095 /* WindowManager.swift in Sources */,
 				7015262B2F6EF349001E8095 /* AccessibilityService.swift in Sources */,
+				70AABB022F900001001E8095 /* CGSPrivate.swift in Sources */,
 				70B56A6C2F64347E005173A5 /* AppState.swift in Sources */,
 				70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */,
 				7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */,

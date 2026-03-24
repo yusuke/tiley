@@ -150,6 +150,10 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var cachedResizabilityPID: pid_t?
     @ObservationIgnored private var layoutPreviewController: LayoutPreviewOverlayController?
     @ObservationIgnored private var availableWindowTargets: [WindowTarget] = []
+    /// Mission Control space list (empty when detection is unavailable).
+    @ObservationIgnored private(set) var spaceList: [SpaceInfo] = []
+    /// The currently active Mission Control space ID.
+    @ObservationIgnored private(set) var activeSpaceID: UInt64?
     @ObservationIgnored private var activeTargetIndex: Int = 0
     @ObservationIgnored private var originalFrontmostPID: pid_t?
     /// Whether the user has cycled the target window at least once via Tab.
@@ -273,6 +277,18 @@ final class AppState: NSObject, NSMenuDelegate {
     var windowTargetList: [WindowTarget] {
         _ = windowTargetListVersion
         return availableWindowTargets
+    }
+
+    /// Mission Control space list for the current refresh cycle.
+    var currentSpaceList: [SpaceInfo] {
+        _ = windowTargetListVersion
+        return spaceList
+    }
+
+    /// The active Mission Control space ID for the current refresh cycle.
+    var currentActiveSpaceID: UInt64? {
+        _ = windowTargetListVersion
+        return activeSpaceID
     }
 
     var currentWindowTargetIndex: Int {
@@ -771,7 +787,10 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func refreshAvailableWindows() {
-        availableWindowTargets = windowManager?.captureAllWindows() ?? []
+        let captured = windowManager?.captureAllWindows(includeOtherSpaces: true)
+        availableWindowTargets = captured?.targets ?? []
+        spaceList = captured?.spaceList ?? []
+        activeSpaceID = captured?.activeSpaceID
         windowTargetListVersion += 1
 
         if let pendingIndex = pendingTargetIndexAfterClose {
@@ -1018,6 +1037,10 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func apply(selection: GridSelection, to target: WindowTarget) {
         let target = unhideAppIfNeeded(target)
+
+        // If the target window is on a different space than the selected space,
+        // switch to that space and move the window there.
+
         // Re-fetch the current visibleFrame from the actual screen to avoid
         // using stale values captured when the target was resolved. The Dock
         // or menu bar may have auto-shown/hidden since then.
@@ -1072,6 +1095,8 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         target = unhideAppIfNeeded(target)
         activeLayoutTarget = target
+
+        // If the target window is on a different space, move it and switch.
 
         // Re-fetch the current visibleFrame from the actual screen to avoid
         // using stale values captured at overlay-open time. The Dock or menu
@@ -1576,6 +1601,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @objc private func quit() {
         quitApp()
     }
+
 
     private func resolveWindowTarget() -> WindowTarget? {
         if let frontmostApp = NSWorkspace.shared.frontmostApplication,

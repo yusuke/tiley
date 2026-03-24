@@ -48,11 +48,11 @@ final class WindowManager {
         return result
     }
 
-    func captureAllWindows() -> [WindowTarget] {
+    func captureAllWindows(includeOtherSpaces: Bool = false) -> (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceID: UInt64?) {
         let perfStart = CFAbsoluteTimeGetCurrent()
-        let result = accessibilityService.allWindowTargets()
+        let result = accessibilityService.allWindowTargets(includeOtherSpaces: includeOtherSpaces)
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
-        debugLog("captureAllWindows done (\(result.count) windows) (\(String(format: "%.1f", elapsed))ms)")
+        debugLog("captureAllWindows done (\(result.targets.count) windows) (\(String(format: "%.1f", elapsed))ms)")
         return result
     }
 
@@ -118,7 +118,15 @@ final class WindowManager {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         log("\n=== Tiley resize \(formatter.string(from: Date())) ===")
-        log("Target: \(target.appName) (pid \(target.processIdentifier))")
+        // Log space info for the target window.
+        let spaceDesc: String
+        if target.cgWindowID != 0 {
+            let spaceMap = AccessibilityService.buildWindowSpaceMap(windowIDs: [target.cgWindowID])
+            spaceDesc = "cgWid=\(target.cgWindowID) space=\(spaceMap[target.cgWindowID].map(String.init) ?? "nil")"
+        } else {
+            spaceDesc = "cgWid=0 spaceID=\(target.spaceID.map(String.init) ?? "nil")"
+        }
+        log("Target: \(target.appName) (pid \(target.processIdentifier)) \(spaceDesc)")
         log("Target AX: pos=(\(axX), \(axY)) size=\(targetSize.width)x\(targetSize.height)")
         log("AppKit frame: \(frame)")
         log("screenFrame: \(screenFrame)  primaryMaxY: \(primaryMaxY)")
@@ -130,12 +138,21 @@ final class WindowManager {
             log("Screen \(i)\(primary): \"\(screen.localizedName)\" frame=(\(f.origin.x),\(f.origin.y),\(f.width),\(f.height)) visible=(\(v.origin.x),\(v.origin.y),\(v.width),\(v.height)) scale=\(screen.backingScaleFactor)")
         }
 
+        func logSpace(_ label: String) {
+            if target.cgWindowID != 0 {
+                let sm = AccessibilityService.buildWindowSpaceMap(windowIDs: [target.cgWindowID])
+                log("\(label) space=\(sm[target.cgWindowID].map(String.init) ?? "nil")")
+            }
+        }
+
         logState("[before]")
+        logSpace("[before]")
 
         // Perform the actual resize
         let constrained = try accessibilityService.setFrame(frame, on: screenFrame, for: window)
 
         logState("[after]")
+        logSpace("[after]")
 
         // Check result
         let (finalPos, finalSz) = readPosAndSize()

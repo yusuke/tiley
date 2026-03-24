@@ -218,6 +218,7 @@ struct MainWindowView: View {
         let originalImageSize: CGSize?
     }
 
+
     private var desktopPictureInfo: DesktopPictureInfo? {
         _ = appState.desktopImageVersion  // Invalidate when wallpaper changes
         let screen: NSScreen?
@@ -1024,7 +1025,7 @@ struct MainWindowView: View {
                     gridHeight: gridHeight
                 )
                 .padding(.horizontal, Self.layoutPanelHorizontalPadding)
-                .padding(.top, 8)
+                .padding(.top, 4)
 
                 layoutPresetsPanel(availableHeight: availablePresetsHeight)
                     .padding(.horizontal, Self.layoutPanelHorizontalPadding)
@@ -1478,6 +1479,8 @@ struct MainWindowView: View {
         let sameAppWindowCount: Int
         let isHidden: Bool
         let isFinder: Bool
+        /// True when this window is on a non-current Mission Control space.
+        let isOnOtherSpace: Bool
         /// True when this item appears under an app header (multi-window app group).
         var isUnderAppHeader: Bool = false
     }
@@ -1490,6 +1493,7 @@ struct MainWindowView: View {
     }
 
     private enum SidebarRow: Identifiable {
+        case spaceHeader(spaceID: UInt64, index: Int, isCurrent: Bool)
         case screenHeader(displayID: CGDirectDisplayID, name: String, hasWindowsOnOtherScreens: Bool, hasWindowsOnThisScreen: Bool)
         case emptyScreen(displayID: CGDirectDisplayID, name: String)
         case appHeader(pid: pid_t, appName: String)
@@ -1497,6 +1501,7 @@ struct MainWindowView: View {
 
         var id: String {
             switch self {
+            case .spaceHeader(let spaceID, _, _): return "space-\(spaceID)"
             case .screenHeader(let displayID, _, _, _): return "screen-\(displayID)"
             case .emptyScreen(let displayID, _): return "empty-screen-\(displayID)"
             case .appHeader(let pid, _): return "app-\(pid)"
@@ -1536,7 +1541,8 @@ struct MainWindowView: View {
                 isLastWindowOfApp: windowCountByPID[target.processIdentifier] == 1,
                 sameAppWindowCount: windowCountByPID[target.processIdentifier] ?? 1,
                 isHidden: target.isHidden,
-                isFinder: isFinder
+                isFinder: isFinder,
+                isOnOtherSpace: target.isOnOtherSpace
             ))
         }
 
@@ -1571,77 +1577,102 @@ struct MainWindowView: View {
             return rows
         }
 
-        // Group items by screen.
-        let screens = NSScreen.screens
-        let isMultiScreen = screens.count > 1
-        guard isMultiScreen else { return appGroupedRows(from: items) }
+        // Helper: group items by screen, emitting screen headers for multi-screen setups.
+        func screenGroupedRows(from screenItems: [WindowListItem]) -> [SidebarRow] {
+            let screens = NSScreen.screens
+            let isMultiScreen = screens.count > 1
+            guard isMultiScreen else { return appGroupedRows(from: screenItems) }
 
-        // Build screen groups: [displayID: (screenName, [WindowListItem])]
-        var screenGroups: [(displayID: CGDirectDisplayID, name: String, items: [WindowListItem])] = []
-        var groupMap: [CGDirectDisplayID: Int] = [:]  // displayID → index in screenGroups
+            var screenGroups: [(displayID: CGDirectDisplayID, name: String, items: [WindowListItem])] = []
+            var groupMap: [CGDirectDisplayID: Int] = [:]
 
-        // Pre-populate all connected screens so that empty screens also appear.
-        for screen in screens {
-            let displayID = screen.displayID
-            if groupMap[displayID] == nil {
-                let idx = screenGroups.count
-                groupMap[displayID] = idx
-                screenGroups.append((displayID: displayID, name: screen.localizedName, items: []))
+            for screen in screens {
+                let displayID = screen.displayID
+                if groupMap[displayID] == nil {
+                    let idx = screenGroups.count
+                    groupMap[displayID] = idx
+                    screenGroups.append((displayID: displayID, name: screen.localizedName, items: []))
+                }
             }
+
+            for item in screenItems {
+                let target = targets[item.id]
+                let screen = NSScreen.screen(containing: target.screenFrame)
+                let displayID = screen?.displayID ?? 0
+
+                if let groupIdx = groupMap[displayID] {
+                    screenGroups[groupIdx].items.append(item)
+                } else {
+                    let screenName = screen?.localizedName ?? NSLocalizedString("Unknown Display", comment: "Fallback screen name")
+                    let idx = screenGroups.count
+                    groupMap[displayID] = idx
+                    screenGroups.append((displayID: displayID, name: screenName, items: [item]))
+                }
+            }
+
+            let thisDisplayID: CGDirectDisplayID? = {
+                switch screenRole {
+                case .secondary(let screen):
+                    return screen.displayID
+                case .target:
+                    guard let screenContext else { return nil }
+                    return NSScreen.screen(containing: screenContext.screenFrame)?.displayID
+                }
+            }()
+            screenGroups.sort { a, b in
+                let aIsThis = a.displayID == thisDisplayID
+                let bIsThis = b.displayID == thisDisplayID
+                if aIsThis != bIsThis { return aIsThis }
+                return a.displayID < b.displayID
+            }
+
+            let screensWithWindows = Set(screenGroups.compactMap { $0.items.isEmpty ? nil : $0.displayID })
+
+            var rows: [SidebarRow] = []
+            for group in screenGroups {
+                if group.items.isEmpty {
+                    rows.append(.emptyScreen(displayID: group.displayID, name: group.name))
+                } else {
+                    let hasWindowsOnOther = screensWithWindows.contains { $0 != group.displayID }
+                    rows.append(.screenHeader(
+                        displayID: group.displayID,
+                        name: group.name,
+                        hasWindowsOnOtherScreens: hasWindowsOnOther,
+                        hasWindowsOnThisScreen: true
+                    ))
+                    rows.append(contentsOf: appGroupedRows(from: group.items))
+                }
+            }
+            return rows
         }
 
-        for item in items {
-            let target = targets[item.id]
-            let screen = NSScreen.screen(containing: target.screenFrame)
-            let displayID = screen?.displayID ?? 0
-
-            if let groupIdx = groupMap[displayID] {
-                screenGroups[groupIdx].items.append(item)
-            } else {
-                let screenName = screen?.localizedName ?? NSLocalizedString("Unknown Display", comment: "Fallback screen name")
-                let idx = screenGroups.count
-                groupMap[displayID] = idx
-                screenGroups.append((displayID: displayID, name: screenName, items: [item]))
+        // Check if we need space-level grouping.
+        // Count how many distinct spaces have windows.
+        let spaceIDsWithWindows: Set<UInt64> = {
+            var ids = Set<UInt64>()
+            for item in items {
+                if let sid = targets[item.id].spaceID {
+                    ids.insert(sid)
+                }
             }
-        }
-
-        // This Tiley window's screen first, then stable order by display ID.
-        let thisDisplayID: CGDirectDisplayID? = {
-            switch screenRole {
-            case .secondary(let screen):
-                return screen.displayID
-            case .target:
-                guard let screenContext else { return nil }
-                return NSScreen.screen(containing: screenContext.screenFrame)?.displayID
-            }
+            return ids
         }()
-        screenGroups.sort { a, b in
-            let aIsThis = a.displayID == thisDisplayID
-            let bIsThis = b.displayID == thisDisplayID
-            if aIsThis != bIsThis { return aIsThis }
-            return a.displayID < b.displayID
+        let hasMultipleSpacesWithWindows = spaceIDsWithWindows.count > 1
+
+        // If only one space has windows (or space detection unavailable), use existing screen/app grouping.
+        guard hasMultipleSpacesWithWindows else {
+            return screenGroupedRows(from: items)
         }
 
-        // Precompute which screens have windows.
-        let screensWithWindows = Set(screenGroups.compactMap { $0.items.isEmpty ? nil : $0.displayID })
-
-        // Flatten into SidebarRow array with screen headers and app grouping.
-        var rows: [SidebarRow] = []
-        for group in screenGroups {
-            if group.items.isEmpty {
-                rows.append(.emptyScreen(displayID: group.displayID, name: group.name))
-            } else {
-                let hasWindowsOnOther = screensWithWindows.contains { $0 != group.displayID }
-                rows.append(.screenHeader(
-                    displayID: group.displayID,
-                    name: group.name,
-                    hasWindowsOnOtherScreens: hasWindowsOnOther,
-                    hasWindowsOnThisScreen: true
-                ))
-                rows.append(contentsOf: appGroupedRows(from: group.items))
-            }
+        // Show only windows belonging to the current (active) space.
+        let filteredItems: [WindowListItem]
+        if let activeID = appState.currentActiveSpaceID {
+            filteredItems = items.filter { targets[$0.id].spaceID == activeID }
+        } else {
+            filteredItems = items
         }
-        return rows
+
+        return screenGroupedRows(from: filteredItems)
     }
 
     private func windowListSidebar(height: CGFloat) -> some View {
@@ -1697,6 +1728,8 @@ struct MainWindowView: View {
                         LazyVStack(spacing: 2) {
                             ForEach(filteredSidebarRows) { row in
                                 switch row {
+                                case .spaceHeader:
+                                    EmptyView()
                                 case .screenHeader(let displayID, let name, let hasOther, let hasThis):
                                     screenHeaderRow(displayID: displayID, name: name, hasWindowsOnOtherScreens: hasOther, hasWindowsOnThisScreen: hasThis)
                                 case .emptyScreen(let displayID, let name):
@@ -1955,6 +1988,7 @@ struct MainWindowView: View {
             }
         }
     }
+
 
     private func screenHeaderRow(displayID: CGDirectDisplayID, name: String, hasWindowsOnOtherScreens: Bool, hasWindowsOnThisScreen: Bool) -> some View {
         let isHovered = hoveredScreenHeaderID == displayID

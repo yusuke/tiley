@@ -21,6 +21,59 @@ struct WindowTarget {
     let screenFrame: CGRect
     /// True when the owning application is hidden (Cmd-H).
     let isHidden: Bool
+    /// The Mission Control space ID this window belongs to (`nil` when detection is unavailable).
+    let spaceID: UInt64?
+    /// True when the window resides on a non-current Mission Control space.
+    let isOnOtherSpace: Bool
+    /// The CoreGraphics window ID, used for space-movement operations.
+    let cgWindowID: CGWindowID
+
+    init(
+        appElement: AXUIElement,
+        windowElement: AXUIElement?,
+        processIdentifier: pid_t,
+        appName: String,
+        windowTitle: String?,
+        frame: CGRect,
+        visibleFrame: CGRect,
+        screenFrame: CGRect,
+        isHidden: Bool,
+        spaceID: UInt64? = nil,
+        isOnOtherSpace: Bool = false,
+        cgWindowID: CGWindowID = 0
+    ) {
+        self.appElement = appElement
+        self.windowElement = windowElement
+        self.processIdentifier = processIdentifier
+        self.appName = appName
+        self.windowTitle = windowTitle
+        self.frame = frame
+        self.visibleFrame = visibleFrame
+        self.screenFrame = screenFrame
+        self.isHidden = isHidden
+        self.spaceID = spaceID
+        self.isOnOtherSpace = isOnOtherSpace
+        self.cgWindowID = cgWindowID
+    }
+}
+
+/// Represents a Mission Control space (desktop).
+struct SpaceInfo: Identifiable, Equatable {
+    let id: UInt64
+    /// 1-based index within its display (for "Desktop 1", "Desktop 2"). 0 for full-screen spaces.
+    let index: Int
+    let displayUUID: String
+    let isCurrent: Bool
+    let isFullScreen: Bool
+}
+
+/// Result of parsing CGSCopyManagedDisplaySpaces.
+struct SpaceMapResult {
+    let spaceList: [SpaceInfo]
+    let activeSpaceID: UInt64?
+    let isAvailable: Bool
+
+    static let empty = SpaceMapResult(spaceList: [], activeSpaceID: nil, isAvailable: false)
 }
 
 enum WindowAccessError: LocalizedError {
@@ -497,18 +550,30 @@ final class AccessibilityService {
     }
 
     /// Returns all on-screen standard windows (excluding Tiley) in z-order (front to back).
-    func allWindowTargets() -> [WindowTarget] {
+    /// When `includeOtherSpaces` is true and private CGS APIs are available, also returns
+    /// windows from non-current Mission Control spaces with `isOnOtherSpace` set.
+    func allWindowTargets(includeOtherSpaces: Bool = false) -> (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceID: UInt64?) {
         let perfStart = CFAbsoluteTimeGetCurrent()
         func perfLog(_ label: String) {
             let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
             debugLog("allWindowTargets: \(label) (t=\(String(format: "%.1f", elapsed))ms)")
         }
-        guard checkAccess(prompt: false) else { return [] }
+        guard checkAccess(prompt: false) else { return ([], [], nil) }
+
+        // Build space map first (before window list) so we know current space.
+        let spaceMap = includeOtherSpaces ? Self.buildSpaceMap() : SpaceMapResult.empty
+        perfLog("buildSpaceMap done (spaces=\(spaceMap.spaceList.count), available=\(spaceMap.isAvailable))")
+
+        // When space detection is available, fetch all windows (including other spaces).
+        // Otherwise, stick with on-screen-only.
+        let cgOptions: CGWindowListOption = spaceMap.isAvailable
+            ? [.optionAll, .excludeDesktopElements]
+            : [.optionOnScreenOnly, .excludeDesktopElements]
 
         guard let windowList = CGWindowListCopyWindowInfo(
-            [.optionOnScreenOnly, .excludeDesktopElements],
+            cgOptions,
             kCGNullWindowID
-        ) as? [[CFString: Any]] else { return [] }
+        ) as? [[CFString: Any]] else { return ([], spaceMap.spaceList, spaceMap.activeSpaceID) }
         perfLog("CGWindowListCopyWindowInfo done (\(windowList.count) entries)")
 
         let selfPID = getpid()
@@ -518,6 +583,8 @@ final class AccessibilityService {
             let pid: pid_t
             let bounds: CGRect  // Top-left origin (AX/CG coordinate space)
             let ownerName: String?
+            let windowID: CGWindowID
+            let isOnScreen: Bool
         }
 
         var cgEntries: [CGWindowEntry] = []
@@ -530,7 +597,38 @@ final class AccessibilityService {
                   let bounds = CGRect(dictionaryRepresentation: boundsRef as! CFDictionary) else { continue }
             guard bounds.width > 0, bounds.height > 0 else { continue }
             let ownerName = info[kCGWindowOwnerName] as? String
-            cgEntries.append(CGWindowEntry(pid: ownerPID, bounds: bounds, ownerName: ownerName))
+            let windowID = info[kCGWindowNumber] as? CGWindowID ?? 0
+            let isOnScreen = info[kCGWindowIsOnscreen] as? Bool ?? false
+            cgEntries.append(CGWindowEntry(pid: ownerPID, bounds: bounds, ownerName: ownerName, windowID: windowID, isOnScreen: isOnScreen))
+        }
+
+        // Build per-window space mapping when available.
+        var windowSpaceMap: [CGWindowID: UInt64] = [:]
+        if spaceMap.isAvailable {
+            let allWindowIDs = cgEntries.map(\.windowID).filter { $0 != 0 }
+            windowSpaceMap = Self.buildWindowSpaceMap(windowIDs: allWindowIDs)
+            perfLog("windowSpaceMap built (\(windowSpaceMap.count) entries)")
+        }
+
+        // Separate current-space and other-space CG entries.
+        let currentSpaceIDs = Set(spaceMap.spaceList.filter(\.isCurrent).map(\.id))
+        var currentSpaceEntries: [CGWindowEntry] = []
+        var otherSpaceEntries: [CGWindowEntry] = []
+
+        if spaceMap.isAvailable {
+            for entry in cgEntries {
+                let wSpaceID = windowSpaceMap[entry.windowID]
+                if let sid = wSpaceID, !currentSpaceIDs.contains(sid) {
+                    // Window is on a different space.
+                    otherSpaceEntries.append(entry)
+                } else if entry.isOnScreen || wSpaceID != nil {
+                    // On current space (on-screen or confirmed by space map).
+                    currentSpaceEntries.append(entry)
+                }
+                // Drop windows that are off-screen with no space info (minimized, etc.)
+            }
+        } else {
+            currentSpaceEntries = cgEntries
         }
 
         // Collect unique PIDs preserving first-seen order.
@@ -542,7 +640,7 @@ final class AccessibilityService {
         )
         var seenPIDs = Set<pid_t>()
         var orderedPIDs: [pid_t] = []
-        for entry in cgEntries {
+        for entry in currentSpaceEntries {
             guard !hiddenPIDs.contains(entry.pid) else { continue }
             if seenPIDs.insert(entry.pid).inserted {
                 orderedPIDs.append(entry.pid)
@@ -584,7 +682,7 @@ final class AccessibilityService {
         var results: [WindowTarget] = []
         var usedAXWindows = Set<ObjectIdentifier>()  // Track used AXUIElement refs
 
-        for cgEntry in cgEntries {
+        for cgEntry in currentSpaceEntries {
             guard !hiddenPIDs.contains(cgEntry.pid) else { continue }
             guard let axInfos = axWindowsByPID[cgEntry.pid] else { continue }
             // Find matching AX window by position/size comparison.
@@ -632,12 +730,57 @@ final class AccessibilityService {
                 frame: frame,
                 visibleFrame: visibleFrame,
                 screenFrame: screenFrame,
-                isHidden: false
+                isHidden: false,
+                spaceID: windowSpaceMap[cgEntry.windowID],
+                cgWindowID: cgEntry.windowID
             )
             results.append(target)
         }
 
         perfLog("CG→AX matching done (\(results.count) matched)")
+
+        // Append windows from other spaces (display-only, no AX element).
+        if spaceMap.isAvailable && !otherSpaceEntries.isEmpty {
+            let defaultScreen = NSScreen.main?.frame ?? .zero
+            let defaultVisible = NSScreen.main?.visibleFrame ?? .zero
+            for cgEntry in otherSpaceEntries {
+                guard !hiddenPIDs.contains(cgEntry.pid) else { continue }
+                let app = NSRunningApplication(processIdentifier: cgEntry.pid)
+                // Skip apps that aren't regular (no dock icon).
+                guard app?.activationPolicy == .regular else { continue }
+                let appName = app?.localizedName
+                    ?? cgEntry.ownerName
+                    ?? NSLocalizedString("App", comment: "Generic app name fallback")
+                // Use CG bounds for frame (CG coordinate space = top-left origin).
+                // Convert to AppKit coordinate space (bottom-left origin).
+                let screen = NSScreen.screens.first { $0.frame.contains(cgEntry.bounds.origin) }
+                    ?? NSScreen.main
+                let screenFrame = screen?.frame ?? defaultScreen
+                let visibleFrame = screen?.visibleFrame ?? defaultVisible
+                let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
+                let appKitFrame = CGRect(
+                    x: cgEntry.bounds.origin.x,
+                    y: primaryMaxY - cgEntry.bounds.origin.y - cgEntry.bounds.height,
+                    width: cgEntry.bounds.width,
+                    height: cgEntry.bounds.height
+                )
+                results.append(WindowTarget(
+                    appElement: AXUIElementCreateApplication(cgEntry.pid),
+                    windowElement: nil,
+                    processIdentifier: cgEntry.pid,
+                    appName: appName,
+                    windowTitle: cgEntry.ownerName,  // CG doesn't provide window titles
+                    frame: appKitFrame,
+                    visibleFrame: visibleFrame,
+                    screenFrame: screenFrame,
+                    isHidden: false,
+                    spaceID: windowSpaceMap[cgEntry.windowID],
+                    isOnOtherSpace: true,
+                    cgWindowID: cgEntry.windowID
+                ))
+            }
+            perfLog("other-space windows appended (\(otherSpaceEntries.count) entries)")
+        }
 
         // Append entries for hidden applications.
         // Hidden apps don't appear in CGWindowListCopyWindowInfo(.optionOnScreenOnly).
@@ -707,7 +850,76 @@ final class AccessibilityService {
         }
 
         perfLog("hidden apps done (total \(results.count) windows)")
-        return results
+        return (results, spaceMap.spaceList, spaceMap.activeSpaceID)
+    }
+
+    // MARK: - Space detection helpers
+
+    /// Builds a mapping from CGWindowID to the space ID it belongs to.
+    static func buildWindowSpaceMap(windowIDs: [CGWindowID]) -> [CGWindowID: UInt64] {
+        guard !windowIDs.isEmpty,
+              let cid = CGSPrivate.mainConnectionID() else { return [:] }
+        var result: [CGWindowID: UInt64] = [:]
+        // Query one window at a time for reliable 1:1 mapping.
+        for wid in windowIDs {
+            guard let spacesArray = CGSPrivate.spacesForWindows(cid, mask: CGSPrivate.kCGSSpaceAll, windowIDs: [wid]) as? [NSNumber],
+                  let firstSpace = spacesArray.first else { continue }
+            result[wid] = firstSpace.uint64Value
+        }
+        return result
+    }
+
+    /// Parses the CGSCopyManagedDisplaySpaces output into ordered SpaceInfo structs.
+    static func buildSpaceMap() -> SpaceMapResult {
+        guard CGSPrivate.isAvailable,
+              let cid = CGSPrivate.mainConnectionID(),
+              let displaysArray = CGSPrivate.managedDisplaySpaces(cid) as? [[String: Any]] else {
+            return .empty
+        }
+
+        var spaceList: [SpaceInfo] = []
+        var activeSpaceID: UInt64?
+
+        for displayDict in displaysArray {
+            let displayUUID = displayDict["Display Identifier"] as? String ?? ""
+            guard let spaces = displayDict["Spaces"] as? [[String: Any]] else { continue }
+
+            // Current space for this display.
+            let currentSpaceDict = displayDict["Current Space"] as? [String: Any]
+            let currentID = (currentSpaceDict?["id64"] as? NSNumber)?.uint64Value
+
+            // Normal-space index counter (for "Desktop N" labeling).
+            var desktopIndex = 0
+
+            for spaceDict in spaces {
+                guard let id64 = (spaceDict["id64"] as? NSNumber)?.uint64Value else { continue }
+                let type = spaceDict["type"] as? Int ?? 0
+                let isFullScreen = (type == CGSPrivate.kCGSSpaceTypeFullScreen)
+                let isCurrent = (id64 == currentID)
+
+                if isCurrent {
+                    activeSpaceID = id64
+                }
+
+                if !isFullScreen {
+                    desktopIndex += 1
+                }
+
+                spaceList.append(SpaceInfo(
+                    id: id64,
+                    index: isFullScreen ? 0 : desktopIndex,
+                    displayUUID: displayUUID,
+                    isCurrent: isCurrent,
+                    isFullScreen: isFullScreen
+                ))
+            }
+        }
+
+        return SpaceMapResult(
+            spaceList: spaceList,
+            activeSpaceID: activeSpaceID,
+            isAvailable: true
+        )
     }
 
     private func copyAllWindowElements(from appElement: AXUIElement) throws -> [AXUIElement] {

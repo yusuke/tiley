@@ -4,6 +4,7 @@
 
 ### Aggiunto
 
+- Quando sono presenti più spazi Mission Control, la barra laterale mostra solo le finestre dello spazio attuale
 - L'overlay a griglia ora mostra un'anteprima della finestra in miniatura con pulsanti semaforo, icona dell'app e titolo della finestra nella posizione attuale della finestra di destinazione
 
 ### Modificato

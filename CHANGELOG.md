@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- When multiple Mission Control spaces exist, the sidebar shows only windows on the current space
 - Grid overlay now shows a miniature window preview with traffic light buttons, app icon, and window title at the target window's current position
 
 ### Changed

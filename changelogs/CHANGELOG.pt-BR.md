@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- Quando há vários espaços do Mission Control, a barra lateral exibe apenas as janelas do espaço atual
 - A sobreposição de grade agora exibe uma pré-visualização da janela em miniatura com botões de semáforo, ícone do app e título da janela na posição atual da janela de destino
 
 ### Alterado

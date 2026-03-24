@@ -4,6 +4,7 @@
 
 ### Hinzugefügt
 
+- Bei mehreren Mission Control Spaces zeigt die Seitenleiste nur Fenster des aktuellen Space an
 - Das Raster-Overlay zeigt jetzt eine Miniatur-Fenstervorschau mit Ampelschaltflächen, App-Symbol und Fenstertitel an der aktuellen Position des Zielfensters an
 
 ### Geändert
