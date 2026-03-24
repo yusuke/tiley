@@ -464,8 +464,7 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         if isShowingLayoutGrid {
-            NSApp.activate(ignoringOtherApps: true)
-            windowTargetMenuRequestVersion += 1
+            cancelLayoutGrid()
             return
         }
 
