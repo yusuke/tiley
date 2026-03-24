@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.1.1] - 2026-03-24
+
 ### Behoben
 
 - Systemhintergrund-Miniaturansichten wurden fälschlicherweise gekachelt statt als Füllung dargestellt

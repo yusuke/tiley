@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.1.1] - 2026-03-24
+
 ### Corretto
 
 - Corretta la visualizzazione a mosaico anziché a riempimento delle miniature degli sfondi di sistema
