@@ -6,6 +6,10 @@
 
 - La superposición de cuadrícula ahora muestra una vista previa de ventana en miniatura con botones de semáforo, icono de la app y título de la ventana en la posición actual de la ventana de destino
 
+### Cambiado
+
+- La ocultación de la superposición es ahora más responsiva al aplicar diseños o traer ventanas al frente
+
 ## [3.1.1] - 2026-03-24
 
 ### Corregido

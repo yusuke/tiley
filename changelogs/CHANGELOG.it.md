@@ -6,6 +6,10 @@
 
 - L'overlay a griglia ora mostra un'anteprima della finestra in miniatura con pulsanti semaforo, icona dell'app e titolo della finestra nella posizione attuale della finestra di destinazione
 
+### Modificato
+
+- La scomparsa dell'overlay è ora più reattiva durante l'applicazione dei layout o il passaggio in primo piano delle finestre
+
 ## [3.1.1] - 2026-03-24
 
 ### Corretto

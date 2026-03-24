@@ -669,6 +669,8 @@ final class AppState: NSObject, NSMenuDelegate {
         guard activeTargetIndex >= 0, activeTargetIndex < availableWindowTargets.count else { return }
         let target = availableWindowTargets[activeTargetIndex]
 
+        dismissOverlayImmediately()
+
         if let window = target.windowElement {
             moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
             accessibilityService.raiseWindow(window)
@@ -806,11 +808,9 @@ final class AppState: NSObject, NSMenuDelegate {
     func focusWindowAndDismiss(at index: Int) {
         guard index >= 0, index < availableWindowTargets.count else { return }
         let target = unhideAppIfNeeded(availableWindowTargets[index])
-        hidePreviewOverlay()
-        isShowingLayoutGrid = false
+        dismissOverlayImmediately()
         activeLayoutTarget = nil
         clearResizabilityCache()
-        hideAllMainWindows()
         if let window = target.windowElement {
             moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
             accessibilityService.raiseWindow(window)
@@ -1036,6 +1036,8 @@ final class AppState: NSObject, NSMenuDelegate {
             gap: gap
         )
 
+        dismissOverlayImmediately()
+
         do {
             let constrained: Bool
             if enableDebugLog {
@@ -1052,6 +1054,7 @@ final class AppState: NSObject, NSMenuDelegate {
             ])
         } catch {
             NSLog("[Tiley] apply(selection:to:) error: %@", error.localizedDescription)
+            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: false)
             launchMessage = error.localizedDescription
         }
     }
@@ -1091,6 +1094,8 @@ final class AppState: NSObject, NSMenuDelegate {
             gap: gap
         )
 
+        dismissOverlayImmediately()
+
         do {
             let constrained: Bool
             if enableDebugLog {
@@ -1101,6 +1106,7 @@ final class AppState: NSObject, NSMenuDelegate {
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
         } catch {
+            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: false)
             launchMessage = error.localizedDescription
         }
     }
@@ -1136,11 +1142,10 @@ final class AppState: NSObject, NSMenuDelegate {
             dismissedTransientLayoutPresetSignature = nil
         }
         transientLayoutPresetID = UUID()
-        hidePreviewOverlay()
+        // hidePreviewOverlay / isShowingLayoutGrid / hideAllMainWindows are
+        // already called by the caller before the resize for faster feedback.
         activeLayoutTarget = nil
         clearResizabilityCache()
-        isShowingLayoutGrid = false
-        hideAllMainWindows()
         if wasConstrained {
             launchMessage = String(
                 format: NSLocalizedString("Moved %@ to %@ (size adjusted due to window constraints).", comment: "Window moved with size constraint message"),
@@ -1273,6 +1278,14 @@ final class AppState: NSObject, NSMenuDelegate {
     func hidePreviewOverlay() {
         layoutPreviewController?.hide()
         layoutPreviewController = nil
+    }
+
+    /// Immediately dismisses the overlay, layout grid, and all main windows
+    /// so the user doesn't wait for subsequent (potentially slow) AX operations.
+    private func dismissOverlayImmediately() {
+        hidePreviewOverlay()
+        isShowingLayoutGrid = false
+        hideAllMainWindows()
     }
 
     /// Returns the resize capability of the active layout target window,

@@ -6,6 +6,10 @@
 
 - La grille superposée affiche désormais un aperçu de fenêtre miniature avec les boutons feux tricolores, l'icône de l'app et le titre de la fenêtre à la position actuelle de la fenêtre cible
 
+### Modifié
+
+- La disparition de la superposition est désormais plus réactive lors de l'application de dispositions ou de la mise au premier plan des fenêtres
+
 ## [3.1.1] - 2026-03-24
 
 ### Corrigé

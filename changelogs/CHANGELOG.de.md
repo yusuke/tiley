@@ -6,6 +6,10 @@
 
 - Das Raster-Overlay zeigt jetzt eine Miniatur-Fenstervorschau mit Ampelschaltflächen, App-Symbol und Fenstertitel an der aktuellen Position des Zielfensters an
 
+### Geändert
+
+- Das Ausblenden des Overlays reagiert nun schneller beim Anwenden von Layouts oder beim In-den-Vordergrund-Bringen von Fenstern
+
 ## [3.1.1] - 2026-03-24
 
 ### Behoben

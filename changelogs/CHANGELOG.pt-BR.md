@@ -6,6 +6,10 @@
 
 - A sobreposição de grade agora exibe uma pré-visualização da janela em miniatura com botões de semáforo, ícone do app e título da janela na posição atual da janela de destino
 
+### Alterado
+
+- A ocultação da sobreposição está agora mais responsiva ao aplicar layouts ou trazer janelas para frente
+
 ## [3.1.1] - 2026-03-24
 
 ### Corrigido
