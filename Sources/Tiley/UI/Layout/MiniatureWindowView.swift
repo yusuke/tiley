@@ -4,7 +4,6 @@ struct MiniatureWindowView: View {
     let titleBarHeight: CGFloat
     var appIcon: NSImage?
     var windowTitle: String?
-    var appName: String?
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
@@ -16,48 +15,46 @@ struct MiniatureWindowView: View {
             let buttonSpacing = buttonDiameter * 0.55
             let buttonLeftPadding = buttonDiameter * 0.8
             let showButtons = w > 30 && titleBarHeight > 6
-            let contentHeight = h - titleBarHeight - 0.5
-            let desiredIconSize = titleBarHeight * 2.6
-            let iconSize = min(desiredIconSize, contentHeight * 0.7, w * 0.35)
-            let displayTitle = windowTitle ?? appName ?? ""
-            let showTitleArea = !displayTitle.isEmpty || appIcon != nil
-            let desiredFontSize = titleBarHeight * 1.8
-            let titleFontSize = max(4, min(desiredFontSize, contentHeight * 0.25))
+            let hasTitle = !(windowTitle ?? "").isEmpty
+            // Space occupied by the three traffic-light buttons + padding
+            let buttonsTrailingEdge = buttonLeftPadding + buttonDiameter * 3 + buttonSpacing * 2 + buttonDiameter * 0.5
+            let titleBarFontSize = max(4, titleBarHeight * 0.6)
 
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .fill(bodyFill)
                 .overlay(alignment: .top) {
                     VStack(spacing: 0) {
                         // Title bar fill
-                        Rectangle()
-                            .fill(titleBarFill)
-                            .frame(height: titleBarHeight)
+                        ZStack {
+                            Rectangle()
+                                .fill(titleBarFill)
+                            // Window title centered in title bar with app icon
+                            if showButtons {
+                                HStack(spacing: titleBarFontSize * 0.4) {
+                                    if let icon = appIcon {
+                                        Image(nsImage: icon)
+                                            .resizable()
+                                            .interpolation(.high)
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: titleBarHeight * 0.6, height: titleBarHeight * 0.6)
+                                            .clipShape(RoundedRectangle(cornerRadius: 2, style: .continuous))
+                                    }
+                                    if hasTitle {
+                                        Text(windowTitle!)
+                                            .font(.system(size: titleBarFontSize))
+                                            .foregroundStyle(titleTextColor)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                    }
+                                }
+                                .padding(.horizontal, buttonsTrailingEdge)
+                            }
+                        }
+                        .frame(height: titleBarHeight)
                         // Divider
                         Rectangle()
                             .fill(dividerColor)
                             .frame(height: 0.5)
-                        // App icon + window title area
-                        if showTitleArea {
-                            HStack(spacing: iconSize * 0.2) {
-                                if let icon = appIcon {
-                                    Image(nsImage: icon)
-                                        .resizable()
-                                        .interpolation(.high)
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: iconSize, height: iconSize)
-                                }
-                                if !displayTitle.isEmpty {
-                                    Text(displayTitle)
-                                        .font(.system(size: titleFontSize, weight: .medium))
-                                        .foregroundStyle(titleTextColor)
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
-                                }
-                            }
-                            .padding(.horizontal, iconSize * 0.2)
-                            .padding(.top, iconSize * 0.15)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .top)
                 }
@@ -116,4 +113,5 @@ struct MiniatureWindowView: View {
             ? Color.white.opacity(0.70)
             : Color.black.opacity(0.55)
     }
+
 }

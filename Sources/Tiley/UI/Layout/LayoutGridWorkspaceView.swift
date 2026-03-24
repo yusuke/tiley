@@ -42,12 +42,11 @@ struct LayoutGridWorkspaceView: View {
                     let winH = wf.height * geometry.size.height
                     let winX = wf.x * geometry.size.width + winW / 2
                     let winY = wf.y * geometry.size.height + winH / 2
-                    let titleBarPx = max(4, wf.menuBarHeightFraction * geometry.size.height)
+                    let titleBarPx = max(4, wf.menuBarHeightFraction * geometry.size.height * 1.5)
                     MiniatureWindowView(
                         titleBarHeight: titleBarPx,
                         appIcon: wf.appIcon,
-                        windowTitle: wf.windowTitle,
-                        appName: wf.appName
+                        windowTitle: wf.windowTitle
                     )
                     .frame(width: winW, height: winH)
                     .position(x: winX, y: winY)
