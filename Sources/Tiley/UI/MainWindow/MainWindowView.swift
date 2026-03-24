@@ -1685,23 +1685,25 @@ struct MainWindowView: View {
             NSScreen.screen(containing: $0.screenFrame)?.displayID == displayID
         }
 
-        // Gather windows to this screen
-        Button {
-            if let screen = screenForDisplay(displayID) {
-                appState.gatherWindowsToScreen(screen)
-                appState.hideMainWindow()
+        // Gather windows to this screen (hidden on single display)
+        if !otherScreens.isEmpty {
+            Button {
+                if let screen = screenForDisplay(displayID) {
+                    appState.gatherWindowsToScreen(screen)
+                    appState.hideMainWindow()
+                }
+            } label: {
+                Image(systemName: "rectangle.compress.vertical")
+                    .font(.system(size: 11, weight: .medium))
+                    .frame(width: 28, height: 24)
             }
-        } label: {
-            Image(systemName: "rectangle.compress.vertical")
-                .font(.system(size: 11, weight: .medium))
-                .frame(width: 28, height: 24)
+            .buttonStyle(TahoeActionBarButtonStyle())
+            .frame(width: 28, height: 24)
+            .disabled(!hasWindowsOnOtherScreens)
+            .instantTooltip(
+                String(format: NSLocalizedString("Gather windows to %@", comment: "Menu item to gather all windows from other screens to this screen"), name)
+            )
         }
-        .buttonStyle(TahoeActionBarButtonStyle())
-        .frame(width: 28, height: 24)
-        .disabled(!hasWindowsOnOtherScreens)
-        .instantTooltip(
-            String(format: NSLocalizedString("Gather windows to %@", comment: "Menu item to gather all windows from other screens to this screen"), name)
-        )
 
         // Move this screen's windows to other display
         moveToDisplayButton(
@@ -1734,10 +1736,9 @@ struct MainWindowView: View {
             )
             .frame(width: 38, height: 24)
             .instantTooltip(NSLocalizedString("Move to Other Display", comment: "Action bar tooltip for move-to-screen button"))
-        } else {
-            let targetScreen = otherScreens.first
+        } else if let targetScreen = otherScreens.first {
             Button {
-                if let screen = targetScreen { onSelect(screen) }
+                onSelect(targetScreen)
             } label: {
                 Image(systemName: "rectangle.portrait.and.arrow.right")
                     .font(.system(size: 11, weight: .medium))
@@ -1747,22 +1748,14 @@ struct MainWindowView: View {
             .frame(width: 28, height: 24)
             .disabled(disabled)
             .instantTooltipView {
-                if let screen = targetScreen {
-                    HStack(spacing: 4) {
-                        ScreenArrangementIcon(highlightDisplayID: screen.displayID, size: 14)
-                        Text(String(format: NSLocalizedString("Move to %@", comment: "Action bar menu item to move window to another display"), screen.localizedName))
-                            .font(.system(size: 11, weight: .medium))
-                    }
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 4)
-                    .fixedSize()
-                } else {
-                    Text(NSLocalizedString("Move to Other Display", comment: "Action bar tooltip for move-to-screen button"))
+                HStack(spacing: 4) {
+                    ScreenArrangementIcon(highlightDisplayID: targetScreen.displayID, size: 14)
+                    Text(String(format: NSLocalizedString("Move to %@", comment: "Action bar menu item to move window to another display"), targetScreen.localizedName))
                         .font(.system(size: 11, weight: .medium))
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 4)
-                        .fixedSize()
                 }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 4)
+                .fixedSize()
             }
         }
     }
