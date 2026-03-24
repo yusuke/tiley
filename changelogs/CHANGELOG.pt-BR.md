@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-03-25
+
 ### Adicionado
 
 - Quando há vários espaços do Mission Control, a barra lateral exibe apenas as janelas do espaço atual

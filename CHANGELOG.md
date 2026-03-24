@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-03-25
+
 ### Added
 
 - When multiple Mission Control spaces exist, the sidebar shows only windows on the current space
@@ -321,7 +323,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v3.1.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/yusuke/tiley/releases/tag/v3.2.0
 [3.1.1]: https://github.com/yusuke/tiley/releases/tag/v3.1.1
 [3.1.0]: https://github.com/yusuke/tiley/releases/tag/v3.1.0
 [3.0.1]: https://github.com/yusuke/tiley/releases/tag/v3.0.1

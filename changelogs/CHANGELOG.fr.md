@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-03-25
+
 ### Ajouté
 
 - Lorsque plusieurs espaces Mission Control existent, la barre latérale n'affiche que les fenêtres de l'espace actuel

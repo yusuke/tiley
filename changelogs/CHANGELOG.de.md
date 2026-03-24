@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-03-25
+
 ### Hinzugefügt
 
 - Bei mehreren Mission Control Spaces zeigt die Seitenleiste nur Fenster des aktuellen Space an
