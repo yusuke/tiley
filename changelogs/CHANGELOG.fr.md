@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Ajustement de l'apparence lorsqu'une mise à jour est disponible
+
 ## [3.2.2] - 2026-03-25
 
 ### Ajouté

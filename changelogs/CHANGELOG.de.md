@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Darstellung bei verfügbarem Update angepasst
+
 ## [3.2.2] - 2026-03-25
 
 ### Hinzugefügt

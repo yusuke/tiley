@@ -137,7 +137,7 @@ private final class AppInfoCache {
 }
 
 struct MainWindowView: View {
-    private static let windowCornerRadius: CGFloat = 14
+    private static let windowCornerRadius: CGFloat = 20
     private static let layoutPanelHorizontalPadding: CGFloat = 8
     private static let layoutGridAspectHeightRatio: CGFloat = 0.75
     private static let footerLeadingWidth: CGFloat = 36
@@ -1388,7 +1388,11 @@ struct MainWindowView: View {
 
             Spacer(minLength: 0)
 
-            // Trailing: gear button (shown on all screens)
+            // Trailing: update badge + gear button (shown on all screens)
+            if appState.showsUpdateIndicator {
+                UpdateAvailableBadge()
+                    .fixedSize()
+            }
             Button {
                 dismissPresetNameEditingIfNeeded()
                 draftSettings = appState.settingsSnapshot
@@ -1408,13 +1412,6 @@ struct MainWindowView: View {
             }
             .buttonStyle(TahoeToolbarButtonStyle())
             .instantTooltip(NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
-            .overlay(alignment: .trailing) {
-                if appState.hasUpdateBadge {
-                    UpdateAvailableBadge()
-                        .fixedSize()
-                        .offset(x: -28)
-                }
-            }
         }
         .frame(height: Self.footerHeight)
     }
@@ -2515,7 +2512,7 @@ struct MainWindowView: View {
                                 .font(.system(size: 12))
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            if appState.hasUpdateBadge {
+                            if appState.showsUpdateIndicator {
                                 UpdateAvailableBadge()
                             }
                             CheckForUpdatesView(updater: updater)
@@ -2539,6 +2536,23 @@ struct MainWindowView: View {
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
+
+                    #if DEBUG
+                    Divider().opacity(0.4)
+
+                    TahoeSettingsRow(label: NSLocalizedString("Simulate update available appearance", comment: "Debug toggle to preview the update-available UI")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.debugSimulateUpdate },
+                            set: { newValue in
+                                draftSettings.debugSimulateUpdate = newValue
+                                appState.debugSimulateUpdate = newValue
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
+                    #endif
                 }
             }
         }

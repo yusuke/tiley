@@ -23,7 +23,6 @@ let package = Package(
             ],
             resources: [
                 .copy("menu-icon.pdf"),
-                .copy("menu-icon-xcode.pdf"),
                 .copy("Images")
             ],
             linkerSettings: [

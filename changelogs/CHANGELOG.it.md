@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Regolato l'aspetto quando è disponibile un aggiornamento
+
 ## [3.2.2] - 2026-03-25
 
 ### Aggiunto

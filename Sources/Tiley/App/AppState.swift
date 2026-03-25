@@ -71,6 +71,7 @@ final class AppState: NSObject, NSMenuDelegate {
         var dockIconVisible: Bool
         var quitAppOnLastWindowClose: Bool
         var enableDebugLog: Bool
+        var debugSimulateUpdate: Bool
     }
 
     var desktopImageVersion: Int = 0
@@ -112,7 +113,18 @@ final class AppState: NSObject, NSMenuDelegate {
         didSet { UserDefaults.standard.set(quitAppOnLastWindowClose, forKey: UserDefaultsKey.quitAppOnLastWindowClose) }
     }
     var enableDebugLog = false {
-        didSet { UserDefaults.standard.set(enableDebugLog, forKey: UserDefaultsKey.enableDebugLog) }
+        didSet {
+            UserDefaults.standard.set(enableDebugLog, forKey: UserDefaultsKey.enableDebugLog)
+            applyStatusItemIcon()
+            applyDockIconBadge()
+        }
+    }
+    var debugSimulateUpdate = false {
+        didSet {
+            UserDefaults.standard.set(debugSimulateUpdate, forKey: UserDefaultsKey.debugSimulateUpdate)
+            applyStatusItemIcon()
+            applyDockIconBadge()
+        }
     }
     var layoutPresets: [LayoutPreset] = []
     var selectedLayoutPresetID: UUID?
@@ -120,10 +132,13 @@ final class AppState: NSObject, NSMenuDelegate {
 
     @ObservationIgnored var updater: SPUUpdater?
     private(set) var hasUpdateBadge = false
+    var showsUpdateIndicator: Bool { hasUpdateBadge || debugSimulateUpdate }
     @ObservationIgnored private var menuIconTemporarilyShown = false
 
     @ObservationIgnored private let accessibilityService = AccessibilityService()
     @ObservationIgnored private var windowManager: WindowManager?
+    @ObservationIgnored private var originalMenuIcon: NSImage?
+    @ObservationIgnored private var appearanceObservation: NSKeyValueObservation?
     @ObservationIgnored private var statusItem: NSStatusItem?
     @ObservationIgnored private var mainWindowControllers: [CGDirectDisplayID: MainWindowController] = [:]
     @ObservationIgnored private var targetScreenDisplayID: CGDirectDisplayID?
@@ -190,7 +205,8 @@ final class AppState: NSObject, NSMenuDelegate {
             menuIconVisible: menuIconVisible,
             dockIconVisible: dockIconVisible,
             quitAppOnLastWindowClose: quitAppOnLastWindowClose,
-            enableDebugLog: enableDebugLog
+            enableDebugLog: enableDebugLog,
+            debugSimulateUpdate: debugSimulateUpdate
         )
     }
 
@@ -461,6 +477,7 @@ final class AppState: NSObject, NSMenuDelegate {
         setDockIconVisible(settings.dockIconVisible)
         quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
         enableDebugLog = settings.enableDebugLog
+        debugSimulateUpdate = settings.debugSimulateUpdate
         sanitizePresetGlobalShortcutEligibility()
         TelemetryDeck.signal("settingsChanged", parameters: [
             "columns": "\(settings.columns)",
@@ -1699,20 +1716,12 @@ final class AppState: NSObject, NSMenuDelegate {
             button.action = #selector(handleStatusItemButtonClick)
             button.sendAction(on: [.leftMouseUp])
         }
-        #if DEBUG
-        let menuIconName = "menu-icon-xcode"
-        #else
-        let menuIconName = "menu-icon"
-        #endif
-        if let iconURL = resourceBundle.url(forResource: menuIconName, withExtension: "pdf"),
+        if let iconURL = resourceBundle.url(forResource: "menu-icon", withExtension: "pdf"),
            let icon = NSImage(contentsOf: iconURL),
            let button = item.button {
-            #if DEBUG
-            icon.isTemplate = false
-            #else
             icon.isTemplate = true
-            #endif
             icon.size = NSSize(width: 18, height: 18)
+            originalMenuIcon = icon
             button.image = icon
             button.imagePosition = .imageOnly
             button.title = ""
@@ -1722,13 +1731,18 @@ final class AppState: NSObject, NSMenuDelegate {
         item.menu = nil
         item.isVisible = true
         statusItem = item
-        if hasUpdateBadge {
-            applyUpdateBadgeIcon()
+        // Observe effectiveAppearance changes to redraw the icon
+        appearanceObservation = item.button?.observe(\.effectiveAppearance, options: [.new, .initial]) { [weak self] _, _ in
+            DispatchQueue.main.async {
+                self?.applyStatusItemIcon()
+            }
         }
     }
 
     private func removeStatusItem() {
         guard let statusItem else { return }
+        appearanceObservation?.invalidate()
+        appearanceObservation = nil
         NSStatusBar.system.removeStatusItem(statusItem)
         self.statusItem = nil
     }
@@ -1756,36 +1770,100 @@ final class AppState: NSObject, NSMenuDelegate {
                 return
             }
         }
-        if show {
-            applyUpdateBadgeIcon()
+        applyStatusItemIcon()
+        applyDockIconBadge()
+    }
+
+    /// Updates the status item icon according to the current state.
+    /// - Update badge or simulating update: overlay info.circle.fill (red)
+    /// - DEBUG build (otherwise): overlay ladybug.fill (green)
+    /// - Otherwise: use the original template icon as-is
+    private func applyStatusItemIcon() {
+        guard let button = statusItem?.button,
+              let baseIcon = originalMenuIcon else { return }
+
+        // Determine which badge to display
+        let badgeInfo: (symbolName: String, colors: [NSColor])?
+        // Get the menu bar foreground color
+        let menuBarForeground: NSColor
+        if let appearance = button.effectiveAppearance.bestMatch(from: [.vibrantDark, .vibrantLight]) {
+            menuBarForeground = appearance == .vibrantDark ? .white : .black
         } else {
-            removeUpdateBadgeIcon()
+            menuBarForeground = .white
         }
-    }
 
-    private static let updateBadgeViewTag = 9999
+        if hasUpdateBadge || debugSimulateUpdate {
+            badgeInfo = ("info.circle", [menuBarForeground])
+        } else if enableDebugLog {
+            badgeInfo = ("ladybug.fill", [.systemGreen, .white])
+        } else {
+            #if DEBUG
+            badgeInfo = ("ladybug.fill", [.systemGreen, .white])
+            #else
+            badgeInfo = nil
+            #endif
+        }
 
-    private func applyUpdateBadgeIcon() {
-        guard let button = statusItem?.button else { return }
-        guard button.viewWithTag(Self.updateBadgeViewTag) == nil else { return }
-        let badgeDiameter: CGFloat = 6
-        let dot = TaggableView(frame: NSRect(
-            x: button.bounds.maxX - badgeDiameter,
-            y: 0,
-            width: badgeDiameter,
-            height: badgeDiameter
-        ))
-        dot.assignedTag = Self.updateBadgeViewTag
-        dot.wantsLayer = true
-        dot.layer?.backgroundColor = NSColor.systemRed.cgColor
-        dot.layer?.cornerRadius = badgeDiameter / 2
-        dot.autoresizingMask = [.minXMargin, .minYMargin]
-        button.addSubview(dot)
-    }
+        guard let badge = badgeInfo else {
+            // No badge — restore the original template icon
+            baseIcon.isTemplate = true
+            button.image = baseIcon
+            return
+        }
 
-    private func removeUpdateBadgeIcon() {
-        guard let button = statusItem?.button else { return }
-        button.viewWithTag(Self.updateBadgeViewTag)?.removeFromSuperview()
+        let iconSize = baseIcon.size          // 18×18
+        let badgeSize: CGFloat = 12
+        let margin: CGFloat = 0.5
+        let clearDiameter = badgeSize + margin * 2  // 10pt
+
+        guard let symbol = NSImage(systemSymbolName: badge.symbolName,
+                                   accessibilityDescription: nil) else { return }
+        let config = NSImage.SymbolConfiguration(paletteColors: badge.colors)
+            .applying(NSImage.SymbolConfiguration(pointSize: badgeSize, weight: .bold))
+        let coloredSymbol = symbol.withSymbolConfiguration(config) ?? symbol
+
+        // Tint the original icon with the menu bar color
+        let tintedBase = NSImage(size: iconSize, flipped: false) { rect in
+            baseIcon.draw(in: rect)
+            menuBarForeground.set()
+            rect.fill(using: .sourceAtop)
+            return true
+        }
+
+        let composite = NSImage(size: iconSize, flipped: false) { drawRect in
+            // 1) Draw the tinted original icon
+            tintedBase.draw(in: drawRect)
+
+            // Badge center (bottom-right)
+            let centerX = iconSize.width - badgeSize / 2
+            let centerY = badgeSize / 2
+
+            // 2) Clear the original icon with a circle including margin
+            let clearRect = NSRect(
+                x: centerX - clearDiameter / 2,
+                y: centerY - clearDiameter / 2,
+                width: clearDiameter,
+                height: clearDiameter
+            )
+            let clearPath = NSBezierPath(ovalIn: clearRect)
+            NSGraphicsContext.current?.compositingOperation = .clear
+            clearPath.fill()
+
+            // 3) Draw the badge symbol
+            NSGraphicsContext.current?.compositingOperation = .sourceOver
+            let badgeRect = NSRect(
+                x: centerX - badgeSize / 2,
+                y: centerY - badgeSize / 2,
+                width: badgeSize,
+                height: badgeSize
+            )
+            coloredSymbol.draw(in: badgeRect)
+
+            return true
+        }
+
+        composite.isTemplate = false
+        button.image = composite
     }
 
     private func updateStatusMenu() {
@@ -2061,12 +2139,16 @@ final class AppState: NSObject, NSMenuDelegate {
         if let storedEnableDebugLog = defaults.object(forKey: UserDefaultsKey.enableDebugLog) as? Bool {
             enableDebugLog = storedEnableDebugLog
         }
+        if let storedDebugSimulateUpdate = defaults.object(forKey: UserDefaultsKey.debugSimulateUpdate) as? Bool {
+            debugSimulateUpdate = storedDebugSimulateUpdate
+        }
         refreshLaunchAtLoginState()
     }
 
     func applyDockIconVisibility() {
         if dockIconVisible {
             _ = NSApp.setActivationPolicy(.regular)
+            applyDockIconBadge()
         } else {
             // Switching to .accessory causes macOS to hide all windows and
             // fire windowDidResignKey, which normally resets UI state via
@@ -2095,6 +2177,76 @@ final class AppState: NSObject, NSMenuDelegate {
                 isSwitchingActivationPolicy = false
             }
         }
+    }
+
+    /// Apply or remove a badge on the Dock icon.
+    /// Uses NSDockTile.contentView so the shadow is not clipped even when the badge extends beyond the icon.
+    /// The icon is drawn to fill the entire tile, and the badge extends beyond it.
+    private func applyDockIconBadge() {
+        guard dockIconVisible else { return }
+        let dockTile = NSApp.dockTile
+
+        // Determine which badge to display (same priority as the menu icon)
+        let badgeInfo: (symbolName: String, colors: [NSColor])?
+        if showsUpdateIndicator {
+            badgeInfo = ("info.circle.fill", [.white, .systemRed])
+        } else if enableDebugLog {
+            badgeInfo = ("ladybug.circle.fill", [.white, .systemGreen])
+        } else {
+            #if DEBUG
+            badgeInfo = ("ladybug.circle.fill", [.white, .systemGreen])
+            #else
+            badgeInfo = nil
+            #endif
+        }
+
+        guard let badge = badgeInfo else {
+            dockTile.contentView = nil
+            dockTile.display()
+            return
+        }
+
+        guard let appIcon = NSImage(named: NSImage.applicationIconName) else { return }
+        guard let symbol = NSImage(systemSymbolName: badge.symbolName,
+                                   accessibilityDescription: nil) else { return }
+
+        let tileSize = dockTile.size
+        let view = NSImageView(frame: NSRect(origin: .zero, size: tileSize))
+        // Create a composite image with the icon filling the tile and the badge overlapping at the top-right
+        let badgeDiameter = tileSize.width * 0.47
+        let config = NSImage.SymbolConfiguration(paletteColors: badge.colors)
+            .applying(NSImage.SymbolConfiguration(pointSize: badgeDiameter, weight: .bold))
+        let coloredSymbol = symbol.withSymbolConfiguration(config) ?? symbol
+
+        let composite = NSImage(size: tileSize, flipped: false) { _ in
+            // Draw the icon to fill the entire tile
+            appIcon.draw(in: NSRect(origin: .zero, size: tileSize))
+
+            // Place the badge at the top-right (flush with the tile edge)
+            let margin: CGFloat = 2
+            let badgeRect = NSRect(
+                x: tileSize.width - badgeDiameter - margin,
+                y: tileSize.height - badgeDiameter - margin,
+                width: badgeDiameter,
+                height: badgeDiameter
+            )
+
+            guard let ctx = NSGraphicsContext.current?.cgContext else { return true }
+            ctx.saveGState()
+            ctx.setShadow(
+                offset: CGSize(width: 0, height: -2),
+                blur: 4,
+                color: NSColor.black.withAlphaComponent(0.4).cgColor
+            )
+            coloredSymbol.draw(in: badgeRect)
+            ctx.restoreGState()
+
+            return true
+        }
+
+        view.image = composite
+        dockTile.contentView = view
+        dockTile.display()
     }
 
     /// Pre-warm SwiftUI's rendering pipeline by creating a temporary hosting view
@@ -2585,6 +2737,8 @@ final class AppState: NSObject, NSMenuDelegate {
                 guard !Task.isCancelled else { break }
                 await MainActor.run { [weak self] in
                     self?.desktopImageVersion += 1
+                    // Redraw the badge icon tint color to match the light/dark appearance
+                    self?.applyStatusItemIcon()
                 }
             }
         }
@@ -2632,10 +2786,12 @@ private enum UserDefaultsKey {
     static let windowListSidebarVisible = "windowListSidebarVisible"
     static let quitAppOnLastWindowClose = "quitAppOnLastWindowClose"
     static let enableDebugLog = "enableDebugLog"
+    static let debugSimulateUpdate = "debugSimulateUpdate"
 }
 
 private final class TaggableView: NSView {
     var assignedTag: Int = 0
     override var tag: Int { assignedTag }
 }
+
 

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Ajustada la apariencia cuando hay una actualización disponible
+
 ## [3.2.2] - 2026-03-25
 
 ### Añadido
