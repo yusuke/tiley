@@ -3740,7 +3740,7 @@ private struct EmptyDisplayOverlay: View {
         let arrowImage = Image(systemName: arrowName)
             .font(.system(size: arrowFontSize, weight: .bold))
 
-        let iconView = ScreenArrangementIcon(highlightDisplayID: windowDisplayID, size: iconSize)
+        let iconView = ScreenArrangementIcon(highlightDisplayID: windowDisplayID, size: iconSize, color: .primary)
             .frame(width: iconSize, height: iconSize)
 
         // Place the arrow relative to the icon based on direction.
@@ -3766,7 +3766,7 @@ private struct EmptyDisplayOverlay: View {
                 }
             }
         }
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
         .allowsHitTesting(false)
     }
 }
