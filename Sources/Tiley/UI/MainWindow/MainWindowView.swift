@@ -2384,50 +2384,33 @@ struct MainWindowView: View {
 
     private var settingsEditor: some View {
         VStack(alignment: .leading, spacing: 16) {
-            TahoeSettingsSection(title: NSLocalizedString("Startup", comment: "Settings section")) {
-                VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Launch at login", comment: "")) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.launchAtLoginEnabled },
-                            set: { newValue in
-                                _ = appState.setLaunchAtLoginEnabled(newValue)
-                                draftSettings.launchAtLoginEnabled = appState.launchAtLoginEnabled
+            if let updater = appState.updater {
+                TahoeSettingsSection(title: NSLocalizedString("Updates", comment: "Settings section")) {
+                    VStack(spacing: 0) {
+                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: "")) {
+                            Toggle("", isOn: Binding(
+                                get: { updater.automaticallyChecksForUpdates },
+                                set: { updater.automaticallyChecksForUpdates = $0 }
+                            ))
+                            .toggleStyle(.switch)
+                            .labelsHidden()
+                        }
+                        .padding(.vertical, 4)
+
+                        Divider().opacity(0.4)
+
+                        HStack {
+                            Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?")")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            if appState.showsUpdateIndicator {
+                                UpdateAvailableBadge()
                             }
-                        ))
-                        .toggleStyle(.switch)
-                        .labelsHidden()
+                            CheckForUpdatesView(updater: updater)
+                        }
+                        .padding(.vertical, 4)
                     }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    TahoeSettingsRow(label: NSLocalizedString("Show menu icon", comment: "")) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.menuIconVisible },
-                            set: { newValue in
-                                appState.setMenuIconVisible(newValue)
-                                draftSettings.menuIconVisible = appState.menuIconVisible
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    TahoeSettingsRow(label: NSLocalizedString("Show Dock icon", comment: "")) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.dockIconVisible },
-                            set: { newValue in
-                                appState.setDockIconVisible(newValue)
-                                draftSettings.dockIconVisible = appState.dockIconVisible
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
                 }
             }
 
@@ -2529,33 +2512,50 @@ struct MainWindowView: View {
                 }
             }
 
-            if let updater = appState.updater {
-                TahoeSettingsSection(title: NSLocalizedString("Updates", comment: "Settings section")) {
-                    VStack(spacing: 0) {
-                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: "")) {
-                            Toggle("", isOn: Binding(
-                                get: { updater.automaticallyChecksForUpdates },
-                                set: { updater.automaticallyChecksForUpdates = $0 }
-                            ))
-                            .toggleStyle(.switch)
-                            .labelsHidden()
-                        }
-                        .padding(.vertical, 4)
-
-                        Divider().opacity(0.4)
-
-                        HStack {
-                            Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?")")
-                                .font(.system(size: 12))
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            if appState.showsUpdateIndicator {
-                                UpdateAvailableBadge()
+            TahoeSettingsSection(title: NSLocalizedString("Startup", comment: "Settings section")) {
+                VStack(spacing: 0) {
+                    TahoeSettingsRow(label: NSLocalizedString("Launch at login", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.launchAtLoginEnabled },
+                            set: { newValue in
+                                _ = appState.setLaunchAtLoginEnabled(newValue)
+                                draftSettings.launchAtLoginEnabled = appState.launchAtLoginEnabled
                             }
-                            CheckForUpdatesView(updater: updater)
-                        }
-                        .padding(.vertical, 4)
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
                     }
+                    .padding(.vertical, 4)
+
+                    Divider().opacity(0.4)
+
+                    TahoeSettingsRow(label: NSLocalizedString("Show menu icon", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.menuIconVisible },
+                            set: { newValue in
+                                appState.setMenuIconVisible(newValue)
+                                draftSettings.menuIconVisible = appState.menuIconVisible
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
+
+                    Divider().opacity(0.4)
+
+                    TahoeSettingsRow(label: NSLocalizedString("Show Dock icon", comment: "")) {
+                        Toggle("", isOn: Binding(
+                            get: { draftSettings.dockIconVisible },
+                            set: { newValue in
+                                appState.setDockIconVisible(newValue)
+                                draftSettings.dockIconVisible = appState.dockIconVisible
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
                 }
             }
 
