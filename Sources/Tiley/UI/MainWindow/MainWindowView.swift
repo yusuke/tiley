@@ -3645,9 +3645,35 @@ private struct MoveToDisplayButtonLabel: View {
     @Environment(\.tahoeActionBarHovered) private var isHovered
     @Environment(\.isEnabled) private var isEnabled
 
+    /// SF Symbol name for the arrow pointing from the current display toward the target display.
+    private var arrowSymbolName: String {
+        // In a 2-display setup the "current" screen is the one that is NOT the target.
+        guard let currentScreen = NSScreen.screens.first(where: { $0.displayID != targetScreen.displayID }) else {
+            return "arrow.right"
+        }
+
+        let dx = targetScreen.frame.midX - currentScreen.frame.midX
+        // NSScreen Y increases upward (Cocoa coords), matching the physical "up" direction.
+        let dy = targetScreen.frame.midY - currentScreen.frame.midY
+
+        let angle = atan2(dy, dx) * 180 / .pi  // degrees: 0 = right, 90 = up
+
+        // 8 sectors of 45° each, centred on the cardinal/diagonal directions.
+        switch angle {
+        case -22.5 ..< 22.5:   return "arrow.right"
+        case 22.5  ..< 67.5:   return "arrow.up.right"
+        case 67.5  ..< 112.5:  return "arrow.up"
+        case 112.5 ..< 157.5:  return "arrow.up.left"
+        case -67.5 ..< -22.5:  return "arrow.down.right"
+        case -112.5 ..< -67.5: return "arrow.down"
+        case -157.5 ..< -112.5: return "arrow.down.left"
+        default:               return "arrow.left"
+        }
+    }
+
     var body: some View {
         HStack(spacing: 2) {
-            Image(systemName: "arrow.right")
+            Image(systemName: arrowSymbolName)
                 .font(.system(size: 8, weight: .bold))
                 .frame(width: 10, height: 10)
             ZStack {
