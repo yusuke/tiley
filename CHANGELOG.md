@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Selecting a window in the sidebar temporarily brings it to the front for easier identification; the original window order is restored when switching to another window or cancelling
+
 ## [3.2.1] - 2026-03-25
 
 ### Fixed

@@ -156,6 +156,10 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private(set) var activeSpaceIDs: Set<UInt64> = []
     @ObservationIgnored private var activeTargetIndex: Int = 0
     @ObservationIgnored private var originalFrontmostPID: pid_t?
+    @ObservationIgnored private var originalFrontmostTarget: WindowTarget?
+    /// The window target that was most recently raised during cycling/selection,
+    /// so we can restore its Z-order when switching to another target.
+    @ObservationIgnored private var previouslyRaisedTarget: WindowTarget?
     /// Whether the user has cycled the target window at least once via Tab.
     var hasUsedTabCycling: Bool { originalFrontmostPID != nil }
     var windowTargetListVersion: Int = 0
@@ -585,13 +589,33 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
         clearResizabilityCache()
-        hideAllMainWindows()
-        // Reactivate the original app (before any Tab cycling), not the current target.
-        if let originalPID = originalFrontmostPID {
+
+        // Restore the original window to the foreground BEFORE hiding Tiley's
+        // windows.  If we hide first, macOS may auto-activate the previously
+        // raised (cycled) window's app, causing it to flash to the front.
+        // By raising + activating the original while Tiley is still present,
+        // the activation target is deterministic.
+        if let prev = previouslyRaisedTarget,
+           let origWindow = originalFrontmostTarget?.windowElement,
+           origWindow != prev.windowElement {
+            // Push the previously raised window back below the original.
+            accessibilityService.raiseWindow(origWindow)
+        }
+        if let originalTarget = originalFrontmostTarget,
+           let window = originalTarget.windowElement {
+            accessibilityService.raiseWindow(window)
+            NSRunningApplication(processIdentifier: originalTarget.processIdentifier)?.activate()
+            // Restore lastTargetPID so that handleMainWindowHidden →
+            // refocusLastTargetApp does not re-activate the cycled window.
+            lastTargetPID = originalTarget.processIdentifier
+        } else if let originalPID = originalFrontmostPID {
             NSRunningApplication(processIdentifier: originalPID)?.activate()
+            lastTargetPID = originalPID
         } else {
             _ = reactivateLastTargetApp(clearingState: false)
         }
+
+        hideAllMainWindows()
         clearWindowCyclingState()
         launchMessage = NSLocalizedString("Canceled layout selection.", comment: "Layout selection canceled")
     }
@@ -605,6 +629,7 @@ final class AppState: NSObject, NSMenuDelegate {
         // Record the original frontmost app on first cycle.
         if originalFrontmostPID == nil {
             originalFrontmostPID = lastTargetPID
+            originalFrontmostTarget = activeLayoutTarget
         }
 
         // Build filtered index list based on search query.
@@ -671,6 +696,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         if originalFrontmostPID == nil {
             originalFrontmostPID = lastTargetPID
+            originalFrontmostTarget = activeLayoutTarget
         }
 
         activeTargetIndex = index
@@ -784,6 +810,22 @@ final class AppState: NSObject, NSMenuDelegate {
                 targetScreenDisplayID = screen.displayID
             }
         }
+
+        // Before raising the new target, restore the previously raised window's
+        // Z-order by re-raising the original frontmost window on top of it.
+        if let prev = previouslyRaisedTarget,
+           prev.windowElement != newTarget.windowElement,
+           let origWindow = originalFrontmostTarget?.windowElement,
+           origWindow != prev.windowElement {
+            accessibilityService.raiseWindow(origWindow)
+        }
+
+        // Raise the selected window to the foreground so the user can see it.
+        // Only raise via AX (not activate) to keep Tiley's overlay visible.
+        if let window = newTarget.windowElement {
+            accessibilityService.raiseWindow(window)
+        }
+        previouslyRaisedTarget = newTarget
     }
 
     func refreshAvailableWindows() {
@@ -1003,6 +1045,8 @@ final class AppState: NSObject, NSMenuDelegate {
 
     private func clearWindowCyclingState() {
         originalFrontmostPID = nil
+        originalFrontmostTarget = nil
+        previouslyRaisedTarget = nil
         // Keep availableWindowTargets so the sidebar can show the previous
         // window list immediately on the next overlay open while the deferred
         // refresh is still pending.

@@ -580,6 +580,22 @@ final class AccessibilityService {
         ) as? [[CFString: Any]] else { return ([], spaceMap.spaceList, spaceMap.activeSpaceIDs) }
         perfLog("CGWindowListCopyWindowInfo done (\(windowList.count) entries)")
 
+        // Build a Z-order lookup from an on-screen-only query (guaranteed front-to-back).
+        // The .optionAll query used above may not preserve Z-order reliably.
+        var zOrderByWindowID: [CGWindowID: Int] = [:]
+        if spaceMap.isAvailable,
+           let onScreenList = CGWindowListCopyWindowInfo(
+               [.optionOnScreenOnly, .excludeDesktopElements],
+               kCGNullWindowID
+           ) as? [[CFString: Any]] {
+            for (zIndex, info) in onScreenList.enumerated() {
+                if let wid = info[kCGWindowNumber] as? CGWindowID {
+                    zOrderByWindowID[wid] = zIndex
+                }
+            }
+            perfLog("zOrderByWindowID built (\(zOrderByWindowID.count) entries)")
+        }
+
         let selfPID = getpid()
 
         // Collect CGWindow entries for standard windows (layer 0), grouped by PID, preserving z-order.
@@ -615,8 +631,15 @@ final class AccessibilityService {
         }
 
         // Separate current-space and other-space CG entries.
+        // On-screen entries from CGWindowListCopyWindowInfo are guaranteed to be
+        // in front-to-back Z-order.  Off-screen entries (e.g. minimised windows
+        // confirmed to be on the current space via the space map) have an
+        // undefined position in the CG list and would disrupt Z-order if mixed
+        // in.  We therefore collect them separately and append after the
+        // on-screen entries so the Z-order of visible windows is preserved.
         let currentSpaceIDs = Set(spaceMap.spaceList.filter(\.isCurrent).map(\.id))
         var currentSpaceEntries: [CGWindowEntry] = []
+        var offScreenCurrentSpaceEntries: [CGWindowEntry] = []
         var otherSpaceEntries: [CGWindowEntry] = []
 
         if spaceMap.isAvailable {
@@ -625,12 +648,26 @@ final class AccessibilityService {
                 if let sid = wSpaceID, !currentSpaceIDs.contains(sid) {
                     // Window is on a different space.
                     otherSpaceEntries.append(entry)
-                } else if entry.isOnScreen || wSpaceID != nil {
-                    // On current space (on-screen or confirmed by space map).
+                } else if entry.isOnScreen {
+                    // Visible on current space — Z-order is reliable.
                     currentSpaceEntries.append(entry)
+                } else if wSpaceID != nil {
+                    // On current space but not on-screen (minimised, etc.) —
+                    // Z-order position in the CG list is undefined.
+                    offScreenCurrentSpaceEntries.append(entry)
                 }
-                // Drop windows that are off-screen with no space info (minimized, etc.)
+                // Drop windows that are off-screen with no space info.
             }
+            // Sort on-screen entries by the guaranteed Z-order from the
+            // separate on-screen-only query (front-to-back).
+            if !zOrderByWindowID.isEmpty {
+                currentSpaceEntries.sort { a, b in
+                    let za = zOrderByWindowID[a.windowID] ?? Int.max
+                    let zb = zOrderByWindowID[b.windowID] ?? Int.max
+                    return za < zb
+                }
+            }
+            currentSpaceEntries.append(contentsOf: offScreenCurrentSpaceEntries)
         } else {
             currentSpaceEntries = cgEntries
         }

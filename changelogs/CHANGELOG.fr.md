@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- La sélection d'une fenêtre dans la barre latérale la place temporairement au premier plan pour faciliter l'identification ; l'ordre original est restauré lors du changement de fenêtre ou de l'annulation
+
 ## [3.2.1] - 2026-03-25
 
 ### Corrigé

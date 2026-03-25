@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Al seleccionar una ventana en la barra lateral, se muestra temporalmente en primer plano para facilitar su identificación; al cambiar a otra ventana o cancelar, se restaura el orden original
+
 ## [3.2.1] - 2026-03-25
 
 ### Corregido

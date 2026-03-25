@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- La selezione di una finestra nella barra laterale la porta temporaneamente in primo piano per facilitarne l'identificazione; l'ordine originale viene ripristinato quando si passa a un'altra finestra o si annulla
+
 ## [3.2.1] - 2026-03-25
 
 ### Corretto
