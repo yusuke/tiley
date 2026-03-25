@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Se añadieron indicadores de flechas direccionales al botón y los elementos de menú "Mover a pantalla", mostrando visualmente la dirección de la pantalla de destino según la disposición física de las pantallas
+- Cuando la ventana seleccionada se encuentra en otra pantalla, la superposición de cuadrícula muestra una flecha direccional y un icono de disposición de pantallas en el centro, guiando al usuario hacia la ubicación de su ventana
+
 ### Cambiado
 
 - Ajustada la apariencia cuando hay una actualización disponible

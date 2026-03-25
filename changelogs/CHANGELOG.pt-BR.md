@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Adicionados indicadores de seta direcional ao botão e itens de menu "Mover para tela", mostrando visualmente a direção da tela de destino com base na disposição física dos monitores
+- Quando a janela selecionada está em outra tela, a sobreposição de grade agora exibe uma seta direcional e um ícone de disposição de telas no centro, orientando o usuário até a localização da janela
+
 ### Alterado
 
 - Ajustada a aparência quando uma atualização está disponível

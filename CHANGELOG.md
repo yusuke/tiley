@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added directional arrow indicators to the "Move to Display" button and menu items, visually showing the direction of the target display based on the physical screen arrangement
+- When the selected window is on another display, the grid overlay now shows a directional arrow and display arrangement icon in the center, guiding users to where their window is
+
 ### Changed
 
 - Adjusted appearance when an update is available

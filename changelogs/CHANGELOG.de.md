@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Richtungspfeile zu den Schaltflächen und Menüeinträgen „Auf Display verschieben" hinzugefügt, die basierend auf der physischen Bildschirmanordnung die Richtung des Zieldisplays anzeigen
+- Wenn sich das ausgewählte Fenster auf einem anderen Display befindet, zeigt das Raster-Overlay nun einen Richtungspfeil und ein Bildschirmanordnungssymbol in der Mitte an, um den Benutzer zum Standort des Fensters zu leiten
+
 ### Geändert
 
 - Darstellung bei verfügbarem Update angepasst

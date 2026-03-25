@@ -1839,9 +1839,11 @@ struct MainWindowView: View {
         let otherScreens = hasSelection ? otherScreensForWindow(at: idx) : []
 
         // Move to other display
+        let windowScreen: NSScreen? = hasSelection ? NSScreen.screen(containing: targets[idx].screenFrame) : nil
         moveToDisplayButton(
             otherScreens: otherScreens,
             disabled: !hasSelection || otherScreens.isEmpty,
+            currentScreen: windowScreen,
             onSelect: { screen in appState.moveWindowToScreen(at: idx, screen: screen); appState.hideMainWindow() }
         )
 
@@ -1888,9 +1890,13 @@ struct MainWindowView: View {
         let isFinder = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder"
 
         // Move all windows to other display
+        let appScreen: NSScreen? = appState.windowTargetList
+            .first(where: { $0.processIdentifier == pid })
+            .flatMap { NSScreen.screen(containing: $0.screenFrame) }
         moveToDisplayButton(
             otherScreens: otherScreens,
             disabled: otherScreens.isEmpty,
+            currentScreen: appScreen,
             onSelect: { screen in appState.moveAllAppWindowsToScreen(pid: pid, screen: screen); appState.hideMainWindow() }
         )
 
@@ -1973,6 +1979,7 @@ struct MainWindowView: View {
         moveToDisplayButton(
             otherScreens: otherScreens,
             disabled: !hasWindowsOnThisScreen || otherScreens.isEmpty,
+            currentScreen: screenForDisplay(displayID),
             onSelect: { screen in
                 appState.moveScreenWindowsToScreen(from: displayID, to: screen)
                 appState.hideMainWindow()
@@ -1982,13 +1989,14 @@ struct MainWindowView: View {
 
     /// Shared move-to-display button: single-click for 2 displays, dropdown for 3+.
     @ViewBuilder
-    private func moveToDisplayButton(otherScreens: [NSScreen], disabled: Bool, onSelect: @escaping (NSScreen) -> Void) -> some View {
+    private func moveToDisplayButton(otherScreens: [NSScreen], disabled: Bool, currentScreen: NSScreen? = nil, onSelect: @escaping (NSScreen) -> Void) -> some View {
         if otherScreens.count >= 2 {
             TahoeActionBarMenuButton(
                 symbolName: "rectangle.portrait.and.arrow.right",
                 disabled: disabled,
                 colorScheme: colorScheme,
                 showChevron: true,
+                currentScreen: currentScreen,
                 menuItems: otherScreens.map { screen in
                     let title = String(
                         format: NSLocalizedString("Move to %@", comment: "Action bar menu item to move window to another display"),
@@ -4215,6 +4223,8 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
     let disabled: Bool
     let colorScheme: ColorScheme
     var showChevron: Bool = true
+    /// The screen where the window/app currently resides (used for arrow direction in menu items).
+    var currentScreen: NSScreen? = nil
     let menuItems: [(title: String, screen: NSScreen)]
     let onSelect: (NSScreen) -> Void
 
@@ -4236,6 +4246,7 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
         coord.symbolName = symbolName
         coord.disabled = disabled
         coord.colorScheme = colorScheme
+        coord.currentScreen = currentScreen
         coord.menuItems = menuItems
         coord.onSelect = onSelect
         nsView.showChevron = showChevron
@@ -4245,7 +4256,7 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
 
     func makeCoordinator() -> Coordinator {
         Coordinator(symbolName: symbolName, disabled: disabled, colorScheme: colorScheme,
-                    menuItems: menuItems, onSelect: onSelect)
+                    currentScreen: currentScreen, menuItems: menuItems, onSelect: onSelect)
     }
 
     final class TahoeMenuButtonView: NSView {
@@ -4287,7 +4298,13 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
                 let mi = NSMenuItem(title: item.title, action: #selector(Coordinator.menuAction(_:)), keyEquivalent: "")
                 mi.target = coord
                 mi.representedObject = item.screen
-                mi.image = Self.screenArrangementImage(highlightDisplayID: item.screen.displayID, size: 16)
+                if let fromScreen = coord.currentScreen {
+                    mi.image = Self.arrowWithScreenArrangementImage(
+                        from: fromScreen, to: item.screen, size: 16
+                    )
+                } else {
+                    mi.image = Self.screenArrangementImage(highlightDisplayID: item.screen.displayID, size: 16)
+                }
                 menu.addItem(mi)
             }
 
@@ -4372,6 +4389,32 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
             }
         }
 
+        /// Renders an arrow + screen arrangement icon as a combined NSImage for NSMenu items.
+        static func arrowWithScreenArrangementImage(from fromScreen: NSScreen, to toScreen: NSScreen, size: CGFloat) -> NSImage {
+            let arrowName = directionArrowSymbol(from: fromScreen, to: toScreen)
+            let arrowConfig = NSImage.SymbolConfiguration(pointSize: size * 0.55, weight: .bold)
+            let arrowImage = NSImage(systemSymbolName: arrowName, accessibilityDescription: nil)?
+                .withSymbolConfiguration(arrowConfig)
+            let displayImage = screenArrangementImage(highlightDisplayID: toScreen.displayID, size: size)
+
+            let arrowSize = arrowImage?.size ?? .zero
+            let spacing: CGFloat = 2
+            let totalWidth = arrowSize.width + spacing + size
+            let totalHeight = max(arrowSize.height, size)
+
+            let combined = NSImage(size: NSSize(width: totalWidth, height: totalHeight), flipped: false) { rect in
+                // Draw arrow on the left, vertically centred
+                let arrowY = (totalHeight - arrowSize.height) / 2
+                arrowImage?.draw(in: NSRect(x: 0, y: arrowY, width: arrowSize.width, height: arrowSize.height))
+                // Draw display icon on the right, vertically centred
+                let iconY = (totalHeight - size) / 2
+                displayImage.draw(in: NSRect(x: arrowSize.width + spacing, y: iconY, width: size, height: size))
+                return true
+            }
+            combined.isTemplate = true
+            return combined
+        }
+
         /// Renders a ScreenArrangementIcon-equivalent as an NSImage for use in NSMenu items.
         static func screenArrangementImage(highlightDisplayID: CGDirectDisplayID, size: CGFloat) -> NSImage {
             let img = NSImage(size: NSSize(width: size, height: size), flipped: true) { rect in
@@ -4425,14 +4468,16 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
         var symbolName: String
         var disabled: Bool
         var colorScheme: ColorScheme
+        var currentScreen: NSScreen?
         var menuItems: [(title: String, screen: NSScreen)]
         var onSelect: (NSScreen) -> Void
 
         init(symbolName: String, disabled: Bool, colorScheme: ColorScheme,
-             menuItems: [(title: String, screen: NSScreen)], onSelect: @escaping (NSScreen) -> Void) {
+             currentScreen: NSScreen?, menuItems: [(title: String, screen: NSScreen)], onSelect: @escaping (NSScreen) -> Void) {
             self.symbolName = symbolName
             self.disabled = disabled
             self.colorScheme = colorScheme
+            self.currentScreen = currentScreen
             self.menuItems = menuItems
             self.onSelect = onSelect
         }

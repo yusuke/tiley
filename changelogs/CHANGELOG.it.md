@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Aggiunti indicatori freccia direzionali al pulsante e alle voci di menu "Sposta su display", che mostrano visivamente la direzione del display di destinazione in base alla disposizione fisica degli schermi
+- Quando la finestra selezionata si trova su un altro display, l'overlay a griglia mostra ora una freccia direzionale e un'icona della disposizione degli schermi al centro, guidando l'utente verso la posizione della finestra
+
 ### Modificato
 
 - Regolato l'aspetto quando è disponibile un aggiornamento

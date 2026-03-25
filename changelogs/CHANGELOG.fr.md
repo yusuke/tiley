@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Ajout d'indicateurs fléchés directionnels au bouton et aux éléments de menu « Déplacer vers l'écran », indiquant visuellement la direction de l'écran cible en fonction de la disposition physique des écrans
+- Lorsque la fenêtre sélectionnée se trouve sur un autre écran, la grille superposée affiche désormais une flèche directionnelle et une icône de disposition des écrans au centre, guidant l'utilisateur vers l'emplacement de sa fenêtre
+
 ### Modifié
 
 - Ajustement de l'apparence lorsqu'une mise à jour est disponible
