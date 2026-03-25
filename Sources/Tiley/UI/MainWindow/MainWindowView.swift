@@ -1424,6 +1424,9 @@ struct MainWindowView: View {
                 draftSettings = appState.settingsSnapshot
                 if case .secondary(let screen) = screenRole {
                     appState.beginSettingsEditing(on: screen)
+                } else if let frame = screenContext?.screenFrame,
+                          let screen = NSScreen.screens.first(where: { $0.frame == frame }) {
+                    appState.beginSettingsEditing(on: screen)
                 } else {
                     appState.beginSettingsEditing()
                 }
@@ -1840,11 +1843,17 @@ struct MainWindowView: View {
 
         // Move to other display
         let windowScreen: NSScreen? = hasSelection ? NSScreen.screen(containing: targets[idx].screenFrame) : nil
+        let thisDisplayID = screenContext.flatMap { ctx in
+            NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })?.displayID
+        }
+        let displayTrigger = (thisDisplayID != nil && thisDisplayID == appState.moveToOtherDisplayTargetID)
+            ? appState.moveToOtherDisplayRequestVersion : 0
         moveToDisplayButton(
             otherScreens: otherScreens,
             disabled: !hasSelection || otherScreens.isEmpty,
             currentScreen: windowScreen,
-            onSelect: { screen in appState.moveWindowToScreen(at: idx, screen: screen); appState.hideMainWindow() }
+            onSelect: { screen in appState.moveWindowToScreen(at: idx, screen: screen); appState.hideMainWindow() },
+            triggerVersion: displayTrigger
         )
 
         // Close or Quit
@@ -1989,7 +1998,7 @@ struct MainWindowView: View {
 
     /// Shared move-to-display button: single-click for 2 displays, dropdown for 3+.
     @ViewBuilder
-    private func moveToDisplayButton(otherScreens: [NSScreen], disabled: Bool, currentScreen: NSScreen? = nil, onSelect: @escaping (NSScreen) -> Void) -> some View {
+    private func moveToDisplayButton(otherScreens: [NSScreen], disabled: Bool, currentScreen: NSScreen? = nil, onSelect: @escaping (NSScreen) -> Void, triggerVersion: Int = 0) -> some View {
         if otherScreens.count >= 2 {
             TahoeActionBarMenuButton(
                 symbolName: "rectangle.portrait.and.arrow.right",
@@ -2004,7 +2013,8 @@ struct MainWindowView: View {
                     )
                     return (title: title, screen: screen)
                 },
-                onSelect: onSelect
+                onSelect: onSelect,
+                triggerVersion: triggerVersion
             )
             .frame(width: 38, height: 24)
             .instantTooltip(NSLocalizedString("Move to Other Display", comment: "Action bar tooltip for move-to-screen button"))
@@ -2012,7 +2022,8 @@ struct MainWindowView: View {
             MoveToDisplayButton(
                 targetScreen: targetScreen,
                 disabled: disabled,
-                onSelect: onSelect
+                onSelect: onSelect,
+                triggerVersion: triggerVersion
             )
             .instantTooltipView {
                 HStack(spacing: 4) {
@@ -2512,6 +2523,8 @@ struct MainWindowView: View {
                 }
             }
 
+            displayShortcutsSection
+
             TahoeSettingsSection(title: NSLocalizedString("Startup", comment: "Settings section")) {
                 VStack(spacing: 0) {
                     TahoeSettingsRow(label: NSLocalizedString("Launch at login", comment: "")) {
@@ -2594,6 +2607,180 @@ struct MainWindowView: View {
             }
         }
         .font(.system(size: 13))
+    }
+
+    private var displayShortcutsSection: some View {
+        TahoeSettingsSection(title: NSLocalizedString("Display Shortcuts", comment: "Settings section for display movement shortcuts")) {
+            VStack(spacing: 0) {
+                displayShortcutRow(
+                    label: NSLocalizedString("Move to Primary Display", comment: "Display shortcut action"),
+                    localBinding: $draftSettings.displayShortcutSettings.moveToPrimary.local,
+                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrimary.localEnabled,
+                    globalBinding: $draftSettings.displayShortcutSettings.moveToPrimary.global,
+                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrimary.globalEnabled,
+                    localKeyPath: "moveToPrimary.local",
+                    globalKeyPath: "moveToPrimary.global"
+                )
+
+                Divider().opacity(0.4)
+
+                displayShortcutRow(
+                    label: NSLocalizedString("Move to Next Display", comment: "Display shortcut action"),
+                    localBinding: $draftSettings.displayShortcutSettings.moveToNext.local,
+                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToNext.localEnabled,
+                    globalBinding: $draftSettings.displayShortcutSettings.moveToNext.global,
+                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToNext.globalEnabled,
+                    localKeyPath: "moveToNext.local",
+                    globalKeyPath: "moveToNext.global"
+                )
+
+                Divider().opacity(0.4)
+
+                displayShortcutRow(
+                    label: NSLocalizedString("Move to Previous Display", comment: "Display shortcut action"),
+                    localBinding: $draftSettings.displayShortcutSettings.moveToPrevious.local,
+                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrevious.localEnabled,
+                    globalBinding: $draftSettings.displayShortcutSettings.moveToPrevious.global,
+                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrevious.globalEnabled,
+                    localKeyPath: "moveToPrevious.local",
+                    globalKeyPath: "moveToPrevious.global"
+                )
+
+                Divider().opacity(0.4)
+
+                displayShortcutRow(
+                    label: NSLocalizedString("Move to Other Display", comment: "Display shortcut action - shows popup menu"),
+                    localBinding: $draftSettings.displayShortcutSettings.moveToOther.local,
+                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToOther.localEnabled,
+                    globalBinding: $draftSettings.displayShortcutSettings.moveToOther.global,
+                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToOther.globalEnabled,
+                    localKeyPath: "moveToOther.local",
+                    globalKeyPath: "moveToOther.global"
+                )
+
+                let resolver = DisplayFingerprintResolver()
+                ForEach(resolver.displays, id: \.displayID) { resolved in
+                    Divider().opacity(0.4)
+
+                    let fp = resolved.fingerprint
+                    let occ = resolved.occurrenceIndex
+                    let did = resolved.displayID
+                    let name = resolver.displayName(for: resolved)
+                    let keyBase = "moveToDisplay.\(fp.vendorNumber).\(fp.modelNumber).\(fp.serialNumber).\(occ)"
+                    displayShortcutRow(
+                        label: String(format: NSLocalizedString("Move to %@", comment: "Display shortcut action for specific display"), name),
+                        localBinding: Binding(
+                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.local },
+                            set: {
+                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
+                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.local = $0
+                            }
+                        ),
+                        localEnabledBinding: Binding(
+                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.localEnabled ?? false },
+                            set: {
+                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
+                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.localEnabled = $0
+                            }
+                        ),
+                        globalBinding: Binding(
+                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.global },
+                            set: {
+                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
+                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.global = $0
+                            }
+                        ),
+                        globalEnabledBinding: Binding(
+                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.globalEnabled ?? false },
+                            set: {
+                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
+                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.globalEnabled = $0
+                            }
+                        ),
+                        localKeyPath: "\(keyBase).local",
+                        globalKeyPath: "\(keyBase).global"
+                    )
+                    .onHover { hovering in
+                        if hovering {
+                            appState.showDisplayHighlight(displayID: did)
+                        } else {
+                            appState.hideDisplayHighlight()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func displayShortcutRow(
+        label: String,
+        localBinding: Binding<HotKeyShortcut?>,
+        localEnabledBinding: Binding<Bool>,
+        globalBinding: Binding<HotKeyShortcut?>,
+        globalEnabledBinding: Binding<Bool>,
+        localKeyPath: String,
+        globalKeyPath: String
+    ) -> some View {
+        VStack(spacing: 0) {
+            // Row 1: Label (left) + local shortcut (right) — same layout as TahoeSettingsRow
+            TahoeSettingsRow(label: label) {
+                displayShortcutField(
+                    binding: localBinding,
+                    enabledBinding: localEnabledBinding,
+                    keyPath: localKeyPath,
+                    isGlobal: false
+                )
+            }
+            .padding(.vertical, 4)
+
+            // Row 2: Global shortcut (right-aligned, no label)
+            HStack {
+                Spacer()
+                displayShortcutField(
+                    binding: globalBinding,
+                    enabledBinding: globalEnabledBinding,
+                    keyPath: globalKeyPath,
+                    isGlobal: true
+                )
+            }
+            .padding(.vertical, 4)
+        }
+        .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    private func displayShortcutField(
+        binding: Binding<HotKeyShortcut?>,
+        enabledBinding: Binding<Bool>,
+        keyPath: String,
+        isGlobal: Bool
+    ) -> some View {
+        HStack(spacing: 4) {
+            ShortcutRecorderField(
+                shortcut: Binding(
+                    get: { binding.wrappedValue ?? HotKeyShortcut.empty },
+                    set: {
+                        var s = $0
+                        s.isGlobal = isGlobal
+                        binding.wrappedValue = s
+                        enabledBinding.wrappedValue = true
+                    }
+                ),
+                placeholder: isGlobal
+                    ? NSLocalizedString("Record Global Shortcut", comment: "Placeholder for global shortcut recorder")
+                    : NSLocalizedString("Record Shortcut", comment: "Placeholder for shortcut recorder"),
+                onRecordingChange: { isRecording in
+                    appState.setShortcutRecordingActive(isRecording)
+                }
+            )
+            .frame(width: 140, height: 22)
+
+            Toggle("", isOn: enabledBinding)
+                .toggleStyle(.checkbox)
+                .labelsHidden()
+                .disabled(binding.wrappedValue == nil || binding.wrappedValue?.isEmpty == true)
+        }
     }
 
     @ViewBuilder
@@ -3659,6 +3846,7 @@ private struct MoveToDisplayButton: View {
     let targetScreen: NSScreen
     let disabled: Bool
     let onSelect: (NSScreen) -> Void
+    var triggerVersion: Int = 0
 
     var body: some View {
         Button {
@@ -3671,6 +3859,11 @@ private struct MoveToDisplayButton: View {
         .buttonStyle(TahoeActionBarButtonStyle())
         .frame(width: 32, height: 24)
         .disabled(disabled)
+        .onChange(of: triggerVersion) { _, newValue in
+            if newValue > 0 && !disabled {
+                onSelect(targetScreen)
+            }
+        }
     }
 }
 
@@ -4227,6 +4420,8 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
     var currentScreen: NSScreen? = nil
     let menuItems: [(title: String, screen: NSScreen)]
     let onSelect: (NSScreen) -> Void
+    /// When changed, programmatically opens the popup menu.
+    var triggerVersion: Int = 0
 
     func makeNSView(context: Context) -> TahoeMenuButtonView {
         let view = TahoeMenuButtonView()
@@ -4252,6 +4447,14 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
         nsView.showChevron = showChevron
         nsView.isEnabled = !disabled
         nsView.needsDisplay = true
+        if triggerVersion != coord.lastTriggerVersion {
+            coord.lastTriggerVersion = triggerVersion
+            if triggerVersion > 0 && !disabled {
+                DispatchQueue.main.async {
+                    nsView.showMenuProgrammatically()
+                }
+            }
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -4289,6 +4492,11 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
         }
 
         override func mouseDown(with event: NSEvent) {
+            guard isEnabled else { return }
+            showMenuProgrammatically()
+        }
+
+        func showMenuProgrammatically() {
             guard isEnabled, let coord = coordinator else { return }
             isMenuOpen = true
             needsDisplay = true
@@ -4471,6 +4679,7 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
         var currentScreen: NSScreen?
         var menuItems: [(title: String, screen: NSScreen)]
         var onSelect: (NSScreen) -> Void
+        var lastTriggerVersion: Int = 0
 
         init(symbolName: String, disabled: Bool, colorScheme: ColorScheme,
              currentScreen: NSScreen?, menuItems: [(title: String, screen: NSScreen)], onSelect: @escaping (NSScreen) -> Void) {

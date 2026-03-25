@@ -126,3 +126,17 @@
 "Hide Other Apps" = "Andere Apps ausblenden";
 "Move to %@" = "Auf %@ verschieben";
 "Close all %@ windows" = "Alle %@-Fenster schließen";
+
+// Display shortcuts
+"Display Shortcuts" = "Bildschirm-Kurzbefehle";
+"Move to Primary Display" = "Zum Hauptbildschirm bewegen";
+"Move to Next Display" = "Zum nächsten Bildschirm bewegen";
+"Move to Previous Display" = "Zum vorherigen Bildschirm bewegen";
+"Move to Display %d" = "Zu Bildschirm %d bewegen";
+"Global Shortcut" = "Globaler Kurzbefehl";
+"Record Shortcut" = "Kurzbefehl aufnehmen";
+"Record Global Shortcut" = "Globalen Kurzbefehl aufnehmen";
+"This shortcut is already used by a display shortcut." = "Dieser Kurzbefehl wird bereits von einem Bildschirm-Kurzbefehl verwendet.";
+"This shortcut is already used by a layout." = "Dieser Kurzbefehl wird bereits von einem Layout verwendet.";
+"This shortcut is already used by another display shortcut." = "Dieser Kurzbefehl wird bereits von einem anderen Bildschirm-Kurzbefehl verwendet.";
+"Primary" = "Primär";

@@ -126,3 +126,17 @@
 "Hide Other Apps" = "Скрыть другие приложения";
 "Move to %@" = "Переместить на %@";
 "Close all %@ windows" = "Закрыть все окна %@";
+
+// Display shortcuts
+"Display Shortcuts" = "Горячие клавиши экрана";
+"Move to Primary Display" = "Переместить на основной экран";
+"Move to Next Display" = "Переместить на следующий экран";
+"Move to Previous Display" = "Переместить на предыдущий экран";
+"Move to Display %d" = "Переместить на экран %d";
+"Global Shortcut" = "Глобальная горячая клавиша";
+"Record Shortcut" = "Записать горячую клавишу";
+"Record Global Shortcut" = "Записать глобальную горячую клавишу";
+"This shortcut is already used by a display shortcut." = "Эта горячая клавиша уже используется горячей клавишей экрана.";
+"This shortcut is already used by a layout." = "Эта горячая клавиша уже используется макетом.";
+"This shortcut is already used by another display shortcut." = "Эта горячая клавиша уже используется другой горячей клавишей экрана.";
+"Primary" = "Основной";

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Adicionados atalhos para mover janelas entre telas (principal, próxima, anterior, escolher no menu, tela específica)
+
 ## [3.2.3] - 2026-03-25
 
 ### Adicionado

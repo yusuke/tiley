@@ -34,6 +34,11 @@ struct HotKeyShortcut: Equatable, Codable {
         modifiers: UInt32(cmdKey | shiftKey)
     )
 
+    /// Sentinel value representing "no shortcut assigned".
+    static let empty = HotKeyShortcut(keyCode: 0, modifiers: 0)
+
+    var isEmpty: Bool { keyCode == 0 && modifiers == 0 }
+
     var displayString: String {
         let parts = modifierDisplayParts + [keyDisplayString]
         return parts.joined(separator: " + ")

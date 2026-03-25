@@ -126,3 +126,17 @@
 "Hide Other Apps" = "他のアプリケーションを隠す";
 "Move to %@" = "%@へ移動";
 "Close all %@ windows" = "%@のウインドウをすべて閉じる";
+
+// Display shortcuts
+"Display Shortcuts" = "ディスプレイショートカット";
+"Move to Primary Display" = "主ディスプレイに移動";
+"Move to Next Display" = "次のディスプレイに移動";
+"Move to Previous Display" = "前のディスプレイに移動";
+"Move to Display %d" = "ディスプレイ %d に移動";
+"Global Shortcut" = "グローバルショートカット";
+"Record Shortcut" = "ショートカットを記録";
+"Record Global Shortcut" = "グローバルショートカットを記録";
+"This shortcut is already used by a display shortcut." = "このショートカットはディスプレイショートカットで使用されています。";
+"This shortcut is already used by a layout." = "このショートカットはレイアウトで使用されています。";
+"This shortcut is already used by another display shortcut." = "このショートカットは別のディスプレイショートカットで使用されています。";
+"Primary" = "主";

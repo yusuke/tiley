@@ -126,3 +126,17 @@
 "Hide Other Apps" = "Nascondi altre app";
 "Move to %@" = "Sposta su %@";
 "Close all %@ windows" = "Chiudi tutte le finestre di %@";
+
+// Display shortcuts
+"Display Shortcuts" = "Scorciatoie schermo";
+"Move to Primary Display" = "Sposta sullo schermo principale";
+"Move to Next Display" = "Sposta sullo schermo successivo";
+"Move to Previous Display" = "Sposta sullo schermo precedente";
+"Move to Display %d" = "Sposta sullo schermo %d";
+"Global Shortcut" = "Scorciatoia globale";
+"Record Shortcut" = "Registra scorciatoia";
+"Record Global Shortcut" = "Registra scorciatoia globale";
+"This shortcut is already used by a display shortcut." = "Questa scorciatoia è già usata da una scorciatoia schermo.";
+"This shortcut is already used by a layout." = "Questa scorciatoia è già usata da un layout.";
+"This shortcut is already used by another display shortcut." = "Questa scorciatoia è già usata da un'altra scorciatoia schermo.";
+"Primary" = "Principale";

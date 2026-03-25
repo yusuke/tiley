@@ -4,6 +4,7 @@ import SwiftUI
 
 struct ShortcutRecorderField: NSViewRepresentable {
     @Binding var shortcut: HotKeyShortcut
+    var placeholder: String?
     var onRecordingChange: ((Bool) -> Void)?
 
     func makeNSView(context: Context) -> RecorderTextField {
@@ -12,6 +13,7 @@ struct ShortcutRecorderField: NSViewRepresentable {
             shortcut = newShortcut
         }
         field.onRecordingChange = onRecordingChange
+        field.placeholder = placeholder
         field.shortcut = shortcut
         return field
     }
@@ -21,6 +23,7 @@ struct ShortcutRecorderField: NSViewRepresentable {
             shortcut = newShortcut
         }
         nsView.onRecordingChange = onRecordingChange
+        nsView.placeholder = placeholder
         if nsView.shortcut != shortcut {
             nsView.applyShortcut(shortcut)
         }
@@ -52,6 +55,8 @@ private final class VerticallyCenteredTextFieldCell: NSTextFieldCell {
 final class RecorderTextField: NSTextField {
     var onShortcutChange: ((HotKeyShortcut) -> Void)?
     var onRecordingChange: ((Bool) -> Void)?
+    /// Placeholder text shown when no shortcut is assigned (shortcut is empty).
+    var placeholder: String?
     var shortcut = HotKeyShortcut.default {
         didSet {
             updateDisplay()
@@ -227,8 +232,16 @@ final class RecorderTextField: NSTextField {
     private func updateDisplay() {
         if isRecording {
             stringValue = ""
+            textColor = .labelColor
+        } else if shortcut.isEmpty, let placeholder {
+            stringValue = placeholder
+            textColor = .tertiaryLabelColor
+        } else if shortcut.isEmpty {
+            stringValue = ""
+            textColor = .labelColor
         } else {
             stringValue = shortcut.displayString
+            textColor = .labelColor
         }
     }
 }

@@ -21,6 +21,7 @@
 		7015262F2F6EF356001E8095 /* GridModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262C2F6EF356001E8095 /* GridModels.swift */; };
 		701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */; };
 		701526332F704490001E8095 /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 701526322F704490001E8095 /* TelemetryClient */; };
+		703BB10A2F742EE700CB3140 /* DisplayShortcutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703BB1092F742EE700CB3140 /* DisplayShortcutSettings.swift */; };
 		70840E2F2F61111100DF0607 /* menu-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 70840E302F61111200DF0607 /* menu-icon.pdf */; };
 		70840E312F61111300DF0607 /* en.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E322F61111400DF0607 /* en.lproj/Localizable.strings */; };
 		70840E332F61111500DF0607 /* ja.lproj/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */; };
@@ -55,6 +56,7 @@
 		701526272F6EF349001E8095 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		7015262C2F6EF356001E8095 /* GridModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridModels.swift; sourceTree = "<group>"; };
 		7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyShortcut.swift; sourceTree = "<group>"; };
+		703BB1092F742EE700CB3140 /* DisplayShortcutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayShortcutSettings.swift; sourceTree = "<group>"; };
 		70840E302F61111200DF0607 /* menu-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "menu-icon.pdf"; sourceTree = "<group>"; };
 		70840E322F61111400DF0607 /* en.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70840E342F61111600DF0607 /* ja.lproj/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		7015262E2F6EF356001E8095 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				703BB1092F742EE700CB3140 /* DisplayShortcutSettings.swift */,
 				7015262C2F6EF356001E8095 /* GridModels.swift */,
 				7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */,
 			);
@@ -292,6 +295,7 @@
 				701526162F6EECE3001E8095 /* DesktopPictureBackgroundView.swift in Sources */,
 				70B56A6A2F64347E005173A5 /* TileyApp.swift in Sources */,
 				70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */,
+				703BB10A2F742EE700CB3140 /* DisplayShortcutSettings.swift in Sources */,
 				701526292F6EF349001E8095 /* DockReader.swift in Sources */,
 				7015262F2F6EF356001E8095 /* GridModels.swift in Sources */,
 				701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */,
@@ -426,7 +430,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 323;
+				CURRENT_PROJECT_VERSION = 324;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -438,7 +442,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.2.3;
+				MARKETING_VERSION = 3.2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -459,7 +463,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 323;
+				CURRENT_PROJECT_VERSION = 324;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
@@ -472,7 +476,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.2.3;
+				MARKETING_VERSION = 3.2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

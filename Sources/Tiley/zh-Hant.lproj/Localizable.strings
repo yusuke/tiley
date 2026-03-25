@@ -126,3 +126,17 @@
 "Hide Other Apps" = "隱藏其他應用程式";
 "Move to %@" = "移動到%@";
 "Close all %@ windows" = "關閉所有%@視窗";
+
+// Display shortcuts
+"Display Shortcuts" = "顯示器快捷鍵";
+"Move to Primary Display" = "移至主顯示器";
+"Move to Next Display" = "移至下一個顯示器";
+"Move to Previous Display" = "移至上一個顯示器";
+"Move to Display %d" = "移至顯示器 %d";
+"Global Shortcut" = "全域快捷鍵";
+"Record Shortcut" = "錄製快捷鍵";
+"Record Global Shortcut" = "錄製全域快捷鍵";
+"This shortcut is already used by a display shortcut." = "此快捷鍵已被顯示器快捷鍵使用。";
+"This shortcut is already used by a layout." = "此快捷鍵已被佈局使用。";
+"This shortcut is already used by another display shortcut." = "此快捷鍵已被其他顯示器快捷鍵使用。";
+"Primary" = "主";

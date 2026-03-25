@@ -126,3 +126,17 @@
 "Hide Other Apps" = "Ocultar otras apps";
 "Move to %@" = "Mover a %@";
 "Close all %@ windows" = "Cerrar todas las ventanas de %@";
+
+// Display shortcuts
+"Display Shortcuts" = "Atajos de pantalla";
+"Move to Primary Display" = "Mover a la pantalla principal";
+"Move to Next Display" = "Mover a la siguiente pantalla";
+"Move to Previous Display" = "Mover a la pantalla anterior";
+"Move to Display %d" = "Mover a la pantalla %d";
+"Global Shortcut" = "Atajo global";
+"Record Shortcut" = "Grabar atajo";
+"Record Global Shortcut" = "Grabar atajo global";
+"This shortcut is already used by a display shortcut." = "Este atajo ya está en uso por un atajo de pantalla.";
+"This shortcut is already used by a layout." = "Este atajo ya está en uso por un diseño.";
+"This shortcut is already used by another display shortcut." = "Este atajo ya está en uso por otro atajo de pantalla.";
+"Primary" = "Principal";

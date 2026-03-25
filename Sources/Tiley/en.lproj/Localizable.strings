@@ -126,3 +126,17 @@
 "Hide Other Apps" = "Hide Other Apps";
 "Move to %@" = "Move to %@";
 "Close all %@ windows" = "Close all %@ windows";
+
+// Display shortcuts
+"Display Shortcuts" = "Display Shortcuts";
+"Move to Primary Display" = "Move to Primary Display";
+"Move to Next Display" = "Move to Next Display";
+"Move to Previous Display" = "Move to Previous Display";
+"Move to Display %d" = "Move to Display %d";
+"Global Shortcut" = "Global Shortcut";
+"Record Shortcut" = "Record Shortcut";
+"Record Global Shortcut" = "Record Global Shortcut";
+"This shortcut is already used by a display shortcut." = "This shortcut is already used by a display shortcut.";
+"This shortcut is already used by a layout." = "This shortcut is already used by a layout.";
+"This shortcut is already used by another display shortcut." = "This shortcut is already used by another display shortcut.";
+"Primary" = "Primary";

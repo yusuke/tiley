@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Ajout de raccourcis pour déplacer les fenêtres entre les écrans (principal, suivant, précédent, choisir dans le menu, écran spécifique)
+
 ## [3.2.3] - 2026-03-25
 
 ### Ajouté

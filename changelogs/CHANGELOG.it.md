@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Aggiunte scorciatoie per spostare le finestre tra gli schermi (principale, successivo, precedente, scegli dal menu, schermo specifico)
+
 ## [3.2.3] - 2026-03-25
 
 ### Aggiunto

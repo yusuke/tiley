@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added display movement shortcuts to move windows between displays (primary, next, previous, pick from menu, or specific display)
+
 ## [3.2.3] - 2026-03-25
 
 ### Added
