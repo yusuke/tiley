@@ -1206,6 +1206,32 @@ struct MainWindowView: View {
                         }
                     )
                     .frame(width: gridWidth, height: gridHeight, alignment: .topLeading)
+                    .overlay {
+                        // Show arrow + display arrangement icon when the currently
+                        // selected window is on a different display.
+                        let thisScreen: NSScreen? = {
+                            switch screenRole {
+                            case .secondary(let screen): return screen
+                            case .target:
+                                guard let ctx = screenContext else { return nil }
+                                return NSScreen.screen(containing: ctx.screenFrame)
+                            }
+                        }()
+                        if let thisScreen, NSScreen.screens.count > 1 {
+                            let thisDisplayID = thisScreen.displayID
+                            let targets = appState.windowTargetList
+                            let idx = appState.currentWindowTargetIndex
+                            let selectedOnOtherDisplay: Bool = {
+                                guard idx >= 0, idx < targets.count else { return false }
+                                let selectedDisplayID = NSScreen.screen(containing: targets[idx].screenFrame)?.displayID
+                                return selectedDisplayID != nil && selectedDisplayID != thisDisplayID
+                            }()
+                            if selectedOnOtherDisplay {
+                                let selectedDisplayID = NSScreen.screen(containing: targets[idx].screenFrame)!.displayID
+                                EmptyDisplayOverlay(thisScreen: thisScreen, windowDisplayID: selectedDisplayID)
+                            }
+                        }
+                    }
 
                     if dockRightWidth > 0 {
                         // Right Dock: rounded rect sized to fit Dock app icons, centered vertically
@@ -3645,35 +3671,15 @@ private struct MoveToDisplayButtonLabel: View {
     @Environment(\.tahoeActionBarHovered) private var isHovered
     @Environment(\.isEnabled) private var isEnabled
 
-    /// SF Symbol name for the arrow pointing from the current display toward the target display.
-    private var arrowSymbolName: String {
-        // In a 2-display setup the "current" screen is the one that is NOT the target.
-        guard let currentScreen = NSScreen.screens.first(where: { $0.displayID != targetScreen.displayID }) else {
-            return "arrow.right"
-        }
-
-        let dx = targetScreen.frame.midX - currentScreen.frame.midX
-        // NSScreen Y increases upward (Cocoa coords), matching the physical "up" direction.
-        let dy = targetScreen.frame.midY - currentScreen.frame.midY
-
-        let angle = atan2(dy, dx) * 180 / .pi  // degrees: 0 = right, 90 = up
-
-        // 8 sectors of 45° each, centred on the cardinal/diagonal directions.
-        switch angle {
-        case -22.5 ..< 22.5:   return "arrow.right"
-        case 22.5  ..< 67.5:   return "arrow.up.right"
-        case 67.5  ..< 112.5:  return "arrow.up"
-        case 112.5 ..< 157.5:  return "arrow.up.left"
-        case -67.5 ..< -22.5:  return "arrow.down.right"
-        case -112.5 ..< -67.5: return "arrow.down"
-        case -157.5 ..< -112.5: return "arrow.down.left"
-        default:               return "arrow.left"
-        }
-    }
-
     var body: some View {
         HStack(spacing: 2) {
-            Image(systemName: arrowSymbolName)
+            Image(systemName: {
+                // Arrow points from the current display toward the target display.
+                guard let currentScreen = NSScreen.screens.first(where: { $0.displayID != targetScreen.displayID }) else {
+                    return "arrow.right"
+                }
+                return directionArrowSymbol(from: currentScreen, to: targetScreen)
+            }())
                 .font(.system(size: 8, weight: .bold))
                 .frame(width: 10, height: 10)
             ZStack {
@@ -3685,6 +3691,105 @@ private struct MoveToDisplayButtonLabel: View {
             .frame(width: 12, height: 12)
         }
         .frame(width: 32, height: 24)
+    }
+}
+
+/// Overlay shown in the centre of the grid on a display that has no windows,
+/// indicating which display the windows are on with an arrow + arrangement icon.
+/// The arrow is placed on the side of the icon that corresponds to the direction.
+private struct EmptyDisplayOverlay: View {
+    let thisScreen: NSScreen
+    let windowDisplayID: CGDirectDisplayID
+
+    private let iconSize: CGFloat = 96
+    private let arrowFontSize: CGFloat = 40
+    private let arrowSpacing: CGFloat = 8
+
+    /// Direction components derived from the arrow symbol name.
+    private var direction: (horizontal: Int, vertical: Int) {
+        // horizontal: -1 = left, 0 = centre, 1 = right
+        // vertical:   -1 = up,   0 = centre, 1 = down
+        let name = directionArrowSymbol(from: thisScreen)
+        var h = 0, v = 0
+        if name.contains(".left")  { h = -1 }
+        if name.contains(".right") { h =  1 }
+        if name.contains(".up")    { v = -1 }
+        if name.contains(".down")  { v =  1 }
+        // Pure "arrow.left" / "arrow.right" etc.
+        if h == 0 && v == 0 {
+            if name == "arrow.left"  { h = -1 }
+            if name == "arrow.right" { h =  1 }
+            if name == "arrow.up"    { v = -1 }
+            if name == "arrow.down"  { v =  1 }
+        }
+        return (h, v)
+    }
+
+    var body: some View {
+        let arrowName = directionArrowSymbol(from: thisScreen)
+        let dir = direction
+
+        let arrowImage = Image(systemName: arrowName)
+            .font(.system(size: arrowFontSize, weight: .bold))
+
+        let iconView = ScreenArrangementIcon(highlightDisplayID: windowDisplayID, size: iconSize)
+            .frame(width: iconSize, height: iconSize)
+
+        // Place the arrow relative to the icon based on direction.
+        // Cardinal directions: HStack/VStack centred on that edge.
+        // Diagonal directions: ZStack with offset so the arrow sits at the corner.
+        Group {
+            switch (dir.horizontal, dir.vertical) {
+            case (-1, 0):  // left
+                HStack(spacing: arrowSpacing) { arrowImage; iconView }
+            case (1, 0):   // right
+                HStack(spacing: arrowSpacing) { iconView; arrowImage }
+            case (0, -1):  // up
+                VStack(spacing: arrowSpacing) { arrowImage; iconView }
+            case (0, 1):   // down
+                VStack(spacing: arrowSpacing) { iconView; arrowImage }
+            default:       // diagonal
+                let offsetX = CGFloat(dir.horizontal) * (iconSize / 2 + arrowFontSize / 2 + arrowSpacing)
+                let offsetY = CGFloat(dir.vertical)   * (iconSize / 2 + arrowFontSize / 2 + arrowSpacing)
+                ZStack {
+                    iconView
+                    arrowImage
+                        .offset(x: offsetX, y: offsetY)
+                }
+            }
+        }
+        .foregroundStyle(.secondary)
+        .allowsHitTesting(false)
+    }
+}
+
+/// Returns the SF Symbol name for an arrow pointing from `screen` toward the
+/// other display in a 2-display setup.  Covers all 8 cardinal/diagonal directions.
+private func directionArrowSymbol(from screen: NSScreen) -> String {
+    guard let otherScreen = NSScreen.screens.first(where: { $0.displayID != screen.displayID }) else {
+        return "arrow.right"
+    }
+    return directionArrowSymbol(from: screen, to: otherScreen)
+}
+
+/// Returns the SF Symbol name for an arrow pointing from `fromScreen` toward `toScreen`.
+private func directionArrowSymbol(from fromScreen: NSScreen, to toScreen: NSScreen) -> String {
+    let dx = toScreen.frame.midX - fromScreen.frame.midX
+    // NSScreen Y increases upward (Cocoa coords), matching the physical "up" direction.
+    let dy = toScreen.frame.midY - fromScreen.frame.midY
+
+    let angle = atan2(dy, dx) * 180 / .pi  // degrees: 0 = right, 90 = up
+
+    // 8 sectors of 45° each, centred on the cardinal/diagonal directions.
+    switch angle {
+    case -22.5 ..< 22.5:    return "arrow.right"
+    case 22.5  ..< 67.5:    return "arrow.up.right"
+    case 67.5  ..< 112.5:   return "arrow.up"
+    case 112.5 ..< 157.5:   return "arrow.up.left"
+    case -67.5 ..< -22.5:   return "arrow.down.right"
+    case -112.5 ..< -67.5:  return "arrow.down"
+    case -157.5 ..< -112.5: return "arrow.down.left"
+    default:                 return "arrow.left"
     }
 }
 
