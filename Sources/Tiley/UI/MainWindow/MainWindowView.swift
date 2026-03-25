@@ -1765,6 +1765,14 @@ struct MainWindowView: View {
             if screenRole.isTarget {
                 appState.refreshAvailableWindows()
             }
+            // Sync sidebar selection with the initially active window so
+            // action buttons are enabled from the start.
+            if sidebarSelection == nil {
+                let idx = appState.currentWindowTargetIndex
+                if idx >= 0, idx < appState.windowTargetList.count {
+                    sidebarSelection = .window(index: idx)
+                }
+            }
         }
     }
 
@@ -1967,16 +1975,11 @@ struct MainWindowView: View {
             .frame(width: 38, height: 24)
             .instantTooltip(NSLocalizedString("Move to Other Display", comment: "Action bar tooltip for move-to-screen button"))
         } else if let targetScreen = otherScreens.first {
-            Button {
-                onSelect(targetScreen)
-            } label: {
-                Image(systemName: "rectangle.portrait.and.arrow.right")
-                    .font(.system(size: 11, weight: .medium))
-                    .frame(width: 28, height: 24)
-            }
-            .buttonStyle(TahoeActionBarButtonStyle())
-            .frame(width: 28, height: 24)
-            .disabled(disabled)
+            MoveToDisplayButton(
+                targetScreen: targetScreen,
+                disabled: disabled,
+                onSelect: onSelect
+            )
             .instantTooltipView {
                 HStack(spacing: 4) {
                     ScreenArrangementIcon(highlightDisplayID: targetScreen.displayID, size: 14)
@@ -3615,6 +3618,50 @@ private final class TooltipHoverView: NSView {
 
 // MARK: - Screen Arrangement Icon
 
+/// Action bar button for 2-display setups: arrow + screen arrangement icon.
+/// Tracks hover internally so the Canvas-based ScreenArrangementIcon can
+/// respond to hover/press state changes.
+private struct MoveToDisplayButton: View {
+    let targetScreen: NSScreen
+    let disabled: Bool
+    let onSelect: (NSScreen) -> Void
+
+    var body: some View {
+        Button {
+            onSelect(targetScreen)
+        } label: {
+            MoveToDisplayButtonLabel(
+                targetScreen: targetScreen
+            )
+        }
+        .buttonStyle(TahoeActionBarButtonStyle())
+        .frame(width: 32, height: 24)
+        .disabled(disabled)
+    }
+}
+
+private struct MoveToDisplayButtonLabel: View {
+    let targetScreen: NSScreen
+    @Environment(\.tahoeActionBarHovered) private var isHovered
+    @Environment(\.isEnabled) private var isEnabled
+
+    var body: some View {
+        HStack(spacing: 2) {
+            Image(systemName: "arrow.right")
+                .font(.system(size: 8, weight: .bold))
+                .frame(width: 10, height: 10)
+            ZStack {
+                ScreenArrangementIcon(highlightDisplayID: targetScreen.displayID, size: 12, color: .secondary)
+                    .opacity(isHovered && isEnabled ? 0 : 1)
+                ScreenArrangementIcon(highlightDisplayID: targetScreen.displayID, size: 12, color: .primary)
+                    .opacity(isHovered && isEnabled ? 1 : 0)
+            }
+            .frame(width: 12, height: 12)
+        }
+        .frame(width: 32, height: 24)
+    }
+}
+
 /// Draws a miniature representation of the screen arrangement, highlighting the
 /// specified display. Each screen is drawn as a rounded rectangle whose position
 /// and size reflect the actual display layout, scaled to fit within the given
@@ -3622,6 +3669,7 @@ private final class TooltipHoverView: NSView {
 private struct ScreenArrangementIcon: View {
     let highlightDisplayID: CGDirectDisplayID
     let size: CGFloat
+    var color: Color = .secondary
 
     var body: some View {
         Canvas { context, canvasSize in
@@ -3664,9 +3712,9 @@ private struct ScreenArrangementIcon: View {
 
                 let isHighlight = screen.displayID == highlightDisplayID
                 if isHighlight {
-                    context.fill(path, with: .color(.secondary))
+                    context.fill(path, with: .color(color))
                 } else {
-                    context.stroke(path, with: .color(.secondary), lineWidth: 0.75)
+                    context.stroke(path, with: .color(color), lineWidth: 0.75)
                 }
             }
         }
@@ -4277,6 +4325,17 @@ private extension NSImage {
     }
 }
 
+private struct TahoeActionBarHoveredKey: EnvironmentKey {
+    static let defaultValue: Bool = false
+}
+
+extension EnvironmentValues {
+    var tahoeActionBarHovered: Bool {
+        get { self[TahoeActionBarHoveredKey.self] }
+        set { self[TahoeActionBarHoveredKey.self] = newValue }
+    }
+}
+
 /// Tahoe-style action bar button: large corner radius, subtle fill, hover highlight.
 private struct TahoeActionBarButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
@@ -4302,6 +4361,7 @@ private struct TahoeActionBarButtonStyle: ButtonStyle {
         let fgStyle: HierarchicalShapeStyle = !isEnabled ? .tertiary : (isHovered || configuration.isPressed ? .primary : .secondary)
 
         configuration.label
+            .environment(\.tahoeActionBarHovered, isHovered || configuration.isPressed)
             .foregroundStyle(fgStyle)
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
