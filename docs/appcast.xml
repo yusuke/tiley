@@ -3,6 +3,120 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>3.2.3</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Добавлены стрелочные индикаторы направления к кнопке и пунктам меню «Переместить на дисплей», визуально показывающие направление целевого дисплея на основе физического расположения экранов</li>
+<li>Когда выбранное окно находится на другом дисплее, наложение сетки теперь отображает стрелку направления и значок расположения дисплеев в центре, помогая пользователю найти окно</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Настроен внешний вид при наличии доступного обновления</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Adicionados indicadores de seta direcional ao botão e itens de menu "Mover para tela", mostrando visualmente a direção da tela de destino com base na disposição física dos monitores</li>
+<li>Quando a janela selecionada está em outra tela, a sobreposição de grade agora exibe uma seta direcional e um ícone de disposição de telas no centro, orientando o usuário até a localização da janela</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>Ajustada a aparência quando uma atualização está disponível</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Aggiunti indicatori freccia direzionali al pulsante e alle voci di menu "Sposta su display", che mostrano visivamente la direzione del display di destinazione in base alla disposizione fisica degli schermi</li>
+<li>Quando la finestra selezionata si trova su un altro display, l'overlay a griglia mostra ora una freccia direzionale e un'icona della disposizione degli schermi al centro, guidando l'utente verso la posizione della finestra</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Regolato l'aspetto quando è disponibile un aggiornamento</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Ajout d'indicateurs fléchés directionnels au bouton et aux éléments de menu « Déplacer vers l'écran », indiquant visuellement la direction de l'écran cible en fonction de la disposition physique des écrans</li>
+<li>Lorsque la fenêtre sélectionnée se trouve sur un autre écran, la grille superposée affiche désormais une flèche directionnelle et une icône de disposition des écrans au centre, guidant l'utilisateur vers l'emplacement de sa fenêtre</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>Ajustement de l'apparence lorsqu'une mise à jour est disponible</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Se añadieron indicadores de flechas direccionales al botón y los elementos de menú "Mover a pantalla", mostrando visualmente la dirección de la pantalla de destino según la disposición física de las pantallas</li>
+<li>Cuando la ventana seleccionada se encuentra en otra pantalla, la superposición de cuadrícula muestra una flecha direccional y un icono de disposición de pantallas en el centro, guiando al usuario hacia la ubicación de su ventana</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Ajustada la apariencia cuando hay una actualización disponible</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Richtungspfeile zu den Schaltflächen und Menüeinträgen „Auf Display verschieben" hinzugefügt, die basierend auf der physischen Bildschirmanordnung die Richtung des Zieldisplays anzeigen</li>
+<li>Wenn sich das ausgewählte Fenster auf einem anderen Display befindet, zeigt das Raster-Overlay nun einen Richtungspfeil und ein Bildschirmanordnungssymbol in der Mitte an, um den Benutzer zum Standort des Fensters zu leiten</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Darstellung bei verfügbarem Update angepasst</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>為「移動到顯示器」按鈕和選單項目新增方向箭頭指示器，根據實際螢幕排列直觀顯示目標顯示器的方向</li>
+<li>當選取的視窗位於其他顯示器時，格線疊層中央會顯示方向箭頭和顯示器排列圖示，引導使用者找到視窗所在位置</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>調整了有更新時的外觀</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>为"移动到显示器"按钮和菜单项添加了方向箭头指示器，根据物理屏幕排列直观显示目标显示器的方向</li>
+<li>当选中的窗口位于其他显示器时，网格叠层中央会显示方向箭头和显示器排列图标，引导用户找到窗口所在位置</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>调整了有更新时的外观</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>"디스플레이로 이동" 버튼 및 메뉴 항목에 물리적 화면 배치에 따라 대상 디스플레이 방향을 나타내는 화살표 표시기를 추가</li>
+<li>선택한 윈도우가 다른 디스플레이에 있을 경우, 그리드 오버레이 중앙에 방향 화살표와 디스플레이 배치 아이콘을 표시하여 윈도우 위치를 안내</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>업데이트가 있을 때의 외관을 조정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>「ディスプレイへ移動」ボタンおよびメニュー項目に、物理的な画面配置に基づいてターゲットディスプレイの方向を示す矢印インジケーターを追加</li>
+<li>選択したウインドウが別のディスプレイにある場合、グリッドオーバーレイの中央に方向矢印とディスプレイ配置アイコンを表示し、ウインドウの場所をガイドするように</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>アップデートがある際のアピアランスを調整</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Added directional arrow indicators to the "Move to Display" button and menu items, visually showing the direction of the target display based on the physical screen arrangement</li>
+<li>When the selected window is on another display, the grid overlay now shows a directional arrow and display arrangement icon in the center, guiding users to where their window is</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Adjusted appearance when an update is available</li>
+</ul>]]></description>
+            <pubDate>Wed, 25 Mar 2026 22:06:31 +0900</pubDate>
+            <sparkle:version>323</sparkle:version>
+            <sparkle:shortVersionString>3.2.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley-3.2.3.zip" length="5256463" type="application/octet-stream" sparkle:edSignature="TNYXqXfLkUMrGHSS487ZZaqgu9gg/vNCliT94vweDbEInytdu4F0zy81esW9g4+catPZXLyQJ/kirNtqoIqhBw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-322.delta" sparkle:deltaFrom="322" length="316254" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="emjzsoVy3ElnqN6w1W9Cj9Cg3jfyDkxEY5aTEVsJjkv4NJ0dVkWlR2Q57oLfN9AVKp8EenN3GvRZuHJ0fBANCw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-321.delta" sparkle:deltaFrom="321" length="362550" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="LACTzSc/g62rbuPwqq2QrIjBdBDtaoRJxv6TKhDPIuvTrF1bI1yGm7xSJ9318+27ORFuVC93RdzmMQIEqj3pCQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-320.delta" sparkle:deltaFrom="320" length="367550" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="h6vAVMEWImF5MU6ML9zUmEzgWGOYg3cjWdcsjrWlgY5BfuOdIJm6WR8P94VoeWZ98v/r/cG8A5ICCx10yQw8Bw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-311.delta" sparkle:deltaFrom="311" length="467370" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PoNBfp7OjAQnN3FasMgPvxAqett0WTYgfrjGF0zs2XkSJCshrFLzsrphCOuC9s04YQOY7kc5LgCSUt/Lm7suDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-310.delta" sparkle:deltaFrom="310" length="491778" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ZdlbIQtZzK48VA9H+buNrZZf/ZVEGuRQsdeYX7cfDgsYGRsGeWjrRB0Ne1i96LyNfXBQd47OW/12ccvIELTsBA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>3.2.2</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -59,11 +173,61 @@
 <li>Selecting a window in the sidebar temporarily brings it to the front for easier identification; the original window order is restored when switching to another window or cancelling</li>
 <li>Resize preview now displays a title bar with the app icon and window title, making it easier to identify which window is being arranged</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Ao selecionar uma janela na barra lateral, ela é temporariamente trazida para a frente para facilitar a identificação; a ordem original é restaurada ao mudar para outra janela ou cancelar</li>
+<li>A pré-visualização de redimensionamento agora exibe uma barra de título com o ícone do aplicativo e o título da janela, facilitando a identificação de qual janela está sendo organizada</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>La selezione di una finestra nella barra laterale la porta temporaneamente in primo piano per facilitarne l'identificazione; l'ordine originale viene ripristinato quando si passa a un'altra finestra o si annulla</li>
+<li>L'anteprima di ridimensionamento ora mostra una barra del titolo con l'icona dell'applicazione e il titolo della finestra, rendendo più intuitivo identificare quale finestra si sta disponendo</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>La sélection d'une fenêtre dans la barre latérale la place temporairement au premier plan pour faciliter l'identification ; l'ordre original est restauré lors du changement de fenêtre ou de l'annulation</li>
+<li>L'aperçu de redimensionnement affiche désormais une barre de titre avec l'icône de l'application et le titre de la fenêtre, permettant d'identifier plus intuitivement la fenêtre en cours d'agencement</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Al seleccionar una ventana en la barra lateral, se muestra temporalmente en primer plano para facilitar su identificación; al cambiar a otra ventana o cancelar, se restaura el orden original</li>
+<li>La vista previa de redimensionamiento ahora muestra una barra de título con el icono de la aplicación y el título de la ventana, facilitando la identificación de la ventana que se está organizando</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Bei Auswahl eines Fensters in der Seitenleiste wird es vorübergehend in den Vordergrund gebracht; beim Wechsel zu einem anderen Fenster oder Abbrechen wird die ursprüngliche Reihenfolge wiederhergestellt</li>
+<li>Die Größenänderungsvorschau zeigt nun eine Titelleiste mit App-Symbol und Fenstertitel an, sodass leichter erkennbar ist, welches Fenster angeordnet wird</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在側邊欄中選擇視窗時，該視窗會暫時置於最前方以便識別；切換到其他視窗或取消時恢復原來的層疊順序</li>
+<li>調整大小預覽現在顯示帶有應用程式圖示和視窗標題的標題列，更直覺地識別正在排列的視窗</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在侧边栏中选择窗口时，该窗口会临时置于最前方以便识别；切换到其他窗口或取消时恢复原来的层叠顺序</li>
+<li>调整大小预览现在显示带有应用图标和窗口标题的标题栏，更直观地识别正在排列的窗口</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바에서 윈도우를 선택하면 식별하기 쉽도록 일시적으로 최상위에 표시됩니다. 다른 윈도우로 전환하거나 취소하면 원래 순서로 복원됩니다</li>
+<li>리사이즈 미리보기에 앱 아이콘과 윈도우 제목이 포함된 타이틀 바가 표시되어 어떤 윈도우를 배치하는지 더 직관적으로 확인할 수 있습니다</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーでウインドウを選択すると、識別しやすいよう一時的に最前面に表示されるように。別のウインドウに切り替えたりキャンセルすると元の重なり順に戻ります</li>
+<li>リサイズプレビューにアプリケーションアイコンとウインドウタイトル付きのタイトルバーを表示し、どのウインドウを配置しているかがより直感的にわかるように</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Selecting a window in the sidebar temporarily brings it to the front for easier identification; the original window order is restored when switching to another window or cancelling</li>
+<li>Resize preview now displays a title bar with the app icon and window title, making it easier to identify which window is being arranged</li>
+</ul>]]></description>
             <pubDate>Wed, 25 Mar 2026 11:33:42 +0900</pubDate>
             <sparkle:version>322</sparkle:version>
             <sparkle:shortVersionString>3.2.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley-3.2.2.zip" length="5543168" type="application/octet-stream" sparkle:edSignature="klYFXHgFbLzprJF+IwvLJQfgbs3sq7R8F1a/hcPiYT6JjCgosa01mFcoVedTtQLWnKeB3h4+0WYsQCoU+Hz3DA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley-3.2.2.zip" length="5543168" type="application/octet-stream" sparkle:edSignature="klYFXHgFbLzprJF+IwvLJQfgbs3sq7R8F1a/hcPiYT6JjCgosa01mFcoVedTtQLWnKeB3h4+0WYsQCoU+Hz3DA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley322-321.delta" sparkle:deltaFrom="321" length="219534" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Hkk8w2Si0N1GjIriQdzg+nyxQ3YuKoWJ1cQuuX1kHEAG1Ywo+pm6rOwaVc/L5rcDzkX3fEZYJ05proOnYQ9EDw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley322-320.delta" sparkle:deltaFrom="320" length="226670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="5wcCR77hyWFGlNTuJsD7BGXWAjLti0xF5daOgN/vrqYDpsAyuNsCdKpWnASOXzEMqqut+73fYMSoVtPlNCi2Bw=="/>
@@ -158,342 +322,57 @@
 <ul>
 <li>Fixed sidebar showing no windows in multi-screen environments due to space filtering only considering a single display's active space</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido problema onde a barra lateral não exibia janelas em ambientes com múltiplas telas porque a filtragem de espaços considerava apenas o espaço ativo de uma única tela</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretta la barra laterale che non mostrava finestre in ambienti multi-schermo perché il filtro degli spazi considerava solo lo spazio attivo di un singolo display</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction de la barre latérale n'affichant aucune fenêtre dans les environnements multi-écrans car le filtrage des espaces ne prenait en compte que l'espace actif d'un seul écran</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido el problema donde la barra lateral no mostraba ventanas en entornos de múltiples pantallas porque el filtrado de espacios solo consideraba el espacio activo de una única pantalla</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Seitenleiste zeigte in Multi-Screen-Umgebungen keine Fenster an, da die Space-Filterung nur den aktiven Space eines einzelnen Displays berücksichtigte</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正多螢幕環境下空間過濾僅考慮單一顯示器的活躍空間導致側邊欄不顯示視窗的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复多屏环境下空间过滤仅考虑单个显示器的活跃空间导致侧边栏不显示窗口的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>멀티 스크린 환경에서 스페이스 필터링이 단일 디스플레이의 활성 스페이스만 고려하여 사이드바에 윈도우가 표시되지 않는 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>マルチスクリーン環境でスペースフィルタリングが単一ディスプレイのアクティブスペースのみを考慮していたため、サイドバーにウインドウが表示されない問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed sidebar showing no windows in multi-screen environments due to space filtering only considering a single display's active space</li>
+</ul>]]></description>
             <pubDate>Wed, 25 Mar 2026 07:44:02 +0900</pubDate>
             <sparkle:version>321</sparkle:version>
             <sparkle:shortVersionString>3.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley-3.2.1.zip" length="5521281" type="application/octet-stream" sparkle:edSignature="tpBaLQsti6nKL470aTNDucjNkUD6bCYVuDFgc+bwCJKvDLFX0E9s7NHC5Ph9kN0TKpPVecyLZXXGw3qrrWprAg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley-3.2.1.zip" length="5521281" type="application/octet-stream" sparkle:edSignature="tpBaLQsti6nKL470aTNDucjNkUD6bCYVuDFgc+bwCJKvDLFX0E9s7NHC5Ph9kN0TKpPVecyLZXXGw3qrrWprAg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.1/Tiley321-320.delta" sparkle:deltaFrom="320" length="137502" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="eSqjMzEwg7K8GxO8LR/X5U0AdWu81DCq4u7liCcF4diWiXWNti+Ik5jKrWz7jgnIBmZdt1JWDOwBRkanCAHhAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.1/Tiley321-311.delta" sparkle:deltaFrom="311" length="348710" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NZAQlf8Gh1kIu5jfZBh/S+bVI2Yz12JUfFa+2lxDas/ejYdV8HF6lvIlYMmC4IfOODkxDOWwxCZPsfaE04HpBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.1/Tiley321-310.delta" sparkle:deltaFrom="310" length="384210" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NBQe0t7MWB4BIN7O7MxNnEI19TEWBZTWLUsIxipnL+pMWFpLrDF3GzHVtxKn3+EerSN1XSXWQ4gB1p84Sqm1BA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.1/Tiley321-301.delta" sparkle:deltaFrom="301" length="505790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="xGkc51dpxC+/TbzoN7XPl2VFJYJowQGXlL26F9ZNdKYaCiYpdkgoAPWpFBs/0Vo0bdb632LvYvuNvgaeT/wdAQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.1/Tiley321-300.delta" sparkle:deltaFrom="300" length="867694" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="adgd/0I3r0jM9HuymdHeZUE0rCcq0zf34WQJlIHmCtxXXqywcQnVaOtM5dH9/386yukCr/x1O3l2CXNlvfjsBQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>3.2.0</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>При наличии нескольких пространств Mission Control боковая панель отображает только окна текущего пространства</li>
-<li>Наложение сетки теперь отображает миниатюрный предпросмотр окна с кнопками светофора, значком приложения и заголовком окна в текущей позиции целевого окна</li>
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Скрытие наложения стало более отзывчивым при применении макетов или переключении окон на передний план</li>
-<li>Окна в нативном полноэкранном режиме macOS теперь автоматически выходят из полноэкранного режима перед изменением размера</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Quando há vários espaços do Mission Control, a barra lateral exibe apenas as janelas do espaço atual</li>
-<li>A sobreposição de grade agora exibe uma pré-visualização da janela em miniatura com botões de semáforo, ícone do app e título da janela na posição atual da janela de destino</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A ocultação da sobreposição está agora mais responsiva ao aplicar layouts ou trazer janelas para frente</li>
-<li>Janelas em modo de tela cheia nativo do macOS agora saem automaticamente da tela cheia antes do redimensionamento</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Quando sono presenti più spazi Mission Control, la barra laterale mostra solo le finestre dello spazio attuale</li>
-<li>L'overlay a griglia ora mostra un'anteprima della finestra in miniatura con pulsanti semaforo, icona dell'app e titolo della finestra nella posizione attuale della finestra di destinazione</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La scomparsa dell'overlay è ora più reattiva durante l'applicazione dei layout o il passaggio in primo piano delle finestre</li>
-<li>Le finestre in modalità schermo intero nativa di macOS vengono ora automaticamente riportate alla modalità normale prima del ridimensionamento</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Lorsque plusieurs espaces Mission Control existent, la barre latérale n'affiche que les fenêtres de l'espace actuel</li>
-<li>La grille superposée affiche désormais un aperçu de fenêtre miniature avec les boutons feux tricolores, l'icône de l'app et le titre de la fenêtre à la position actuelle de la fenêtre cible</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La disparition de la superposition est désormais plus réactive lors de l'application de dispositions ou de la mise au premier plan des fenêtres</li>
-<li>Les fenêtres en mode plein écran natif de macOS quittent désormais automatiquement le plein écran avant le redimensionnement</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Cuando hay varios espacios de Mission Control, la barra lateral muestra solo las ventanas del espacio actual</li>
-<li>La superposición de cuadrícula ahora muestra una vista previa de ventana en miniatura con botones de semáforo, icono de la app y título de la ventana en la posición actual de la ventana de destino</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La ocultación de la superposición es ahora más responsiva al aplicar diseños o traer ventanas al frente</li>
-<li>Las ventanas en modo de pantalla completa nativo de macOS ahora salen automáticamente de la pantalla completa antes de redimensionarse</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Bei mehreren Mission Control Spaces zeigt die Seitenleiste nur Fenster des aktuellen Space an</li>
-<li>Das Raster-Overlay zeigt jetzt eine Miniatur-Fenstervorschau mit Ampelschaltflächen, App-Symbol und Fenstertitel an der aktuellen Position des Zielfensters an</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Das Ausblenden des Overlays reagiert nun schneller beim Anwenden von Layouts oder beim In-den-Vordergrund-Bringen von Fenstern</li>
-<li>Fenster im nativen macOS-Vollbildmodus werden vor der Größenänderung automatisch aus dem Vollbildmodus geholt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>當存在多個 Mission Control 空間時，側邊欄僅顯示當前空間的視窗</li>
-<li>格線疊層現在在目標視窗的當前位置顯示帶有紅綠燈按鈕、應用程式圖示和視窗標題的微縮視窗預覽</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>套用佈局或將視窗移至最前時，疊層隱藏回應更加迅速</li>
-<li>調整處於 macOS 原生全螢幕模式的視窗大小時，現在會自動退出全螢幕</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>当存在多个 Mission Control 空间时，侧边栏仅显示当前空间的窗口</li>
-<li>网格叠层现在在目标窗口的当前位置显示带有红绿灯按钮、应用图标和窗口标题的微缩窗口预览</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>应用布局或将窗口置于前台时，叠层隐藏响应更加迅速</li>
-<li>调整处于 macOS 原生全屏模式的窗口大小时，现在会自动退出全屏</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>여러 Mission Control 스페이스가 있을 때 사이드바에 현재 스페이스의 윈도우만 표시</li>
-<li>그리드 오버레이에 신호등 버튼, 앱 아이콘, 윈도우 제목이 포함된 미니어처 윈도우 미리보기를 대상 윈도우의 현재 위치에 표시하도록 추가</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>레이아웃 적용 또는 윈도우를 앞으로 가져올 때 오버레이 숨김이 더 빠르게 반응하도록 개선</li>
-<li>macOS 기본 전체 화면 모드의 윈도우 크기를 조정할 때 자동으로 전체 화면을 해제하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>複数のMission Controlスペースがある場合、サイドバーに現在のスペースのウインドウのみ表示するようにした</li>
-<li>グリッドオーバーレイに、信号ボタン・アプリアイコン・ウィンドウタイトル付きのミニチュアウィンドウプレビューを対象ウィンドウの現在位置に表示するようにした</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>レイアウト適用やウィンドウの最前面化の際、オーバーレイの非表示がよりレスポンシブになった</li>
-<li>macOSのフルスクリーン状態のウィンドウをリサイズする際、自動的にフルスクリーンを解除するようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>When multiple Mission Control spaces exist, the sidebar shows only windows on the current space</li>
-<li>Grid overlay now shows a miniature window preview with traffic light buttons, app icon, and window title at the target window's current position</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Overlay dismissal is now more responsive when applying layouts or bringing windows to front</li>
-<li>Windows in native macOS fullscreen mode are now automatically exited from fullscreen before resizing</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Quando há vários espaços do Mission Control, a barra lateral exibe apenas as janelas do espaço atual</li>
-<li>A sobreposição de grade agora exibe uma pré-visualização da janela em miniatura com botões de semáforo, ícone do app e título da janela na posição atual da janela de destino</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A ocultação da sobreposição está agora mais responsiva ao aplicar layouts ou trazer janelas para frente</li>
-<li>Janelas em modo de tela cheia nativo do macOS agora saem automaticamente da tela cheia antes do redimensionamento</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Quando sono presenti più spazi Mission Control, la barra laterale mostra solo le finestre dello spazio attuale</li>
-<li>L'overlay a griglia ora mostra un'anteprima della finestra in miniatura con pulsanti semaforo, icona dell'app e titolo della finestra nella posizione attuale della finestra di destinazione</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La scomparsa dell'overlay è ora più reattiva durante l'applicazione dei layout o il passaggio in primo piano delle finestre</li>
-<li>Le finestre in modalità schermo intero nativa di macOS vengono ora automaticamente riportate alla modalità normale prima del ridimensionamento</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Lorsque plusieurs espaces Mission Control existent, la barre latérale n'affiche que les fenêtres de l'espace actuel</li>
-<li>La grille superposée affiche désormais un aperçu de fenêtre miniature avec les boutons feux tricolores, l'icône de l'app et le titre de la fenêtre à la position actuelle de la fenêtre cible</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La disparition de la superposition est désormais plus réactive lors de l'application de dispositions ou de la mise au premier plan des fenêtres</li>
-<li>Les fenêtres en mode plein écran natif de macOS quittent désormais automatiquement le plein écran avant le redimensionnement</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Cuando hay varios espacios de Mission Control, la barra lateral muestra solo las ventanas del espacio actual</li>
-<li>La superposición de cuadrícula ahora muestra una vista previa de ventana en miniatura con botones de semáforo, icono de la app y título de la ventana en la posición actual de la ventana de destino</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La ocultación de la superposición es ahora más responsiva al aplicar diseños o traer ventanas al frente</li>
-<li>Las ventanas en modo de pantalla completa nativo de macOS ahora salen automáticamente de la pantalla completa antes de redimensionarse</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Bei mehreren Mission Control Spaces zeigt die Seitenleiste nur Fenster des aktuellen Space an</li>
-<li>Das Raster-Overlay zeigt jetzt eine Miniatur-Fenstervorschau mit Ampelschaltflächen, App-Symbol und Fenstertitel an der aktuellen Position des Zielfensters an</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Das Ausblenden des Overlays reagiert nun schneller beim Anwenden von Layouts oder beim In-den-Vordergrund-Bringen von Fenstern</li>
-<li>Fenster im nativen macOS-Vollbildmodus werden vor der Größenänderung automatisch aus dem Vollbildmodus geholt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>當存在多個 Mission Control 空間時，側邊欄僅顯示當前空間的視窗</li>
-<li>格線疊層現在在目標視窗的當前位置顯示帶有紅綠燈按鈕、應用程式圖示和視窗標題的微縮視窗預覽</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>套用佈局或將視窗移至最前時，疊層隱藏回應更加迅速</li>
-<li>調整處於 macOS 原生全螢幕模式的視窗大小時，現在會自動退出全螢幕</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>当存在多个 Mission Control 空间时，侧边栏仅显示当前空间的窗口</li>
-<li>网格叠层现在在目标窗口的当前位置显示带有红绿灯按钮、应用图标和窗口标题的微缩窗口预览</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>应用布局或将窗口置于前台时，叠层隐藏响应更加迅速</li>
-<li>调整处于 macOS 原生全屏模式的窗口大小时，现在会自动退出全屏</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>여러 Mission Control 스페이스가 있을 때 사이드바에 현재 스페이스의 윈도우만 표시</li>
-<li>그리드 오버레이에 신호등 버튼, 앱 아이콘, 윈도우 제목이 포함된 미니어처 윈도우 미리보기를 대상 윈도우의 현재 위치에 표시하도록 추가</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>레이아웃 적용 또는 윈도우를 앞으로 가져올 때 오버레이 숨김이 더 빠르게 반응하도록 개선</li>
-<li>macOS 기본 전체 화면 모드의 윈도우 크기를 조정할 때 자동으로 전체 화면을 해제하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>複数のMission Controlスペースがある場合、サイドバーに現在のスペースのウインドウのみ表示するようにした</li>
-<li>グリッドオーバーレイに、信号ボタン・アプリアイコン・ウィンドウタイトル付きのミニチュアウィンドウプレビューを対象ウィンドウの現在位置に表示するようにした</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>レイアウト適用やウィンドウの最前面化の際、オーバーレイの非表示がよりレスポンシブになった</li>
-<li>macOSのフルスクリーン状態のウィンドウをリサイズする際、自動的にフルスクリーンを解除するようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>When multiple Mission Control spaces exist, the sidebar shows only windows on the current space</li>
-<li>Grid overlay now shows a miniature window preview with traffic light buttons, app icon, and window title at the target window's current position</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Overlay dismissal is now more responsive when applying layouts or bringing windows to front</li>
-<li>Windows in native macOS fullscreen mode are now automatically exited from fullscreen before resizing</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Quando há vários espaços do Mission Control, a barra lateral exibe apenas as janelas do espaço atual</li>
-<li>A sobreposição de grade agora exibe uma pré-visualização da janela em miniatura com botões de semáforo, ícone do app e título da janela na posição atual da janela de destino</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A ocultação da sobreposição está agora mais responsiva ao aplicar layouts ou trazer janelas para frente</li>
-<li>Janelas em modo de tela cheia nativo do macOS agora saem automaticamente da tela cheia antes do redimensionamento</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Quando sono presenti più spazi Mission Control, la barra laterale mostra solo le finestre dello spazio attuale</li>
-<li>L'overlay a griglia ora mostra un'anteprima della finestra in miniatura con pulsanti semaforo, icona dell'app e titolo della finestra nella posizione attuale della finestra di destinazione</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La scomparsa dell'overlay è ora più reattiva durante l'applicazione dei layout o il passaggio in primo piano delle finestre</li>
-<li>Le finestre in modalità schermo intero nativa di macOS vengono ora automaticamente riportate alla modalità normale prima del ridimensionamento</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Lorsque plusieurs espaces Mission Control existent, la barre latérale n'affiche que les fenêtres de l'espace actuel</li>
-<li>La grille superposée affiche désormais un aperçu de fenêtre miniature avec les boutons feux tricolores, l'icône de l'app et le titre de la fenêtre à la position actuelle de la fenêtre cible</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La disparition de la superposition est désormais plus réactive lors de l'application de dispositions ou de la mise au premier plan des fenêtres</li>
-<li>Les fenêtres en mode plein écran natif de macOS quittent désormais automatiquement le plein écran avant le redimensionnement</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Cuando hay varios espacios de Mission Control, la barra lateral muestra solo las ventanas del espacio actual</li>
-<li>La superposición de cuadrícula ahora muestra una vista previa de ventana en miniatura con botones de semáforo, icono de la app y título de la ventana en la posición actual de la ventana de destino</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La ocultación de la superposición es ahora más responsiva al aplicar diseños o traer ventanas al frente</li>
-<li>Las ventanas en modo de pantalla completa nativo de macOS ahora salen automáticamente de la pantalla completa antes de redimensionarse</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Bei mehreren Mission Control Spaces zeigt die Seitenleiste nur Fenster des aktuellen Space an</li>
-<li>Das Raster-Overlay zeigt jetzt eine Miniatur-Fenstervorschau mit Ampelschaltflächen, App-Symbol und Fenstertitel an der aktuellen Position des Zielfensters an</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Das Ausblenden des Overlays reagiert nun schneller beim Anwenden von Layouts oder beim In-den-Vordergrund-Bringen von Fenstern</li>
-<li>Fenster im nativen macOS-Vollbildmodus werden vor der Größenänderung automatisch aus dem Vollbildmodus geholt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>當存在多個 Mission Control 空間時，側邊欄僅顯示當前空間的視窗</li>
-<li>格線疊層現在在目標視窗的當前位置顯示帶有紅綠燈按鈕、應用程式圖示和視窗標題的微縮視窗預覽</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>套用佈局或將視窗移至最前時，疊層隱藏回應更加迅速</li>
-<li>調整處於 macOS 原生全螢幕模式的視窗大小時，現在會自動退出全螢幕</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>当存在多个 Mission Control 空间时，侧边栏仅显示当前空间的窗口</li>
-<li>网格叠层现在在目标窗口的当前位置显示带有红绿灯按钮、应用图标和窗口标题的微缩窗口预览</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>应用布局或将窗口置于前台时，叠层隐藏响应更加迅速</li>
-<li>调整处于 macOS 原生全屏模式的窗口大小时，现在会自动退出全屏</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>여러 Mission Control 스페이스가 있을 때 사이드바에 현재 스페이스의 윈도우만 표시</li>
-<li>그리드 오버레이에 신호등 버튼, 앱 아이콘, 윈도우 제목이 포함된 미니어처 윈도우 미리보기를 대상 윈도우의 현재 위치에 표시하도록 추가</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>레이아웃 적용 또는 윈도우를 앞으로 가져올 때 오버레이 숨김이 더 빠르게 반응하도록 개선</li>
-<li>macOS 기본 전체 화면 모드의 윈도우 크기를 조정할 때 자동으로 전체 화면을 해제하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>複数のMission Controlスペースがある場合、サイドバーに現在のスペースのウインドウのみ表示するようにした</li>
-<li>グリッドオーバーレイに、信号ボタン・アプリアイコン・ウィンドウタイトル付きのミニチュアウィンドウプレビューを対象ウィンドウの現在位置に表示するようにした</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>レイアウト適用やウィンドウの最前面化の際、オーバーレイの非表示がよりレスポンシブになった</li>
-<li>macOSのフルスクリーン状態のウィンドウをリサイズする際、自動的にフルスクリーンを解除するようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>When multiple Mission Control spaces exist, the sidebar shows only windows on the current space</li>
-<li>Grid overlay now shows a miniature window preview with traffic light buttons, app icon, and window title at the target window's current position</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Overlay dismissal is now more responsive when applying layouts or bringing windows to front</li>
-<li>Windows in native macOS fullscreen mode are now automatically exited from fullscreen before resizing</li>
-</ul>]]></description>
-            <pubDate>Wed, 25 Mar 2026 01:01:37 +0900</pubDate>
-            <sparkle:version>320</sparkle:version>
-            <sparkle:shortVersionString>3.2.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley-3.2.0.zip" length="5520920" type="application/octet-stream" sparkle:edSignature="LcsaJmy0WFbFk2CfYP0lOH260miUMnzs/q/FU9f0ez+wV/sulldpoEAgIl1CdwnCVwT5QqfudgHCeAHk5EKODA=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-311.delta" sparkle:deltaFrom="311" length="348014" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="f/cWVRcF5merFqEmhVp+IWAw/AgvE4Hqvv039ulSn1UzzGNsFWgq0Uotj4rf7zApxDwcc/CryvBzfIFWOiOCBw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-310.delta" sparkle:deltaFrom="310" length="381686" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2JVPXa2hTGu7KALXt5e//iMORUJGgTRntKIKpAtZjAOJY70mOLBJy78P2nAT+CKt+ubnE2P7DUROfoHTGdyXCQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-301.delta" sparkle:deltaFrom="301" length="504930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="WTps4JwSTzAth+UFDYV4SDDMbsjn/7ug+nfiFCDOvPwYvn6brf7gvSuPaTWmqgo87kXAVfI1pxO50ohnSP0LDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-300.delta" sparkle:deltaFrom="300" length="869246" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GRBQWxnN9utDOIW4y0+zV/KNd/Aalzrvq8Q/fcOFt63zDBh74oQBaN8Gpqpi8Fhym7uBz8uG7hxVro4flNqBAQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.0/Tiley320-220.delta" sparkle:deltaFrom="220" length="1124798" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bBxaqXgBkEsgXqK6IEQ5/g3Y7WQC8mE3PejZFS2RpOR19PafhRhxFN6y0A0eh1FmZoLhKgCP+sbGXorzMOtEAw=="/>
             </sparkle:deltas>
         </item>
     </channel>
