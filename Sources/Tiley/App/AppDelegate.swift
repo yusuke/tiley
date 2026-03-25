@@ -10,7 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var wasSettingsVisibleBeforeUpdate = false
 
     lazy var updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(
-        startingUpdater: true,
+        startingUpdater: !Bundle.main.bundlePath.contains("/.build/"),
         updaterDelegate: self,
         userDriverDelegate: self
     )
