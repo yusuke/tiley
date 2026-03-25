@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.3] - 2026-03-25
+
 ### Ajouté
 
 - Ajout d'indicateurs fléchés directionnels au bouton et aux éléments de menu « Déplacer vers l'écran », indiquant visuellement la direction de l'écran cible en fonction de la disposition physique des écrans

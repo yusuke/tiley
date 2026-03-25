@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.3] - 2026-03-25
+
 ### Adicionado
 
 - Adicionados indicadores de seta direcional ao botão e itens de menu "Mover para tela", mostrando visualmente a direção da tela de destino com base na disposição física dos monitores

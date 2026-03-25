@@ -1708,9 +1708,6 @@ final class AppState: NSObject, NSMenuDelegate {
     private func installStatusItem() {
         guard statusItem == nil else { return }
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        // Hide the item until the icon is fully configured to prevent a
-        // brief flash of an un-themed (black) icon in the menu bar.
-        item.isVisible = false
         if let button = item.button {
             button.target = self
             button.action = #selector(handleStatusItemButtonClick)
@@ -1729,13 +1726,19 @@ final class AppState: NSObject, NSMenuDelegate {
             item.button?.title = NSLocalizedString("Tiley", comment: "App name fallback title")
         }
         item.menu = nil
-        item.isVisible = true
+        // Show immediately — the template icon adapts to any appearance
+        // automatically, so there is no black flash.
         statusItem = item
-        // Observe effectiveAppearance changes to redraw the icon
-        appearanceObservation = item.button?.observe(\.effectiveAppearance, options: [.new, .initial]) { [weak self] _, _ in
+        // Observe effectiveAppearance changes to redraw badge overlays.
+        // Skip .initial; instead delay the first badge application so the
+        // button's effectiveAppearance has settled in the menu bar.
+        appearanceObservation = item.button?.observe(\.effectiveAppearance, options: [.new]) { [weak self] _, _ in
             DispatchQueue.main.async {
                 self?.applyStatusItemIcon()
             }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.applyStatusItemIcon()
         }
     }
 

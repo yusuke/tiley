@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.3] - 2026-03-25
+
 ### Hinzugefügt
 
 - Richtungspfeile zu den Schaltflächen und Menüeinträgen „Auf Display verschieben" hinzugefügt, die basierend auf der physischen Bildschirmanordnung die Richtung des Zieldisplays anzeigen

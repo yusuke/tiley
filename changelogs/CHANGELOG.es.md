@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.3] - 2026-03-25
+
 ### Añadido
 
 - Se añadieron indicadores de flechas direccionales al botón y los elementos de menú "Mover a pantalla", mostrando visualmente la dirección de la pantalla de destino según la disposición física de las pantallas

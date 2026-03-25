@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.3] - 2026-03-25
+
 ### Aggiunto
 
 - Aggiunti indicatori freccia direzionali al pulsante e alle voci di menu "Sposta su display", che mostrano visivamente la direzione del display di destinazione in base alla disposizione fisica degli schermi
