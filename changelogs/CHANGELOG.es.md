@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.4] - 2026-03-26
+
 ### Añadido
 
 - Añadidos atajos para mover ventanas entre pantallas (principal, siguiente, anterior, elegir del menú, pantalla específica)

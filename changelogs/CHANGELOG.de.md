@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.4] - 2026-03-26
+
 ### Hinzugefügt
 
 - Kurzbefehle zum Verschieben von Fenstern zwischen Bildschirmen hinzugefügt (Hauptbildschirm, nächster, vorheriger, aus Menü wählen, bestimmter Bildschirm)
