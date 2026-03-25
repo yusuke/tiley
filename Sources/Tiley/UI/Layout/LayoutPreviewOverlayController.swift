@@ -31,13 +31,16 @@ final class LayoutPreviewOverlayController: NSWindowController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil) {
+    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil) {
         let frame = GridCalculator.frame(for: selection, in: visibleFrame, rows: rows, columns: columns, gap: gap)
         let rootView = SelectionPreviewOverlayView(
             frame: frame,
             resizability: resizability,
             windowSize: windowSize,
-            screenFrame: screenFrame
+            screenFrame: screenFrame,
+            appIcon: appIcon,
+            windowTitle: windowTitle,
+            appName: appName
         )
         window?.contentView = NSHostingView(rootView: rootView)
         window?.level = .normal
@@ -99,6 +102,9 @@ private struct SelectionPreviewOverlayView: View {
     /// Current window size — used to compute the accepted region on locked axes.
     let windowSize: CGSize?
     let screenFrame: CGRect
+    let appIcon: NSImage?
+    let windowTitle: String?
+    let appName: String?
 
     var body: some View {
         // Full requested frame in screen-local coordinates (top-left origin).
@@ -126,13 +132,7 @@ private struct SelectionPreviewOverlayView: View {
                 let displayHeight = min(effectiveHeight, localFrame.height)
 
                 // Accepted region at the top-left.
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
-                    )
-                    .frame(width: displayWidth, height: displayHeight)
+                previewRect(width: displayWidth, height: displayHeight)
                     .position(x: localFrame.minX + displayWidth / 2, y: localFrame.minY + displayHeight / 2)
 
                 // --- Red: unified overflow region (selection larger than window can expand) ---
@@ -188,18 +188,129 @@ private struct SelectionPreviewOverlayView: View {
                 }
             } else {
                 // Fully resizable — normal display.
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
-                    )
-                    .frame(width: localFrame.width, height: localFrame.height)
+                previewRect(width: localFrame.width, height: localFrame.height)
                     .position(x: localFrame.midX, y: localFrame.midY)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Color.clear)
+    }
+
+    /// Builds the preview rectangle with an optional title bar (matching MiniatureWindowView style).
+    @ViewBuilder
+    private func previewRect(width: CGFloat, height: CGFloat) -> some View {
+        let cornerRadius: CGFloat = 10
+        // Use the actual system title bar height for a standard titled window.
+        let titleBarHeight = NSWindow.frameRect(
+            forContentRect: .zero,
+            styleMask: [.titled, .closable, .miniaturizable, .resizable]
+        ).height
+        let showTitleBar = height > titleBarHeight * 2 && width > 60
+
+        ZStack(alignment: .top) {
+            // Base fill + border
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
+
+            if showTitleBar {
+                // Title bar background
+                VStack(spacing: 0) {
+                    ZStack {
+                        Rectangle()
+                            .fill(titleBarFill)
+                        titleBarContent(height: titleBarHeight, totalWidth: width)
+                    }
+                    .frame(height: titleBarHeight)
+                    Rectangle()
+                        .fill(titleBarDividerColor)
+                        .frame(height: 0.5)
+                    Spacer(minLength: 0)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+
+                // Traffic light buttons
+                trafficLightButtons(titleBarHeight: titleBarHeight)
+            }
+
+            // Border stroke on top of everything
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
+        }
+        .frame(width: width, height: height)
+    }
+
+    @ViewBuilder
+    private func titleBarContent(height: CGFloat, totalWidth: CGFloat) -> some View {
+        let fontSize: CGFloat = max(8, height * 0.48)
+        let buttonDiameter = height * 0.38
+        let buttonsTrailingEdge = buttonDiameter * 0.8 + buttonDiameter * 3 + buttonDiameter * 0.55 * 2 + buttonDiameter * 0.5
+        let titleText: String? = {
+            let t = (windowTitle ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !t.isEmpty { return t }
+            let a = (appName ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !a.isEmpty { return a }
+            return nil
+        }()
+
+        HStack(spacing: fontSize * 0.4) {
+            if let icon = appIcon {
+                Image(nsImage: icon)
+                    .resizable()
+                    .interpolation(.high)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: height * 0.55, height: height * 0.55)
+                    .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+            }
+            if let titleText {
+                Text(titleText)
+                    .font(.system(size: fontSize))
+                    .foregroundStyle(titleBarTextColor)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+        }
+        .padding(.horizontal, buttonsTrailingEdge)
+    }
+
+    @ViewBuilder
+    private func trafficLightButtons(titleBarHeight: CGFloat) -> some View {
+        let buttonDiameter = titleBarHeight * 0.38
+        let buttonSpacing = buttonDiameter * 0.55
+        let buttonLeftPadding = buttonDiameter * 0.8
+
+        HStack(spacing: buttonSpacing) {
+            Circle()
+                .fill(Color(red: 1.0, green: 0.373, blue: 0.341))
+            Circle()
+                .fill(Color(red: 0.996, green: 0.737, blue: 0.180))
+            Circle()
+                .fill(Color(red: 0.157, green: 0.784, blue: 0.251))
+        }
+        .frame(height: buttonDiameter)
+        .fixedSize()
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(.leading, buttonLeftPadding)
+        .padding(.top, (titleBarHeight - buttonDiameter) / 2)
+    }
+
+    // MARK: - Title bar colors
+
+    private var titleBarFill: Color {
+        colorScheme == .dark
+            ? Color.white.opacity(0.14)
+            : Color.white.opacity(0.65)
+    }
+
+    private var titleBarDividerColor: Color {
+        colorScheme == .dark
+            ? Color.white.opacity(0.12)
+            : Color.black.opacity(0.10)
+    }
+
+    private var titleBarTextColor: Color {
+        colorScheme == .dark
+            ? Color.white.opacity(0.70)
+            : Color.black.opacity(0.55)
     }
 }
 

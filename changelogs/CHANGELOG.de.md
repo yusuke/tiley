@@ -5,6 +5,7 @@
 ### Hinzugefügt
 
 - Bei Auswahl eines Fensters in der Seitenleiste wird es vorübergehend in den Vordergrund gebracht; beim Wechsel zu einem anderen Fenster oder Abbrechen wird die ursprüngliche Reihenfolge wiederhergestellt
+- Die Größenänderungsvorschau zeigt nun eine Titelleiste mit App-Symbol und Fenstertitel an, sodass leichter erkennbar ist, welches Fenster angeordnet wird
 
 ## [3.2.1] - 2026-03-25
 

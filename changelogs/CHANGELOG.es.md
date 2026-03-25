@@ -5,6 +5,7 @@
 ### Añadido
 
 - Al seleccionar una ventana en la barra lateral, se muestra temporalmente en primer plano para facilitar su identificación; al cambiar a otra ventana o cancelar, se restaura el orden original
+- La vista previa de redimensionamiento ahora muestra una barra de título con el icono de la aplicación y el título de la ventana, facilitando la identificación de la ventana que se está organizando
 
 ## [3.2.1] - 2026-03-25
 

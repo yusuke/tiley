@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Selecting a window in the sidebar temporarily brings it to the front for easier identification; the original window order is restored when switching to another window or cancelling
+- Resize preview now displays a title bar with the app icon and window title, making it easier to identify which window is being arranged
 
 ## [3.2.1] - 2026-03-25
 

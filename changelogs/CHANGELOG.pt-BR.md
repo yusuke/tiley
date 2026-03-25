@@ -5,6 +5,7 @@
 ### Adicionado
 
 - Ao selecionar uma janela na barra lateral, ela é temporariamente trazida para a frente para facilitar a identificação; a ordem original é restaurada ao mudar para outra janela ou cancelar
+- A pré-visualização de redimensionamento agora exibe uma barra de título com o ícone do aplicativo e o título da janela, facilitando a identificação de qual janela está sendo organizada
 
 ## [3.2.1] - 2026-03-25
 

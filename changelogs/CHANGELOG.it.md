@@ -5,6 +5,7 @@
 ### Aggiunto
 
 - La selezione di una finestra nella barra laterale la porta temporaneamente in primo piano per facilitarne l'identificazione; l'ordine originale viene ripristinato quando si passa a un'altra finestra o si annulla
+- L'anteprima di ridimensionamento ora mostra una barra del titolo con l'icona dell'applicazione e il titolo della finestra, rendendo più intuitivo identificare quale finestra si sta disponendo
 
 ## [3.2.1] - 2026-03-25
 

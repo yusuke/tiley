@@ -5,6 +5,7 @@
 ### Ajouté
 
 - La sélection d'une fenêtre dans la barre latérale la place temporairement au premier plan pour faciliter l'identification ; l'ordre original est restauré lors du changement de fenêtre ou de l'annulation
+- L'aperçu de redimensionnement affiche désormais une barre de titre avec l'icône de l'application et le titre de la fenêtre, permettant d'identifier plus intuitivement la fenêtre en cours d'agencement
 
 ## [3.2.1] - 2026-03-25
 

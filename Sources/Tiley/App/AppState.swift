@@ -1312,6 +1312,9 @@ final class AppState: NSObject, NSMenuDelegate {
 
         let resizability = resizabilityForActiveTarget()
         let windowSize = activeLayoutTarget?.frame.size
+        let appIcon: NSImage? = activeLayoutTarget.flatMap {
+            NSRunningApplication(processIdentifier: $0.processIdentifier)?.icon
+        }
 
         layoutPreviewController?.showSelection(
             selection,
@@ -1320,7 +1323,10 @@ final class AppState: NSObject, NSMenuDelegate {
             gap: gap,
             behind: parentWindow,
             resizability: resizability,
-            windowSize: windowSize
+            windowSize: windowSize,
+            appIcon: appIcon,
+            windowTitle: activeLayoutTarget?.windowTitle,
+            appName: activeLayoutTarget?.appName
         )
     }
 
