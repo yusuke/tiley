@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.2.6] - 2026-03-26
+
 ### Fixed
 
 - Fixed a crash that occurred when the app was launched as a login item
@@ -369,7 +371,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v3.2.5...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v3.2.6...HEAD
+[3.2.6]: https://github.com/yusuke/tiley/releases/tag/v3.2.6
 [3.2.5]: https://github.com/yusuke/tiley/releases/tag/v3.2.5
 [3.2.4]: https://github.com/yusuke/tiley/releases/tag/v3.2.4
 [3.2.3]: https://github.com/yusuke/tiley/releases/tag/v3.2.3

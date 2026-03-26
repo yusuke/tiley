@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.6] - 2026-03-26
+
 ### Corretto
 
 - Corretto un arresto anomalo che si verificava all'avvio come elemento di login

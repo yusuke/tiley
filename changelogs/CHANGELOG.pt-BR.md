@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.6] - 2026-03-26
+
 ### Corrigido
 
 - Corrigido um travamento que ocorria ao iniciar o app como item de login

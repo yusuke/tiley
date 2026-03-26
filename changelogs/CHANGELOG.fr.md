@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.6] - 2026-03-26
+
 ### Corrigé
 
 - Correction d'un plantage lors du lancement en tant qu'élément d'ouverture de session
