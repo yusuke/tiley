@@ -3,6 +3,65 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>3.2.8</title>
+            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
+<ul>
+<li>Исправлена проблема переключения окон клавишами Tab/стрелками в боковой панели, при которой происходило переключение только между двумя окнами вместо перебора всех окон</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o problema na barra lateral onde Tab/setas alternavam entre apenas duas janelas em vez de percorrer todas as janelas</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto il problema nella barra laterale in cui Tab/frecce alternavano solo tra due finestre invece di scorrere tutte le finestre</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction du problème dans la barre latérale où Tab/flèches alternaient entre seulement deux fenêtres au lieu de parcourir toutes les fenêtres</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido el problema en la barra lateral donde Tab/flechas alternaban solo entre dos ventanas en lugar de recorrer todas</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Tab-/Pfeiltasten-Navigation in der Seitenleiste wechselte nur zwischen zwei Fenstern statt alle Fenster zu durchlaufen</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了在側邊欄中使用 Tab/方向鍵切換視窗時只在兩個視窗之間來回切換的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了在侧边栏中使用 Tab/方向键切换窗口时只在两个窗口之间来回切换的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>사이드바에서 Tab/화살표 키로 윈도우를 전환할 때 두 개의 윈도우 사이만 번갈아 선택되는 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>サイドバーでTab/矢印キーによるウインドウ切り替えが2つのウインドウ間で行き来するだけになる問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed Tab/arrow key window cycling in the sidebar alternating between only two windows instead of cycling through all windows</li>
+</ul>]]></description>
+            <pubDate>Thu, 26 Mar 2026 23:56:15 +0900</pubDate>
+            <sparkle:version>328</sparkle:version>
+            <sparkle:shortVersionString>3.2.8</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley-3.2.8.zip" length="5421379" type="application/octet-stream" sparkle:edSignature="XfJETf3zOjd7vph1ZZtneTXD9WKFDvfhzvsFbfXPTFllfljFRzUb0fHHrkQHxeD+S1dTx5O0fHVOvlcDZAreCg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley328-327.delta" sparkle:deltaFrom="327" length="95630" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="uVJMSMDKIYenUWXYKQSysUTB260bAvN8VQfTQn8lRqIvzWlbxnV9eaVZPSnkf8cZFCB/Pk/qcQZLqXT82iuQBQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley328-326.delta" sparkle:deltaFrom="326" length="175858" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yprlEZ7I4a0yUMG7qjikKfvPzCl6bfEC/dONXZ80wua4+yq+A0V+HmOd70gya/hoFzpKD7EQdhQpO8UsQL6tDw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley328-325.delta" sparkle:deltaFrom="325" length="177294" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="H2dYbdb44jFfjt5I9VtGt5k1M5UOPy2nmlAYdfsjNfCpmDafGa6TTTDt39tRIeNBqwOl3NppE4kSiLqK6sPVDg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley328-324.delta" sparkle:deltaFrom="324" length="355442" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Lcsm18QNo57hAE8Xe7FN16M3awfIInccz8fTbSt0rTcpOzIHOODWsclX3eCrCEfEoOxMI/+t+r+KmmfLxWFGAA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley328-323.delta" sparkle:deltaFrom="323" length="859254" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2m8GsU9gqgStM9TgKmJYDqR/Gx/J8EtOUXI5tR6LxnRLPBwRFeXABm3EybRV9HD/5S2FngMJpuSeDA8hCD1wCg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>3.2.7</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -48,11 +107,51 @@
 <ul>
 <li>Fixed a crash that occurred when the app was launched as a login item (incomplete fix in 3.2.6)</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um travamento que ocorria ao iniciar o app como item de login (correção incompleta na versão 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto un arresto anomalo che si verificava all'avvio come elemento di login (correzione incompleta nella versione 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un plantage lors du lancement en tant qu'élément d'ouverture de session (correction incomplète dans la version 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión (corrección incompleta en 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Absturz beim Starten als Anmeldeobjekt behoben (unvollständige Behebung in 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了作為登入項目啟動時當機的問題（3.2.6中的修正不完整）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了作为登录项启动时崩溃的问题（3.2.6中的修复不完整）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>로그인 항목으로 실행 시 충돌하는 문제를 수정 (3.2.6에서의 수정이 불완전했던 문제)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>ログイン項目として起動した際にクラッシュする問題を修正（3.2.6での修正が不十分だった問題）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed a crash that occurred when the app was launched as a login item (incomplete fix in 3.2.6)</li>
+</ul>]]></description>
             <pubDate>Thu, 26 Mar 2026 17:25:42 +0900</pubDate>
             <sparkle:version>327</sparkle:version>
             <sparkle:shortVersionString>3.2.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley-3.2.7.zip" length="5421368" type="application/octet-stream" sparkle:edSignature="FpACaSHJOXZadBTdiI1ZLtBNEU1Vn4g76HA+Q5qiryxfrJngaQfuvK/qrz8aPiayeOy/uUg5bWdj4LLGGqjtBA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley-3.2.7.zip" length="5421368" type="application/octet-stream" sparkle:edSignature="FpACaSHJOXZadBTdiI1ZLtBNEU1Vn4g76HA+Q5qiryxfrJngaQfuvK/qrz8aPiayeOy/uUg5bWdj4LLGGqjtBA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley327-326.delta" sparkle:deltaFrom="326" length="178826" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="m7diDq2OS6b8uegPu5DWXWvn5T+gwkKSGNpkCoUGrIrnIyIPdQ2YZo4Qgznm6i902cI1OsGl4NJ75KU/0qq7BA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley327-325.delta" sparkle:deltaFrom="325" length="170598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GcISSwppJFJ3Ss7d/4Rq17MHdJKvfM9+oUTu8rbckq98C5/jJ2/KXTsn2kPhR77RRGwP9OJvW+FEUj54+dogBw=="/>
@@ -147,342 +246,57 @@
 <ul>
 <li>Fixed a crash that occurred when the app was launched as a login item</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um travamento que ocorria ao iniciar o app como item de login</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto un arresto anomalo che si verificava all'avvio come elemento di login</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un plantage lors du lancement en tant qu'élément d'ouverture de session</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Absturz beim Starten als Anmeldeobjekt behoben</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了作為登入項目啟動時當機的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了作为登录项启动时崩溃的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>로그인 항목으로 실행 시 충돌하는 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>ログイン項目として起動した際にクラッシュする問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed a crash that occurred when the app was launched as a login item</li>
+</ul>]]></description>
             <pubDate>Thu, 26 Mar 2026 16:35:01 +0900</pubDate>
             <sparkle:version>326</sparkle:version>
             <sparkle:shortVersionString>3.2.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley-3.2.6.zip" length="5424689" type="application/octet-stream" sparkle:edSignature="6jwfHJUwgN//OFjZx6Z9Fn+a1lpqjMMQf0GR5Yrxw+XpA/1Z+h2csUU4oHMFg5rHTGvTLcElb/6tPkZzK+3OBQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley-3.2.6.zip" length="5424689" type="application/octet-stream" sparkle:edSignature="6jwfHJUwgN//OFjZx6Z9Fn+a1lpqjMMQf0GR5Yrxw+XpA/1Z+h2csUU4oHMFg5rHTGvTLcElb/6tPkZzK+3OBQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-325.delta" sparkle:deltaFrom="325" length="149338" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dfDzRR4UNXNg/6LhIa7/Ss6/fh5DbYoAtjnn9HDPrDN3ohwT/YwshBIxiYuOuWf2h0VKKD+RTYwqVkCoHcVDAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-324.delta" sparkle:deltaFrom="324" length="350242" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="6dyilju+hr3enaDUePDceSukpjvi6fPzdF3quYP6FzgNNQgvZjLYxCK0A2GAgVVMMUE2oTV0dC11AGQLqorzDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-323.delta" sparkle:deltaFrom="323" length="860646" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Kln3Ykx2arAkJUE2IjOesbNfhB2hjSNP6SlQ+kXh4N7DWGEiewGhL5RsNQZxXIyWwdaZtEVD6pEGSAW9tK9zBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-322.delta" sparkle:deltaFrom="322" length="888494" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PLVI7lNFTJuw0zBPQQqN/qk/4ilDV4MnxfqilR7882IAZx6jBTZPeGC268rfo9SkFoNMKPFEGnicYInYqhNCCg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-321.delta" sparkle:deltaFrom="321" length="894738" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="XN6mww2qnbIJlQhFj8RIs55W2BwtsHp54YWUek5g0PYRDMiLBeiuWwOVC2vfyCbyc98WI8BTsV0NJYzcZUhLDg=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>3.2.5</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>Разделы горячих клавиш и глобальных горячих клавиш объединены в один раздел</li>
-<li>Унифицирован интерфейс настройки для всех типов горячих клавиш</li>
-</ul>
-<h3>Исправлено</h3>
-<ul>
-<li>Исправлена проблема, при которой главное окно могло оставаться видимым при переходе приложения в фоновый режим</li>
-<li>Исправлена обрезка красной рамки подсветки из-за закруглённых углов и выреза на встроенных дисплеях (рамка теперь рисуется ниже области строки меню)</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Seções de atalhos e atalhos globais unificadas em uma única seção</li>
-<li>Interface de configuração de atalhos unificada para todos os tipos</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um problema em que a janela principal podia permanecer visível quando o app ia para segundo plano</li>
-<li>Corrigida a borda de destaque que era cortada pelos cantos arredondados e notch em telas integradas (agora é desenhada abaixo da área da barra de menus)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Sezioni scorciatoie e scorciatoie globali unificate in un'unica sezione</li>
-<li>Interfaccia di impostazione delle scorciatoie unificata per tutti i tipi</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Risolto un problema per cui la finestra principale poteva rimanere visibile quando l'app passava in background</li>
-<li>Corretto il bordo di evidenziazione tagliato dagli angoli arrotondati e dal notch sui display integrati (ora viene disegnato sotto l'area della barra dei menu)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Fusion des sections Raccourcis et Raccourcis globaux en une seule section</li>
-<li>Interface de configuration des raccourcis unifiée pour tous les types</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un problème où la fenêtre principale pouvait rester visible lorsque l'app passait en arrière-plan</li>
-<li>Correction du cadre de surbrillance tronqué par les coins arrondis et l'encoche sur les écrans intégrés (le cadre est désormais dessiné sous la barre de menus)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Secciones de atajos y atajos globales unificadas en una sola sección</li>
-<li>Interfaz de configuración de atajos unificada para todos los tipos</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió un problema en el que la ventana principal podía permanecer visible cuando la app pasaba a segundo plano</li>
-<li>Corregido el borde de resaltado que se recortaba por las esquinas redondeadas y el notch en pantallas integradas (ahora se dibuja debajo del área de la barra de menús)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Kurzbefehle- und Globale-Kurzbefehle-Bereiche zu einem einzigen Bereich zusammengeführt</li>
-<li>Einheitliche Einstellungsoberfläche für alle Kurzbefehltypen</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Ein Problem wurde behoben, bei dem das Hauptfenster sichtbar bleiben konnte, wenn die App in den Hintergrund wechselte</li>
-<li>Hervorhebungsrahmen auf integrierten Displays wurde durch abgerundete Ecken und Notch abgeschnitten – der Rahmen wird nun unterhalb der Menüleiste gezeichnet</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>將快捷鍵和全域快捷鍵區段合併為一個快捷鍵區段</li>
-<li>統一所有快捷鍵類型的設定介面</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了應用程式切換到背景時主視窗可能仍然顯示的問題</li>
-<li>修正內建顯示器上因圓角和瀏海導致紅色高亮邊框被裁剪的問題（改為在選單列區域下方繪製邊框）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>将快捷键和全局快捷键部分合并为一个快捷键部分</li>
-<li>统一所有快捷键类型的设置界面</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了应用切换到后台时主窗口可能仍然显示的问题</li>
-<li>修复内置显示器上因圆角和刘海导致红色高亮边框被裁剪的问题（改为在菜单栏区域下方绘制边框）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>단축키 섹션과 글로벌 단축키 섹션을 하나로 통합</li>
-<li>모든 단축키 유형에서 설정 UI 통일</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>앱이 백그라운드로 전환될 때 메인 윈도우가 표시된 채로 남아 있을 수 있는 문제를 수정</li>
-<li>내장 디스플레이에서 둥근 모서리와 노치로 인해 빨간 하이라이트 테두리가 잘리는 문제를 수정 (메뉴 막대 영역 아래에 테두리를 그리도록 변경)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ショートカットセクションとグローバルショートカットセクションを統合</li>
-<li>すべてのショートカット種別で設定UIを統一</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>アプリがバックグラウンドに移行した際にメインウインドウが表示されたまま残ることがある問題を修正</li>
-<li>内蔵ディスプレイで角丸やノッチにより赤いハイライト枠線が途切れる問題を修正（メニューバー領域より下に枠線を描画するように変更）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Unified the Shortcuts and Global Shortcut sections into a single Shortcuts section</li>
-<li>Unified shortcut setting UI across all shortcut types</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed an issue where the main window could remain visible when the app went to the background</li>
-<li>Fixed display highlight border being clipped by rounded corners and notch on built-in displays by drawing the border below the menu bar area</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Seções de atalhos e atalhos globais unificadas em uma única seção</li>
-<li>Interface de configuração de atalhos unificada para todos os tipos</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um problema em que a janela principal podia permanecer visível quando o app ia para segundo plano</li>
-<li>Corrigida a borda de destaque que era cortada pelos cantos arredondados e notch em telas integradas (agora é desenhada abaixo da área da barra de menus)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Sezioni scorciatoie e scorciatoie globali unificate in un'unica sezione</li>
-<li>Interfaccia di impostazione delle scorciatoie unificata per tutti i tipi</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Risolto un problema per cui la finestra principale poteva rimanere visibile quando l'app passava in background</li>
-<li>Corretto il bordo di evidenziazione tagliato dagli angoli arrotondati e dal notch sui display integrati (ora viene disegnato sotto l'area della barra dei menu)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Fusion des sections Raccourcis et Raccourcis globaux en une seule section</li>
-<li>Interface de configuration des raccourcis unifiée pour tous les types</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un problème où la fenêtre principale pouvait rester visible lorsque l'app passait en arrière-plan</li>
-<li>Correction du cadre de surbrillance tronqué par les coins arrondis et l'encoche sur les écrans intégrés (le cadre est désormais dessiné sous la barre de menus)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Secciones de atajos y atajos globales unificadas en una sola sección</li>
-<li>Interfaz de configuración de atajos unificada para todos los tipos</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió un problema en el que la ventana principal podía permanecer visible cuando la app pasaba a segundo plano</li>
-<li>Corregido el borde de resaltado que se recortaba por las esquinas redondeadas y el notch en pantallas integradas (ahora se dibuja debajo del área de la barra de menús)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Kurzbefehle- und Globale-Kurzbefehle-Bereiche zu einem einzigen Bereich zusammengeführt</li>
-<li>Einheitliche Einstellungsoberfläche für alle Kurzbefehltypen</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Ein Problem wurde behoben, bei dem das Hauptfenster sichtbar bleiben konnte, wenn die App in den Hintergrund wechselte</li>
-<li>Hervorhebungsrahmen auf integrierten Displays wurde durch abgerundete Ecken und Notch abgeschnitten – der Rahmen wird nun unterhalb der Menüleiste gezeichnet</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>將快捷鍵和全域快捷鍵區段合併為一個快捷鍵區段</li>
-<li>統一所有快捷鍵類型的設定介面</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了應用程式切換到背景時主視窗可能仍然顯示的問題</li>
-<li>修正內建顯示器上因圓角和瀏海導致紅色高亮邊框被裁剪的問題（改為在選單列區域下方繪製邊框）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>将快捷键和全局快捷键部分合并为一个快捷键部分</li>
-<li>统一所有快捷键类型的设置界面</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了应用切换到后台时主窗口可能仍然显示的问题</li>
-<li>修复内置显示器上因圆角和刘海导致红色高亮边框被裁剪的问题（改为在菜单栏区域下方绘制边框）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>단축키 섹션과 글로벌 단축키 섹션을 하나로 통합</li>
-<li>모든 단축키 유형에서 설정 UI 통일</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>앱이 백그라운드로 전환될 때 메인 윈도우가 표시된 채로 남아 있을 수 있는 문제를 수정</li>
-<li>내장 디스플레이에서 둥근 모서리와 노치로 인해 빨간 하이라이트 테두리가 잘리는 문제를 수정 (메뉴 막대 영역 아래에 테두리를 그리도록 변경)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ショートカットセクションとグローバルショートカットセクションを統合</li>
-<li>すべてのショートカット種別で設定UIを統一</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>アプリがバックグラウンドに移行した際にメインウインドウが表示されたまま残ることがある問題を修正</li>
-<li>内蔵ディスプレイで角丸やノッチにより赤いハイライト枠線が途切れる問題を修正（メニューバー領域より下に枠線を描画するように変更）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Unified the Shortcuts and Global Shortcut sections into a single Shortcuts section</li>
-<li>Unified shortcut setting UI across all shortcut types</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed an issue where the main window could remain visible when the app went to the background</li>
-<li>Fixed display highlight border being clipped by rounded corners and notch on built-in displays by drawing the border below the menu bar area</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Seções de atalhos e atalhos globais unificadas em uma única seção</li>
-<li>Interface de configuração de atalhos unificada para todos os tipos</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um problema em que a janela principal podia permanecer visível quando o app ia para segundo plano</li>
-<li>Corrigida a borda de destaque que era cortada pelos cantos arredondados e notch em telas integradas (agora é desenhada abaixo da área da barra de menus)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Sezioni scorciatoie e scorciatoie globali unificate in un'unica sezione</li>
-<li>Interfaccia di impostazione delle scorciatoie unificata per tutti i tipi</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Risolto un problema per cui la finestra principale poteva rimanere visibile quando l'app passava in background</li>
-<li>Corretto il bordo di evidenziazione tagliato dagli angoli arrotondati e dal notch sui display integrati (ora viene disegnato sotto l'area della barra dei menu)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Fusion des sections Raccourcis et Raccourcis globaux en une seule section</li>
-<li>Interface de configuration des raccourcis unifiée pour tous les types</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un problème où la fenêtre principale pouvait rester visible lorsque l'app passait en arrière-plan</li>
-<li>Correction du cadre de surbrillance tronqué par les coins arrondis et l'encoche sur les écrans intégrés (le cadre est désormais dessiné sous la barre de menus)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Secciones de atajos y atajos globales unificadas en una sola sección</li>
-<li>Interfaz de configuración de atajos unificada para todos los tipos</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió un problema en el que la ventana principal podía permanecer visible cuando la app pasaba a segundo plano</li>
-<li>Corregido el borde de resaltado que se recortaba por las esquinas redondeadas y el notch en pantallas integradas (ahora se dibuja debajo del área de la barra de menús)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Kurzbefehle- und Globale-Kurzbefehle-Bereiche zu einem einzigen Bereich zusammengeführt</li>
-<li>Einheitliche Einstellungsoberfläche für alle Kurzbefehltypen</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Ein Problem wurde behoben, bei dem das Hauptfenster sichtbar bleiben konnte, wenn die App in den Hintergrund wechselte</li>
-<li>Hervorhebungsrahmen auf integrierten Displays wurde durch abgerundete Ecken und Notch abgeschnitten – der Rahmen wird nun unterhalb der Menüleiste gezeichnet</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>將快捷鍵和全域快捷鍵區段合併為一個快捷鍵區段</li>
-<li>統一所有快捷鍵類型的設定介面</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了應用程式切換到背景時主視窗可能仍然顯示的問題</li>
-<li>修正內建顯示器上因圓角和瀏海導致紅色高亮邊框被裁剪的問題（改為在選單列區域下方繪製邊框）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>将快捷键和全局快捷键部分合并为一个快捷键部分</li>
-<li>统一所有快捷键类型的设置界面</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了应用切换到后台时主窗口可能仍然显示的问题</li>
-<li>修复内置显示器上因圆角和刘海导致红色高亮边框被裁剪的问题（改为在菜单栏区域下方绘制边框）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>단축키 섹션과 글로벌 단축키 섹션을 하나로 통합</li>
-<li>모든 단축키 유형에서 설정 UI 통일</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>앱이 백그라운드로 전환될 때 메인 윈도우가 표시된 채로 남아 있을 수 있는 문제를 수정</li>
-<li>내장 디스플레이에서 둥근 모서리와 노치로 인해 빨간 하이라이트 테두리가 잘리는 문제를 수정 (메뉴 막대 영역 아래에 테두리를 그리도록 변경)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ショートカットセクションとグローバルショートカットセクションを統合</li>
-<li>すべてのショートカット種別で設定UIを統一</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>アプリがバックグラウンドに移行した際にメインウインドウが表示されたまま残ることがある問題を修正</li>
-<li>内蔵ディスプレイで角丸やノッチにより赤いハイライト枠線が途切れる問題を修正（メニューバー領域より下に枠線を描画するように変更）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Unified the Shortcuts and Global Shortcut sections into a single Shortcuts section</li>
-<li>Unified shortcut setting UI across all shortcut types</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed an issue where the main window could remain visible when the app went to the background</li>
-<li>Fixed display highlight border being clipped by rounded corners and notch on built-in displays by drawing the border below the menu bar area</li>
-</ul>]]></description>
-            <pubDate>Thu, 26 Mar 2026 11:46:48 +0900</pubDate>
-            <sparkle:version>325</sparkle:version>
-            <sparkle:shortVersionString>3.2.5</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley-3.2.5.zip" length="5423515" type="application/octet-stream" sparkle:edSignature="1uOkec77y8s5+B3EuUEXybvZNFVLtVOaNzL9YhmwcUYuuHwKyr00HlpwUOiEcm1Gb/nmCmL8vztoqWfbVDVHCw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-324.delta" sparkle:deltaFrom="324" length="350814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="3P0G3jms99gXqviCsA7A8ybDTKkYUJ8xyLx2NCQRxqnsaViaOBr5JLHR04Dq81YDtM35/4F7u0CQhfpRIQhqAw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-323.delta" sparkle:deltaFrom="323" length="859686" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="20i12ZR1/Ud9RD96rmd1Juko/b5bi/qY/LjM3Ibj6aKgXnla88bybPiO3d1jXoF07uiBszlMyihneLke1dszDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-322.delta" sparkle:deltaFrom="322" length="885930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="t6sY85e2JEHo5Nz8GexP/ZcgQCkOYHs2fylqqmUjMyvnU1LeL46LegFe2T0HzP2aLFCjRWhlCkQdvGucIT1eCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-321.delta" sparkle:deltaFrom="321" length="894454" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CyN8Yabbrew4Dn+GnLJtZCRs2BH2JlGuJj60m8bAycCZgwXDTXz794tKHN/voaCVv8Nzh3x1QYOjxbrqlhKoAg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-320.delta" sparkle:deltaFrom="320" length="896598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="RTEltYvFWOTmLvEzsvh2VhaiKFG3VGZ+kFciKIYHd8LIQaG4hLx5FAdg/fz4Vs6PYXiNres4z5M0rGv4UCHMCg=="/>
             </sparkle:deltas>
         </item>
     </channel>
