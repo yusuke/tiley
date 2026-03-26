@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Fusion des sections Raccourcis et Raccourcis globaux en une seule section
+- Interface de configuration des raccourcis unifiée pour tous les types
+
+### Corrigé
+
+- Correction d'un problème où la fenêtre principale pouvait rester visible lorsque l'app passait en arrière-plan
+- Correction du cadre de surbrillance tronqué par les coins arrondis et l'encoche sur les écrans intégrés (le cadre est désormais dessiné sous la barre de menus)
+
 ## [3.2.4] - 2026-03-26
 
 ### Ajouté

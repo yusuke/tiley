@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Seções de atalhos e atalhos globais unificadas em uma única seção
+- Interface de configuração de atalhos unificada para todos os tipos
+
+### Corrigido
+
+- Corrigido um problema em que a janela principal podia permanecer visível quando o app ia para segundo plano
+- Corrigida a borda de destaque que era cortada pelos cantos arredondados e notch em telas integradas (agora é desenhada abaixo da área da barra de menus)
+
 ## [3.2.4] - 2026-03-26
 
 ### Adicionado

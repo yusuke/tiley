@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Secciones de atajos y atajos globales unificadas en una sola sección
+- Interfaz de configuración de atajos unificada para todos los tipos
+
+### Corregido
+
+- Se corrigió un problema en el que la ventana principal podía permanecer visible cuando la app pasaba a segundo plano
+- Corregido el borde de resaltado que se recortaba por las esquinas redondeadas y el notch en pantallas integradas (ahora se dibuja debajo del área de la barra de menús)
+
 ## [3.2.4] - 2026-03-26
 
 ### Añadido

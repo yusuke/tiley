@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Unified the Shortcuts and Global Shortcut sections into a single Shortcuts section
+- Unified shortcut setting UI across all shortcut types
+
+### Fixed
+
+- Fixed an issue where the main window could remain visible when the app went to the background
+- Fixed display highlight border being clipped by rounded corners and notch on built-in displays by drawing the border below the menu bar area
+
 ## [3.2.4] - 2026-03-26
 
 ### Added

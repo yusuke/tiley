@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Kurzbefehle- und Globale-Kurzbefehle-Bereiche zu einem einzigen Bereich zusammengeführt
+- Einheitliche Einstellungsoberfläche für alle Kurzbefehltypen
+
+### Behoben
+
+- Ein Problem wurde behoben, bei dem das Hauptfenster sichtbar bleiben konnte, wenn die App in den Hintergrund wechselte
+- Hervorhebungsrahmen auf integrierten Displays wurde durch abgerundete Ecken und Notch abgeschnitten – der Rahmen wird nun unterhalb der Menüleiste gezeichnet
+
 ## [3.2.4] - 2026-03-26
 
 ### Hinzugefügt

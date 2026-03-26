@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Sezioni scorciatoie e scorciatoie globali unificate in un'unica sezione
+- Interfaccia di impostazione delle scorciatoie unificata per tutti i tipi
+
+### Corretto
+
+- Risolto un problema per cui la finestra principale poteva rimanere visibile quando l'app passava in background
+- Corretto il bordo di evidenziazione tagliato dagli angoli arrotondati e dal notch sui display integrati (ora viene disegnato sotto l'area della barra dei menu)
+
 ## [3.2.4] - 2026-03-26
 
 ### Aggiunto
