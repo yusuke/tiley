@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.5] - 2026-03-26
+
 ### Modificato
 
 - Sezioni scorciatoie e scorciatoie globali unificate in un'unica sezione

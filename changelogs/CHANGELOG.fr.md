@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.5] - 2026-03-26
+
 ### Modifié
 
 - Fusion des sections Raccourcis et Raccourcis globaux en une seule section
