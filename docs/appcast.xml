@@ -3,6 +3,65 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>3.2.9</title>
+            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
+<ul>
+<li>Исправлен порядок переключения Tab/стрелками для соответствия порядку отображения в боковой панели (группировка по пространству, экрану и приложению)</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigida a ordem de navegação Tab/setas para corresponder à ordem de exibição da barra lateral (agrupada por espaço, tela e aplicativo)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto l'ordine di navigazione Tab/frecce per corrispondere all'ordine di visualizzazione della barra laterale (raggruppato per spazio, schermo e applicazione)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'ordre de parcours Tab/flèches pour correspondre à l'ordre d'affichage de la barre latérale (groupé par espace, écran et application)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido el orden de ciclo de Tab/flechas para coincidir con el orden de la barra lateral (agrupado por espacio, pantalla y aplicación)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Tab-/Pfeiltasten-Reihenfolge entspricht nun der Anzeigereihenfolge der Seitenleiste (gruppiert nach Space, Bildschirm und Anwendung)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了 Tab/方向鍵的切換順序與側邊欄顯示順序（依空間、螢幕和應用程式分組）不一致的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了 Tab/方向键的切换顺序与侧边栏显示顺序（按空间、屏幕和应用程序分组）不一致的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>Tab/화살표 키의 순환 순서가 사이드바 표시 순서(스페이스, 화면, 애플리케이션별 그룹)와 일치하도록 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>Tab/矢印キーの巡回順序がサイドバーの表示順序（スペース・スクリーン・アプリケーション別グループ）と一致するように修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)</li>
+</ul>]]></description>
+            <pubDate>Fri, 27 Mar 2026 00:15:32 +0900</pubDate>
+            <sparkle:version>329</sparkle:version>
+            <sparkle:shortVersionString>3.2.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley-3.2.9.zip" length="5423180" type="application/octet-stream" sparkle:edSignature="fizybZtkkbrC97NwZOCKAe9AhGH4EtJz1vmoG5rDa9S5bLxSOk0v8G0PU8dvKWTr9/RHteVHZroNNsfS1TThAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-328.delta" sparkle:deltaFrom="328" length="181878" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="IZyYawyt+0/stWNPbpRGO72EuHwmkfLP63k74o+R26FNHsUZKNuqAOYM24HCqGbNIXYAGWKF0QwD5gCROTgWDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-327.delta" sparkle:deltaFrom="327" length="184222" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CKK8UvI1WqanXi/nUwnTcwnHeFbUE5M5vvwf0jMhBdtfzIcu4xvQ2y6cjLWC6REvsuQELGaSVK8bt+LPb872Aw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-326.delta" sparkle:deltaFrom="326" length="182686" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="t6sX92nxPlDyNoz1cReDocxAzW7jBtn/mWC1T/Y9IBG8YYuyjNd6vvT7IqbtY4ERN8RJjN7wcDSqJ0OGw7nCCw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-325.delta" sparkle:deltaFrom="325" length="189478" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="X1V3zdLkc5XohdXm3bz/iXw0WBfJE7W3IcR9x+4XC9uxKK0/XQ/IaC5soEvVQXWUOaJrgI5qrFa2sQZJoJ2+DA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-324.delta" sparkle:deltaFrom="324" length="359990" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Grxz06RheGdq2Jp7TC2ZfqMkvhkEPmQjtu9a2koI+FJ6YSKjSn8qQUJO0DRyPCvwgjtvm1HCTMDis0dXrvMeAQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>3.2.8</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -48,11 +107,51 @@
 <ul>
 <li>Fixed Tab/arrow key window cycling in the sidebar alternating between only two windows instead of cycling through all windows</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o problema na barra lateral onde Tab/setas alternavam entre apenas duas janelas em vez de percorrer todas as janelas</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto il problema nella barra laterale in cui Tab/frecce alternavano solo tra due finestre invece di scorrere tutte le finestre</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction du problème dans la barre latérale où Tab/flèches alternaient entre seulement deux fenêtres au lieu de parcourir toutes les fenêtres</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido el problema en la barra lateral donde Tab/flechas alternaban solo entre dos ventanas en lugar de recorrer todas</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Tab-/Pfeiltasten-Navigation in der Seitenleiste wechselte nur zwischen zwei Fenstern statt alle Fenster zu durchlaufen</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了在側邊欄中使用 Tab/方向鍵切換視窗時只在兩個視窗之間來回切換的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了在侧边栏中使用 Tab/方向键切换窗口时只在两个窗口之间来回切换的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>사이드바에서 Tab/화살표 키로 윈도우를 전환할 때 두 개의 윈도우 사이만 번갈아 선택되는 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>サイドバーでTab/矢印キーによるウインドウ切り替えが2つのウインドウ間で行き来するだけになる問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed Tab/arrow key window cycling in the sidebar alternating between only two windows instead of cycling through all windows</li>
+</ul>]]></description>
             <pubDate>Thu, 26 Mar 2026 23:56:15 +0900</pubDate>
             <sparkle:version>328</sparkle:version>
             <sparkle:shortVersionString>3.2.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley-3.2.8.zip" length="5421379" type="application/octet-stream" sparkle:edSignature="XfJETf3zOjd7vph1ZZtneTXD9WKFDvfhzvsFbfXPTFllfljFRzUb0fHHrkQHxeD+S1dTx5O0fHVOvlcDZAreCg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley-3.2.8.zip" length="5421379" type="application/octet-stream" sparkle:edSignature="XfJETf3zOjd7vph1ZZtneTXD9WKFDvfhzvsFbfXPTFllfljFRzUb0fHHrkQHxeD+S1dTx5O0fHVOvlcDZAreCg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley328-327.delta" sparkle:deltaFrom="327" length="95630" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="uVJMSMDKIYenUWXYKQSysUTB260bAvN8VQfTQn8lRqIvzWlbxnV9eaVZPSnkf8cZFCB/Pk/qcQZLqXT82iuQBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley328-326.delta" sparkle:deltaFrom="326" length="175858" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yprlEZ7I4a0yUMG7qjikKfvPzCl6bfEC/dONXZ80wua4+yq+A0V+HmOd70gya/hoFzpKD7EQdhQpO8UsQL6tDw=="/>
@@ -147,156 +246,57 @@
 <ul>
 <li>Fixed a crash that occurred when the app was launched as a login item (incomplete fix in 3.2.6)</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um travamento que ocorria ao iniciar o app como item de login (correção incompleta na versão 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto un arresto anomalo che si verificava all'avvio come elemento di login (correzione incompleta nella versione 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un plantage lors du lancement en tant qu'élément d'ouverture de session (correction incomplète dans la version 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión (corrección incompleta en 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Absturz beim Starten als Anmeldeobjekt behoben (unvollständige Behebung in 3.2.6)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了作為登入項目啟動時當機的問題（3.2.6中的修正不完整）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了作为登录项启动时崩溃的问题（3.2.6中的修复不完整）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>로그인 항목으로 실행 시 충돌하는 문제를 수정 (3.2.6에서의 수정이 불완전했던 문제)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>ログイン項目として起動した際にクラッシュする問題を修正（3.2.6での修正が不十分だった問題）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed a crash that occurred when the app was launched as a login item (incomplete fix in 3.2.6)</li>
+</ul>]]></description>
             <pubDate>Thu, 26 Mar 2026 17:25:42 +0900</pubDate>
             <sparkle:version>327</sparkle:version>
             <sparkle:shortVersionString>3.2.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley-3.2.7.zip" length="5421368" type="application/octet-stream" sparkle:edSignature="FpACaSHJOXZadBTdiI1ZLtBNEU1Vn4g76HA+Q5qiryxfrJngaQfuvK/qrz8aPiayeOy/uUg5bWdj4LLGGqjtBA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley-3.2.7.zip" length="5421368" type="application/octet-stream" sparkle:edSignature="FpACaSHJOXZadBTdiI1ZLtBNEU1Vn4g76HA+Q5qiryxfrJngaQfuvK/qrz8aPiayeOy/uUg5bWdj4LLGGqjtBA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley327-326.delta" sparkle:deltaFrom="326" length="178826" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="m7diDq2OS6b8uegPu5DWXWvn5T+gwkKSGNpkCoUGrIrnIyIPdQ2YZo4Qgznm6i902cI1OsGl4NJ75KU/0qq7BA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley327-325.delta" sparkle:deltaFrom="325" length="170598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GcISSwppJFJ3Ss7d/4Rq17MHdJKvfM9+oUTu8rbckq98C5/jJ2/KXTsn2kPhR77RRGwP9OJvW+FEUj54+dogBw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley327-324.delta" sparkle:deltaFrom="324" length="354614" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="p2BzMu1a71ekOU0zTsC27RX381paq3gPhYn6sS+/xM5Jaw5vFeejLmv5NeY6nKRNUCfzAh3SdPblQyjSwoKEBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley327-323.delta" sparkle:deltaFrom="323" length="859982" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0TeS/qCTnZbJGuJ6sreeSBTrQZmlRe1vu6YkjJgf4zI8ryV52jJNHNpp0A6ir/5JoaL2wkUII2aH41QUTXqbCQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.7/Tiley327-322.delta" sparkle:deltaFrom="322" length="886782" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="06CvDyx3HBAsIlNd+MQ2E9NErhEGXBcwQmLVAijV0x2LsfrSSltgZ2FVSKRK9AjvB8FKlRl5miJQNXaZQh1vBA=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>3.2.6</title>
-            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
-<ul>
-<li>Исправлен сбой при запуске приложения как объекта входа</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um travamento que ocorria ao iniciar o app como item de login</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto un arresto anomalo che si verificava all'avvio come elemento di login</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un plantage lors du lancement en tant qu'élément d'ouverture de session</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Absturz beim Starten als Anmeldeobjekt behoben</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了作為登入項目啟動時當機的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了作为登录项启动时崩溃的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>로그인 항목으로 실행 시 충돌하는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>ログイン項目として起動した際にクラッシュする問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed a crash that occurred when the app was launched as a login item</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um travamento que ocorria ao iniciar o app como item de login</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto un arresto anomalo che si verificava all'avvio come elemento di login</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un plantage lors du lancement en tant qu'élément d'ouverture de session</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Absturz beim Starten als Anmeldeobjekt behoben</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了作為登入項目啟動時當機的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了作为登录项启动时崩溃的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>로그인 항목으로 실행 시 충돌하는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>ログイン項目として起動した際にクラッシュする問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed a crash that occurred when the app was launched as a login item</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um travamento que ocorria ao iniciar o app como item de login</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto un arresto anomalo che si verificava all'avvio come elemento di login</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un plantage lors du lancement en tant qu'élément d'ouverture de session</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Absturz beim Starten als Anmeldeobjekt behoben</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了作為登入項目啟動時當機的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了作为登录项启动时崩溃的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>로그인 항목으로 실행 시 충돌하는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>ログイン項目として起動した際にクラッシュする問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed a crash that occurred when the app was launched as a login item</li>
-</ul>]]></description>
-            <pubDate>Thu, 26 Mar 2026 16:35:01 +0900</pubDate>
-            <sparkle:version>326</sparkle:version>
-            <sparkle:shortVersionString>3.2.6</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.8/Tiley-3.2.6.zip" length="5424689" type="application/octet-stream" sparkle:edSignature="6jwfHJUwgN//OFjZx6Z9Fn+a1lpqjMMQf0GR5Yrxw+XpA/1Z+h2csUU4oHMFg5rHTGvTLcElb/6tPkZzK+3OBQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-325.delta" sparkle:deltaFrom="325" length="149338" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dfDzRR4UNXNg/6LhIa7/Ss6/fh5DbYoAtjnn9HDPrDN3ohwT/YwshBIxiYuOuWf2h0VKKD+RTYwqVkCoHcVDAw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-324.delta" sparkle:deltaFrom="324" length="350242" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="6dyilju+hr3enaDUePDceSukpjvi6fPzdF3quYP6FzgNNQgvZjLYxCK0A2GAgVVMMUE2oTV0dC11AGQLqorzDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-323.delta" sparkle:deltaFrom="323" length="860646" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Kln3Ykx2arAkJUE2IjOesbNfhB2hjSNP6SlQ+kXh4N7DWGEiewGhL5RsNQZxXIyWwdaZtEVD6pEGSAW9tK9zBQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-322.delta" sparkle:deltaFrom="322" length="888494" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PLVI7lNFTJuw0zBPQQqN/qk/4ilDV4MnxfqilR7882IAZx6jBTZPeGC268rfo9SkFoNMKPFEGnicYInYqhNCCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.6/Tiley326-321.delta" sparkle:deltaFrom="321" length="894738" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="XN6mww2qnbIJlQhFj8RIs55W2BwtsHp54YWUek5g0PYRDMiLBeiuWwOVC2vfyCbyc98WI8BTsV0NJYzcZUhLDg=="/>
             </sparkle:deltas>
         </item>
     </channel>
