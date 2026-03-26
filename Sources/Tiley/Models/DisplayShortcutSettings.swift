@@ -155,7 +155,67 @@ struct DisplayFingerprintResolver {
                 ))
             }
         }
-        displays = result.sorted { $0.displayID < $1.displayID }
+        // Sort by physical arrangement: top-to-bottom rows, left-to-right within each row.
+        // Displays whose vertical extents overlap by ≥80% are treated as the same row.
+        displays = Self.sortByPhysicalArrangement(result)
+    }
+
+    /// Sorts displays by physical position: higher displays first, then left to right.
+    /// Displays whose vertical ranges overlap by ≥80% are considered on the same row.
+    private static func sortByPhysicalArrangement(_ list: [ResolvedDisplay]) -> [ResolvedDisplay] {
+        guard list.count > 1 else { return list }
+
+        // Use CGDisplayBounds (Quartz coordinates: origin top-left of primary, y↓).
+        struct DisplayRect {
+            let resolved: ResolvedDisplay
+            let bounds: CGRect  // Quartz coords
+        }
+        let rects = list.map { DisplayRect(resolved: $0, bounds: CGDisplayBounds($0.displayID)) }
+
+        // Assign rows: group displays whose vertical extents overlap ≥80%.
+        var rows: [[DisplayRect]] = []
+        let sortedByTop = rects.sorted { $0.bounds.minY < $1.bounds.minY }
+
+        for dr in sortedByTop {
+            var placed = false
+            for i in rows.indices {
+                // Check overlap with the first element in the row (representative).
+                let rep = rows[i][0]
+                if verticalOverlapFraction(dr.bounds, rep.bounds) >= 0.8 {
+                    rows[i].append(dr)
+                    placed = true
+                    break
+                }
+            }
+            if !placed {
+                rows.append([dr])
+            }
+        }
+
+        // Sort rows top-to-bottom (smallest minY first in Quartz coords).
+        rows.sort { rowA, rowB in
+            let topA = rowA.map(\.bounds.minY).min() ?? 0
+            let topB = rowB.map(\.bounds.minY).min() ?? 0
+            return topA < topB
+        }
+
+        // Within each row, sort left-to-right.
+        var result: [ResolvedDisplay] = []
+        for row in rows {
+            let sorted = row.sorted { $0.bounds.minX < $1.bounds.minX }
+            result.append(contentsOf: sorted.map(\.resolved))
+        }
+        return result
+    }
+
+    /// Returns the fraction of vertical overlap between two rects relative to the shorter one.
+    private static func verticalOverlapFraction(_ a: CGRect, _ b: CGRect) -> CGFloat {
+        let overlapTop = max(a.minY, b.minY)
+        let overlapBottom = min(a.maxY, b.maxY)
+        let overlap = max(0, overlapBottom - overlapTop)
+        let shorter = min(a.height, b.height)
+        guard shorter > 0 else { return 0 }
+        return overlap / shorter
     }
 
     /// Finds the resolved display for a fingerprint with a given occurrence index.
