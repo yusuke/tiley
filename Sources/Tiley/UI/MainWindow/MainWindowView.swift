@@ -3734,7 +3734,7 @@ private struct ShortcutBadgeLabelView: View {
                         onDelete()
                     }
                 } label: {
-                    Image(systemName: "trash")
+                    Image(systemName: "xmark")
                         .font(.system(size: 9, weight: .semibold))
                         .foregroundStyle(isDeleteHovered ? Color.red : Color.secondary)
                         .padding(.horizontal, 5)
