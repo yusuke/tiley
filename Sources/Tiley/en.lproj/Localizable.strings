@@ -46,9 +46,7 @@
 "Show Dock icon" = "Show Dock icon";
 "Windows" = "Windows";
 "Write debug log to ~/tiley.log" = "Write debug log to ~/tiley.log";
-"Global shortcut" = "Global shortcut";
 "Reset to Default" = "Reset to Default";
-"Click the field, then press the new shortcut." = "Click the field, then press the new shortcut.";
 "Gap" = "Gap";
 "Reset Grid to Default" = "Reset Grid to Default";
 "Reset the layout preset list to the defaults." = "Reset the layout preset list to the defaults.";
@@ -128,7 +126,10 @@
 "Close all %@ windows" = "Close all %@ windows";
 
 // Display shortcuts
-"Display Shortcuts" = "Display Shortcuts";
+"Shortcuts" = "Shortcuts";
+"Show Tiley" = "Show Tiley";
+"Remove Shortcut" = "Remove Shortcut";
+"Click to change" = "Click to change";
 "Move to Primary Display" = "Move to Primary Display";
 "Move to Next Display" = "Move to Next Display";
 "Move to Previous Display" = "Move to Previous Display";

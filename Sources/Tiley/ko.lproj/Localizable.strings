@@ -46,9 +46,7 @@
 "Show Dock icon" = "Dock 아이콘 표시";
 "Windows" = "윈도우";
 "Write debug log to ~/tiley.log" = "디버그 로그를 ~/tiley.log에 기록";
-"Global shortcut" = "전역 단축키";
 "Reset to Default" = "기본값으로 재설정";
-"Click the field, then press the new shortcut." = "필드를 클릭한 뒤 새 단축키를 누르세요.";
 "Gap" = "간격";
 "Reset Grid to Default" = "그리드를 기본값으로 재설정";
 "Reset the layout preset list to the defaults." = "레이아웃 프리셋 목록을 기본값으로 되돌립니다.";
@@ -128,7 +126,10 @@
 "Close all %@ windows" = "%@의 모든 윈도우 닫기";
 
 // Display shortcuts
-"Display Shortcuts" = "디스플레이 단축키";
+"Shortcuts" = "단축키";
+"Show Tiley" = "Tiley 표시";
+"Remove Shortcut" = "단축키 제거";
+"Click to change" = "클릭하여 변경";
 "Move to Primary Display" = "주 디스플레이로 이동";
 "Move to Next Display" = "다음 디스플레이로 이동";
 "Move to Previous Display" = "이전 디스플레이로 이동";

@@ -1476,7 +1476,7 @@ final class AppState: NSObject, NSMenuDelegate {
         registerPresetHotKeys()
     }
 
-    func layoutShortcutConflictMessage(for shortcut: HotKeyShortcut, excluding presetID: UUID) -> String? {
+    func layoutShortcutConflictMessage(for shortcut: HotKeyShortcut, excluding presetID: UUID?) -> String? {
         // Tab and Shift+Tab are reserved for window target cycling.
         if shortcut.keyCode == UInt32(kVK_Tab),
            shortcut.modifiers == 0 || shortcut.modifiers == UInt32(shiftKey) {

@@ -46,9 +46,7 @@
 "Show Dock icon" = "Mostrar ícone no Dock";
 "Windows" = "Janelas";
 "Write debug log to ~/tiley.log" = "Gravar log de depuração em ~/tiley.log";
-"Global shortcut" = "Atalho global";
 "Reset to Default" = "Redefinir padrão";
-"Click the field, then press the new shortcut." = "Clique no campo e pressione o novo atalho.";
 "Gap" = "Espaçamento";
 "Reset Grid to Default" = "Redefinir grade";
 "Reset the layout preset list to the defaults." = "Redefine a lista de layouts predefinidos para os padrões.";
@@ -128,7 +126,10 @@
 "Close all %@ windows" = "Fechar todas as janelas do %@";
 
 // Display shortcuts
-"Display Shortcuts" = "Atalhos de tela";
+"Shortcuts" = "Atalhos";
+"Show Tiley" = "Mostrar Tiley";
+"Remove Shortcut" = "Remover atalho";
+"Click to change" = "Clique para alterar";
 "Move to Primary Display" = "Mover para a tela principal";
 "Move to Next Display" = "Mover para a próxima tela";
 "Move to Previous Display" = "Mover para a tela anterior";

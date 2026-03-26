@@ -46,9 +46,7 @@
 "Show Dock icon" = "Показывать значок в Dock";
 "Windows" = "Окна";
 "Write debug log to ~/tiley.log" = "Записывать отладочный лог в ~/tiley.log";
-"Global shortcut" = "Глобальное сочетание";
 "Reset to Default" = "Сбросить";
-"Click the field, then press the new shortcut." = "Нажмите на поле и введите новое сочетание клавиш.";
 "Gap" = "Отступ";
 "Reset Grid to Default" = "Сбросить сетку";
 "Reset the layout preset list to the defaults." = "Сбросить список компоновок к значениям по умолчанию.";
@@ -128,7 +126,10 @@
 "Close all %@ windows" = "Закрыть все окна %@";
 
 // Display shortcuts
-"Display Shortcuts" = "Горячие клавиши экрана";
+"Shortcuts" = "Горячие клавиши";
+"Show Tiley" = "Показать Tiley";
+"Remove Shortcut" = "Удалить горячую клавишу";
+"Click to change" = "Нажмите для изменения";
 "Move to Primary Display" = "Переместить на основной экран";
 "Move to Next Display" = "Переместить на следующий экран";
 "Move to Previous Display" = "Переместить на предыдущий экран";

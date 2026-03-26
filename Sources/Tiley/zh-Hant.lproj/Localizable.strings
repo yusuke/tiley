@@ -46,9 +46,7 @@
 "Show Dock icon" = "顯示 Dock 圖示";
 "Windows" = "視窗";
 "Write debug log to ~/tiley.log" = "將除錯日誌寫入 ~/tiley.log";
-"Global shortcut" = "全域快捷鍵";
 "Reset to Default" = "重設為預設值";
-"Click the field, then press the new shortcut." = "點擊欄位後按下新的快捷鍵。";
 "Gap" = "間距";
 "Reset Grid to Default" = "將網格重設為預設值";
 "Reset the layout preset list to the defaults." = "將版面預設清單重設為預設值。";
@@ -128,7 +126,10 @@
 "Close all %@ windows" = "關閉所有%@視窗";
 
 // Display shortcuts
-"Display Shortcuts" = "顯示器快捷鍵";
+"Shortcuts" = "快捷鍵";
+"Show Tiley" = "顯示 Tiley";
+"Remove Shortcut" = "移除快捷鍵";
+"Click to change" = "點擊更改";
 "Move to Primary Display" = "移至主顯示器";
 "Move to Next Display" = "移至下一個顯示器";
 "Move to Previous Display" = "移至上一個顯示器";

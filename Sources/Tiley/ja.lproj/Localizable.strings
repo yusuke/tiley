@@ -46,9 +46,7 @@
 "Show Dock icon" = "Dockアイコンを表示";
 "Windows" = "ウインドウ";
 "Write debug log to ~/tiley.log" = "デバッグログを ~/tiley.log に書き出す";
-"Global shortcut" = "グローバルショートカット";
 "Reset to Default" = "デフォルトに戻す";
-"Click the field, then press the new shortcut." = "新しいショートカットを設定するにはフィールドをクリックして入力してください。";
 "Gap" = "間隔";
 "Reset Grid to Default" = "グリッドをデフォルトに戻す";
 "Reset the layout preset list to the defaults." = "レイアウトプリセット一覧を初期状態に戻します。";
@@ -128,7 +126,10 @@
 "Close all %@ windows" = "%@のウインドウをすべて閉じる";
 
 // Display shortcuts
-"Display Shortcuts" = "ディスプレイショートカット";
+"Shortcuts" = "ショートカット";
+"Show Tiley" = "Tileyを表示";
+"Remove Shortcut" = "ショートカットを削除";
+"Click to change" = "クリックして変更";
 "Move to Primary Display" = "主ディスプレイに移動";
 "Move to Next Display" = "次のディスプレイに移動";
 "Move to Previous Display" = "前のディスプレイに移動";

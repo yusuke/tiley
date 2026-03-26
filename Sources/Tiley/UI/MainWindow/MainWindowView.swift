@@ -1,4 +1,5 @@
 import AppKit
+import Carbon
 import Sparkle
 import SwiftUI
 import UniformTypeIdentifiers
@@ -169,11 +170,12 @@ struct MainWindowView: View {
     @State private var editingPresetID: UUID?
     @State private var editingPresetNameID: UUID?
     @State private var editingPresetNameDraft = ""
-    @State private var isRecordingGlobalShortcut = false
     @State private var recordingPresetShortcutID: UUID?
     @State private var addingShortcutPresetID: UUID?
     @State private var addingShortcutIsGlobal = false
     @State private var replacingShortcutIndex: Int?
+    @State private var recordingDisplayShortcutKey: String?
+    @State private var recordingDisplayShortcutIsGlobal = false
     @State private var nameFieldFocusTrigger: Int = 0
     @State private var hoveredPresetID: UUID?
     @State private var draggingPresetID: UUID?
@@ -2425,33 +2427,6 @@ struct MainWindowView: View {
                 }
             }
 
-            TahoeSettingsSection(title: NSLocalizedString("Shortcut", comment: "Settings section")) {
-                VStack(spacing: 8) {
-                    TahoeSettingsRow(label: NSLocalizedString("Global shortcut", comment: "")) {
-                        ShortcutRecorderField(
-                            shortcut: $draftSettings.hotKeyShortcut,
-                            onRecordingChange: { isRecording in
-                                isRecordingGlobalShortcut = isRecording
-                                appState.setShortcutRecordingActive(isRecording)
-                            }
-                        )
-                        .frame(width: 140, height: 22)
-                    }
-                    .padding(.vertical, 2)
-
-                    HStack {
-                        Text("Click the field, then press the new shortcut.")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                        Spacer()
-                        Button("Reset to Default") {
-                            dismissPresetNameEditingIfNeeded()
-                            draftSettings.hotKeyShortcut = .default
-                        }
-                    }
-                }
-            }
-
             TahoeSettingsSection(title: NSLocalizedString("Grid", comment: "Settings section")) {
                 VStack(spacing: 0) {
                     TahoeSettingsRow(label: NSLocalizedString("Columns", comment: "")) {
@@ -2609,9 +2584,73 @@ struct MainWindowView: View {
         .font(.system(size: 13))
     }
 
+    @ViewBuilder
+    private var showTileyShortcutRow: some View {
+        let keyPath = "showTiley.global"
+        let isRecording = recordingDisplayShortcutKey == keyPath && recordingDisplayShortcutIsGlobal == true
+        let hasShortcut = !draftSettings.hotKeyShortcut.isEmpty
+
+        TahoeSettingsRow(label: NSLocalizedString("Show Tiley", comment: "Shortcut action to show Tiley overlay")) {
+            if isRecording {
+                CompactShortcutRecorderField(
+                    onShortcutRecorded: { newShortcut in
+                        var s = newShortcut
+                        s.isGlobal = true
+                        draftSettings.hotKeyShortcut = s
+                        recordingDisplayShortcutKey = nil
+                        appState.setShortcutRecordingActive(false)
+                    },
+                    onRecordingChange: { recording in
+                        if !recording {
+                            recordingDisplayShortcutKey = nil
+                            appState.setShortcutRecordingActive(false)
+                        }
+                    },
+                    validateShortcut: { candidate in
+                        validateDisplayShortcut(candidate, excludeKeyPath: keyPath)
+                    }
+                )
+                .frame(width: 120, height: 22)
+            } else if hasShortcut {
+                DisplayShortcutBadgeLabelView(
+                    shortcut: draftSettings.hotKeyShortcut,
+                    isGlobal: true,
+                    onTap: {
+                        recordingDisplayShortcutKey = keyPath
+                        recordingDisplayShortcutIsGlobal = true
+                        appState.setShortcutRecordingActive(true)
+                    },
+                    onDelete: {
+                        draftSettings.hotKeyShortcut = .empty
+                    }
+                )
+            } else {
+                AddShortcutButton(colorScheme: colorScheme, tooltip: NSLocalizedString("Add Global Shortcut", comment: "Tooltip for add global shortcut button")) {
+                    HStack(spacing: 2) {
+                        Image(systemName: "globe")
+                            .font(.system(size: 8, weight: .semibold))
+                        Image(systemName: "plus")
+                            .font(.system(size: 9, weight: .semibold))
+                    }
+                    .foregroundStyle(.secondary)
+                } action: {
+                    recordingDisplayShortcutKey = keyPath
+                    recordingDisplayShortcutIsGlobal = true
+                    appState.setShortcutRecordingActive(true)
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+
     private var displayShortcutsSection: some View {
-        TahoeSettingsSection(title: NSLocalizedString("Display Shortcuts", comment: "Settings section for display movement shortcuts")) {
+        TahoeSettingsSection(title: NSLocalizedString("Shortcuts", comment: "Settings section for shortcuts")) {
             VStack(spacing: 0) {
+                // Show Tiley (global-only shortcut, formerly separate "Shortcut" section)
+                showTileyShortcutRow
+
+                Divider().opacity(0.4)
+
                 displayShortcutRow(
                     label: NSLocalizedString("Move to Primary Display", comment: "Display shortcut action"),
                     localBinding: $draftSettings.displayShortcutSettings.moveToPrimary.local,
@@ -2708,6 +2747,17 @@ struct MainWindowView: View {
                         }
                     }
                 }
+
+                Divider().opacity(0.4)
+
+                HStack {
+                    Spacer()
+                    Button(NSLocalizedString("Reset to Default", comment: "Reset shortcut to default")) {
+                        dismissPresetNameEditingIfNeeded()
+                        draftSettings.hotKeyShortcut = .default
+                    }
+                }
+                .padding(.vertical, 4)
             }
         }
     }
@@ -2722,64 +2772,94 @@ struct MainWindowView: View {
         localKeyPath: String,
         globalKeyPath: String
     ) -> some View {
-        VStack(spacing: 0) {
-            // Row 1: Label (left) + local shortcut (right) — same layout as TahoeSettingsRow
-            TahoeSettingsRow(label: label) {
-                displayShortcutField(
+        TahoeSettingsRow(label: label) {
+            HStack(spacing: 4) {
+                displayShortcutBadgeOrRecorder(
                     binding: localBinding,
                     enabledBinding: localEnabledBinding,
                     keyPath: localKeyPath,
                     isGlobal: false
                 )
-            }
-            .padding(.vertical, 4)
-
-            // Row 2: Global shortcut (right-aligned, no label)
-            HStack {
-                Spacer()
-                displayShortcutField(
+                displayShortcutBadgeOrRecorder(
                     binding: globalBinding,
                     enabledBinding: globalEnabledBinding,
                     keyPath: globalKeyPath,
                     isGlobal: true
                 )
             }
-            .padding(.vertical, 4)
         }
+        .padding(.vertical, 4)
         .contentShape(Rectangle())
     }
 
     @ViewBuilder
-    private func displayShortcutField(
+    private func displayShortcutBadgeOrRecorder(
         binding: Binding<HotKeyShortcut?>,
         enabledBinding: Binding<Bool>,
         keyPath: String,
         isGlobal: Bool
     ) -> some View {
-        HStack(spacing: 4) {
-            ShortcutRecorderField(
-                shortcut: Binding(
-                    get: { binding.wrappedValue ?? HotKeyShortcut.empty },
-                    set: {
-                        var s = $0
-                        s.isGlobal = isGlobal
-                        binding.wrappedValue = s
-                        enabledBinding.wrappedValue = true
+        let isRecording = recordingDisplayShortcutKey == keyPath && recordingDisplayShortcutIsGlobal == isGlobal
+        let hasShortcut = binding.wrappedValue != nil && binding.wrappedValue?.isEmpty == false
+
+        if isRecording {
+            CompactShortcutRecorderField(
+                onShortcutRecorded: { newShortcut in
+                    var s = newShortcut
+                    s.isGlobal = isGlobal
+                    binding.wrappedValue = s
+                    enabledBinding.wrappedValue = true
+                    recordingDisplayShortcutKey = nil
+                    appState.setShortcutRecordingActive(false)
+                },
+                onRecordingChange: { recording in
+                    if !recording {
+                        recordingDisplayShortcutKey = nil
+                        appState.setShortcutRecordingActive(false)
                     }
-                ),
-                placeholder: isGlobal
-                    ? NSLocalizedString("Record Global Shortcut", comment: "Placeholder for global shortcut recorder")
-                    : NSLocalizedString("Record Shortcut", comment: "Placeholder for shortcut recorder"),
-                onRecordingChange: { isRecording in
-                    appState.setShortcutRecordingActive(isRecording)
+                },
+                validateShortcut: { candidate in
+                    validateDisplayShortcut(candidate, excludeKeyPath: keyPath)
                 }
             )
-            .frame(width: 140, height: 22)
-
-            Toggle("", isOn: enabledBinding)
-                .toggleStyle(.checkbox)
-                .labelsHidden()
-                .disabled(binding.wrappedValue == nil || binding.wrappedValue?.isEmpty == true)
+            .frame(width: 120, height: 22)
+        } else if hasShortcut {
+            DisplayShortcutBadgeLabelView(
+                shortcut: binding.wrappedValue!,
+                isGlobal: isGlobal,
+                onTap: {
+                    recordingDisplayShortcutKey = keyPath
+                    recordingDisplayShortcutIsGlobal = isGlobal
+                    appState.setShortcutRecordingActive(true)
+                },
+                onDelete: {
+                    binding.wrappedValue = nil
+                    enabledBinding.wrappedValue = false
+                }
+            )
+        } else {
+            AddShortcutButton(colorScheme: colorScheme, tooltip: isGlobal
+                ? NSLocalizedString("Add Global Shortcut", comment: "Tooltip for add global shortcut button")
+                : NSLocalizedString("Add Shortcut", comment: "Tooltip for add shortcut button")
+            ) {
+                if isGlobal {
+                    HStack(spacing: 2) {
+                        Image(systemName: "globe")
+                            .font(.system(size: 8, weight: .semibold))
+                        Image(systemName: "plus")
+                            .font(.system(size: 9, weight: .semibold))
+                    }
+                    .foregroundStyle(.secondary)
+                } else {
+                    Image(systemName: "plus")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                }
+            } action: {
+                recordingDisplayShortcutKey = keyPath
+                recordingDisplayShortcutIsGlobal = isGlobal
+                appState.setShortcutRecordingActive(true)
+            }
         }
     }
 
@@ -3245,7 +3325,7 @@ struct MainWindowView: View {
     }
 
     private func handlePresetTap(_ preset: LayoutPreset) {
-        let isEditing = editingPresetID != nil || editingPresetNameID != nil || isRecordingGlobalShortcut || recordingPresetShortcutID != nil || draggingPresetID != nil
+        let isEditing = editingPresetID != nil || editingPresetNameID != nil || recordingDisplayShortcutKey != nil || recordingPresetShortcutID != nil || draggingPresetID != nil
         if isEditing {
             appState.selectLayoutPreset(preset.id)
             return
@@ -3357,6 +3437,78 @@ struct MainWindowView: View {
             let rawIndex = Int((location.y / step).rounded(.down))
             return min(max(0, rawIndex), itemCount)
         }
+    }
+
+    /// Validates a shortcut candidate against **draft** settings instead of the committed appState,
+    /// so that a shortcut deleted in the draft can be immediately re-assigned.
+    private func validateDisplayShortcut(_ candidate: HotKeyShortcut, excludeKeyPath: String) -> String? {
+        // Reserved keys (same rules as appState.layoutShortcutConflictMessage)
+        if !candidate.isGlobal {
+            if candidate.keyCode == UInt32(kVK_Tab),
+               candidate.modifiers == 0 || candidate.modifiers == UInt32(shiftKey) {
+                return NSLocalizedString("Tab is reserved for switching target windows.", comment: "Tab shortcut reserved for window cycling")
+            }
+            if candidate.keyCode == UInt32(kVK_Return), candidate.modifiers == 0 {
+                return NSLocalizedString("Return is reserved for raising the selected window.", comment: "Return shortcut reserved for raising window")
+            }
+            if (candidate.keyCode == UInt32(kVK_UpArrow) || candidate.keyCode == UInt32(kVK_DownArrow)),
+               candidate.modifiers == 0 {
+                return NSLocalizedString("Arrow keys are reserved for switching target windows.", comment: "Arrow key shortcut reserved for window cycling")
+            }
+            if candidate.keyCode == UInt32(kVK_ANSI_Slash), candidate.modifiers == 0 {
+                return NSLocalizedString("/ is reserved for closing/quitting the selected window.", comment: "Slash shortcut reserved for closing window or quitting app")
+            }
+            if candidate.keyCode == UInt32(kVK_ANSI_F), candidate.modifiers == UInt32(cmdKey) {
+                return NSLocalizedString("⌘F is reserved for searching the window list.", comment: "Cmd+F shortcut reserved for window search")
+            }
+        }
+
+        // Check against draft hotKeyShortcut (Show Tiley)
+        if excludeKeyPath != "showTiley.global" {
+            let bareCandidate = HotKeyShortcut(keyCode: candidate.keyCode, modifiers: candidate.modifiers)
+            let bareHotKey = HotKeyShortcut(keyCode: draftSettings.hotKeyShortcut.keyCode, modifiers: draftSettings.hotKeyShortcut.modifiers)
+            if !draftSettings.hotKeyShortcut.isEmpty && bareCandidate == bareHotKey {
+                return NSLocalizedString("This shortcut is already used by the global shortcut.", comment: "Layout shortcut conflict with app global shortcut")
+            }
+        }
+
+        // Check layout presets
+        if appState.layoutPresets.contains(where: { $0.shortcuts.contains(where: {
+            $0.keyCode == candidate.keyCode && $0.modifiers == candidate.modifiers && $0.isGlobal == candidate.isGlobal
+        }) }) {
+            return NSLocalizedString("This shortcut is already used by a layout.", comment: "Display shortcut conflict with layout preset")
+        }
+
+        // Check other draft display shortcuts (excluding the current slot)
+        let ds = draftSettings.displayShortcutSettings
+        var allSlots: [(String, HotKeyShortcut)] = []
+        let suffix = candidate.isGlobal ? ".global" : ".local"
+        if let s = candidate.isGlobal ? ds.moveToPrimary.global : ds.moveToPrimary.local {
+            allSlots.append(("moveToPrimary\(suffix)", s))
+        }
+        if let s = candidate.isGlobal ? ds.moveToNext.global : ds.moveToNext.local {
+            allSlots.append(("moveToNext\(suffix)", s))
+        }
+        if let s = candidate.isGlobal ? ds.moveToPrevious.global : ds.moveToPrevious.local {
+            allSlots.append(("moveToPrevious\(suffix)", s))
+        }
+        if let s = candidate.isGlobal ? ds.moveToOther.global : ds.moveToOther.local {
+            allSlots.append(("moveToOther\(suffix)", s))
+        }
+        for entry in ds.moveToDisplay {
+            let fp = entry.fingerprint
+            let keyBase = "moveToDisplay.\(fp.vendorNumber).\(fp.modelNumber).\(fp.serialNumber).\(entry.occurrenceIndex)"
+            if let s = candidate.isGlobal ? entry.shortcuts.global : entry.shortcuts.local {
+                allSlots.append(("\(keyBase)\(suffix)", s))
+            }
+        }
+        for (kp, s) in allSlots where kp != excludeKeyPath {
+            if s.keyCode == candidate.keyCode && s.modifiers == candidate.modifiers {
+                return NSLocalizedString("This shortcut is already used by another display shortcut.", comment: "Display shortcut conflict with another display shortcut")
+            }
+        }
+
+        return nil
     }
 
     private func dismissPresetNameEditingIfNeeded(except id: UUID? = nil) {
@@ -3604,6 +3756,69 @@ private struct ShortcutBadgeLabelView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 5, style: .continuous)
                 .stroke(isEditing && isGroupHovered ? Color.accentColor.opacity(0.6) : Color.accentColor.opacity(0.3), lineWidth: isEditing && isGroupHovered ? 1 : 0.5)
+        )
+    }
+}
+
+private struct DisplayShortcutBadgeLabelView: View {
+    let shortcut: HotKeyShortcut
+    let isGlobal: Bool
+    var onTap: (() -> Void)? = nil
+    var onDelete: (() -> Void)? = nil
+
+    @State private var isLabelHovered = false
+    @State private var isDeleteHovered = false
+
+    private var isGroupHovered: Bool { isLabelHovered || isDeleteHovered }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            HStack(spacing: 3) {
+                if isGlobal {
+                    Image(systemName: "globe")
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(Color.accentColor)
+                }
+                Text(shortcut.displayString)
+                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                    .lineLimit(1)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .contentShape(Rectangle())
+            .onHover { hovering in isLabelHovered = hovering }
+            .onTapGesture { onTap?() }
+            .instantTooltip(NSLocalizedString("Click to change", comment: "Tooltip for clicking display shortcut badge to edit"))
+
+            // Divider
+            Rectangle()
+                .fill(Color.accentColor.opacity(0.3))
+                .frame(width: 0.5)
+                .padding(.vertical, 2)
+
+            // Delete button
+            Button {
+                onDelete?()
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 8, weight: .bold))
+                    .foregroundStyle(isDeleteHovered ? Color.red : Color.secondary)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 3)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .onHover { hovering in isDeleteHovered = hovering }
+            .instantTooltip(NSLocalizedString("Remove Shortcut", comment: "Tooltip for remove display shortcut button"))
+        }
+        .fixedSize()
+        .background(
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .fill(Color.accentColor.opacity(isGroupHovered ? 0.25 : 0.15))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .stroke(isGroupHovered ? Color.accentColor.opacity(0.6) : Color.accentColor.opacity(0.3), lineWidth: isGroupHovered ? 1 : 0.5)
         )
     }
 }
