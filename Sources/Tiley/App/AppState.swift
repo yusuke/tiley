@@ -183,6 +183,9 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Whether the user has cycled the target window at least once via Tab.
     var hasUsedTabCycling: Bool { originalFrontmostPID != nil }
     var windowTargetListVersion: Int = 0
+    /// The window-target indices in the order displayed in the sidebar.
+    /// Updated by the sidebar view whenever its rows are recomputed.
+    @ObservationIgnored var sidebarWindowOrder: [Int] = []
     /// True while the deferred `refreshAvailableWindows` is pending.
     var isLoadingWindowList = false
     /// Incremented to signal the UI to toggle the window list sidebar.
@@ -657,7 +660,9 @@ final class AppState: NSObject, NSMenuDelegate {
     func cycleTargetWindow(forward: Bool) {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
 
-        refreshAvailableWindows()
+        if originalFrontmostPID == nil {
+            refreshAvailableWindows()
+        }
         guard !availableWindowTargets.isEmpty else { return }
 
         // Record the original frontmost app on first cycle.
@@ -666,23 +671,37 @@ final class AppState: NSObject, NSMenuDelegate {
             originalFrontmostTarget = activeLayoutTarget
         }
 
-        // Build filtered index list based on search query.
+        // Use the sidebar display order so Tab cycles in the same visual order.
         let query = windowSearchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        var baseIndices: [Int]
-        if query.isEmpty {
-            baseIndices = Array(availableWindowTargets.indices)
-        } else {
-            baseIndices = availableWindowTargets.indices.filter { i in
-                let target = availableWindowTargets[i]
-                let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                return target.appName.lowercased().contains(query)
-                    || title.lowercased().contains(query)
+        let filteredIndices: [Int]
+        if !sidebarWindowOrder.isEmpty {
+            // Use sidebar order, filtering out any stale indices.
+            let valid = sidebarWindowOrder.filter { $0 < availableWindowTargets.count }
+            if query.isEmpty {
+                filteredIndices = valid
+            } else {
+                filteredIndices = valid.filter { i in
+                    let target = availableWindowTargets[i]
+                    let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    return target.appName.lowercased().contains(query)
+                        || title.lowercased().contains(query)
+                }
             }
+        } else {
+            // Fallback: screen-ordered indices (sidebar not yet rendered).
+            var baseIndices: [Int]
+            if query.isEmpty {
+                baseIndices = Array(availableWindowTargets.indices)
+            } else {
+                baseIndices = availableWindowTargets.indices.filter { i in
+                    let target = availableWindowTargets[i]
+                    let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    return target.appName.lowercased().contains(query)
+                        || title.lowercased().contains(query)
+                }
+            }
+            filteredIndices = screenOrderedIndices(baseIndices)
         }
-        guard !baseIndices.isEmpty else { return }
-
-        // Order indices by screen group: mouse cursor screen first.
-        let filteredIndices = screenOrderedIndices(baseIndices)
 
         if let currentPos = filteredIndices.firstIndex(of: activeTargetIndex) {
             let nextPos = forward

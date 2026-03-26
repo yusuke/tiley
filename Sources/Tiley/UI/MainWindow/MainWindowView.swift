@@ -1707,6 +1707,20 @@ struct MainWindowView: View {
         return screenGroupedRows(from: filteredItems)
     }
 
+    /// Extracts window-target indices from sidebar rows and syncs them to AppState
+    /// so that Tab cycling follows the same visual order as the sidebar.
+    @discardableResult
+    private func updateSidebarWindowOrder(_ rows: [SidebarRow]) -> Bool {
+        let order = rows.compactMap { row -> Int? in
+            if case .window(let item) = row { return item.id }
+            return nil
+        }
+        if order != appState.sidebarWindowOrder {
+            appState.sidebarWindowOrder = order
+        }
+        return true
+    }
+
     private func windowListSidebar(height: CGFloat) -> some View {
         VStack(spacing: 0) {
             // Action bar (always visible)
@@ -1756,9 +1770,11 @@ struct MainWindowView: View {
                 Spacer()
             } else {
                 ScrollViewReader { proxy in
+                    let rows = filteredSidebarRows
+                    let _ = updateSidebarWindowOrder(rows)
                     ScrollView {
                         LazyVStack(spacing: 2) {
-                            ForEach(filteredSidebarRows) { row in
+                            ForEach(rows) { row in
                                 switch row {
                                 case .spaceHeader:
                                     EmptyView()
