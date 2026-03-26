@@ -164,6 +164,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var lastTargetPID: pid_t?
     @ObservationIgnored private var workspaceObserverTask: Task<Void, Never>?
     @ObservationIgnored private var appActivationTask: Task<Void, Never>?
+    @ObservationIgnored private var appDeactivationTask: Task<Void, Never>?
     @ObservationIgnored private var activeLayoutTarget: WindowTarget?
     @ObservationIgnored private var cachedResizability: WindowResizability?
     @ObservationIgnored private var cachedResizabilityPID: pid_t?
@@ -452,6 +453,7 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         workspaceObserverTask?.cancel()
         appActivationTask?.cancel()
+        appDeactivationTask?.cancel()
         screenChangeTask?.cancel()
     }
 
@@ -3147,6 +3149,18 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
+        appDeactivationTask = Task { [weak self] in
+            let notifications = NotificationCenter.default.notifications(
+                named: NSApplication.didResignActiveNotification
+            )
+            for await _ in notifications {
+                guard !Task.isCancelled else { break }
+                await MainActor.run { [weak self] in
+                    self?.handleAppDidResignActive()
+                }
+            }
+        }
+
         screenChangeTask = Task { [weak self] in
             let notifications = NotificationCenter.default.notifications(
                 named: NSApplication.didChangeScreenParametersNotification
@@ -3180,6 +3194,14 @@ final class AppState: NSObject, NSMenuDelegate {
         registerDisplayHotKeys()
         guard isShowingLayoutGrid, !isEditingSettings, !isShowingPermissionsOnly else { return }
         openAllScreenWindows()
+    }
+
+    private func handleAppDidResignActive() {
+        guard !isSwitchingActivationPolicy else { return }
+        guard !isRecreatingWindows else { return }
+        guard !isShowingPermissionsOnly else { return }
+        hidePreviewOverlay()
+        hideMainWindow()
     }
 
     private func handleAppDidBecomeActive() {
