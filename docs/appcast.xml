@@ -3,6 +3,131 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>3.2.5</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Разделы горячих клавиш и глобальных горячих клавиш объединены в один раздел</li>
+<li>Унифицирован интерфейс настройки для всех типов горячих клавиш</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена проблема, при которой главное окно могло оставаться видимым при переходе приложения в фоновый режим</li>
+<li>Исправлена обрезка красной рамки подсветки из-за закруглённых углов и выреза на встроенных дисплеях (рамка теперь рисуется ниже области строки меню)</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Seções de atalhos e atalhos globais unificadas em uma única seção</li>
+<li>Interface de configuração de atalhos unificada para todos os tipos</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema em que a janela principal podia permanecer visível quando o app ia para segundo plano</li>
+<li>Corrigida a borda de destaque que era cortada pelos cantos arredondados e notch em telas integradas (agora é desenhada abaixo da área da barra de menus)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Sezioni scorciatoie e scorciatoie globali unificate in un'unica sezione</li>
+<li>Interfaccia di impostazione delle scorciatoie unificata per tutti i tipi</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Risolto un problema per cui la finestra principale poteva rimanere visibile quando l'app passava in background</li>
+<li>Corretto il bordo di evidenziazione tagliato dagli angoli arrotondati e dal notch sui display integrati (ora viene disegnato sotto l'area della barra dei menu)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Fusion des sections Raccourcis et Raccourcis globaux en une seule section</li>
+<li>Interface de configuration des raccourcis unifiée pour tous les types</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un problème où la fenêtre principale pouvait rester visible lorsque l'app passait en arrière-plan</li>
+<li>Correction du cadre de surbrillance tronqué par les coins arrondis et l'encoche sur les écrans intégrés (le cadre est désormais dessiné sous la barre de menus)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Secciones de atajos y atajos globales unificadas en una sola sección</li>
+<li>Interfaz de configuración de atajos unificada para todos los tipos</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Se corrigió un problema en el que la ventana principal podía permanecer visible cuando la app pasaba a segundo plano</li>
+<li>Corregido el borde de resaltado que se recortaba por las esquinas redondeadas y el notch en pantallas integradas (ahora se dibuja debajo del área de la barra de menús)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Kurzbefehle- und Globale-Kurzbefehle-Bereiche zu einem einzigen Bereich zusammengeführt</li>
+<li>Einheitliche Einstellungsoberfläche für alle Kurzbefehltypen</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Ein Problem wurde behoben, bei dem das Hauptfenster sichtbar bleiben konnte, wenn die App in den Hintergrund wechselte</li>
+<li>Hervorhebungsrahmen auf integrierten Displays wurde durch abgerundete Ecken und Notch abgeschnitten – der Rahmen wird nun unterhalb der Menüleiste gezeichnet</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>將快捷鍵和全域快捷鍵區段合併為一個快捷鍵區段</li>
+<li>統一所有快捷鍵類型的設定介面</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了應用程式切換到背景時主視窗可能仍然顯示的問題</li>
+<li>修正內建顯示器上因圓角和瀏海導致紅色高亮邊框被裁剪的問題（改為在選單列區域下方繪製邊框）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>将快捷键和全局快捷键部分合并为一个快捷键部分</li>
+<li>统一所有快捷键类型的设置界面</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了应用切换到后台时主窗口可能仍然显示的问题</li>
+<li>修复内置显示器上因圆角和刘海导致红色高亮边框被裁剪的问题（改为在菜单栏区域下方绘制边框）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>단축키 섹션과 글로벌 단축키 섹션을 하나로 통합</li>
+<li>모든 단축키 유형에서 설정 UI 통일</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>앱이 백그라운드로 전환될 때 메인 윈도우가 표시된 채로 남아 있을 수 있는 문제를 수정</li>
+<li>내장 디스플레이에서 둥근 모서리와 노치로 인해 빨간 하이라이트 테두리가 잘리는 문제를 수정 (메뉴 막대 영역 아래에 테두리를 그리도록 변경)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>ショートカットセクションとグローバルショートカットセクションを統合</li>
+<li>すべてのショートカット種別で設定UIを統一</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>アプリがバックグラウンドに移行した際にメインウインドウが表示されたまま残ることがある問題を修正</li>
+<li>内蔵ディスプレイで角丸やノッチにより赤いハイライト枠線が途切れる問題を修正（メニューバー領域より下に枠線を描画するように変更）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Unified the Shortcuts and Global Shortcut sections into a single Shortcuts section</li>
+<li>Unified shortcut setting UI across all shortcut types</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed an issue where the main window could remain visible when the app went to the background</li>
+<li>Fixed display highlight border being clipped by rounded corners and notch on built-in displays by drawing the border below the menu bar area</li>
+</ul>]]></description>
+            <pubDate>Thu, 26 Mar 2026 11:46:48 +0900</pubDate>
+            <sparkle:version>325</sparkle:version>
+            <sparkle:shortVersionString>3.2.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley-3.2.5.zip" length="5423515" type="application/octet-stream" sparkle:edSignature="1uOkec77y8s5+B3EuUEXybvZNFVLtVOaNzL9YhmwcUYuuHwKyr00HlpwUOiEcm1Gb/nmCmL8vztoqWfbVDVHCw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-324.delta" sparkle:deltaFrom="324" length="350814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="3P0G3jms99gXqviCsA7A8ybDTKkYUJ8xyLx2NCQRxqnsaViaOBr5JLHR04Dq81YDtM35/4F7u0CQhfpRIQhqAw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-323.delta" sparkle:deltaFrom="323" length="859686" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="20i12ZR1/Ud9RD96rmd1Juko/b5bi/qY/LjM3Ibj6aKgXnla88bybPiO3d1jXoF07uiBszlMyihneLke1dszDg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-322.delta" sparkle:deltaFrom="322" length="885930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="t6sY85e2JEHo5Nz8GexP/ZcgQCkOYHs2fylqqmUjMyvnU1LeL46LegFe2T0HzP2aLFCjRWhlCkQdvGucIT1eCg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-321.delta" sparkle:deltaFrom="321" length="894454" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CyN8Yabbrew4Dn+GnLJtZCRs2BH2JlGuJj60m8bAycCZgwXDTXz794tKHN/voaCVv8Nzh3x1QYOjxbrqlhKoAg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley325-320.delta" sparkle:deltaFrom="320" length="896598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="RTEltYvFWOTmLvEzsvh2VhaiKFG3VGZ+kFciKIYHd8LIQaG4hLx5FAdg/fz4Vs6PYXiNres4z5M0rGv4UCHMCg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>3.2.4</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -48,11 +173,51 @@
 <ul>
 <li>Added display movement shortcuts to move windows between displays (primary, next, previous, pick from menu, or specific display)</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Adicionados atalhos para mover janelas entre telas (principal, próxima, anterior, escolher no menu, tela específica)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Aggiunte scorciatoie per spostare le finestre tra gli schermi (principale, successivo, precedente, scegli dal menu, schermo specifico)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Ajout de raccourcis pour déplacer les fenêtres entre les écrans (principal, suivant, précédent, choisir dans le menu, écran spécifique)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Añadidos atajos para mover ventanas entre pantallas (principal, siguiente, anterior, elegir del menú, pantalla específica)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Kurzbefehle zum Verschieben von Fenstern zwischen Bildschirmen hinzugefügt (Hauptbildschirm, nächster, vorheriger, aus Menü wählen, bestimmter Bildschirm)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增在顯示器之間移動視窗的快捷鍵（主顯示器、下一個、上一個、從選單選擇、特定顯示器）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>添加了在显示器之间移动窗口的快捷键（主显示器、下一个、上一个、从菜单选择、特定显示器）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>디스플레이 간 창 이동 단축키 추가 (주 디스플레이, 다음, 이전, 메뉴에서 선택, 특정 디스플레이)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>ディスプレイ間でウインドウを移動するショートカットを追加（主ディスプレイ、次、前、メニューから選択、特定のディスプレイ）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Added display movement shortcuts to move windows between displays (primary, next, previous, pick from menu, or specific display)</li>
+</ul>]]></description>
             <pubDate>Thu, 26 Mar 2026 01:09:15 +0900</pubDate>
             <sparkle:version>324</sparkle:version>
             <sparkle:shortVersionString>3.2.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.4/Tiley-3.2.4.zip" length="5385486" type="application/octet-stream" sparkle:edSignature="5zQ5vkAYRi/ZiNeaFO0kPa2cEgu8MzBxe11MciXvm3ZKoQHOR3Ay3xA0noxJ9+v4x/F7JUlux0vp3cN0vUCwBg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley-3.2.4.zip" length="5385486" type="application/octet-stream" sparkle:edSignature="5zQ5vkAYRi/ZiNeaFO0kPa2cEgu8MzBxe11MciXvm3ZKoQHOR3Ay3xA0noxJ9+v4x/F7JUlux0vp3cN0vUCwBg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.4/Tiley324-323.delta" sparkle:deltaFrom="323" length="814166" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GEPJj1nKpxLXWYKkgb4wPrnitimCv+81fO9Mn/XmAAKShKtMmQCV4kI2QB6CaU1kPD7nLnUpf5HTeg3lmVjZCQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.4/Tiley324-322.delta" sparkle:deltaFrom="322" length="848042" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Hqp/QG/qf1mj0cEjmL4MNHUm60CPDwebZNIwv3bFVQcxGvvs3zJFQ8LUaOUtrCM9Q8BRs/+k8UbH1S6YgMYkCQ=="/>
@@ -252,187 +417,107 @@
 <ul>
 <li>Adjusted appearance when an update is available</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Adicionados indicadores de seta direcional ao botão e itens de menu "Mover para tela", mostrando visualmente a direção da tela de destino com base na disposição física dos monitores</li>
+<li>Quando a janela selecionada está em outra tela, a sobreposição de grade agora exibe uma seta direcional e um ícone de disposição de telas no centro, orientando o usuário até a localização da janela</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>Ajustada a aparência quando uma atualização está disponível</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Aggiunti indicatori freccia direzionali al pulsante e alle voci di menu "Sposta su display", che mostrano visivamente la direzione del display di destinazione in base alla disposizione fisica degli schermi</li>
+<li>Quando la finestra selezionata si trova su un altro display, l'overlay a griglia mostra ora una freccia direzionale e un'icona della disposizione degli schermi al centro, guidando l'utente verso la posizione della finestra</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Regolato l'aspetto quando è disponibile un aggiornamento</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Ajout d'indicateurs fléchés directionnels au bouton et aux éléments de menu « Déplacer vers l'écran », indiquant visuellement la direction de l'écran cible en fonction de la disposition physique des écrans</li>
+<li>Lorsque la fenêtre sélectionnée se trouve sur un autre écran, la grille superposée affiche désormais une flèche directionnelle et une icône de disposition des écrans au centre, guidant l'utilisateur vers l'emplacement de sa fenêtre</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>Ajustement de l'apparence lorsqu'une mise à jour est disponible</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Se añadieron indicadores de flechas direccionales al botón y los elementos de menú "Mover a pantalla", mostrando visualmente la dirección de la pantalla de destino según la disposición física de las pantallas</li>
+<li>Cuando la ventana seleccionada se encuentra en otra pantalla, la superposición de cuadrícula muestra una flecha direccional y un icono de disposición de pantallas en el centro, guiando al usuario hacia la ubicación de su ventana</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Ajustada la apariencia cuando hay una actualización disponible</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Richtungspfeile zu den Schaltflächen und Menüeinträgen „Auf Display verschieben" hinzugefügt, die basierend auf der physischen Bildschirmanordnung die Richtung des Zieldisplays anzeigen</li>
+<li>Wenn sich das ausgewählte Fenster auf einem anderen Display befindet, zeigt das Raster-Overlay nun einen Richtungspfeil und ein Bildschirmanordnungssymbol in der Mitte an, um den Benutzer zum Standort des Fensters zu leiten</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Darstellung bei verfügbarem Update angepasst</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>為「移動到顯示器」按鈕和選單項目新增方向箭頭指示器，根據實際螢幕排列直觀顯示目標顯示器的方向</li>
+<li>當選取的視窗位於其他顯示器時，格線疊層中央會顯示方向箭頭和顯示器排列圖示，引導使用者找到視窗所在位置</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>調整了有更新時的外觀</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>为"移动到显示器"按钮和菜单项添加了方向箭头指示器，根据物理屏幕排列直观显示目标显示器的方向</li>
+<li>当选中的窗口位于其他显示器时，网格叠层中央会显示方向箭头和显示器排列图标，引导用户找到窗口所在位置</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>调整了有更新时的外观</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>"디스플레이로 이동" 버튼 및 메뉴 항목에 물리적 화면 배치에 따라 대상 디스플레이 방향을 나타내는 화살표 표시기를 추가</li>
+<li>선택한 윈도우가 다른 디스플레이에 있을 경우, 그리드 오버레이 중앙에 방향 화살표와 디스플레이 배치 아이콘을 표시하여 윈도우 위치를 안내</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>업데이트가 있을 때의 외관을 조정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>「ディスプレイへ移動」ボタンおよびメニュー項目に、物理的な画面配置に基づいてターゲットディスプレイの方向を示す矢印インジケーターを追加</li>
+<li>選択したウインドウが別のディスプレイにある場合、グリッドオーバーレイの中央に方向矢印とディスプレイ配置アイコンを表示し、ウインドウの場所をガイドするように</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>アップデートがある際のアピアランスを調整</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Added directional arrow indicators to the "Move to Display" button and menu items, visually showing the direction of the target display based on the physical screen arrangement</li>
+<li>When the selected window is on another display, the grid overlay now shows a directional arrow and display arrangement icon in the center, guiding users to where their window is</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Adjusted appearance when an update is available</li>
+</ul>]]></description>
             <pubDate>Wed, 25 Mar 2026 22:06:31 +0900</pubDate>
             <sparkle:version>323</sparkle:version>
             <sparkle:shortVersionString>3.2.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.4/Tiley-3.2.3.zip" length="5256463" type="application/octet-stream" sparkle:edSignature="TNYXqXfLkUMrGHSS487ZZaqgu9gg/vNCliT94vweDbEInytdu4F0zy81esW9g4+catPZXLyQJ/kirNtqoIqhBw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.5/Tiley-3.2.3.zip" length="5256463" type="application/octet-stream" sparkle:edSignature="TNYXqXfLkUMrGHSS487ZZaqgu9gg/vNCliT94vweDbEInytdu4F0zy81esW9g4+catPZXLyQJ/kirNtqoIqhBw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-322.delta" sparkle:deltaFrom="322" length="316254" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="emjzsoVy3ElnqN6w1W9Cj9Cg3jfyDkxEY5aTEVsJjkv4NJ0dVkWlR2Q57oLfN9AVKp8EenN3GvRZuHJ0fBANCw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-321.delta" sparkle:deltaFrom="321" length="362550" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="LACTzSc/g62rbuPwqq2QrIjBdBDtaoRJxv6TKhDPIuvTrF1bI1yGm7xSJ9318+27ORFuVC93RdzmMQIEqj3pCQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-320.delta" sparkle:deltaFrom="320" length="367550" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="h6vAVMEWImF5MU6ML9zUmEzgWGOYg3cjWdcsjrWlgY5BfuOdIJm6WR8P94VoeWZ98v/r/cG8A5ICCx10yQw8Bw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-311.delta" sparkle:deltaFrom="311" length="467370" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PoNBfp7OjAQnN3FasMgPvxAqett0WTYgfrjGF0zs2XkSJCshrFLzsrphCOuC9s04YQOY7kc5LgCSUt/Lm7suDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.3/Tiley323-310.delta" sparkle:deltaFrom="310" length="491778" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ZdlbIQtZzK48VA9H+buNrZZf/ZVEGuRQsdeYX7cfDgsYGRsGeWjrRB0Ne1i96LyNfXBQd47OW/12ccvIELTsBA=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>3.2.2</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>При выборе окна в боковой панели оно временно выводится на передний план для удобства идентификации; при переключении на другое окно или отмене восстанавливается исходный порядок</li>
-<li>Предварительный просмотр изменения размера теперь отображает строку заголовка с иконкой приложения и названием окна, что позволяет более интуитивно определить, какое окно размещается</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao selecionar uma janela na barra lateral, ela é temporariamente trazida para a frente para facilitar a identificação; a ordem original é restaurada ao mudar para outra janela ou cancelar</li>
-<li>A pré-visualização de redimensionamento agora exibe uma barra de título com o ícone do aplicativo e o título da janela, facilitando a identificação de qual janela está sendo organizada</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>La selezione di una finestra nella barra laterale la porta temporaneamente in primo piano per facilitarne l'identificazione; l'ordine originale viene ripristinato quando si passa a un'altra finestra o si annulla</li>
-<li>L'anteprima di ridimensionamento ora mostra una barra del titolo con l'icona dell'applicazione e il titolo della finestra, rendendo più intuitivo identificare quale finestra si sta disponendo</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>La sélection d'une fenêtre dans la barre latérale la place temporairement au premier plan pour faciliter l'identification ; l'ordre original est restauré lors du changement de fenêtre ou de l'annulation</li>
-<li>L'aperçu de redimensionnement affiche désormais une barre de titre avec l'icône de l'application et le titre de la fenêtre, permettant d'identifier plus intuitivement la fenêtre en cours d'agencement</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al seleccionar una ventana en la barra lateral, se muestra temporalmente en primer plano para facilitar su identificación; al cambiar a otra ventana o cancelar, se restaura el orden original</li>
-<li>La vista previa de redimensionamiento ahora muestra una barra de título con el icono de la aplicación y el título de la ventana, facilitando la identificación de la ventana que se está organizando</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Bei Auswahl eines Fensters in der Seitenleiste wird es vorübergehend in den Vordergrund gebracht; beim Wechsel zu einem anderen Fenster oder Abbrechen wird die ursprüngliche Reihenfolge wiederhergestellt</li>
-<li>Die Größenänderungsvorschau zeigt nun eine Titelleiste mit App-Symbol und Fenstertitel an, sodass leichter erkennbar ist, welches Fenster angeordnet wird</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>在側邊欄中選擇視窗時，該視窗會暫時置於最前方以便識別；切換到其他視窗或取消時恢復原來的層疊順序</li>
-<li>調整大小預覽現在顯示帶有應用程式圖示和視窗標題的標題列，更直覺地識別正在排列的視窗</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>在侧边栏中选择窗口时，该窗口会临时置于最前方以便识别；切换到其他窗口或取消时恢复原来的层叠顺序</li>
-<li>调整大小预览现在显示带有应用图标和窗口标题的标题栏，更直观地识别正在排列的窗口</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>사이드바에서 윈도우를 선택하면 식별하기 쉽도록 일시적으로 최상위에 표시됩니다. 다른 윈도우로 전환하거나 취소하면 원래 순서로 복원됩니다</li>
-<li>리사이즈 미리보기에 앱 아이콘과 윈도우 제목이 포함된 타이틀 바가 표시되어 어떤 윈도우를 배치하는지 더 직관적으로 확인할 수 있습니다</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>サイドバーでウインドウを選択すると、識別しやすいよう一時的に最前面に表示されるように。別のウインドウに切り替えたりキャンセルすると元の重なり順に戻ります</li>
-<li>リサイズプレビューにアプリケーションアイコンとウインドウタイトル付きのタイトルバーを表示し、どのウインドウを配置しているかがより直感的にわかるように</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Selecting a window in the sidebar temporarily brings it to the front for easier identification; the original window order is restored when switching to another window or cancelling</li>
-<li>Resize preview now displays a title bar with the app icon and window title, making it easier to identify which window is being arranged</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao selecionar uma janela na barra lateral, ela é temporariamente trazida para a frente para facilitar a identificação; a ordem original é restaurada ao mudar para outra janela ou cancelar</li>
-<li>A pré-visualização de redimensionamento agora exibe uma barra de título com o ícone do aplicativo e o título da janela, facilitando a identificação de qual janela está sendo organizada</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>La selezione di una finestra nella barra laterale la porta temporaneamente in primo piano per facilitarne l'identificazione; l'ordine originale viene ripristinato quando si passa a un'altra finestra o si annulla</li>
-<li>L'anteprima di ridimensionamento ora mostra una barra del titolo con l'icona dell'applicazione e il titolo della finestra, rendendo più intuitivo identificare quale finestra si sta disponendo</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>La sélection d'une fenêtre dans la barre latérale la place temporairement au premier plan pour faciliter l'identification ; l'ordre original est restauré lors du changement de fenêtre ou de l'annulation</li>
-<li>L'aperçu de redimensionnement affiche désormais une barre de titre avec l'icône de l'application et le titre de la fenêtre, permettant d'identifier plus intuitivement la fenêtre en cours d'agencement</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al seleccionar una ventana en la barra lateral, se muestra temporalmente en primer plano para facilitar su identificación; al cambiar a otra ventana o cancelar, se restaura el orden original</li>
-<li>La vista previa de redimensionamiento ahora muestra una barra de título con el icono de la aplicación y el título de la ventana, facilitando la identificación de la ventana que se está organizando</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Bei Auswahl eines Fensters in der Seitenleiste wird es vorübergehend in den Vordergrund gebracht; beim Wechsel zu einem anderen Fenster oder Abbrechen wird die ursprüngliche Reihenfolge wiederhergestellt</li>
-<li>Die Größenänderungsvorschau zeigt nun eine Titelleiste mit App-Symbol und Fenstertitel an, sodass leichter erkennbar ist, welches Fenster angeordnet wird</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>在側邊欄中選擇視窗時，該視窗會暫時置於最前方以便識別；切換到其他視窗或取消時恢復原來的層疊順序</li>
-<li>調整大小預覽現在顯示帶有應用程式圖示和視窗標題的標題列，更直覺地識別正在排列的視窗</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>在侧边栏中选择窗口时，该窗口会临时置于最前方以便识别；切换到其他窗口或取消时恢复原来的层叠顺序</li>
-<li>调整大小预览现在显示带有应用图标和窗口标题的标题栏，更直观地识别正在排列的窗口</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>사이드바에서 윈도우를 선택하면 식별하기 쉽도록 일시적으로 최상위에 표시됩니다. 다른 윈도우로 전환하거나 취소하면 원래 순서로 복원됩니다</li>
-<li>리사이즈 미리보기에 앱 아이콘과 윈도우 제목이 포함된 타이틀 바가 표시되어 어떤 윈도우를 배치하는지 더 직관적으로 확인할 수 있습니다</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>サイドバーでウインドウを選択すると、識別しやすいよう一時的に最前面に表示されるように。別のウインドウに切り替えたりキャンセルすると元の重なり順に戻ります</li>
-<li>リサイズプレビューにアプリケーションアイコンとウインドウタイトル付きのタイトルバーを表示し、どのウインドウを配置しているかがより直感的にわかるように</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Selecting a window in the sidebar temporarily brings it to the front for easier identification; the original window order is restored when switching to another window or cancelling</li>
-<li>Resize preview now displays a title bar with the app icon and window title, making it easier to identify which window is being arranged</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao selecionar uma janela na barra lateral, ela é temporariamente trazida para a frente para facilitar a identificação; a ordem original é restaurada ao mudar para outra janela ou cancelar</li>
-<li>A pré-visualização de redimensionamento agora exibe uma barra de título com o ícone do aplicativo e o título da janela, facilitando a identificação de qual janela está sendo organizada</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>La selezione di una finestra nella barra laterale la porta temporaneamente in primo piano per facilitarne l'identificazione; l'ordine originale viene ripristinato quando si passa a un'altra finestra o si annulla</li>
-<li>L'anteprima di ridimensionamento ora mostra una barra del titolo con l'icona dell'applicazione e il titolo della finestra, rendendo più intuitivo identificare quale finestra si sta disponendo</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>La sélection d'une fenêtre dans la barre latérale la place temporairement au premier plan pour faciliter l'identification ; l'ordre original est restauré lors du changement de fenêtre ou de l'annulation</li>
-<li>L'aperçu de redimensionnement affiche désormais une barre de titre avec l'icône de l'application et le titre de la fenêtre, permettant d'identifier plus intuitivement la fenêtre en cours d'agencement</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al seleccionar una ventana en la barra lateral, se muestra temporalmente en primer plano para facilitar su identificación; al cambiar a otra ventana o cancelar, se restaura el orden original</li>
-<li>La vista previa de redimensionamiento ahora muestra una barra de título con el icono de la aplicación y el título de la ventana, facilitando la identificación de la ventana que se está organizando</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Bei Auswahl eines Fensters in der Seitenleiste wird es vorübergehend in den Vordergrund gebracht; beim Wechsel zu einem anderen Fenster oder Abbrechen wird die ursprüngliche Reihenfolge wiederhergestellt</li>
-<li>Die Größenänderungsvorschau zeigt nun eine Titelleiste mit App-Symbol und Fenstertitel an, sodass leichter erkennbar ist, welches Fenster angeordnet wird</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>在側邊欄中選擇視窗時，該視窗會暫時置於最前方以便識別；切換到其他視窗或取消時恢復原來的層疊順序</li>
-<li>調整大小預覽現在顯示帶有應用程式圖示和視窗標題的標題列，更直覺地識別正在排列的視窗</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>在侧边栏中选择窗口时，该窗口会临时置于最前方以便识别；切换到其他窗口或取消时恢复原来的层叠顺序</li>
-<li>调整大小预览现在显示带有应用图标和窗口标题的标题栏，更直观地识别正在排列的窗口</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>사이드바에서 윈도우를 선택하면 식별하기 쉽도록 일시적으로 최상위에 표시됩니다. 다른 윈도우로 전환하거나 취소하면 원래 순서로 복원됩니다</li>
-<li>리사이즈 미리보기에 앱 아이콘과 윈도우 제목이 포함된 타이틀 바가 표시되어 어떤 윈도우를 배치하는지 더 직관적으로 확인할 수 있습니다</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>サイドバーでウインドウを選択すると、識別しやすいよう一時的に最前面に表示されるように。別のウインドウに切り替えたりキャンセルすると元の重なり順に戻ります</li>
-<li>リサイズプレビューにアプリケーションアイコンとウインドウタイトル付きのタイトルバーを表示し、どのウインドウを配置しているかがより直感的にわかるように</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Selecting a window in the sidebar temporarily brings it to the front for easier identification; the original window order is restored when switching to another window or cancelling</li>
-<li>Resize preview now displays a title bar with the app icon and window title, making it easier to identify which window is being arranged</li>
-</ul>]]></description>
-            <pubDate>Wed, 25 Mar 2026 11:33:42 +0900</pubDate>
-            <sparkle:version>322</sparkle:version>
-            <sparkle:shortVersionString>3.2.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.4/Tiley-3.2.2.zip" length="5543168" type="application/octet-stream" sparkle:edSignature="klYFXHgFbLzprJF+IwvLJQfgbs3sq7R8F1a/hcPiYT6JjCgosa01mFcoVedTtQLWnKeB3h4+0WYsQCoU+Hz3DA=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley322-321.delta" sparkle:deltaFrom="321" length="219534" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Hkk8w2Si0N1GjIriQdzg+nyxQ3YuKoWJ1cQuuX1kHEAG1Ywo+pm6rOwaVc/L5rcDzkX3fEZYJ05proOnYQ9EDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley322-320.delta" sparkle:deltaFrom="320" length="226670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="5wcCR77hyWFGlNTuJsD7BGXWAjLti0xF5daOgN/vrqYDpsAyuNsCdKpWnASOXzEMqqut+73fYMSoVtPlNCi2Bw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley322-311.delta" sparkle:deltaFrom="311" length="381886" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="hBNdrTcQZoeiPf3cu7KzK2dVoEZyLuhIt10fV098DcFwsMpnDuwFX4L+sEyN9nxx9JkQ8uus9gbmvuf4RrFlAw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley322-310.delta" sparkle:deltaFrom="310" length="418778" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="I69s322Uwy4IgvLpSKMSEu4a/u9qgBiNs3aGFQnPAgm7mG8hyXRGFhlQT/dRoHRpYo6mBp8EAjM4plgiyqCNAA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.2/Tiley322-301.delta" sparkle:deltaFrom="301" length="536942" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="uwfnnkLYMPBL8lEKNeu5Kh4JtpVMT8bIU7rxbzZ7umTJBsAUXlJ7va/008GO3oGqE06LesZ6w/DDsahy2LgACA=="/>
             </sparkle:deltas>
         </item>
     </channel>
