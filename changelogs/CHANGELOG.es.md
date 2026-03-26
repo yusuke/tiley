@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [3.2.7] - 2026-03-26
+
+### Corregido
+
+- Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión (corrección incompleta en 3.2.6)
+
 ## [3.2.6] - 2026-03-26
 
 ### Corregido

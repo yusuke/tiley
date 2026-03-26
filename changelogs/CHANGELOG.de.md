@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [3.2.7] - 2026-03-26
+
+### Behoben
+
+- Absturz beim Starten als Anmeldeobjekt behoben (unvollständige Behebung in 3.2.6)
+
 ## [3.2.6] - 2026-03-26
 
 ### Behoben

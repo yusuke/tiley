@@ -391,7 +391,7 @@ final class AppState: NSObject, NSMenuDelegate {
         refreshAccessibilityState()
         installWorkspaceObserver()
         applyStatusItemVisibility()
-        applyDockIconVisibility()
+        applyDockIconVisibility(isInitialStartup: true)
         installHotKeyHandler()
         installDebugHotKeyCoordination()
         registerAllHotKeys()
@@ -434,8 +434,6 @@ final class AppState: NSObject, NSMenuDelegate {
         Task { @MainActor [weak self] in
             if showMainWindowOnLaunch {
                 self?.openMainWindow()
-            } else {
-                self?.warmUpSwiftUIHostingView()
             }
             self?.promptLaunchAtLoginIfNeeded()
         }
@@ -2580,11 +2578,19 @@ final class AppState: NSObject, NSMenuDelegate {
         refreshLaunchAtLoginState()
     }
 
-    func applyDockIconVisibility() {
+    func applyDockIconVisibility(isInitialStartup: Bool = false) {
         if dockIconVisible {
             _ = NSApp.setActivationPolicy(.regular)
             applyDockIconBadge()
         } else {
+            if isInitialStartup {
+                // Activation policy is already .accessory (set in
+                // applicationWillFinishLaunching).  Skip the .prohibited
+                // → .accessory dance to avoid a use-after-free crash
+                // caused by rapid activation policy transitions during
+                // early app startup.
+                return
+            }
             // Switching to .accessory causes macOS to hide all windows and
             // fire windowDidResignKey, which normally resets UI state via
             // handleMainWindowHidden(). Use a flag to suppress that reset.
@@ -2682,45 +2688,6 @@ final class AppState: NSObject, NSMenuDelegate {
         view.image = composite
         dockTile.contentView = view
         dockTile.display()
-    }
-
-    /// Pre-warm SwiftUI's rendering pipeline by creating a temporary hosting view
-    /// off-screen. The first `NSHostingView.contentView =` assignment is expensive
-    /// (~200 ms) because SwiftUI initialises its render backend; subsequent ones are
-    /// fast (~40 ms). Calling this at login-item launch amortises the cost so the
-    /// first overlay open feels instant.
-    private func warmUpSwiftUIHostingView() {
-        let perfStart = CFAbsoluteTimeGetCurrent()
-        let screen = NSScreen.main ?? NSScreen.screens.first!
-        let screenContext = ScreenContext(
-            visibleFrame: screen.visibleFrame,
-            screenFrame: screen.frame
-        )
-        let view = MainWindowView(appState: self, screenRole: .target)
-            .environment(\.screenContext, screenContext)
-        let hostingView = NSHostingView(rootView: view)
-        // Create a tiny off-screen window and assign the hosting view to trigger
-        // SwiftUI's first layout pass, then immediately discard both.
-        let window = NSWindow(
-            contentRect: NSRect(x: -9999, y: -9999, width: 1, height: 1),
-            styleMask: [.borderless],
-            backing: .buffered,
-            defer: true
-        )
-        window.contentView = hostingView
-        // Force a layout pass so the SwiftUI render pipeline is fully initialised.
-        hostingView.layoutSubtreeIfNeeded()
-        // Delay teardown to give SwiftUI/AttributeGraph time to finish
-        // all asynchronous layout processing before the window hierarchy
-        // is destroyed.  A short delay (1 runloop tick) is insufficient;
-        // AttributeGraph may schedule work on background queues that
-        // takes several seconds to complete.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [window] in
-            window.contentView = nil
-            window.close()
-        }
-        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
-        debugLog("warmUpSwiftUIHostingView done (\(String(format: "%.1f", elapsed))ms)")
     }
 
     private func refreshLaunchAtLoginState() {
