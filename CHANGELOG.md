@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a crash that occurred when the app was launched as a login item
+
 ## [3.2.5] - 2026-03-26
 
 ### Changed

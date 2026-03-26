@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Corregido un fallo que ocurría al iniciar la app como elemento de inicio de sesión
+
 ## [3.2.5] - 2026-03-26
 
 ### Cambiado

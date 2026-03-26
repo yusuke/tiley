@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Corretto un arresto anomalo che si verificava all'avvio come elemento di login
+
 ## [3.2.5] - 2026-03-26
 
 ### Modificato

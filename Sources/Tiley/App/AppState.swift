@@ -451,6 +451,9 @@ final class AppState: NSObject, NSMenuDelegate {
         if let hotKeyHandler {
             RemoveEventHandler(hotKeyHandler)
         }
+        #if !DEBUG
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+        #endif
         workspaceObserverTask?.cancel()
         appActivationTask?.cancel()
         appDeactivationTask?.cancel()
@@ -2707,8 +2710,15 @@ final class AppState: NSObject, NSMenuDelegate {
         window.contentView = hostingView
         // Force a layout pass so the SwiftUI render pipeline is fully initialised.
         hostingView.layoutSubtreeIfNeeded()
-        window.contentView = nil
-        window.close()
+        // Delay teardown to give SwiftUI/AttributeGraph time to finish
+        // all asynchronous layout processing before the window hierarchy
+        // is destroyed.  A short delay (1 runloop tick) is insufficient;
+        // AttributeGraph may schedule work on background queues that
+        // takes several seconds to complete.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [window] in
+            window.contentView = nil
+            window.close()
+        }
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
         debugLog("warmUpSwiftUIHostingView done (\(String(format: "%.1f", elapsed))ms)")
     }
