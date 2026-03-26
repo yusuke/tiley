@@ -1954,9 +1954,15 @@ final class AppState: NSObject, NSMenuDelegate {
             hideDisplayHighlight()
             return
         }
-        let frame = screen.frame
+        var frame = screen.frame
+        // 内蔵ディスプレイはノッチ・角丸を避けるためメニューバー下に描画
+        if CGDisplayIsBuiltin(displayID) != 0 {
+            let menuBarHeight = screen.frame.maxY - screen.visibleFrame.maxY
+            frame.size.height -= menuBarHeight
+        }
         if let existing = displayHighlightWindow {
             existing.setFrame(frame, display: false)
+            (existing.contentView as? DisplayHighlightView)?.frame = NSRect(origin: .zero, size: frame.size)
             existing.orderFront(nil)
             return
         }
