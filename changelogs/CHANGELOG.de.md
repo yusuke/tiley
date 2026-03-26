@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [3.2.9] - 2026-03-27
+
+### Behoben
+
+- Tab-/Pfeiltasten-Reihenfolge entspricht nun der Anzeigereihenfolge der Seitenleiste (gruppiert nach Space, Bildschirm und Anwendung)
+
+## [3.2.8] - 2026-03-26
+
+### Behoben
+
+- Tab-/Pfeiltasten-Navigation in der Seitenleiste wechselte nur zwischen zwei Fenstern statt alle Fenster zu durchlaufen
+
 ## [3.2.7] - 2026-03-26
 
 ### Behoben

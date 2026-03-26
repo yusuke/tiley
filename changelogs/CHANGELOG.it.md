@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [3.2.9] - 2026-03-27
+
+### Corretto
+
+- Corretto l'ordine di navigazione Tab/frecce per corrispondere all'ordine di visualizzazione della barra laterale (raggruppato per spazio, schermo e applicazione)
+
+## [3.2.8] - 2026-03-26
+
+### Corretto
+
+- Corretto il problema nella barra laterale in cui Tab/frecce alternavano solo tra due finestre invece di scorrere tutte le finestre
+
 ## [3.2.7] - 2026-03-26
 
 ### Corretto

@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [3.2.9] - 2026-03-27
+
+### Corrigido
+
+- Corrigida a ordem de navegação Tab/setas para corresponder à ordem de exibição da barra lateral (agrupada por espaço, tela e aplicativo)
+
+## [3.2.8] - 2026-03-26
+
+### Corrigido
+
+- Corrigido o problema na barra lateral onde Tab/setas alternavam entre apenas duas janelas em vez de percorrer todas as janelas
+
 ## [3.2.7] - 2026-03-26
 
 ### Corrigido

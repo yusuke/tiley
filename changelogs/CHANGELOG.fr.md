@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [3.2.9] - 2026-03-27
+
+### Corrigé
+
+- Correction de l'ordre de parcours Tab/flèches pour correspondre à l'ordre d'affichage de la barre latérale (groupé par espace, écran et application)
+
+## [3.2.8] - 2026-03-26
+
+### Corrigé
+
+- Correction du problème dans la barre latérale où Tab/flèches alternaient entre seulement deux fenêtres au lieu de parcourir toutes les fenêtres
+
 ## [3.2.7] - 2026-03-26
 
 ### Corrigé

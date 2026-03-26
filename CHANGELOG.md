@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.2.9] - 2026-03-27
+
+### Fixed
+
+- Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)
+
+## [3.2.8] - 2026-03-26
+
+### Fixed
+
+- Fixed Tab/arrow key window cycling in the sidebar alternating between only two windows instead of cycling through all windows
+
 ## [3.2.7] - 2026-03-26
 
 ### Fixed
@@ -377,7 +389,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v3.2.7...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v3.2.9...HEAD
+[3.2.9]: https://github.com/yusuke/tiley/releases/tag/v3.2.9
+[3.2.8]: https://github.com/yusuke/tiley/releases/tag/v3.2.8
 [3.2.7]: https://github.com/yusuke/tiley/releases/tag/v3.2.7
 [3.2.6]: https://github.com/yusuke/tiley/releases/tag/v3.2.6
 [3.2.5]: https://github.com/yusuke/tiley/releases/tag/v3.2.5

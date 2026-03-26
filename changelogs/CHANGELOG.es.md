@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [3.2.9] - 2026-03-27
+
+### Corregido
+
+- Corregido el orden de ciclo de Tab/flechas para coincidir con el orden de la barra lateral (agrupado por espacio, pantalla y aplicación)
+
+## [3.2.8] - 2026-03-26
+
+### Corregido
+
+- Corregido el problema en la barra lateral donde Tab/flechas alternaban solo entre dos ventanas en lugar de recorrer todas
+
 ## [3.2.7] - 2026-03-26
 
 ### Corregido
