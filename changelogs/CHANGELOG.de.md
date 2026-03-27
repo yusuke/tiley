@@ -5,6 +5,7 @@
 ### Behoben
 
 - Präventive Behebung einer übermäßigen CPU-Auslastung, die in Multi-Display-Umgebungen auftreten konnte
+- Behebung einer Neuzeichnungsschleife des Statusleistensymbols, die bei angezeigtem Badge-Overlay (Update-Benachrichtigung oder Debug-Anzeige) zu 100 % CPU-Auslastung führen konnte
 - Tiley-Fenster werden nun immer schwebend angezeigt, damit sie beim Tab-Wechsel nicht hinter Zielfenstern verschwinden
 
 ## [3.2.9] - 2026-03-27

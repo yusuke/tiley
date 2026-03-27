@@ -5,6 +5,7 @@
 ### Corretto
 
 - Correzione preventiva dell'utilizzo eccessivo della CPU che poteva verificarsi in ambienti multi-display
+- Correzione di un ciclo di ridisegno dell'icona della barra di stato che poteva causare un utilizzo della CPU al 100% quando veniva visualizzato un badge sovrapposto (notifica di aggiornamento o indicatore di debug)
 - Le finestre di Tiley ora fluttuano sempre sopra le finestre normali per non essere nascoste durante il cambio con Tab
 
 ## [3.2.9] - 2026-03-27

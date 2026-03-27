@@ -142,6 +142,11 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var originalMenuIcon: NSImage?
     @ObservationIgnored private var appearanceObservation: NSKeyValueObservation?
     @ObservationIgnored private var statusItem: NSStatusItem?
+    /// Tracks the last appearance name used to render the status icon badge,
+    /// preventing redundant redraws that can cause a CPU-spinning feedback loop.
+    @ObservationIgnored private var lastStatusIconAppearance: NSAppearance.Name?
+    /// Re-entrancy guard for `applyStatusItemIcon()`.
+    @ObservationIgnored private var isApplyingStatusIcon = false
     @ObservationIgnored private var mainWindowControllers: [CGDirectDisplayID: MainWindowController] = [:]
     @ObservationIgnored private var targetScreenDisplayID: CGDirectDisplayID?
     @ObservationIgnored private var screenChangeTask: Task<Void, Never>?
@@ -2170,9 +2175,11 @@ final class AppState: NSObject, NSMenuDelegate {
         // Observe effectiveAppearance changes to redraw badge overlays.
         // Skip .initial; instead delay the first badge application so the
         // button's effectiveAppearance has settled in the menu bar.
-        appearanceObservation = item.button?.observe(\.effectiveAppearance, options: [.new]) { [weak self] _, _ in
+        appearanceObservation = item.button?.observe(\.effectiveAppearance, options: [.new]) { [weak self] button, _ in
+            let newAppearance = button.effectiveAppearance.bestMatch(from: [.vibrantDark, .vibrantLight])
             DispatchQueue.main.async {
-                self?.applyStatusItemIcon()
+                guard let self, newAppearance != self.lastStatusIconAppearance else { return }
+                self.applyStatusItemIcon()
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
@@ -2198,6 +2205,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func setUpdateBadge(_ show: Bool) {
         hasUpdateBadge = show
+        lastStatusIconAppearance = nil   // Force redraw on badge state change
         if show && statusItem == nil {
             // Menu icon is hidden — temporarily show it so the badge is visible.
             installStatusItem()
@@ -2220,14 +2228,19 @@ final class AppState: NSObject, NSMenuDelegate {
     /// - DEBUG build (otherwise): overlay ladybug.fill (green)
     /// - Otherwise: use the original template icon as-is
     private func applyStatusItemIcon() {
+        guard !isApplyingStatusIcon else { return }
+        isApplyingStatusIcon = true
+        defer { isApplyingStatusIcon = false }
+
         guard let button = statusItem?.button,
               let baseIcon = originalMenuIcon else { return }
 
         // Determine which badge to display
         let badgeInfo: (symbolName: String, colors: [NSColor])?
         // Get the menu bar foreground color
+        let currentAppearance = button.effectiveAppearance.bestMatch(from: [.vibrantDark, .vibrantLight])
         let menuBarForeground: NSColor
-        if let appearance = button.effectiveAppearance.bestMatch(from: [.vibrantDark, .vibrantLight]) {
+        if let appearance = currentAppearance {
             menuBarForeground = appearance == .vibrantDark ? .white : .black
         } else {
             menuBarForeground = .white
@@ -2246,11 +2259,20 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         guard let badge = badgeInfo else {
-            // No badge — restore the original template icon
-            baseIcon.isTemplate = true
-            button.image = baseIcon
+            // No badge — restore the original template icon (template adapts automatically)
+            if button.image !== baseIcon {
+                baseIcon.isTemplate = true
+                button.image = baseIcon
+            }
+            lastStatusIconAppearance = nil
             return
         }
+
+        // Skip redundant badge redraws when appearance hasn't changed
+        if currentAppearance == lastStatusIconAppearance {
+            return
+        }
+        lastStatusIconAppearance = currentAppearance
 
         let iconSize = baseIcon.size          // 18×18
         let badgeSize: CGFloat = 12

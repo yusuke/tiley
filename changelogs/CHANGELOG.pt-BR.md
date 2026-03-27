@@ -5,6 +5,7 @@
 ### Corrigido
 
 - Correção preventiva do uso excessivo de CPU que poderia ocorrer em ambientes com múltiplos monitores
+- Correção de um loop de redesenho do ícone da barra de status que poderia causar 100% de uso da CPU quando um selo sobreposto (notificação de atualização ou indicador de depuração) era exibido
 - As janelas do Tiley agora flutuam sempre acima das janelas normais para não ficarem ocultas durante a alternância com Tab
 
 ## [3.2.9] - 2026-03-27

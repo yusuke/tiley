@@ -5,6 +5,7 @@
 ### Corrigé
 
 - Correction préventive de l'utilisation excessive du CPU pouvant survenir dans les environnements multi-écrans
+- Correction d'une boucle de redessin de l'icône de la barre d'état pouvant entraîner une utilisation de 100 % du CPU lorsqu'un badge superposé (notification de mise à jour ou indicateur de débogage) était affiché
 - Les fenêtres de Tiley flottent désormais toujours au-dessus des fenêtres normales afin de ne pas être masquées lors du changement par Tab
 
 ## [3.2.9] - 2026-03-27
