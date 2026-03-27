@@ -2466,9 +2466,10 @@ final class AppState: NSObject, NSMenuDelegate {
 
             // 3) Draw the badge symbol
             NSGraphicsContext.current?.compositingOperation = .sourceOver
+            let symbolOffsetY: CGFloat = badge.symbolName.hasPrefix("ladybug") ? 1.0 : 0
             let badgeRect = NSRect(
                 x: centerX - badgeSize / 2,
-                y: centerY - badgeSize / 2,
+                y: centerY - badgeSize / 2 + symbolOffsetY,
                 width: badgeSize,
                 height: badgeSize
             )
