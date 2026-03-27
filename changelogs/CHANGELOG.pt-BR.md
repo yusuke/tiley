@@ -5,6 +5,7 @@
 ### Corrigido
 
 - Correção preventiva do uso excessivo de CPU que poderia ocorrer em ambientes com múltiplos monitores
+- As janelas do Tiley agora flutuam sempre acima das janelas normais para não ficarem ocultas durante a alternância com Tab
 
 ## [3.2.9] - 2026-03-27
 

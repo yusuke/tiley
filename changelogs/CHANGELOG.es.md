@@ -5,6 +5,7 @@
 ### Corregido
 
 - Corrección preventiva del uso excesivo de CPU que podía ocurrir en entornos con múltiples pantallas
+- Las ventanas de Tiley ahora flotan siempre sobre las ventanas normales para no quedar ocultas durante el cambio con Tab
 
 ## [3.2.9] - 2026-03-27
 

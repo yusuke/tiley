@@ -5,6 +5,7 @@
 ### Corretto
 
 - Correzione preventiva dell'utilizzo eccessivo della CPU che poteva verificarsi in ambienti multi-display
+- Le finestre di Tiley ora fluttuano sempre sopra le finestre normali per non essere nascoste durante il cambio con Tab
 
 ## [3.2.9] - 2026-03-27
 

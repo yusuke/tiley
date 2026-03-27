@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Preventive fix for excessive CPU usage that could occur in multi-display environments
+- Made Tiley windows always float above normal windows so they are not hidden behind target windows during Tab cycling
 
 ## [3.2.9] - 2026-03-27
 
