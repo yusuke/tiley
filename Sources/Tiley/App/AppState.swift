@@ -2317,7 +2317,7 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         if hasUpdateBadge || debugSimulateUpdate {
-            badgeInfo = ("info.circle", [menuBarForeground])
+            badgeInfo = ("exclamationmark.circle", [menuBarForeground])
         } else if enableDebugLog {
             badgeInfo = ("ladybug.fill", [.systemGreen, .white])
         } else {
@@ -2345,14 +2345,14 @@ final class AppState: NSObject, NSMenuDelegate {
         lastStatusIconAppearance = currentAppearance
 
         let iconSize = baseIcon.size          // 18×18
-        let badgeSize: CGFloat = 12
+        let badgeSize: CGFloat = 16
         let margin: CGFloat = 0.5
         let clearDiameter = badgeSize + margin * 2  // 10pt
 
         guard let symbol = NSImage(systemSymbolName: badge.symbolName,
                                    accessibilityDescription: nil) else { return }
         let config = NSImage.SymbolConfiguration(paletteColors: badge.colors)
-            .applying(NSImage.SymbolConfiguration(pointSize: badgeSize, weight: .bold))
+            .applying(NSImage.SymbolConfiguration(pointSize: badgeSize, weight: .heavy))
         let coloredSymbol = symbol.withSymbolConfiguration(config) ?? symbol
 
         // Tint the original icon with the menu bar color
@@ -2367,11 +2367,11 @@ final class AppState: NSObject, NSMenuDelegate {
             // 1) Draw the tinted original icon
             tintedBase.draw(in: drawRect)
 
-            // Badge center (bottom-right)
-            let centerX = iconSize.width - badgeSize / 2
-            let centerY = badgeSize / 2
+            // Badge center (bottom-right, offset 3pt right to extend beyond icon edge)
+            let centerX = iconSize.width - badgeSize / 2 + 1
+            let centerY = badgeSize / 2 - 1
 
-            // 2) Clear the original icon with a circle including margin
+            // 2) Clear the original icon with a circle (slightly lower to match badge visual center)
             let clearRect = NSRect(
                 x: centerX - clearDiameter / 2,
                 y: centerY - clearDiameter / 2,
@@ -2793,7 +2793,7 @@ final class AppState: NSObject, NSMenuDelegate {
         // Determine which badge to display (same priority as the menu icon)
         let badgeInfo: (symbolName: String, colors: [NSColor])?
         if showsUpdateIndicator {
-            badgeInfo = ("info.circle.fill", [.white, .systemRed])
+            badgeInfo = ("exclamationmark.circle.fill", [.white, .systemRed])
         } else if enableDebugLog {
             badgeInfo = ("ladybug.circle.fill", [.white, .systemGreen])
         } else {
