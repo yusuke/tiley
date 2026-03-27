@@ -98,6 +98,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = false
+        window.level = .floating
         let displayID = self.targetScreen.displayID
         window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
         window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary]
