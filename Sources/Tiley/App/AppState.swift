@@ -967,7 +967,7 @@ final class AppState: NSObject, NSMenuDelegate {
             accessibilityService.raiseWindow(window)
         }
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
-        clearWindowCyclingState()
+        clearWindowCyclingState(restoreZOrder: false)
     }
 
     func closeWindowTarget(at index: Int) {
@@ -1133,10 +1133,14 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
-    private func clearWindowCyclingState() {
-        // Restore the last raised window to its original z-order position
-        // before clearing state.
-        restorePreviewedWindowZOrder()
+    /// Clears cycling state.  When `restoreZOrder` is true (the default),
+    /// the previously raised window is lowered back to its original z-order
+    /// position.  Pass `false` when a layout was applied and the selected
+    /// window should stay at the front.
+    private func clearWindowCyclingState(restoreZOrder: Bool = true) {
+        if restoreZOrder {
+            restorePreviewedWindowZOrder()
+        }
         originalFrontmostPID = nil
         originalFrontmostTarget = nil
         initialZOrderWindowIDs = []
@@ -1339,7 +1343,7 @@ final class AppState: NSObject, NSMenuDelegate {
             )
         }
         _ = reactivateLastTargetApp(clearingState: false)
-        clearWindowCyclingState()
+        clearWindowCyclingState(restoreZOrder: false)
     }
 
     @objc private func showLayoutGrid() {
