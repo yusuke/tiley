@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-03-28
+
 ### Ajouté
 
 - Lors de la sélection d'une fenêtre dans la barre latérale, les fenêtres superposées sont déplacées vers le bas avec une animation fluide pour rendre la fenêtre sélectionnée visible sans changer le focus

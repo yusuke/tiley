@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-03-28
+
 ### Adicionado
 
 - Ao selecionar uma janela na barra lateral, as janelas sobrepostas são movidas para baixo com uma animação suave para tornar a janela selecionada visível sem alterar o foco

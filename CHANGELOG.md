@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-03-28
+
 ### Added
 
 - When selecting a window in the sidebar, overlapping windows are smoothly animated downward to reveal the selected window without changing focus
@@ -407,7 +409,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v3.3.1...HEAD
+[3.3.1]: https://github.com/yusuke/tiley/releases/tag/v3.3.1
 [3.3.0]: https://github.com/yusuke/tiley/releases/tag/v3.3.0
 [3.2.9]: https://github.com/yusuke/tiley/releases/tag/v3.2.9
 [3.2.8]: https://github.com/yusuke/tiley/releases/tag/v3.2.8

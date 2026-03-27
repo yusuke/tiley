@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-03-28
+
 ### Aggiunto
 
 - Quando si seleziona una finestra nella barra laterale, le finestre sovrapposte vengono spostate verso il basso con un'animazione fluida per rendere visibile la finestra selezionata senza cambiare il focus

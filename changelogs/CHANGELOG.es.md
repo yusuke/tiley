@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-03-28
+
 ### Añadido
 
 - Al seleccionar una ventana en la barra lateral, las ventanas superpuestas se desplazan hacia abajo con una animación suave para hacer visible la ventana seleccionada sin cambiar el foco

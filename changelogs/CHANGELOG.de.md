@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-03-28
+
 ### Hinzugefügt
 
 - Bei Auswahl eines Fensters in der Seitenleiste werden überlappende Fenster mit einer sanften Animation nach unten verschoben, um das ausgewählte Fenster ohne Fokuswechsel sichtbar zu machen
