@@ -694,6 +694,12 @@ struct MainWindowView: View {
             }
         }
         .onChange(of: windowSearchText) { _, newValue in
+            // Guard against redundant writes: in multi-display setups each
+            // MainWindowView listens to appState.windowSearchQuery and syncs
+            // it back to windowSearchText.  Without this check the two onChange
+            // handlers can cycle (view A writes → appState → view B writes →
+            // appState → view A …), leading to runaway CPU usage.
+            guard appState.windowSearchQuery != newValue else { return }
             appState.windowSearchQuery = newValue
             searchDebounceTask?.cancel()
             if newValue.isEmpty {
@@ -719,6 +725,11 @@ struct MainWindowView: View {
         }
         .onChange(of: appState.selectedLayoutPresetID) { _, selectedID in
             if let hoveredPresetID, selectedID != hoveredPresetID {
+                // Guard: only the view instance that owns the hover should
+                // override the selection.  Without this check, multiple
+                // MainWindowView instances (one per display) can ping-pong
+                // the selectedLayoutPresetID back and forth, causing 100% CPU.
+                guard isMouseOnThisScreen else { return }
                 appState.selectLayoutPreset(hoveredPresetID)
                 return
             }

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction préventive de l'utilisation excessive du CPU pouvant survenir dans les environnements multi-écrans
+
 ## [3.2.9] - 2026-03-27
 
 ### Corrigé

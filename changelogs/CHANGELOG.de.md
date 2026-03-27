@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Präventive Behebung einer übermäßigen CPU-Auslastung, die in Multi-Display-Umgebungen auftreten konnte
+
 ## [3.2.9] - 2026-03-27
 
 ### Behoben

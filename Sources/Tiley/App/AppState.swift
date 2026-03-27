@@ -1122,7 +1122,10 @@ final class AppState: NSObject, NSMenuDelegate {
         // its frontmost window so we have a real AXUIElement to work with.
         app?.activate()
         // Give the app a moment to unhide and surface its windows.
-        Thread.sleep(forTimeInterval: 0.15)
+        // Use RunLoop instead of Thread.sleep so the main thread can
+        // continue processing events (e.g. Accessibility notifications)
+        // and avoid a CPU spike from queued-up work after the sleep.
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.15))
 
         if let freshTarget = try? accessibilityService.focusedWindowTarget(
             preferredPID: target.processIdentifier
