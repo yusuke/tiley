@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-03-27
+
 ### Fixed
 
 - Preventive fix for excessive CPU usage that could occur in multi-display environments
@@ -395,7 +397,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v3.2.9...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v3.3.0...HEAD
+[3.3.0]: https://github.com/yusuke/tiley/releases/tag/v3.3.0
 [3.2.9]: https://github.com/yusuke/tiley/releases/tag/v3.2.9
 [3.2.8]: https://github.com/yusuke/tiley/releases/tag/v3.2.8
 [3.2.7]: https://github.com/yusuke/tiley/releases/tag/v3.2.7

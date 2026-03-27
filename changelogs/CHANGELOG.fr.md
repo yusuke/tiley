@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-03-27
+
 ### Corrigé
 
 - Correction préventive de l'utilisation excessive du CPU pouvant survenir dans les environnements multi-écrans
