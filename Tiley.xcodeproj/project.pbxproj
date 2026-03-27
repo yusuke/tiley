@@ -40,6 +40,7 @@
 		70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A652F64347E005173A5 /* AppDelegate.swift */; };
 		70B56A6C2F64347E005173A5 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A662F64347E005173A5 /* AppState.swift */; };
 		70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A682F64347E005173A5 /* UpdaterSupport.swift */; };
+		70F7B0282F768B8C004F17E3 /* WindowHighlightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		70B56A662F64347E005173A5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		70B56A672F64347E005173A5 /* TileyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileyApp.swift; sourceTree = "<group>"; };
 		70B56A682F64347E005173A5 /* UpdaterSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSupport.swift; sourceTree = "<group>"; };
+		70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHighlightController.swift; sourceTree = "<group>"; };
 		A00000000000000000000011 /* Tiley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tiley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000000000000000000012 /* Tiley-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tiley-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +119,7 @@
 		7012E05D2F65B653003EC442 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				70F7B0272F768B8C004F17E3 /* Overlay */,
 				7012E0582F65B653003EC442 /* Layout */,
 				7012E05C2F65B653003EC442 /* MainWindow */,
 			);
@@ -164,6 +167,14 @@
 				70B56A682F64347E005173A5 /* UpdaterSupport.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		70F7B0272F768B8C004F17E3 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */,
+			);
+			path = Overlay;
 			sourceTree = "<group>";
 		};
 		A00000000000000000000013 = {
@@ -304,6 +315,7 @@
 				70AABB022F900001001E8095 /* CGSPrivate.swift in Sources */,
 				70B56A6C2F64347E005173A5 /* AppState.swift in Sources */,
 				70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */,
+				70F7B0282F768B8C004F17E3 /* WindowHighlightController.swift in Sources */,
 				7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */,
 				7012E05E2F65B653003EC442 /* LayoutPreviewOverlayController.swift in Sources */,
 				7012E05F2F65B653003EC442 /* MainWindowController.swift in Sources */,
@@ -430,7 +442,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 330;
+				CURRENT_PROJECT_VERSION = 331;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -442,7 +454,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.3.0;
+				MARKETING_VERSION = 3.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -463,7 +475,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 330;
+				CURRENT_PROJECT_VERSION = 331;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
@@ -476,7 +488,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.3.0;
+				MARKETING_VERSION = 3.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

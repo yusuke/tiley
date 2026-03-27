@@ -293,6 +293,14 @@ final class AccessibilityService {
         }
     }
 
+    /// Moves a window to the given AX position (top-left origin, y-down)
+    /// without changing its size.
+    func setPosition(_ position: CGPoint, for window: AXUIElement) {
+        var pos = position
+        guard let value = AXValueCreate(.cgPoint, &pos) else { return }
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, value)
+    }
+
     /// Moves and resizes the given window synchronously, then returns.
     /// Call ``verifyAndCorrectFrame(_:for:)`` afterwards (on a background
     /// thread) to handle apps that asynchronously revert position or size.

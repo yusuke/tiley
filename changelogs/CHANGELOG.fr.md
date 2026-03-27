@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Lors de la sélection d'une fenêtre dans la barre latérale, les fenêtres superposées sont temporairement déplacées pour rendre la fenêtre sélectionnée visible sans changer le focus
+- Un cadre de mise en évidence est affiché autour de la fenêtre actuellement sélectionnée dans la barre latérale
+
+### Corrigé
+
+- Correction de l'ordre de parcours Tab/flèches pour correspondre à l'ordre d'affichage de la barre latérale (groupé par espace, écran et application)
+- Les fenêtres déplacées pendant la sélection dans la barre latérale sont restaurées à leur position d'origine lors de l'annulation (Esc) ou de la fermeture de Tiley
+
 ## [3.3.0] - 2026-03-27
 
 ### Corrigé

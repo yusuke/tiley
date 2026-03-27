@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Al seleccionar una ventana en la barra lateral, las ventanas superpuestas se mueven temporalmente para hacer visible la ventana seleccionada sin cambiar el foco
+- Se muestra un borde resaltado alrededor de la ventana actualmente seleccionada en la barra lateral
+
+### Corregido
+
+- Corregido el orden de ciclo de Tab/flechas para coincidir con el orden de la barra lateral (agrupado por espacio, pantalla y aplicación)
+- Las ventanas desplazadas durante la selección en la barra lateral se restauran a su posición original al cancelar (Esc) o cerrar Tiley
+
 ## [3.3.0] - 2026-03-27
 
 ### Corregido

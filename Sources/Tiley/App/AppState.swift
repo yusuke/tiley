@@ -152,9 +152,6 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var screenChangeTask: Task<Void, Never>?
     @ObservationIgnored private var isSwitchingActivationPolicy = false
     @ObservationIgnored private(set) var isRecreatingWindows = false
-    /// Suppresses `windowDidResignKey` hide while briefly activating a target
-    /// app during sidebar window cycling.
-
     @ObservationIgnored private var hotKeyRef: EventHotKeyRef?
     @ObservationIgnored private var presetHotKeyRefs: [UInt32: EventHotKeyRef] = [:]
     @ObservationIgnored private var presetHotKeyIDs: [UInt32: UUID] = [:]
@@ -177,6 +174,7 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var cachedResizability: WindowResizability?
     @ObservationIgnored private var cachedResizabilityPID: pid_t?
     @ObservationIgnored private var layoutPreviewController: LayoutPreviewOverlayController?
+    @ObservationIgnored private var windowHighlightController: WindowHighlightController?
     @ObservationIgnored private var availableWindowTargets: [WindowTarget] = []
     /// Mission Control space list (empty when detection is unavailable).
     @ObservationIgnored private(set) var spaceList: [SpaceInfo] = []
@@ -189,7 +187,6 @@ final class AppState: NSObject, NSMenuDelegate {
     /// True while the user is cycling through target windows (Tab/arrow/click
     /// in the sidebar).  Used to suppress Tiley from hiding itself when the
     /// target app is briefly activated to bring its window to the front.
-    var isCyclingWindows: Bool { originalFrontmostPID != nil }
     /// The window target that was most recently raised during cycling/selection,
     /// so we can restore its Z-order when switching to another target.
     /// Whether the user has cycled the target window at least once via Tab.
@@ -449,6 +446,7 @@ final class AppState: NSObject, NSMenuDelegate {
         Task { @MainActor [weak self] in
             if showMainWindowOnLaunch {
                 self?.openMainWindow()
+                self?.showHighlightForActiveTarget()
             }
             self?.promptLaunchAtLoginIfNeeded()
         }
@@ -524,6 +522,7 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = initialLayoutTarget()
         launchMessage = NSLocalizedString("Applied grid settings.", comment: "Settings applied confirmation")
         openMainWindow()
+        showHighlightForActiveTarget()
     }
 
     func cancelSettingsEditing() {
@@ -538,6 +537,7 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = initialLayoutTarget()
         launchMessage = NSLocalizedString("Canceled settings changes.", comment: "Settings canceled confirmation")
         openMainWindow()
+        showHighlightForActiveTarget()
     }
 
     func beginSettingsEditing() {
@@ -545,6 +545,8 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
+        windowHighlightController?.hide()
+        windowHighlightController = nil
         closeSecondaryWindows()
         openMainWindow()
     }
@@ -554,6 +556,8 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
+        windowHighlightController?.hide()
+        windowHighlightController = nil
         openTargetScreenWindow(on: screen)
     }
 
@@ -598,6 +602,8 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingLayoutGrid = true
         openMainWindow()
         perfLog("openMainWindow done")
+        // Show a highlight border around the initially selected (frontmost) window.
+        showHighlightForActiveTarget()
         // Bump version after the window is open so the view picks up the latest
         // target info and window list.
         windowTargetListVersion += 1
@@ -610,6 +616,11 @@ final class AppState: NSObject, NSMenuDelegate {
             self.refreshAvailableWindows()
             self.isLoadingWindowList = false
             debugLog("refreshAvailableWindows done (deferred)")
+
+            // The initially captured target may have been a transient window
+            // (e.g. Xcode's "Build Succeeded" HUD) that has since disappeared.
+            // Verify it still exists; if not, fall back to the next window.
+            self.revalidateActiveTarget()
         }
         launchMessage = String(
             format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
@@ -851,9 +862,9 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Used to restore the original stacking order before raising a new window.
     private var initialZOrderWindowIDs: [CGWindowID] = []
 
-    /// The index within `initialZOrderWindowIDs` of the window currently raised
-    /// for preview, or `nil` if nothing has been raised yet.
-    private var previewRaisedZIndex: Int?
+    /// Maps window IDs that have been moved off-screen to their original
+    /// positions, so they can be restored when selection changes or cycling ends.
+    private var displacedWindowFrames: [CGWindowID: CGPoint] = [:]
 
     private func applyTargetAtCurrentIndex() {
         let newTarget = availableWindowTargets[activeTargetIndex]
@@ -881,41 +892,21 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
-        // Raise the selected window to the foreground so the user can see it.
-        // AXRaise lifts the window within its app; activate() brings the app's
-        // windows above other apps.  Tiley is floating so it stays visible.
-        // isCyclingWindows suppresses windowDidResignKey / handleAppDidResignActive
-        // from hiding Tiley while the target app is briefly active.
-        if let window = newTarget.windowElement {
-            // Restore the previously raised window to its original z-order
-            // before raising the new one.
-            if let raisedIdx = previewRaisedZIndex {
-                for i in stride(from: raisedIdx - 1, through: 0, by: -1) {
-                    let wid = initialZOrderWindowIDs[i]
-                    if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
-                       let elem = target.windowElement {
-                        accessibilityService.raiseWindow(elem)
-                    }
-                }
-            }
+        // 1. Hide the old highlight and flush the change so it is
+        //    visually removed before any window movement begins.
+        windowHighlightController?.hide()
+        windowHighlightController = nil
+        CATransaction.flush()
 
-            accessibilityService.raiseWindow(window)
-
-            // Activate the target app so its window comes above all other
-            // normal windows, then immediately reactivate Tiley.
-            let targetApp = NSRunningApplication(processIdentifier: newTarget.processIdentifier)
-            targetApp?.activate()
-            DispatchQueue.main.async {
-                NSApp.activate()
-                // Reclaim key window status so keyboard input goes to Tiley.
-                for controller in self.mainWindowControllers.values {
-                    controller.nsWindow?.makeKeyAndOrderFront(nil)
-                }
-            }
-
-            // Record the position of the newly raised window in the initial z-order.
-            previewRaisedZIndex = initialZOrderWindowIDs.firstIndex(of: newTarget.cgWindowID)
+        // 2. Move windows that occlude the selected target off-screen so it
+        //    becomes visible without changing focus.
+        if newTarget.cgWindowID != 0 {
+            displaceOccludingWindows(for: newTarget)
         }
+
+        // 3. Show the highlight border last, after the target is fully visible.
+        windowHighlightController = WindowHighlightController()
+        windowHighlightController?.show(around: newTarget.frame)
     }
 
     func refreshAvailableWindows() {
@@ -967,7 +958,7 @@ final class AppState: NSObject, NSMenuDelegate {
             accessibilityService.raiseWindow(window)
         }
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
-        clearWindowCyclingState(restoreZOrder: false)
+        clearWindowCyclingState()
     }
 
     func closeWindowTarget(at index: Int) {
@@ -1133,35 +1124,108 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
-    /// Clears cycling state.  When `restoreZOrder` is true (the default),
-    /// the previously raised window is lowered back to its original z-order
-    /// position.  Pass `false` when a layout was applied and the selected
-    /// window should stay at the front.
-    private func clearWindowCyclingState(restoreZOrder: Bool = true) {
-        if restoreZOrder {
-            restorePreviewedWindowZOrder()
-        }
+    private func clearWindowCyclingState() {
+        windowHighlightController?.hide()
+        windowHighlightController = nil
+        CATransaction.flush()
+        restoreDisplacedWindows()
         originalFrontmostPID = nil
         originalFrontmostTarget = nil
         initialZOrderWindowIDs = []
-        previewRaisedZIndex = nil
         // Keep availableWindowTargets so the sidebar can show the previous
         // window list immediately on the next overlay open while the deferred
         // refresh is still pending.
         activeTargetIndex = 0
     }
 
-    /// Restores the original z-order by re-raising all windows that were
-    /// originally above the currently previewed window.
-    private func restorePreviewedWindowZOrder() {
-        guard let raisedIdx = previewRaisedZIndex else { return }
-        for i in stride(from: raisedIdx - 1, through: 0, by: -1) {
+    /// Moves windows that occlude the selected target off-screen so it
+    /// becomes visible, and restores any previously displaced windows
+    /// that no longer need to be moved.
+    private func displaceOccludingWindows(for selectedTarget: WindowTarget) {
+        let selectedWID = selectedTarget.cgWindowID
+        guard let selectedIdx = initialZOrderWindowIDs.firstIndex(of: selectedWID) else { return }
+        let selectedFrame = selectedTarget.frame
+
+        // Determine which windows should be displaced: in front of the
+        // selected window AND overlapping its frame.
+        var shouldDisplace = Set<CGWindowID>()
+        for i in 0..<selectedIdx {
             let wid = initialZOrderWindowIDs[i]
             if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
-               let elem = target.windowElement {
-                accessibilityService.raiseWindow(elem)
+               target.frame.intersects(selectedFrame) {
+                shouldDisplace.insert(wid)
             }
         }
+
+        // Restore windows that were displaced but no longer need to be.
+        let toRestore = Set(displacedWindowFrames.keys).subtracting(shouldDisplace)
+        for wid in toRestore {
+            if let originalOrigin = displacedWindowFrames.removeValue(forKey: wid),
+               let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+               let window = target.windowElement {
+                accessibilityService.setPosition(originalOrigin, for: window)
+            }
+        }
+
+        // Move newly-overlapping windows off-screen, saving their original
+        // AX position (top-left origin, y-down) for accurate restoration.
+        let toDisplace = shouldDisplace.subtracting(Set(displacedWindowFrames.keys))
+        for wid in toDisplace {
+            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+               let window = target.windowElement {
+                let (axPos, _) = accessibilityService.readPositionAndSize(of: window)
+                displacedWindowFrames[wid] = axPos
+                accessibilityService.setPosition(CGPoint(x: 10000, y: 10000), for: window)
+            }
+        }
+    }
+
+    /// Shows a highlight border around the current `activeLayoutTarget`.
+    private func showHighlightForActiveTarget() {
+        guard let frame = activeLayoutTarget?.frame else { return }
+        windowHighlightController = WindowHighlightController()
+        windowHighlightController?.show(around: frame)
+    }
+
+    /// Restores all displaced windows back to their original positions.
+    private func restoreDisplacedWindows() {
+        guard !displacedWindowFrames.isEmpty else { return }
+        for (wid, originalOrigin) in displacedWindowFrames {
+            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+               let window = target.windowElement {
+                accessibilityService.setPosition(originalOrigin, for: window)
+            }
+        }
+        displacedWindowFrames.removeAll()
+    }
+
+    /// Checks whether the current `activeLayoutTarget` still exists (its
+    /// AX position is queryable).  If the window has disappeared (e.g. a
+    /// transient HUD), falls back to the first available window target and
+    /// updates the highlight border.
+    private func revalidateActiveTarget() {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+        guard let current = activeLayoutTarget,
+              let window = current.windowElement else { return }
+        // If we can still read the position, the window is alive.
+        let (pos, size) = accessibilityService.readPositionAndSize(of: window)
+        if size.width > 0 && size.height > 0 { return }
+
+        // Target window has disappeared — switch to the first available.
+        guard let fallback = availableWindowTargets.first else { return }
+        activeLayoutTarget = fallback
+        lastTargetPID = fallback.processIdentifier
+        clearResizabilityCache()
+        layoutPreviewController?.hide()
+        layoutPreviewController = makeLayoutPreviewController(for: fallback)
+        windowTargetListVersion += 1
+        launchMessage = String(
+            format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+            fallback.appName
+        )
+        windowHighlightController?.hide()
+        windowHighlightController = WindowHighlightController()
+        windowHighlightController?.show(around: fallback.frame)
     }
 
     /// If the target's app is hidden (Cmd-H), unhide it so the window becomes
@@ -1343,7 +1407,7 @@ final class AppState: NSObject, NSMenuDelegate {
             )
         }
         _ = reactivateLastTargetApp(clearingState: false)
-        clearWindowCyclingState(restoreZOrder: false)
+        clearWindowCyclingState()
     }
 
     @objc private func showLayoutGrid() {
@@ -1472,6 +1536,8 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Immediately dismisses the overlay, layout grid, and all main windows
     /// so the user doesn't wait for subsequent (potentially slow) AX operations.
     private func dismissOverlayImmediately() {
+        windowHighlightController?.hide()
+        windowHighlightController = nil
         hidePreviewOverlay()
         isShowingLayoutGrid = false
         hideAllMainWindows()
@@ -3279,7 +3345,6 @@ final class AppState: NSObject, NSMenuDelegate {
     private func handleAppDidResignActive() {
         guard !isSwitchingActivationPolicy else { return }
         guard !isRecreatingWindows else { return }
-        guard !isCyclingWindows else { return }
         guard !isShowingPermissionsOnly else { return }
         hidePreviewOverlay()
         hideMainWindow()

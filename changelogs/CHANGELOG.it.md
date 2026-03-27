@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Quando si seleziona una finestra nella barra laterale, le finestre sovrapposte vengono temporaneamente spostate per rendere visibile la finestra selezionata senza cambiare il focus
+- Viene mostrato un bordo evidenziato attorno alla finestra attualmente selezionata nella barra laterale
+
+### Corretto
+
+- Corretto l'ordine di navigazione Tab/frecce per corrispondere all'ordine di visualizzazione della barra laterale (raggruppato per spazio, schermo e applicazione)
+- Le finestre spostate durante la selezione nella barra laterale vengono ripristinate alla loro posizione originale quando la selezione viene annullata (Esc) o Tiley viene chiuso
+
 ## [3.3.0] - 2026-03-27
 
 ### Corretto

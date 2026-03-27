@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Ao selecionar uma janela na barra lateral, as janelas sobrepostas são temporariamente movidas para tornar a janela selecionada visível sem alterar o foco
+- Uma borda de destaque é exibida ao redor da janela atualmente selecionada na barra lateral
+
+### Corrigido
+
+- Corrigida a ordem de navegação Tab/setas para corresponder à ordem de exibição da barra lateral (agrupada por espaço, tela e aplicativo)
+- As janelas deslocadas durante a seleção na barra lateral são restauradas às suas posições originais ao cancelar (Esc) ou fechar o Tiley
+
 ## [3.3.0] - 2026-03-27
 
 ### Corrigido
