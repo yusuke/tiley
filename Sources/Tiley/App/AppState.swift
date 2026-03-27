@@ -1236,16 +1236,17 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
 
-        let totalSteps = 8
+        let totalSteps = 16
         var step = 0
 
         let timer = DispatchSource.makeTimerSource(queue: .main)
-        timer.schedule(deadline: .now(), repeating: .milliseconds(20))
+        timer.schedule(deadline: .now(), repeating: .milliseconds(15))
         timer.setEventHandler { [weak self] in
             step += 1
             let t = min(Double(step) / Double(totalSteps), 1.0)
-            // Ease-out: decelerate toward the end.
-            let eased = 1.0 - (1.0 - t) * (1.0 - t)
+            // Ease-out cubic: fast start, slow finish.
+            let inv = 1.0 - t
+            let eased = 1.0 - inv * inv * inv
 
             for move in significantMoves {
                 let x = move.from.x + (move.to.x - move.from.x) * eased
