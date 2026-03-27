@@ -13,6 +13,7 @@ typealias CGSConnectionID = UInt32
 private typealias MainConnectionIDFunc = @convention(c) () -> CGSConnectionID
 private typealias CopySpacesForWindowsFunc = @convention(c) (CGSConnectionID, UInt32, CFArray) -> CFArray?
 private typealias CopyManagedDisplaySpacesFunc = @convention(c) (CGSConnectionID) -> CFArray?
+private typealias OrderWindowFunc = @convention(c) (CGSConnectionID, CGWindowID, Int32, CGWindowID) -> CGError
 
 enum CGSPrivate {
     static let kCGSSpaceAll: UInt32 = 0x7
@@ -46,6 +47,7 @@ enum CGSPrivate {
     private static let _mainConnectionID: MainConnectionIDFunc? = resolve("CGSMainConnectionID", slsName: "SLSMainConnectionID")
     private static let _copySpacesForWindows: CopySpacesForWindowsFunc? = resolve("CGSCopySpacesForWindows", slsName: "SLSCopySpacesForWindows")
     private static let _copyManagedDisplaySpaces: CopyManagedDisplaySpacesFunc? = resolve("CGSCopyManagedDisplaySpaces", slsName: "SLSCopyManagedDisplaySpaces")
+    private static let _orderWindow: OrderWindowFunc? = resolve("CGSOrderWindow", slsName: "SLSOrderWindow")
 
     // MARK: - Public interface
 
@@ -72,5 +74,17 @@ enum CGSPrivate {
     static func managedDisplaySpaces(_ cid: CGSConnectionID) -> CFArray? {
         guard let fn = _copyManagedDisplaySpaces else { return nil }
         return fn(cid)
+    }
+
+    // MARK: - Window ordering
+
+    static let kCGSOrderAbove: Int32 = 1
+
+    /// Reorders a window above another window (or to the front if
+    /// `relativeToWID` is 0) without changing application activation.
+    @discardableResult
+    static func orderWindowAbove(_ cid: CGSConnectionID, windowID: CGWindowID, relativeToWID: CGWindowID = 0) -> Bool {
+        guard let fn = _orderWindow else { return false }
+        return fn(cid, windowID, kCGSOrderAbove, relativeToWID) == .success
     }
 }

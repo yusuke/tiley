@@ -147,6 +147,9 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var screenChangeTask: Task<Void, Never>?
     @ObservationIgnored private var isSwitchingActivationPolicy = false
     @ObservationIgnored private(set) var isRecreatingWindows = false
+    /// Suppresses `windowDidResignKey` hide while briefly activating a target
+    /// app during sidebar window cycling.
+
     @ObservationIgnored private var hotKeyRef: EventHotKeyRef?
     @ObservationIgnored private var presetHotKeyRefs: [UInt32: EventHotKeyRef] = [:]
     @ObservationIgnored private var presetHotKeyIDs: [UInt32: UUID] = [:]
@@ -177,9 +180,13 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored private var activeTargetIndex: Int = 0
     @ObservationIgnored private var originalFrontmostPID: pid_t?
     @ObservationIgnored private var originalFrontmostTarget: WindowTarget?
+
+    /// True while the user is cycling through target windows (Tab/arrow/click
+    /// in the sidebar).  Used to suppress Tiley from hiding itself when the
+    /// target app is briefly activated to bring its window to the front.
+    var isCyclingWindows: Bool { originalFrontmostPID != nil }
     /// The window target that was most recently raised during cycling/selection,
     /// so we can restore its Z-order when switching to another target.
-    @ObservationIgnored private var previouslyRaisedTarget: WindowTarget?
     /// Whether the user has cycled the target window at least once via Tab.
     var hasUsedTabCycling: Bool { originalFrontmostPID != nil }
     var windowTargetListVersion: Int = 0
@@ -632,12 +639,6 @@ final class AppState: NSObject, NSMenuDelegate {
         // raised (cycled) window's app, causing it to flash to the front.
         // By raising + activating the original while Tiley is still present,
         // the activation target is deterministic.
-        if let prev = previouslyRaisedTarget,
-           let origWindow = originalFrontmostTarget?.windowElement,
-           origWindow != prev.windowElement {
-            // Push the previously raised window back below the original.
-            accessibilityService.raiseWindow(origWindow)
-        }
         if let originalTarget = originalFrontmostTarget,
            let window = originalTarget.windowElement {
             accessibilityService.raiseWindow(window)
@@ -669,6 +670,8 @@ final class AppState: NSObject, NSMenuDelegate {
         if originalFrontmostPID == nil {
             originalFrontmostPID = lastTargetPID
             originalFrontmostTarget = activeLayoutTarget
+            // Snapshot the initial z-order so we can restore it when switching targets.
+            initialZOrderWindowIDs = availableWindowTargets.map(\.cgWindowID).filter { $0 != 0 }
         }
 
         // Use the sidebar display order so Tab cycles in the same visual order.
@@ -750,6 +753,7 @@ final class AppState: NSObject, NSMenuDelegate {
         if originalFrontmostPID == nil {
             originalFrontmostPID = lastTargetPID
             originalFrontmostTarget = activeLayoutTarget
+            initialZOrderWindowIDs = availableWindowTargets.map(\.cgWindowID).filter { $0 != 0 }
         }
 
         activeTargetIndex = index
@@ -838,6 +842,14 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
+    /// The initial z-order of CG window IDs captured when cycling begins.
+    /// Used to restore the original stacking order before raising a new window.
+    private var initialZOrderWindowIDs: [CGWindowID] = []
+
+    /// The index within `initialZOrderWindowIDs` of the window currently raised
+    /// for preview, or `nil` if nothing has been raised yet.
+    private var previewRaisedZIndex: Int?
+
     private func applyTargetAtCurrentIndex() {
         let newTarget = availableWindowTargets[activeTargetIndex]
         let previousScreenFrame = activeLayoutTarget?.screenFrame
@@ -864,21 +876,41 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
-        // Before raising the new target, restore the previously raised window's
-        // Z-order by re-raising the original frontmost window on top of it.
-        if let prev = previouslyRaisedTarget,
-           prev.windowElement != newTarget.windowElement,
-           let origWindow = originalFrontmostTarget?.windowElement,
-           origWindow != prev.windowElement {
-            accessibilityService.raiseWindow(origWindow)
-        }
-
         // Raise the selected window to the foreground so the user can see it.
-        // Only raise via AX (not activate) to keep Tiley's overlay visible.
+        // AXRaise lifts the window within its app; activate() brings the app's
+        // windows above other apps.  Tiley is floating so it stays visible.
+        // isCyclingWindows suppresses windowDidResignKey / handleAppDidResignActive
+        // from hiding Tiley while the target app is briefly active.
         if let window = newTarget.windowElement {
+            // Restore the previously raised window to its original z-order
+            // before raising the new one.
+            if let raisedIdx = previewRaisedZIndex {
+                for i in stride(from: raisedIdx - 1, through: 0, by: -1) {
+                    let wid = initialZOrderWindowIDs[i]
+                    if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+                       let elem = target.windowElement {
+                        accessibilityService.raiseWindow(elem)
+                    }
+                }
+            }
+
             accessibilityService.raiseWindow(window)
+
+            // Activate the target app so its window comes above all other
+            // normal windows, then immediately reactivate Tiley.
+            let targetApp = NSRunningApplication(processIdentifier: newTarget.processIdentifier)
+            targetApp?.activate()
+            DispatchQueue.main.async {
+                NSApp.activate()
+                // Reclaim key window status so keyboard input goes to Tiley.
+                for controller in self.mainWindowControllers.values {
+                    controller.nsWindow?.makeKeyAndOrderFront(nil)
+                }
+            }
+
+            // Record the position of the newly raised window in the initial z-order.
+            previewRaisedZIndex = initialZOrderWindowIDs.firstIndex(of: newTarget.cgWindowID)
         }
-        previouslyRaisedTarget = newTarget
     }
 
     func refreshAvailableWindows() {
@@ -1097,13 +1129,30 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func clearWindowCyclingState() {
+        // Restore the last raised window to its original z-order position
+        // before clearing state.
+        restorePreviewedWindowZOrder()
         originalFrontmostPID = nil
         originalFrontmostTarget = nil
-        previouslyRaisedTarget = nil
+        initialZOrderWindowIDs = []
+        previewRaisedZIndex = nil
         // Keep availableWindowTargets so the sidebar can show the previous
         // window list immediately on the next overlay open while the deferred
         // refresh is still pending.
         activeTargetIndex = 0
+    }
+
+    /// Restores the original z-order by re-raising all windows that were
+    /// originally above the currently previewed window.
+    private func restorePreviewedWindowZOrder() {
+        guard let raisedIdx = previewRaisedZIndex else { return }
+        for i in stride(from: raisedIdx - 1, through: 0, by: -1) {
+            let wid = initialZOrderWindowIDs[i]
+            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+               let elem = target.windowElement {
+                accessibilityService.raiseWindow(elem)
+            }
+        }
     }
 
     /// If the target's app is hidden (Cmd-H), unhide it so the window becomes
@@ -3204,6 +3253,7 @@ final class AppState: NSObject, NSMenuDelegate {
     private func handleAppDidResignActive() {
         guard !isSwitchingActivationPolicy else { return }
         guard !isRecreatingWindows else { return }
+        guard !isCyclingWindows else { return }
         guard !isShowingPermissionsOnly else { return }
         hidePreviewOverlay()
         hideMainWindow()

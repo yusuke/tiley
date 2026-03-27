@@ -206,6 +206,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         // to settings mode), the old key window is ordered out which triggers
         // this callback. Suppress state resets so the new mode is preserved.
         guard appState?.isRecreatingWindows != true else { return }
+        // While cycling target windows, the target app is briefly activated
+        // to bring its window to the front.  Don't hide Tiley in that case.
+        guard appState?.isCyclingWindows != true else { return }
         appState?.hidePreviewOverlay()
         // Keep the permissions-only panel visible so the user can grant access
         // in System Settings and return to Tiley.
