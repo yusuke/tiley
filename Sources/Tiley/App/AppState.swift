@@ -862,6 +862,9 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Used to restore the original stacking order before raising a new window.
     private var initialZOrderWindowIDs: [CGWindowID] = []
 
+    /// Active displacement animation timer.
+    private var displacementAnimationTimer: DispatchSourceTimer?
+
     /// Maps window IDs that have been moved off-screen to their original
     /// positions, so they can be restored when selection changes or cycling ends.
     private var displacedWindowFrames: [CGWindowID: CGPoint] = [:]
@@ -1128,6 +1131,8 @@ final class AppState: NSObject, NSMenuDelegate {
         windowHighlightController?.hide()
         windowHighlightController = nil
         CATransaction.flush()
+        displacementAnimationTimer?.cancel()
+        displacementAnimationTimer = nil
         restoreDisplacedWindows()
         originalFrontmostPID = nil
         originalFrontmostTarget = nil
@@ -1157,27 +1162,104 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
+        // Build a list of (window, currentPosition, targetPosition) for animation.
+        var moves: [(window: AXUIElement, from: CGPoint, to: CGPoint)] = []
+
         // Restore windows that were displaced but no longer need to be.
         let toRestore = Set(displacedWindowFrames.keys).subtracting(shouldDisplace)
         for wid in toRestore {
             if let originalOrigin = displacedWindowFrames.removeValue(forKey: wid),
                let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
                let window = target.windowElement {
-                accessibilityService.setPosition(originalOrigin, for: window)
+                let (currentPos, _) = accessibilityService.readPositionAndSize(of: window)
+                moves.append((window: window, from: currentPos, to: originalOrigin))
             }
         }
 
-        // Move newly-overlapping windows off-screen, saving their original
-        // AX position (top-left origin, y-down) for accurate restoration.
-        let toDisplace = shouldDisplace.subtracting(Set(displacedWindowFrames.keys))
-        for wid in toDisplace {
-            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
-               let window = target.windowElement {
-                let (axPos, _) = accessibilityService.readPositionAndSize(of: window)
-                displacedWindowFrames[wid] = axPos
-                accessibilityService.setPosition(CGPoint(x: 10000, y: 10000), for: window)
+        // Move all occluding windows down below the selected window's bottom edge.
+        // Read the selected window's AX position directly (it's never displaced,
+        // so its AX position is always accurate).
+        let gap: CGFloat = 10
+        var selectedBottomAX = selectedFrame.maxY  // fallback to CG
+        if let selWindow = selectedTarget.windowElement {
+            let (axPos, axSize) = accessibilityService.readPositionAndSize(of: selWindow)
+            if axSize.height > 0 {
+                selectedBottomAX = axPos.y + axSize.height
             }
         }
+        var nextY = selectedBottomAX + gap
+        debugLog("displaceOccluding: selectedCGMaxY=\(selectedFrame.maxY) selectedAXBottom=\(selectedBottomAX) nextY=\(nextY)")
+
+        // Sort by original Y position so stacking order is predictable.
+        let sortedDisplace = shouldDisplace.sorted { a, b in
+            let aTarget = availableWindowTargets.first(where: { $0.cgWindowID == a })
+            let bTarget = availableWindowTargets.first(where: { $0.cgWindowID == b })
+            return (aTarget?.frame.minY ?? 0) < (bTarget?.frame.minY ?? 0)
+        }
+
+        for wid in sortedDisplace {
+            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+                  let window = target.windowElement else { continue }
+
+            // Save original position if not already tracked.
+            if displacedWindowFrames[wid] == nil {
+                let (axPos, _) = accessibilityService.readPositionAndSize(of: window)
+                displacedWindowFrames[wid] = axPos
+            }
+
+            let destination = CGPoint(x: target.frame.minX, y: nextY)
+            nextY += gap
+
+            let (currentPos, axSize) = accessibilityService.readPositionAndSize(of: window)
+            debugLog("displaceOccluding: wid=\(wid) cgFrame=\(target.frame) axPos=\(currentPos) axSize=\(axSize) to=\(destination)")
+            moves.append((window: window, from: currentPos, to: destination))
+        }
+
+        animateWindowMoves(moves)
+    }
+
+    /// Animates multiple window moves simultaneously over a short duration.
+    private func animateWindowMoves(_ moves: [(window: AXUIElement, from: CGPoint, to: CGPoint)]) {
+        displacementAnimationTimer?.cancel()
+        displacementAnimationTimer = nil
+
+        guard !moves.isEmpty else { return }
+
+        // Filter out moves with negligible distance.
+        let significantMoves = moves.filter {
+            abs($0.from.x - $0.to.x) > 1 || abs($0.from.y - $0.to.y) > 1
+        }
+        guard !significantMoves.isEmpty else {
+            for move in moves {
+                accessibilityService.setPosition(move.to, for: move.window)
+            }
+            return
+        }
+
+        let totalSteps = 8
+        var step = 0
+
+        let timer = DispatchSource.makeTimerSource(queue: .main)
+        timer.schedule(deadline: .now(), repeating: .milliseconds(20))
+        timer.setEventHandler { [weak self] in
+            step += 1
+            let t = min(Double(step) / Double(totalSteps), 1.0)
+            // Ease-out: decelerate toward the end.
+            let eased = 1.0 - (1.0 - t) * (1.0 - t)
+
+            for move in significantMoves {
+                let x = move.from.x + (move.to.x - move.from.x) * eased
+                let y = move.from.y + (move.to.y - move.from.y) * eased
+                self?.accessibilityService.setPosition(CGPoint(x: x, y: y), for: move.window)
+            }
+
+            if step >= totalSteps {
+                timer.cancel()
+                self?.displacementAnimationTimer = nil
+            }
+        }
+        displacementAnimationTimer = timer
+        timer.resume()
     }
 
     /// Shows a highlight border around the current `activeLayoutTarget`.

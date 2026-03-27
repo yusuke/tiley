@@ -9,13 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- When selecting a window in the sidebar, windows overlapping the selected window are temporarily moved off-screen to make it visible without changing focus
+- When selecting a window in the sidebar, overlapping windows are smoothly animated downward to reveal the selected window without changing focus
 - A highlight border is shown around the currently selected window in the sidebar
 
 ### Fixed
 
 - Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)
-- Occluding windows displaced during sidebar selection are restored to their original positions when the selection is canceled (Esc) or Tiley is closed
+- Displaced windows are restored to their original positions when the selection is canceled (Esc) or Tiley is closed
 
 ## [3.3.0] - 2026-03-27
 

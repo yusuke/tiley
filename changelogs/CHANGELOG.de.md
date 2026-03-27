@@ -4,13 +4,13 @@
 
 ### Hinzugefügt
 
-- Bei Auswahl eines Fensters in der Seitenleiste werden überlappende Fenster vorübergehend verschoben, um das ausgewählte Fenster ohne Fokuswechsel sichtbar zu machen
+- Bei Auswahl eines Fensters in der Seitenleiste werden überlappende Fenster mit einer sanften Animation nach unten verschoben, um das ausgewählte Fenster ohne Fokuswechsel sichtbar zu machen
 - Ein Hervorhebungsrahmen wird um das aktuell in der Seitenleiste ausgewählte Fenster angezeigt
 
 ### Behoben
 
 - Tab-/Pfeiltasten-Reihenfolge entspricht nun der Anzeigereihenfolge der Seitenleiste (gruppiert nach Space, Bildschirm und Anwendung)
-- Während der Seitenleistenauswahl verschobene Fenster werden beim Abbrechen (Esc) oder Schließen von Tiley an ihre ursprüngliche Position zurückgesetzt
+- Verschobene Fenster werden beim Abbrechen (Esc) oder Schließen von Tiley an ihre ursprüngliche Position zurückgesetzt
 
 ## [3.3.0] - 2026-03-27
 
