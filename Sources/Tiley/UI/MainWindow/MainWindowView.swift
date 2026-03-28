@@ -2684,74 +2684,95 @@ struct MainWindowView: View {
 
     private var displayShortcutsSection: some View {
         TahoeSettingsSection(title: NSLocalizedString("Shortcuts", comment: "Settings section for shortcuts")) {
-            VStack(spacing: 0) {
-                // Show Tiley (global-only shortcut, formerly separate "Shortcut" section)
-                showTileyShortcutRow
+            VStack(spacing: 8) {
+                // Window action shortcuts group
+                VStack(spacing: 0) {
+                    // Show Tiley (global-only shortcut, formerly separate "Shortcut" section)
+                    showTileyShortcutRow
 
-                Divider().opacity(0.4)
+                    Divider().opacity(0.4)
 
-                localOnlyShortcutRow(
-                    label: NSLocalizedString("Select Next Window", comment: "Shortcut action to select next window"),
-                    binding: $draftSettings.displayShortcutSettings.selectNextWindow.local,
-                    enabledBinding: $draftSettings.displayShortcutSettings.selectNextWindow.localEnabled,
-                    keyPath: "selectNextWindow.local",
-                    iconContent: AnyView(
-                        HStack(spacing: 1) {
-                            Image(systemName: "arrow.down")
-                                .font(.system(size: 9, weight: .semibold))
-                            Image(systemName: "sidebar.left")
-                                .font(.system(size: 12, weight: .regular))
-                        }
-                        .foregroundStyle(.secondary)
-                    )
-                )
-
-                Divider().opacity(0.4)
-
-                localOnlyShortcutRow(
-                    label: NSLocalizedString("Select Previous Window", comment: "Shortcut action to select previous window"),
-                    binding: $draftSettings.displayShortcutSettings.selectPreviousWindow.local,
-                    enabledBinding: $draftSettings.displayShortcutSettings.selectPreviousWindow.localEnabled,
-                    keyPath: "selectPreviousWindow.local",
-                    iconContent: AnyView(
-                        HStack(spacing: 1) {
-                            Image(systemName: "arrow.up")
-                                .font(.system(size: 9, weight: .semibold))
-                            Image(systemName: "sidebar.left")
-                                .font(.system(size: 12, weight: .regular))
-                        }
-                        .foregroundStyle(.secondary)
-                    )
-                )
-
-                Divider().opacity(0.4)
-
-                localOnlyShortcutRow(
-                    label: NSLocalizedString("Bring to Front", comment: "Shortcut action to bring selected window to front"),
-                    binding: $draftSettings.displayShortcutSettings.bringToFront.local,
-                    enabledBinding: $draftSettings.displayShortcutSettings.bringToFront.localEnabled,
-                    keyPath: "bringToFront.local",
-                    systemImage: "macwindow.stack"
-                )
-
-                Divider().opacity(0.4)
-
-                localOnlyShortcutRow(
-                    label: NSLocalizedString("Close / Quit", comment: "Shortcut action to close window or quit app"),
-                    binding: $draftSettings.displayShortcutSettings.closeOrQuit.local,
-                    enabledBinding: $draftSettings.displayShortcutSettings.closeOrQuit.localEnabled,
-                    keyPath: "closeOrQuit.local",
-                    iconContent: AnyView(
-                        Image(systemName: "xmark.circle")
-                            .font(.system(size: 12, weight: .semibold))
+                    localOnlyShortcutRow(
+                        label: NSLocalizedString("Select Next Window", comment: "Shortcut action to select next window"),
+                        binding: $draftSettings.displayShortcutSettings.selectNextWindow.local,
+                        enabledBinding: $draftSettings.displayShortcutSettings.selectNextWindow.localEnabled,
+                        keyPath: "selectNextWindow.local",
+                        iconContent: AnyView(
+                            HStack(spacing: 1) {
+                                Image(systemName: "arrow.down")
+                                    .font(.system(size: 9, weight: .semibold))
+                                Image(systemName: "sidebar.left")
+                                    .font(.system(size: 12, weight: .regular))
+                            }
                             .foregroundStyle(.secondary)
-                            .padding(.trailing, 1)
+                        )
                     )
-                )
 
-                Divider().opacity(0.4)
+                    Divider().opacity(0.4)
 
-                displayShortcutRow(
+                    localOnlyShortcutRow(
+                        label: NSLocalizedString("Select Previous Window", comment: "Shortcut action to select previous window"),
+                        binding: $draftSettings.displayShortcutSettings.selectPreviousWindow.local,
+                        enabledBinding: $draftSettings.displayShortcutSettings.selectPreviousWindow.localEnabled,
+                        keyPath: "selectPreviousWindow.local",
+                        iconContent: AnyView(
+                            HStack(spacing: 1) {
+                                Image(systemName: "arrow.up")
+                                    .font(.system(size: 9, weight: .semibold))
+                                Image(systemName: "sidebar.left")
+                                    .font(.system(size: 12, weight: .regular))
+                            }
+                            .foregroundStyle(.secondary)
+                        )
+                    )
+
+                    Divider().opacity(0.4)
+
+                    localOnlyShortcutRow(
+                        label: NSLocalizedString("Bring to Front", comment: "Shortcut action to bring selected window to front"),
+                        binding: $draftSettings.displayShortcutSettings.bringToFront.local,
+                        enabledBinding: $draftSettings.displayShortcutSettings.bringToFront.localEnabled,
+                        keyPath: "bringToFront.local",
+                        systemImage: "macwindow.stack"
+                    )
+
+                    Divider().opacity(0.4)
+
+                    localOnlyShortcutRow(
+                        label: NSLocalizedString("Close / Quit", comment: "Shortcut action to close window or quit app"),
+                        binding: $draftSettings.displayShortcutSettings.closeOrQuit.local,
+                        enabledBinding: $draftSettings.displayShortcutSettings.closeOrQuit.localEnabled,
+                        keyPath: "closeOrQuit.local",
+                        iconContent: AnyView(
+                            Image(systemName: "xmark.circle")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(.secondary)
+                                .padding(.trailing, 1)
+                        )
+                    )
+
+                    Divider().opacity(0.4)
+
+                    HStack {
+                        Spacer()
+                        Button(NSLocalizedString("Reset to Default", comment: "Reset shortcut to default")) {
+                            dismissPresetNameEditingIfNeeded()
+                            draftSettings.hotKeyShortcut = .default
+                            draftSettings.displayShortcutSettings.selectNextWindow = DisplayShortcutSettings.defaultSelectNextWindow
+                            draftSettings.displayShortcutSettings.selectPreviousWindow = DisplayShortcutSettings.defaultSelectPreviousWindow
+                            draftSettings.displayShortcutSettings.bringToFront = DisplayShortcutSettings.defaultBringToFront
+                            draftSettings.displayShortcutSettings.closeOrQuit = DisplayShortcutSettings.defaultCloseOrQuit
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .modifier(SettingsSectionBackground(cornerRadius: 10))
+
+                VStack(spacing: 0) {
+                    displayShortcutRow(
                     label: NSLocalizedString("Move to Primary Display", comment: "Display shortcut action"),
                     localBinding: $draftSettings.displayShortcutSettings.moveToPrimary.local,
                     localEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrimary.localEnabled,
@@ -2868,21 +2889,11 @@ struct MainWindowView: View {
                         }
                     }
                 }
-
-                Divider().opacity(0.4)
-
-                HStack {
-                    Spacer()
-                    Button(NSLocalizedString("Reset to Default", comment: "Reset shortcut to default")) {
-                        dismissPresetNameEditingIfNeeded()
-                        draftSettings.hotKeyShortcut = .default
-                        draftSettings.displayShortcutSettings.selectNextWindow = DisplayShortcutSettings.defaultSelectNextWindow
-                        draftSettings.displayShortcutSettings.selectPreviousWindow = DisplayShortcutSettings.defaultSelectPreviousWindow
-                        draftSettings.displayShortcutSettings.bringToFront = DisplayShortcutSettings.defaultBringToFront
-                        draftSettings.displayShortcutSettings.closeOrQuit = DisplayShortcutSettings.defaultCloseOrQuit
-                    }
                 }
-                .padding(.vertical, 4)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .modifier(SettingsSectionBackground(cornerRadius: 10))
             }
         }
     }
