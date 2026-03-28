@@ -189,6 +189,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 id: UUID(),
                 name: NSLocalizedString("Left Half", comment: "Default layout preset name"),
                 selection: GridSelection(startColumn: 0, startRow: 0, endColumn: leftEnd, endRow: maxRow),
+                secondarySelections: [
+                    GridSelection(startColumn: rightStart, startRow: 0, endColumn: maxColumn, endRow: maxRow)
+                ],
                 baseRows: rows,
                 baseColumns: columns,
                 shortcuts: [
@@ -201,6 +204,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 id: UUID(),
                 name: NSLocalizedString("Right Half", comment: "Default layout preset name"),
                 selection: GridSelection(startColumn: rightStart, startRow: 0, endColumn: maxColumn, endRow: maxRow),
+                secondarySelections: [
+                    GridSelection(startColumn: 0, startRow: 0, endColumn: leftEnd, endRow: maxRow)
+                ],
                 baseRows: rows,
                 baseColumns: columns,
                 shortcuts: [
@@ -213,6 +219,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 id: UUID(),
                 name: NSLocalizedString("Top Half", comment: "Default layout preset name"),
                 selection: GridSelection(startColumn: 0, startRow: 0, endColumn: maxColumn, endRow: topEnd),
+                secondarySelections: [
+                    GridSelection(startColumn: 0, startRow: bottomStart, endColumn: maxColumn, endRow: maxRow)
+                ],
                 baseRows: rows,
                 baseColumns: columns,
                 shortcuts: [
@@ -225,6 +234,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                 id: UUID(),
                 name: NSLocalizedString("Bottom Half", comment: "Default layout preset name"),
                 selection: GridSelection(startColumn: 0, startRow: bottomStart, endColumn: maxColumn, endRow: maxRow),
+                secondarySelections: [
+                    GridSelection(startColumn: 0, startRow: 0, endColumn: maxColumn, endRow: topEnd)
+                ],
                 baseRows: rows,
                 baseColumns: columns,
                 shortcuts: [
