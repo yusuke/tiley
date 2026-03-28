@@ -184,6 +184,8 @@ final class AppState: NSObject, NSMenuDelegate {
     /// All currently selected window indices for multi-selection.
     /// Invariant: always contains `activeTargetIndex`.
     @ObservationIgnored private(set) var selectedWindowIndices: Set<Int> = [0]
+    /// Window indices in the order they were selected. First element = primary.
+    @ObservationIgnored private(set) var selectionOrder: [Int] = [0]
     /// Anchor index for Shift+click range selection.
     @ObservationIgnored private var selectionAnchorIndex: Int? = nil
     @ObservationIgnored private var originalFrontmostPID: pid_t?
@@ -701,13 +703,8 @@ final class AppState: NSObject, NSMenuDelegate {
 
         dismissOverlayImmediately()
 
-        // Order selected window indices by sidebar (Z-order): topmost first.
-        let orderedIndices: [Int]
-        if !sidebarWindowOrder.isEmpty {
-            orderedIndices = sidebarWindowOrder.filter { selectedWindowIndices.contains($0) && $0 < availableWindowTargets.count }
-        } else {
-            orderedIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }.sorted()
-        }
+        // Order selected window indices by selection order (first selected = primary).
+        let orderedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
 
         for (windowPosition, idx) in orderedIndices.enumerated() {
             var target = availableWindowTargets[idx]
@@ -857,6 +854,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         // Tab cycling always resets to single selection.
         selectedWindowIndices = [activeTargetIndex]
+        selectionOrder = [activeTargetIndex]
         selectionAnchorIndex = activeTargetIndex
 
         applyTargetAtCurrentIndex()
@@ -915,14 +913,16 @@ final class AppState: NSObject, NSMenuDelegate {
                 // Don't deselect the last remaining item.
                 if selectedWindowIndices.count > 1 {
                     selectedWindowIndices.remove(index)
+                    selectionOrder.removeAll { $0 == index }
                     // If the removed item was the primary, pick another.
                     if activeTargetIndex == index {
-                        activeTargetIndex = selectedWindowIndices.first!
+                        activeTargetIndex = selectionOrder.first ?? selectedWindowIndices.first!
                     }
                 }
                 // else: sole item Cmd-clicked → no-op
             } else {
                 selectedWindowIndices.insert(index)
+                selectionOrder.append(index)
                 activeTargetIndex = index
             }
         } else if shift {
@@ -938,15 +938,24 @@ final class AppState: NSObject, NSMenuDelegate {
                let clickPos = order.firstIndex(of: index) {
                 let lo = min(anchorPos, clickPos)
                 let hi = max(anchorPos, clickPos)
-                selectedWindowIndices = Set(order[lo...hi])
+                let rangeIndices = Array(order[lo...hi])
+                selectedWindowIndices = Set(rangeIndices)
+                // Selection order: anchor first, then the rest in sidebar order.
+                // Preserve existing selectionOrder entries that are still selected,
+                // then append new ones from the range.
+                let previousOrder = selectionOrder.filter { selectedWindowIndices.contains($0) }
+                let newIndices = rangeIndices.filter { !previousOrder.contains($0) }
+                selectionOrder = previousOrder + newIndices
             } else {
                 selectedWindowIndices = [index]
+                selectionOrder = [index]
             }
             activeTargetIndex = index
             // Don't update selectionAnchorIndex on shift-click.
         } else {
             // Plain click: single selection.
             selectedWindowIndices = [index]
+            selectionOrder = [index]
             selectionAnchorIndex = index
             activeTargetIndex = index
         }
@@ -968,8 +977,15 @@ final class AppState: NSObject, NSMenuDelegate {
         let indices = availableWindowTargets.indices.filter { availableWindowTargets[$0].processIdentifier == pid }
         guard !indices.isEmpty else { return }
         selectedWindowIndices = Set(indices)
+        // Selection order: current active first (if in this app), then rest in index order.
+        let currentActive = activeTargetIndex
+        if indices.contains(currentActive) {
+            selectionOrder = [currentActive] + indices.filter { $0 != currentActive }
+        } else {
+            selectionOrder = indices
+        }
         selectionAnchorIndex = nil
-        activeTargetIndex = indices.first!
+        activeTargetIndex = selectionOrder.first!
         windowTargetListVersion += 1
         applyTargetAtCurrentIndex()
     }
@@ -989,8 +1005,14 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         guard !indices.isEmpty else { return }
         selectedWindowIndices = Set(indices)
+        let currentActive = activeTargetIndex
+        if indices.contains(currentActive) {
+            selectionOrder = [currentActive] + indices.filter { $0 != currentActive }
+        } else {
+            selectionOrder = indices
+        }
         selectionAnchorIndex = nil
-        activeTargetIndex = indices.first!
+        activeTargetIndex = selectionOrder.first!
         windowTargetListVersion += 1
         applyTargetAtCurrentIndex()
     }
@@ -1012,6 +1034,9 @@ final class AppState: NSObject, NSMenuDelegate {
         if activeTargetIndex >= availableWindowTargets.count {
             activeTargetIndex = 0
         }
+        // Selection order: current active first, then rest in index order.
+        let allIndices = Array(availableWindowTargets.indices)
+        selectionOrder = [activeTargetIndex] + allIndices.filter { $0 != activeTargetIndex }
         windowTargetListVersion += 1
     }
 
@@ -1191,7 +1216,11 @@ final class AppState: NSObject, NSMenuDelegate {
 
         // Reconcile multi-selection: remove stale indices and ensure invariant.
         selectedWindowIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }
+        selectionOrder = selectionOrder.filter { $0 < availableWindowTargets.count }
         selectedWindowIndices.insert(activeTargetIndex)
+        if !selectionOrder.contains(activeTargetIndex) {
+            selectionOrder.insert(activeTargetIndex, at: 0)
+        }
     }
 
     /// Closes the window at the given index in the window list.
@@ -1399,15 +1428,8 @@ final class AppState: NSObject, NSMenuDelegate {
 
         dismissOverlayImmediately()
 
-        // Use the sidebar display order: the topmost window in the sidebar
-        // should become the frontmost on screen after raising.
-        let sidebarOrder: [Int]
-        if !sidebarWindowOrder.isEmpty {
-            sidebarOrder = sidebarWindowOrder.filter { selectedWindowIndices.contains($0) && $0 < availableWindowTargets.count }
-        } else {
-            // Fallback: use index order.
-            sidebarOrder = selectedWindowIndices.filter { $0 < availableWindowTargets.count }.sorted(by: <)
-        }
+        // Use selection order: the first selected window becomes the frontmost.
+        let sidebarOrder = selectionOrder.filter { $0 < availableWindowTargets.count }
 
         guard !sidebarOrder.isEmpty else {
             clearWindowCyclingState(animateRestore: true)
@@ -1534,6 +1556,7 @@ final class AppState: NSObject, NSMenuDelegate {
         // refresh is still pending.
         activeTargetIndex = 0
         selectedWindowIndices = [0]
+        selectionOrder = [0]
         selectionAnchorIndex = nil
     }
 
@@ -2099,13 +2122,8 @@ final class AppState: NSObject, NSMenuDelegate {
         let parentWindow = windowControllerForScreen(frame: previewScreenFrame)?.nsWindow
             ?? targetWindowController?.nsWindow
 
-        // Order selected window indices by sidebar (Z-order).
-        let orderedIndices: [Int]
-        if !sidebarWindowOrder.isEmpty {
-            orderedIndices = sidebarWindowOrder.filter { selectedWindowIndices.contains($0) && $0 < availableWindowTargets.count }
-        } else {
-            orderedIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }.sorted()
-        }
+        // Order selected window indices by selection order (first selected = primary).
+        let orderedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
 
         // Build preview items: map each window to its selection.
         var items: [SelectionPreviewItem] = []
