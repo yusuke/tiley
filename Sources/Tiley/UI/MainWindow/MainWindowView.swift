@@ -2945,20 +2945,12 @@ struct MainWindowView: View {
         iconContent: AnyView? = nil
     ) -> some View {
         TahoeSettingsRow(label: label, systemImage: systemImage, iconContent: iconContent) {
-            HStack(spacing: 4) {
-                displayShortcutBadgeOrRecorder(
-                    binding: localBinding,
-                    enabledBinding: localEnabledBinding,
-                    keyPath: localKeyPath,
-                    isGlobal: false
-                )
-                displayShortcutBadgeOrRecorder(
-                    binding: globalBinding,
-                    enabledBinding: globalEnabledBinding,
-                    keyPath: globalKeyPath,
-                    isGlobal: true
-                )
-            }
+            displayShortcutBadgeOrRecorder(
+                binding: globalBinding,
+                enabledBinding: globalEnabledBinding,
+                keyPath: globalKeyPath,
+                isGlobal: true
+            )
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
