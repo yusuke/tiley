@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-03-29
+
+### Alterado
+
+- A paleta de cores de seleção agora cicla entre azul, verde, laranja e roxo (4 cores), de modo que a 5ª seleção corresponde à 1ª
+- As predefinições padrão (Metade esquerda/direita/superior/inferior) agora incluem a metade oposta como seleção secundária
+
 ## [4.0.0] - 2026-03-29
 
 ### Adicionado

@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-03-29
+
+### Geändert
+
+- Auswahlfarbpalette auf 4 Farben (Blau, Grün, Orange, Lila) geändert, sodass die 5. Auswahl dieselbe Farbe wie die 1. hat
+- Standardvorlagen (Linke/Rechte/Obere/Untere Hälfte) enthalten jetzt die gegenüberliegende Hälfte als sekundäre Auswahl
+
 ## [4.0.0] - 2026-03-29
 
 ### Hinzugefügt

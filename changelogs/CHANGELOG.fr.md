@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-03-29
+
+### Modifié
+
+- La palette de couleurs de sélection cycle désormais entre bleu, vert, orange et violet (4 couleurs), la 5e sélection ayant la même couleur que la 1re
+- Les préréglages par défaut (Moitié gauche/droite/haute/basse) incluent désormais la moitié opposée comme sélection secondaire
+
 ## [4.0.0] - 2026-03-29
 
 ### Ajouté

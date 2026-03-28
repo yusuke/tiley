@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-03-29
+
+### Modificato
+
+- La palette dei colori di selezione ora cicla tra blu, verde, arancione e viola (4 colori), in modo che la 5ª selezione corrisponda alla 1ª
+- I preset predefiniti (Metà sinistra/destra/superiore/inferiore) ora includono la metà opposta come selezione secondaria
+
 ## [4.0.0] - 2026-03-29
 
 ### Aggiunto

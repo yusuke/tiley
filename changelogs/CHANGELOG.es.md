@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-03-29
+
+### Cambiado
+
+- La paleta de colores de selección ahora cicla entre azul, verde, naranja y púrpura (4 colores), de modo que la 5ª selección coincide con la 1ª
+- Los preajustes predeterminados (Mitad izquierda/derecha/superior/inferior) ahora incluyen la mitad opuesta como selección secundaria
+
 ## [4.0.0] - 2026-03-29
 
 ### Añadido
