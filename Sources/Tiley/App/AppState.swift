@@ -670,7 +670,7 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         hideAllMainWindows()
-        clearWindowCyclingState()
+        clearWindowCyclingState(animateRestore: true)
         launchMessage = NSLocalizedString("Canceled layout selection.", comment: "Layout selection canceled")
     }
 
@@ -779,6 +779,7 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Raises (brings to front) the currently selected target window and activates its app.
     /// If the mouse pointer is on a different screen than the window, the window is moved
     /// to the mouse pointer's screen first, preferring repositioning over resizing.
+    /// Displaced windows are animated back to their original positions in the background.
     func raiseCurrentTargetWindow() {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
         guard activeTargetIndex >= 0, activeTargetIndex < availableWindowTargets.count else { return }
@@ -791,6 +792,9 @@ final class AppState: NSObject, NSMenuDelegate {
             accessibilityService.raiseWindow(window)
         }
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
+
+        // Animate displaced windows back after the selected window is operational.
+        clearWindowCyclingState(animateRestore: true)
     }
 
     /// Moves a window to the mouse pointer's screen when they are on different screens.
@@ -864,6 +868,12 @@ final class AppState: NSObject, NSMenuDelegate {
 
     /// Active displacement animation timer.
     private var displacementAnimationTimer: DispatchSourceTimer?
+
+    /// Separate timer for restoring displaced windows after confirmation.
+    /// Kept independent from `displacementAnimationTimer` so that a
+    /// secondary `clearWindowCyclingState()` call (e.g. from
+    /// `handleMainWindowHidden`) does not cancel the restore animation.
+    private var restorationAnimationTimer: DispatchSourceTimer?
 
     /// Maps window IDs that have been moved off-screen to their original
     /// positions, so they can be restored when selection changes or cycling ends.
@@ -961,7 +971,9 @@ final class AppState: NSObject, NSMenuDelegate {
             accessibilityService.raiseWindow(window)
         }
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
-        clearWindowCyclingState()
+
+        // Animate displaced windows back after the selected window is operational.
+        clearWindowCyclingState(animateRestore: true)
     }
 
     func closeWindowTarget(at index: Int) {
@@ -1127,13 +1139,17 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
-    private func clearWindowCyclingState() {
+    private func clearWindowCyclingState(animateRestore: Bool = false) {
         windowHighlightController?.hide()
         windowHighlightController = nil
         CATransaction.flush()
         displacementAnimationTimer?.cancel()
         displacementAnimationTimer = nil
-        restoreDisplacedWindows()
+        if animateRestore {
+            restoreDisplacedWindowsAnimated()
+        } else {
+            restoreDisplacedWindows()
+        }
         originalFrontmostPID = nil
         originalFrontmostTarget = nil
         initialZOrderWindowIDs = []
@@ -1270,7 +1286,7 @@ final class AppState: NSObject, NSMenuDelegate {
         windowHighlightController?.show(around: frame)
     }
 
-    /// Restores all displaced windows back to their original positions.
+    /// Restores all displaced windows back to their original positions instantly.
     private func restoreDisplacedWindows() {
         guard !displacedWindowFrames.isEmpty else { return }
         for (wid, originalOrigin) in displacedWindowFrames {
@@ -1280,6 +1296,60 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
         displacedWindowFrames.removeAll()
+    }
+
+    /// Restores all displaced windows back to their original positions with animation.
+    /// Uses a dedicated timer (`restorationAnimationTimer`) that is independent of
+    /// the cycling state, so it survives secondary `clearWindowCyclingState()` calls.
+    private func restoreDisplacedWindowsAnimated() {
+        guard !displacedWindowFrames.isEmpty else { return }
+
+        var moves: [(window: AXUIElement, from: CGPoint, to: CGPoint)] = []
+        for (wid, originalOrigin) in displacedWindowFrames {
+            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+               let window = target.windowElement {
+                let (currentPos, _) = accessibilityService.readPositionAndSize(of: window)
+                moves.append((window: window, from: currentPos, to: originalOrigin))
+            }
+        }
+        displacedWindowFrames.removeAll()
+
+        restorationAnimationTimer?.cancel()
+        restorationAnimationTimer = nil
+
+        let significantMoves = moves.filter {
+            abs($0.from.x - $0.to.x) > 1 || abs($0.from.y - $0.to.y) > 1
+        }
+        guard !significantMoves.isEmpty else {
+            for move in moves {
+                accessibilityService.setPosition(move.to, for: move.window)
+            }
+            return
+        }
+
+        let totalSteps = 16
+        var step = 0
+        let timer = DispatchSource.makeTimerSource(queue: .main)
+        timer.schedule(deadline: .now(), repeating: .milliseconds(15))
+        timer.setEventHandler { [weak self] in
+            step += 1
+            let t = min(Double(step) / Double(totalSteps), 1.0)
+            let inv = 1.0 - t
+            let eased = 1.0 - inv * inv * inv
+
+            for move in significantMoves {
+                let x = move.from.x + (move.to.x - move.from.x) * eased
+                let y = move.from.y + (move.to.y - move.from.y) * eased
+                self?.accessibilityService.setPosition(CGPoint(x: x, y: y), for: move.window)
+            }
+
+            if step >= totalSteps {
+                timer.cancel()
+                self?.restorationAnimationTimer = nil
+            }
+        }
+        restorationAnimationTimer = timer
+        timer.resume()
     }
 
     /// Checks whether the current `activeLayoutTarget` still exists (its
@@ -1490,7 +1560,7 @@ final class AppState: NSObject, NSMenuDelegate {
             )
         }
         _ = reactivateLastTargetApp(clearingState: false)
-        clearWindowCyclingState()
+        clearWindowCyclingState(animateRestore: true)
     }
 
     @objc private func showLayoutGrid() {
@@ -1943,22 +2013,7 @@ final class AppState: NSObject, NSMenuDelegate {
     // MARK: - Display movement shortcuts
 
     private func displayShortcutLocalAction(for shortcut: HotKeyShortcut) -> DisplayHotKeyAction? {
-        if displayShortcutSettings.moveToPrimary.localEnabled,
-           let s = displayShortcutSettings.moveToPrimary.local, s == shortcut { return .moveToPrimary }
-        if displayShortcutSettings.moveToNext.localEnabled,
-           let s = displayShortcutSettings.moveToNext.local, s == shortcut { return .moveToNext }
-        if displayShortcutSettings.moveToPrevious.localEnabled,
-           let s = displayShortcutSettings.moveToPrevious.local, s == shortcut { return .moveToPrevious }
-        if displayShortcutSettings.moveToOther.localEnabled,
-           let s = displayShortcutSettings.moveToOther.local, s == shortcut { return .moveToOther }
-        let resolver = DisplayFingerprintResolver()
-        for entry in displayShortcutSettings.moveToDisplay {
-            if entry.shortcuts.localEnabled,
-               let s = entry.shortcuts.local, s == shortcut,
-               let resolved = resolver.resolve(entry.fingerprint, occurrenceIndex: entry.occurrenceIndex) {
-                return .moveToDisplay(displayID: resolved.displayID)
-            }
-        }
+        // Display movement shortcuts are global-only; local shortcuts are not used.
         return nil
     }
 
