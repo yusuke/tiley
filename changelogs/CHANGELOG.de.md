@@ -2,14 +2,24 @@
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-03-29
+
 ### Hinzugefügt
 
 - Mehrfachauswahl-Layout-Vorlagen: Definieren Sie mehrere Rasterbereiche pro Vorlage, um verschiedene Fenster an verschiedenen Positionen anzuordnen
   - Jedes Ziehen im Vorlagen-Editor fügt eine neue Auswahl hinzu (1., 2., 3., ...)
   - Jede Auswahl zeigt ihre Indexnummer und einen Löschbutton
   - Überlappende Auswahlen werden verhindert (mit visuellem Feedback)
-  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Z-Reihenfolge zugewiesen: vorderstes Fenster erhält Auswahl 1, zweites Auswahl 2 usw.
-  - Vorlagen-Miniaturansichten zeigen alle Auswahlen in unterschiedlichen Farben
+  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Auswahlreihenfolge zugewiesen: zuerst ausgewähltes Fenster erhält Auswahl 1, nächstes Auswahl 2 usw.
+  - Vorlagen-Miniaturansichten und Echtgrößen-Vorschauen zeigen alle Auswahlen mit indizierten Farben
+  - Rasterauswahlen haben einen 1pt-Rand vom Bildschirmrand für bessere Sichtbarkeit
+
+### Geändert
+
+- Mehrfenster-Reihenfolge folgt jetzt der Auswahlreihenfolge statt der Seitenleisten-Z-Reihenfolge
+  - Das zuerst ausgewählte Fenster ist immer primär; per Cmd+Klick hinzugefügte Fenster werden in Reihenfolge angehängt
+  - Shift+Klick-Bereichsauswahl behält das Ankerfenster als primär
+  - Betrifft Layout-Vorlagen-Anwendung, In den Vordergrund bringen (Enter) und Vorschauanzeige
 
 ## [3.4.0] - 2026-03-28
 

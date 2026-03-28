@@ -2,14 +2,24 @@
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-03-29
+
 ### Aggiunto
 
 - Preset di layout a selezione multipla: definisci più aree della griglia per preset per posizionare finestre diverse in posizioni diverse
   - Ogni trascinamento nell'editor dei preset aggiunge una nuova selezione (1ª, 2ª, 3ª, ...)
   - Ogni selezione mostra il suo numero di indice e un pulsante di eliminazione
   - La sovrapposizione delle selezioni viene impedita (con feedback visivo)
-  - Quando si applica un preset a selezione multipla, le finestre vengono assegnate per ordine Z: la finestra in primo piano ottiene la selezione 1, la seconda la selezione 2, ecc.
-  - Le miniature dei preset mostrano tutte le selezioni con colori distinti
+  - Quando si applica un preset a selezione multipla, le finestre vengono assegnate per ordine di selezione: la prima finestra selezionata ottiene la selezione 1, la successiva la selezione 2, ecc.
+  - Le miniature e le anteprime a dimensione reale mostrano tutte le selezioni con colori indicizzati
+  - Le selezioni della griglia hanno un margine di 1pt dai bordi dello schermo per una migliore visibilità
+
+### Modificato
+
+- L'ordine delle finestre multiple ora segue l'ordine di selezione anziché l'ordine Z della barra laterale
+  - La prima finestra selezionata è sempre la principale; le finestre aggiunte con Cmd+clic vengono aggiunte in ordine
+  - La selezione per intervallo con Shift+clic mantiene la finestra di ancoraggio come principale
+  - Influisce sull'applicazione dei preset, sul portare in primo piano (Invio) e sulla visualizzazione dell'anteprima
 
 ## [3.4.0] - 2026-03-28
 

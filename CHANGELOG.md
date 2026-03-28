@@ -7,14 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-03-29
+
 ### Added
 
 - Multi-selection layout presets: define multiple grid regions per preset for arranging different windows in different positions
   - Each drag in the preset editor appends a new selection (1st, 2nd, 3rd, ...)
   - Selections show their index number and a delete button for easy management
   - Overlapping selections are prevented with visual feedback
-  - When applying a multi-selection preset, windows are assigned by Z-order: frontmost gets selection 1, second gets selection 2, etc.
-  - Preset thumbnails display all selections with distinct colors
+  - When applying a multi-selection preset, windows are assigned by selection order: the initially selected window gets selection 1, the next selected window gets selection 2, etc.
+  - Preset thumbnails and real-size previews display all selections with distinct indexed colors
+  - Grid selections have a 1pt margin from physical screen edges for better visibility
+
+### Changed
+
+- Multi-window ordering now follows selection order instead of sidebar Z-order
+  - The initially selected window is always primary; subsequently Cmd+clicked windows are appended in order
+  - Shift+click range selections keep the anchor window as primary
+  - Affects layout preset application, Bring to Front (Enter), and preview display
 
 ## [3.4.0] - 2026-03-28
 
@@ -451,7 +461,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v3.4.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/yusuke/tiley/releases/tag/v4.0.0
 [3.4.0]: https://github.com/yusuke/tiley/releases/tag/v3.4.0
 [3.3.2]: https://github.com/yusuke/tiley/releases/tag/v3.3.2
 [3.3.1]: https://github.com/yusuke/tiley/releases/tag/v3.3.1
