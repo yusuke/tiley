@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [4.0.3] - 2026-03-29
+
+### Aggiunto
+
+- I preset con layout multipli ora ridimensionano più finestre anche con una sola finestra selezionata, utilizzando l'ordine Z effettivo (la finestra più in primo piano per prima)
+- Al passaggio del mouse su un preset con layout multipli, le righe delle finestre interessate nella barra laterale vengono evidenziate con i colori del layout (blu, verde, arancione, viola)
+
+## [4.0.2] - 2026-03-29
+
+### Modificato
+
+- L'anteprima del layout a dimensioni reali ora mostra solo le anteprime per il numero di selezioni definite nel preset (le finestre selezionate in eccesso rispetto al numero di selezioni del preset non vengono più visualizzate)
+
 ## [4.0.1] - 2026-03-29
 
 ### Modificato

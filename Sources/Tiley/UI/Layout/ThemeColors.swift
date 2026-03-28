@@ -155,12 +155,7 @@ enum ThemeColors {
     }
 
     static func overlaySelectionBorder(for colorScheme: ColorScheme) -> Color {
-        switch colorScheme {
-        case .dark:
-            return Color.white.opacity(0.75)
-        default:
-            return Color.white.opacity(0.88)
-        }
+        indexedSelectionBorder(index: 0, for: colorScheme)
     }
 
     // MARK: - Preset List
@@ -254,6 +249,20 @@ enum ThemeColors {
         let pal = selectionPalette[index % selectionPalette.count]
         let c = colorScheme == .dark ? pal.dark : pal.light
         return Color(red: c.r, green: c.g, blue: c.b)
+    }
+
+    /// Sidebar row background highlight for a preset hover at the given color index.
+    static func indexedSidebarHighlight(index: Int, for colorScheme: ColorScheme) -> Color {
+        let pal = selectionPalette[index % selectionPalette.count]
+        let c = colorScheme == .dark ? pal.dark : pal.light
+        return Color(red: c.r, green: c.g, blue: c.b).opacity(0.18)
+    }
+
+    /// Sidebar row border highlight for a preset hover at the given color index.
+    static func indexedSidebarHighlightBorder(index: Int, for colorScheme: ColorScheme) -> Color {
+        let pal = selectionPalette[index % selectionPalette.count]
+        let c = colorScheme == .dark ? pal.dark : pal.light
+        return Color(red: c.r, green: c.g, blue: c.b).opacity(0.45)
     }
 
     /// Fill for an invalid (overlapping) drag selection.

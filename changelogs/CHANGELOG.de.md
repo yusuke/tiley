@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [4.0.3] - 2026-03-29
+
+### Hinzugefügt
+
+- Multi-Layout-Presets passen nun auch bei nur einem ausgewählten Fenster mehrere Fenster nach tatsächlicher Z-Reihenfolge (vorderstes zuerst) an
+- Beim Hovern über ein Multi-Layout-Preset werden die betroffenen Fensterzeilen in der Seitenleiste mit Layout-Farben (Blau, Grün, Orange, Lila) hervorgehoben
+
+## [4.0.2] - 2026-03-29
+
+### Geändert
+
+- Echtgröße-Layoutvorschau zeigt jetzt nur Vorschauen für die Anzahl der in der Vorlage definierten Auswahlen an (zusätzlich ausgewählte Fenster über die Auswahlanzahl der Vorlage hinaus werden nicht mehr angezeigt)
+
 ## [4.0.1] - 2026-03-29
 
 ### Geändert

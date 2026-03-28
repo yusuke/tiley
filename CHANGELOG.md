@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.3] - 2026-03-29
+
+### Added
+
+- Multi-layout presets now resize multiple windows even with a single window selected — windows are picked by actual z-order (frontmost first)
+- Sidebar window rows highlight with layout colors (blue, green, orange, purple) when hovering over a multi-layout preset
+
+## [4.0.2] - 2026-03-29
+
+### Changed
+
+- Real-size layout preview now only shows previews for the number of selections defined in the preset (extra selected windows beyond the preset's selection count are no longer previewed)
+
 ## [4.0.1] - 2026-03-29
 
 ### Changed
@@ -468,7 +481,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.3...HEAD
+[4.0.3]: https://github.com/yusuke/tiley/releases/tag/v4.0.3
+[4.0.2]: https://github.com/yusuke/tiley/releases/tag/v4.0.2
 [4.0.1]: https://github.com/yusuke/tiley/releases/tag/v4.0.1
 [4.0.0]: https://github.com/yusuke/tiley/releases/tag/v4.0.0
 [3.4.0]: https://github.com/yusuke/tiley/releases/tag/v3.4.0

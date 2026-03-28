@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [4.0.3] - 2026-03-29
+
+### Ajouté
+
+- Les presets multi-disposition redimensionnent maintenant plusieurs fenêtres même avec une seule fenêtre sélectionnée, en utilisant l'ordre Z réel (fenêtre la plus en avant en premier)
+- Au survol d'un preset multi-disposition, les lignes des fenêtres concernées dans la barre latérale sont mises en surbrillance avec les couleurs de disposition (bleu, vert, orange, violet)
+
+## [4.0.2] - 2026-03-29
+
+### Modifié
+
+- L'aperçu de disposition en taille réelle n'affiche désormais que les aperçus correspondant au nombre de sélections définies dans le préréglage (les fenêtres sélectionnées au-delà du nombre de sélections du préréglage ne sont plus affichées)
+
 ## [4.0.1] - 2026-03-29
 
 ### Modifié

@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [4.0.3] - 2026-03-29
+
+### Añadido
+
+- Los presets con múltiples diseños ahora redimensionan varias ventanas incluso con una sola ventana seleccionada, usando el orden Z real (la ventana más al frente primero)
+- Al pasar el cursor sobre un preset con múltiples diseños, las filas de ventanas afectadas en la barra lateral se resaltan con los colores del diseño (azul, verde, naranja, púrpura)
+
+## [4.0.2] - 2026-03-29
+
+### Cambiado
+
+- La vista previa de diseño a tamaño real ahora solo muestra vistas previas para el número de selecciones definidas en el preajuste (las ventanas seleccionadas adicionales más allá del número de selecciones del preajuste ya no se previsualizan)
+
 ## [4.0.1] - 2026-03-29
 
 ### Cambiado

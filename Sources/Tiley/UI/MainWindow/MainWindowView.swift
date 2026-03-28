@@ -2403,6 +2403,7 @@ struct MainWindowView: View {
         let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
         let isSelected = isPrimary || isInSelection
         let isHovered = hoveredWindowIndex == item.id
+        let presetColorIndex = appState.presetHoverHighlights[item.id]
 
         return Button {
             let flags = NSApp.currentEvent?.modifierFlags ?? []
@@ -2449,11 +2450,20 @@ struct MainWindowView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme))
+                    .fill(
+                        presetColorIndex != nil
+                            ? ThemeColors.indexedSidebarHighlight(index: presetColorIndex!, for: colorScheme)
+                            : ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme)
+                    )
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .stroke(ThemeColors.presetRowBorder(selected: isPrimary, for: colorScheme), lineWidth: isSelected ? 1 : 0)
+                    .stroke(
+                        presetColorIndex != nil
+                            ? ThemeColors.indexedSidebarHighlightBorder(index: presetColorIndex!, for: colorScheme)
+                            : ThemeColors.presetRowBorder(selected: isPrimary, for: colorScheme),
+                        lineWidth: presetColorIndex != nil ? 1 : (isSelected ? 1 : 0)
+                    )
             )
             .animation(nil, value: isHovered)
         }
@@ -3634,11 +3644,19 @@ struct MainWindowView: View {
         guard let id,
               let preset = appState.displayedLayoutPresets.first(where: { $0.id == id }) else {
             appState.updateLayoutPreview(nil)
+            appState.presetHoverHighlights = [:]
             return
         }
+
+        // Update sidebar highlights for affected windows.
+        appState.presetHoverHighlights = appState.computePresetHoverHighlights(for: preset)
+
         // Use multi-selection preview when the preset has secondary selections
         // and multiple windows are selected.
         if !preset.secondarySelections.isEmpty, appState.isMultiSelection {
+            appState.updateLayoutPreviewForPreset(preset, screenContext: screenContext)
+        } else if !preset.secondarySelections.isEmpty {
+            // Single selection but preset has multiple layouts → show multi-preview with z-order windows
             appState.updateLayoutPreviewForPreset(preset, screenContext: screenContext)
         } else {
             let selection = preset.scaledSelection(toRows: appState.rows, columns: appState.columns)

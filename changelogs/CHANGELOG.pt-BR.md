@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [4.0.3] - 2026-03-29
+
+### Adicionado
+
+- Presets com múltiplos layouts agora redimensionam várias janelas mesmo com apenas uma janela selecionada, usando a ordem Z real (janela mais à frente primeiro)
+- Ao passar o cursor sobre um preset com múltiplos layouts, as linhas das janelas afetadas na barra lateral são destacadas com as cores do layout (azul, verde, laranja, roxo)
+
+## [4.0.2] - 2026-03-29
+
+### Alterado
+
+- A pré-visualização de layout em tamanho real agora mostra apenas as pré-visualizações para o número de seleções definidas na predefinição (janelas selecionadas além do número de seleções da predefinição não são mais exibidas)
+
 ## [4.0.1] - 2026-03-29
 
 ### Alterado
