@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.4.0] - 2026-03-28
+
 ### Añadido
 
 - Selección múltiple de ventanas en la barra lateral con acciones por lotes

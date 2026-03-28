@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.4.0] - 2026-03-28
+
 ### Aggiunto
 
 - Selezione multipla delle finestre nella barra laterale con azioni in blocco
