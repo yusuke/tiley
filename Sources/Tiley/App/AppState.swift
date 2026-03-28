@@ -1709,28 +1709,9 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func layoutShortcutConflictMessage(for shortcut: HotKeyShortcut, excluding presetID: UUID?) -> String? {
-        // Tab and Shift+Tab are reserved for window target cycling.
-        if shortcut.keyCode == UInt32(kVK_Tab),
-           shortcut.modifiers == 0 || shortcut.modifiers == UInt32(shiftKey) {
-            return NSLocalizedString("Tab is reserved for switching target windows.", comment: "Tab shortcut reserved for window cycling")
-        }
-
-        // Return is reserved for raising the selected window.
-        if shortcut.keyCode == UInt32(kVK_Return),
-           shortcut.modifiers == 0 {
-            return NSLocalizedString("Return is reserved for raising the selected window.", comment: "Return shortcut reserved for raising window")
-        }
-
-        // Up/Down arrows are reserved for window cycling.
-        if (shortcut.keyCode == UInt32(kVK_UpArrow) || shortcut.keyCode == UInt32(kVK_DownArrow)),
-           shortcut.modifiers == 0 {
-            return NSLocalizedString("Arrow keys are reserved for switching target windows.", comment: "Arrow key shortcut reserved for window cycling")
-        }
-
-        // "/" is reserved for closing the selected window.
-        if shortcut.keyCode == UInt32(kVK_ANSI_Slash),
-           shortcut.modifiers == 0 {
-            return NSLocalizedString("/ is reserved for closing/quitting the selected window.", comment: "Slash shortcut reserved for closing window or quitting app")
+        // Check against configured window action shortcuts.
+        if windowActionShortcutConflicts(with: shortcut) {
+            return NSLocalizedString("This shortcut is already used for a window action.", comment: "Shortcut conflict with window action")
         }
 
         // Cmd+F is reserved for the window search field.
@@ -1763,19 +1744,11 @@ final class AppState: NSObject, NSMenuDelegate {
     func displayShortcutConflictMessage(for shortcut: HotKeyShortcut, excludeKeyPath: String) -> String? {
         // Check reserved keys (same rules as layout shortcuts for local shortcuts).
         if !shortcut.isGlobal {
-            if shortcut.keyCode == UInt32(kVK_Tab),
-               shortcut.modifiers == 0 || shortcut.modifiers == UInt32(shiftKey) {
-                return NSLocalizedString("Tab is reserved for switching target windows.", comment: "Tab shortcut reserved for window cycling")
-            }
-            if shortcut.keyCode == UInt32(kVK_Return), shortcut.modifiers == 0 {
-                return NSLocalizedString("Return is reserved for raising the selected window.", comment: "Return shortcut reserved for raising window")
-            }
-            if (shortcut.keyCode == UInt32(kVK_UpArrow) || shortcut.keyCode == UInt32(kVK_DownArrow)),
-               shortcut.modifiers == 0 {
-                return NSLocalizedString("Arrow keys are reserved for switching target windows.", comment: "Arrow key shortcut reserved for window cycling")
-            }
-            if shortcut.keyCode == UInt32(kVK_ANSI_Slash), shortcut.modifiers == 0 {
-                return NSLocalizedString("/ is reserved for closing/quitting the selected window.", comment: "Slash shortcut reserved for closing window or quitting app")
+            // Check against configured window action shortcuts (excluding self).
+            if !excludeKeyPath.hasPrefix("selectNextWindow") && !excludeKeyPath.hasPrefix("selectPreviousWindow") && !excludeKeyPath.hasPrefix("bringToFront") && !excludeKeyPath.hasPrefix("closeOrQuit") {
+                if windowActionShortcutConflicts(with: shortcut) {
+                    return NSLocalizedString("This shortcut is already used for a window action.", comment: "Shortcut conflict with window action")
+                }
             }
             if shortcut.keyCode == UInt32(kVK_ANSI_F), shortcut.modifiers == UInt32(cmdKey) {
                 return NSLocalizedString("⌘F is reserved for searching the window list.", comment: "Cmd+F shortcut reserved for window search")
@@ -1803,6 +1776,20 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     /// Collects all assigned display shortcuts (local or global).
+    /// Returns true if the given shortcut conflicts with a configured window action shortcut
+    /// (window cycling or bring to front).
+    func windowActionShortcutConflicts(with shortcut: HotKeyShortcut) -> Bool {
+        if displayShortcutSettings.selectNextWindow.localEnabled,
+           let s = displayShortcutSettings.selectNextWindow.local, s == shortcut { return true }
+        if displayShortcutSettings.selectPreviousWindow.localEnabled,
+           let s = displayShortcutSettings.selectPreviousWindow.local, s == shortcut { return true }
+        if displayShortcutSettings.bringToFront.localEnabled,
+           let s = displayShortcutSettings.bringToFront.local, s == shortcut { return true }
+        if displayShortcutSettings.closeOrQuit.localEnabled,
+           let s = displayShortcutSettings.closeOrQuit.local, s == shortcut { return true }
+        return false
+    }
+
     private func allDisplayShortcuts(isGlobal: Bool) -> [HotKeyShortcut] {
         allDisplayShortcutSlots(isGlobal: isGlobal).map(\.1)
     }
@@ -1828,6 +1815,18 @@ final class AppState: NSObject, NSMenuDelegate {
             if let s = isGlobal ? entry.shortcuts.global : entry.shortcuts.local {
                 result.append(("\(key)\(suffix)", s))
             }
+        }
+        if let s = isGlobal ? displayShortcutSettings.selectNextWindow.global : displayShortcutSettings.selectNextWindow.local {
+            result.append(("selectNextWindow\(suffix)", s))
+        }
+        if let s = isGlobal ? displayShortcutSettings.selectPreviousWindow.global : displayShortcutSettings.selectPreviousWindow.local {
+            result.append(("selectPreviousWindow\(suffix)", s))
+        }
+        if let s = isGlobal ? displayShortcutSettings.bringToFront.global : displayShortcutSettings.bringToFront.local {
+            result.append(("bringToFront\(suffix)", s))
+        }
+        if let s = isGlobal ? displayShortcutSettings.closeOrQuit.global : displayShortcutSettings.closeOrQuit.local {
+            result.append(("closeOrQuit\(suffix)", s))
         }
         return result
     }
@@ -3304,20 +3303,42 @@ final class AppState: NSObject, NSMenuDelegate {
     private func handleMainWindowKeyCommand(_ event: NSEvent) -> Bool {
         guard !isEditingSettings else { return false }
 
+        // Check configurable window cycling shortcuts.
+        let eventShortcut = HotKeyShortcut.from(event: event, requireModifiers: false)
+        if let shortcut = eventShortcut {
+            if displayShortcutSettings.selectNextWindow.localEnabled,
+               let s = displayShortcutSettings.selectNextWindow.local, s == shortcut {
+                cycleTargetWindow(forward: true)
+                return true
+            }
+            if displayShortcutSettings.selectPreviousWindow.localEnabled,
+               let s = displayShortcutSettings.selectPreviousWindow.local, s == shortcut {
+                cycleTargetWindow(forward: false)
+                return true
+            }
+            if displayShortcutSettings.bringToFront.localEnabled,
+               let s = displayShortcutSettings.bringToFront.local, s == shortcut {
+                raiseCurrentTargetWindow()
+                return true
+            }
+            if displayShortcutSettings.closeOrQuit.localEnabled,
+               let s = displayShortcutSettings.closeOrQuit.local, s == shortcut {
+                let idx = activeTargetIndex
+                if idx >= 0, idx < availableWindowTargets.count {
+                    let target = availableWindowTargets[idx]
+                    let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
+                    let windowCount = availableWindowTargets.filter { $0.processIdentifier == target.processIdentifier }.count
+                    if isFinder || windowCount > 1 {
+                        closeWindowTarget(at: idx)
+                    } else {
+                        quitApp(at: idx)
+                    }
+                }
+                return true
+            }
+        }
+
         switch Int(event.keyCode) {
-        case kVK_Tab:
-            let isShift = event.modifierFlags.contains(.shift)
-            cycleTargetWindow(forward: !isShift)
-            return true
-        case kVK_UpArrow:
-            cycleTargetWindow(forward: false)
-            return true
-        case kVK_DownArrow:
-            cycleTargetWindow(forward: true)
-            return true
-        case kVK_Return:
-            raiseCurrentTargetWindow()
-            return true
         case kVK_ANSI_Slash where event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty:
             let idx = activeTargetIndex
             if idx >= 0, idx < availableWindowTargets.count {

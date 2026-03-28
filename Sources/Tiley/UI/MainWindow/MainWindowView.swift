@@ -1374,14 +1374,26 @@ struct MainWindowView: View {
 
     private var keyboardHintsBar: some View {
         HStack(spacing: 12) {
-            hintLabel("↓ Tab", NSLocalizedString("Next window", comment: "Status bar hint for next window"))
-            hintLabel("↑ ⇧Tab", NSLocalizedString("Previous window", comment: "Status bar hint for previous window"))
+            if let nextShortcut = appState.displayShortcutSettings.selectNextWindow.local,
+               appState.displayShortcutSettings.selectNextWindow.localEnabled {
+                hintLabel(nextShortcut.compactDisplayString, NSLocalizedString("Next window", comment: "Status bar hint for next window"))
+            }
+            if let prevShortcut = appState.displayShortcutSettings.selectPreviousWindow.local,
+               appState.displayShortcutSettings.selectPreviousWindow.localEnabled {
+                hintLabel(prevShortcut.compactDisplayString, NSLocalizedString("Previous window", comment: "Status bar hint for previous window"))
+            }
             if isSearchFieldFocused {
                 hintLabel("↩", NSLocalizedString("Confirm search criteria", comment: "Status bar hint for confirming search criteria"))
                 hintLabel("Esc", NSLocalizedString("Clear search criteria", comment: "Status bar hint for clearing search criteria"))
             } else {
-                hintLabel("↩", NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
-                hintLabel("/", slashKeyHintLabel)
+                if let bringShortcut = appState.displayShortcutSettings.bringToFront.local,
+                   appState.displayShortcutSettings.bringToFront.localEnabled {
+                    hintLabel(bringShortcut.compactDisplayString, NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
+                }
+                if let closeShortcut = appState.displayShortcutSettings.closeOrQuit.local,
+                   appState.displayShortcutSettings.closeOrQuit.localEnabled {
+                    hintLabel(closeShortcut.compactDisplayString, slashKeyHintLabel)
+                }
                 hintLabel("Esc", NSLocalizedString("Close Tiley", comment: "Status bar hint for Escape to close"))
             }
         }
@@ -2617,7 +2629,7 @@ struct MainWindowView: View {
         let isRecording = recordingDisplayShortcutKey == keyPath && recordingDisplayShortcutIsGlobal == true
         let hasShortcut = !draftSettings.hotKeyShortcut.isEmpty
 
-        TahoeSettingsRow(label: NSLocalizedString("Show Tiley", comment: "Shortcut action to show Tiley overlay")) {
+        TahoeSettingsRow(label: NSLocalizedString("Show Tiley", comment: "Shortcut action to show Tiley overlay"), systemImage: "macwindow") {
             if isRecording {
                 CompactShortcutRecorderField(
                     onShortcutRecorded: { newShortcut in
@@ -2678,6 +2690,67 @@ struct MainWindowView: View {
 
                 Divider().opacity(0.4)
 
+                localOnlyShortcutRow(
+                    label: NSLocalizedString("Select Next Window", comment: "Shortcut action to select next window"),
+                    binding: $draftSettings.displayShortcutSettings.selectNextWindow.local,
+                    enabledBinding: $draftSettings.displayShortcutSettings.selectNextWindow.localEnabled,
+                    keyPath: "selectNextWindow.local",
+                    iconContent: AnyView(
+                        HStack(spacing: 1) {
+                            Image(systemName: "arrow.down")
+                                .font(.system(size: 9, weight: .semibold))
+                            Image(systemName: "sidebar.left")
+                                .font(.system(size: 12, weight: .regular))
+                        }
+                        .foregroundStyle(.secondary)
+                    )
+                )
+
+                Divider().opacity(0.4)
+
+                localOnlyShortcutRow(
+                    label: NSLocalizedString("Select Previous Window", comment: "Shortcut action to select previous window"),
+                    binding: $draftSettings.displayShortcutSettings.selectPreviousWindow.local,
+                    enabledBinding: $draftSettings.displayShortcutSettings.selectPreviousWindow.localEnabled,
+                    keyPath: "selectPreviousWindow.local",
+                    iconContent: AnyView(
+                        HStack(spacing: 1) {
+                            Image(systemName: "arrow.up")
+                                .font(.system(size: 9, weight: .semibold))
+                            Image(systemName: "sidebar.left")
+                                .font(.system(size: 12, weight: .regular))
+                        }
+                        .foregroundStyle(.secondary)
+                    )
+                )
+
+                Divider().opacity(0.4)
+
+                localOnlyShortcutRow(
+                    label: NSLocalizedString("Bring to Front", comment: "Shortcut action to bring selected window to front"),
+                    binding: $draftSettings.displayShortcutSettings.bringToFront.local,
+                    enabledBinding: $draftSettings.displayShortcutSettings.bringToFront.localEnabled,
+                    keyPath: "bringToFront.local",
+                    systemImage: "macwindow.stack"
+                )
+
+                Divider().opacity(0.4)
+
+                localOnlyShortcutRow(
+                    label: NSLocalizedString("Close / Quit", comment: "Shortcut action to close window or quit app"),
+                    binding: $draftSettings.displayShortcutSettings.closeOrQuit.local,
+                    enabledBinding: $draftSettings.displayShortcutSettings.closeOrQuit.localEnabled,
+                    keyPath: "closeOrQuit.local",
+                    iconContent: AnyView(
+                        Image(systemName: "xmark.circle")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                            .padding(.trailing, 1)
+                    )
+                )
+
+                Divider().opacity(0.4)
+
                 displayShortcutRow(
                     label: NSLocalizedString("Move to Primary Display", comment: "Display shortcut action"),
                     localBinding: $draftSettings.displayShortcutSettings.moveToPrimary.local,
@@ -2685,7 +2758,8 @@ struct MainWindowView: View {
                     globalBinding: $draftSettings.displayShortcutSettings.moveToPrimary.global,
                     globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrimary.globalEnabled,
                     localKeyPath: "moveToPrimary.local",
-                    globalKeyPath: "moveToPrimary.global"
+                    globalKeyPath: "moveToPrimary.global",
+                    systemImage: "dot.scope.display"
                 )
 
                 Divider().opacity(0.4)
@@ -2697,7 +2771,16 @@ struct MainWindowView: View {
                     globalBinding: $draftSettings.displayShortcutSettings.moveToNext.global,
                     globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToNext.globalEnabled,
                     localKeyPath: "moveToNext.local",
-                    globalKeyPath: "moveToNext.global"
+                    globalKeyPath: "moveToNext.global",
+                    iconContent: AnyView(
+                        HStack(spacing: 1) {
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 9, weight: .semibold))
+                            Image(systemName: "display")
+                                .font(.system(size: 12, weight: .regular))
+                        }
+                        .foregroundStyle(.secondary)
+                    )
                 )
 
                 Divider().opacity(0.4)
@@ -2709,7 +2792,16 @@ struct MainWindowView: View {
                     globalBinding: $draftSettings.displayShortcutSettings.moveToPrevious.global,
                     globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrevious.globalEnabled,
                     localKeyPath: "moveToPrevious.local",
-                    globalKeyPath: "moveToPrevious.global"
+                    globalKeyPath: "moveToPrevious.global",
+                    iconContent: AnyView(
+                        HStack(spacing: 1) {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 9, weight: .semibold))
+                            Image(systemName: "display")
+                                .font(.system(size: 12, weight: .regular))
+                        }
+                        .foregroundStyle(.secondary)
+                    )
                 )
 
                 Divider().opacity(0.4)
@@ -2721,7 +2813,8 @@ struct MainWindowView: View {
                     globalBinding: $draftSettings.displayShortcutSettings.moveToOther.global,
                     globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToOther.globalEnabled,
                     localKeyPath: "moveToOther.local",
-                    globalKeyPath: "moveToOther.global"
+                    globalKeyPath: "moveToOther.global",
+                    systemImage: "filemenu.and.selection"
                 )
 
                 let resolver = DisplayFingerprintResolver()
@@ -2764,7 +2857,8 @@ struct MainWindowView: View {
                             }
                         ),
                         localKeyPath: "\(keyBase).local",
-                        globalKeyPath: "\(keyBase).global"
+                        globalKeyPath: "\(keyBase).global",
+                        systemImage: "display.and.arrow.down"
                     )
                     .onHover { hovering in
                         if hovering {
@@ -2782,11 +2876,37 @@ struct MainWindowView: View {
                     Button(NSLocalizedString("Reset to Default", comment: "Reset shortcut to default")) {
                         dismissPresetNameEditingIfNeeded()
                         draftSettings.hotKeyShortcut = .default
+                        draftSettings.displayShortcutSettings.selectNextWindow = DisplayShortcutSettings.defaultSelectNextWindow
+                        draftSettings.displayShortcutSettings.selectPreviousWindow = DisplayShortcutSettings.defaultSelectPreviousWindow
+                        draftSettings.displayShortcutSettings.bringToFront = DisplayShortcutSettings.defaultBringToFront
+                        draftSettings.displayShortcutSettings.closeOrQuit = DisplayShortcutSettings.defaultCloseOrQuit
                     }
                 }
                 .padding(.vertical, 4)
             }
         }
+    }
+
+    @ViewBuilder
+    private func localOnlyShortcutRow(
+        label: String,
+        binding: Binding<HotKeyShortcut?>,
+        enabledBinding: Binding<Bool>,
+        keyPath: String,
+        systemImage: String? = nil,
+        systemImageWeight: Font.Weight = .regular,
+        iconContent: AnyView? = nil
+    ) -> some View {
+        TahoeSettingsRow(label: label, systemImage: systemImage, systemImageWeight: systemImageWeight, iconContent: iconContent) {
+            displayShortcutBadgeOrRecorder(
+                binding: binding,
+                enabledBinding: enabledBinding,
+                keyPath: keyPath,
+                isGlobal: false
+            )
+        }
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
     }
 
     @ViewBuilder
@@ -2797,9 +2917,11 @@ struct MainWindowView: View {
         globalBinding: Binding<HotKeyShortcut?>,
         globalEnabledBinding: Binding<Bool>,
         localKeyPath: String,
-        globalKeyPath: String
+        globalKeyPath: String,
+        systemImage: String? = nil,
+        iconContent: AnyView? = nil
     ) -> some View {
-        TahoeSettingsRow(label: label) {
+        TahoeSettingsRow(label: label, systemImage: systemImage, iconContent: iconContent) {
             HStack(spacing: 4) {
                 displayShortcutBadgeOrRecorder(
                     binding: localBinding,
@@ -3469,21 +3591,13 @@ struct MainWindowView: View {
     /// Validates a shortcut candidate against **draft** settings instead of the committed appState,
     /// so that a shortcut deleted in the draft can be immediately re-assigned.
     private func validateDisplayShortcut(_ candidate: HotKeyShortcut, excludeKeyPath: String) -> String? {
-        // Reserved keys (same rules as appState.layoutShortcutConflictMessage)
+        // Reserved keys
         if !candidate.isGlobal {
-            if candidate.keyCode == UInt32(kVK_Tab),
-               candidate.modifiers == 0 || candidate.modifiers == UInt32(shiftKey) {
-                return NSLocalizedString("Tab is reserved for switching target windows.", comment: "Tab shortcut reserved for window cycling")
-            }
-            if candidate.keyCode == UInt32(kVK_Return), candidate.modifiers == 0 {
-                return NSLocalizedString("Return is reserved for raising the selected window.", comment: "Return shortcut reserved for raising window")
-            }
-            if (candidate.keyCode == UInt32(kVK_UpArrow) || candidate.keyCode == UInt32(kVK_DownArrow)),
-               candidate.modifiers == 0 {
-                return NSLocalizedString("Arrow keys are reserved for switching target windows.", comment: "Arrow key shortcut reserved for window cycling")
-            }
-            if candidate.keyCode == UInt32(kVK_ANSI_Slash), candidate.modifiers == 0 {
-                return NSLocalizedString("/ is reserved for closing/quitting the selected window.", comment: "Slash shortcut reserved for closing window or quitting app")
+            // Check against configured window action shortcuts (excluding self).
+            if !excludeKeyPath.hasPrefix("selectNextWindow") && !excludeKeyPath.hasPrefix("selectPreviousWindow") && !excludeKeyPath.hasPrefix("bringToFront") && !excludeKeyPath.hasPrefix("closeOrQuit") {
+                if draftWindowActionConflicts(with: candidate) {
+                    return NSLocalizedString("This shortcut is already used for a window action.", comment: "Shortcut conflict with window action")
+                }
             }
             if candidate.keyCode == UInt32(kVK_ANSI_F), candidate.modifiers == UInt32(cmdKey) {
                 return NSLocalizedString("⌘F is reserved for searching the window list.", comment: "Cmd+F shortcut reserved for window search")
@@ -3529,6 +3643,18 @@ struct MainWindowView: View {
                 allSlots.append(("\(keyBase)\(suffix)", s))
             }
         }
+        if let s = candidate.isGlobal ? ds.selectNextWindow.global : ds.selectNextWindow.local {
+            allSlots.append(("selectNextWindow\(suffix)", s))
+        }
+        if let s = candidate.isGlobal ? ds.selectPreviousWindow.global : ds.selectPreviousWindow.local {
+            allSlots.append(("selectPreviousWindow\(suffix)", s))
+        }
+        if let s = candidate.isGlobal ? ds.bringToFront.global : ds.bringToFront.local {
+            allSlots.append(("bringToFront\(suffix)", s))
+        }
+        if let s = candidate.isGlobal ? ds.closeOrQuit.global : ds.closeOrQuit.local {
+            allSlots.append(("closeOrQuit\(suffix)", s))
+        }
         for (kp, s) in allSlots where kp != excludeKeyPath {
             if s.keyCode == candidate.keyCode && s.modifiers == candidate.modifiers {
                 return NSLocalizedString("This shortcut is already used by another display shortcut.", comment: "Display shortcut conflict with another display shortcut")
@@ -3536,6 +3662,20 @@ struct MainWindowView: View {
         }
 
         return nil
+    }
+
+    /// Checks if a shortcut conflicts with the draft window action shortcuts.
+    private func draftWindowActionConflicts(with shortcut: HotKeyShortcut) -> Bool {
+        let ds = draftSettings.displayShortcutSettings
+        if ds.selectNextWindow.localEnabled,
+           let s = ds.selectNextWindow.local, s == shortcut { return true }
+        if ds.selectPreviousWindow.localEnabled,
+           let s = ds.selectPreviousWindow.local, s == shortcut { return true }
+        if ds.bringToFront.localEnabled,
+           let s = ds.bringToFront.local, s == shortcut { return true }
+        if ds.closeOrQuit.localEnabled,
+           let s = ds.closeOrQuit.local, s == shortcut { return true }
+        return false
     }
 
     private func dismissPresetNameEditingIfNeeded(except id: UUID? = nil) {
@@ -4561,12 +4701,29 @@ private struct SettingsSectionBackground: ViewModifier {
 
 // MARK: - Tahoe Settings Row
 
+private let shortcutIconColumnWidth: CGFloat = 24
+
 private struct TahoeSettingsRow<Trailing: View>: View {
     let label: String
+    var systemImage: String? = nil
+    var systemImageWeight: Font.Weight = .regular
+    var iconContent: AnyView? = nil
     @ViewBuilder var trailing: () -> Trailing
 
     var body: some View {
         HStack {
+            Group {
+                if let iconContent {
+                    iconContent
+                } else if let systemImage {
+                    Image(systemName: systemImage)
+                        .font(.system(size: 12, weight: systemImageWeight))
+                        .foregroundStyle(.secondary)
+                } else {
+                    Color.clear
+                }
+            }
+            .frame(width: shortcutIconColumnWidth, alignment: .trailing)
             Text(label)
             Spacer()
             trailing()

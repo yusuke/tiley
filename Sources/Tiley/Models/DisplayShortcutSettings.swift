@@ -1,7 +1,8 @@
 import AppKit
+import Carbon.HIToolbox
 import Foundation
 
-/// Persisted settings for display-movement shortcuts.
+/// Persisted settings for display-movement shortcuts and window cycling shortcuts.
 struct DisplayShortcutSettings: Codable, Equatable {
     var moveToPrimary: DisplayShortcutEntry
     var moveToNext: DisplayShortcutEntry
@@ -10,14 +11,90 @@ struct DisplayShortcutSettings: Codable, Equatable {
     var moveToOther: DisplayShortcutEntry
     /// Shortcuts to move to a specific physical display, identified by hardware fingerprint.
     var moveToDisplay: [PerDisplayShortcut]
+    /// Shortcut for selecting the next window in the window list.
+    var selectNextWindow: DisplayShortcutEntry
+    /// Shortcut for selecting the previous window in the window list.
+    var selectPreviousWindow: DisplayShortcutEntry
+    /// Shortcut for bringing the selected window to front.
+    var bringToFront: DisplayShortcutEntry
+    /// Shortcut for closing the selected window or quitting the app.
+    var closeOrQuit: DisplayShortcutEntry
+
+    static let defaultCloseOrQuit = DisplayShortcutEntry(
+        local: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_Slash), modifiers: 0),
+        global: nil,
+        localEnabled: true,
+        globalEnabled: false
+    )
+    static let defaultBringToFront = DisplayShortcutEntry(
+        local: HotKeyShortcut(keyCode: UInt32(kVK_Return), modifiers: 0),
+        global: nil,
+        localEnabled: true,
+        globalEnabled: false
+    )
+    static let defaultSelectNextWindow = DisplayShortcutEntry(
+        local: HotKeyShortcut(keyCode: UInt32(kVK_Tab), modifiers: 0),
+        global: nil,
+        localEnabled: true,
+        globalEnabled: false
+    )
+    static let defaultSelectPreviousWindow = DisplayShortcutEntry(
+        local: HotKeyShortcut(keyCode: UInt32(kVK_Tab), modifiers: UInt32(shiftKey)),
+        global: nil,
+        localEnabled: true,
+        globalEnabled: false
+    )
 
     static let `default` = DisplayShortcutSettings(
         moveToPrimary: .empty,
         moveToNext: .empty,
         moveToPrevious: .empty,
         moveToOther: .empty,
-        moveToDisplay: []
+        moveToDisplay: [],
+        selectNextWindow: defaultSelectNextWindow,
+        selectPreviousWindow: defaultSelectPreviousWindow,
+        bringToFront: defaultBringToFront,
+        closeOrQuit: defaultCloseOrQuit
     )
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        moveToPrimary = try container.decode(DisplayShortcutEntry.self, forKey: .moveToPrimary)
+        moveToNext = try container.decode(DisplayShortcutEntry.self, forKey: .moveToNext)
+        moveToPrevious = try container.decode(DisplayShortcutEntry.self, forKey: .moveToPrevious)
+        moveToOther = try container.decode(DisplayShortcutEntry.self, forKey: .moveToOther)
+        moveToDisplay = try container.decode([PerDisplayShortcut].self, forKey: .moveToDisplay)
+        selectNextWindow = try container.decodeIfPresent(DisplayShortcutEntry.self, forKey: .selectNextWindow)
+            ?? Self.defaultSelectNextWindow
+        selectPreviousWindow = try container.decodeIfPresent(DisplayShortcutEntry.self, forKey: .selectPreviousWindow)
+            ?? Self.defaultSelectPreviousWindow
+        bringToFront = try container.decodeIfPresent(DisplayShortcutEntry.self, forKey: .bringToFront)
+            ?? Self.defaultBringToFront
+        closeOrQuit = try container.decodeIfPresent(DisplayShortcutEntry.self, forKey: .closeOrQuit)
+            ?? Self.defaultCloseOrQuit
+    }
+
+    init(
+        moveToPrimary: DisplayShortcutEntry,
+        moveToNext: DisplayShortcutEntry,
+        moveToPrevious: DisplayShortcutEntry,
+        moveToOther: DisplayShortcutEntry,
+        moveToDisplay: [PerDisplayShortcut],
+        selectNextWindow: DisplayShortcutEntry = defaultSelectNextWindow,
+        selectPreviousWindow: DisplayShortcutEntry = defaultSelectPreviousWindow,
+        bringToFront: DisplayShortcutEntry = defaultBringToFront,
+        closeOrQuit: DisplayShortcutEntry = defaultCloseOrQuit
+    ) {
+        self.moveToPrimary = moveToPrimary
+        self.moveToNext = moveToNext
+        self.moveToPrevious = moveToPrevious
+        self.moveToOther = moveToOther
+        self.moveToDisplay = moveToDisplay
+        self.selectNextWindow = selectNextWindow
+        self.selectPreviousWindow = selectPreviousWindow
+        self.bringToFront = bringToFront
+        self.closeOrQuit = closeOrQuit
+    }
 
     /// Returns the entry matching a fingerprint and occurrence index, or nil.
     func entry(for fingerprint: DisplayFingerprint, occurrenceIndex: Int = 1) -> PerDisplayShortcut? {

@@ -78,9 +78,6 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley 的磁盘映像仍处于挂载状态。是否要推出？";
 "Add Shortcut" = "添加快捷键";
 "Add Global Shortcut" = "添加全局快捷键";
-"Tab is reserved for switching target windows." = "Tab 已用于切换目标窗口。";
-"Return is reserved for raising the selected window." = "Return 已用于将选定窗口置于最前面。";
-"Arrow keys are reserved for switching target windows." = "方向键已用于切换目标窗口。";
 "Edit Layout" = "编辑布局";
 "Done Editing" = "完成编辑";
 "Delete Shortcut" = "删除快捷键";
@@ -92,7 +89,6 @@
 "Type to filter" = "输入以筛选";
 "Type to filter (⌘F)" = "输入以筛选 (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F 已被保留用于搜索窗口列表。";
-"/ is reserved for closing/quitting the selected window." = "/ 键用于关闭/退出所选窗口。";
 "Close" = "关闭";
 "Quit" = "退出";
 "Bring to front" = "移至最前";
@@ -130,6 +126,11 @@
 "Show Tiley" = "显示 Tiley";
 "Remove Shortcut" = "移除快捷键";
 "Click to change" = "点击更改";
+"Select Next Window" = "选择下一个窗口";
+"Select Previous Window" = "选择上一个窗口";
+"Bring to Front" = "置于最前";
+"Close / Quit" = "关闭 / 退出";
+"This shortcut is already used for a window action." = "此快捷键已用于窗口操作。";
 "Move to Primary Display" = "移至主显示器";
 "Move to Next Display" = "移至下一个显示器";
 "Move to Previous Display" = "移至上一个显示器";

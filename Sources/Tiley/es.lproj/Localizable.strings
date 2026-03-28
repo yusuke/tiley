@@ -78,9 +78,6 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Una imagen de disco de Tiley sigue montada. ¿Deseas expulsarla?";
 "Add Shortcut" = "Añadir atajo";
 "Add Global Shortcut" = "Añadir atajo global";
-"Tab is reserved for switching target windows." = "Tab está reservado para cambiar la ventana de destino.";
-"Return is reserved for raising the selected window." = "Return está reservado para traer al frente la ventana seleccionada.";
-"Arrow keys are reserved for switching target windows." = "Las teclas de flecha están reservadas para cambiar la ventana de destino.";
 "Edit Layout" = "Editar disposición";
 "Done Editing" = "Finalizar edición";
 "Delete Shortcut" = "Eliminar atajo";
@@ -92,7 +89,6 @@
 "Type to filter" = "Escribe para filtrar";
 "Type to filter (⌘F)" = "Escribe para filtrar (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F está reservado para buscar en la lista de ventanas.";
-"/ is reserved for closing/quitting the selected window." = "/ está reservada para cerrar/salir de la ventana seleccionada.";
 "Close" = "Cerrar";
 "Quit" = "Salir";
 "Bring to front" = "Traer al frente";
@@ -130,6 +126,11 @@
 "Show Tiley" = "Mostrar Tiley";
 "Remove Shortcut" = "Eliminar atajo";
 "Click to change" = "Haz clic para cambiar";
+"Select Next Window" = "Seleccionar siguiente ventana";
+"Select Previous Window" = "Seleccionar ventana anterior";
+"Bring to Front" = "Traer al frente";
+"Close / Quit" = "Cerrar / Salir";
+"This shortcut is already used for a window action." = "Este atajo ya se usa para una acción de ventana.";
 "Move to Primary Display" = "Mover a la pantalla principal";
 "Move to Next Display" = "Mover a la siguiente pantalla";
 "Move to Previous Display" = "Mover a la pantalla anterior";

@@ -78,9 +78,6 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Образ диска Tiley всё ещё подключён. Извлечь его?";
 "Add Shortcut" = "Добавить сочетание";
 "Add Global Shortcut" = "Добавить глобальное сочетание";
-"Tab is reserved for switching target windows." = "Tab зарезервирована для переключения целевого окна.";
-"Return is reserved for raising the selected window." = "Return зарезервирована для вывода выбранного окна на передний план.";
-"Arrow keys are reserved for switching target windows." = "Клавиши стрелок зарезервированы для переключения целевого окна.";
 "Edit Layout" = "Редактировать макет";
 "Done Editing" = "Завершить редактирование";
 "Delete Shortcut" = "Удалить сочетание клавиш";
@@ -92,7 +89,6 @@
 "Type to filter" = "Введите для фильтрации";
 "Type to filter (⌘F)" = "Введите для фильтрации (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F зарезервировано для поиска в списке окон.";
-"/ is reserved for closing/quitting the selected window." = "/ зарезервирована для закрытия/завершения выбранного окна.";
 "Close" = "Закрыть";
 "Quit" = "Завершить";
 "Bring to front" = "На передний план";
@@ -130,6 +126,11 @@
 "Show Tiley" = "Показать Tiley";
 "Remove Shortcut" = "Удалить горячую клавишу";
 "Click to change" = "Нажмите для изменения";
+"Select Next Window" = "Выбрать следующее окно";
+"Select Previous Window" = "Выбрать предыдущее окно";
+"Bring to Front" = "На передний план";
+"Close / Quit" = "Закрыть / Выйти";
+"This shortcut is already used for a window action." = "Это сочетание клавиш уже используется для действия с окном.";
 "Move to Primary Display" = "Переместить на основной экран";
 "Move to Next Display" = "Переместить на следующий экран";
 "Move to Previous Display" = "Переместить на предыдущий экран";

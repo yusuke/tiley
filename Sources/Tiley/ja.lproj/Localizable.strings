@@ -78,9 +78,6 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley のディスクイメージがマウントされたままです。取り出しますか？";
 "Add Shortcut" = "ショートカットを追加";
 "Add Global Shortcut" = "グローバルショートカットを追加";
-"Tab is reserved for switching target windows." = "Tab はターゲットウインドウの切り替えに使用されています。";
-"Return is reserved for raising the selected window." = "Return は選択したウインドウの最前面化に使用されています。";
-"Arrow keys are reserved for switching target windows." = "矢印キーはターゲットウインドウの切り替えに使用されています。";
 "Edit Layout" = "レイアウトを編集";
 "Done Editing" = "編集を完了";
 "Delete Shortcut" = "ショートカットを削除";
@@ -92,7 +89,6 @@
 "Type to filter" = "タイプして絞り込む";
 "Type to filter (⌘F)" = "タイプして絞り込む (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘Fはウインドウリストの検索に予約されています。";
-"/ is reserved for closing/quitting the selected window." = "/ は選択中のウインドウを閉じる/終了するために予約されています。";
 "Close" = "閉じる";
 "Quit" = "終了";
 "Bring to front" = "最前面へ";
@@ -130,6 +126,11 @@
 "Show Tiley" = "Tileyを表示";
 "Remove Shortcut" = "ショートカットを削除";
 "Click to change" = "クリックして変更";
+"Select Next Window" = "次のウインドウを選択";
+"Select Previous Window" = "前のウインドウを選択";
+"Bring to Front" = "最前面へ";
+"Close / Quit" = "閉じる / 終了";
+"This shortcut is already used for a window action." = "このショートカットはウインドウ操作に使用されています。";
 "Move to Primary Display" = "主ディスプレイに移動";
 "Move to Next Display" = "次のディスプレイに移動";
 "Move to Previous Display" = "前のディスプレイに移動";

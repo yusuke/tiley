@@ -44,6 +44,11 @@ struct HotKeyShortcut: Equatable, Codable {
         return parts.joined(separator: " + ")
     }
 
+    /// Compact display string without spaces or separators, e.g. "⇧Tab".
+    var compactDisplayString: String {
+        (modifierDisplayParts + [keyDisplayString]).joined()
+    }
+
     var eventHotKeyModifiers: UInt32 {
         var carbonModifiers: UInt32 = 0
         if modifiers & UInt32(cmdKey) != 0 {

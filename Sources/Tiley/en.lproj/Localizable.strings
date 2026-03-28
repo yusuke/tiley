@@ -78,9 +78,6 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "A Tiley disk image is still mounted. Would you like to eject it?";
 "Add Shortcut" = "Add Shortcut";
 "Add Global Shortcut" = "Add Global Shortcut";
-"Tab is reserved for switching target windows." = "Tab is reserved for switching target windows.";
-"Return is reserved for raising the selected window." = "Return is reserved for raising the selected window.";
-"Arrow keys are reserved for switching target windows." = "Arrow keys are reserved for switching target windows.";
 "Edit Layout" = "Edit Layout";
 "Done Editing" = "Done Editing";
 "Delete Shortcut" = "Delete Shortcut";
@@ -92,7 +89,6 @@
 "Type to filter" = "Type to filter";
 "Type to filter (⌘F)" = "Type to filter (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F is reserved for searching the window list.";
-"/ is reserved for closing/quitting the selected window." = "/ is reserved for closing/quitting the selected window.";
 "Close" = "Close";
 "Quit" = "Quit";
 "Bring to front" = "Bring to front";
@@ -130,6 +126,11 @@
 "Show Tiley" = "Show Tiley";
 "Remove Shortcut" = "Remove Shortcut";
 "Click to change" = "Click to change";
+"Select Next Window" = "Select Next Window";
+"Select Previous Window" = "Select Previous Window";
+"Bring to Front" = "Bring to Front";
+"Close / Quit" = "Close / Quit";
+"This shortcut is already used for a window action." = "This shortcut is already used for a window action.";
 "Move to Primary Display" = "Move to Primary Display";
 "Move to Next Display" = "Move to Next Display";
 "Move to Previous Display" = "Move to Previous Display";

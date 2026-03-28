@@ -78,9 +78,6 @@
 "A Tiley disk image is still mounted. Would you like to eject it?" = "Tiley 디스크 이미지가 아직 마운트되어 있습니다. 추출하시겠습니까?";
 "Add Shortcut" = "단축키 추가";
 "Add Global Shortcut" = "전역 단축키 추가";
-"Tab is reserved for switching target windows." = "Tab은 대상 창 전환에 사용됩니다.";
-"Return is reserved for raising the selected window." = "Return은 선택한 창을 앞으로 가져오는 데 사용됩니다.";
-"Arrow keys are reserved for switching target windows." = "방향키는 대상 창 전환에 사용됩니다.";
 "Edit Layout" = "레이아웃 편집";
 "Done Editing" = "편집 완료";
 "Delete Shortcut" = "단축키 삭제";
@@ -92,7 +89,6 @@
 "Type to filter" = "입력하여 필터링";
 "Type to filter (⌘F)" = "입력하여 필터링 (⌘F)";
 "⌘F is reserved for searching the window list." = "⌘F는 윈도우 목록 검색에 예약되어 있습니다.";
-"/ is reserved for closing/quitting the selected window." = "/ 키는 선택한 윈도우를 닫거나 종료하는 데 사용됩니다.";
 "Close" = "닫기";
 "Quit" = "종료";
 "Bring to front" = "앞으로 가져오기";
@@ -130,6 +126,11 @@
 "Show Tiley" = "Tiley 표시";
 "Remove Shortcut" = "단축키 제거";
 "Click to change" = "클릭하여 변경";
+"Select Next Window" = "다음 창 선택";
+"Select Previous Window" = "이전 창 선택";
+"Bring to Front" = "앞으로 가져오기";
+"Close / Quit" = "닫기 / 종료";
+"This shortcut is already used for a window action." = "이 단축키는 창 동작에 이미 사용 중입니다.";
 "Move to Primary Display" = "주 디스플레이로 이동";
 "Move to Next Display" = "다음 디스플레이로 이동";
 "Move to Previous Display" = "이전 디스플레이로 이동";
