@@ -615,7 +615,7 @@ struct MainWindowView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
-                ThemeColors.windowBackground(for: colorScheme)
+                Color(nsColor: .windowBackgroundColor)
                     .opacity(appState.isEditingSettings || appState.isShowingPermissionsOnly ? 1.0 : 0.86)
 
                 if appState.isShowingPermissionsOnly {
@@ -2058,6 +2058,7 @@ struct MainWindowView: View {
                 triggerVersion: triggerVersion
             )
             .frame(width: 38, height: 24)
+            .modifier(InteractiveGlassBackground(cornerRadius: 8))
             .instantTooltip(NSLocalizedString("Move to Other Display", comment: "Action bar tooltip for move-to-screen button"))
         } else if let targetScreen = otherScreens.first {
             MoveToDisplayButton(
@@ -4794,39 +4795,66 @@ private struct VisualEffectFallbackBackground: NSViewRepresentable {
     }
 }
 
+// MARK: - Interactive Glass Background (for NSViewRepresentable buttons)
+
+/// Applies .interactive() glass on macOS 26+; no-op on earlier versions.
+private struct InteractiveGlassBackground: ViewModifier {
+    let cornerRadius: CGFloat
+
+    func body(content: Content) -> some View {
+        if #available(macOS 26.0, *) {
+            content
+                .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: cornerRadius))
+        } else {
+            content
+        }
+    }
+}
+
 // MARK: - Tahoe-style Toolbar Button
 
 private struct TahoeQuitButtonStyle: ButtonStyle {
     @State private var isHovered = false
 
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(
-                Capsule(style: .continuous)
-                    .fill(
-                        configuration.isPressed
-                            ? Color.black.opacity(0.08)
-                            : isHovered
-                                ? Color.white.opacity(0.9)
-                                : Color.clear
+        Group {
+            if #available(macOS 26.0, *) {
+                configuration.label
+                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .glassEffect(.regular.interactive(), in: Capsule())
+                    .contentShape(Capsule())
+            } else {
+                configuration.label
+                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule(style: .continuous)
+                            .fill(
+                                configuration.isPressed
+                                    ? Color.black.opacity(0.08)
+                                    : isHovered
+                                        ? Color.white.opacity(0.9)
+                                        : Color.clear
+                            )
+                            .shadow(
+                                color: isHovered || configuration.isPressed
+                                    ? .black.opacity(0.08) : .clear,
+                                radius: 2, x: 0, y: 0.5
+                            )
                     )
-                    .shadow(
-                        color: isHovered || configuration.isPressed
-                            ? .black.opacity(0.08) : .clear,
-                        radius: 2, x: 0, y: 0.5
-                    )
-            )
-            .contentShape(Capsule())
-            .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    isHovered = hovering
-                }
+                    .contentShape(Capsule())
             }
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+        }
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovered = hovering
+            }
+        }
+        .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+        .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
@@ -4952,27 +4980,31 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
             let cornerRadius: CGFloat = 8
             let path = CGPath(roundedRect: bounds, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
 
-            // Background fill
-            let fillAlpha: CGFloat
-            if isMenuOpen {
-                fillAlpha = isDark ? 0.18 : 0.12
-            } else if isHovered {
-                fillAlpha = isDark ? 0.12 : 0.08
+            if #available(macOS 26.0, *) {
+                // Background and border are handled by .glassEffect() applied from SwiftUI.
             } else {
-                fillAlpha = isDark ? 0.06 : 0.04
-            }
-            let fillColor = isDark ? CGColor(gray: 1, alpha: fillAlpha) : CGColor(gray: 0, alpha: fillAlpha)
-            ctx.addPath(path)
-            ctx.setFillColor(fillColor)
-            ctx.fillPath()
+                // Background fill
+                let fillAlpha: CGFloat
+                if isMenuOpen {
+                    fillAlpha = isDark ? 0.18 : 0.12
+                } else if isHovered {
+                    fillAlpha = isDark ? 0.12 : 0.08
+                } else {
+                    fillAlpha = isDark ? 0.06 : 0.04
+                }
+                let fillColor = isDark ? CGColor(gray: 1, alpha: fillAlpha) : CGColor(gray: 0, alpha: fillAlpha)
+                ctx.addPath(path)
+                ctx.setFillColor(fillColor)
+                ctx.fillPath()
 
-            // Border
-            let borderAlpha: CGFloat = isDark ? 0.10 : 0.08
-            let borderColor = isDark ? CGColor(gray: 1, alpha: borderAlpha) : CGColor(gray: 0, alpha: borderAlpha)
-            ctx.addPath(path)
-            ctx.setStrokeColor(borderColor)
-            ctx.setLineWidth(0.5)
-            ctx.strokePath()
+                // Border
+                let borderAlpha: CGFloat = isDark ? 0.10 : 0.08
+                let borderColor = isDark ? CGColor(gray: 1, alpha: borderAlpha) : CGColor(gray: 0, alpha: borderAlpha)
+                ctx.addPath(path)
+                ctx.setStrokeColor(borderColor)
+                ctx.setLineWidth(0.5)
+                ctx.strokePath()
+            }
 
             // Tint color
             let tintColor: NSColor
@@ -5166,25 +5198,35 @@ private struct TahoeActionBarButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         let fgStyle: HierarchicalShapeStyle = !isEnabled ? .tertiary : (isHovered || configuration.isPressed ? .primary : .secondary)
 
-        configuration.label
-            .environment(\.tahoeActionBarHovered, isHovered || configuration.isPressed)
-            .foregroundStyle(fgStyle)
-            .background(
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(fillColor(isPressed: configuration.isPressed))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(borderColor, lineWidth: 0.5)
-            )
-            .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    isHovered = hovering
-                }
+        Group {
+            if #available(macOS 26.0, *) {
+                configuration.label
+                    .environment(\.tahoeActionBarHovered, isHovered || configuration.isPressed)
+                    .foregroundStyle(fgStyle)
+                    .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 8))
+                    .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            } else {
+                configuration.label
+                    .environment(\.tahoeActionBarHovered, isHovered || configuration.isPressed)
+                    .foregroundStyle(fgStyle)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(fillColor(isPressed: configuration.isPressed))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .stroke(borderColor, lineWidth: 0.5)
+                    )
+                    .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+        }
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovered = hovering
+            }
+        }
+        .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+        .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
@@ -5192,32 +5234,42 @@ private struct TahoeToolbarButtonStyle: ButtonStyle {
     @State private var isHovered = false
 
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
-            .frame(width: 30, height: 30)
-            .background(
-                Capsule(style: .continuous)
-                    .fill(
-                        configuration.isPressed
-                            ? Color.black.opacity(0.08)
-                            : isHovered
-                                ? Color.white.opacity(0.9)
-                                : Color.clear
+        Group {
+            if #available(macOS 26.0, *) {
+                configuration.label
+                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
+                    .frame(width: 30, height: 30)
+                    .glassEffect(.regular.interactive(), in: Capsule())
+                    .contentShape(Capsule())
+            } else {
+                configuration.label
+                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
+                    .frame(width: 30, height: 30)
+                    .background(
+                        Capsule(style: .continuous)
+                            .fill(
+                                configuration.isPressed
+                                    ? Color.black.opacity(0.08)
+                                    : isHovered
+                                        ? Color.white.opacity(0.9)
+                                        : Color.clear
+                            )
+                            .shadow(
+                                color: isHovered || configuration.isPressed
+                                    ? .black.opacity(0.08) : .clear,
+                                radius: 2, x: 0, y: 0.5
+                            )
                     )
-                    .shadow(
-                        color: isHovered || configuration.isPressed
-                            ? .black.opacity(0.08) : .clear,
-                        radius: 2, x: 0, y: 0.5
-                    )
-            )
-            .contentShape(Capsule())
-            .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    isHovered = hovering
-                }
+                    .contentShape(Capsule())
             }
-            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+        }
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovered = hovering
+            }
+        }
+        .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
+        .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
