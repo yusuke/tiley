@@ -3,6 +3,76 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.0.1</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Палитра цветов выделений теперь циклически чередует синий, зелёный, оранжевый и фиолетовый (4 цвета), 5-е выделение совпадает с 1-м</li>
+<li>Стандартные пресеты (Левая/Правая/Верхняя/Нижняя половина) теперь включают противоположную половину как вторичное выделение</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>A paleta de cores de seleção agora cicla entre azul, verde, laranja e roxo (4 cores), de modo que a 5ª seleção corresponde à 1ª</li>
+<li>As predefinições padrão (Metade esquerda/direita/superior/inferior) agora incluem a metade oposta como seleção secundária</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>La palette dei colori di selezione ora cicla tra blu, verde, arancione e viola (4 colori), in modo che la 5ª selezione corrisponda alla 1ª</li>
+<li>I preset predefiniti (Metà sinistra/destra/superiore/inferiore) ora includono la metà opposta come selezione secondaria</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>La palette de couleurs de sélection cycle désormais entre bleu, vert, orange et violet (4 couleurs), la 5e sélection ayant la même couleur que la 1re</li>
+<li>Les préréglages par défaut (Moitié gauche/droite/haute/basse) incluent désormais la moitié opposée comme sélection secondaire</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>La paleta de colores de selección ahora cicla entre azul, verde, naranja y púrpura (4 colores), de modo que la 5ª selección coincide con la 1ª</li>
+<li>Los preajustes predeterminados (Mitad izquierda/derecha/superior/inferior) ahora incluyen la mitad opuesta como selección secundaria</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Auswahlfarbpalette auf 4 Farben (Blau, Grün, Orange, Lila) geändert, sodass die 5. Auswahl dieselbe Farbe wie die 1. hat</li>
+<li>Standardvorlagen (Linke/Rechte/Obere/Untere Hälfte) enthalten jetzt die gegenüberliegende Hälfte als sekundäre Auswahl</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>選擇顏色調色盤改為藍、綠、橙、紫4色循環，第5個選擇與第1個顏色相同</li>
+<li>預設佈局（左半/右半/上半/下半）現包含對側半螢幕作為輔助選擇</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>选择颜色调色板改为蓝、绿、橙、紫4色循环，第5个选择与第1个颜色相同</li>
+<li>默认预设（左半/右半/上半/下半）现包含对侧半屏作为辅助选择</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>선택 색상 팔레트를 파랑, 초록, 주황, 보라 4색 순환으로 변경하여 5번째 선택이 1번째와 동일한 색상으로 표시</li>
+<li>기본 프리셋(왼쪽/오른쪽/위/아래 절반)에 보조 선택으로 반대쪽 절반 추가</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>セレクションカラーパレットを青・緑・オレンジ・紫の4色サイクルに変更し、5番目が1番目と同じ色に</li>
+<li>デフォルトプリセット（左半分/右半分/上半分/下半分）にセカンダリとして反対側の半分を追加</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Selection color palette now cycles as blue, green, orange, purple (4 colors) so the 5th selection matches the 1st</li>
+<li>Default presets (Left/Right/Top/Bottom Half) now include a secondary selection for the opposite half</li>
+</ul>]]></description>
+            <pubDate>Sun, 29 Mar 2026 00:51:32 +0900</pubDate>
+            <sparkle:version>401</sparkle:version>
+            <sparkle:shortVersionString>4.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley-4.0.1.zip" length="5584514" type="application/octet-stream" sparkle:edSignature="8wrtZIiSMEXJ4ZUszIcfzD++Hll3d4VDBGqNE1H5Q6PXzm0jpFoeX7sriiWrZNCTgJNFIZ3xBa4vKxkPPlHhBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-400.delta" sparkle:deltaFrom="400" length="187378" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="l1vcJzM3DKfOPUiJfmQ0VmLlFiQLhh39WeqTt0HI2GRDSi1MOC6D16PIafe6DQp8c1p4Oy+4yT5ePYZso62QAA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-340.delta" sparkle:deltaFrom="340" length="379350" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="JnyhKu1g7/eA18yx1fXa4V9cGT2Wddr9mLMYLtcWlHsh/fZrPWWx9s5txTRFPvJc077M3qoeLjMxcITiEWSbAg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-332.delta" sparkle:deltaFrom="332" length="449970" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aSt8+mJnYpKpFPw9YnDWASAbNfoHWGB1KoHAf6OqZxs+uR9fLF5hT7KAvHNXGbb3QffWT0BIfuJxcE7z2C6BBw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-331.delta" sparkle:deltaFrom="331" length="581822" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="MbaAC5w4Ow7gSzVCEBrLNZ7T/G56dAqY7h7SMWD8V9s/ijjtQ6RZUAGQEPtoEQRTPGDPACf51CxsqTXf64xDAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-330.delta" sparkle:deltaFrom="330" length="625054" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="xmzRj5uEKUMFXRNjqNJbU5XICOLOwXjMfQkrdomNvoHcyV93SWklJaQS44JEmYvGwOc9ZgiPiK5QVL0PidSxAw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.0.0</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -191,11 +261,181 @@
   - Shift+click range selections keep the anchor window as primary
   - Affects layout preset application, Bring to Front (Enter), and preview display
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Predefinições de layout com seleção múltipla: defina múltiplas regiões de grade por predefinição para posicionar diferentes janelas em diferentes locais</li>
+  - Cada arraste no editor de predefinições adiciona uma nova seleção (1ª, 2ª, 3ª, ...)
+  - Cada seleção exibe seu número de índice e um botão de exclusão
+  - A sobreposição de seleções é impedida (com feedback visual)
+  - Ao aplicar uma predefinição com seleção múltipla, as janelas são atribuídas por ordem de seleção: a primeira janela selecionada recebe a seleção 1, a próxima a seleção 2, etc.
+  - As miniaturas e as visualizações em tamanho real exibem todas as seleções com cores indexadas
+  - As seleções de grade têm uma margem de 1pt das bordas da tela para melhor visibilidade
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>A ordenação de múltiplas janelas agora segue a ordem de seleção em vez da ordem Z da barra lateral</li>
+  - A primeira janela selecionada é sempre a principal; janelas adicionadas com Cmd+clique são adicionadas em ordem
+  - A seleção por intervalo com Shift+clique mantém a janela âncora como principal
+  - Afeta a aplicação de predefinições, trazer para frente (Enter) e exibição de visualização
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Preset di layout a selezione multipla: definisci più aree della griglia per preset per posizionare finestre diverse in posizioni diverse</li>
+  - Ogni trascinamento nell'editor dei preset aggiunge una nuova selezione (1ª, 2ª, 3ª, ...)
+  - Ogni selezione mostra il suo numero di indice e un pulsante di eliminazione
+  - La sovrapposizione delle selezioni viene impedita (con feedback visivo)
+  - Quando si applica un preset a selezione multipla, le finestre vengono assegnate per ordine di selezione: la prima finestra selezionata ottiene la selezione 1, la successiva la selezione 2, ecc.
+  - Le miniature e le anteprime a dimensione reale mostrano tutte le selezioni con colori indicizzati
+  - Le selezioni della griglia hanno un margine di 1pt dai bordi dello schermo per una migliore visibilità
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>L'ordine delle finestre multiple ora segue l'ordine di selezione anziché l'ordine Z della barra laterale</li>
+  - La prima finestra selezionata è sempre la principale; le finestre aggiunte con Cmd+clic vengono aggiunte in ordine
+  - La selezione per intervallo con Shift+clic mantiene la finestra di ancoraggio come principale
+  - Influisce sull'applicazione dei preset, sul portare in primo piano (Invio) e sulla visualizzazione dell'anteprima
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Préréglages de disposition à sélection multiple : définissez plusieurs zones de grille par préréglage pour positionner différentes fenêtres à différents emplacements</li>
+  - Chaque glisser dans l'éditeur de préréglages ajoute une nouvelle sélection (1ère, 2ème, 3ème, ...)
+  - Chaque sélection affiche son numéro d'index et un bouton de suppression
+  - Le chevauchement des sélections est empêché (avec retour visuel)
+  - Lors de l'application d'un préréglage à sélection multiple, les fenêtres sont assignées par ordre de sélection : la première fenêtre sélectionnée reçoit la sélection 1, la suivante la sélection 2, etc.
+  - Les miniatures et les aperçus en taille réelle affichent toutes les sélections avec des couleurs indexées
+  - Les sélections de grille ont une marge de 1pt depuis les bords d'écran pour une meilleure visibilité
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>L'ordre des fenêtres multiples suit désormais l'ordre de sélection au lieu de l'ordre Z de la barre latérale</li>
+  - La première fenêtre sélectionnée est toujours la principale ; les fenêtres ajoutées par Cmd+clic sont ajoutées dans l'ordre
+  - La sélection par plage Shift+clic conserve la fenêtre d'ancrage comme principale
+  - Affecte l'application des préréglages, la mise au premier plan (Entrée) et l'affichage de l'aperçu
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Preajustes de diseño con selección múltiple: define múltiples regiones de cuadrícula por preajuste para colocar diferentes ventanas en diferentes posiciones</li>
+  - Cada arrastre en el editor de preajustes añade una nueva selección (1ª, 2ª, 3ª, ...)
+  - Cada selección muestra su número de índice y un botón de eliminar
+  - Se previene la superposición de selecciones (con retroalimentación visual)
+  - Al aplicar un preajuste con selección múltiple, las ventanas se asignan por orden de selección: la primera ventana seleccionada obtiene la selección 1, la siguiente la selección 2, etc.
+  - Las miniaturas y las vistas previas a tamaño real muestran todas las selecciones con colores indexados
+  - Las selecciones de cuadrícula tienen un margen de 1pt desde los bordes de pantalla para mejor visibilidad
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>El orden de múltiples ventanas ahora sigue el orden de selección en lugar del orden Z de la barra lateral</li>
+  - La primera ventana seleccionada siempre es la principal; las ventanas añadidas con Cmd+clic se agregan en orden
+  - La selección por rango con Shift+clic mantiene la ventana ancla como principal
+  - Afecta la aplicación de preajustes, traer al frente (Enter) y la vista previa
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Mehrfachauswahl-Layout-Vorlagen: Definieren Sie mehrere Rasterbereiche pro Vorlage, um verschiedene Fenster an verschiedenen Positionen anzuordnen</li>
+  - Jedes Ziehen im Vorlagen-Editor fügt eine neue Auswahl hinzu (1., 2., 3., ...)
+  - Jede Auswahl zeigt ihre Indexnummer und einen Löschbutton
+  - Überlappende Auswahlen werden verhindert (mit visuellem Feedback)
+  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Auswahlreihenfolge zugewiesen: zuerst ausgewähltes Fenster erhält Auswahl 1, nächstes Auswahl 2 usw.
+  - Vorlagen-Miniaturansichten und Echtgrößen-Vorschauen zeigen alle Auswahlen mit indizierten Farben
+  - Rasterauswahlen haben einen 1pt-Rand vom Bildschirmrand für bessere Sichtbarkeit
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Mehrfenster-Reihenfolge folgt jetzt der Auswahlreihenfolge statt der Seitenleisten-Z-Reihenfolge</li>
+  - Das zuerst ausgewählte Fenster ist immer primär; per Cmd+Klick hinzugefügte Fenster werden in Reihenfolge angehängt
+  - Shift+Klick-Bereichsauswahl behält das Ankerfenster als primär
+  - Betrifft Layout-Vorlagen-Anwendung, In den Vordergrund bringen (Enter) und Vorschauanzeige
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>多選佈局預設：在一個預設中定義多個網格區域，將不同視窗放置到不同位置</li>
+  - 在預設編輯器中每次拖曳都會新增選擇區域（第1個、第2個、第3個…）
+  - 每個選擇區域顯示索引編號和刪除按鈕
+  - 防止選擇區域重疊（附視覺回饋）
+  - 套用多選預設時按選擇順序分配視窗：最先選擇的視窗對應選擇1，下一個選擇的視窗對應選擇2，依此類推
+  - 預設縮圖和實際尺寸預覽以索引顏色顯示所有選擇區域
+  - 網格選擇區域從螢幕邊緣留出1pt邊距以提高可見性
+</ul>
+<h3>變更</h3>
+<ul>
+<li>多視窗排序從側邊欄Z順序改為選擇順序</li>
+  - 最先選擇的視窗始終為主視窗，Cmd+點擊新增的視窗按新增順序排列
+  - Shift+點擊範圍選擇中錨點視窗保持為主視窗
+  - 影響佈局預設套用、置於最前（Enter）和預覽顯示
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>多选布局预设：在一个预设中定义多个网格区域，将不同窗口放置到不同位置</li>
+  - 在预设编辑器中每次拖拽都会添加新的选择区域（第1个、第2个、第3个…）
+  - 每个选择区域显示索引编号和删除按钮
+  - 防止选择区域重叠（带视觉反馈）
+  - 应用多选预设时按选择顺序分配窗口：最先选择的窗口对应选择1，下一个选择的窗口对应选择2，依此类推
+  - 预设缩略图和实际尺寸预览以索引颜色显示所有选择区域
+  - 网格选择区域从屏幕边缘留出1pt边距以提高可见性
+</ul>
+<h3>变更</h3>
+<ul>
+<li>多窗口排序从侧边栏Z顺序改为选择顺序</li>
+  - 最先选择的窗口始终为主窗口，Cmd+点击添加的窗口按添加顺序排列
+  - Shift+点击范围选择中锚点窗口保持为主窗口
+  - 影响布局预设应用、置于最前（Enter）和预览显示
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>다중 선택 레이아웃 프리셋: 하나의 프리셋에 여러 그리드 영역을 정의하여 다른 창을 다른 위치에 배치 가능</li>
+  - 프리셋 편집기에서 드래그할 때마다 새 선택 영역 추가 (1번째, 2번째, 3번째...)
+  - 각 선택 영역에 인덱스 번호와 삭제 버튼 표시
+  - 선택 영역 간 겹침 방지 (시각적 피드백 포함)
+  - 다중 선택 프리셋 적용 시 선택 순서에 따라 창 할당: 처음 선택한 창이 선택 1, 다음 선택한 창이 선택 2 등
+  - 프리셋 썸네일과 실제 크기 미리보기에 모든 선택 영역을 인덱스 색상으로 표시
+  - 그리드 선택 영역은 화면 가장자리에서 1pt 여백으로 가시성 향상
+</ul>
+<h3>변경</h3>
+<ul>
+<li>다중 창 순서가 사이드바 Z순서에서 선택 순서로 변경</li>
+  - 처음 선택한 창이 항상 프라이머리, Cmd+클릭으로 추가한 창은 추가 순서대로 배치
+  - Shift+클릭 범위 선택에서는 앵커 창이 프라이머리 유지
+  - 레이아웃 프리셋 적용, 최전면화(Enter), 미리보기 표시에 영향
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>複数セレクション対応レイアウトプリセット：1つのプリセットに複数のグリッド領域を定義し、異なるウインドウを異なる位置に配置可能に</li>
+  - プリセットエディタでドラッグするたびに新しいセレクションを追加（1番目、2番目、3番目…）
+  - 各セレクションにはインデックス番号と削除ボタンを表示
+  - セレクション同士の重なりを防止（視覚的フィードバック付き）
+  - 複数セレクションプリセットの適用時、ウインドウは選択順で割り当て：最初に選択したウインドウがセレクション1、次に選択したウインドウがセレクション2…
+  - プリセットのサムネイルと実サイズプレビューにすべてのセレクションをインデックス色で表示
+  - グリッドのセレクションは画面端から1ptのマージンで見やすく表示
+</ul>
+<h3>変更</h3>
+<ul>
+<li>複数ウインドウの順序がサイドバーのZ順から選択順に変更</li>
+  - 最初に選択したウインドウが常にプライマリ、Cmd+クリックで追加したウインドウは追加順に並ぶ
+  - Shift+クリックの範囲選択ではアンカーウインドウがプライマリを維持
+  - レイアウトプリセットの適用、最前面化（Enter）、プレビュー表示に影響
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Multi-selection layout presets: define multiple grid regions per preset for arranging different windows in different positions</li>
+  - Each drag in the preset editor appends a new selection (1st, 2nd, 3rd, ...)
+  - Selections show their index number and a delete button for easy management
+  - Overlapping selections are prevented with visual feedback
+  - When applying a multi-selection preset, windows are assigned by selection order: the initially selected window gets selection 1, the next selected window gets selection 2, etc.
+  - Preset thumbnails and real-size previews display all selections with distinct indexed colors
+  - Grid selections have a 1pt margin from physical screen edges for better visibility
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Multi-window ordering now follows selection order instead of sidebar Z-order</li>
+  - The initially selected window is always primary; subsequently Cmd+clicked windows are appended in order
+  - Shift+click range selections keep the anchor window as primary
+  - Affects layout preset application, Bring to Front (Enter), and preview display
+</ul>]]></description>
             <pubDate>Sun, 29 Mar 2026 00:24:55 +0900</pubDate>
             <sparkle:version>400</sparkle:version>
             <sparkle:shortVersionString>4.0.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley-4.0.0.zip" length="5583300" type="application/octet-stream" sparkle:edSignature="qv0FuxE2qX1Ckbt2EXyb7HRohm1KS/LvKIPqbwlpJs7IK62Dj/R8Rll1bWtXwGDDSUUJiJ22HSJxwO/tL6HlCQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley-4.0.0.zip" length="5583300" type="application/octet-stream" sparkle:edSignature="qv0FuxE2qX1Ckbt2EXyb7HRohm1KS/LvKIPqbwlpJs7IK62Dj/R8Rll1bWtXwGDDSUUJiJ22HSJxwO/tL6HlCQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley400-340.delta" sparkle:deltaFrom="340" length="380930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="3YZG3Fg0Rak27nKJNc/MXmiyvcgig0VPv4+kHLbMOYUeKDX2ILLUJ68t14Y5lphPh/3M/btwJXD2YniiTFw9Bg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley400-332.delta" sparkle:deltaFrom="332" length="450214" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="rL7pJarfJ8d60DzpNNXbsbyQNqjCxXv1xmxwkLg6CaR5sFSxBDtab37RCbxzmU4HxApKRnq4sBzLgAjg26DMBQ=="/>
@@ -542,435 +782,177 @@
 <li>Added a "Quit App" button next to the "Close Window" button for non-Finder apps with multiple windows in the sidebar action bar</li>
 <li>The "Close Window" tooltip now shows the window name (e.g., Close "Document")</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Seleção múltipla de janelas na barra lateral com ações em lote</li>
+    - Clique no cabeçalho do app para selecionar todas as suas janelas
+    - Cmd+clique para adicionar/remover janelas individuais
+    - Shift+clique para selecionar um intervalo contínuo de janelas
+<li>Ações em lote na seleção múltipla: trazer para frente (mantendo a ordem Z da barra lateral), redimensionar/mover para a grade, mover para outra tela, fechar/encerrar</li>
+<li>Ao fechar múltiplas janelas selecionadas, apps com todas as janelas selecionadas são encerrados (exceto o Finder)</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>Clicar no cabeçalho de um app na barra lateral agora seleciona todas as janelas desse app (anteriormente selecionava apenas a janela da frente)</li>
+<li>Ao selecionar uma janela dentro de um grupo de app, o cabeçalho do aplicativo permanece destacado</li>
+<li>Para apps não-Finder com múltiplas janelas, um botão "Encerrar app" é exibido ao lado do botão "Fechar janela" na barra de ações</li>
+<li>O tooltip "Fechar janela" agora exibe o nome da janela (ex.: Fechar "Documento")</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Selezione multipla delle finestre nella barra laterale con azioni in blocco</li>
+    - Clic sull'intestazione dell'app per selezionare tutte le sue finestre
+    - Cmd+clic per aggiungere/rimuovere finestre singole
+    - Shift+clic per selezionare un intervallo continuo di finestre
+<li>Azioni in blocco per la selezione multipla: porta in primo piano (mantenendo l'ordine Z della barra laterale), ridimensiona/sposta nella griglia, sposta su un altro display, chiudi/esci</li>
+<li>Quando si chiudono più finestre selezionate, le app con tutte le finestre selezionate vengono chiuse (eccetto il Finder)</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Cliccando sull'intestazione di un'app nella barra laterale ora si selezionano tutte le finestre di quell'app (in precedenza veniva selezionata solo la finestra in primo piano)</li>
+<li>Selezionando una finestra all'interno di un gruppo di app, l'intestazione dell'applicazione rimane evidenziata</li>
+<li>Per le app non-Finder con più finestre, nella barra delle azioni viene mostrato un pulsante "Esci dall'app" accanto a "Chiudi finestra"</li>
+<li>Il tooltip "Chiudi finestra" ora mostra il nome della finestra (es.: Chiudi "Documento")</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Sélection multiple de fenêtres dans la barre latérale avec actions groupées</li>
+    - Clic sur l'en-tête d'une app pour sélectionner toutes ses fenêtres
+    - Cmd+clic pour ajouter/retirer des fenêtres individuellement
+    - Shift+clic pour sélectionner une plage continue de fenêtres
+<li>Actions groupées en sélection multiple : mettre au premier plan (en conservant l'ordre Z de la barre latérale), redimensionner/déplacer vers la grille, déplacer vers un autre écran, fermer/quitter</li>
+<li>Lors de la fermeture de plusieurs fenêtres sélectionnées, les apps dont toutes les fenêtres sont sélectionnées sont quittées (sauf le Finder)</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>Cliquer sur l'en-tête d'une app dans la barre latérale sélectionne désormais toutes les fenêtres de cette app (auparavant, seule la fenêtre la plus en avant était sélectionnée)</li>
+<li>La sélection d'une fenêtre dans un groupe d'app maintient l'en-tête de l'application en surbrillance</li>
+<li>Pour les apps non-Finder ayant plusieurs fenêtres, un bouton « Quitter l'app » est affiché à côté du bouton « Fermer la fenêtre » dans la barre d'actions</li>
+<li>L'infobulle « Fermer la fenêtre » affiche désormais le nom de la fenêtre (ex. : Fermer « Document »)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Selección múltiple de ventanas en la barra lateral con acciones por lotes</li>
+    - Clic en el encabezado de la app para seleccionar todas sus ventanas
+    - Cmd+clic para añadir/quitar ventanas individuales
+    - Shift+clic para seleccionar un rango continuo de ventanas
+<li>Acciones por lotes en selección múltiple: traer al frente (manteniendo el orden Z de la barra lateral), redimensionar/mover a la cuadrícula, mover a otra pantalla, cerrar/salir</li>
+<li>Al cerrar múltiples ventanas seleccionadas, las apps con todas sus ventanas seleccionadas se cierran completamente (excepto Finder)</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Hacer clic en el encabezado de una app en la barra lateral ahora selecciona todas las ventanas de esa app (antes solo seleccionaba la ventana del frente)</li>
+<li>Al seleccionar una ventana dentro de un grupo de app, el encabezado de la aplicación permanece resaltado</li>
+<li>Para apps que no son Finder con múltiples ventanas, se muestra un botón "Salir de la app" junto al botón "Cerrar ventana" en la barra de acciones</li>
+<li>El tooltip "Cerrar ventana" ahora muestra el nombre de la ventana (ej.: Cerrar "Documento")</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Mehrfachauswahl von Fenstern in der Seitenleiste mit Stapelaktionen</li>
+    - Klick auf App-Header wählt alle Fenster der App aus
+    - Cmd+Klick zum Hinzufügen/Entfernen einzelner Fenster
+    - Shift+Klick für zusammenhängende Bereichsauswahl
+<li>Stapelaktionen bei Mehrfachauswahl: In den Vordergrund bringen (Seitenleisten-Z-Reihenfolge beibehalten), Größe ändern/zum Raster verschieben, Display wechseln, Schließen/Beenden</li>
+<li>Beim Schließen mehrerer ausgewählter Fenster wird die App beendet, wenn alle ihre Fenster ausgewählt sind (außer Finder)</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Klick auf App-Header in der Seitenleiste wählt nun alle Fenster der App aus (zuvor nur das vorderste Fenster)</li>
+<li>Beim Auswählen eines Fensters innerhalb einer App-Gruppe bleibt der App-Header hervorgehoben</li>
+<li>Für Nicht-Finder-Apps mit mehreren Fenstern wird in der Aktionsleiste neben „Fenster schließen" nun auch eine „App beenden"-Schaltfläche angezeigt</li>
+<li>Der Tooltip „Fenster schließen" zeigt nun den Fensternamen an (z. B. „Dokument" schließen)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>側邊欄支援多視窗選擇，可對所有選取的視窗執行批次操作</li>
+    - 點按應用程式標題以選取該應用程式的所有視窗
+    - Cmd+點按切換個別視窗的選取狀態
+    - Shift+點按選取側邊欄中連續的視窗範圍
+<li>多選批次操作：移至最前（保持側邊欄 Z 順序）、調整大小/移動到格線、移動到其他顯示器、關閉/結束</li>
+<li>關閉多個選取的視窗時，若某應用程式的所有視窗皆被選取則結束該應用程式（Finder 除外）</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>點按側邊欄中的應用程式標題現在會選取該應用程式的所有視窗（之前僅選取最前面的視窗）</li>
+<li>選取應用程式群組中的視窗時，應用程式標題也會保持醒目提示狀態</li>
+<li>對於擁有多個視窗的非 Finder 應用程式，操作列中在「關閉視窗」按鈕旁新增「結束應用程式」按鈕</li>
+<li>「關閉視窗」工具提示現在會顯示視窗名稱（例如：關閉「文件」）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>侧边栏支持多窗口选择，可对所有选中窗口执行批量操作</li>
+    - 点击应用标题选择该应用的所有窗口
+    - Cmd+点击切换单个窗口的选择状态
+    - Shift+点击选择侧边栏中连续的窗口范围
+<li>多选批量操作：置顶（保持侧边栏 Z 顺序）、调整大小/移动到网格、移动到其他显示器、关闭/退出</li>
+<li>关闭多个选中窗口时，若某应用的所有窗口均被选中则退出该应用（Finder 除外）</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>点击侧边栏中的应用标题现在会选择该应用的所有窗口（之前仅选择最前面的窗口）</li>
+<li>选择应用分组中的窗口时，应用程序标题也会保持高亮状态</li>
+<li>对于拥有多个窗口的非 Finder 应用，操作栏中在"关闭窗口"按钮旁新增"退出应用"按钮</li>
+<li>"关闭窗口"工具提示现在会显示窗口名称（例如：关闭"文稿"）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바에서 여러 윈도우를 선택하여 일괄 작업 수행 가능</li>
+    - 앱 헤더를 클릭하면 해당 앱의 모든 윈도우 선택
+    - Cmd+클릭으로 개별 윈도우 추가/해제
+    - Shift+클릭으로 사이드바에서 연속된 윈도우 범위 선택
+<li>다중 선택 시 일괄 작업: 최전면으로(사이드바 순서의 Z-order 유지), 그리드로 리사이즈/이동, 디스플레이 이동, 닫기/종료</li>
+<li>여러 윈도우를 닫을 때 모든 윈도우가 선택된 앱은 앱 자체를 종료(Finder 제외)</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>사이드바에서 앱 헤더를 클릭하면 해당 앱의 모든 윈도우를 선택하도록 변경(이전에는 최전면 윈도우만 선택)</li>
+<li>앱 그룹 내 윈도우를 선택할 때 애플리케이션 헤더도 하이라이트되도록 변경</li>
+<li>Finder가 아닌 앱이 여러 윈도우를 가진 경우, 액션 바에 "윈도우 닫기" 버튼 옆에 "앱 종료" 버튼을 추가 표시</li>
+<li>"윈도우 닫기" 툴팁에 윈도우 이름을 표시하도록 변경 (예: "문서" 닫기)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーで複数ウインドウを選択し、一括操作が可能に</li>
+  - アプリケーションヘッダをクリックすると、そのアプリの全ウインドウを選択
+  - Cmd+クリックで個別にウインドウを追加/解除
+  - Shift+クリックでサイドバー上の連続するウインドウを範囲選択
+<li>複数選択時の一括操作: 最前面へ（サイドバー順のZ-orderを維持）、グリッドへのリサイズ/移動、ディスプレイ移動、閉じる/終了</li>
+<li>複数ウインドウを閉じる際、全ウインドウが選択されているアプリはアプリケーション自体を終了（Finderを除く）</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>サイドバーでアプリケーションヘッダをクリックすると、そのアプリの全ウインドウを選択するようにした（以前は最前面ウインドウのみ）</li>
+<li>アプリグループ内のウインドウを選択したとき、アプリケーションヘッダもハイライトされるようにした</li>
+<li>Finder以外のアプリが複数ウインドウを持つ場合、アクションバーに「ウインドウを閉じる」ボタンに加えて「アプリケーションを終了」ボタンを表示するようにした</li>
+<li>「ウインドウを閉じる」ツールチップにウインドウ名を表示するようにした（例: 「書類」を閉じる）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Multi-window selection in the sidebar: select multiple windows and perform batch actions on all of them</li>
+  - Click an application header to select all windows of that app
+  - Cmd+click to toggle individual windows in/out of the selection
+  - Shift+click to select a contiguous range of windows in sidebar order
+<li>Batch actions for multi-selection: Bring to Front (preserving sidebar Z-order), resize/move to grid, move to display, and close/quit</li>
+<li>When closing multiple selected windows, apps whose windows are all selected will be quit (except Finder)</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Clicking an application header in the sidebar now selects all windows of that app (previously selected only the frontmost)</li>
+<li>Selecting a window under an app group now keeps the application header highlighted</li>
+<li>Added a "Quit App" button next to the "Close Window" button for non-Finder apps with multiple windows in the sidebar action bar</li>
+<li>The "Close Window" tooltip now shows the window name (e.g., Close "Document")</li>
+</ul>]]></description>
             <pubDate>Sat, 28 Mar 2026 20:38:22 +0900</pubDate>
             <sparkle:version>340</sparkle:version>
             <sparkle:shortVersionString>3.4.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley-3.4.0.zip" length="5537293" type="application/octet-stream" sparkle:edSignature="JzhRS1djxZ14fcEVd84PANPyp+hFc2F/VY3tWiEdChYaoQd6mVOVkbiL7bS0TAMcJnj7wAxJC56PAZGLQNWzCQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley-3.4.0.zip" length="5537293" type="application/octet-stream" sparkle:edSignature="JzhRS1djxZ14fcEVd84PANPyp+hFc2F/VY3tWiEdChYaoQd6mVOVkbiL7bS0TAMcJnj7wAxJC56PAZGLQNWzCQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.4.0/Tiley340-332.delta" sparkle:deltaFrom="332" length="317706" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GYmDWi/MdFq7SLlJKs3SSCKKwzJUU9LFKcRtgZq3Kf+rblN0pjCdLsHq2uj1PUyufY//F6v8GGnUbpNsiGeHCA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.4.0/Tiley340-331.delta" sparkle:deltaFrom="331" length="472634" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TXHN9HZRNvp8YbZ5clt5MXJMtIYEBrghfCLUR7hcrquwzeCED8ijJ3w6iysgYB+KRWQD1rL21b6SDuUrxXJ+AA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.4.0/Tiley340-330.delta" sparkle:deltaFrom="330" length="514090" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="J6oS5HW/I9MWGT9QjSZ+5jU1aKzN7k8rN9BLCvs5fFKC0s5u53sQZubN1G5IplT8KGN2SlBuEO1jR/WT70U1Cg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.4.0/Tiley340-329.delta" sparkle:deltaFrom="329" length="528234" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="H181CtxTCPbHutMoABU1sL5/N9e5VZ5fWiLOpBO2m0AFA7C1pVxlsQZdYdP3CywdjeNKYqT9GIQ+yHZetpMiBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.4.0/Tiley340-328.delta" sparkle:deltaFrom="328" length="530222" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="jpIi1tJfqMMBmUiLm1rA/pWk+qt64XzWnRU1d93fCVaa42t+H1f42A/9hRdAQHAPV/1j50znVfnx+TwA8491BQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>3.3.2</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Горячие клавиши для «Следующее окно», «Предыдущее окно», «На передний план» и «Закрыть/Выйти» теперь можно настроить в разделе горячих клавиш настроек</li>
-<li>Новый пункт контекстного меню «Закрыть другие окна [Приложения]» при правом клике на окно в боковой панели (отображается только если у приложения несколько окон)</li>
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Раздел настройки горячих клавиш разделён на две группы: действия с окнами и перемещение между дисплеями</li>
-<li>Горячие клавиши перемещения между дисплеями теперь только глобальные; поддержка локальных сочетаний клавиш и соответствующие настройки удалены</li>
-<li>На macOS 26 (Tahoe) кнопки панели инструментов, кнопка «Выйти», кнопки панели действий и кнопка раскрывающегося меню теперь используют интерактивный эффект Liquid Glass в соответствии с Human Interface Guidelines</li>
-<li>Цвет фона окна заменён на системный цвет фона для лучшей совместимости с изменениями оформления macOS</li>
-<li>Смещённые окна теперь возвращаются на исходные позиции с анимацией при подтверждении выбора, применении макета или отмене с помощью Escape</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Os atalhos de teclado para "Selecionar próxima janela", "Selecionar janela anterior", "Trazer para frente" e "Fechar/Sair" agora podem ser configurados na seção de atalhos das preferências</li>
-<li>Novo item de menu de contexto "Fechar outras janelas de [App]" ao clicar com o botão direito em uma janela na barra lateral (exibido apenas quando o app tem várias janelas)</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A seção de configuração de atalhos foi reorganizada em dois grupos: atalhos de ação de janela e atalhos de movimento de monitor</li>
-<li>Os atalhos de movimento de monitor agora são apenas globais; o suporte a atalhos locais e suas opções de configuração foram removidos</li>
-<li>No macOS 26 (Tahoe), os botões da barra de ferramentas, o botão Sair, os botões da barra de ações e o botão de menu suspenso agora usam o efeito interativo do Liquid Glass, seguindo as Human Interface Guidelines</li>
-<li>A cor de fundo da janela agora usa a cor do sistema para melhor compatibilidade com as mudanças de aparência do macOS</li>
-<li>As janelas deslocadas agora retornam à posição original com animação ao confirmar uma seleção, aplicar um layout ou cancelar com Escape</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>I tasti di scelta rapida per "Seleziona finestra successiva", "Seleziona finestra precedente", "Porta in primo piano" e "Chiudi/Esci" sono ora configurabili nella sezione scorciatoie delle preferenze</li>
-<li>Nuova voce di menu contestuale "Chiudi le altre finestre di [App]" facendo clic destro su una finestra nella barra laterale (visibile solo quando l'app ha più finestre)</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La sezione di configurazione delle scorciatoie è stata riorganizzata in due gruppi: scorciatoie per le azioni sulle finestre e scorciatoie per lo spostamento del display</li>
-<li>Le scorciatoie per lo spostamento del display sono ora solo globali; il supporto per le scorciatoie locali e le relative opzioni di configurazione sono stati rimossi</li>
-<li>Su macOS 26 (Tahoe), i pulsanti della barra degli strumenti, il pulsante Esci, i pulsanti della barra delle azioni e il pulsante del menu a discesa utilizzano ora l'effetto Liquid Glass interattivo, in conformità con le Human Interface Guidelines</li>
-<li>Il colore di sfondo della finestra ora usa il colore di sistema per una migliore compatibilità con le modifiche all'aspetto di macOS</li>
-<li>Le finestre spostate tornano ora alla posizione originale con un'animazione quando si conferma una selezione, si applica un layout o si annulla con Escape</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Les raccourcis clavier pour « Fenêtre suivante », « Fenêtre précédente », « Mettre au premier plan » et « Fermer/Quitter » sont désormais configurables dans la section des raccourcis des préférences</li>
-<li>Nouvel élément de menu contextuel « Fermer les autres fenêtres de [App] » lors d'un clic droit sur une fenêtre dans la barre latérale (affiché uniquement lorsque l'app a plusieurs fenêtres)</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La section de configuration des raccourcis a été réorganisée en deux groupes : les raccourcis d'action sur les fenêtres et les raccourcis de déplacement d'écran</li>
-<li>Les raccourcis de déplacement d'écran sont désormais uniquement globaux ; le support des raccourcis locaux et leurs options de configuration ont été supprimés</li>
-<li>Sur macOS 26 (Tahoe), les boutons de la barre d'outils, le bouton Quitter, les boutons de la barre d'actions et le bouton de menu déroulant utilisent désormais l'effet Liquid Glass interactif, conformément aux Human Interface Guidelines</li>
-<li>La couleur de fond de la fenêtre utilise maintenant la couleur système pour une meilleure compatibilité avec les changements d'apparence de macOS</li>
-<li>Les fenêtres déplacées reviennent désormais à leur position d'origine avec une animation lors de la confirmation d'une sélection, de l'application d'une disposition ou de l'annulation avec Échap</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Los atajos de teclado para "Seleccionar siguiente ventana", "Seleccionar ventana anterior", "Traer al frente" y "Cerrar/Salir" ahora se pueden configurar en la sección de atajos de las preferencias</li>
-<li>Nuevo elemento de menú contextual "Cerrar otras ventanas de [App]" al hacer clic derecho en una ventana de la barra lateral (solo visible cuando la app tiene varias ventanas)</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La sección de configuración de atajos ha sido reorganizada en dos grupos: atajos de acción de ventana y atajos de movimiento de pantalla</li>
-<li>Los atajos de movimiento de pantalla ahora son solo globales; se eliminó el soporte de atajos locales y sus opciones de configuración</li>
-<li>En macOS 26 (Tahoe), los botones de la barra de herramientas, el botón de salir, los botones de la barra de acciones y el botón de menú desplegable usan el efecto interactivo de Liquid Glass, siguiendo las Human Interface Guidelines</li>
-<li>El color de fondo de la ventana ahora usa el color del sistema para mayor compatibilidad con los cambios de apariencia de macOS</li>
-<li>Las ventanas desplazadas ahora regresan a su posición original con animación al confirmar una selección, aplicar un diseño o cancelar con Escape</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Die Tastenkürzel für „Nächstes Fenster auswählen", „Vorheriges Fenster auswählen", „In den Vordergrund" und „Schließen/Beenden" können jetzt in den Einstellungen konfiguriert werden</li>
-<li>Neuer Kontextmenüeintrag „Andere Fenster von [App] schließen" beim Rechtsklick auf ein Fenster in der Seitenleiste (nur sichtbar, wenn die App mehrere Fenster hat)</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Der Bereich für Tastenkürzel wurde in zwei Gruppen unterteilt: Fensterbefehle und Anzeige-Bewegungen</li>
-<li>Anzeige-Bewegungskürzel sind jetzt nur noch global; lokale Tastenkürzel und deren Einstellungen wurden entfernt</li>
-<li>Auf macOS 26 (Tahoe) verwenden Symbolleisten-Schaltflächen, Beenden-Schaltfläche, Aktionsleisten-Schaltflächen und Dropdown-Menü-Schaltflächen den interaktiven Liquid Glass-Effekt gemäß den Human Interface Guidelines</li>
-<li>Fensterhintergrundfarbe wurde auf die System-Fensterhintergrundfarbe umgestellt, um die Kompatibilität mit macOS-Erscheinungsänderungen zu verbessern</li>
-<li>Verschobene Fenster kehren nun beim Bestätigen einer Auswahl, Anwenden eines Layouts oder Abbrechen mit Escape animiert an ihre ursprüngliche Position zurück</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>現可在偏好設定的快捷鍵部分中設定「選擇下一個視窗」、「選擇上一個視窗」、「移至最前面」和「關閉/結束」的快捷鍵</li>
-<li>在側邊欄右鍵點擊視窗時新增「關閉[應用程式名稱]的其他視窗」選單項目（僅在應用程式有多個視窗時顯示）</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>快捷鍵設定介面已重組為兩個群組：視窗操作快捷鍵和顯示器移動快捷鍵</li>
-<li>顯示器移動快捷鍵改為僅支援全域快捷鍵，移除了區域快捷鍵支援和相關設定項目</li>
-<li>在 macOS 26（Tahoe）上，工具列按鈕、結束按鈕、操作列按鈕及下拉選單按鈕現在使用 Liquid Glass 互動效果（符合人機介面指引）</li>
-<li>視窗背景色改為使用系統視窗背景色，以提升與 macOS 外觀變更的相容性</li>
-<li>確認選擇、套用佈局或按 Esc 取消時，被移開的視窗現在會以動畫方式返回原位</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>现可在偏好设置的快捷键部分中配置"选择下一个窗口"、"选择上一个窗口"、"移至前台"和"关闭/退出"的快捷键</li>
-<li>在侧栏右键点击窗口时新增"关闭[应用名称]的其他窗口"菜单项（仅在应用有多个窗口时显示）</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>快捷键设置界面已重组为两个分组：窗口操作快捷键和显示器移动快捷键</li>
-<li>显示器移动快捷键改为仅支持全局快捷键，移除了本地快捷键支持和相关设置项</li>
-<li>在 macOS 26（Tahoe）上，工具栏按钮、退出按钮、操作栏按钮及下拉菜单按钮现在使用 Liquid Glass 交互效果（符合人机界面指南）</li>
-<li>窗口背景色改为使用系统窗口背景色，以提高与 macOS 外观变化的兼容性</li>
-<li>确认选择、应用布局或按 Esc 取消时，被移开的窗口现在会以动画方式返回原位</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>다음 창 선택, 이전 창 선택, 최전면으로 가져오기, 닫기/종료 단축키를 환경설정의 단축키 섹션에서 설정할 수 있게 됨</li>
-<li>사이드바에서 창을 오른쪽 클릭할 때 "[앱 이름]의 다른 윈도우 닫기" 컨텍스트 메뉴 항목 추가 (앱에 여러 창이 있을 때만 표시)</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>단축키 설정 화면을 창 동작 단축키와 디스플레이 이동 단축키 두 그룹으로 재구성함</li>
-<li>디스플레이 이동 단축키를 글로벌 전용으로 변경하고, 로컬 단축키 지원 및 설정 항목을 제거함</li>
-<li>macOS 26(Tahoe)에서 툴바 버튼, 종료 버튼, 액션 바 버튼, 드롭다운 메뉴 버튼에 Liquid Glass 인터랙티브 효과를 적용함(휴먼 인터페이스 가이드라인 준수)</li>
-<li>윈도우 배경색을 시스템 윈도우 배경색으로 변경하여 macOS 외관 변경과의 호환성을 개선함</li>
-<li>창 선택 확정, 레이아웃 적용 또는 Esc 취소 시 대피된 창이 애니메이션으로 원래 위치로 되돌아가도록 함</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>「次のウインドウを選択」「前のウインドウを選択」「最前面へ」「閉じる/終了」のショートカットを設定画面で変更できるようになった</li>
-<li>サイドバーでウインドウを右クリックしたときに「○○の他のウインドウを閉じる」メニューを追加（アプリが複数のウインドウを持つ場合のみ表示）</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>ショートカット設定セクションを整理し、ウインドウ操作ショートカットとディスプレイ移動ショートカットを別々のグループカードに分けて表示するようにした</li>
-<li>ディスプレイ移動ショートカットをグローバル専用に変更し、ローカルショートカットのサポートと設定項目を削除した</li>
-<li>macOS 26（Tahoe）でツールバーボタン・終了ボタン・アクションバーボタン・ドロップダウンメニューボタンにLiquid Glassのインタラクティブエフェクトを適用した（ヒューマンインタフェースガイドライン準拠）</li>
-<li>ウインドウ背景色をシステムのウインドウ背景色に変更し、macOSの外観変更との互換性を向上させた</li>
-<li>ウインドウの選択確定・レイアウト適用・Escキャンセル時に、待避していたウインドウがアニメーションで元の位置に戻るようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Shortcuts for "Select Next Window", "Select Previous Window", "Bring to Front", and "Close / Quit" are now configurable in the Shortcuts settings</li>
-<li>Added "Close other windows of [App]" context menu item when right-clicking a window in the sidebar (shown only when the app has multiple windows)</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Reorganized the Shortcuts settings section: window action shortcuts and display movement shortcuts are now grouped separately, each in their own card</li>
-<li>Display movement shortcuts are now global-only; removed local shortcut support and settings for display movement actions</li>
-<li>Updated toolbar buttons, quit button, action bar buttons, and dropdown menu button to use Liquid Glass interactive effect on macOS 26 (Tahoe), following the Human Interface Guidelines</li>
-<li>Window background now uses the system window background color for better compatibility with macOS appearance changes</li>
-<li>Displaced windows now animate back to their original positions when confirming a selection, applying a layout, or canceling with Escape</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Os atalhos de teclado para "Selecionar próxima janela", "Selecionar janela anterior", "Trazer para frente" e "Fechar/Sair" agora podem ser configurados na seção de atalhos das preferências</li>
-<li>Novo item de menu de contexto "Fechar outras janelas de [App]" ao clicar com o botão direito em uma janela na barra lateral (exibido apenas quando o app tem várias janelas)</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A seção de configuração de atalhos foi reorganizada em dois grupos: atalhos de ação de janela e atalhos de movimento de monitor</li>
-<li>Os atalhos de movimento de monitor agora são apenas globais; o suporte a atalhos locais e suas opções de configuração foram removidos</li>
-<li>No macOS 26 (Tahoe), os botões da barra de ferramentas, o botão Sair, os botões da barra de ações e o botão de menu suspenso agora usam o efeito interativo do Liquid Glass, seguindo as Human Interface Guidelines</li>
-<li>A cor de fundo da janela agora usa a cor do sistema para melhor compatibilidade com as mudanças de aparência do macOS</li>
-<li>As janelas deslocadas agora retornam à posição original com animação ao confirmar uma seleção, aplicar um layout ou cancelar com Escape</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>I tasti di scelta rapida per "Seleziona finestra successiva", "Seleziona finestra precedente", "Porta in primo piano" e "Chiudi/Esci" sono ora configurabili nella sezione scorciatoie delle preferenze</li>
-<li>Nuova voce di menu contestuale "Chiudi le altre finestre di [App]" facendo clic destro su una finestra nella barra laterale (visibile solo quando l'app ha più finestre)</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La sezione di configurazione delle scorciatoie è stata riorganizzata in due gruppi: scorciatoie per le azioni sulle finestre e scorciatoie per lo spostamento del display</li>
-<li>Le scorciatoie per lo spostamento del display sono ora solo globali; il supporto per le scorciatoie locali e le relative opzioni di configurazione sono stati rimossi</li>
-<li>Su macOS 26 (Tahoe), i pulsanti della barra degli strumenti, il pulsante Esci, i pulsanti della barra delle azioni e il pulsante del menu a discesa utilizzano ora l'effetto Liquid Glass interattivo, in conformità con le Human Interface Guidelines</li>
-<li>Il colore di sfondo della finestra ora usa il colore di sistema per una migliore compatibilità con le modifiche all'aspetto di macOS</li>
-<li>Le finestre spostate tornano ora alla posizione originale con un'animazione quando si conferma una selezione, si applica un layout o si annulla con Escape</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Les raccourcis clavier pour « Fenêtre suivante », « Fenêtre précédente », « Mettre au premier plan » et « Fermer/Quitter » sont désormais configurables dans la section des raccourcis des préférences</li>
-<li>Nouvel élément de menu contextuel « Fermer les autres fenêtres de [App] » lors d'un clic droit sur une fenêtre dans la barre latérale (affiché uniquement lorsque l'app a plusieurs fenêtres)</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La section de configuration des raccourcis a été réorganisée en deux groupes : les raccourcis d'action sur les fenêtres et les raccourcis de déplacement d'écran</li>
-<li>Les raccourcis de déplacement d'écran sont désormais uniquement globaux ; le support des raccourcis locaux et leurs options de configuration ont été supprimés</li>
-<li>Sur macOS 26 (Tahoe), les boutons de la barre d'outils, le bouton Quitter, les boutons de la barre d'actions et le bouton de menu déroulant utilisent désormais l'effet Liquid Glass interactif, conformément aux Human Interface Guidelines</li>
-<li>La couleur de fond de la fenêtre utilise maintenant la couleur système pour une meilleure compatibilité avec les changements d'apparence de macOS</li>
-<li>Les fenêtres déplacées reviennent désormais à leur position d'origine avec une animation lors de la confirmation d'une sélection, de l'application d'une disposition ou de l'annulation avec Échap</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Los atajos de teclado para "Seleccionar siguiente ventana", "Seleccionar ventana anterior", "Traer al frente" y "Cerrar/Salir" ahora se pueden configurar en la sección de atajos de las preferencias</li>
-<li>Nuevo elemento de menú contextual "Cerrar otras ventanas de [App]" al hacer clic derecho en una ventana de la barra lateral (solo visible cuando la app tiene varias ventanas)</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La sección de configuración de atajos ha sido reorganizada en dos grupos: atajos de acción de ventana y atajos de movimiento de pantalla</li>
-<li>Los atajos de movimiento de pantalla ahora son solo globales; se eliminó el soporte de atajos locales y sus opciones de configuración</li>
-<li>En macOS 26 (Tahoe), los botones de la barra de herramientas, el botón de salir, los botones de la barra de acciones y el botón de menú desplegable usan el efecto interactivo de Liquid Glass, siguiendo las Human Interface Guidelines</li>
-<li>El color de fondo de la ventana ahora usa el color del sistema para mayor compatibilidad con los cambios de apariencia de macOS</li>
-<li>Las ventanas desplazadas ahora regresan a su posición original con animación al confirmar una selección, aplicar un diseño o cancelar con Escape</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Die Tastenkürzel für „Nächstes Fenster auswählen", „Vorheriges Fenster auswählen", „In den Vordergrund" und „Schließen/Beenden" können jetzt in den Einstellungen konfiguriert werden</li>
-<li>Neuer Kontextmenüeintrag „Andere Fenster von [App] schließen" beim Rechtsklick auf ein Fenster in der Seitenleiste (nur sichtbar, wenn die App mehrere Fenster hat)</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Der Bereich für Tastenkürzel wurde in zwei Gruppen unterteilt: Fensterbefehle und Anzeige-Bewegungen</li>
-<li>Anzeige-Bewegungskürzel sind jetzt nur noch global; lokale Tastenkürzel und deren Einstellungen wurden entfernt</li>
-<li>Auf macOS 26 (Tahoe) verwenden Symbolleisten-Schaltflächen, Beenden-Schaltfläche, Aktionsleisten-Schaltflächen und Dropdown-Menü-Schaltflächen den interaktiven Liquid Glass-Effekt gemäß den Human Interface Guidelines</li>
-<li>Fensterhintergrundfarbe wurde auf die System-Fensterhintergrundfarbe umgestellt, um die Kompatibilität mit macOS-Erscheinungsänderungen zu verbessern</li>
-<li>Verschobene Fenster kehren nun beim Bestätigen einer Auswahl, Anwenden eines Layouts oder Abbrechen mit Escape animiert an ihre ursprüngliche Position zurück</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>現可在偏好設定的快捷鍵部分中設定「選擇下一個視窗」、「選擇上一個視窗」、「移至最前面」和「關閉/結束」的快捷鍵</li>
-<li>在側邊欄右鍵點擊視窗時新增「關閉[應用程式名稱]的其他視窗」選單項目（僅在應用程式有多個視窗時顯示）</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>快捷鍵設定介面已重組為兩個群組：視窗操作快捷鍵和顯示器移動快捷鍵</li>
-<li>顯示器移動快捷鍵改為僅支援全域快捷鍵，移除了區域快捷鍵支援和相關設定項目</li>
-<li>在 macOS 26（Tahoe）上，工具列按鈕、結束按鈕、操作列按鈕及下拉選單按鈕現在使用 Liquid Glass 互動效果（符合人機介面指引）</li>
-<li>視窗背景色改為使用系統視窗背景色，以提升與 macOS 外觀變更的相容性</li>
-<li>確認選擇、套用佈局或按 Esc 取消時，被移開的視窗現在會以動畫方式返回原位</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>现可在偏好设置的快捷键部分中配置"选择下一个窗口"、"选择上一个窗口"、"移至前台"和"关闭/退出"的快捷键</li>
-<li>在侧栏右键点击窗口时新增"关闭[应用名称]的其他窗口"菜单项（仅在应用有多个窗口时显示）</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>快捷键设置界面已重组为两个分组：窗口操作快捷键和显示器移动快捷键</li>
-<li>显示器移动快捷键改为仅支持全局快捷键，移除了本地快捷键支持和相关设置项</li>
-<li>在 macOS 26（Tahoe）上，工具栏按钮、退出按钮、操作栏按钮及下拉菜单按钮现在使用 Liquid Glass 交互效果（符合人机界面指南）</li>
-<li>窗口背景色改为使用系统窗口背景色，以提高与 macOS 外观变化的兼容性</li>
-<li>确认选择、应用布局或按 Esc 取消时，被移开的窗口现在会以动画方式返回原位</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>다음 창 선택, 이전 창 선택, 최전면으로 가져오기, 닫기/종료 단축키를 환경설정의 단축키 섹션에서 설정할 수 있게 됨</li>
-<li>사이드바에서 창을 오른쪽 클릭할 때 "[앱 이름]의 다른 윈도우 닫기" 컨텍스트 메뉴 항목 추가 (앱에 여러 창이 있을 때만 표시)</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>단축키 설정 화면을 창 동작 단축키와 디스플레이 이동 단축키 두 그룹으로 재구성함</li>
-<li>디스플레이 이동 단축키를 글로벌 전용으로 변경하고, 로컬 단축키 지원 및 설정 항목을 제거함</li>
-<li>macOS 26(Tahoe)에서 툴바 버튼, 종료 버튼, 액션 바 버튼, 드롭다운 메뉴 버튼에 Liquid Glass 인터랙티브 효과를 적용함(휴먼 인터페이스 가이드라인 준수)</li>
-<li>윈도우 배경색을 시스템 윈도우 배경색으로 변경하여 macOS 외관 변경과의 호환성을 개선함</li>
-<li>창 선택 확정, 레이아웃 적용 또는 Esc 취소 시 대피된 창이 애니메이션으로 원래 위치로 되돌아가도록 함</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>「次のウインドウを選択」「前のウインドウを選択」「最前面へ」「閉じる/終了」のショートカットを設定画面で変更できるようになった</li>
-<li>サイドバーでウインドウを右クリックしたときに「○○の他のウインドウを閉じる」メニューを追加（アプリが複数のウインドウを持つ場合のみ表示）</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>ショートカット設定セクションを整理し、ウインドウ操作ショートカットとディスプレイ移動ショートカットを別々のグループカードに分けて表示するようにした</li>
-<li>ディスプレイ移動ショートカットをグローバル専用に変更し、ローカルショートカットのサポートと設定項目を削除した</li>
-<li>macOS 26（Tahoe）でツールバーボタン・終了ボタン・アクションバーボタン・ドロップダウンメニューボタンにLiquid Glassのインタラクティブエフェクトを適用した（ヒューマンインタフェースガイドライン準拠）</li>
-<li>ウインドウ背景色をシステムのウインドウ背景色に変更し、macOSの外観変更との互換性を向上させた</li>
-<li>ウインドウの選択確定・レイアウト適用・Escキャンセル時に、待避していたウインドウがアニメーションで元の位置に戻るようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Shortcuts for "Select Next Window", "Select Previous Window", "Bring to Front", and "Close / Quit" are now configurable in the Shortcuts settings</li>
-<li>Added "Close other windows of [App]" context menu item when right-clicking a window in the sidebar (shown only when the app has multiple windows)</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Reorganized the Shortcuts settings section: window action shortcuts and display movement shortcuts are now grouped separately, each in their own card</li>
-<li>Display movement shortcuts are now global-only; removed local shortcut support and settings for display movement actions</li>
-<li>Updated toolbar buttons, quit button, action bar buttons, and dropdown menu button to use Liquid Glass interactive effect on macOS 26 (Tahoe), following the Human Interface Guidelines</li>
-<li>Window background now uses the system window background color for better compatibility with macOS appearance changes</li>
-<li>Displaced windows now animate back to their original positions when confirming a selection, applying a layout, or canceling with Escape</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Os atalhos de teclado para "Selecionar próxima janela", "Selecionar janela anterior", "Trazer para frente" e "Fechar/Sair" agora podem ser configurados na seção de atalhos das preferências</li>
-<li>Novo item de menu de contexto "Fechar outras janelas de [App]" ao clicar com o botão direito em uma janela na barra lateral (exibido apenas quando o app tem várias janelas)</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A seção de configuração de atalhos foi reorganizada em dois grupos: atalhos de ação de janela e atalhos de movimento de monitor</li>
-<li>Os atalhos de movimento de monitor agora são apenas globais; o suporte a atalhos locais e suas opções de configuração foram removidos</li>
-<li>No macOS 26 (Tahoe), os botões da barra de ferramentas, o botão Sair, os botões da barra de ações e o botão de menu suspenso agora usam o efeito interativo do Liquid Glass, seguindo as Human Interface Guidelines</li>
-<li>A cor de fundo da janela agora usa a cor do sistema para melhor compatibilidade com as mudanças de aparência do macOS</li>
-<li>As janelas deslocadas agora retornam à posição original com animação ao confirmar uma seleção, aplicar um layout ou cancelar com Escape</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>I tasti di scelta rapida per "Seleziona finestra successiva", "Seleziona finestra precedente", "Porta in primo piano" e "Chiudi/Esci" sono ora configurabili nella sezione scorciatoie delle preferenze</li>
-<li>Nuova voce di menu contestuale "Chiudi le altre finestre di [App]" facendo clic destro su una finestra nella barra laterale (visibile solo quando l'app ha più finestre)</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>La sezione di configurazione delle scorciatoie è stata riorganizzata in due gruppi: scorciatoie per le azioni sulle finestre e scorciatoie per lo spostamento del display</li>
-<li>Le scorciatoie per lo spostamento del display sono ora solo globali; il supporto per le scorciatoie locali e le relative opzioni di configurazione sono stati rimossi</li>
-<li>Su macOS 26 (Tahoe), i pulsanti della barra degli strumenti, il pulsante Esci, i pulsanti della barra delle azioni e il pulsante del menu a discesa utilizzano ora l'effetto Liquid Glass interattivo, in conformità con le Human Interface Guidelines</li>
-<li>Il colore di sfondo della finestra ora usa il colore di sistema per una migliore compatibilità con le modifiche all'aspetto di macOS</li>
-<li>Le finestre spostate tornano ora alla posizione originale con un'animazione quando si conferma una selezione, si applica un layout o si annulla con Escape</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Les raccourcis clavier pour « Fenêtre suivante », « Fenêtre précédente », « Mettre au premier plan » et « Fermer/Quitter » sont désormais configurables dans la section des raccourcis des préférences</li>
-<li>Nouvel élément de menu contextuel « Fermer les autres fenêtres de [App] » lors d'un clic droit sur une fenêtre dans la barre latérale (affiché uniquement lorsque l'app a plusieurs fenêtres)</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>La section de configuration des raccourcis a été réorganisée en deux groupes : les raccourcis d'action sur les fenêtres et les raccourcis de déplacement d'écran</li>
-<li>Les raccourcis de déplacement d'écran sont désormais uniquement globaux ; le support des raccourcis locaux et leurs options de configuration ont été supprimés</li>
-<li>Sur macOS 26 (Tahoe), les boutons de la barre d'outils, le bouton Quitter, les boutons de la barre d'actions et le bouton de menu déroulant utilisent désormais l'effet Liquid Glass interactif, conformément aux Human Interface Guidelines</li>
-<li>La couleur de fond de la fenêtre utilise maintenant la couleur système pour une meilleure compatibilité avec les changements d'apparence de macOS</li>
-<li>Les fenêtres déplacées reviennent désormais à leur position d'origine avec une animation lors de la confirmation d'une sélection, de l'application d'une disposition ou de l'annulation avec Échap</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Los atajos de teclado para "Seleccionar siguiente ventana", "Seleccionar ventana anterior", "Traer al frente" y "Cerrar/Salir" ahora se pueden configurar en la sección de atajos de las preferencias</li>
-<li>Nuevo elemento de menú contextual "Cerrar otras ventanas de [App]" al hacer clic derecho en una ventana de la barra lateral (solo visible cuando la app tiene varias ventanas)</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>La sección de configuración de atajos ha sido reorganizada en dos grupos: atajos de acción de ventana y atajos de movimiento de pantalla</li>
-<li>Los atajos de movimiento de pantalla ahora son solo globales; se eliminó el soporte de atajos locales y sus opciones de configuración</li>
-<li>En macOS 26 (Tahoe), los botones de la barra de herramientas, el botón de salir, los botones de la barra de acciones y el botón de menú desplegable usan el efecto interactivo de Liquid Glass, siguiendo las Human Interface Guidelines</li>
-<li>El color de fondo de la ventana ahora usa el color del sistema para mayor compatibilidad con los cambios de apariencia de macOS</li>
-<li>Las ventanas desplazadas ahora regresan a su posición original con animación al confirmar una selección, aplicar un diseño o cancelar con Escape</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Die Tastenkürzel für „Nächstes Fenster auswählen", „Vorheriges Fenster auswählen", „In den Vordergrund" und „Schließen/Beenden" können jetzt in den Einstellungen konfiguriert werden</li>
-<li>Neuer Kontextmenüeintrag „Andere Fenster von [App] schließen" beim Rechtsklick auf ein Fenster in der Seitenleiste (nur sichtbar, wenn die App mehrere Fenster hat)</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Der Bereich für Tastenkürzel wurde in zwei Gruppen unterteilt: Fensterbefehle und Anzeige-Bewegungen</li>
-<li>Anzeige-Bewegungskürzel sind jetzt nur noch global; lokale Tastenkürzel und deren Einstellungen wurden entfernt</li>
-<li>Auf macOS 26 (Tahoe) verwenden Symbolleisten-Schaltflächen, Beenden-Schaltfläche, Aktionsleisten-Schaltflächen und Dropdown-Menü-Schaltflächen den interaktiven Liquid Glass-Effekt gemäß den Human Interface Guidelines</li>
-<li>Fensterhintergrundfarbe wurde auf die System-Fensterhintergrundfarbe umgestellt, um die Kompatibilität mit macOS-Erscheinungsänderungen zu verbessern</li>
-<li>Verschobene Fenster kehren nun beim Bestätigen einer Auswahl, Anwenden eines Layouts oder Abbrechen mit Escape animiert an ihre ursprüngliche Position zurück</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>現可在偏好設定的快捷鍵部分中設定「選擇下一個視窗」、「選擇上一個視窗」、「移至最前面」和「關閉/結束」的快捷鍵</li>
-<li>在側邊欄右鍵點擊視窗時新增「關閉[應用程式名稱]的其他視窗」選單項目（僅在應用程式有多個視窗時顯示）</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>快捷鍵設定介面已重組為兩個群組：視窗操作快捷鍵和顯示器移動快捷鍵</li>
-<li>顯示器移動快捷鍵改為僅支援全域快捷鍵，移除了區域快捷鍵支援和相關設定項目</li>
-<li>在 macOS 26（Tahoe）上，工具列按鈕、結束按鈕、操作列按鈕及下拉選單按鈕現在使用 Liquid Glass 互動效果（符合人機介面指引）</li>
-<li>視窗背景色改為使用系統視窗背景色，以提升與 macOS 外觀變更的相容性</li>
-<li>確認選擇、套用佈局或按 Esc 取消時，被移開的視窗現在會以動畫方式返回原位</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>现可在偏好设置的快捷键部分中配置"选择下一个窗口"、"选择上一个窗口"、"移至前台"和"关闭/退出"的快捷键</li>
-<li>在侧栏右键点击窗口时新增"关闭[应用名称]的其他窗口"菜单项（仅在应用有多个窗口时显示）</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>快捷键设置界面已重组为两个分组：窗口操作快捷键和显示器移动快捷键</li>
-<li>显示器移动快捷键改为仅支持全局快捷键，移除了本地快捷键支持和相关设置项</li>
-<li>在 macOS 26（Tahoe）上，工具栏按钮、退出按钮、操作栏按钮及下拉菜单按钮现在使用 Liquid Glass 交互效果（符合人机界面指南）</li>
-<li>窗口背景色改为使用系统窗口背景色，以提高与 macOS 外观变化的兼容性</li>
-<li>确认选择、应用布局或按 Esc 取消时，被移开的窗口现在会以动画方式返回原位</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>다음 창 선택, 이전 창 선택, 최전면으로 가져오기, 닫기/종료 단축키를 환경설정의 단축키 섹션에서 설정할 수 있게 됨</li>
-<li>사이드바에서 창을 오른쪽 클릭할 때 "[앱 이름]의 다른 윈도우 닫기" 컨텍스트 메뉴 항목 추가 (앱에 여러 창이 있을 때만 표시)</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>단축키 설정 화면을 창 동작 단축키와 디스플레이 이동 단축키 두 그룹으로 재구성함</li>
-<li>디스플레이 이동 단축키를 글로벌 전용으로 변경하고, 로컬 단축키 지원 및 설정 항목을 제거함</li>
-<li>macOS 26(Tahoe)에서 툴바 버튼, 종료 버튼, 액션 바 버튼, 드롭다운 메뉴 버튼에 Liquid Glass 인터랙티브 효과를 적용함(휴먼 인터페이스 가이드라인 준수)</li>
-<li>윈도우 배경색을 시스템 윈도우 배경색으로 변경하여 macOS 외관 변경과의 호환성을 개선함</li>
-<li>창 선택 확정, 레이아웃 적용 또는 Esc 취소 시 대피된 창이 애니메이션으로 원래 위치로 되돌아가도록 함</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>「次のウインドウを選択」「前のウインドウを選択」「最前面へ」「閉じる/終了」のショートカットを設定画面で変更できるようになった</li>
-<li>サイドバーでウインドウを右クリックしたときに「○○の他のウインドウを閉じる」メニューを追加（アプリが複数のウインドウを持つ場合のみ表示）</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>ショートカット設定セクションを整理し、ウインドウ操作ショートカットとディスプレイ移動ショートカットを別々のグループカードに分けて表示するようにした</li>
-<li>ディスプレイ移動ショートカットをグローバル専用に変更し、ローカルショートカットのサポートと設定項目を削除した</li>
-<li>macOS 26（Tahoe）でツールバーボタン・終了ボタン・アクションバーボタン・ドロップダウンメニューボタンにLiquid Glassのインタラクティブエフェクトを適用した（ヒューマンインタフェースガイドライン準拠）</li>
-<li>ウインドウ背景色をシステムのウインドウ背景色に変更し、macOSの外観変更との互換性を向上させた</li>
-<li>ウインドウの選択確定・レイアウト適用・Escキャンセル時に、待避していたウインドウがアニメーションで元の位置に戻るようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Shortcuts for "Select Next Window", "Select Previous Window", "Bring to Front", and "Close / Quit" are now configurable in the Shortcuts settings</li>
-<li>Added "Close other windows of [App]" context menu item when right-clicking a window in the sidebar (shown only when the app has multiple windows)</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Reorganized the Shortcuts settings section: window action shortcuts and display movement shortcuts are now grouped separately, each in their own card</li>
-<li>Display movement shortcuts are now global-only; removed local shortcut support and settings for display movement actions</li>
-<li>Updated toolbar buttons, quit button, action bar buttons, and dropdown menu button to use Liquid Glass interactive effect on macOS 26 (Tahoe), following the Human Interface Guidelines</li>
-<li>Window background now uses the system window background color for better compatibility with macOS appearance changes</li>
-<li>Displaced windows now animate back to their original positions when confirming a selection, applying a layout, or canceling with Escape</li>
-</ul>]]></description>
-            <pubDate>Sat, 28 Mar 2026 11:10:50 +0900</pubDate>
-            <sparkle:version>332</sparkle:version>
-            <sparkle:shortVersionString>3.3.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley-3.3.2.zip" length="5500295" type="application/octet-stream" sparkle:edSignature="tFLiM3K5KFFk9bfpZhtk349UH+JIc4RRsEEZ0ZP8L/Fnj9fQLXP1/ySQQ/w43yrMgE8NRHi4IsHdgIMYezPvDA=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-331.delta" sparkle:deltaFrom="331" length="400670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TfNhTZoXwrXQQpP9OEaQWMM2NsRTiGZ5xAYWYr2ui7FiItFvDKqrb811pmVfdespNzZoM1QtINS4uOidBrXVCA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-330.delta" sparkle:deltaFrom="330" length="450890" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="4Swks1NRd3FDncFnnzF2x5HPD2hTQ9360sQVPlmj1KkzDeep55MloZp13LPAGTU+aYefjCvWc7Gcq+43/uuxBQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-329.delta" sparkle:deltaFrom="329" length="472558" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="KXcOlck4/YiAhI6gIIjhmjbF5DrcOoQXbVzV+WKYJ7Z9d+pUSoVPusmzY4hvP/r2QbNLLM2t8sAPJ13iOxCeCA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-328.delta" sparkle:deltaFrom="328" length="477906" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="A0v27peXBC0mVen2lb0hTCv7S3+y1LJkuzXO0V0rjsT+aqgil/IXzZfR/7GNyZG1ferFxQGn6y5Hkn78DU9cBQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-327.delta" sparkle:deltaFrom="327" length="478182" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kkitRobz5JysQYj+Op0hJs1xj6W99Pfrluu3rz83ZfRGtZaPJtMpzy1gZNjSEaje4yOlo1Ua4IRtY2i/vDyfCg=="/>
             </sparkle:deltas>
         </item>
     </channel>
