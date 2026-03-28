@@ -103,6 +103,8 @@ struct LayoutGridWorkspaceView: View {
                 ForEach(Array(committedSelections.enumerated()), id: \.offset) { index, sel in
                     let norm = sel.normalized
                     let selRect = rectForSelection(norm, cellWidth: cellWidth, cellHeight: cellHeight)
+                        .insetBy(dx: committedSelections.count > 1 ? 1 : 0,
+                                 dy: committedSelections.count > 1 ? 1 : 0)
                     let fill = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
                     let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
                     committedSelectionRectangle(
@@ -118,17 +120,23 @@ struct LayoutGridWorkspaceView: View {
 
                 // Multiple highlight rectangles (preset hover with secondary selections)
                 if !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty {
+                    let showHighlightIndex = highlightSelections.count > 1
+                    let multiInset: CGFloat = highlightSelections.count > 1 ? 1 : 0
                     ForEach(Array(highlightSelections.enumerated()), id: \.offset) { index, sel in
                         let norm = sel.normalized
                         let selRect = rectForSelection(norm, cellWidth: cellWidth, cellHeight: cellHeight)
+                            .insetBy(dx: multiInset, dy: multiInset)
                         let fill = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
                         let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
-                        selectionRectangle(
+                        committedSelectionRectangle(
+                            index: index,
                             sel: norm, selRect: selRect,
                             cellWidth: cellWidth, cellHeight: cellHeight,
                             cornerRadius: cellCornerRadius,
                             fill: fill, border: border,
-                            divider: border.opacity(0.3)
+                            divider: border.opacity(0.3),
+                            showIndex: showHighlightIndex,
+                            showDelete: false
                         )
                     }
                 }
@@ -384,6 +392,7 @@ struct LayoutGridWorkspaceView: View {
         fill: Color,
         border: Color,
         divider: Color,
+        showIndex: Bool = true,
         showDelete: Bool
     ) -> some View {
         let spanCols = sel.endColumn - sel.startColumn + 1
@@ -417,11 +426,13 @@ struct LayoutGridWorkspaceView: View {
                 )
 
             // Index label centered
-            Text("\(index + 1)")
-                .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-                .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            if showIndex {
+                Text("\(index + 1)")
+                    .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
 
             // Delete button at top-left
             if showDelete {

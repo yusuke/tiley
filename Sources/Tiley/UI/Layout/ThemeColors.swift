@@ -63,7 +63,7 @@ enum ThemeColors {
     }
 
     static func gridCellHighlightBorder(for colorScheme: ColorScheme) -> Color {
-        gridCellSelectedBorder(for: colorScheme)
+        indexedSelectionBorder(index: 0, for: colorScheme)
     }
 
     // MARK: - Grid Preview (Settings)
@@ -227,40 +227,31 @@ enum ThemeColors {
 
     // MARK: - Multi-Selection Palette
 
-    /// Colors for indexed selections: index 0 = primary (blue), 1+ = secondary palette (green, orange, purple, cycling).
-    private static let secondaryPalette: [(light: (r: Double, g: Double, b: Double), dark: (r: Double, g: Double, b: Double))] = [
+    /// Colors for indexed selections: blue, green, orange, purple (cycling).
+    private static let selectionPalette: [(light: (r: Double, g: Double, b: Double), dark: (r: Double, g: Double, b: Double))] = [
+        (light: (0.16, 0.49, 0.93), dark: (0.22, 0.55, 1.0)),   // blue
         (light: (0.18, 0.70, 0.35), dark: (0.25, 0.75, 0.42)),  // green
         (light: (0.85, 0.52, 0.10), dark: (0.92, 0.60, 0.18)),  // orange
         (light: (0.58, 0.28, 0.78), dark: (0.65, 0.38, 0.85)),  // purple
     ]
 
-    /// Fill for a selection at the given index (0 = primary blue, 1+ = secondary palette).
+    /// Fill for a selection at the given index (cycling through blue, green, orange, purple).
     static func indexedSelectionFill(index: Int, for colorScheme: ColorScheme) -> Color {
-        if index == 0 { return gridCellSelectedFill(for: colorScheme) }
-        let pal = secondaryPalette[(index - 1) % secondaryPalette.count]
+        let pal = selectionPalette[index % selectionPalette.count]
         let c = colorScheme == .dark ? pal.dark : pal.light
         return Color(red: c.r, green: c.g, blue: c.b).opacity(0.45)
     }
 
     /// Border for a selection at the given index.
     static func indexedSelectionBorder(index: Int, for colorScheme: ColorScheme) -> Color {
-        if index == 0 {
-            switch colorScheme {
-            case .dark:
-                return Color(red: 0.22, green: 0.55, blue: 1.0).opacity(0.70)
-            default:
-                return Color(red: 0.16, green: 0.49, blue: 0.93).opacity(0.80)
-            }
-        }
-        let pal = secondaryPalette[(index - 1) % secondaryPalette.count]
+        let pal = selectionPalette[index % selectionPalette.count]
         let c = colorScheme == .dark ? pal.dark : pal.light
         return Color(red: c.r, green: c.g, blue: c.b).opacity(colorScheme == .dark ? 0.70 : 0.80)
     }
 
     /// Preset grid thumbnail fill for a selection at the given index.
     static func indexedPresetGridFill(index: Int, for colorScheme: ColorScheme) -> Color {
-        if index == 0 { return Color.accentColor }
-        let pal = secondaryPalette[(index - 1) % secondaryPalette.count]
+        let pal = selectionPalette[index % selectionPalette.count]
         let c = colorScheme == .dark ? pal.dark : pal.light
         return Color(red: c.r, green: c.g, blue: c.b)
     }
