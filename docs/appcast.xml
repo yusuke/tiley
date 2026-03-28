@@ -3,6 +3,164 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>3.3.2</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Горячие клавиши для «Следующее окно», «Предыдущее окно», «На передний план» и «Закрыть/Выйти» теперь можно настроить в разделе горячих клавиш настроек</li>
+<li>Новый пункт контекстного меню «Закрыть другие окна [Приложения]» при правом клике на окно в боковой панели (отображается только если у приложения несколько окон)</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Раздел настройки горячих клавиш разделён на две группы: действия с окнами и перемещение между дисплеями</li>
+<li>Горячие клавиши перемещения между дисплеями теперь только глобальные; поддержка локальных сочетаний клавиш и соответствующие настройки удалены</li>
+<li>На macOS 26 (Tahoe) кнопки панели инструментов, кнопка «Выйти», кнопки панели действий и кнопка раскрывающегося меню теперь используют интерактивный эффект Liquid Glass в соответствии с Human Interface Guidelines</li>
+<li>Цвет фона окна заменён на системный цвет фона для лучшей совместимости с изменениями оформления macOS</li>
+<li>Смещённые окна теперь возвращаются на исходные позиции с анимацией при подтверждении выбора, применении макета или отмене с помощью Escape</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Os atalhos de teclado para "Selecionar próxima janela", "Selecionar janela anterior", "Trazer para frente" e "Fechar/Sair" agora podem ser configurados na seção de atalhos das preferências</li>
+<li>Novo item de menu de contexto "Fechar outras janelas de [App]" ao clicar com o botão direito em uma janela na barra lateral (exibido apenas quando o app tem várias janelas)</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>A seção de configuração de atalhos foi reorganizada em dois grupos: atalhos de ação de janela e atalhos de movimento de monitor</li>
+<li>Os atalhos de movimento de monitor agora são apenas globais; o suporte a atalhos locais e suas opções de configuração foram removidos</li>
+<li>No macOS 26 (Tahoe), os botões da barra de ferramentas, o botão Sair, os botões da barra de ações e o botão de menu suspenso agora usam o efeito interativo do Liquid Glass, seguindo as Human Interface Guidelines</li>
+<li>A cor de fundo da janela agora usa a cor do sistema para melhor compatibilidade com as mudanças de aparência do macOS</li>
+<li>As janelas deslocadas agora retornam à posição original com animação ao confirmar uma seleção, aplicar um layout ou cancelar com Escape</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>I tasti di scelta rapida per "Seleziona finestra successiva", "Seleziona finestra precedente", "Porta in primo piano" e "Chiudi/Esci" sono ora configurabili nella sezione scorciatoie delle preferenze</li>
+<li>Nuova voce di menu contestuale "Chiudi le altre finestre di [App]" facendo clic destro su una finestra nella barra laterale (visibile solo quando l'app ha più finestre)</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>La sezione di configurazione delle scorciatoie è stata riorganizzata in due gruppi: scorciatoie per le azioni sulle finestre e scorciatoie per lo spostamento del display</li>
+<li>Le scorciatoie per lo spostamento del display sono ora solo globali; il supporto per le scorciatoie locali e le relative opzioni di configurazione sono stati rimossi</li>
+<li>Su macOS 26 (Tahoe), i pulsanti della barra degli strumenti, il pulsante Esci, i pulsanti della barra delle azioni e il pulsante del menu a discesa utilizzano ora l'effetto Liquid Glass interattivo, in conformità con le Human Interface Guidelines</li>
+<li>Il colore di sfondo della finestra ora usa il colore di sistema per una migliore compatibilità con le modifiche all'aspetto di macOS</li>
+<li>Le finestre spostate tornano ora alla posizione originale con un'animazione quando si conferma una selezione, si applica un layout o si annulla con Escape</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Les raccourcis clavier pour « Fenêtre suivante », « Fenêtre précédente », « Mettre au premier plan » et « Fermer/Quitter » sont désormais configurables dans la section des raccourcis des préférences</li>
+<li>Nouvel élément de menu contextuel « Fermer les autres fenêtres de [App] » lors d'un clic droit sur une fenêtre dans la barre latérale (affiché uniquement lorsque l'app a plusieurs fenêtres)</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>La section de configuration des raccourcis a été réorganisée en deux groupes : les raccourcis d'action sur les fenêtres et les raccourcis de déplacement d'écran</li>
+<li>Les raccourcis de déplacement d'écran sont désormais uniquement globaux ; le support des raccourcis locaux et leurs options de configuration ont été supprimés</li>
+<li>Sur macOS 26 (Tahoe), les boutons de la barre d'outils, le bouton Quitter, les boutons de la barre d'actions et le bouton de menu déroulant utilisent désormais l'effet Liquid Glass interactif, conformément aux Human Interface Guidelines</li>
+<li>La couleur de fond de la fenêtre utilise maintenant la couleur système pour une meilleure compatibilité avec les changements d'apparence de macOS</li>
+<li>Les fenêtres déplacées reviennent désormais à leur position d'origine avec une animation lors de la confirmation d'une sélection, de l'application d'une disposition ou de l'annulation avec Échap</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Los atajos de teclado para "Seleccionar siguiente ventana", "Seleccionar ventana anterior", "Traer al frente" y "Cerrar/Salir" ahora se pueden configurar en la sección de atajos de las preferencias</li>
+<li>Nuevo elemento de menú contextual "Cerrar otras ventanas de [App]" al hacer clic derecho en una ventana de la barra lateral (solo visible cuando la app tiene varias ventanas)</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>La sección de configuración de atajos ha sido reorganizada en dos grupos: atajos de acción de ventana y atajos de movimiento de pantalla</li>
+<li>Los atajos de movimiento de pantalla ahora son solo globales; se eliminó el soporte de atajos locales y sus opciones de configuración</li>
+<li>En macOS 26 (Tahoe), los botones de la barra de herramientas, el botón de salir, los botones de la barra de acciones y el botón de menú desplegable usan el efecto interactivo de Liquid Glass, siguiendo las Human Interface Guidelines</li>
+<li>El color de fondo de la ventana ahora usa el color del sistema para mayor compatibilidad con los cambios de apariencia de macOS</li>
+<li>Las ventanas desplazadas ahora regresan a su posición original con animación al confirmar una selección, aplicar un diseño o cancelar con Escape</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Die Tastenkürzel für „Nächstes Fenster auswählen", „Vorheriges Fenster auswählen", „In den Vordergrund" und „Schließen/Beenden" können jetzt in den Einstellungen konfiguriert werden</li>
+<li>Neuer Kontextmenüeintrag „Andere Fenster von [App] schließen" beim Rechtsklick auf ein Fenster in der Seitenleiste (nur sichtbar, wenn die App mehrere Fenster hat)</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Der Bereich für Tastenkürzel wurde in zwei Gruppen unterteilt: Fensterbefehle und Anzeige-Bewegungen</li>
+<li>Anzeige-Bewegungskürzel sind jetzt nur noch global; lokale Tastenkürzel und deren Einstellungen wurden entfernt</li>
+<li>Auf macOS 26 (Tahoe) verwenden Symbolleisten-Schaltflächen, Beenden-Schaltfläche, Aktionsleisten-Schaltflächen und Dropdown-Menü-Schaltflächen den interaktiven Liquid Glass-Effekt gemäß den Human Interface Guidelines</li>
+<li>Fensterhintergrundfarbe wurde auf die System-Fensterhintergrundfarbe umgestellt, um die Kompatibilität mit macOS-Erscheinungsänderungen zu verbessern</li>
+<li>Verschobene Fenster kehren nun beim Bestätigen einer Auswahl, Anwenden eines Layouts oder Abbrechen mit Escape animiert an ihre ursprüngliche Position zurück</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>現可在偏好設定的快捷鍵部分中設定「選擇下一個視窗」、「選擇上一個視窗」、「移至最前面」和「關閉/結束」的快捷鍵</li>
+<li>在側邊欄右鍵點擊視窗時新增「關閉[應用程式名稱]的其他視窗」選單項目（僅在應用程式有多個視窗時顯示）</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>快捷鍵設定介面已重組為兩個群組：視窗操作快捷鍵和顯示器移動快捷鍵</li>
+<li>顯示器移動快捷鍵改為僅支援全域快捷鍵，移除了區域快捷鍵支援和相關設定項目</li>
+<li>在 macOS 26（Tahoe）上，工具列按鈕、結束按鈕、操作列按鈕及下拉選單按鈕現在使用 Liquid Glass 互動效果（符合人機介面指引）</li>
+<li>視窗背景色改為使用系統視窗背景色，以提升與 macOS 外觀變更的相容性</li>
+<li>確認選擇、套用佈局或按 Esc 取消時，被移開的視窗現在會以動畫方式返回原位</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>现可在偏好设置的快捷键部分中配置"选择下一个窗口"、"选择上一个窗口"、"移至前台"和"关闭/退出"的快捷键</li>
+<li>在侧栏右键点击窗口时新增"关闭[应用名称]的其他窗口"菜单项（仅在应用有多个窗口时显示）</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>快捷键设置界面已重组为两个分组：窗口操作快捷键和显示器移动快捷键</li>
+<li>显示器移动快捷键改为仅支持全局快捷键，移除了本地快捷键支持和相关设置项</li>
+<li>在 macOS 26（Tahoe）上，工具栏按钮、退出按钮、操作栏按钮及下拉菜单按钮现在使用 Liquid Glass 交互效果（符合人机界面指南）</li>
+<li>窗口背景色改为使用系统窗口背景色，以提高与 macOS 外观变化的兼容性</li>
+<li>确认选择、应用布局或按 Esc 取消时，被移开的窗口现在会以动画方式返回原位</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>다음 창 선택, 이전 창 선택, 최전면으로 가져오기, 닫기/종료 단축키를 환경설정의 단축키 섹션에서 설정할 수 있게 됨</li>
+<li>사이드바에서 창을 오른쪽 클릭할 때 "[앱 이름]의 다른 윈도우 닫기" 컨텍스트 메뉴 항목 추가 (앱에 여러 창이 있을 때만 표시)</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>단축키 설정 화면을 창 동작 단축키와 디스플레이 이동 단축키 두 그룹으로 재구성함</li>
+<li>디스플레이 이동 단축키를 글로벌 전용으로 변경하고, 로컬 단축키 지원 및 설정 항목을 제거함</li>
+<li>macOS 26(Tahoe)에서 툴바 버튼, 종료 버튼, 액션 바 버튼, 드롭다운 메뉴 버튼에 Liquid Glass 인터랙티브 효과를 적용함(휴먼 인터페이스 가이드라인 준수)</li>
+<li>윈도우 배경색을 시스템 윈도우 배경색으로 변경하여 macOS 외관 변경과의 호환성을 개선함</li>
+<li>창 선택 확정, 레이아웃 적용 또는 Esc 취소 시 대피된 창이 애니메이션으로 원래 위치로 되돌아가도록 함</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>「次のウインドウを選択」「前のウインドウを選択」「最前面へ」「閉じる/終了」のショートカットを設定画面で変更できるようになった</li>
+<li>サイドバーでウインドウを右クリックしたときに「○○の他のウインドウを閉じる」メニューを追加（アプリが複数のウインドウを持つ場合のみ表示）</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>ショートカット設定セクションを整理し、ウインドウ操作ショートカットとディスプレイ移動ショートカットを別々のグループカードに分けて表示するようにした</li>
+<li>ディスプレイ移動ショートカットをグローバル専用に変更し、ローカルショートカットのサポートと設定項目を削除した</li>
+<li>macOS 26（Tahoe）でツールバーボタン・終了ボタン・アクションバーボタン・ドロップダウンメニューボタンにLiquid Glassのインタラクティブエフェクトを適用した（ヒューマンインタフェースガイドライン準拠）</li>
+<li>ウインドウ背景色をシステムのウインドウ背景色に変更し、macOSの外観変更との互換性を向上させた</li>
+<li>ウインドウの選択確定・レイアウト適用・Escキャンセル時に、待避していたウインドウがアニメーションで元の位置に戻るようにした</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Shortcuts for "Select Next Window", "Select Previous Window", "Bring to Front", and "Close / Quit" are now configurable in the Shortcuts settings</li>
+<li>Added "Close other windows of [App]" context menu item when right-clicking a window in the sidebar (shown only when the app has multiple windows)</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Reorganized the Shortcuts settings section: window action shortcuts and display movement shortcuts are now grouped separately, each in their own card</li>
+<li>Display movement shortcuts are now global-only; removed local shortcut support and settings for display movement actions</li>
+<li>Updated toolbar buttons, quit button, action bar buttons, and dropdown menu button to use Liquid Glass interactive effect on macOS 26 (Tahoe), following the Human Interface Guidelines</li>
+<li>Window background now uses the system window background color for better compatibility with macOS appearance changes</li>
+<li>Displaced windows now animate back to their original positions when confirming a selection, applying a layout, or canceling with Escape</li>
+</ul>]]></description>
+            <pubDate>Sat, 28 Mar 2026 11:10:50 +0900</pubDate>
+            <sparkle:version>332</sparkle:version>
+            <sparkle:shortVersionString>3.3.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley-3.3.2.zip" length="5500295" type="application/octet-stream" sparkle:edSignature="tFLiM3K5KFFk9bfpZhtk349UH+JIc4RRsEEZ0ZP8L/Fnj9fQLXP1/ySQQ/w43yrMgE8NRHi4IsHdgIMYezPvDA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-331.delta" sparkle:deltaFrom="331" length="400670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TfNhTZoXwrXQQpP9OEaQWMM2NsRTiGZ5xAYWYr2ui7FiItFvDKqrb811pmVfdespNzZoM1QtINS4uOidBrXVCA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-330.delta" sparkle:deltaFrom="330" length="450890" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="4Swks1NRd3FDncFnnzF2x5HPD2hTQ9360sQVPlmj1KkzDeep55MloZp13LPAGTU+aYefjCvWc7Gcq+43/uuxBQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-329.delta" sparkle:deltaFrom="329" length="472558" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="KXcOlck4/YiAhI6gIIjhmjbF5DrcOoQXbVzV+WKYJ7Z9d+pUSoVPusmzY4hvP/r2QbNLLM2t8sAPJ13iOxCeCA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-328.delta" sparkle:deltaFrom="328" length="477906" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="A0v27peXBC0mVen2lb0hTCv7S3+y1LJkuzXO0V0rjsT+aqgil/IXzZfR/7GNyZG1ferFxQGn6y5Hkn78DU9cBQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley332-327.delta" sparkle:deltaFrom="327" length="478182" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kkitRobz5JysQYj+Op0hJs1xj6W99Pfrluu3rz83ZfRGtZaPJtMpzy1gZNjSEaje4yOlo1Ua4IRtY2i/vDyfCg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>3.3.1</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -114,11 +272,111 @@
 <li>Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)</li>
 <li>Displaced windows are restored to their original positions when the selection is canceled (Esc) or Tiley is closed</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Ao selecionar uma janela na barra lateral, as janelas sobrepostas são movidas para baixo com uma animação suave para tornar a janela selecionada visível sem alterar o foco</li>
+<li>Uma borda de destaque é exibida ao redor da janela atualmente selecionada na barra lateral</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigida a ordem de navegação Tab/setas para corresponder à ordem de exibição da barra lateral (agrupada por espaço, tela e aplicativo)</li>
+<li>As janelas deslocadas são restauradas às suas posições originais ao cancelar (Esc) ou fechar o Tiley</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Quando si seleziona una finestra nella barra laterale, le finestre sovrapposte vengono spostate verso il basso con un'animazione fluida per rendere visibile la finestra selezionata senza cambiare il focus</li>
+<li>Viene mostrato un bordo evidenziato attorno alla finestra attualmente selezionata nella barra laterale</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto l'ordine di navigazione Tab/frecce per corrispondere all'ordine di visualizzazione della barra laterale (raggruppato per spazio, schermo e applicazione)</li>
+<li>Le finestre spostate vengono ripristinate alla loro posizione originale quando la selezione viene annullata (Esc) o Tiley viene chiuso</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Lors de la sélection d'une fenêtre dans la barre latérale, les fenêtres superposées sont déplacées vers le bas avec une animation fluide pour rendre la fenêtre sélectionnée visible sans changer le focus</li>
+<li>Un cadre de mise en évidence est affiché autour de la fenêtre actuellement sélectionnée dans la barre latérale</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'ordre de parcours Tab/flèches pour correspondre à l'ordre d'affichage de la barre latérale (groupé par espace, écran et application)</li>
+<li>Les fenêtres déplacées sont restaurées à leur position d'origine lors de l'annulation (Esc) ou de la fermeture de Tiley</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Al seleccionar una ventana en la barra lateral, las ventanas superpuestas se desplazan hacia abajo con una animación suave para hacer visible la ventana seleccionada sin cambiar el foco</li>
+<li>Se muestra un borde resaltado alrededor de la ventana actualmente seleccionada en la barra lateral</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido el orden de ciclo de Tab/flechas para coincidir con el orden de la barra lateral (agrupado por espacio, pantalla y aplicación)</li>
+<li>Las ventanas desplazadas se restauran a su posición original al cancelar (Esc) o cerrar Tiley</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Bei Auswahl eines Fensters in der Seitenleiste werden überlappende Fenster mit einer sanften Animation nach unten verschoben, um das ausgewählte Fenster ohne Fokuswechsel sichtbar zu machen</li>
+<li>Ein Hervorhebungsrahmen wird um das aktuell in der Seitenleiste ausgewählte Fenster angezeigt</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Tab-/Pfeiltasten-Reihenfolge entspricht nun der Anzeigereihenfolge der Seitenleiste (gruppiert nach Space, Bildschirm und Anwendung)</li>
+<li>Verschobene Fenster werden beim Abbrechen (Esc) oder Schließen von Tiley an ihre ursprüngliche Position zurückgesetzt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在側邊欄中選擇視窗時，遮擋的視窗會透過平滑動畫向下移動，無需切換焦點即可查看選中視窗</li>
+<li>在側邊欄中為當前選中的視窗顯示高亮邊框</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了 Tab/方向鍵的切換順序與側邊欄顯示順序（依空間、螢幕和應用程式分組）不一致的問題</li>
+<li>移走的視窗在取消選擇（Esc）或關閉 Tiley 時會恢復到原始位置</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>在侧边栏中选择窗口时，遮挡的窗口会通过平滑动画向下移动，无需切换焦点即可查看选中窗口</li>
+<li>在侧边栏中为当前选中的窗口显示高亮边框</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了 Tab/方向键的切换顺序与侧边栏显示顺序（按空间、屏幕和应用程序分组）不一致的问题</li>
+<li>移走的窗口在取消选择（Esc）或关闭 Tiley 时会恢复到原始位置</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>사이드바에서 윈도우를 선택하면 겹치는 윈도우를 부드러운 애니메이션으로 아래로 이동시켜 포커스를 변경하지 않고 선택 윈도우를 표시하도록 함</li>
+<li>사이드바에서 선택 중인 윈도우에 하이라이트 테두리를 표시하도록 함</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>Tab/화살표 키의 순환 순서가 사이드바 표시 순서(스페이스, 화면, 애플리케이션별 그룹)와 일치하도록 수정</li>
+<li>이동된 윈도우가 선택 취소(Esc) 또는 Tiley 종료 시 원래 위치로 복원되도록 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>サイドバーでウインドウを選択すると、重なっているウインドウをスムーズにアニメーションで下方に移動させ、フォーカスを変えずに選択ウインドウを可視化するようにした</li>
+<li>サイドバーで選択中のウインドウにハイライト枠を表示するようにした</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>Tab/矢印キーの巡回順序がサイドバーの表示順序（スペース・スクリーン・アプリケーション別グループ）と一致するように修正</li>
+<li>退避したウインドウが、選択キャンセル（Esc）やTiley終了時に元の位置に復元されるように修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>When selecting a window in the sidebar, overlapping windows are smoothly animated downward to reveal the selected window without changing focus</li>
+<li>A highlight border is shown around the currently selected window in the sidebar</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)</li>
+<li>Displaced windows are restored to their original positions when the selection is canceled (Esc) or Tiley is closed</li>
+</ul>]]></description>
             <pubDate>Sat, 28 Mar 2026 01:46:09 +0900</pubDate>
             <sparkle:version>331</sparkle:version>
             <sparkle:shortVersionString>3.3.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.1/Tiley-3.3.1.zip" length="5452955" type="application/octet-stream" sparkle:edSignature="+f2FynR+5RYU3zQ2zE5K2zxPvGSrxmVR3kZBkly6TLyp5UBBUnufUtYiHS1MIxkpXnpCuP4CPoJU5x4ZR2l2Dg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley-3.3.1.zip" length="5452955" type="application/octet-stream" sparkle:edSignature="+f2FynR+5RYU3zQ2zE5K2zxPvGSrxmVR3kZBkly6TLyp5UBBUnufUtYiHS1MIxkpXnpCuP4CPoJU5x4ZR2l2Dg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.1/Tiley331-330.delta" sparkle:deltaFrom="330" length="264506" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="DhUNBbL8zQo0eVzl+0VZeKVnXgD9nXlLVhGNiQl8l08Fp8+GSQ3+0Quh5opzY9hBKkrN0nJBZ9BmD6ujkSSFCA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.1/Tiley331-329.delta" sparkle:deltaFrom="329" length="292290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="DlUjKgWVMz03UDx5q66yVjCwVrwZEanz5M9Enoj05781WWebjASRJuNg+HvNa677YqT8E8uQrJvX1EctNqbkCA=="/>
@@ -255,156 +513,77 @@
 <li>Fixed a status bar icon redraw loop that could cause 100% CPU usage when a badge overlay (update notification or debug indicator) was displayed</li>
 <li>Made Tiley windows always float above normal windows so they are not hidden behind target windows during Tab cycling</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Correção preventiva do uso excessivo de CPU que poderia ocorrer em ambientes com múltiplos monitores</li>
+<li>Correção de um loop de redesenho do ícone da barra de status que poderia causar 100% de uso da CPU quando um selo sobreposto (notificação de atualização ou indicador de depuração) era exibido</li>
+<li>As janelas do Tiley agora flutuam sempre acima das janelas normais para não ficarem ocultas durante a alternância com Tab</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Correzione preventiva dell'utilizzo eccessivo della CPU che poteva verificarsi in ambienti multi-display</li>
+<li>Correzione di un ciclo di ridisegno dell'icona della barra di stato che poteva causare un utilizzo della CPU al 100% quando veniva visualizzato un badge sovrapposto (notifica di aggiornamento o indicatore di debug)</li>
+<li>Le finestre di Tiley ora fluttuano sempre sopra le finestre normali per non essere nascoste durante il cambio con Tab</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction préventive de l'utilisation excessive du CPU pouvant survenir dans les environnements multi-écrans</li>
+<li>Correction d'une boucle de redessin de l'icône de la barre d'état pouvant entraîner une utilisation de 100 % du CPU lorsqu'un badge superposé (notification de mise à jour ou indicateur de débogage) était affiché</li>
+<li>Les fenêtres de Tiley flottent désormais toujours au-dessus des fenêtres normales afin de ne pas être masquées lors du changement par Tab</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corrección preventiva del uso excesivo de CPU que podía ocurrir en entornos con múltiples pantallas</li>
+<li>Corrección de un bucle de redibujo del icono de la barra de estado que podía causar un uso del 100 % de CPU cuando se mostraba una insignia superpuesta (notificación de actualización o indicador de depuración)</li>
+<li>Las ventanas de Tiley ahora flotan siempre sobre las ventanas normales para no quedar ocultas durante el cambio con Tab</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Präventive Behebung einer übermäßigen CPU-Auslastung, die in Multi-Display-Umgebungen auftreten konnte</li>
+<li>Behebung einer Neuzeichnungsschleife des Statusleistensymbols, die bei angezeigtem Badge-Overlay (Update-Benachrichtigung oder Debug-Anzeige) zu 100 % CPU-Auslastung führen konnte</li>
+<li>Tiley-Fenster werden nun immer schwebend angezeigt, damit sie beim Tab-Wechsel nicht hinter Zielfenstern verschwinden</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>預防性修正多螢幕環境下可能發生的 CPU 佔用率過高問題</li>
+<li>修正當顯示徽章疊加層（更新通知或除錯指示器）時，狀態列圖示重複重繪導致 CPU 佔用率達到 100% 的問題</li>
+<li>將 Tiley 視窗設為始終浮動顯示，防止在 Tab 切換過程中被目標視窗遮擋</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>预防性修复多显示器环境下可能出现的 CPU 占用率过高问题</li>
+<li>修复当显示徽章叠加层（更新通知或调试指示器）时，状态栏图标重复重绘导致 CPU 占用率达到 100% 的问题</li>
+<li>将 Tiley 窗口设为始终浮动显示，防止在 Tab 切换过程中被目标窗口遮挡</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>다중 디스플레이 환경에서 발생할 수 있는 과도한 CPU 사용량에 대한 예방적 수정</li>
+<li>배지 오버레이(업데이트 알림 또는 디버그 표시)가 표시될 때 상태 표시줄 아이콘이 반복 렌더링되어 CPU 사용량이 100%에 도달하는 문제 수정</li>
+<li>Tab 전환 중 대상 윈도우 뒤에 숨겨지지 않도록 Tiley 윈도우를 항상 플로팅 표시하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>マルチディスプレイ環境で発生しうる過剰なCPU使用率の予防的修正</li>
+<li>バッジオーバーレイ（アップデート通知やデバッグ表示）表示時にステータスバーアイコンの再描画がループしCPU使用率が100%になる問題を修正</li>
+<li>Tab切り替え中にターゲットウインドウの背面に隠れないよう、Tileyのウインドウを常にフローティング表示するように変更</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Preventive fix for excessive CPU usage that could occur in multi-display environments</li>
+<li>Fixed a status bar icon redraw loop that could cause 100% CPU usage when a badge overlay (update notification or debug indicator) was displayed</li>
+<li>Made Tiley windows always float above normal windows so they are not hidden behind target windows during Tab cycling</li>
+</ul>]]></description>
             <pubDate>Fri, 27 Mar 2026 12:49:37 +0900</pubDate>
             <sparkle:version>330</sparkle:version>
             <sparkle:shortVersionString>3.3.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.1/Tiley-3.3.0.zip" length="5429177" type="application/octet-stream" sparkle:edSignature="FSiErSpY90jWyHf124eUcYtFS1vNPInv6JGZxm0Jumxo1A5PdykAO7W4sM0v18x96EMHxcemtkh5LM4DRryTDA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.2/Tiley-3.3.0.zip" length="5429177" type="application/octet-stream" sparkle:edSignature="FSiErSpY90jWyHf124eUcYtFS1vNPInv6JGZxm0Jumxo1A5PdykAO7W4sM0v18x96EMHxcemtkh5LM4DRryTDA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.0/Tiley330-329.delta" sparkle:deltaFrom="329" length="234454" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Fm9SmN2k7Ol5oYSMrSPLYOvEKd0mRY9aGkZP606DgNDRsvLLRR1u1KrAf8vK3Bzr2urlFPbkIKvjliHlJqo5DQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.0/Tiley330-328.delta" sparkle:deltaFrom="328" length="246274" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Q28LqzwwI+CtpEFKU7T5NKrLm4z7TdWBn9UuBt7WTNPC2sWqXNSipDsv/KOZ76D96hL4wl3qIWtBru1onX0gAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.0/Tiley330-327.delta" sparkle:deltaFrom="327" length="247586" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="pUs7OxHeHoc4qmcqN/yFC8Q+u0x+3qV8/b2v62+e8Z2JNn5MaDXBkMArzuypp6UIsewJqKtKsI9vIq4t1+2aDw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.0/Tiley330-326.delta" sparkle:deltaFrom="326" length="250998" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="772+TeCAtffTTZ2ji25ASk0zyOEGJ4vuvPUNd4sbmUyuN0Z7rQvWrpxbLP6Y12Nzg50giEYxa6GlOlzh/otpBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.0/Tiley330-325.delta" sparkle:deltaFrom="325" length="246670" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="FBPgq9pHHccbnLKq5ISynMY9Lzmg59obtR7JAzWTCthm4gHr/f74kI+BszmEyfQbUvjmf/73P9mzZVHum5BUAQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>3.2.9</title>
-            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
-<ul>
-<li>Исправлен порядок переключения Tab/стрелками для соответствия порядку отображения в боковой панели (группировка по пространству, экрану и приложению)</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigida a ordem de navegação Tab/setas para corresponder à ordem de exibição da barra lateral (agrupada por espaço, tela e aplicativo)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto l'ordine di navigazione Tab/frecce per corrispondere all'ordine di visualizzazione della barra laterale (raggruppato per spazio, schermo e applicazione)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction de l'ordre de parcours Tab/flèches pour correspondre à l'ordre d'affichage de la barre latérale (groupé par espace, écran et application)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Corregido el orden de ciclo de Tab/flechas para coincidir con el orden de la barra lateral (agrupado por espacio, pantalla y aplicación)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Tab-/Pfeiltasten-Reihenfolge entspricht nun der Anzeigereihenfolge der Seitenleiste (gruppiert nach Space, Bildschirm und Anwendung)</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了 Tab/方向鍵的切換順序與側邊欄顯示順序（依空間、螢幕和應用程式分組）不一致的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了 Tab/方向键的切换顺序与侧边栏显示顺序（按空间、屏幕和应用程序分组）不一致的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>Tab/화살표 키의 순환 순서가 사이드바 표시 순서(스페이스, 화면, 애플리케이션별 그룹)와 일치하도록 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>Tab/矢印キーの巡回順序がサイドバーの表示順序（スペース・スクリーン・アプリケーション別グループ）と一致するように修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigida a ordem de navegação Tab/setas para corresponder à ordem de exibição da barra lateral (agrupada por espaço, tela e aplicativo)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto l'ordine di navigazione Tab/frecce per corrispondere all'ordine di visualizzazione della barra laterale (raggruppato per spazio, schermo e applicazione)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction de l'ordre de parcours Tab/flèches pour correspondre à l'ordre d'affichage de la barre latérale (groupé par espace, écran et application)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Corregido el orden de ciclo de Tab/flechas para coincidir con el orden de la barra lateral (agrupado por espacio, pantalla y aplicación)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Tab-/Pfeiltasten-Reihenfolge entspricht nun der Anzeigereihenfolge der Seitenleiste (gruppiert nach Space, Bildschirm und Anwendung)</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了 Tab/方向鍵的切換順序與側邊欄顯示順序（依空間、螢幕和應用程式分組）不一致的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了 Tab/方向键的切换顺序与侧边栏显示顺序（按空间、屏幕和应用程序分组）不一致的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>Tab/화살표 키의 순환 순서가 사이드바 표시 순서(스페이스, 화면, 애플리케이션별 그룹)와 일치하도록 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>Tab/矢印キーの巡回順序がサイドバーの表示順序（スペース・スクリーン・アプリケーション別グループ）と一致するように修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigida a ordem de navegação Tab/setas para corresponder à ordem de exibição da barra lateral (agrupada por espaço, tela e aplicativo)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto l'ordine di navigazione Tab/frecce per corrispondere all'ordine di visualizzazione della barra laterale (raggruppato per spazio, schermo e applicazione)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction de l'ordre de parcours Tab/flèches pour correspondre à l'ordre d'affichage de la barre latérale (groupé par espace, écran et application)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Corregido el orden de ciclo de Tab/flechas para coincidir con el orden de la barra lateral (agrupado por espacio, pantalla y aplicación)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Tab-/Pfeiltasten-Reihenfolge entspricht nun der Anzeigereihenfolge der Seitenleiste (gruppiert nach Space, Bildschirm und Anwendung)</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了 Tab/方向鍵的切換順序與側邊欄顯示順序（依空間、螢幕和應用程式分組）不一致的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了 Tab/方向键的切换顺序与侧边栏显示顺序（按空间、屏幕和应用程序分组）不一致的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>Tab/화살표 키의 순환 순서가 사이드바 표시 순서(스페이스, 화면, 애플리케이션별 그룹)와 일치하도록 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>Tab/矢印キーの巡回順序がサイドバーの表示順序（スペース・スクリーン・アプリケーション別グループ）と一致するように修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed Tab/arrow key cycling order to match the sidebar display order (grouped by space, screen, and application)</li>
-</ul>]]></description>
-            <pubDate>Fri, 27 Mar 2026 00:15:32 +0900</pubDate>
-            <sparkle:version>329</sparkle:version>
-            <sparkle:shortVersionString>3.2.9</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.3.1/Tiley-3.2.9.zip" length="5423180" type="application/octet-stream" sparkle:edSignature="fizybZtkkbrC97NwZOCKAe9AhGH4EtJz1vmoG5rDa9S5bLxSOk0v8G0PU8dvKWTr9/RHteVHZroNNsfS1TThAw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-328.delta" sparkle:deltaFrom="328" length="181878" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="IZyYawyt+0/stWNPbpRGO72EuHwmkfLP63k74o+R26FNHsUZKNuqAOYM24HCqGbNIXYAGWKF0QwD5gCROTgWDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-327.delta" sparkle:deltaFrom="327" length="184222" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CKK8UvI1WqanXi/nUwnTcwnHeFbUE5M5vvwf0jMhBdtfzIcu4xvQ2y6cjLWC6REvsuQELGaSVK8bt+LPb872Aw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-326.delta" sparkle:deltaFrom="326" length="182686" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="t6sX92nxPlDyNoz1cReDocxAzW7jBtn/mWC1T/Y9IBG8YYuyjNd6vvT7IqbtY4ERN8RJjN7wcDSqJ0OGw7nCCw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-325.delta" sparkle:deltaFrom="325" length="189478" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="X1V3zdLkc5XohdXm3bz/iXw0WBfJE7W3IcR9x+4XC9uxKK0/XQ/IaC5soEvVQXWUOaJrgI5qrFa2sQZJoJ2+DA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v3.2.9/Tiley329-324.delta" sparkle:deltaFrom="324" length="359990" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Grxz06RheGdq2Jp7TC2ZfqMkvhkEPmQjtu9a2koI+FJ6YSKjSn8qQUJO0DRyPCvwgjtvm1HCTMDis0dXrvMeAQ=="/>
             </sparkle:deltas>
         </item>
     </channel>
