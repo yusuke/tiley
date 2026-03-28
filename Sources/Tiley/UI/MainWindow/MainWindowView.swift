@@ -2377,6 +2377,17 @@ struct MainWindowView: View {
                 }
             }
 
+            if item.sameAppWindowCount > 1 {
+                Button {
+                    appState.closeOtherWindowTargets(except: item.id)
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Close other windows of %@", comment: "Menu item to close other windows of the same app"), item.appName),
+                        systemImage: "xmark.rectangle"
+                    )
+                }
+            }
+
             Button {
                 appState.hideOtherApps(except: item.id)
             } label: {
