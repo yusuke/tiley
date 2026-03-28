@@ -170,6 +170,8 @@ struct MainWindowView: View {
     @State private var editingPresetID: UUID?
     @State private var editingPresetNameID: UUID?
     @State private var editingPresetNameDraft = ""
+    /// Snapshot of the preset's selections before editing, for rollback when all selections are deleted.
+    @State private var editingPresetSelectionSnapshot: (selection: GridSelection, secondarySelections: [GridSelection])?
     @State private var recordingPresetShortcutID: UUID?
     @State private var addingShortcutPresetID: UUID?
     @State private var addingShortcutIsGlobal = false
@@ -1177,9 +1179,32 @@ struct MainWindowView: View {
                         columns: appState.columns,
                         gap: appState.gap,
                         highlightSelection: editingPresetHighlightSelection,
+                        highlightSelections: editingPresetHighlightSelections,
                         desktopPictureInfo: desktopPictureInfo,
                         showDesktopPicture: false,
                         windowFrameRelative: screenRole.isTarget ? appState.currentLayoutTargetRelativeFrame : nil,
+                        screenEdgeInsets: gridScreenEdgeInsets,
+                        committedSelections: editingPresetCommittedSelections,
+                        onDeleteSelection: { index in
+                            guard let editingID = editingPresetID else { return }
+                            appState.updateLayoutPreset(editingID) { preset in
+                                if index == 0 {
+                                    if !preset.secondarySelections.isEmpty {
+                                        preset.selection = preset.secondarySelections.removeFirst()
+                                    } else {
+                                        // Last selection removed — mark as empty.
+                                        // Will be rolled back on finishEditingPreset.
+                                        preset.selection = LayoutPreset.emptySelection
+                                    }
+                                } else {
+                                    let secondaryIndex = index - 1
+                                    if secondaryIndex < preset.secondarySelections.count {
+                                        preset.secondarySelections.remove(at: secondaryIndex)
+                                    }
+                                }
+                            }
+                            appState.updateLayoutPreview(nil)
+                        },
                         onSelectionChange: { selection in
                             if editingPresetID == nil {
                                 dismissPresetNameEditingIfNeeded()
@@ -1188,25 +1213,32 @@ struct MainWindowView: View {
                                 appState.selectedLayoutPresetID = nil
                             }
                             activeLayoutSelection = selection
+                            let nextColorIndex: Int? = editingPresetID != nil ? editingPresetCommittedSelections.count : nil
                             if let ctx = screenContext {
-                                appState.updateLayoutPreview(selection, screenContext: ctx)
+                                appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex)
                             } else {
-                                appState.updateLayoutPreview(selection)
+                                appState.updateLayoutPreview(selection, colorIndex: nextColorIndex)
                             }
                         },
                         onHoverChange: { selection in
                             guard activeLayoutSelection == nil else { return }
+                            let nextColorIndex: Int? = editingPresetID != nil ? editingPresetCommittedSelections.count : nil
                             if let ctx = screenContext {
-                                appState.updateLayoutPreview(selection, screenContext: ctx)
+                                appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex)
                             } else {
-                                appState.updateLayoutPreview(selection)
+                                appState.updateLayoutPreview(selection, colorIndex: nextColorIndex)
                             }
                         },
                         onSelectionCommit: { selection in
                             activeLayoutSelection = nil
                             if let editingID = editingPresetID {
                                 appState.updateLayoutPreset(editingID) { preset in
-                                    preset.selection = selection
+                                    if preset.selection == LayoutPreset.emptySelection {
+                                        // Refill primary when all selections were deleted.
+                                        preset.selection = selection
+                                    } else {
+                                        preset.secondarySelections.append(selection)
+                                    }
                                     preset.baseRows = appState.rows
                                     preset.baseColumns = appState.columns
                                 }
@@ -3119,7 +3151,8 @@ struct MainWindowView: View {
             PresetGridPreviewView(
                 rows: appState.rows,
                 columns: appState.columns,
-                selection: preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+                selection: preset.scaledSelection(toRows: appState.rows, columns: appState.columns),
+                secondarySelections: preset.scaledSecondarySelections(toRows: appState.rows, columns: appState.columns)
             )
             .frame(width: presetGridSize.width, height: presetGridSize.height)
             .frame(width: Self.presetGridColumnWidth, alignment: .center)
@@ -3411,6 +3444,17 @@ struct MainWindowView: View {
     }
 
     private func finishEditingPreset(_ id: UUID) {
+        // Rollback to snapshot if all selections were deleted.
+        if let snapshot = editingPresetSelectionSnapshot,
+           let preset = appState.displayedLayoutPresets.first(where: { $0.id == id }),
+           preset.allSelections.isEmpty {
+            appState.updateLayoutPreset(id) { preset in
+                preset.selection = snapshot.selection
+                preset.secondarySelections = snapshot.secondarySelections
+            }
+        }
+        editingPresetSelectionSnapshot = nil
+
         if editingPresetNameID == id {
             let trimmed = editingPresetNameDraft.trimmingCharacters(in: .whitespacesAndNewlines)
             let currentName = appState.displayedLayoutPresets.first(where: { $0.id == id })?.name ?? ""
@@ -3434,6 +3478,7 @@ struct MainWindowView: View {
         editingPresetID = preset.id
         editingPresetNameID = preset.id
         editingPresetNameDraft = preset.name
+        editingPresetSelectionSnapshot = (selection: preset.selection, secondarySelections: preset.secondarySelections)
         recordingPresetShortcutID = preset.id
         appState.isEditingLayoutPresets = true
     }
@@ -3524,23 +3569,61 @@ struct MainWindowView: View {
         return ctx.screenFrame.contains(NSEvent.mouseLocation)
     }
 
-    private var editingPresetHighlightSelection: GridSelection? {
-        // Editing preset takes priority
-        if let editingID = editingPresetID,
-           let preset = appState.displayedLayoutPresets.first(where: { $0.id == editingID }) {
-            return preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+    /// 1pt inset on grid edges that correspond to physical screen edges (not menu bar / Dock).
+    private var gridScreenEdgeInsets: EdgeInsets {
+        guard let ctx = screenContext else {
+            return EdgeInsets(top: 0, leading: 1, bottom: 1, trailing: 1)
         }
-        // Hovered preset
+        let vf = ctx.visibleFrame
+        let sf = ctx.screenFrame
+        let tolerance: CGFloat = 1
+        return EdgeInsets(
+            top: abs(vf.maxY - sf.maxY) < tolerance ? 1 : 0,
+            leading: abs(vf.minX - sf.minX) < tolerance ? 1 : 0,
+            bottom: abs(vf.minY - sf.minY) < tolerance ? 1 : 0,
+            trailing: abs(vf.maxX - sf.maxX) < tolerance ? 1 : 0
+        )
+    }
+
+    /// Committed selections for the grid workspace when editing a preset.
+    private var editingPresetCommittedSelections: [GridSelection] {
+        guard let editingID = editingPresetID,
+              let preset = appState.displayedLayoutPresets.first(where: { $0.id == editingID }) else {
+            return []
+        }
+        return preset.allScaledSelections(toRows: appState.rows, columns: appState.columns)
+    }
+
+    /// Returns the preset to highlight (hovered or keyboard-selected), if any.
+    private var highlightPreset: LayoutPreset? {
+        // When editing a preset, committed selections handle the display.
+        if let editingID = editingPresetID,
+           appState.displayedLayoutPresets.contains(where: { $0.id == editingID }) {
+            return nil
+        }
         if let hoveredID = hoveredPresetID,
            let preset = appState.displayedLayoutPresets.first(where: { $0.id == hoveredID }) {
-            return preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+            return preset
         }
-        // Keyboard-selected preset
         if let selectedID = appState.selectedLayoutPresetID, isMouseOnThisScreen,
            let preset = appState.displayedLayoutPresets.first(where: { $0.id == selectedID }) {
-            return preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+            return preset
         }
         return nil
+    }
+
+    private var editingPresetHighlightSelection: GridSelection? {
+        guard let preset = highlightPreset else { return nil }
+        // Use single highlight only for presets without secondary selections.
+        guard preset.secondarySelections.isEmpty else { return nil }
+        return preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+    }
+
+    /// All scaled selections for a hovered/selected multi-selection preset.
+    private var editingPresetHighlightSelections: [GridSelection] {
+        guard let preset = highlightPreset else { return [] }
+        guard !preset.secondarySelections.isEmpty else { return [] }
+        return preset.allScaledSelections(toRows: appState.rows, columns: appState.columns)
     }
 
     private func updatePresetSelectionPreview(for id: UUID?) {
@@ -3553,11 +3636,17 @@ struct MainWindowView: View {
             appState.updateLayoutPreview(nil)
             return
         }
-        let selection = preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
-        if let ctx = screenContext {
-            appState.updateLayoutPreview(selection, screenContext: ctx)
+        // Use multi-selection preview when the preset has secondary selections
+        // and multiple windows are selected.
+        if !preset.secondarySelections.isEmpty, appState.isMultiSelection {
+            appState.updateLayoutPreviewForPreset(preset, screenContext: screenContext)
         } else {
-            appState.updateLayoutPreview(selection)
+            let selection = preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
+            if let ctx = screenContext {
+                appState.updateLayoutPreview(selection, screenContext: ctx)
+            } else {
+                appState.updateLayoutPreview(selection)
+            }
         }
     }
 
@@ -4212,19 +4301,26 @@ private struct PresetGridPreviewView: View {
     let rows: Int
     let columns: Int
     let selection: GridSelection
+    var secondarySelections: [GridSelection] = []
 
     var body: some View {
         GeometryReader { geometry in
             let gap: CGFloat = 2
             let cellWidth = max(2, (geometry.size.width - gap * CGFloat(max(0, columns - 1))) / CGFloat(max(columns, 1)))
             let cellHeight = max(2, (geometry.size.height - gap * CGFloat(max(0, rows - 1))) / CGFloat(max(rows, 1)))
+            let allSelections = [selection] + secondarySelections
 
             ZStack(alignment: .topLeading) {
                 ForEach(0..<rows, id: \.self) { row in
                     ForEach(0..<columns, id: \.self) { column in
-                        let selected = selection.startRow...selection.endRow ~= row && selection.startColumn...selection.endColumn ~= column
+                        let matchIndex = allSelections.firstIndex { sel in
+                            let n = sel.normalized
+                            return n.startRow...n.endRow ~= row && n.startColumn...n.endColumn ~= column
+                        }
                         RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(selected ? Color.accentColor : ThemeColors.presetGridUnselectedFill(for: colorScheme))
+                            .fill(matchIndex != nil
+                                  ? ThemeColors.indexedPresetGridFill(index: matchIndex!, for: colorScheme)
+                                  : ThemeColors.presetGridUnselectedFill(for: colorScheme))
                             .frame(width: cellWidth, height: cellHeight)
                             .position(
                                 x: CGFloat(column) * (cellWidth + gap) + (cellWidth / 2),

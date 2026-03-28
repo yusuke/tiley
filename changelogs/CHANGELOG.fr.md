@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Préréglages de disposition à sélection multiple : définissez plusieurs zones de grille par préréglage pour positionner différentes fenêtres à différents emplacements
+  - Chaque glisser dans l'éditeur de préréglages ajoute une nouvelle sélection (1ère, 2ème, 3ème, ...)
+  - Chaque sélection affiche son numéro d'index et un bouton de suppression
+  - Le chevauchement des sélections est empêché (avec retour visuel)
+  - Lors de l'application d'un préréglage à sélection multiple, les fenêtres sont assignées par ordre Z : la fenêtre au premier plan reçoit la sélection 1, la deuxième la sélection 2, etc.
+  - Les miniatures des préréglages affichent toutes les sélections avec des couleurs distinctes
+
 ## [3.4.0] - 2026-03-28
 
 ### Ajouté

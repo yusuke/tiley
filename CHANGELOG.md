@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Multi-selection layout presets: define multiple grid regions per preset for arranging different windows in different positions
+  - Each drag in the preset editor appends a new selection (1st, 2nd, 3rd, ...)
+  - Selections show their index number and a delete button for easy management
+  - Overlapping selections are prevented with visual feedback
+  - When applying a multi-selection preset, windows are assigned by Z-order: frontmost gets selection 1, second gets selection 2, etc.
+  - Preset thumbnails display all selections with distinct colors
+
 ## [3.4.0] - 2026-03-28
 
 ### Added

@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Preajustes de diseño con selección múltiple: define múltiples regiones de cuadrícula por preajuste para colocar diferentes ventanas en diferentes posiciones
+  - Cada arrastre en el editor de preajustes añade una nueva selección (1ª, 2ª, 3ª, ...)
+  - Cada selección muestra su número de índice y un botón de eliminar
+  - Se previene la superposición de selecciones (con retroalimentación visual)
+  - Al aplicar un preajuste con selección múltiple, las ventanas se asignan por orden Z: la ventana frontal obtiene la selección 1, la segunda la selección 2, etc.
+  - Las miniaturas de preajustes muestran todas las selecciones con colores distintos
+
 ## [3.4.0] - 2026-03-28
 
 ### Añadido

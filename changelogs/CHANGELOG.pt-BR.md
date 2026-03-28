@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Predefinições de layout com seleção múltipla: defina múltiplas regiões de grade por predefinição para posicionar diferentes janelas em diferentes locais
+  - Cada arraste no editor de predefinições adiciona uma nova seleção (1ª, 2ª, 3ª, ...)
+  - Cada seleção exibe seu número de índice e um botão de exclusão
+  - A sobreposição de seleções é impedida (com feedback visual)
+  - Ao aplicar uma predefinição com seleção múltipla, as janelas são atribuídas por ordem Z: a janela frontal recebe a seleção 1, a segunda a seleção 2, etc.
+  - As miniaturas das predefinições exibem todas as seleções com cores distintas
+
 ## [3.4.0] - 2026-03-28
 
 ### Adicionado

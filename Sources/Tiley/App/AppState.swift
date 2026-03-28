@@ -669,9 +669,11 @@ final class AppState: NSObject, NSMenuDelegate {
 
     /// Apply a grid selection to all windows in the multi-selection.
     /// - Parameters:
+    ///   - selection: The primary grid selection.
+    ///   - secondarySelections: Additional selections for 2nd, 3rd, ... windows (by sidebar/Z-order).
     ///   - visibleFrame: If provided, use this screen's visible frame (e.g. from mouse pointer's screen).
     ///   - screenFrame: If provided, use this screen frame for coordinate conversion.
-    private func applyToMultipleWindows(selection: GridSelection, visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil) {
+    private func applyToMultipleWindows(selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil) {
         guard let primaryTarget = activeLayoutTarget else { return }
 
         // Determine the target screen: use the provided screen (mouse pointer's screen)
@@ -695,20 +697,33 @@ final class AppState: NSObject, NSMenuDelegate {
             currentScreenFrame = primaryTarget.screenFrame
         }
 
-        let frame = GridCalculator.frame(
-            for: selection,
-            in: currentVisibleFrame,
-            rows: rows,
-            columns: columns,
-            gap: gap
-        )
+        let allSelections = [selection] + secondarySelections
 
         dismissOverlayImmediately()
 
-        for idx in selectedWindowIndices {
-            guard idx < availableWindowTargets.count else { continue }
+        // Order selected window indices by sidebar (Z-order): topmost first.
+        let orderedIndices: [Int]
+        if !sidebarWindowOrder.isEmpty {
+            orderedIndices = sidebarWindowOrder.filter { selectedWindowIndices.contains($0) && $0 < availableWindowTargets.count }
+        } else {
+            orderedIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }.sorted()
+        }
+
+        for (windowPosition, idx) in orderedIndices.enumerated() {
             var target = availableWindowTargets[idx]
             target = unhideAppIfNeeded(target)
+
+            // Map window position to selection: clamp to last available selection.
+            let selectionIndex = min(windowPosition, allSelections.count - 1)
+            let sel = allSelections[selectionIndex]
+
+            let frame = GridCalculator.frame(
+                for: sel,
+                in: currentVisibleFrame,
+                rows: rows,
+                columns: columns,
+                gap: gap
+            )
 
             // If the window is on a different screen, move it to the target screen first.
             if let window = target.windowElement,
@@ -731,12 +746,25 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
-        recordSelectionAndHide(selection: selection, appName: primaryTarget.appName, wasConstrained: false)
+        // Clear displaced window frames so restoreDisplacedWindowsAnimated()
+        // (called from recordSelectionAndHide) doesn't undo the positions
+        // we just set.
+        displacedWindowFrames.removeAll()
+
+        // Activate the primary window (frontmost in sidebar order) so it
+        // becomes the active window after layout application.
+        let primaryWindowTarget: WindowTarget? = orderedIndices.first.map { availableWindowTargets[$0] }
+        if let primary = primaryWindowTarget {
+            lastTargetPID = primary.processIdentifier
+        }
+
+        recordSelectionAndHide(selection: selection, appName: primaryWindowTarget?.appName ?? primaryTarget.appName, wasConstrained: false)
         let norm = selection.normalized
         TelemetryDeck.signal("layoutApplied", parameters: [
             "columns": "\(norm.endColumn - norm.startColumn + 1)",
             "rows": "\(norm.endRow - norm.startRow + 1)",
             "multiSelection": "\(selectedWindowIndices.count)",
+            "selectionCount": "\(allSelections.count)",
         ])
     }
 
@@ -1808,7 +1836,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     /// Commits a layout selection on a specific screen (used by multi-screen grid/preset interactions).
-    func commitLayoutSelectionOnScreen(_ selection: GridSelection, visibleFrame: CGRect, screenFrame: CGRect) {
+    func commitLayoutSelectionOnScreen(_ selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect, screenFrame: CGRect) {
         if activeLayoutTarget == nil, lastTargetPID != nil {
             activeLayoutTarget = resolveWindowTarget()
         }
@@ -1822,7 +1850,7 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = target
 
         if selectedWindowIndices.count > 1 {
-            applyToMultipleWindows(selection: selection, visibleFrame: visibleFrame, screenFrame: screenFrame)
+            applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
             return
         }
 
@@ -1885,7 +1913,8 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
         let selection = preset.scaledSelection(toRows: rows, columns: columns)
-        commitLayoutSelectionOnScreen(selection, visibleFrame: visibleFrame, screenFrame: screenFrame)
+        let secondarySelections = preset.scaledSecondarySelections(toRows: rows, columns: columns)
+        commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
     }
 
     private func recordSelectionAndHide(selection: GridSelection, appName: String, wasConstrained: Bool = false) {
@@ -1951,7 +1980,7 @@ final class AppState: NSObject, NSMenuDelegate {
         openSettings()
     }
 
-    func updateLayoutPreview(_ selection: GridSelection?, screenContext: ScreenContext? = nil) {
+    func updateLayoutPreview(_ selection: GridSelection?, screenContext: ScreenContext? = nil, colorIndex: Int? = nil) {
         guard isShowingLayoutGrid else {
             hidePreviewOverlay()
             return
@@ -2012,7 +2041,95 @@ final class AppState: NSObject, NSMenuDelegate {
             windowSize: windowSize,
             appIcon: appIcon,
             windowTitle: activeLayoutTarget?.windowTitle,
-            appName: activeLayoutTarget?.appName
+            appName: activeLayoutTarget?.appName,
+            colorIndex: colorIndex
+        )
+    }
+
+    /// Shows preview rectangles for multiple selections mapped to selected windows.
+    func updateLayoutPreviewForPreset(_ preset: LayoutPreset, screenContext: ScreenContext? = nil) {
+        guard isShowingLayoutGrid else {
+            hidePreviewOverlay()
+            return
+        }
+
+        let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+        guard !allSelections.isEmpty else {
+            hidePreviewOverlay()
+            return
+        }
+
+        // If only one selection or single window, fall back to normal preview.
+        if allSelections.count <= 1 || selectedWindowIndices.count <= 1 {
+            updateLayoutPreview(allSelections.first, screenContext: screenContext)
+            return
+        }
+
+        let previewScreenFrame: CGRect
+        let previewVisibleFrame: CGRect
+        if let ctx = screenContext,
+           let screen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame }) {
+            previewScreenFrame = screen.frame
+            previewVisibleFrame = screen.visibleFrame
+        } else if let ctx = screenContext {
+            previewScreenFrame = ctx.screenFrame
+            previewVisibleFrame = ctx.visibleFrame
+        } else if let target = activeLayoutTarget,
+                  let screen = NSScreen.screens.first(where: { $0.frame == target.screenFrame }) {
+            previewScreenFrame = screen.frame
+            previewVisibleFrame = screen.visibleFrame
+        } else if let target = activeLayoutTarget {
+            previewScreenFrame = target.screenFrame
+            previewVisibleFrame = target.visibleFrame
+        } else {
+            hidePreviewOverlay()
+            return
+        }
+
+        if layoutPreviewController == nil ||
+            layoutPreviewController?.screenFrame != previewScreenFrame ||
+            layoutPreviewController?.visibleFrame != previewVisibleFrame {
+            layoutPreviewController?.hide()
+            layoutPreviewController = LayoutPreviewOverlayController(
+                screenFrame: previewScreenFrame,
+                visibleFrame: previewVisibleFrame
+            )
+        }
+
+        let parentWindow = windowControllerForScreen(frame: previewScreenFrame)?.nsWindow
+            ?? targetWindowController?.nsWindow
+
+        // Order selected window indices by sidebar (Z-order).
+        let orderedIndices: [Int]
+        if !sidebarWindowOrder.isEmpty {
+            orderedIndices = sidebarWindowOrder.filter { selectedWindowIndices.contains($0) && $0 < availableWindowTargets.count }
+        } else {
+            orderedIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }.sorted()
+        }
+
+        // Build preview items: map each window to its selection.
+        var items: [SelectionPreviewItem] = []
+        for (windowPosition, idx) in orderedIndices.enumerated() {
+            let selectionIndex = min(windowPosition, allSelections.count - 1)
+            let sel = allSelections[selectionIndex]
+            let target = availableWindowTargets[idx]
+            let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+            items.append(SelectionPreviewItem(
+                selection: sel,
+                resizability: windowPosition == 0 ? resizabilityForActiveTarget() : .both,
+                windowSize: target.frame.size,
+                appIcon: appIcon,
+                windowTitle: target.windowTitle,
+                appName: target.appName
+            ))
+        }
+
+        layoutPreviewController?.showMultipleSelections(
+            items,
+            rows: rows,
+            columns: columns,
+            gap: gap,
+            behind: parentWindow
         )
     }
 
@@ -2337,7 +2454,12 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
         let selection = preset.scaledSelection(toRows: rows, columns: columns)
-        apply(selection: selection, to: target)
+        if selectedWindowIndices.count > 1 {
+            let secondarySelections = preset.scaledSecondarySelections(toRows: rows, columns: columns)
+            applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections)
+        } else {
+            apply(selection: selection, to: target)
+        }
         TelemetryDeck.signal("presetApplied", parameters: ["presetName": preset.name])
     }
 

@@ -5,11 +5,19 @@ struct LayoutGridWorkspaceView: View {
     let columns: Int
     let gap: CGFloat
     var highlightSelection: GridSelection?
+    /// Multiple highlight selections for preset hover/keyboard preview (no index labels, no delete buttons).
+    var highlightSelections: [GridSelection] = []
     var desktopPictureInfo: MainWindowView.DesktopPictureInfo?
     /// When false, wallpaper background is not rendered (used when the parent
     /// composite view renders the wallpaper at a larger scale).
     var showDesktopPicture: Bool = true
     var windowFrameRelative: WindowFrameRelative?
+    /// Insets from grid edges that correspond to physical screen edges (not menu bar/Dock).
+    var screenEdgeInsets: EdgeInsets = EdgeInsets()
+    /// Committed selections displayed in edit mode (indexed from 0).
+    var committedSelections: [GridSelection] = []
+    /// Called when the user clicks the "x" button on a committed selection.
+    var onDeleteSelection: ((Int) -> Void)?
     let onSelectionChange: (GridSelection?) -> Void
     let onHoverChange: ((GridSelection?) -> Void)?
     let onSelectionCommit: (GridSelection) -> Void
@@ -60,14 +68,23 @@ struct LayoutGridWorkspaceView: View {
                         let frame = rectForCell(row: row, column: column, width: cellWidth, height: cellHeight)
                         let isInSelection = isSelected(row: row, column: column)
                         let isInHighlight = isHighlighted(row: row, column: column)
-                        if !isInSelection && !isInHighlight {
+                        let isInCommitted = isInCommittedSelection(row: row, column: column)
+                        let isInMultiHighlight = isInHighlightSelections(row: row, column: column)
+                        if !isInSelection && !isInHighlight && !isInCommitted && !isInMultiHighlight {
+                            let hovered = isHovered(row: row, column: column)
+                            let nextIndex = committedSelections.count
+                            let useIndexedHover = hovered && onDeleteSelection != nil
                             RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
-                                .fill(isHovered(row: row, column: column)
+                                .fill(useIndexedHover
+                                      ? ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme).opacity(0.5)
+                                      : hovered
                                       ? ThemeColors.gridCellHoverFill(for: colorScheme)
                                       : ThemeColors.gridCellFill(for: colorScheme))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
-                                        .stroke(isHovered(row: row, column: column)
+                                        .stroke(useIndexedHover
+                                                ? ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme).opacity(0.5)
+                                                : hovered
                                                 ? ThemeColors.gridCellHoverBorder(for: colorScheme)
                                                 : ThemeColors.gridCellBorder(for: colorScheme), lineWidth: 1.5)
                                 )
@@ -82,8 +99,42 @@ struct LayoutGridWorkspaceView: View {
                     }
                 }
 
-                // Unified highlight rectangle (from highlightSelection)
-                if let hl = highlightSelection?.normalized, activeSelection == nil {
+                // Committed selections (edit mode)
+                ForEach(Array(committedSelections.enumerated()), id: \.offset) { index, sel in
+                    let norm = sel.normalized
+                    let selRect = rectForSelection(norm, cellWidth: cellWidth, cellHeight: cellHeight)
+                    let fill = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
+                    let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
+                    committedSelectionRectangle(
+                        index: index,
+                        sel: norm, selRect: selRect,
+                        cellWidth: cellWidth, cellHeight: cellHeight,
+                        cornerRadius: cellCornerRadius,
+                        fill: fill, border: border,
+                        divider: border.opacity(0.3),
+                        showDelete: onDeleteSelection != nil
+                    )
+                }
+
+                // Multiple highlight rectangles (preset hover with secondary selections)
+                if !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty {
+                    ForEach(Array(highlightSelections.enumerated()), id: \.offset) { index, sel in
+                        let norm = sel.normalized
+                        let selRect = rectForSelection(norm, cellWidth: cellWidth, cellHeight: cellHeight)
+                        let fill = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
+                        let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
+                        selectionRectangle(
+                            sel: norm, selRect: selRect,
+                            cellWidth: cellWidth, cellHeight: cellHeight,
+                            cornerRadius: cellCornerRadius,
+                            fill: fill, border: border,
+                            divider: border.opacity(0.3)
+                        )
+                    }
+                }
+
+                // Unified highlight rectangle (from highlightSelection, single)
+                if let hl = highlightSelection?.normalized, activeSelection == nil, committedSelections.isEmpty, highlightSelections.isEmpty {
                     let selRect = rectForSelection(hl, cellWidth: cellWidth, cellHeight: cellHeight)
                     selectionRectangle(
                         sel: hl, selRect: selRect,
@@ -98,13 +149,23 @@ struct LayoutGridWorkspaceView: View {
                 // Unified drag selection rectangle
                 if let sel = activeSelection?.normalized {
                     let selRect = rectForSelection(sel, cellWidth: cellWidth, cellHeight: cellHeight)
+                    let overlaps = dragOverlapsCommitted
+                    // In edit mode, use the color of the next index this drag will become.
+                    let nextIndex = committedSelections.count
+                    let usesIndexedColor = !committedSelections.isEmpty || onDeleteSelection != nil
+                    let fillColor = overlaps ? ThemeColors.invalidSelectionFill(for: colorScheme)
+                        : usesIndexedColor ? ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme)
+                        : ThemeColors.gridCellSelectedFill(for: colorScheme)
+                    let borderColor = overlaps ? ThemeColors.invalidSelectionBorder(for: colorScheme)
+                        : usesIndexedColor ? ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme)
+                        : ThemeColors.gridCellSelectedBorder(for: colorScheme)
                     selectionRectangle(
                         sel: sel, selRect: selRect,
                         cellWidth: cellWidth, cellHeight: cellHeight,
                         cornerRadius: cellCornerRadius,
-                        fill: ThemeColors.gridCellSelectedFill(for: colorScheme),
-                        border: ThemeColors.gridCellSelectedBorder(for: colorScheme),
-                        divider: ThemeColors.gridCellSelectedBorder(for: colorScheme).opacity(0.3)
+                        fill: fillColor,
+                        border: borderColor,
+                        divider: borderColor.opacity(0.3)
                     )
                 }
             }
@@ -160,10 +221,13 @@ struct LayoutGridWorkspaceView: View {
                         }
                         let cell = cell(at: value.location, cellWidth: cellWidth, cellHeight: cellHeight)
                         let selection = updateSelection(row: cell.row, column: cell.column)
+                        let overlaps = dragOverlapsCommitted
                         dragSelection = nil
                         dragStart = nil
                         onSelectionChange(nil)
-                        onSelectionCommit(selection)
+                        if !overlaps {
+                            onSelectionCommit(selection)
+                        }
                     }
             )
         }
@@ -184,15 +248,19 @@ struct LayoutGridWorkspaceView: View {
 
     /// Returns a single rectangle spanning from the top-left of the start cell
     /// to the bottom-right of the end cell (inclusive of gaps between cells).
+    /// Applies `screenEdgeInsets` when the selection touches a grid edge.
     private func rectForSelection(_ sel: GridSelection, cellWidth: CGFloat, cellHeight: CGFloat) -> CGRect {
         let topLeft = rectForCell(row: sel.startRow, column: sel.startColumn, width: cellWidth, height: cellHeight)
         let bottomRight = rectForCell(row: sel.endRow, column: sel.endColumn, width: cellWidth, height: cellHeight)
-        return CGRect(
-            x: topLeft.minX,
-            y: topLeft.minY,
-            width: bottomRight.maxX - topLeft.minX,
-            height: bottomRight.maxY - topLeft.minY
-        )
+        var x = topLeft.minX
+        var y = topLeft.minY
+        var w = bottomRight.maxX - topLeft.minX
+        var h = bottomRight.maxY - topLeft.minY
+        if sel.startColumn == 0 { x += screenEdgeInsets.leading; w -= screenEdgeInsets.leading }
+        if sel.endColumn == columns - 1 { w -= screenEdgeInsets.trailing }
+        if sel.startRow == 0 { y += screenEdgeInsets.top; h -= screenEdgeInsets.top }
+        if sel.endRow == rows - 1 { h -= screenEdgeInsets.bottom }
+        return CGRect(x: x, y: y, width: w, height: h)
     }
 
     private func cell(at location: CGPoint, cellWidth: CGFloat, cellHeight: CGFloat) -> (row: Int, column: Int) {
@@ -279,8 +347,98 @@ struct LayoutGridWorkspaceView: View {
     }
 
     private func isHighlighted(row: Int, column: Int) -> Bool {
-        guard let hl = highlightSelection?.normalized, activeSelection == nil else { return false }
+        guard let hl = highlightSelection?.normalized, activeSelection == nil, committedSelections.isEmpty else { return false }
         return hl.startRow...hl.endRow ~= row && hl.startColumn...hl.endColumn ~= column
+    }
+
+    private func isInCommittedSelection(row: Int, column: Int) -> Bool {
+        committedSelections.contains { sel in
+            let n = sel.normalized
+            return n.startRow...n.endRow ~= row && n.startColumn...n.endColumn ~= column
+        }
+    }
+
+    private func isInHighlightSelections(row: Int, column: Int) -> Bool {
+        guard !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty else { return false }
+        return highlightSelections.contains { sel in
+            let n = sel.normalized
+            return n.startRow...n.endRow ~= row && n.startColumn...n.endColumn ~= column
+        }
+    }
+
+    /// Whether the current drag selection overlaps any committed selection.
+    private var dragOverlapsCommitted: Bool {
+        guard let drag = activeSelection?.normalized else { return false }
+        return committedSelections.contains { drag.overlaps($0) }
+    }
+
+    /// Draws a committed selection rectangle with index label and optional delete button.
+    @ViewBuilder
+    private func committedSelectionRectangle(
+        index: Int,
+        sel: GridSelection,
+        selRect: CGRect,
+        cellWidth: CGFloat,
+        cellHeight: CGFloat,
+        cornerRadius: CGFloat,
+        fill: Color,
+        border: Color,
+        divider: Color,
+        showDelete: Bool
+    ) -> some View {
+        let spanCols = sel.endColumn - sel.startColumn + 1
+        let spanRows = sel.endRow - sel.startRow + 1
+
+        ZStack(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(fill)
+                .overlay(
+                    Canvas { context, size in
+                        for i in 1..<spanCols {
+                            let x = CGFloat(i) * (cellWidth + gap) - gap / 2
+                            var path = Path()
+                            path.move(to: CGPoint(x: x, y: 0))
+                            path.addLine(to: CGPoint(x: x, y: size.height))
+                            context.stroke(path, with: .color(divider), lineWidth: 0.5)
+                        }
+                        for i in 1..<spanRows {
+                            let y = CGFloat(i) * (cellHeight + gap) - gap / 2
+                            var path = Path()
+                            path.move(to: CGPoint(x: 0, y: y))
+                            path.addLine(to: CGPoint(x: size.width, y: y))
+                            context.stroke(path, with: .color(divider), lineWidth: 0.5)
+                        }
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(border, lineWidth: 1.5)
+                )
+
+            // Index label centered
+            Text("\(index + 1)")
+                .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+                .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Delete button at top-left
+            if showDelete {
+                Button {
+                    onDeleteSelection?(index)
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: min(14, min(selRect.width, selRect.height) * 0.22)))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .shadow(color: .black.opacity(0.4), radius: 1, y: 0.5)
+                }
+                .buttonStyle(.plain)
+                .padding(4)
+            }
+        }
+        .frame(width: selRect.width, height: selRect.height)
+        .position(x: selRect.midX, y: selRect.midY)
     }
 
 }

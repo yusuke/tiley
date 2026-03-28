@@ -1,6 +1,26 @@
 import AppKit
 import SwiftUI
 
+/// Data for a single selection preview (used by multi-selection overlay).
+struct SelectionPreviewItem {
+    let selection: GridSelection
+    let resizability: WindowResizability
+    let windowSize: CGSize?
+    let appIcon: NSImage?
+    let windowTitle: String?
+    let appName: String?
+}
+
+/// Resolved frame + window info for rendering.
+private struct SelectionPreviewEntry {
+    let frame: CGRect
+    let resizability: WindowResizability
+    let windowSize: CGSize?
+    let appIcon: NSImage?
+    let windowTitle: String?
+    let appName: String?
+}
+
 final class LayoutPreviewOverlayController: NSWindowController {
     let screenFrame: CGRect
     let visibleFrame: CGRect
@@ -31,7 +51,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil) {
+    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil, colorIndex: Int? = nil) {
         let frame = GridCalculator.frame(for: selection, in: visibleFrame, rows: rows, columns: columns, gap: gap)
         let rootView = SelectionPreviewOverlayView(
             frame: frame,
@@ -40,8 +60,27 @@ final class LayoutPreviewOverlayController: NSWindowController {
             screenFrame: screenFrame,
             appIcon: appIcon,
             windowTitle: windowTitle,
-            appName: appName
+            appName: appName,
+            colorIndex: colorIndex
         )
+        window?.contentView = NSHostingView(rootView: rootView)
+        window?.level = .normal
+        present(behind: parentWindow)
+    }
+
+    /// Show preview rectangles for multiple selections (multi-selection preset).
+    func showMultipleSelections(_ items: [SelectionPreviewItem], rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?) {
+        let frames = items.map { item in
+            SelectionPreviewEntry(
+                frame: GridCalculator.frame(for: item.selection, in: visibleFrame, rows: rows, columns: columns, gap: gap),
+                resizability: item.resizability,
+                windowSize: item.windowSize,
+                appIcon: item.appIcon,
+                windowTitle: item.windowTitle,
+                appName: item.appName
+            )
+        }
+        let rootView = MultiSelectionPreviewOverlayView(entries: frames, screenFrame: screenFrame)
         window?.contentView = NSHostingView(rootView: rootView)
         window?.level = .normal
         present(behind: parentWindow)
@@ -105,6 +144,8 @@ private struct SelectionPreviewOverlayView: View {
     let appIcon: NSImage?
     let windowTitle: String?
     let appName: String?
+    /// When set, uses indexed selection colors instead of default overlay colors.
+    var colorIndex: Int? = nil
 
     var body: some View {
         // Full requested frame in screen-local coordinates (top-left origin).
@@ -210,7 +251,9 @@ private struct SelectionPreviewOverlayView: View {
         ZStack(alignment: .top) {
             // Base fill + border
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(ThemeColors.overlaySelectionFill(for: colorScheme))
+                .fill(colorIndex != nil
+                      ? ThemeColors.indexedSelectionFill(index: colorIndex!, for: colorScheme)
+                      : ThemeColors.overlaySelectionFill(for: colorScheme))
 
             if showTitleBar {
                 // Title bar background
@@ -234,7 +277,9 @@ private struct SelectionPreviewOverlayView: View {
 
             // Border stroke on top of everything
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
+                .stroke(colorIndex != nil
+                        ? ThemeColors.indexedSelectionBorder(index: colorIndex!, for: colorScheme)
+                        : ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
         }
         .frame(width: width, height: height)
     }
@@ -357,6 +402,31 @@ private struct GridPreviewOverlayView: View {
                         .frame(width: rect.width, height: rect.height)
                         .position(x: rect.midX, y: rect.midY)
                 }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Color.clear)
+    }
+}
+
+/// Overlay view that renders multiple selection preview rectangles simultaneously.
+private struct MultiSelectionPreviewOverlayView: View {
+    let entries: [SelectionPreviewEntry]
+    let screenFrame: CGRect
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            ForEach(Array(entries.enumerated()), id: \.offset) { index, entry in
+                SelectionPreviewOverlayView(
+                    frame: entry.frame,
+                    resizability: entry.resizability,
+                    windowSize: entry.windowSize,
+                    screenFrame: screenFrame,
+                    appIcon: entry.appIcon,
+                    windowTitle: entry.windowTitle,
+                    appName: entry.appName,
+                    colorIndex: index
+                )
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

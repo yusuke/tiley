@@ -21,6 +21,12 @@ struct GridSelection: Equatable, Codable {
         return "c\(n.startColumn + 1)-\(n.endColumn + 1), r\(n.startRow + 1)-\(n.endRow + 1)"
     }
 
+    func overlaps(_ other: GridSelection) -> Bool {
+        let a = self.normalized, b = other.normalized
+        return a.startColumn <= b.endColumn && a.endColumn >= b.startColumn
+            && a.startRow <= b.endRow && a.endRow >= b.startRow
+    }
+
     func scaled(fromRows sourceRows: Int, columns sourceColumns: Int, toRows targetRows: Int, columns targetColumns: Int) -> GridSelection {
         let n = normalized
 
@@ -48,9 +54,26 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
     let id: UUID
     var name: String
     var selection: GridSelection
+    var secondarySelections: [GridSelection]
     var baseRows: Int
     var baseColumns: Int
     var shortcuts: [HotKeyShortcut]
+
+    /// A sentinel selection used when all selections have been deleted in the editor.
+    static let emptySelection = GridSelection(startColumn: -1, startRow: -1, endColumn: -1, endRow: -1)
+
+    var allSelections: [GridSelection] {
+        if selection == Self.emptySelection {
+            return []
+        }
+        return [selection] + secondarySelections
+    }
+
+    func allScaledSelections(toRows rows: Int, columns: Int) -> [GridSelection] {
+        allSelections.map {
+            $0.scaled(fromRows: baseRows, columns: baseColumns, toRows: rows, columns: columns)
+        }
+    }
 
     var hasAnyGlobalShortcut: Bool { shortcuts.contains { $0.isGlobal } }
     var globalShortcuts: [HotKeyShortcut] { shortcuts.filter { $0.isGlobal } }
@@ -60,6 +83,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         case id
         case name
         case selection
+        case secondarySelections
         case baseRows
         case baseColumns
         case shortcut
@@ -73,6 +97,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         id: UUID,
         name: String,
         selection: GridSelection,
+        secondarySelections: [GridSelection] = [],
         baseRows: Int,
         baseColumns: Int,
         shortcuts: [HotKeyShortcut]
@@ -80,6 +105,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         self.id = id
         self.name = name
         self.selection = selection
+        self.secondarySelections = secondarySelections
         self.baseRows = baseRows
         self.baseColumns = baseColumns
         self.shortcuts = shortcuts
@@ -90,6 +116,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         id = try container.decode(UUID.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         selection = try container.decode(GridSelection.self, forKey: .selection)
+        secondarySelections = try container.decodeIfPresent([GridSelection].self, forKey: .secondarySelections) ?? []
         baseRows = try container.decode(Int.self, forKey: .baseRows)
         baseColumns = try container.decode(Int.self, forKey: .baseColumns)
 
@@ -124,10 +151,19 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         try container.encode(baseRows, forKey: .baseRows)
         try container.encode(baseColumns, forKey: .baseColumns)
         try container.encode(shortcuts, forKey: .shortcuts)
+        if !secondarySelections.isEmpty {
+            try container.encode(secondarySelections, forKey: .secondarySelections)
+        }
     }
 
     func scaledSelection(toRows rows: Int, columns: Int) -> GridSelection {
         selection.scaled(fromRows: baseRows, columns: baseColumns, toRows: rows, columns: columns)
+    }
+
+    func scaledSecondarySelections(toRows rows: Int, columns: Int) -> [GridSelection] {
+        secondarySelections.map {
+            $0.scaled(fromRows: baseRows, columns: baseColumns, toRows: rows, columns: columns)
+        }
     }
 
     static func defaultPresets(rows: Int, columns: Int) -> [LayoutPreset] {

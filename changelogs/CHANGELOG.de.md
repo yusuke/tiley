@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Mehrfachauswahl-Layout-Vorlagen: Definieren Sie mehrere Rasterbereiche pro Vorlage, um verschiedene Fenster an verschiedenen Positionen anzuordnen
+  - Jedes Ziehen im Vorlagen-Editor fügt eine neue Auswahl hinzu (1., 2., 3., ...)
+  - Jede Auswahl zeigt ihre Indexnummer und einen Löschbutton
+  - Überlappende Auswahlen werden verhindert (mit visuellem Feedback)
+  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Z-Reihenfolge zugewiesen: vorderstes Fenster erhält Auswahl 1, zweites Auswahl 2 usw.
+  - Vorlagen-Miniaturansichten zeigen alle Auswahlen in unterschiedlichen Farben
+
 ## [3.4.0] - 2026-03-28
 
 ### Hinzugefügt
