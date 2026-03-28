@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Clicar no cabeçalho de um aplicativo na barra lateral agora seleciona a janela mais à frente do app
+- Ao selecionar uma janela dentro de um grupo de app, o cabeçalho do aplicativo permanece destacado
+- Para apps não-Finder com múltiplas janelas, um botão "Encerrar app" é exibido ao lado do botão "Fechar janela" na barra de ações
+- O tooltip "Fechar janela" agora exibe o nome da janela (ex.: Fechar "Documento")
+
+## [3.3.2] - 2026-03-28
+
+### Adicionado
+
+- Os atalhos de teclado para "Selecionar próxima janela", "Selecionar janela anterior", "Trazer para frente" e "Fechar/Sair" agora podem ser configurados na seção de atalhos das preferências
+- Novo item de menu de contexto "Fechar outras janelas de [App]" ao clicar com o botão direito em uma janela na barra lateral (exibido apenas quando o app tem várias janelas)
+
+### Alterado
+
+- A seção de configuração de atalhos foi reorganizada em dois grupos: atalhos de ação de janela e atalhos de movimento de monitor
+- Os atalhos de movimento de monitor agora são apenas globais; o suporte a atalhos locais e suas opções de configuração foram removidos
+- No macOS 26 (Tahoe), os botões da barra de ferramentas, o botão Sair, os botões da barra de ações e o botão de menu suspenso agora usam o efeito interativo do Liquid Glass, seguindo as Human Interface Guidelines
+- A cor de fundo da janela agora usa a cor do sistema para melhor compatibilidade com as mudanças de aparência do macOS
+- As janelas deslocadas agora retornam à posição original com animação ao confirmar uma seleção, aplicar um layout ou cancelar com Escape
+
 ## [3.3.1] - 2026-03-28
 
 ### Adicionado

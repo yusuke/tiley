@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Clicking an application header in the sidebar now selects the app's frontmost window
+- Selecting a window under an app group now keeps the application header highlighted
+- Added a "Quit App" button next to the "Close Window" button for non-Finder apps with multiple windows in the sidebar action bar
+- The "Close Window" tooltip now shows the window name (e.g., Close "Document")
+
+## [3.3.2] - 2026-03-28
+
+### Added
+
+- Shortcuts for "Select Next Window", "Select Previous Window", "Bring to Front", and "Close / Quit" are now configurable in the Shortcuts settings
+- Added "Close other windows of [App]" context menu item when right-clicking a window in the sidebar (shown only when the app has multiple windows)
+
+### Changed
+
+- Reorganized the Shortcuts settings section: window action shortcuts and display movement shortcuts are now grouped separately, each in their own card
+- Display movement shortcuts are now global-only; removed local shortcut support and settings for display movement actions
+- Updated toolbar buttons, quit button, action bar buttons, and dropdown menu button to use Liquid Glass interactive effect on macOS 26 (Tahoe), following the Human Interface Guidelines
+- Window background now uses the system window background color for better compatibility with macOS appearance changes
+- Displaced windows now animate back to their original positions when confirming a selection, applying a layout, or canceling with Escape
+
 ## [3.3.1] - 2026-03-28
 
 ### Added
@@ -409,7 +431,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v3.3.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v3.3.2...HEAD
+[3.3.2]: https://github.com/yusuke/tiley/releases/tag/v3.3.2
 [3.3.1]: https://github.com/yusuke/tiley/releases/tag/v3.3.1
 [3.3.0]: https://github.com/yusuke/tiley/releases/tag/v3.3.0
 [3.2.9]: https://github.com/yusuke/tiley/releases/tag/v3.2.9

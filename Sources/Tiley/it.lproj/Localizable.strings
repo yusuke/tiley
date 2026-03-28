@@ -115,7 +115,7 @@
 
 // Action bar tooltips
 "Move to Other Display" = "Sposta su altro display";
-"Close Window" = "Chiudi finestra";
+"Close \"%@\"" = "Chiudi \"%@\"";
 "Quit App" = "Esci dall'app";
 "Hide Other Apps" = "Nascondi altre app";
 "Move to %@" = "Sposta su %@";

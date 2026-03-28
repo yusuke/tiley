@@ -1914,11 +1914,30 @@ struct MainWindowView: View {
         .buttonStyle(TahoeActionBarButtonStyle())
         .frame(width: 28, height: 24)
         .disabled(!hasSelection)
-        .instantTooltip(
-            isFinder || sameAppCount > 1
-            ? NSLocalizedString("Close Window", comment: "Action bar tooltip for close window button")
-            : NSLocalizedString("Quit App", comment: "Action bar tooltip for quit app button")
-        )
+        .instantTooltip({
+            if isFinder || sameAppCount > 1 {
+                let title = selectedTarget?.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                let name = title.isEmpty ? (selectedTarget?.appName ?? "") : title
+                return String(format: NSLocalizedString("Close \"%@\"", comment: "Action bar tooltip for close window button with window name"), name)
+            } else {
+                return NSLocalizedString("Quit App", comment: "Action bar tooltip for quit app button")
+            }
+        }())
+
+        // Quit App (shown alongside Close Window for non-Finder apps with multiple windows)
+        if !isFinder && sameAppCount > 1 {
+            Button {
+                if hasSelection { appState.quitApp(at: idx) }
+            } label: {
+                Image(systemName: "power")
+                    .font(.system(size: 11, weight: .medium))
+                    .frame(width: 28, height: 24)
+            }
+            .buttonStyle(TahoeActionBarButtonStyle())
+            .frame(width: 28, height: 24)
+            .disabled(!hasSelection)
+            .instantTooltip(NSLocalizedString("Quit App", comment: "Action bar tooltip for quit app button"))
+        }
 
         // Hide others
         Button {
@@ -2187,10 +2206,25 @@ struct MainWindowView: View {
     }
 
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
-        let isSelected = sidebarSelection == .appHeader(pid: pid, appName: appName)
+        let isExplicitlySelected = sidebarSelection == .appHeader(pid: pid, appName: appName)
+        // Also highlight when any child window of this app is the current target.
+        let hasSelectedChild: Bool = {
+            let idx = appState.currentWindowTargetIndex
+            let targets = appState.windowTargetList
+            if idx >= 0, idx < targets.count,
+               targets[idx].processIdentifier == pid {
+                return true
+            }
+            return false
+        }()
+        let isSelected = isExplicitlySelected || hasSelectedChild
 
         return Button {
             sidebarSelection = .appHeader(pid: pid, appName: appName)
+            // Select the frontmost window of this app (first match in z-order list).
+            if let firstIndex = appState.windowTargetList.firstIndex(where: { $0.processIdentifier == pid }) {
+                appState.selectWindowTarget(at: firstIndex)
+            }
         } label: {
             HStack(spacing: 6) {
                 if let icon = appInfoCache.icon(for: pid) {
@@ -2297,7 +2331,12 @@ struct MainWindowView: View {
 
         return Button {
             appState.selectWindowTarget(at: item.id)
-            sidebarSelection = .window(index: item.id)
+            if item.isUnderAppHeader {
+                // Keep the app header selected when choosing a child window.
+                sidebarSelection = .appHeader(pid: item.pid, appName: item.appName)
+            } else {
+                sidebarSelection = .window(index: item.id)
+            }
         } label: {
             HStack(spacing: 6) {
                 if item.isUnderAppHeader {

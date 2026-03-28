@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Ein Klick auf einen App-Header in der Seitenleiste wählt nun das vorderste Fenster der App aus
+- Beim Auswählen eines Fensters innerhalb einer App-Gruppe bleibt der App-Header hervorgehoben
+- Für Nicht-Finder-Apps mit mehreren Fenstern wird in der Aktionsleiste neben „Fenster schließen" nun auch eine „App beenden"-Schaltfläche angezeigt
+- Der Tooltip „Fenster schließen" zeigt nun den Fensternamen an (z. B. „Dokument" schließen)
+
+## [3.3.2] - 2026-03-28
+
+### Hinzugefügt
+
+- Die Tastenkürzel für „Nächstes Fenster auswählen", „Vorheriges Fenster auswählen", „In den Vordergrund" und „Schließen/Beenden" können jetzt in den Einstellungen konfiguriert werden
+- Neuer Kontextmenüeintrag „Andere Fenster von [App] schließen" beim Rechtsklick auf ein Fenster in der Seitenleiste (nur sichtbar, wenn die App mehrere Fenster hat)
+
+### Geändert
+
+- Der Bereich für Tastenkürzel wurde in zwei Gruppen unterteilt: Fensterbefehle und Anzeige-Bewegungen
+- Anzeige-Bewegungskürzel sind jetzt nur noch global; lokale Tastenkürzel und deren Einstellungen wurden entfernt
+- Auf macOS 26 (Tahoe) verwenden Symbolleisten-Schaltflächen, Beenden-Schaltfläche, Aktionsleisten-Schaltflächen und Dropdown-Menü-Schaltflächen den interaktiven Liquid Glass-Effekt gemäß den Human Interface Guidelines
+- Fensterhintergrundfarbe wurde auf die System-Fensterhintergrundfarbe umgestellt, um die Kompatibilität mit macOS-Erscheinungsänderungen zu verbessern
+- Verschobene Fenster kehren nun beim Bestätigen einer Auswahl, Anwenden eines Layouts oder Abbrechen mit Escape animiert an ihre ursprüngliche Position zurück
+
 ## [3.3.1] - 2026-03-28
 
 ### Hinzugefügt

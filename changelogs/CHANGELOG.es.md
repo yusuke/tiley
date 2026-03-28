@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Al hacer clic en el encabezado de una aplicación en la barra lateral, ahora se selecciona la ventana más al frente de la app
+- Al seleccionar una ventana dentro de un grupo de app, el encabezado de la aplicación permanece resaltado
+- Para apps que no son Finder con múltiples ventanas, se muestra un botón "Salir de la app" junto al botón "Cerrar ventana" en la barra de acciones
+- El tooltip "Cerrar ventana" ahora muestra el nombre de la ventana (ej.: Cerrar "Documento")
+
+## [3.3.2] - 2026-03-28
+
+### Añadido
+
+- Los atajos de teclado para "Seleccionar siguiente ventana", "Seleccionar ventana anterior", "Traer al frente" y "Cerrar/Salir" ahora se pueden configurar en la sección de atajos de las preferencias
+- Nuevo elemento de menú contextual "Cerrar otras ventanas de [App]" al hacer clic derecho en una ventana de la barra lateral (solo visible cuando la app tiene varias ventanas)
+
+### Cambiado
+
+- La sección de configuración de atajos ha sido reorganizada en dos grupos: atajos de acción de ventana y atajos de movimiento de pantalla
+- Los atajos de movimiento de pantalla ahora son solo globales; se eliminó el soporte de atajos locales y sus opciones de configuración
+- En macOS 26 (Tahoe), los botones de la barra de herramientas, el botón de salir, los botones de la barra de acciones y el botón de menú desplegable usan el efecto interactivo de Liquid Glass, siguiendo las Human Interface Guidelines
+- El color de fondo de la ventana ahora usa el color del sistema para mayor compatibilidad con los cambios de apariencia de macOS
+- Las ventanas desplazadas ahora regresan a su posición original con animación al confirmar una selección, aplicar un diseño o cancelar con Escape
+
 ## [3.3.1] - 2026-03-28
 
 ### Añadido

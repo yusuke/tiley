@@ -115,7 +115,7 @@
 
 // Action bar tooltips
 "Move to Other Display" = "他のディスプレイに移動";
-"Close Window" = "ウィンドウを閉じる";
+"Close \"%@\"" = "「%@」を閉じる";
 "Quit App" = "アプリケーションを終了";
 "Hide Other Apps" = "他のアプリケーションを隠す";
 "Move to %@" = "%@へ移動";

@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Cliccando sull'intestazione di un'app nella barra laterale, ora viene selezionata la finestra più in primo piano dell'app
+- Selezionando una finestra all'interno di un gruppo di app, l'intestazione dell'applicazione rimane evidenziata
+- Per le app non-Finder con più finestre, nella barra delle azioni viene mostrato un pulsante "Esci dall'app" accanto a "Chiudi finestra"
+- Il tooltip "Chiudi finestra" ora mostra il nome della finestra (es.: Chiudi "Documento")
+
+## [3.3.2] - 2026-03-28
+
+### Aggiunto
+
+- I tasti di scelta rapida per "Seleziona finestra successiva", "Seleziona finestra precedente", "Porta in primo piano" e "Chiudi/Esci" sono ora configurabili nella sezione scorciatoie delle preferenze
+- Nuova voce di menu contestuale "Chiudi le altre finestre di [App]" facendo clic destro su una finestra nella barra laterale (visibile solo quando l'app ha più finestre)
+
+### Modificato
+
+- La sezione di configurazione delle scorciatoie è stata riorganizzata in due gruppi: scorciatoie per le azioni sulle finestre e scorciatoie per lo spostamento del display
+- Le scorciatoie per lo spostamento del display sono ora solo globali; il supporto per le scorciatoie locali e le relative opzioni di configurazione sono stati rimossi
+- Su macOS 26 (Tahoe), i pulsanti della barra degli strumenti, il pulsante Esci, i pulsanti della barra delle azioni e il pulsante del menu a discesa utilizzano ora l'effetto Liquid Glass interattivo, in conformità con le Human Interface Guidelines
+- Il colore di sfondo della finestra ora usa il colore di sistema per una migliore compatibilità con le modifiche all'aspetto di macOS
+- Le finestre spostate tornano ora alla posizione originale con un'animazione quando si conferma una selezione, si applica un layout o si annulla con Escape
+
 ## [3.3.1] - 2026-03-28
 
 ### Aggiunto

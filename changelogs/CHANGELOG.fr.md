@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Un clic sur l'en-tête d'une application dans la barre latérale sélectionne désormais la fenêtre la plus en avant de l'app
+- La sélection d'une fenêtre dans un groupe d'app maintient l'en-tête de l'application en surbrillance
+- Pour les apps non-Finder ayant plusieurs fenêtres, un bouton « Quitter l'app » est affiché à côté du bouton « Fermer la fenêtre » dans la barre d'actions
+- L'infobulle « Fermer la fenêtre » affiche désormais le nom de la fenêtre (ex. : Fermer « Document »)
+
+## [3.3.2] - 2026-03-28
+
+### Ajouté
+
+- Les raccourcis clavier pour « Fenêtre suivante », « Fenêtre précédente », « Mettre au premier plan » et « Fermer/Quitter » sont désormais configurables dans la section des raccourcis des préférences
+- Nouvel élément de menu contextuel « Fermer les autres fenêtres de [App] » lors d'un clic droit sur une fenêtre dans la barre latérale (affiché uniquement lorsque l'app a plusieurs fenêtres)
+
+### Modifié
+
+- La section de configuration des raccourcis a été réorganisée en deux groupes : les raccourcis d'action sur les fenêtres et les raccourcis de déplacement d'écran
+- Les raccourcis de déplacement d'écran sont désormais uniquement globaux ; le support des raccourcis locaux et leurs options de configuration ont été supprimés
+- Sur macOS 26 (Tahoe), les boutons de la barre d'outils, le bouton Quitter, les boutons de la barre d'actions et le bouton de menu déroulant utilisent désormais l'effet Liquid Glass interactif, conformément aux Human Interface Guidelines
+- La couleur de fond de la fenêtre utilise maintenant la couleur système pour une meilleure compatibilité avec les changements d'apparence de macOS
+- Les fenêtres déplacées reviennent désormais à leur position d'origine avec une animation lors de la confirmation d'une sélection, de l'application d'une disposition ou de l'annulation avec Échap
+
 ## [3.3.1] - 2026-03-28
 
 ### Ajouté
