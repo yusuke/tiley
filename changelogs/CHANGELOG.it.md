@@ -2,9 +2,18 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Selezione multipla delle finestre nella barra laterale con azioni in blocco
+    - Clic sull'intestazione dell'app per selezionare tutte le sue finestre
+    - Cmd+clic per aggiungere/rimuovere finestre singole
+    - Shift+clic per selezionare un intervallo continuo di finestre
+- Azioni in blocco per la selezione multipla: porta in primo piano (mantenendo l'ordine Z della barra laterale), ridimensiona/sposta nella griglia, sposta su un altro display, chiudi/esci
+- Quando si chiudono più finestre selezionate, le app con tutte le finestre selezionate vengono chiuse (eccetto il Finder)
+
 ### Modificato
 
-- Cliccando sull'intestazione di un'app nella barra laterale, ora viene selezionata la finestra più in primo piano dell'app
+- Cliccando sull'intestazione di un'app nella barra laterale ora si selezionano tutte le finestre di quell'app (in precedenza veniva selezionata solo la finestra in primo piano)
 - Selezionando una finestra all'interno di un gruppo di app, l'intestazione dell'applicazione rimane evidenziata
 - Per le app non-Finder con più finestre, nella barra delle azioni viene mostrato un pulsante "Esci dall'app" accanto a "Chiudi finestra"
 - Il tooltip "Chiudi finestra" ora mostra il nome della finestra (es.: Chiudi "Documento")

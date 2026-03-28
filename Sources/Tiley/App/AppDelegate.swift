@@ -47,6 +47,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        rotateDebugLogIfNeeded()
+
         let telemetryConfig = TelemetryDeck.Config(appID: "9B33124A-BA08-47CC-9633-935F30737BCF")
         TelemetryDeck.initialize(config: telemetryConfig)
 

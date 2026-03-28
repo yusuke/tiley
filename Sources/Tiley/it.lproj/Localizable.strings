@@ -120,6 +120,7 @@
 "Hide Other Apps" = "Nascondi altre app";
 "Move to %@" = "Sposta su %@";
 "Close all %@ windows" = "Chiudi tutte le finestre di %@";
+"Close %d windows" = "Chiudi %d finestre";
 "Close other windows of %@" = "Chiudi le altre finestre di %@";
 
 // Display shortcuts

@@ -120,6 +120,7 @@
 "Hide Other Apps" = "다른 앱 가리기";
 "Move to %@" = "%@(으)로 이동";
 "Close all %@ windows" = "%@의 모든 윈도우 닫기";
+"Close %d windows" = "%d개의 윈도우 닫기";
 "Close other windows of %@" = "%@의 다른 윈도우 닫기";
 
 // Display shortcuts

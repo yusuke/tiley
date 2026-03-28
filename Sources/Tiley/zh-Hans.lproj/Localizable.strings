@@ -120,6 +120,7 @@
 "Hide Other Apps" = "隐藏其他应用";
 "Move to %@" = "移动到%@";
 "Close all %@ windows" = "关闭所有%@窗口";
+"Close %d windows" = "关闭 %d 个窗口";
 "Close other windows of %@" = "关闭%@的其他窗口";
 
 // Display shortcuts

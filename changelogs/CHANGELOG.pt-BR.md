@@ -2,9 +2,18 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Seleção múltipla de janelas na barra lateral com ações em lote
+    - Clique no cabeçalho do app para selecionar todas as suas janelas
+    - Cmd+clique para adicionar/remover janelas individuais
+    - Shift+clique para selecionar um intervalo contínuo de janelas
+- Ações em lote na seleção múltipla: trazer para frente (mantendo a ordem Z da barra lateral), redimensionar/mover para a grade, mover para outra tela, fechar/encerrar
+- Ao fechar múltiplas janelas selecionadas, apps com todas as janelas selecionadas são encerrados (exceto o Finder)
+
 ### Alterado
 
-- Clicar no cabeçalho de um aplicativo na barra lateral agora seleciona a janela mais à frente do app
+- Clicar no cabeçalho de um app na barra lateral agora seleciona todas as janelas desse app (anteriormente selecionava apenas a janela da frente)
 - Ao selecionar uma janela dentro de um grupo de app, o cabeçalho do aplicativo permanece destacado
 - Para apps não-Finder com múltiplas janelas, um botão "Encerrar app" é exibido ao lado do botão "Fechar janela" na barra de ações
 - O tooltip "Fechar janela" agora exibe o nome da janela (ex.: Fechar "Documento")

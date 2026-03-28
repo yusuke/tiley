@@ -2,9 +2,18 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Mehrfachauswahl von Fenstern in der Seitenleiste mit Stapelaktionen
+    - Klick auf App-Header wählt alle Fenster der App aus
+    - Cmd+Klick zum Hinzufügen/Entfernen einzelner Fenster
+    - Shift+Klick für zusammenhängende Bereichsauswahl
+- Stapelaktionen bei Mehrfachauswahl: In den Vordergrund bringen (Seitenleisten-Z-Reihenfolge beibehalten), Größe ändern/zum Raster verschieben, Display wechseln, Schließen/Beenden
+- Beim Schließen mehrerer ausgewählter Fenster wird die App beendet, wenn alle ihre Fenster ausgewählt sind (außer Finder)
+
 ### Geändert
 
-- Ein Klick auf einen App-Header in der Seitenleiste wählt nun das vorderste Fenster der App aus
+- Klick auf App-Header in der Seitenleiste wählt nun alle Fenster der App aus (zuvor nur das vorderste Fenster)
 - Beim Auswählen eines Fensters innerhalb einer App-Gruppe bleibt der App-Header hervorgehoben
 - Für Nicht-Finder-Apps mit mehreren Fenstern wird in der Aktionsleiste neben „Fenster schließen" nun auch eine „App beenden"-Schaltfläche angezeigt
 - Der Tooltip „Fenster schließen" zeigt nun den Fensternamen an (z. B. „Dokument" schließen)

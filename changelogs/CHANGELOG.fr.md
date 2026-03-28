@@ -2,9 +2,18 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Sélection multiple de fenêtres dans la barre latérale avec actions groupées
+    - Clic sur l'en-tête d'une app pour sélectionner toutes ses fenêtres
+    - Cmd+clic pour ajouter/retirer des fenêtres individuellement
+    - Shift+clic pour sélectionner une plage continue de fenêtres
+- Actions groupées en sélection multiple : mettre au premier plan (en conservant l'ordre Z de la barre latérale), redimensionner/déplacer vers la grille, déplacer vers un autre écran, fermer/quitter
+- Lors de la fermeture de plusieurs fenêtres sélectionnées, les apps dont toutes les fenêtres sont sélectionnées sont quittées (sauf le Finder)
+
 ### Modifié
 
-- Un clic sur l'en-tête d'une application dans la barre latérale sélectionne désormais la fenêtre la plus en avant de l'app
+- Cliquer sur l'en-tête d'une app dans la barre latérale sélectionne désormais toutes les fenêtres de cette app (auparavant, seule la fenêtre la plus en avant était sélectionnée)
 - La sélection d'une fenêtre dans un groupe d'app maintient l'en-tête de l'application en surbrillance
 - Pour les apps non-Finder ayant plusieurs fenêtres, un bouton « Quitter l'app » est affiché à côté du bouton « Fermer la fenêtre » dans la barre d'actions
 - L'infobulle « Fermer la fenêtre » affiche désormais le nom de la fenêtre (ex. : Fermer « Document »)

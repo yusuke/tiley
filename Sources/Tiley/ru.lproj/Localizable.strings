@@ -120,6 +120,7 @@
 "Hide Other Apps" = "Скрыть другие приложения";
 "Move to %@" = "Переместить на %@";
 "Close all %@ windows" = "Закрыть все окна %@";
+"Close %d windows" = "Закрыть %d окон";
 "Close other windows of %@" = "Закрыть другие окна %@";
 
 // Display shortcuts

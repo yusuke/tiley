@@ -181,6 +181,11 @@ final class AppState: NSObject, NSMenuDelegate {
     /// The currently active Mission Control space IDs (one per display).
     @ObservationIgnored private(set) var activeSpaceIDs: Set<UInt64> = []
     @ObservationIgnored private var activeTargetIndex: Int = 0
+    /// All currently selected window indices for multi-selection.
+    /// Invariant: always contains `activeTargetIndex`.
+    @ObservationIgnored private(set) var selectedWindowIndices: Set<Int> = [0]
+    /// Anchor index for Shift+click range selection.
+    @ObservationIgnored private var selectionAnchorIndex: Int? = nil
     @ObservationIgnored private var originalFrontmostPID: pid_t?
     @ObservationIgnored private var originalFrontmostTarget: WindowTarget?
 
@@ -336,6 +341,18 @@ final class AppState: NSObject, NSMenuDelegate {
     var currentWindowTargetIndex: Int {
         _ = windowTargetListVersion
         return activeTargetIndex
+    }
+
+    /// The set of all selected window indices (for multi-selection).
+    var currentSelectedWindowIndices: Set<Int> {
+        _ = windowTargetListVersion
+        return selectedWindowIndices
+    }
+
+    /// True when multiple windows are selected.
+    var isMultiSelection: Bool {
+        _ = windowTargetListVersion
+        return selectedWindowIndices.count > 1
     }
 
     /// The display ID of the screen currently hosting the layout target.
@@ -641,7 +658,86 @@ final class AppState: NSObject, NSMenuDelegate {
             hidePreviewOverlay()
             return
         }
-        apply(selection: selection, to: target)
+
+        if selectedWindowIndices.count > 1 {
+            // Multi-selection: apply the same layout to all selected windows.
+            applyToMultipleWindows(selection: selection)
+        } else {
+            apply(selection: selection, to: target)
+        }
+    }
+
+    /// Apply a grid selection to all windows in the multi-selection.
+    /// - Parameters:
+    ///   - visibleFrame: If provided, use this screen's visible frame (e.g. from mouse pointer's screen).
+    ///   - screenFrame: If provided, use this screen frame for coordinate conversion.
+    private func applyToMultipleWindows(selection: GridSelection, visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil) {
+        guard let primaryTarget = activeLayoutTarget else { return }
+
+        // Determine the target screen: use the provided screen (mouse pointer's screen)
+        // or fall back to the primary target's screen.
+        let currentVisibleFrame: CGRect
+        let currentScreenFrame: CGRect
+        if let vf = visibleFrame, let sf = screenFrame {
+            // Re-fetch from actual screen to avoid stale values.
+            if let screen = NSScreen.screens.first(where: { $0.frame == sf }) {
+                currentVisibleFrame = screen.visibleFrame
+                currentScreenFrame = screen.frame
+            } else {
+                currentVisibleFrame = vf
+                currentScreenFrame = sf
+            }
+        } else if let screen = NSScreen.screens.first(where: { $0.frame == primaryTarget.screenFrame }) {
+            currentVisibleFrame = screen.visibleFrame
+            currentScreenFrame = screen.frame
+        } else {
+            currentVisibleFrame = primaryTarget.visibleFrame
+            currentScreenFrame = primaryTarget.screenFrame
+        }
+
+        let frame = GridCalculator.frame(
+            for: selection,
+            in: currentVisibleFrame,
+            rows: rows,
+            columns: columns,
+            gap: gap
+        )
+
+        dismissOverlayImmediately()
+
+        for idx in selectedWindowIndices {
+            guard idx < availableWindowTargets.count else { continue }
+            var target = availableWindowTargets[idx]
+            target = unhideAppIfNeeded(target)
+
+            // If the window is on a different screen, move it to the target screen first.
+            if let window = target.windowElement,
+               target.screenFrame != currentScreenFrame {
+                let destScreen = NSScreen.screens.first(where: { $0.frame == currentScreenFrame })
+                if let dest = destScreen {
+                    moveWindowToDestinationScreen(window: window, destination: dest)
+                }
+            }
+
+            do {
+                if enableDebugLog {
+                    _ = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
+                } else {
+                    _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
+                }
+                windowManager?.raiseWindow(target: target)
+            } catch {
+                NSLog("[Tiley] applyToMultipleWindows error for index \(idx): %@", error.localizedDescription)
+            }
+        }
+
+        recordSelectionAndHide(selection: selection, appName: primaryTarget.appName, wasConstrained: false)
+        let norm = selection.normalized
+        TelemetryDeck.signal("layoutApplied", parameters: [
+            "columns": "\(norm.endColumn - norm.startColumn + 1)",
+            "rows": "\(norm.endRow - norm.startRow + 1)",
+            "multiSelection": "\(selectedWindowIndices.count)",
+        ])
     }
 
     func cancelLayoutGrid() {
@@ -731,6 +827,10 @@ final class AppState: NSObject, NSMenuDelegate {
             activeTargetIndex = forward ? filteredIndices.first! : filteredIndices.last!
         }
 
+        // Tab cycling always resets to single selection.
+        selectedWindowIndices = [activeTargetIndex]
+        selectionAnchorIndex = activeTargetIndex
+
         applyTargetAtCurrentIndex()
     }
 
@@ -763,6 +863,15 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func selectWindowTarget(at index: Int) {
+        selectWindowTarget(at: index, shift: false, cmd: false)
+    }
+
+    /// Select a window target with optional modifier keys for multi-selection.
+    /// - Parameters:
+    ///   - index: The window index to select.
+    ///   - shift: True when Shift is held (range selection).
+    ///   - cmd: True when Cmd is held (toggle selection).
+    func selectWindowTarget(at index: Int, shift: Bool, cmd: Bool) {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
         guard index >= 0, index < availableWindowTargets.count else { return }
 
@@ -772,8 +881,110 @@ final class AppState: NSObject, NSMenuDelegate {
             initialZOrderWindowIDs = availableWindowTargets.map(\.cgWindowID).filter { $0 != 0 }
         }
 
-        activeTargetIndex = index
+        if cmd {
+            // Cmd+click: toggle this window in/out of the selection.
+            if selectedWindowIndices.contains(index) {
+                // Don't deselect the last remaining item.
+                if selectedWindowIndices.count > 1 {
+                    selectedWindowIndices.remove(index)
+                    // If the removed item was the primary, pick another.
+                    if activeTargetIndex == index {
+                        activeTargetIndex = selectedWindowIndices.first!
+                    }
+                }
+                // else: sole item Cmd-clicked → no-op
+            } else {
+                selectedWindowIndices.insert(index)
+                activeTargetIndex = index
+            }
+        } else if shift {
+            // Shift+click: select contiguous range in sidebar order.
+            let anchor = selectionAnchorIndex ?? activeTargetIndex
+            let order: [Int]
+            if !sidebarWindowOrder.isEmpty {
+                order = sidebarWindowOrder.filter { $0 < availableWindowTargets.count }
+            } else {
+                order = Array(availableWindowTargets.indices)
+            }
+            if let anchorPos = order.firstIndex(of: anchor),
+               let clickPos = order.firstIndex(of: index) {
+                let lo = min(anchorPos, clickPos)
+                let hi = max(anchorPos, clickPos)
+                selectedWindowIndices = Set(order[lo...hi])
+            } else {
+                selectedWindowIndices = [index]
+            }
+            activeTargetIndex = index
+            // Don't update selectionAnchorIndex on shift-click.
+        } else {
+            // Plain click: single selection.
+            selectedWindowIndices = [index]
+            selectionAnchorIndex = index
+            activeTargetIndex = index
+        }
+
+        windowTargetListVersion += 1
         applyTargetAtCurrentIndex()
+    }
+
+    /// Select all windows belonging to the given app (PID).
+    func selectAllWindowsOfApp(pid: pid_t) {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+
+        if originalFrontmostPID == nil {
+            originalFrontmostPID = lastTargetPID
+            originalFrontmostTarget = activeLayoutTarget
+            initialZOrderWindowIDs = availableWindowTargets.map(\.cgWindowID).filter { $0 != 0 }
+        }
+
+        let indices = availableWindowTargets.indices.filter { availableWindowTargets[$0].processIdentifier == pid }
+        guard !indices.isEmpty else { return }
+        selectedWindowIndices = Set(indices)
+        selectionAnchorIndex = nil
+        activeTargetIndex = indices.first!
+        windowTargetListVersion += 1
+        applyTargetAtCurrentIndex()
+    }
+
+    /// Select all windows on the given display.
+    func selectAllWindowsOnScreen(displayID: CGDirectDisplayID) {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+
+        if originalFrontmostPID == nil {
+            originalFrontmostPID = lastTargetPID
+            originalFrontmostTarget = activeLayoutTarget
+            initialZOrderWindowIDs = availableWindowTargets.map(\.cgWindowID).filter { $0 != 0 }
+        }
+
+        let indices = availableWindowTargets.indices.filter {
+            NSScreen.screen(containing: availableWindowTargets[$0].screenFrame)?.displayID == displayID
+        }
+        guard !indices.isEmpty else { return }
+        selectedWindowIndices = Set(indices)
+        selectionAnchorIndex = nil
+        activeTargetIndex = indices.first!
+        windowTargetListVersion += 1
+        applyTargetAtCurrentIndex()
+    }
+
+    /// Select all windows in the current window list.
+    func selectAllWindows() {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+        guard !availableWindowTargets.isEmpty else { return }
+
+        if originalFrontmostPID == nil {
+            originalFrontmostPID = lastTargetPID
+            originalFrontmostTarget = activeLayoutTarget
+            initialZOrderWindowIDs = availableWindowTargets.map(\.cgWindowID).filter { $0 != 0 }
+        }
+
+        selectedWindowIndices = Set(availableWindowTargets.indices)
+        selectionAnchorIndex = nil
+        // Keep activeTargetIndex as is, or set to 0 if invalid.
+        if activeTargetIndex >= availableWindowTargets.count {
+            activeTargetIndex = 0
+        }
+        windowTargetListVersion += 1
     }
 
     /// Raises (brings to front) the currently selected target window and activates its app.
@@ -949,6 +1160,10 @@ final class AppState: NSObject, NSMenuDelegate {
         } else {
             activeTargetIndex = 0
         }
+
+        // Reconcile multi-selection: remove stale indices and ensure invariant.
+        selectedWindowIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }
+        selectedWindowIndices.insert(activeTargetIndex)
     }
 
     /// Closes the window at the given index in the window list.
@@ -1139,6 +1354,139 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
 
+    // MARK: - Multi-Selection Batch Actions
+
+    /// Raises all selected windows, preserving their relative Z-order.
+    ///
+    /// `availableWindowTargets` is in z-order (front-to-back from CGWindowList,
+    /// index 0 = frontmost).
+    ///
+    /// When `CGSOrderWindow` is available we use it to place each selected
+    /// window directly above the previously placed one, building an exact
+    /// cross-app stacking order that the public AX/NS APIs cannot achieve.
+    /// Falls back to activate+AXRaise when the private API is unavailable.
+    func raiseSelectedWindows() {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+        guard !selectedWindowIndices.isEmpty else { return }
+
+        dismissOverlayImmediately()
+
+        // Use the sidebar display order: the topmost window in the sidebar
+        // should become the frontmost on screen after raising.
+        let sidebarOrder: [Int]
+        if !sidebarWindowOrder.isEmpty {
+            sidebarOrder = sidebarWindowOrder.filter { selectedWindowIndices.contains($0) && $0 < availableWindowTargets.count }
+        } else {
+            // Fallback: use index order.
+            sidebarOrder = selectedWindowIndices.filter { $0 < availableWindowTargets.count }.sorted(by: <)
+        }
+
+        guard !sidebarOrder.isEmpty else {
+            clearWindowCyclingState(animateRestore: true)
+            return
+        }
+
+        // Move windows to mouse screen if needed (before reordering).
+        for idx in sidebarOrder {
+            let target = availableWindowTargets[idx]
+            if let window = target.windowElement {
+                moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
+            }
+        }
+
+        // アプリ間: 最後に activate したアプリが前面に来る
+        //   → サイドバー下位のアプリを先に、上位のアプリを最後に処理
+        // アプリ内: 最後に AXRaise したウインドウがアプリ内最前面になる
+        //   → サイドバー下位のウインドウを先に、上位のウインドウを最後に AXRaise
+
+        // サイドバー順で選択ウインドウをアプリ別にグループ化
+        var appOrder: [pid_t] = []
+        var windowsByApp: [pid_t: [Int]] = [:]
+        for idx in sidebarOrder {
+            let pid = availableWindowTargets[idx].processIdentifier
+            if windowsByApp[pid] == nil {
+                appOrder.append(pid)
+            }
+            windowsByApp[pid, default: []].append(idx)
+        }
+
+        // サイドバー下位のアプリから処理（最後に処理したアプリが最前面）
+        for pid in appOrder.reversed() {
+            guard let indices = windowsByApp[pid] else { continue }
+            let app = NSRunningApplication(processIdentifier: pid)
+            app?.activate()
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+
+            // アプリ内: サイドバー下位から AXRaise（最後に raise = 最前面）
+            for idx in indices.reversed() {
+                let target = availableWindowTargets[idx]
+                if let window = target.windowElement {
+                    accessibilityService.raiseWindow(window)
+                }
+            }
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+        }
+
+        clearWindowCyclingState(animateRestore: true)
+    }
+
+    /// Closes all selected windows. If all windows of an app are selected, quits that app instead.
+    func closeSelectedWindows() {
+        guard !selectedWindowIndices.isEmpty else { return }
+
+        // Group selected indices by PID.
+        var selectedByPID: [pid_t: [Int]] = [:]
+        for idx in selectedWindowIndices where idx < availableWindowTargets.count {
+            let pid = availableWindowTargets[idx].processIdentifier
+            selectedByPID[pid, default: []].append(idx)
+        }
+
+        // Count total windows per PID.
+        var totalByPID: [pid_t: Int] = [:]
+        for target in availableWindowTargets {
+            totalByPID[target.processIdentifier, default: 0] += 1
+        }
+
+        // Remember the lowest selected index for post-close selection.
+        pendingTargetIndexAfterClose = selectedWindowIndices.min()
+
+        var quittedPIDs: Set<pid_t> = []
+        for (pid, selectedIndices) in selectedByPID {
+            let isFinder = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder"
+            let allSelected = selectedIndices.count >= (totalByPID[pid] ?? 0)
+
+            if allSelected && !isFinder {
+                // All windows of this non-Finder app are selected: quit the app.
+                NSRunningApplication(processIdentifier: pid)?.terminate()
+                quittedPIDs.insert(pid)
+            } else {
+                // Close individual windows.
+                for idx in selectedIndices {
+                    if let window = availableWindowTargets[idx].windowElement {
+                        accessibilityService.closeWindow(window)
+                    }
+                }
+            }
+        }
+
+        // Reset selection and refresh.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
+        }
+    }
+
+    /// Move all selected windows to the given screen.
+    func moveSelectedWindowsToScreen(_ screen: NSScreen) {
+        for idx in selectedWindowIndices where idx < availableWindowTargets.count {
+            let target = availableWindowTargets[idx]
+            guard let window = target.windowElement else { continue }
+            moveWindowToDestinationScreen(window: window, destination: screen)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
+        }
+    }
+
     private func clearWindowCyclingState(animateRestore: Bool = false) {
         windowHighlightController?.hide()
         windowHighlightController = nil
@@ -1157,6 +1505,8 @@ final class AppState: NSObject, NSMenuDelegate {
         // window list immediately on the next overlay open while the deferred
         // refresh is still pending.
         activeTargetIndex = 0
+        selectedWindowIndices = [0]
+        selectionAnchorIndex = nil
     }
 
     /// Moves windows that occlude the selected target off-screen so it
@@ -1470,6 +1820,11 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         target = unhideAppIfNeeded(target)
         activeLayoutTarget = target
+
+        if selectedWindowIndices.count > 1 {
+            applyToMultipleWindows(selection: selection, visibleFrame: visibleFrame, screenFrame: screenFrame)
+            return
+        }
 
         // If the target window is on a different space, move it and switch.
 
@@ -3373,11 +3728,39 @@ final class AppState: NSObject, NSMenuDelegate {
             }
             if displayShortcutSettings.bringToFront.localEnabled,
                let s = displayShortcutSettings.bringToFront.local, s == shortcut {
-                raiseCurrentTargetWindow()
+                if selectedWindowIndices.count > 1 {
+                    raiseSelectedWindows()
+                } else {
+                    raiseCurrentTargetWindow()
+                }
                 return true
             }
             if displayShortcutSettings.closeOrQuit.localEnabled,
                let s = displayShortcutSettings.closeOrQuit.local, s == shortcut {
+                if selectedWindowIndices.count > 1 {
+                    closeSelectedWindows()
+                } else {
+                    let idx = activeTargetIndex
+                    if idx >= 0, idx < availableWindowTargets.count {
+                        let target = availableWindowTargets[idx]
+                        let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
+                        let windowCount = availableWindowTargets.filter { $0.processIdentifier == target.processIdentifier }.count
+                        if isFinder || windowCount > 1 {
+                            closeWindowTarget(at: idx)
+                        } else {
+                            quitApp(at: idx)
+                        }
+                    }
+                }
+                return true
+            }
+        }
+
+        switch Int(event.keyCode) {
+        case kVK_ANSI_Slash where event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty:
+            if selectedWindowIndices.count > 1 {
+                closeSelectedWindows()
+            } else {
                 let idx = activeTargetIndex
                 if idx >= 0, idx < availableWindowTargets.count {
                     let target = availableWindowTargets[idx]
@@ -3389,25 +3772,10 @@ final class AppState: NSObject, NSMenuDelegate {
                         quitApp(at: idx)
                     }
                 }
-                return true
             }
-        }
-
-        switch Int(event.keyCode) {
-        case kVK_ANSI_Slash where event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty:
-            let idx = activeTargetIndex
-            if idx >= 0, idx < availableWindowTargets.count {
-                let target = availableWindowTargets[idx]
-                let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
-                let windowCount = availableWindowTargets.filter { $0.processIdentifier == target.processIdentifier }.count
-                if isFinder || windowCount > 1 {
-                    // Finder or multi-window app: close this window
-                    closeWindowTarget(at: idx)
-                } else {
-                    // Single-window non-Finder app: quit the app
-                    quitApp(at: idx)
-                }
-            }
+            return true
+        case kVK_ANSI_A where event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
+            selectAllWindows()
             return true
         case kVK_ANSI_F where event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
             // Handled in MainWindowController.performKeyEquivalent which checks first responder.

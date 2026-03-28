@@ -15,6 +15,9 @@ typealias CGSConnectionID = Int32
 private typealias MainConnectionIDFunc = @convention(c) () -> CGSConnectionID
 private typealias CopySpacesForWindowsFunc = @convention(c) (CGSConnectionID, UInt32, CFArray) -> CFArray?
 private typealias CopyManagedDisplaySpacesFunc = @convention(c) (CGSConnectionID) -> CFArray?
+/// CGSOrderWindow(cid, windowID, orderingMode, relativeToWindowID) -> CGError
+/// orderingMode: kCGSOrderAbove = 1, kCGSOrderBelow = -1, kCGSOrderOut = 0
+private typealias OrderWindowFunc = @convention(c) (CGSConnectionID, CGWindowID, Int32, CGWindowID) -> CGError
 
 enum CGSPrivate {
     static let kCGSSpaceAll: UInt32 = 0x7
@@ -48,6 +51,7 @@ enum CGSPrivate {
     private static let _mainConnectionID: MainConnectionIDFunc? = resolve("CGSMainConnectionID", slsName: "SLSMainConnectionID")
     private static let _copySpacesForWindows: CopySpacesForWindowsFunc? = resolve("CGSCopySpacesForWindows", slsName: "SLSCopySpacesForWindows")
     private static let _copyManagedDisplaySpaces: CopyManagedDisplaySpacesFunc? = resolve("CGSCopyManagedDisplaySpaces", slsName: "SLSCopyManagedDisplaySpaces")
+    private static let _orderWindow: OrderWindowFunc? = resolve("CGSOrderWindow", slsName: "SLSOrderWindow")
 
     // MARK: - Public interface
 
@@ -74,5 +78,22 @@ enum CGSPrivate {
     static func managedDisplaySpaces(_ cid: CGSConnectionID) -> CFArray? {
         guard let fn = _copyManagedDisplaySpaces else { return nil }
         return fn(cid)
+    }
+
+    // MARK: - Window ordering
+
+    static let kCGSOrderAbove: Int32 = 1
+    static let kCGSOrderBelow: Int32 = -1
+
+    /// Whether `CGSOrderWindow` is available.
+    static var isOrderWindowAvailable: Bool { _orderWindow != nil && _mainConnectionID != nil }
+
+    /// Place `windowID` directly above `relativeToWindowID` in the global
+    /// window stacking order.  Pass 0 for `relativeToWindowID` to move the
+    /// window to the very front (kCGSOrderAbove) or very back (kCGSOrderBelow).
+    @discardableResult
+    static func orderWindow(_ windowID: CGWindowID, mode: Int32, relativeTo relativeToWindowID: CGWindowID = 0) -> Bool {
+        guard let fn = _orderWindow, let cid = _mainConnectionID?() else { return false }
+        return fn(cid, windowID, mode, relativeToWindowID) == .success
     }
 }

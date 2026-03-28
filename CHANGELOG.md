@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Multi-window selection in the sidebar: select multiple windows and perform batch actions on all of them
+  - Click an application header to select all windows of that app
+  - Cmd+click to toggle individual windows in/out of the selection
+  - Shift+click to select a contiguous range of windows in sidebar order
+- Batch actions for multi-selection: Bring to Front (preserving sidebar Z-order), resize/move to grid, move to display, and close/quit
+- When closing multiple selected windows, apps whose windows are all selected will be quit (except Finder)
+
 ### Changed
 
-- Clicking an application header in the sidebar now selects the app's frontmost window
+- Clicking an application header in the sidebar now selects all windows of that app (previously selected only the frontmost)
 - Selecting a window under an app group now keeps the application header highlighted
 - Added a "Quit App" button next to the "Close Window" button for non-Finder apps with multiple windows in the sidebar action bar
 - The "Close Window" tooltip now shows the window name (e.g., Close "Document")

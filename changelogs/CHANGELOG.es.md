@@ -2,9 +2,18 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Selección múltiple de ventanas en la barra lateral con acciones por lotes
+    - Clic en el encabezado de la app para seleccionar todas sus ventanas
+    - Cmd+clic para añadir/quitar ventanas individuales
+    - Shift+clic para seleccionar un rango continuo de ventanas
+- Acciones por lotes en selección múltiple: traer al frente (manteniendo el orden Z de la barra lateral), redimensionar/mover a la cuadrícula, mover a otra pantalla, cerrar/salir
+- Al cerrar múltiples ventanas seleccionadas, las apps con todas sus ventanas seleccionadas se cierran completamente (excepto Finder)
+
 ### Cambiado
 
-- Al hacer clic en el encabezado de una aplicación en la barra lateral, ahora se selecciona la ventana más al frente de la app
+- Hacer clic en el encabezado de una app en la barra lateral ahora selecciona todas las ventanas de esa app (antes solo seleccionaba la ventana del frente)
 - Al seleccionar una ventana dentro de un grupo de app, el encabezado de la aplicación permanece resaltado
 - Para apps que no son Finder con múltiples ventanas, se muestra un botón "Salir de la app" junto al botón "Cerrar ventana" en la barra de acciones
 - El tooltip "Cerrar ventana" ahora muestra el nombre de la ventana (ej.: Cerrar "Documento")

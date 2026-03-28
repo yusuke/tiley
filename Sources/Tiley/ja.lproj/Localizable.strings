@@ -120,6 +120,7 @@
 "Hide Other Apps" = "他のアプリケーションを隠す";
 "Move to %@" = "%@へ移動";
 "Close all %@ windows" = "%@のウインドウをすべて閉じる";
+"Close %d windows" = "%d個のウインドウを閉じる";
 "Close other windows of %@" = "%@の他のウインドウを閉じる";
 
 // Display shortcuts

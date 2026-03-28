@@ -2,6 +2,36 @@ import AppKit
 
 // MARK: - Debug log helper
 
+/// Rotates ~/tiley.log on launch.  Keeps at most `maxFiles` generations:
+///   tiley.log → tiley.1.log → tiley.2.log → … → tiley.4.log (deleted)
+func rotateDebugLogIfNeeded(maxFiles: Int = 5) {
+    let fm = FileManager.default
+    let home = fm.homeDirectoryForCurrentUser
+    let base = home.appendingPathComponent("tiley")
+
+    // Shift existing rotated files: .4 → delete, .3 → .4, … .1 → .2
+    for i in stride(from: maxFiles - 1, through: 1, by: -1) {
+        let src = base.appendingPathExtension("\(i).log")
+        let dst = base.appendingPathExtension("\(i + 1).log")
+        if fm.fileExists(atPath: src.path) {
+            if i == maxFiles - 1 {
+                try? fm.removeItem(at: src)
+            } else {
+                try? fm.removeItem(at: dst)
+                try? fm.moveItem(at: src, to: dst)
+            }
+        }
+    }
+
+    // tiley.log → tiley.1.log
+    let current = home.appendingPathComponent("tiley.log")
+    let first = base.appendingPathExtension("1.log")
+    if fm.fileExists(atPath: current.path) {
+        try? fm.removeItem(at: first)
+        try? fm.moveItem(at: current, to: first)
+    }
+}
+
 /// Appends a timestamped line to ~/tiley.log when the debug-log setting is on.
 /// Replaces the `NSLog("[Tiley:perf] …")` calls so that performance traces are
 /// only emitted when the user has explicitly opted in.

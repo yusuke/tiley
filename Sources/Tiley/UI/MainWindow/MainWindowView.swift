@@ -1860,15 +1860,19 @@ struct MainWindowView: View {
     /// Action buttons shown next to the search field, adapting to the current sidebar selection.
     @ViewBuilder
     private var sidebarActionButtons: some View {
-        switch sidebarSelection {
-        case .window(let idx):
-            windowActionButtons(index: idx)
-        case .appHeader(let pid, let appName):
-            appHeaderActionButtons(pid: pid, appName: appName)
-        case .screenHeader(let displayID, let name):
-            screenHeaderActionButtons(displayID: displayID, name: name)
-        case nil:
-            windowActionButtons(index: -1) // show disabled buttons
+        if appState.isMultiSelection {
+            multiWindowActionButtons
+        } else {
+            switch sidebarSelection {
+            case .window(let idx):
+                windowActionButtons(index: idx)
+            case .appHeader(let pid, let appName):
+                appHeaderActionButtons(pid: pid, appName: appName)
+            case .screenHeader(let displayID, let name):
+                screenHeaderActionButtons(displayID: displayID, name: name)
+            case nil:
+                windowActionButtons(index: -1) // show disabled buttons
+            }
         }
     }
 
@@ -2013,6 +2017,46 @@ struct MainWindowView: View {
         )
     }
 
+    /// Action buttons for multi-window selection.
+    @ViewBuilder
+    private var multiWindowActionButtons: some View {
+        let selectedIndices = appState.currentSelectedWindowIndices
+        let targets = appState.windowTargetList
+        let count = selectedIndices.count
+
+        // Move to other display: use the primary target's screen as reference.
+        let primaryIdx = appState.currentWindowTargetIndex
+        let otherScreens = otherScreensForWindow(at: primaryIdx)
+        let primaryScreen: NSScreen? = (primaryIdx >= 0 && primaryIdx < targets.count)
+            ? NSScreen.screen(containing: targets[primaryIdx].screenFrame) : nil
+        moveToDisplayButton(
+            otherScreens: otherScreens,
+            disabled: otherScreens.isEmpty,
+            currentScreen: primaryScreen,
+            onSelect: { screen in appState.moveSelectedWindowsToScreen(screen); appState.hideMainWindow() }
+        )
+
+        // Close / Quit
+        Button {
+            appState.closeSelectedWindows()
+        } label: {
+            Image(systemName: "xmark")
+                .font(.system(size: 11, weight: .medium))
+                .frame(width: 28, height: 24)
+        }
+        .buttonStyle(TahoeActionBarButtonStyle())
+        .frame(width: 28, height: 24)
+        .instantTooltip(
+            String(format: NSLocalizedString("Close %d windows", comment: "Action bar tooltip for closing multiple windows"), count)
+        )
+
+        // Selection count badge
+        Text("\(count)")
+            .font(.system(size: 10, weight: .medium, design: .rounded))
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 4)
+    }
+
     @ViewBuilder
     private func screenHeaderActionButtons(displayID: CGDirectDisplayID, name: String) -> some View {
         let otherScreens = otherScreensForDisplay(displayID)
@@ -2107,6 +2151,7 @@ struct MainWindowView: View {
 
         return Button {
             sidebarSelection = .screenHeader(displayID: displayID, name: name)
+            appState.selectAllWindowsOnScreen(displayID: displayID)
         } label: {
             HStack(spacing: 6) {
                 ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
@@ -2207,24 +2252,20 @@ struct MainWindowView: View {
 
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
         let isExplicitlySelected = sidebarSelection == .appHeader(pid: pid, appName: appName)
-        // Also highlight when any child window of this app is the current target.
+        // Also highlight when any child window of this app is in the selection.
         let hasSelectedChild: Bool = {
-            let idx = appState.currentWindowTargetIndex
             let targets = appState.windowTargetList
-            if idx >= 0, idx < targets.count,
-               targets[idx].processIdentifier == pid {
-                return true
-            }
-            return false
+            let selectedIndices = appState.currentSelectedWindowIndices
+            return selectedIndices.contains(where: { idx in
+                idx < targets.count && targets[idx].processIdentifier == pid
+            })
         }()
         let isSelected = isExplicitlySelected || hasSelectedChild
 
         return Button {
             sidebarSelection = .appHeader(pid: pid, appName: appName)
-            // Select the frontmost window of this app (first match in z-order list).
-            if let firstIndex = appState.windowTargetList.firstIndex(where: { $0.processIdentifier == pid }) {
-                appState.selectWindowTarget(at: firstIndex)
-            }
+            // Select all windows of this app.
+            appState.selectAllWindowsOfApp(pid: pid)
         } label: {
             HStack(spacing: 6) {
                 if let icon = appInfoCache.icon(for: pid) {
@@ -2326,13 +2367,17 @@ struct MainWindowView: View {
     }
 
     private func windowListRow(item: WindowListItem) -> some View {
-        let isSelected = item.id == appState.currentWindowTargetIndex
+        let isPrimary = item.id == appState.currentWindowTargetIndex
+        let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
+        let isSelected = isPrimary || isInSelection
         let isHovered = hoveredWindowIndex == item.id
 
         return Button {
-            appState.selectWindowTarget(at: item.id)
+            let flags = NSApp.currentEvent?.modifierFlags ?? []
+            let shift = flags.contains(.shift)
+            let cmd = flags.contains(.command)
+            appState.selectWindowTarget(at: item.id, shift: shift, cmd: cmd)
             if item.isUnderAppHeader {
-                // Keep the app header selected when choosing a child window.
                 sidebarSelection = .appHeader(pid: item.pid, appName: item.appName)
             } else {
                 sidebarSelection = .window(index: item.id)
@@ -2376,7 +2421,7 @@ struct MainWindowView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .stroke(ThemeColors.presetRowBorder(selected: isSelected, for: colorScheme), lineWidth: isSelected ? 1 : 0)
+                    .stroke(ThemeColors.presetRowBorder(selected: isPrimary, for: colorScheme), lineWidth: isSelected ? 1 : 0)
             )
             .animation(nil, value: isHovered)
         }
