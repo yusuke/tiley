@@ -7,7 +7,9 @@
 ### Adicionado
 
 - Presets com múltiplos layouts agora redimensionam várias janelas mesmo com apenas uma janela selecionada, usando a ordem Z real (janela mais à frente primeiro)
+- Quando as janelas selecionadas são menos que as definições de layout, a janela selecionada é sempre tratada como principal e os slots restantes são preenchidos por ordem Z
 - Ao passar o cursor sobre um preset com múltiplos layouts, as linhas das janelas afetadas na barra lateral são destacadas com as cores do layout (azul, verde, laranja, roxo)
+- Ao passar o cursor sobre um preset, a pré-visualização da mini-tela mostra barras de título das janelas (ícone do app, nome do app, título da janela)
 
 ## [4.0.2] - 2026-03-29
 

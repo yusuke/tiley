@@ -1180,6 +1180,7 @@ struct MainWindowView: View {
                         gap: appState.gap,
                         highlightSelection: editingPresetHighlightSelection,
                         highlightSelections: editingPresetHighlightSelections,
+                        highlightWindowInfo: appState.presetHoverWindowInfo,
                         desktopPictureInfo: desktopPictureInfo,
                         showDesktopPicture: false,
                         windowFrameRelative: screenRole.isTarget ? appState.currentLayoutTargetRelativeFrame : nil,
@@ -3645,11 +3646,14 @@ struct MainWindowView: View {
               let preset = appState.displayedLayoutPresets.first(where: { $0.id == id }) else {
             appState.updateLayoutPreview(nil)
             appState.presetHoverHighlights = [:]
+            appState.presetHoverWindowInfo = []
             return
         }
 
-        // Update sidebar highlights for affected windows.
-        appState.presetHoverHighlights = appState.computePresetHoverHighlights(for: preset)
+        // Update sidebar highlights and window info for affected windows.
+        let hoverInfo = appState.computePresetHoverInfo(for: preset)
+        appState.presetHoverHighlights = hoverInfo.highlights
+        appState.presetHoverWindowInfo = hoverInfo.windowInfo
 
         // Use multi-selection preview when the preset has secondary selections
         // and multiple windows are selected.

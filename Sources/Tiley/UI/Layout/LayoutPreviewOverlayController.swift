@@ -290,10 +290,11 @@ private struct SelectionPreviewOverlayView: View {
         let buttonDiameter = height * 0.38
         let buttonsTrailingEdge = buttonDiameter * 0.8 + buttonDiameter * 3 + buttonDiameter * 0.55 * 2 + buttonDiameter * 0.5
         let titleText: String? = {
-            let t = (windowTitle ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            if !t.isEmpty { return t }
             let a = (appName ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            let t = (windowTitle ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !a.isEmpty && !t.isEmpty { return "\(a) — \(t)" }
             if !a.isEmpty { return a }
+            if !t.isEmpty { return t }
             return nil
         }()
 

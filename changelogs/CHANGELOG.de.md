@@ -7,7 +7,9 @@
 ### Hinzugefügt
 
 - Multi-Layout-Presets passen nun auch bei nur einem ausgewählten Fenster mehrere Fenster nach tatsächlicher Z-Reihenfolge (vorderstes zuerst) an
+- Wenn weniger Fenster ausgewählt sind als Layout-Definitionen vorhanden, wird das ausgewählte Fenster immer als primär behandelt und die restlichen Plätze werden nach Z-Reihenfolge aufgefüllt
 - Beim Hovern über ein Multi-Layout-Preset werden die betroffenen Fensterzeilen in der Seitenleiste mit Layout-Farben (Blau, Grün, Orange, Lila) hervorgehoben
+- Beim Hovern über ein Preset zeigt die Mini-Bildschirm-Layoutvorschau Fenster-Titelleisten (App-Symbol, App-Name, Fenstertitel) an
 
 ## [4.0.2] - 2026-03-29
 

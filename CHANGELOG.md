@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Multi-layout presets now resize multiple windows even with a single window selected — windows are picked by actual z-order (frontmost first)
+- When selected windows are fewer than preset layout definitions, the selected window is always treated as primary and remaining slots are filled from z-order
 - Sidebar window rows highlight with layout colors (blue, green, orange, purple) when hovering over a multi-layout preset
+- Mini-screen layout preview shows window title bars (app icon, app name, window title) when hovering over any preset
 
 ## [4.0.2] - 2026-03-29
 

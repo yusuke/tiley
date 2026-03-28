@@ -212,6 +212,14 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Maps window indices to layout color indices during preset hover preview.
     /// Used by the sidebar to highlight which windows will be affected and with which color.
     var presetHoverHighlights: [Int: Int] = [:]
+
+    /// Window info per layout selection index during preset hover, for the mini-grid preview.
+    struct PresetHoverWindowInfo {
+        let appIcon: NSImage?
+        let appName: String
+        let windowTitle: String
+    }
+    var presetHoverWindowInfo: [PresetHoverWindowInfo] = []
     /// Incremented to signal Cmd+F when search field IS focused: hide sidebar.
     var windowSearchHideRequestVersion: Int = 0
     /// Current window search query, synced from the UI for filtered cycling.
@@ -769,9 +777,27 @@ final class AppState: NSObject, NSMenuDelegate {
         ])
     }
 
-    /// Applies a multi-layout preset to the top N windows by actual z-order,
-    /// even when only a single window is selected in the sidebar.
-    /// `selections` must contain at least 2 elements (primary + secondaries).
+    /// Builds an ordered list of window indices for a multi-layout preset.
+    /// Selected windows come first (in selection order), then unselected
+    /// windows are filled in by z-order (frontmost first) up to `count`.
+    private func buildZOrderedWindowIndices(count: Int) -> [Int] {
+        let selectedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
+        let selectedSet = Set(selectedIndices)
+        var result = selectedIndices
+
+        // Fill remaining slots with unselected windows by z-order.
+        for i in 0..<availableWindowTargets.count {
+            guard result.count < count else { break }
+            if !selectedSet.contains(i) {
+                result.append(i)
+            }
+        }
+        return Array(result.prefix(count))
+    }
+
+    /// Applies a multi-layout preset. Selected windows are placed first
+    /// (as primary, secondary, …), then remaining layout slots are filled
+    /// with unselected windows picked by actual z-order (frontmost first).
     private func applyPresetToZOrderedWindows(selections: [GridSelection], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil) {
         guard let primaryTarget = activeLayoutTarget else { return }
 
@@ -795,14 +821,13 @@ final class AppState: NSObject, NSMenuDelegate {
 
         dismissOverlayImmediately()
 
-        // Pick the first N windows from availableWindowTargets (which is in z-order,
-        // front-to-back) up to the number of layout selections.
-        let windowCount = min(selections.count, availableWindowTargets.count)
+        // Selected windows first, then fill from z-order.
+        let orderedIndices = buildZOrderedWindowIndices(count: selections.count)
 
-        for i in 0..<windowCount {
-            var target = availableWindowTargets[i]
+        for (position, idx) in orderedIndices.enumerated() {
+            var target = availableWindowTargets[idx]
             target = unhideAppIfNeeded(target)
-            let sel = selections[i]
+            let sel = selections[position]
 
             let frame = GridCalculator.frame(
                 for: sel,
@@ -828,23 +853,24 @@ final class AppState: NSObject, NSMenuDelegate {
                 }
                 windowManager?.raiseWindow(target: target)
             } catch {
-                NSLog("[Tiley] applyPresetToZOrderedWindows error for index \(i): %@", error.localizedDescription)
+                NSLog("[Tiley] applyPresetToZOrderedWindows error for index \(idx): %@", error.localizedDescription)
             }
         }
 
         displacedWindowFrames.removeAll()
 
-        if !availableWindowTargets.isEmpty {
-            lastTargetPID = availableWindowTargets[0].processIdentifier
+        let primaryWindowTarget: WindowTarget? = orderedIndices.first.map { availableWindowTargets[$0] }
+        if let primary = primaryWindowTarget {
+            lastTargetPID = primary.processIdentifier
         }
 
         let primarySelection = selections[0]
-        recordSelectionAndHide(selection: primarySelection, appName: availableWindowTargets.first?.appName ?? primaryTarget.appName, wasConstrained: false)
+        recordSelectionAndHide(selection: primarySelection, appName: primaryWindowTarget?.appName ?? primaryTarget.appName, wasConstrained: false)
         let norm = primarySelection.normalized
         TelemetryDeck.signal("layoutApplied", parameters: [
             "columns": "\(norm.endColumn - norm.startColumn + 1)",
             "rows": "\(norm.endRow - norm.startRow + 1)",
-            "multiSelection": "1",
+            "multiSelection": "\(selectedWindowIndices.count)",
             "selectionCount": "\(selections.count)",
             "zOrderBased": "true",
         ])
@@ -1957,14 +1983,13 @@ final class AppState: NSObject, NSMenuDelegate {
         target = unhideAppIfNeeded(target)
         activeLayoutTarget = target
 
-        if selectedWindowIndices.count > 1 {
-            applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
-            return
-        }
-
         let allSelections = [selection] + secondarySelections
         if allSelections.count > 1 {
-            applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
+            if selectedWindowIndices.count >= allSelections.count {
+                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
+            } else {
+                applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
+            }
             return
         }
 
@@ -2213,15 +2238,8 @@ final class AppState: NSObject, NSMenuDelegate {
         let parentWindow = windowControllerForScreen(frame: previewScreenFrame)?.nsWindow
             ?? targetWindowController?.nsWindow
 
-        // Determine window indices: use selection order for multi-selection,
-        // z-order (first N from availableWindowTargets) for single selection.
-        let orderedIndices: [Int]
-        if selectedWindowIndices.count > 1 {
-            orderedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
-        } else {
-            let windowCount = min(allSelections.count, availableWindowTargets.count)
-            orderedIndices = Array(0..<windowCount)
-        }
+        // Selected windows first, then fill remaining from z-order.
+        let orderedIndices = buildZOrderedWindowIndices(count: allSelections.count)
 
         // Build preview items: only show as many windows as selections defined.
         var items: [SelectionPreviewItem] = []
@@ -2248,27 +2266,41 @@ final class AppState: NSObject, NSMenuDelegate {
         )
     }
 
-    /// Computes sidebar highlight mapping for a preset hover.
-    /// Returns a dictionary mapping window indices to color indices.
-    func computePresetHoverHighlights(for preset: LayoutPreset) -> [Int: Int] {
+    /// Computes sidebar highlight mapping and window info for a preset hover.
+    /// Selected windows come first, remaining slots filled by z-order.
+    /// Returns (highlights, windowInfo) — highlights maps window indices to color indices,
+    /// windowInfo provides app/window names per layout selection index.
+    func computePresetHoverInfo(for preset: LayoutPreset) -> (highlights: [Int: Int], windowInfo: [PresetHoverWindowInfo]) {
         let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
-        guard allSelections.count > 1 else { return [:] }
 
-        var highlights: [Int: Int] = [:]
-        if selectedWindowIndices.count > 1 {
-            // Multi-selection: use selectionOrder
-            let orderedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
-            for (colorIndex, idx) in orderedIndices.prefix(allSelections.count).enumerated() {
-                highlights[idx] = colorIndex
+        if allSelections.count <= 1 {
+            // Single-layout preset: return window info for the active target only.
+            var windowInfo: [PresetHoverWindowInfo] = []
+            if let target = activeLayoutTarget {
+                let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+                windowInfo.append(PresetHoverWindowInfo(
+                    appIcon: appIcon,
+                    appName: target.appName,
+                    windowTitle: target.windowTitle ?? ""
+                ))
             }
-        } else {
-            // Single selection + multi-layout: use z-order (first N windows)
-            let windowCount = min(allSelections.count, availableWindowTargets.count)
-            for i in 0..<windowCount {
-                highlights[i] = i
-            }
+            return ([:], windowInfo)
         }
-        return highlights
+
+        let orderedIndices = buildZOrderedWindowIndices(count: allSelections.count)
+        var highlights: [Int: Int] = [:]
+        var windowInfo: [PresetHoverWindowInfo] = []
+        for (colorIndex, idx) in orderedIndices.enumerated() {
+            highlights[idx] = colorIndex
+            let target = availableWindowTargets[idx]
+            let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+            windowInfo.append(PresetHoverWindowInfo(
+                appIcon: appIcon,
+                appName: target.appName,
+                windowTitle: target.windowTitle ?? ""
+            ))
+        }
+        return (highlights, windowInfo)
     }
 
     func updateSettingsPreview(_ settings: SettingsSnapshot) {
@@ -2296,6 +2328,9 @@ final class AppState: NSObject, NSMenuDelegate {
         layoutPreviewController = nil
         if !presetHoverHighlights.isEmpty {
             presetHoverHighlights = [:]
+        }
+        if !presetHoverWindowInfo.isEmpty {
+            presetHoverWindowInfo = []
         }
     }
 
@@ -2594,17 +2629,19 @@ final class AppState: NSObject, NSMenuDelegate {
 
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
-        let selection = preset.scaledSelection(toRows: rows, columns: columns)
-        if selectedWindowIndices.count > 1 {
-            let secondarySelections = preset.scaledSecondarySelections(toRows: rows, columns: columns)
-            applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections)
-        } else {
-            let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
-            if allSelections.count > 1 {
-                applyPresetToZOrderedWindows(selections: allSelections)
+        let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+        if allSelections.count > 1 {
+            if selectedWindowIndices.count >= allSelections.count {
+                // Enough selected windows — use explicit selection order.
+                let selection = allSelections[0]
+                let secondarySelections = Array(allSelections.dropFirst())
+                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections)
             } else {
-                apply(selection: selection, to: target)
+                // Not enough selected windows — selected first, fill from z-order.
+                applyPresetToZOrderedWindows(selections: allSelections)
             }
+        } else {
+            apply(selection: allSelections.first ?? preset.scaledSelection(toRows: rows, columns: columns), to: target)
         }
         TelemetryDeck.signal("presetApplied", parameters: ["presetName": preset.name])
     }

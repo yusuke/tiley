@@ -7,6 +7,8 @@ struct LayoutGridWorkspaceView: View {
     var highlightSelection: GridSelection?
     /// Multiple highlight selections for preset hover/keyboard preview (no index labels, no delete buttons).
     var highlightSelections: [GridSelection] = []
+    /// Window info to display as title bars on highlight selections during preset hover.
+    var highlightWindowInfo: [AppState.PresetHoverWindowInfo] = []
     var desktopPictureInfo: MainWindowView.DesktopPictureInfo?
     /// When false, wallpaper background is not rendered (used when the parent
     /// composite view renders the wallpaper at a larger scale).
@@ -45,7 +47,9 @@ struct LayoutGridWorkspaceView: View {
                 }
 
                 // Miniature window showing current window position
-                if let wf = windowFrameRelative, wf.width > 0, wf.height > 0 {
+                // Hidden when highlight window info is shown to avoid visual clutter.
+                if highlightWindowInfo.isEmpty,
+                   let wf = windowFrameRelative, wf.width > 0, wf.height > 0 {
                     let winW = wf.width * geometry.size.width
                     let winH = wf.height * geometry.size.height
                     let winX = wf.x * geometry.size.width + winW / 2
@@ -120,7 +124,7 @@ struct LayoutGridWorkspaceView: View {
 
                 // Multiple highlight rectangles (preset hover with secondary selections)
                 if !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty {
-                    let showHighlightIndex = highlightSelections.count > 1
+                    let showHighlightIndex = highlightSelections.count > 1 && highlightWindowInfo.isEmpty
                     let multiInset: CGFloat = highlightSelections.count > 1 ? 1 : 0
                     ForEach(Array(highlightSelections.enumerated()), id: \.offset) { index, sel in
                         let norm = sel.normalized
@@ -138,6 +142,21 @@ struct LayoutGridWorkspaceView: View {
                             showIndex: showHighlightIndex,
                             showDelete: false
                         )
+
+                        // Overlay miniature window with title bar on hover
+                        if index < highlightWindowInfo.count {
+                            let info = highlightWindowInfo[index]
+                            let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
+                            let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                            MiniatureWindowView(
+                                titleBarHeight: titleBarPx,
+                                appIcon: info.appIcon,
+                                windowTitle: info.windowTitle.isEmpty ? info.appName : "\(info.appName) — \(info.windowTitle)"
+                            )
+                            .frame(width: selRect.width, height: selRect.height)
+                            .position(x: selRect.midX, y: selRect.midY)
+                            .allowsHitTesting(false)
+                        }
                     }
                 }
 
@@ -152,6 +171,20 @@ struct LayoutGridWorkspaceView: View {
                         border: ThemeColors.gridCellHighlightBorder(for: colorScheme),
                         divider: ThemeColors.gridCellHighlightBorder(for: colorScheme).opacity(0.3)
                     )
+
+                    // Overlay miniature window with title bar on hover
+                    if let info = highlightWindowInfo.first {
+                        let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
+                        let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                        MiniatureWindowView(
+                            titleBarHeight: titleBarPx,
+                            appIcon: info.appIcon,
+                            windowTitle: info.windowTitle.isEmpty ? info.appName : "\(info.appName) — \(info.windowTitle)"
+                        )
+                        .frame(width: selRect.width, height: selRect.height)
+                        .position(x: selRect.midX, y: selRect.midY)
+                        .allowsHitTesting(false)
+                    }
                 }
 
                 // Unified drag selection rectangle
