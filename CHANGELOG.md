@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.4] - 2026-03-29
+
 ## [4.0.3] - 2026-03-29
 
 ### Added
@@ -483,7 +485,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.3...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.4...HEAD
+[4.0.4]: https://github.com/yusuke/tiley/releases/tag/v4.0.4
 [4.0.3]: https://github.com/yusuke/tiley/releases/tag/v4.0.3
 [4.0.2]: https://github.com/yusuke/tiley/releases/tag/v4.0.2
 [4.0.1]: https://github.com/yusuke/tiley/releases/tag/v4.0.1
