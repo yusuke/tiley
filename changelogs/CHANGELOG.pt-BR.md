@@ -5,6 +5,8 @@
 ### Corrigido
 
 - O painel de permissões não é mais exibido sobre outros aplicativos e diálogos do sistema ao solicitar acesso de acessibilidade
+- A pré-visualização do papel de parede não era exibida no macOS Tahoe 26.4: adaptação à mudança de estrutura do plist da Store de papéis de parede (`Desktop` → chave `Linked`), papéis de parede de Fotos são carregados do cache BMP do agente de papéis de parede, adicionado o valor de posicionamento `FillScreen` (substituto de `Stretch` no Tahoe), e habilitadas as configurações de modo de exibição para provedores de papéis de parede não do sistema
+- Os modos de exibição centralizado e lado a lado renderizavam as imagens muito pequenas quando os metadados DPI da imagem não eram 72 (ex.: capturas de tela Retina a 144 DPI); agora sempre são utilizadas as dimensões reais em pixels
 
 ## [4.0.7] - 2026-03-29
 

@@ -5,6 +5,8 @@
 ### Behoben
 
 - Das Berechtigungsfenster wird beim Anfordern von Bedienungshilfenzugriff nicht mehr über anderen Apps und Systemdialogen angezeigt
+- Hintergrundvorschau wurde unter macOS Tahoe 26.4 nicht angezeigt: Anpassung an die Strukturänderung der Hintergrund-Store-plist (`Desktop` → `Linked`-Schlüssel), Fotos-Hintergründe werden aus dem BMP-Cache des Hintergrund-Agenten geladen, `FillScreen`-Platzierungswert (Tahoes Ersatz für `Stretch`) hinzugefügt, Anzeigemodus-Einstellungen für Nicht-System-Hintergrundanbieter aktiviert
+- Zentrierte und gekachelte Hintergrund-Anzeigemodi stellten Bilder zu klein dar, wenn die DPI-Metadaten des Bildes nicht 72 waren (z. B. Retina-Screenshots mit 144 DPI); es werden nun immer die tatsächlichen Pixelmaße verwendet
 
 ## [4.0.7] - 2026-03-29
 

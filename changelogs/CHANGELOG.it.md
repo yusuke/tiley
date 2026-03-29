@@ -5,6 +5,8 @@
 ### Corretto
 
 - Il pannello delle autorizzazioni non viene più visualizzato sopra altre app e finestre di dialogo del sistema durante la richiesta di accesso all'accessibilità
+- L'anteprima dello sfondo non veniva visualizzata su macOS Tahoe 26.4: adattamento al cambiamento di struttura del plist dello Store sfondi (`Desktop` → chiave `Linked`), gli sfondi Foto vengono caricati dalla cache BMP dell'agente sfondi, aggiunto il valore di posizionamento `FillScreen` (sostituto di `Stretch` su Tahoe), e abilitate le impostazioni della modalità di visualizzazione per i fornitori di sfondi non di sistema
+- Le modalità di visualizzazione centrata e a mosaico renderizzavano le immagini troppo piccole quando i metadati DPI dell'immagine non erano 72 (ad es. screenshot Retina a 144 DPI); ora vengono sempre utilizzate le dimensioni reali in pixel
 
 ## [4.0.7] - 2026-03-29
 

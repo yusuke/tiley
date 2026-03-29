@@ -5,6 +5,8 @@
 ### Corrigé
 
 - Le panneau des autorisations n'est plus affiché au-dessus des autres applications et des fenêtres système lors de la demande d'accès à l'accessibilité
+- L'aperçu du fond d'écran ne s'affichait pas sous macOS Tahoe 26.4 : adaptation au changement de structure du plist du Store de fonds d'écran (`Desktop` → clé `Linked`), les fonds d'écran Photos sont chargés depuis le cache BMP de l'agent de fonds d'écran, ajout de la valeur de placement `FillScreen` (remplacement de `Stretch` sous Tahoe), et activation des paramètres de mode d'affichage pour les fournisseurs de fonds d'écran non système
+- Les modes d'affichage centré et mosaïque affichaient les images trop petites lorsque les métadonnées DPI de l'image n'étaient pas 72 (par ex. captures d'écran Retina à 144 DPI) ; les dimensions réelles en pixels sont désormais toujours utilisées
 
 ## [4.0.7] - 2026-03-29
 

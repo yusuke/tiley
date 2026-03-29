@@ -5,6 +5,8 @@
 ### Corregido
 
 - El panel de permisos ya no flota sobre otras aplicaciones y diálogos del sistema al solicitar acceso de accesibilidad
+- La vista previa del fondo de pantalla no se mostraba en macOS Tahoe 26.4: adaptación al cambio de estructura del plist del Store de fondos de pantalla (`Desktop` → clave `Linked`), los fondos de Fotos se cargan desde la caché BMP del agente de fondos de pantalla, se añadió el valor de colocación `FillScreen` (reemplazo de `Stretch` en Tahoe), y se habilitó la configuración del modo de visualización para proveedores de fondos no del sistema
+- Los modos de visualización centrado y en mosaico renderizaban las imágenes demasiado pequeñas cuando los metadatos DPI de la imagen no eran 72 (p. ej., capturas de pantalla Retina a 144 DPI); ahora siempre se utilizan las dimensiones reales en píxeles
 
 ## [4.0.7] - 2026-03-29
 

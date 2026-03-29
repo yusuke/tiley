@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Permissions panel window is no longer floating above other apps and OS dialogs while requesting accessibility access
+- Wallpaper preview not displayed on macOS Tahoe 26.4: adapted to wallpaper Store plist structure change (`Desktop` → `Linked` key), added support for Photos wallpapers via wallpaper agent BMP cache, added `FillScreen` placement value (Tahoe's replacement for `Stretch`), and enabled display mode settings for non-system wallpaper providers
+- Center and tile wallpaper display modes rendered images too small when the image had non-72 DPI metadata (e.g. Retina screenshots at 144 DPI); now always uses actual pixel dimensions
 
 ## [4.0.7] - 2026-03-29
 

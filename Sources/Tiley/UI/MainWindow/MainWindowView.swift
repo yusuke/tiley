@@ -245,21 +245,39 @@ struct MainWindowView: View {
         // regardless of aspect ratio, so no gaps will appear.
         let url = storeInfo?.thumbnailURL ?? rawURL
 
-        // When we use a thumbnail, read the actual wallpaper's pixel dimensions from the
-        // original .heic so that tile/center size calculations are based on the real image size.
+        // Always read the actual pixel dimensions of the wallpaper image.
+        // nsImage.size is DPI-dependent (e.g. a 144 DPI Retina screenshot reports
+        // half its pixel dimensions), but tile/center/fit calculations need real pixels.
+        // For thumbnails, read from the original wallpaper (rawURL), not the thumbnail.
         var originalImageSize: CGSize? = nil
-        if storeInfo?.thumbnailURL != nil {
-            if let src = CGImageSourceCreateWithURL(rawURL as CFURL, nil),
-               let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any],
-               let pixelWidth = props[kCGImagePropertyPixelWidth] as? CGFloat,
-               let pixelHeight = props[kCGImagePropertyPixelHeight] as? CGFloat {
-                originalImageSize = CGSize(width: pixelWidth, height: pixelHeight)
-            }
+        let pixelSizeSourceURL = storeInfo?.thumbnailURL != nil ? rawURL : url
+        if let src = CGImageSourceCreateWithURL(pixelSizeSourceURL as CFURL, nil),
+           let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any],
+           let pixelWidth = props[kCGImagePropertyPixelWidth] as? CGFloat,
+           let pixelHeight = props[kCGImagePropertyPixelHeight] as? CGFloat {
+            originalImageSize = CGSize(width: pixelWidth, height: pixelHeight)
         }
 
         // Whether rawURL points to a custom user image (not DefaultDesktop.heic system symlink).
         // On macOS 15+, custom images still have their actual path in desktopImageURL.
         let isCustomImage = rawURL.lastPathComponent != "DefaultDesktop.heic"
+
+        // Whether the wallpaper is user-provided content whose display mode (placement)
+        // should be respected. This includes custom image files AND user-content providers
+        // like Photos. System presets (Tahoe, Sequoia, etc.) always render as Fill
+        // regardless of what the Store plist records, so placement is ignored for those.
+        let respectsPlacement: Bool
+        if isCustomImage {
+            respectsPlacement = true
+        } else if let provider = storeInfo?.provider,
+                  provider != "default",
+                  !provider.hasPrefix("com.apple.wallpaper.choice.") {
+            // Non-system providers (e.g. com.apple.wallpaper.extension.photos)
+            // are user-selected content that respects placement settings.
+            respectsPlacement = true
+        } else {
+            respectsPlacement = false
+        }
 
         // Determine display mode.
         // Known placement values from the Store plist:
@@ -282,15 +300,16 @@ struct MainWindowView: View {
             scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
             allowClipping = true
             isTiled = false
-        } else if isCustomImage, let placement = storeInfo?.placement {
-            // Custom image with Store plist placement (macOS 15+ and some macOS 14 installs).
+        } else if respectsPlacement, let placement = storeInfo?.placement {
+            // User-provided image with Store plist placement (macOS 15+ and some macOS 14 installs).
             // The Store plist is the most reliable source for display mode on modern macOS.
             switch placement {
             case "Tiled", "Tile":
                 scalingRaw = nil
                 allowClipping = false
                 isTiled = true
-            case "Stretch":
+            case "Stretch", "FillScreen":
+                // "Stretch" on older macOS, "FillScreen" on macOS Tahoe
                 scalingRaw = Int(NSImageScaling.scaleAxesIndependently.rawValue)
                 allowClipping = false
                 isTiled = false
@@ -314,7 +333,7 @@ struct MainWindowView: View {
             scalingRaw = scalingRawOpt
             allowClipping = opts?[.allowClipping] as? Bool ?? false
             isTiled = false
-        } else if isCustomImage, opts != nil, opts?[.imageScaling] == nil {
+        } else if respectsPlacement, opts != nil, opts?[.imageScaling] == nil {
             // Older macOS tile mode: desktopImageOptions exists but does NOT contain
             // imageScaling or allowClipping — this is the classic tile mode indicator.
             scalingRaw = nil
@@ -341,8 +360,22 @@ struct MainWindowView: View {
         }
         // For system wallpapers without a resolvable thumbnail (e.g. programmatic
         // wallpapers like "Macintosh"), DefaultDesktop.heic is NOT the correct image.
-        // Skip showing the wallpaper entirely rather than displaying the wrong image.
+        // Try the wallpaper agent's rendered BMP cache as a last resort (covers
+        // Photos wallpapers and other providers without dedicated thumbnails).
+        // If no cache hit either, skip showing the wallpaper entirely.
         if storeInfo?.thumbnailURL == nil && !isCustomImage {
+            if let cachedURL = Self.wallpaperCacheBMP(forScreenWidth: Int(screen.frame.width * screen.backingScaleFactor),
+                                                      height: Int(screen.frame.height * screen.backingScaleFactor)) {
+                // Read pixel dimensions from the BMP (its DPI may differ from 72)
+                var bmpPixelSize: CGSize? = nil
+                if let src = CGImageSourceCreateWithURL(cachedURL as CFURL, nil),
+                   let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any],
+                   let pw = props[kCGImagePropertyPixelWidth] as? CGFloat,
+                   let ph = props[kCGImagePropertyPixelHeight] as? CGFloat {
+                    bmpPixelSize = CGSize(width: pw, height: ph)
+                }
+                return DesktopPictureInfo(url: cachedURL, scaling: scaling, allowClipping: allowClipping, isTiled: isTiled, screenSize: screen.frame.size, screenScale: screen.backingScaleFactor, fillColor: fillColor, originalImageSize: bmpPixelSize)
+            }
             return nil
         }
 
@@ -359,6 +392,8 @@ struct MainWindowView: View {
         let placement: String?
         /// Background fill color from EncodedOptionValues
         let fillColor: Color?
+        /// Provider string from the plist Choices entry (e.g. "com.apple.wallpaper.extension.photos")
+        let provider: String?
     }
 
     /// On macOS 15+, desktopImageURL always returns DefaultDesktop.heic for system wallpapers.
@@ -373,28 +408,40 @@ struct MainWindowView: View {
         // Try multiple plist paths to find the active Desktop content.
         // macOS versions vary in where they store the wallpaper info:
         //   - AllSpacesAndDisplays > Desktop > Content  (older macOS)
-        //   - SystemDefault > Desktop > Content          (macOS Tahoe+)
-        //   - Displays > {UUID} > Desktop > Content      (per-display override)
+        //   - AllSpacesAndDisplays > Linked > Content   (macOS Tahoe)
+        //   - SystemDefault > Desktop > Content          (macOS 15+)
+        //   - SystemDefault > Linked > Content           (macOS Tahoe)
+        //   - Displays > {UUID} > Desktop/Linked > Content (per-display override)
+        // Helper to extract Content dict from a section that may use "Desktop" or "Linked" key.
+        func extractContent(from section: [String: Any]) -> [String: Any]? {
+            for key in ["Desktop", "Linked"] {
+                if let sub = section[key] as? [String: Any],
+                   let c = sub["Content"] as? [String: Any] {
+                    return c
+                }
+            }
+            return nil
+        }
         let content: [String: Any]
         let first: [String: Any]
         if let allSpaces = root["AllSpacesAndDisplays"] as? [String: Any],
-           let desktop = allSpaces["Desktop"] as? [String: Any],
-           let c = desktop["Content"] as? [String: Any],
+           let c = extractContent(from: allSpaces),
            let choices = c["Choices"] as? [[String: Any]],
            let f = choices.first {
             content = c
             first = f
         } else if let sysDefault = root["SystemDefault"] as? [String: Any],
-                  let desktop = sysDefault["Desktop"] as? [String: Any],
-                  let c = desktop["Content"] as? [String: Any],
+                  let c = extractContent(from: sysDefault),
                   let choices = c["Choices"] as? [[String: Any]],
                   let f = choices.first {
             content = c
             first = f
         } else if let displays = root["Displays"] as? [String: Any],
-                  let firstDisplay = displays.values.first(where: { ($0 as? [String: Any])?["Desktop"] != nil }) as? [String: Any],
-                  let desktop = firstDisplay["Desktop"] as? [String: Any],
-                  let c = desktop["Content"] as? [String: Any],
+                  let firstDisplay = displays.values.first(where: {
+                      guard let d = $0 as? [String: Any] else { return false }
+                      return d["Desktop"] != nil || d["Linked"] != nil
+                  }) as? [String: Any],
+                  let c = extractContent(from: firstDisplay),
                   let choices = c["Choices"] as? [[String: Any]],
                   let f = choices.first {
             content = c
@@ -465,7 +512,8 @@ struct MainWindowView: View {
             }
         }
 
-        return WallpaperStoreInfo(thumbnailURL: thumbnailURL, placement: placement, fillColor: fillColor)
+        let provider = first["Provider"] as? String
+        return WallpaperStoreInfo(thumbnailURL: thumbnailURL, placement: placement, fillColor: fillColor, provider: provider)
     }
 
     /// Resolves a thumbnail URL for provider-based dynamic wallpapers.
@@ -533,6 +581,43 @@ struct MainWindowView: View {
             }
         }
         return nil
+    }
+
+    /// Searches the wallpaper agent's rendered BMP cache for an image matching
+    /// the given physical screen dimensions. This covers wallpaper types that
+    /// have no dedicated thumbnail (e.g. Photos wallpapers).
+    /// The cache lives in the wallpaper agent's container and stores rendered
+    /// BMP files with filenames like `{hash}-{width}-{height}-{flags}.bmp`.
+    /// Providers whose caches should be skipped during BMP fallback lookup,
+    /// because they already have dedicated thumbnail resolution in `thumbnailForProvider`.
+    private static let handledCacheProviders: Set<String> = [
+        "aerials", "sequoia", "sonoma", "ventura", "monterey", "macintosh",
+    ]
+
+    private static func wallpaperCacheBMP(forScreenWidth width: Int, height: Int) -> URL? {
+        let cacheBase = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Containers/com.apple.wallpaper.agent/Data/Library/Caches/com.apple.wallpaper.caches")
+        guard let extensionDirs = try? FileManager.default.contentsOfDirectory(atPath: cacheBase.path) else { return nil }
+        let suffix = "-\(width)-\(height)-"
+        var bestURL: URL? = nil
+        var bestDate: Date = .distantPast
+        for dir in extensionDirs {
+            // Skip cache directories for providers that have dedicated thumbnail handlers.
+            // Their BMPs may be stale leftovers that would incorrectly win the recency check.
+            if handledCacheProviders.contains(where: { dir.contains($0) }) { continue }
+            let dirURL = cacheBase.appendingPathComponent(dir)
+            guard let files = try? FileManager.default.contentsOfDirectory(atPath: dirURL.path) else { continue }
+            for file in files where file.hasSuffix(".bmp") && file.contains(suffix) {
+                let fileURL = dirURL.appendingPathComponent(file)
+                if let attrs = try? FileManager.default.attributesOfItem(atPath: fileURL.path),
+                   let modified = attrs[.modificationDate] as? Date,
+                   modified > bestDate {
+                    bestDate = modified
+                    bestURL = fileURL
+                }
+            }
+        }
+        return bestURL
     }
 
     /// Determines the menu bar text color for the current preview screen.
