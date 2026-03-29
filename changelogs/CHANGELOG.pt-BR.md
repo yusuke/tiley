@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Ao passar o cursor sobre um preset de múltiplos layouts, números de índice de layout são exibidos na grade de mini tela, na pré-visualização em tamanho real e na lista de janelas da barra lateral, permitindo identificar intuitivamente qual layout se aplica a cada janela independentemente da percepção de cores
+
 ### Alterado
 
-- Interface da janela de configurações ajustada para corresponder ao visual do macOS Tahoe: botões da barra de ferramentas e de ação unificados com formato de cápsula e fundos de hover/pressão adaptativos ao sistema, cartões de seção de configurações com fundo cinza claro sem borda, alternadores redimensionados para o tamanho das Preferências do Sistema, e lista de atalhos reestruturada com uma seção independente "Atalhos para mover ao monitor"
+- Interface da janela de configurações ajustada para corresponder ao visual do macOS Tahoe: botões da barra de ferramentas e de ação unificados com formato de cápsula e fundos de hover/pressão adaptativos ao sistema, cartões de seç��o de configurações com fundo cinza claro sem borda, alternadores redimensionados para o tamanho das Preferências do Sistema, e lista de atalhos reestruturada com uma seção independente "Atalhos para mover ao monitor"
+
+### Corrigido
+
+- Janelas da barra lateral que excedem o número de layouts do preset agora exibem corretamente a cor do último layout em vez da cor de seleção principal
 
 ## [4.0.5] - 2026-03-29
 

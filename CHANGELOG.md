@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Hovering over a multi-layout preset now shows layout index numbers on the mini-screen grid, full-size preview rectangles, and sidebar window list items, making it easy to see which layout applies to which window regardless of color vision
+
 ### Changed
 
 - Fine-tuned the settings window UI to match macOS Tahoe look and feel: toolbar and action bar buttons now use capsule shape with system-adaptive hover/press fills, settings section cards use a subtle gray background without borders, toggles are sized to match System Settings, and shortcut rows are restructured with a dedicated "Display Move Shortcuts" section
+
+### Fixed
+
+- Sidebar windows beyond the preset layout count now correctly show the last layout's color instead of the primary selection color
 
 ## [4.0.5] - 2026-03-29
 

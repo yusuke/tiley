@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Le survol d’un preset multi-disposition affiche désormais les numéros d’index de disposition sur la grille mini-écran, l’aperçu en taille réelle et la liste des fenêtres de la barre latérale, permettant d’identifier intuitivement quelle disposition s’applique à chaque fenêtre indépendamment de la perception des couleurs
+
 ### Modifié
 
 - Interface de la fenêtre de réglages affinée pour correspondre au look & feel de macOS Tahoe : boutons de la barre d'outils et de la barre d'actions unifiés en forme de capsule avec des fonds de survol/pression adaptatifs au système, cartes de section de réglages avec fond gris clair sans bordure, boutons bascule redimensionnés à la taille de Préférences Système, et liste des raccourcis restructurée avec une section indépendante « Raccourcis déplacer vers l'écran »
+
+### Corrigé
+
+- Les fenêtres de la barre latérale dépassant le nombre de dispositions du preset affichent désormais correctement la couleur de la dernière disposition au lieu de la couleur de sélection principale
 
 ## [4.0.5] - 2026-03-29
 

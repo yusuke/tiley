@@ -2464,6 +2464,19 @@ struct MainWindowView: View {
                         lineWidth: presetColorIndex != nil ? 1 : (isSelected ? 1 : 0)
                     )
             )
+            .overlay(alignment: .trailing) {
+                if let ci = presetColorIndex {
+                    Text("\(ci + 1)")
+                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(width: 16, height: 16)
+                        .background(
+                            Circle()
+                                .fill(ThemeColors.indexedSelectionFill(index: ci, for: colorScheme))
+                        )
+                        .padding(.trailing, 4)
+                }
+            }
             .animation(nil, value: isHovered)
         }
         .buttonStyle(.plain)
@@ -3685,10 +3698,10 @@ struct MainWindowView: View {
         // Use multi-selection preview when the preset has secondary selections
         // and multiple windows are selected.
         if !preset.secondarySelections.isEmpty, appState.isMultiSelection {
-            appState.updateLayoutPreviewForPreset(preset, screenContext: screenContext)
+            appState.updateLayoutPreviewForPreset(preset, screenContext: screenContext, showIndexLabels: true)
         } else if !preset.secondarySelections.isEmpty {
             // Single selection but preset has multiple layouts → show multi-preview with z-order windows
-            appState.updateLayoutPreviewForPreset(preset, screenContext: screenContext)
+            appState.updateLayoutPreviewForPreset(preset, screenContext: screenContext, showIndexLabels: true)
         } else {
             let selection = preset.scaledSelection(toRows: appState.rows, columns: appState.columns)
             if let ctx = screenContext {

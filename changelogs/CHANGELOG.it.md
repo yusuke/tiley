@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Passando il cursore su un preset multi-layout, vengono mostrati i numeri di indice del layout sulla griglia mini-schermo, sull'anteprima a dimensione reale e sulla lista finestre della barra laterale, rendendo immediatamente chiaro quale layout viene applicato a ciascuna finestra indipendentemente dalla percezione dei colori
+
 ### Modificato
 
 - Interfaccia della finestra di impostazioni ottimizzata per adattarsi al look & feel di macOS Tahoe: pulsanti della barra degli strumenti e della barra delle azioni unificati con forma a capsula e sfondi hover/pressione adattivi al sistema, schede sezione impostazioni con sfondo grigio chiaro senza bordo, toggle ridimensionati alla dimensione di Preferenze di Sistema, e lista scorciatoie ristrutturata con una sezione indipendente "Scorciatoie spostamento display"
+
+### Corretto
+
+- Le finestre della barra laterale che superano il numero di layout del preset ora mostrano correttamente il colore dell'ultimo layout invece del colore di selezione principale
 
 ## [4.0.5] - 2026-03-29
 

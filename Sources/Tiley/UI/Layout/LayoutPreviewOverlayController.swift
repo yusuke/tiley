@@ -69,7 +69,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
     }
 
     /// Show preview rectangles for multiple selections (multi-selection preset).
-    func showMultipleSelections(_ items: [SelectionPreviewItem], rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?) {
+    func showMultipleSelections(_ items: [SelectionPreviewItem], rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, showIndexLabels: Bool = false) {
         let frames = items.map { item in
             SelectionPreviewEntry(
                 frame: GridCalculator.frame(for: item.selection, in: visibleFrame, rows: rows, columns: columns, gap: gap),
@@ -80,7 +80,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
                 appName: item.appName
             )
         }
-        let rootView = MultiSelectionPreviewOverlayView(entries: frames, screenFrame: screenFrame)
+        let rootView = MultiSelectionPreviewOverlayView(entries: frames, screenFrame: screenFrame, showIndexLabels: showIndexLabels)
         window?.contentView = NSHostingView(rootView: rootView)
         window?.level = .normal
         present(behind: parentWindow)
@@ -146,6 +146,8 @@ private struct SelectionPreviewOverlayView: View {
     let appName: String?
     /// Color index into the multi-selection palette (blue, green, orange, purple cycling).
     var colorIndex: Int = 0
+    /// 1-based selection index label to show on the preview (nil = hidden).
+    var selectionLabel: Int?
 
     var body: some View {
         // Full requested frame in screen-local coordinates (top-left origin).
@@ -276,6 +278,15 @@ private struct SelectionPreviewOverlayView: View {
             // Border stroke on top of everything
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .stroke(ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme), lineWidth: 2)
+
+            // Selection index label centered in content area
+            if let label = selectionLabel {
+                Text("\(label)")
+                    .font(.system(size: min(width, height) * 0.25, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
         }
         .frame(width: width, height: height)
     }
@@ -410,6 +421,8 @@ private struct GridPreviewOverlayView: View {
 private struct MultiSelectionPreviewOverlayView: View {
     let entries: [SelectionPreviewEntry]
     let screenFrame: CGRect
+    /// When true, show 1-based index labels on each selection.
+    var showIndexLabels: Bool = false
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -422,7 +435,8 @@ private struct MultiSelectionPreviewOverlayView: View {
                     appIcon: entry.appIcon,
                     windowTitle: entry.windowTitle,
                     appName: entry.appName,
-                    colorIndex: index
+                    colorIndex: index,
+                    selectionLabel: showIndexLabels ? index + 1 : nil
                 )
             }
         }

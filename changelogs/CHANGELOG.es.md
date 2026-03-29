@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Al pasar el cursor sobre un preset de múltiples diseños, se muestran números de índice de diseño en la cuadrícula de mini pantalla, la vista previa a tamaño real y la lista de ventanas de la barra lateral, permitiendo identificar intuitivamente qué diseño se aplica a cada ventana independientemente de la percepción del color
+
 ### Cambiado
 
 - Ajustada la interfaz de la ventana de ajustes para adaptarse al aspecto visual de macOS Tahoe: botones de la barra de herramientas y de acción unificados con forma de cápsula y fondos de hover/pulsación adaptativos al sistema, tarjetas de sección de ajustes con fondo gris claro sin borde, interruptores redimensionados al tamaño de Preferencias del Sistema, y lista de atajos reestructurada con una sección independiente "Atajos para mover a pantalla"
+
+### Corregido
+
+- Las ventanas de la barra lateral que exceden el número de diseños del preset ahora muestran correctamente el color del último diseño en lugar del color de selección principal
 
 ## [4.0.5] - 2026-03-29
 

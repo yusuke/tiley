@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Beim Überfahren eines Multi-Layout-Presets werden Layout-Indexnummern im Mini-Bildschirm-Raster, in der Originalgrößen-Vorschau und in der Seitenleisten-Fensterliste angezeigt, sodass unabhängig vom Farbsehvermögen sofort erkennbar ist, welches Layout auf welches Fenster angewendet wird
+
 ### Geändert
 
 - Einstellungsfenster-UI an das macOS Tahoe Look & Feel angepasst: Toolbar- und Action-Bar-Schaltflächen vereinheitlicht auf Kapselform mit systemadaptiven Hover-/Press-Hintergründen, Einstellungsbereich-Karten ohne Rahmen mit hellem Grau-Hintergrund, Umschalter auf System-Einstellungen-Größe verkleinert, Tastenkürzel-Liste neu strukturiert mit eigenem Bereich „Tastenkürzel zum Verschieben auf Display"
+
+### Behoben
+
+- Seitenleisten-Fenster, die die Preset-Layout-Anzahl überschreiten, werden jetzt korrekt in der Farbe des letzten Layouts statt in der primären Auswahlfarbe angezeigt
 
 ## [4.0.5] - 2026-03-29
 

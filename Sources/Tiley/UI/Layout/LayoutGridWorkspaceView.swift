@@ -124,7 +124,7 @@ struct LayoutGridWorkspaceView: View {
 
                 // Multiple highlight rectangles (preset hover with secondary selections)
                 if !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty {
-                    let showHighlightIndex = highlightSelections.count > 1 && highlightWindowInfo.isEmpty
+                    let showHighlightIndex = highlightSelections.count > 1
                     let multiInset: CGFloat = highlightSelections.count > 1 ? 1 : 0
                     ForEach(Array(highlightSelections.enumerated()), id: \.offset) { index, sel in
                         let norm = sel.normalized

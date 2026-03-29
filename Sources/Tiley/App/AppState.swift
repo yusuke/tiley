@@ -2207,7 +2207,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     /// Shows preview rectangles for multiple selections mapped to selected windows.
-    func updateLayoutPreviewForPreset(_ preset: LayoutPreset, screenContext: ScreenContext? = nil) {
+    func updateLayoutPreviewForPreset(_ preset: LayoutPreset, screenContext: ScreenContext? = nil, showIndexLabels: Bool = false) {
         guard isShowingLayoutGrid else {
             hidePreviewOverlay()
             return
@@ -2283,7 +2283,8 @@ final class AppState: NSObject, NSMenuDelegate {
             rows: rows,
             columns: columns,
             gap: gap,
-            behind: parentWindow
+            behind: parentWindow,
+            showIndexLabels: showIndexLabels
         )
     }
 
@@ -2320,6 +2321,15 @@ final class AppState: NSObject, NSMenuDelegate {
                 appName: target.appName,
                 windowTitle: target.windowTitle ?? ""
             ))
+        }
+        // Selected windows beyond the preset layout count are clamped to the last layout
+        // during apply, so highlight them with the last layout's color.
+        let lastColorIndex = allSelections.count - 1
+        let assignedSet = Set(orderedIndices)
+        for idx in selectionOrder where idx < availableWindowTargets.count {
+            if !assignedSet.contains(idx) {
+                highlights[idx] = lastColorIndex
+            }
         }
         return (highlights, windowInfo)
     }
