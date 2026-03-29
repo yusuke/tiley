@@ -2576,7 +2576,7 @@ struct MainWindowView: View {
             if let updater = appState.updater {
                 TahoeSettingsSection(title: NSLocalizedString("Updates", comment: "Settings section")) {
                     VStack(spacing: 0) {
-                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: ""), systemImage: "exclamationmark.circle") {
+                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: ""), systemImage: "exclamationmark.circle", iconAlignment: .center) {
                             Toggle("", isOn: Binding(
                                 get: { updater.automaticallyChecksForUpdates },
                                 set: { updater.automaticallyChecksForUpdates = $0 }
@@ -2606,7 +2606,7 @@ struct MainWindowView: View {
 
             TahoeSettingsSection(title: NSLocalizedString("Grid", comment: "Settings section")) {
                 VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Rows", comment: ""), systemImage: "square.split.1x2") {
+                    TahoeSettingsRow(label: NSLocalizedString("Rows", comment: ""), systemImage: "square.split.1x2", iconAlignment: .center) {
                         Stepper("\(draftSettings.rows)", value: $draftSettings.rows, in: 2...12)
                             .labelsHidden()
                         Text("\(draftSettings.rows)")
@@ -2618,7 +2618,7 @@ struct MainWindowView: View {
 
                     Divider().opacity(0.4)
 
-                    TahoeSettingsRow(label: NSLocalizedString("Columns", comment: ""), systemImage: "square.split.2x1") {
+                    TahoeSettingsRow(label: NSLocalizedString("Columns", comment: ""), systemImage: "square.split.2x1", iconAlignment: .center) {
                         Stepper("\(draftSettings.columns)", value: $draftSettings.columns, in: 2...12)
                             .labelsHidden()
                         Text("\(draftSettings.columns)")
@@ -2631,7 +2631,7 @@ struct MainWindowView: View {
                     Divider().opacity(0.4)
 
                     VStack(spacing: 4) {
-                        TahoeSettingsRow(label: NSLocalizedString("Gap", comment: ""), systemImage: "square.split.2x2") {
+                        TahoeSettingsRow(label: NSLocalizedString("Gap", comment: ""), systemImage: "square.split.2x2", iconAlignment: .center) {
                             Text("\(Int(draftSettings.gap)) pt")
                                 .monospacedDigit()
                                 .foregroundStyle(.secondary)
@@ -2649,6 +2649,7 @@ struct MainWindowView: View {
                             draftSettings.rows = Self.defaultGridRows
                             draftSettings.gap = Self.defaultGridGap
                         }
+                        .disabled(isGridAtDefault)
                     }
                     .padding(.vertical, 4)
                 }
@@ -2672,6 +2673,7 @@ struct MainWindowView: View {
                         dismissPresetNameEditingIfNeeded()
                         appState.resetLayoutPresetsToDefault()
                     }
+                    .disabled(isLayoutPresetsAtDefault)
                 }
             }
 
@@ -2729,7 +2731,7 @@ struct MainWindowView: View {
 
             TahoeSettingsSection(title: NSLocalizedString("Debug", comment: "Settings section")) {
                 VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Write debug log to ~/tiley.log", comment: ""), systemImage: "ladybug") {
+                    TahoeSettingsRow(label: NSLocalizedString("Write debug log to ~/tiley.log", comment: ""), systemImage: "ladybug", iconAlignment: .center) {
                         Toggle("", isOn: Binding(
                             get: { draftSettings.enableDebugLog },
                             set: { newValue in
@@ -2825,6 +2827,33 @@ struct MainWindowView: View {
         .padding(.vertical, 4)
     }
 
+    private var isGridAtDefault: Bool {
+        draftSettings.columns == Self.defaultGridColumns &&
+        draftSettings.rows == Self.defaultGridRows &&
+        draftSettings.gap == Self.defaultGridGap
+    }
+
+    private var isLayoutPresetsAtDefault: Bool {
+        let defaults = LayoutPreset.defaultPresets(rows: appState.rows, columns: appState.columns)
+        guard appState.layoutPresets.count == defaults.count else { return false }
+        return zip(appState.layoutPresets, defaults).allSatisfy { current, def in
+            current.name == def.name &&
+            current.selection == def.selection &&
+            current.secondarySelections == def.secondarySelections &&
+            current.baseRows == def.baseRows &&
+            current.baseColumns == def.baseColumns &&
+            current.shortcuts == def.shortcuts
+        }
+    }
+
+    private var isShortcutsAtDefault: Bool {
+        draftSettings.hotKeyShortcut == .default &&
+        draftSettings.displayShortcutSettings.selectNextWindow == DisplayShortcutSettings.defaultSelectNextWindow &&
+        draftSettings.displayShortcutSettings.selectPreviousWindow == DisplayShortcutSettings.defaultSelectPreviousWindow &&
+        draftSettings.displayShortcutSettings.bringToFront == DisplayShortcutSettings.defaultBringToFront &&
+        draftSettings.displayShortcutSettings.closeOrQuit == DisplayShortcutSettings.defaultCloseOrQuit
+    }
+
     private var displayShortcutsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
         TahoeSettingsSection(title: NSLocalizedString("Shortcuts", comment: "Settings section for shortcuts")) {
@@ -2905,6 +2934,7 @@ struct MainWindowView: View {
                             draftSettings.displayShortcutSettings.bringToFront = DisplayShortcutSettings.defaultBringToFront
                             draftSettings.displayShortcutSettings.closeOrQuit = DisplayShortcutSettings.defaultCloseOrQuit
                         }
+                        .disabled(isShortcutsAtDefault)
                     }
                     .padding(.vertical, 4)
             }
