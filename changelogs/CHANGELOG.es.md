@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Ajustada la interfaz de la ventana de ajustes para adaptarse al aspecto visual de macOS Tahoe: botones de la barra de herramientas y de acción unificados con forma de cápsula y fondos de hover/pulsación adaptativos al sistema, tarjetas de sección de ajustes con fondo gris claro sin borde, interruptores redimensionados al tamaño de Preferencias del Sistema, y lista de atajos reestructurada con una sección independiente "Atajos para mover a pantalla"
+
 ## [4.0.5] - 2026-03-29
 
 ### Corregido

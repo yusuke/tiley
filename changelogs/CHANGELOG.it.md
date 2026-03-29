@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Interfaccia della finestra di impostazioni ottimizzata per adattarsi al look & feel di macOS Tahoe: pulsanti della barra degli strumenti e della barra delle azioni unificati con forma a capsula e sfondi hover/pressione adattivi al sistema, schede sezione impostazioni con sfondo grigio chiaro senza bordo, toggle ridimensionati alla dimensione di Preferenze di Sistema, e lista scorciatoie ristrutturata con una sezione indipendente "Scorciatoie spostamento display"
+
 ## [4.0.5] - 2026-03-29
 
 ### Corretto

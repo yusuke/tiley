@@ -47,6 +47,8 @@
 "Windows" = "ウインドウ";
 "Write debug log to ~/tiley.log" = "デバッグログを ~/tiley.log に書き出す";
 "Reset to Default" = "デフォルトに戻す";
+"Rows" = "行";
+"Columns" = "列";
 "Gap" = "間隔";
 "Reset Grid to Default" = "グリッドをデフォルトに戻す";
 "Reset the layout preset list to the defaults." = "レイアウトプリセット一覧を初期状態に戻します。";
@@ -125,6 +127,7 @@
 
 // Display shortcuts
 "Shortcuts" = "ショートカット";
+"Display Move Shortcuts" = "ディスプレイ移動ショートカット";
 "Show Tiley" = "Tileyを表示";
 "Remove Shortcut" = "ショートカットを削除";
 "Click to change" = "クリックして変更";

@@ -47,6 +47,8 @@
 "Windows" = "Окна";
 "Write debug log to ~/tiley.log" = "Записывать отладочный лог в ~/tiley.log";
 "Reset to Default" = "Сбросить";
+"Rows" = "Строки";
+"Columns" = "Столбцы";
 "Gap" = "Отступ";
 "Reset Grid to Default" = "Сбросить сетку";
 "Reset the layout preset list to the defaults." = "Сбросить список компоновок к значениям по умолчанию.";
@@ -125,6 +127,7 @@
 
 // Display shortcuts
 "Shortcuts" = "Горячие клавиши";
+"Display Move Shortcuts" = "Горячие клавиши перемещения на дисплей";
 "Show Tiley" = "Показать Tiley";
 "Remove Shortcut" = "Удалить горячую клавишу";
 "Click to change" = "Нажмите для изменения";

@@ -47,6 +47,8 @@
 "Windows" = "Janelas";
 "Write debug log to ~/tiley.log" = "Gravar log de depuração em ~/tiley.log";
 "Reset to Default" = "Redefinir padrão";
+"Rows" = "Linhas";
+"Columns" = "Colunas";
 "Gap" = "Espaçamento";
 "Reset Grid to Default" = "Redefinir grade";
 "Reset the layout preset list to the defaults." = "Redefine a lista de layouts predefinidos para os padrões.";
@@ -125,6 +127,7 @@
 
 // Display shortcuts
 "Shortcuts" = "Atalhos";
+"Display Move Shortcuts" = "Atalhos de mudança de tela";
 "Show Tiley" = "Mostrar Tiley";
 "Remove Shortcut" = "Remover atalho";
 "Click to change" = "Clique para alterar";

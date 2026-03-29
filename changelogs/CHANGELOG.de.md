@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Einstellungsfenster-UI an das macOS Tahoe Look & Feel angepasst: Toolbar- und Action-Bar-Schaltflächen vereinheitlicht auf Kapselform mit systemadaptiven Hover-/Press-Hintergründen, Einstellungsbereich-Karten ohne Rahmen mit hellem Grau-Hintergrund, Umschalter auf System-Einstellungen-Größe verkleinert, Tastenkürzel-Liste neu strukturiert mit eigenem Bereich „Tastenkürzel zum Verschieben auf Display"
+
 ## [4.0.5] - 2026-03-29
 
 ### Behoben

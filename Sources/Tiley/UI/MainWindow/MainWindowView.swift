@@ -759,7 +759,6 @@ struct MainWindowView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.secondary)
                 }
                 .buttonStyle(TahoeToolbarButtonStyle())
                 .help("Back")
@@ -2154,7 +2153,6 @@ struct MainWindowView: View {
                 triggerVersion: triggerVersion
             )
             .frame(width: 38, height: 24)
-            .modifier(InteractiveGlassBackground(cornerRadius: 8))
             .instantTooltip(NSLocalizedString("Move to Other Display", comment: "Action bar tooltip for move-to-screen button"))
         } else if let targetScreen = otherScreens.first {
             MoveToDisplayButton(
@@ -2578,12 +2576,13 @@ struct MainWindowView: View {
             if let updater = appState.updater {
                 TahoeSettingsSection(title: NSLocalizedString("Updates", comment: "Settings section")) {
                     VStack(spacing: 0) {
-                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: "")) {
+                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: ""), systemImage: "exclamationmark.circle") {
                             Toggle("", isOn: Binding(
                                 get: { updater.automaticallyChecksForUpdates },
                                 set: { updater.automaticallyChecksForUpdates = $0 }
                             ))
                             .toggleStyle(.switch)
+                            .controlSize(.mini)
                             .labelsHidden()
                         }
                         .padding(.vertical, 4)
@@ -2607,19 +2606,7 @@ struct MainWindowView: View {
 
             TahoeSettingsSection(title: NSLocalizedString("Grid", comment: "Settings section")) {
                 VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Columns", comment: "")) {
-                        Stepper("\(draftSettings.columns)", value: $draftSettings.columns, in: 2...12)
-                            .labelsHidden()
-                        Text("\(draftSettings.columns)")
-                            .monospacedDigit()
-                            .foregroundStyle(.secondary)
-                            .frame(width: 20, alignment: .trailing)
-                    }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    TahoeSettingsRow(label: NSLocalizedString("Rows", comment: "")) {
+                    TahoeSettingsRow(label: NSLocalizedString("Rows", comment: ""), systemImage: "square.split.1x2") {
                         Stepper("\(draftSettings.rows)", value: $draftSettings.rows, in: 2...12)
                             .labelsHidden()
                         Text("\(draftSettings.rows)")
@@ -2631,8 +2618,20 @@ struct MainWindowView: View {
 
                     Divider().opacity(0.4)
 
+                    TahoeSettingsRow(label: NSLocalizedString("Columns", comment: ""), systemImage: "square.split.2x1") {
+                        Stepper("\(draftSettings.columns)", value: $draftSettings.columns, in: 2...12)
+                            .labelsHidden()
+                        Text("\(draftSettings.columns)")
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                            .frame(width: 20, alignment: .trailing)
+                    }
+                    .padding(.vertical, 4)
+
+                    Divider().opacity(0.4)
+
                     VStack(spacing: 4) {
-                        TahoeSettingsRow(label: NSLocalizedString("Gap", comment: "")) {
+                        TahoeSettingsRow(label: NSLocalizedString("Gap", comment: ""), systemImage: "square.split.2x2") {
                             Text("\(Int(draftSettings.gap)) pt")
                                 .monospacedDigit()
                                 .foregroundStyle(.secondary)
@@ -2680,7 +2679,7 @@ struct MainWindowView: View {
 
             TahoeSettingsSection(title: NSLocalizedString("Startup", comment: "Settings section")) {
                 VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Launch at login", comment: "")) {
+                    TahoeSettingsRow(label: NSLocalizedString("Launch at login", comment: ""), systemImage: "power", iconAlignment: .center) {
                         Toggle("", isOn: Binding(
                             get: { draftSettings.launchAtLoginEnabled },
                             set: { newValue in
@@ -2689,13 +2688,14 @@ struct MainWindowView: View {
                             }
                         ))
                         .toggleStyle(.switch)
+                        .controlSize(.mini)
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
 
                     Divider().opacity(0.4)
 
-                    TahoeSettingsRow(label: NSLocalizedString("Show menu icon", comment: "")) {
+                    TahoeSettingsRow(label: NSLocalizedString("Show menu icon", comment: ""), systemImage: "menubar.rectangle", iconAlignment: .center) {
                         Toggle("", isOn: Binding(
                             get: { draftSettings.menuIconVisible },
                             set: { newValue in
@@ -2704,13 +2704,14 @@ struct MainWindowView: View {
                             }
                         ))
                         .toggleStyle(.switch)
+                        .controlSize(.mini)
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
 
                     Divider().opacity(0.4)
 
-                    TahoeSettingsRow(label: NSLocalizedString("Show Dock icon", comment: "")) {
+                    TahoeSettingsRow(label: NSLocalizedString("Show Dock icon", comment: ""), systemImage: "dock.rectangle", iconAlignment: .center) {
                         Toggle("", isOn: Binding(
                             get: { draftSettings.dockIconVisible },
                             set: { newValue in
@@ -2719,6 +2720,7 @@ struct MainWindowView: View {
                             }
                         ))
                         .toggleStyle(.switch)
+                        .controlSize(.mini)
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
@@ -2727,7 +2729,7 @@ struct MainWindowView: View {
 
             TahoeSettingsSection(title: NSLocalizedString("Debug", comment: "Settings section")) {
                 VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Write debug log to ~/tiley.log", comment: "")) {
+                    TahoeSettingsRow(label: NSLocalizedString("Write debug log to ~/tiley.log", comment: ""), systemImage: "ladybug") {
                         Toggle("", isOn: Binding(
                             get: { draftSettings.enableDebugLog },
                             set: { newValue in
@@ -2736,6 +2738,7 @@ struct MainWindowView: View {
                             }
                         ))
                         .toggleStyle(.switch)
+                        .controlSize(.mini)
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
@@ -2752,6 +2755,7 @@ struct MainWindowView: View {
                             }
                         ))
                         .toggleStyle(.switch)
+                        .controlSize(.mini)
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
@@ -2822,10 +2826,9 @@ struct MainWindowView: View {
     }
 
     private var displayShortcutsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
         TahoeSettingsSection(title: NSLocalizedString("Shortcuts", comment: "Settings section for shortcuts")) {
-            VStack(spacing: 8) {
-                // Window action shortcuts group
-                VStack(spacing: 0) {
+            VStack(spacing: 0) {
                     // Show Tiley (global-only shortcut, formerly separate "Shortcut" section)
                     showTileyShortcutRow
 
@@ -2904,13 +2907,11 @@ struct MainWindowView: View {
                         }
                     }
                     .padding(.vertical, 4)
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .modifier(SettingsSectionBackground(cornerRadius: 10))
+            }
+        }
 
-                VStack(spacing: 0) {
+        TahoeSettingsSection(title: NSLocalizedString("Display Move Shortcuts", comment: "Settings section for display move shortcuts")) {
+            VStack(spacing: 0) {
                     displayShortcutRow(
                     label: NSLocalizedString("Move to Primary Display", comment: "Display shortcut action"),
                     localBinding: $draftSettings.displayShortcutSettings.moveToPrimary.local,
@@ -3028,13 +3029,9 @@ struct MainWindowView: View {
                         }
                     }
                 }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .modifier(SettingsSectionBackground(cornerRadius: 10))
             }
         }
+        } // end VStack
     }
 
     @ViewBuilder
@@ -4881,39 +4878,22 @@ private struct SettingsSectionBackground: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
 
     func body(content: Content) -> some View {
-        if #available(macOS 26.0, *) {
-            content
-                .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
-        } else {
-            content
-                .background(
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .fill(settingsCardFill)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .stroke(settingsCardBorder, lineWidth: 0.5)
-                )
-        }
+        content
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(settingsCardFill)
+            )
     }
 
     private var settingsCardFill: Color {
         switch colorScheme {
         case .dark:
-            return Color.white.opacity(0.06)
+            return Color.white.opacity(0.08)
         default:
-            return Color.white.opacity(0.65)
+            return Color(white: 0.98)
         }
     }
 
-    private var settingsCardBorder: Color {
-        switch colorScheme {
-        case .dark:
-            return Color.white.opacity(0.10)
-        default:
-            return Color.black.opacity(0.08)
-        }
-    }
 }
 
 // MARK: - Tahoe Settings Row
@@ -4924,6 +4904,7 @@ private struct TahoeSettingsRow<Trailing: View>: View {
     let label: String
     var systemImage: String? = nil
     var systemImageWeight: Font.Weight = .regular
+    var iconAlignment: Alignment = .trailing
     var iconContent: AnyView? = nil
     @ViewBuilder var trailing: () -> Trailing
 
@@ -4940,7 +4921,7 @@ private struct TahoeSettingsRow<Trailing: View>: View {
                     Color.clear
                 }
             }
-            .frame(width: shortcutIconColumnWidth, alignment: .trailing)
+            .frame(width: shortcutIconColumnWidth, alignment: iconAlignment)
             Text(label)
             Spacer()
             trailing()
@@ -4994,11 +4975,17 @@ private struct VisualEffectFallbackBackground: NSViewRepresentable {
 /// Applies .interactive() glass on macOS 26+; no-op on earlier versions.
 private struct InteractiveGlassBackground: ViewModifier {
     let cornerRadius: CGFloat
+    var useCapsule: Bool = false
 
     func body(content: Content) -> some View {
         if #available(macOS 26.0, *) {
-            content
-                .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: cornerRadius))
+            if useCapsule {
+                content
+                    .glassEffect(.regular.interactive(), in: Capsule())
+            } else {
+                content
+                    .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: cornerRadius))
+            }
         } else {
             content
         }
@@ -5011,44 +4998,28 @@ private struct TahoeQuitButtonStyle: ButtonStyle {
     @State private var isHovered = false
 
     func makeBody(configuration: Configuration) -> some View {
-        Group {
-            if #available(macOS 26.0, *) {
-                configuration.label
-                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .glassEffect(.regular.interactive(), in: Capsule())
-                    .contentShape(Capsule())
-            } else {
-                configuration.label
-                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(
-                        Capsule(style: .continuous)
-                            .fill(
-                                configuration.isPressed
-                                    ? Color.black.opacity(0.08)
-                                    : isHovered
-                                        ? Color.white.opacity(0.9)
-                                        : Color.clear
-                            )
-                            .shadow(
-                                color: isHovered || configuration.isPressed
-                                    ? .black.opacity(0.08) : .clear,
-                                radius: 2, x: 0, y: 0.5
-                            )
+        configuration.label
+            .foregroundStyle(.primary)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(
+                        configuration.isPressed
+                            ? Color(nsColor: .labelColor).opacity(0.12)
+                            : isHovered
+                                ? Color(nsColor: .labelColor).opacity(0.06)
+                                : Color.clear
                     )
-                    .contentShape(Capsule())
+            )
+            .contentShape(Capsule())
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isHovered = hovering
+                }
             }
-        }
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.15)) {
-                isHovered = hovering
-            }
-        }
-        .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-        .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
@@ -5170,44 +5141,29 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
 
         override func draw(_ dirtyRect: NSRect) {
             guard let ctx = NSGraphicsContext.current?.cgContext else { return }
-            let isDark = coordinator?.colorScheme == .dark
-            let cornerRadius: CGFloat = 8
+            let cornerRadius = bounds.height / 2  // Capsule
             let path = CGPath(roundedRect: bounds, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
 
-            if #available(macOS 26.0, *) {
-                // Background and border are handled by .glassEffect() applied from SwiftUI.
-            } else {
-                // Background fill
-                let fillAlpha: CGFloat
-                if isMenuOpen {
-                    fillAlpha = isDark ? 0.18 : 0.12
-                } else if isHovered {
-                    fillAlpha = isDark ? 0.12 : 0.08
-                } else {
-                    fillAlpha = isDark ? 0.06 : 0.04
-                }
-                let fillColor = isDark ? CGColor(gray: 1, alpha: fillAlpha) : CGColor(gray: 0, alpha: fillAlpha)
+            // Background fill (Xcode/Finder-like: gray on hover, transparent normally)
+            if isMenuOpen {
+                let labelColor = NSColor.labelColor.cgColor
                 ctx.addPath(path)
-                ctx.setFillColor(fillColor)
+                ctx.setFillColor(labelColor.copy(alpha: 0.12) ?? CGColor(gray: 0, alpha: 0.12))
                 ctx.fillPath()
-
-                // Border
-                let borderAlpha: CGFloat = isDark ? 0.10 : 0.08
-                let borderColor = isDark ? CGColor(gray: 1, alpha: borderAlpha) : CGColor(gray: 0, alpha: borderAlpha)
+            } else if isHovered {
+                let labelColor = NSColor.labelColor.cgColor
                 ctx.addPath(path)
-                ctx.setStrokeColor(borderColor)
-                ctx.setLineWidth(0.5)
-                ctx.strokePath()
+                ctx.setFillColor(labelColor.copy(alpha: 0.06) ?? CGColor(gray: 0, alpha: 0.06))
+                ctx.fillPath()
             }
+            // Normal state: no fill (transparent)
 
-            // Tint color
+            // Tint color: always full opacity (primary), dimmed only when disabled
             let tintColor: NSColor
             if !isEnabled {
                 tintColor = .tertiaryLabelColor
-            } else if isHovered || isMenuOpen {
-                tintColor = .labelColor
             } else {
-                tintColor = .secondaryLabelColor
+                tintColor = .labelColor
             }
 
             // Main icon
@@ -5368,59 +5324,38 @@ extension EnvironmentValues {
     }
 }
 
-/// Tahoe-style action bar button: large corner radius, subtle fill, hover highlight.
+/// Tahoe-style action bar button: capsule shape, Xcode/Finder-like L&F.
+/// Default: icon at full opacity, transparent background.
+/// Hover: icon unchanged, gray background.
 private struct TahoeActionBarButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
     @State private var isHovered = false
 
-    private func fillColor(isPressed: Bool) -> Color {
-        let isDark = colorScheme == .dark
-        if isPressed {
-            return isDark ? Color.white.opacity(0.15) : Color.black.opacity(0.10)
-        } else if isHovered {
-            return isDark ? Color.white.opacity(0.10) : Color.black.opacity(0.06)
-        } else {
-            return isDark ? Color.white.opacity(0.05) : Color.black.opacity(0.03)
-        }
-    }
-
-    private var borderColor: Color {
-        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.06)
-    }
-
     func makeBody(configuration: Configuration) -> some View {
-        let fgStyle: HierarchicalShapeStyle = !isEnabled ? .tertiary : (isHovered || configuration.isPressed ? .primary : .secondary)
+        let fgStyle: HierarchicalShapeStyle = !isEnabled ? .tertiary : .primary
 
-        Group {
-            if #available(macOS 26.0, *) {
-                configuration.label
-                    .environment(\.tahoeActionBarHovered, isHovered || configuration.isPressed)
-                    .foregroundStyle(fgStyle)
-                    .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 8))
-                    .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            } else {
-                configuration.label
-                    .environment(\.tahoeActionBarHovered, isHovered || configuration.isPressed)
-                    .foregroundStyle(fgStyle)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(fillColor(isPressed: configuration.isPressed))
+        configuration.label
+            .environment(\.tahoeActionBarHovered, isHovered || configuration.isPressed)
+            .foregroundStyle(fgStyle)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(
+                        configuration.isPressed
+                            ? Color(nsColor: .labelColor).opacity(0.12)
+                            : isHovered
+                                ? Color(nsColor: .labelColor).opacity(0.06)
+                                : Color.clear
                     )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(borderColor, lineWidth: 0.5)
-                    )
-                    .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            )
+            .contentShape(Capsule())
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isHovered = hovering
+                }
             }
-        }
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.15)) {
-                isHovered = hovering
-            }
-        }
-        .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-        .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
@@ -5428,42 +5363,27 @@ private struct TahoeToolbarButtonStyle: ButtonStyle {
     @State private var isHovered = false
 
     func makeBody(configuration: Configuration) -> some View {
-        Group {
-            if #available(macOS 26.0, *) {
-                configuration.label
-                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
-                    .frame(width: 30, height: 30)
-                    .glassEffect(.regular.interactive(), in: Capsule())
-                    .contentShape(Capsule())
-            } else {
-                configuration.label
-                    .foregroundStyle(isHovered || configuration.isPressed ? .primary : .secondary)
-                    .frame(width: 30, height: 30)
-                    .background(
-                        Capsule(style: .continuous)
-                            .fill(
-                                configuration.isPressed
-                                    ? Color.black.opacity(0.08)
-                                    : isHovered
-                                        ? Color.white.opacity(0.9)
-                                        : Color.clear
-                            )
-                            .shadow(
-                                color: isHovered || configuration.isPressed
-                                    ? .black.opacity(0.08) : .clear,
-                                radius: 2, x: 0, y: 0.5
-                            )
+        configuration.label
+            .foregroundStyle(.primary)
+            .frame(width: 30, height: 30)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(
+                        configuration.isPressed
+                            ? Color(nsColor: .labelColor).opacity(0.12)
+                            : isHovered
+                                ? Color(nsColor: .labelColor).opacity(0.06)
+                                : Color.clear
                     )
-                    .contentShape(Capsule())
+            )
+            .contentShape(Capsule())
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isHovered = hovering
+                }
             }
-        }
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.15)) {
-                isHovered = hovering
-            }
-        }
-        .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
-        .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

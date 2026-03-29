@@ -47,6 +47,8 @@
 "Windows" = "윈도우";
 "Write debug log to ~/tiley.log" = "디버그 로그를 ~/tiley.log에 기록";
 "Reset to Default" = "기본값으로 재설정";
+"Rows" = "행 수";
+"Columns" = "열 수";
 "Gap" = "간격";
 "Reset Grid to Default" = "그리드를 기본값으로 재설정";
 "Reset the layout preset list to the defaults." = "레이아웃 프리셋 목록을 기본값으로 되돌립니다.";
@@ -125,6 +127,7 @@
 
 // Display shortcuts
 "Shortcuts" = "단축키";
+"Display Move Shortcuts" = "디스플레이 이동 단축키";
 "Show Tiley" = "Tiley 표시";
 "Remove Shortcut" = "단축키 제거";
 "Click to change" = "클릭하여 변경";

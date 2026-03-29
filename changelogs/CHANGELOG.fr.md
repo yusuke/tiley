@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Interface de la fenêtre de réglages affinée pour correspondre au look & feel de macOS Tahoe : boutons de la barre d'outils et de la barre d'actions unifiés en forme de capsule avec des fonds de survol/pression adaptatifs au système, cartes de section de réglages avec fond gris clair sans bordure, boutons bascule redimensionnés à la taille de Préférences Système, et liste des raccourcis restructurée avec une section indépendante « Raccourcis déplacer vers l'écran »
+
 ## [4.0.5] - 2026-03-29
 
 ### Corrigé

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Interface da janela de configurações ajustada para corresponder ao visual do macOS Tahoe: botões da barra de ferramentas e de ação unificados com formato de cápsula e fundos de hover/pressão adaptativos ao sistema, cartões de seção de configurações com fundo cinza claro sem borda, alternadores redimensionados para o tamanho das Preferências do Sistema, e lista de atalhos reestruturada com uma seção independente "Atalhos para mover ao monitor"
+
 ## [4.0.5] - 2026-03-29
 
 ### Corrigido

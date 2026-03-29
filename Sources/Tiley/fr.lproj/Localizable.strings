@@ -47,6 +47,8 @@
 "Windows" = "Fenêtres";
 "Write debug log to ~/tiley.log" = "Écrire le journal de débogage dans ~/tiley.log";
 "Reset to Default" = "Réinitialiser";
+"Rows" = "Lignes";
+"Columns" = "Colonnes";
 "Gap" = "Espacement";
 "Reset Grid to Default" = "Réinitialiser la grille";
 "Reset the layout preset list to the defaults." = "Réinitialise la liste des dispositions prédéfinies.";
@@ -125,6 +127,7 @@
 
 // Display shortcuts
 "Shortcuts" = "Raccourcis";
+"Display Move Shortcuts" = "Raccourcis de déplacement d'écran";
 "Show Tiley" = "Afficher Tiley";
 "Remove Shortcut" = "Supprimer le raccourci";
 "Click to change" = "Cliquer pour modifier";

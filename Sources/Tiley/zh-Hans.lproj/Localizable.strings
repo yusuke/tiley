@@ -47,6 +47,8 @@
 "Windows" = "窗口";
 "Write debug log to ~/tiley.log" = "将调试日志写入 ~/tiley.log";
 "Reset to Default" = "恢复默认";
+"Rows" = "行";
+"Columns" = "列";
 "Gap" = "间距";
 "Reset Grid to Default" = "将网格恢复为默认";
 "Reset the layout preset list to the defaults." = "将布局预设列表恢复为默认值。";
@@ -125,6 +127,7 @@
 
 // Display shortcuts
 "Shortcuts" = "快捷键";
+"Display Move Shortcuts" = "显示器移动快捷键";
 "Show Tiley" = "显示 Tiley";
 "Remove Shortcut" = "移除快捷键";
 "Click to change" = "点击更改";

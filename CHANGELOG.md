@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Fine-tuned the settings window UI to match macOS Tahoe look and feel: toolbar and action bar buttons now use capsule shape with system-adaptive hover/press fills, settings section cards use a subtle gray background without borders, toggles are sized to match System Settings, and shortcut rows are restructured with a dedicated "Display Move Shortcuts" section
+
 ## [4.0.5] - 2026-03-29
 
 ### Fixed
