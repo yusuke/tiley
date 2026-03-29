@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- El modo de visualización de fondo de pantalla en mosaico no se reflejaba en la vista previa de la mini pantalla (el valor de colocación "Tiled" del plist del Store de fondos de pantalla de macOS no se correspondía correctamente)
+- Se añadió registro de depuración para la canalización de resolución de fondos de pantalla para ayudar a diagnosticar problemas de visualización
+
 ## [4.0.6] - 2026-03-29
 
 ### Añadido

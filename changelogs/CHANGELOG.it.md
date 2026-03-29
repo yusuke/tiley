@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- La modalità di visualizzazione a mosaico dello sfondo non veniva riflessa nell'anteprima del mini schermo (il valore di posizionamento "Tiled" dal plist dello Store sfondi di macOS non veniva abbinato correttamente)
+- Aggiunta registrazione di debug per la pipeline di risoluzione dello sfondo per aiutare a diagnosticare problemi di visualizzazione
+
 ## [4.0.6] - 2026-03-29
 
 ### Aggiunto

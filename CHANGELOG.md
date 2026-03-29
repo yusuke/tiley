@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Tiled wallpaper display mode was not reflected in the mini-screen preview (the placement value "Tiled" from the macOS wallpaper Store plist was not matched correctly)
+- Added debug logging for wallpaper resolution pipeline to help diagnose wallpaper display issues
+
 ## [4.0.6] - 2026-03-29
 
 ### Added

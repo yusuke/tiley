@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Der gekachelte Hintergrund-Anzeigemodus wurde in der Mini-Bildschirmvorschau nicht korrekt dargestellt (der Platzierungswert „Tiled" aus der macOS-Hintergrund-Store-plist wurde nicht korrekt zugeordnet)
+- Debug-Protokollierung für die Hintergrund-Auflösungspipeline hinzugefügt, um Hintergrund-Anzeigeprobleme zu diagnostizieren
+
 ## [4.0.6] - 2026-03-29
 
 ### Hinzugefügt

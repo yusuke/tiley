@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- O modo de exibição lado a lado do papel de parede não era refletido na pré-visualização da minitela (o valor de posicionamento "Tiled" do plist da Store de papéis de parede do macOS não era correspondido corretamente)
+- Adicionado registro de depuração para o pipeline de resolução de papel de parede para ajudar a diagnosticar problemas de exibição
+
 ## [4.0.6] - 2026-03-29
 
 ### Adicionado
