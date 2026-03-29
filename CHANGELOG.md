@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.7] - 2026-03-29
+
 ### Fixed
 
 - Tiled wallpaper display mode was not reflected in the mini-screen preview (the placement value "Tiled" from the macOS wallpaper Store plist was not matched correctly)
@@ -518,7 +520,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.6...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.7...HEAD
+[4.0.7]: https://github.com/yusuke/tiley/releases/tag/v4.0.7
 [4.0.6]: https://github.com/yusuke/tiley/releases/tag/v4.0.6
 [4.0.5]: https://github.com/yusuke/tiley/releases/tag/v4.0.5
 [4.0.4]: https://github.com/yusuke/tiley/releases/tag/v4.0.4

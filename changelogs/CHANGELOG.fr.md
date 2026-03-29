@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.7] - 2026-03-29
+
 ### Corrigé
 
 - Le mode d'affichage mosaïque du fond d'écran n'était pas reflété dans l'aperçu du mini-écran (la valeur de placement « Tiled » du plist du Store de fonds d'écran macOS n'était pas correctement reconnue)

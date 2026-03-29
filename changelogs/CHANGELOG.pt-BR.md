@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.7] - 2026-03-29
+
 ### Corrigido
 
 - O modo de exibição lado a lado do papel de parede não era refletido na pré-visualização da minitela (o valor de posicionamento "Tiled" do plist da Store de papéis de parede do macOS não era correspondido corretamente)

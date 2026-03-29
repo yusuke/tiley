@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.7] - 2026-03-29
+
 ### Corretto
 
 - La modalità di visualizzazione a mosaico dello sfondo non veniva riflessa nell'anteprima del mini schermo (il valore di posizionamento "Tiled" dal plist dello Store sfondi di macOS non veniva abbinato correttamente)
