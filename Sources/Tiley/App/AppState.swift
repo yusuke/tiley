@@ -2140,7 +2140,7 @@ final class AppState: NSObject, NSMenuDelegate {
         openSettings()
     }
 
-    func updateLayoutPreview(_ selection: GridSelection?, screenContext: ScreenContext? = nil, colorIndex: Int? = nil) {
+    func updateLayoutPreview(_ selection: GridSelection?, screenContext: ScreenContext? = nil, colorIndex: Int = 0) {
         guard isShowingLayoutGrid else {
             hidePreviewOverlay()
             return

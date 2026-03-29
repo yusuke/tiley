@@ -5,6 +5,7 @@
 ### Corretto
 
 - Le finestre spostate per mostrare la finestra di destinazione selezionata ora vengono ripristinate correttamente alla posizione originale anche durante la navigazione rapida
+- L'anteprima del ridimensionamento di una singola finestra era troppo tenue rispetto alle anteprime del layout multi-finestra; ora utilizza la stessa opacità
 
 ## [4.0.4] - 2026-03-29
 

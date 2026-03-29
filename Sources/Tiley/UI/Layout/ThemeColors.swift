@@ -150,14 +150,6 @@ enum ThemeColors {
         }
     }
 
-    static func overlaySelectionFill(for colorScheme: ColorScheme) -> Color {
-        gridCellSelectedFill(for: colorScheme).opacity(0.24)
-    }
-
-    static func overlaySelectionBorder(for colorScheme: ColorScheme) -> Color {
-        indexedSelectionBorder(index: 0, for: colorScheme)
-    }
-
     // MARK: - Preset List
 
     static func presetRowBackground(selected: Bool, for colorScheme: ColorScheme) -> Color {

@@ -1214,7 +1214,7 @@ struct MainWindowView: View {
                                 appState.selectedLayoutPresetID = nil
                             }
                             activeLayoutSelection = selection
-                            let nextColorIndex: Int? = editingPresetID != nil ? editingPresetCommittedSelections.count : nil
+                            let nextColorIndex = editingPresetID != nil ? editingPresetCommittedSelections.count : 0
                             if let ctx = screenContext {
                                 appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex)
                             } else {
@@ -1223,7 +1223,7 @@ struct MainWindowView: View {
                         },
                         onHoverChange: { selection in
                             guard activeLayoutSelection == nil else { return }
-                            let nextColorIndex: Int? = editingPresetID != nil ? editingPresetCommittedSelections.count : nil
+                            let nextColorIndex = editingPresetID != nil ? editingPresetCommittedSelections.count : 0
                             if let ctx = screenContext {
                                 appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex)
                             } else {

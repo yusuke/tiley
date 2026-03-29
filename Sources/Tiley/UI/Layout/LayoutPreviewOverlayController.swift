@@ -51,7 +51,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil, colorIndex: Int? = nil) {
+    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil, colorIndex: Int = 0) {
         let frame = GridCalculator.frame(for: selection, in: visibleFrame, rows: rows, columns: columns, gap: gap)
         let rootView = SelectionPreviewOverlayView(
             frame: frame,
@@ -144,8 +144,8 @@ private struct SelectionPreviewOverlayView: View {
     let appIcon: NSImage?
     let windowTitle: String?
     let appName: String?
-    /// When set, uses indexed selection colors instead of default overlay colors.
-    var colorIndex: Int? = nil
+    /// Color index into the multi-selection palette (blue, green, orange, purple cycling).
+    var colorIndex: Int = 0
 
     var body: some View {
         // Full requested frame in screen-local coordinates (top-left origin).
@@ -251,9 +251,7 @@ private struct SelectionPreviewOverlayView: View {
         ZStack(alignment: .top) {
             // Base fill + border
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(colorIndex != nil
-                      ? ThemeColors.indexedSelectionFill(index: colorIndex!, for: colorScheme)
-                      : ThemeColors.overlaySelectionFill(for: colorScheme))
+                .fill(ThemeColors.indexedSelectionFill(index: colorIndex, for: colorScheme))
 
             if showTitleBar {
                 // Title bar background
@@ -277,9 +275,7 @@ private struct SelectionPreviewOverlayView: View {
 
             // Border stroke on top of everything
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(colorIndex != nil
-                        ? ThemeColors.indexedSelectionBorder(index: colorIndex!, for: colorScheme)
-                        : ThemeColors.overlaySelectionBorder(for: colorScheme), lineWidth: 2)
+                .stroke(ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme), lineWidth: 2)
         }
         .frame(width: width, height: height)
     }

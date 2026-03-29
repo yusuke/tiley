@@ -5,6 +5,7 @@
 ### Corrigé
 
 - Les fenêtres déplacées pour afficher la fenêtre cible sélectionnée reviennent désormais correctement à leur position d'origine, même lors d'un changement rapide de cible
+- L'aperçu de redimensionnement d'une seule fenêtre était trop pâle par rapport aux aperçus de disposition multi-fenêtres ; utilise désormais la même opacité
 
 ## [4.0.4] - 2026-03-29
 

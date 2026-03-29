@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Windows displaced to show a selected target now correctly restore to their original positions even when the user cycles through targets rapidly
+- Single-window resize preview was too faint compared to multi-window layout previews; now uses the same opacity
 
 ## [4.0.4] - 2026-03-29
 

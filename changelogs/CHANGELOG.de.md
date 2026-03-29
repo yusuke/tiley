@@ -5,6 +5,7 @@
 ### Behoben
 
 - Fenster, die zur Anzeige des ausgewählten Zielfensters verschoben wurden, werden jetzt auch bei schnellem Wechsel korrekt an ihre ursprüngliche Position zurückgebracht
+- Die Vorschau bei Größenänderung eines einzelnen Fensters war im Vergleich zur Mehrfenster-Layoutvorschau zu blass; verwendet jetzt die gleiche Deckkraft
 
 ## [4.0.4] - 2026-03-29
 

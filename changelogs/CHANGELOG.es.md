@@ -5,6 +5,7 @@
 ### Corregido
 
 - Las ventanas desplazadas para mostrar la ventana de destino seleccionada ahora se restauran correctamente a su posición original incluso al ciclar rápidamente
+- La vista previa de redimensionamiento de una sola ventana era demasiado tenue en comparación con las vistas previas de diseño de múltiples ventanas; ahora usa la misma opacidad
 
 ## [4.0.4] - 2026-03-29
 
