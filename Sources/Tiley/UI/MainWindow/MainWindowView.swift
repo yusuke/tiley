@@ -791,7 +791,8 @@ struct MainWindowView: View {
                 .buttonStyle(TahoeQuitButtonStyle())
                 .help(NSLocalizedString("Quit Tiley", comment: "Quit button tooltip"))
             }
-            .frame(height: 36)
+            .padding(.top, 10)
+            .padding(.bottom, 4)
             .padding(.horizontal, 8)
 
             Divider()
@@ -876,7 +877,8 @@ struct MainWindowView: View {
                 .buttonStyle(TahoeQuitButtonStyle())
                 .help(NSLocalizedString("Quit Tiley", comment: "Quit button tooltip"))
             }
-            .frame(height: 36)
+            .padding(.top, 10)
+            .padding(.bottom, 4)
             .padding(.horizontal, 8)
 
             Divider()
@@ -5038,28 +5040,33 @@ private struct InteractiveGlassBackground: ViewModifier {
 // MARK: - Tahoe-style Toolbar Button
 
 private struct TahoeQuitButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) private var colorScheme
     @State private var isHovered = false
 
+    private var normalFill: Color {
+        colorScheme == .dark ? Color(white: 0.18) : Color.white
+    }
+    private var hoverFill: Color {
+        colorScheme == .dark ? Color(white: 0.26) : Color(white: 0.92)
+    }
+    private var pressFill: Color {
+        colorScheme == .dark ? Color(white: 0.32) : Color(white: 0.76)
+    }
+
     func makeBody(configuration: Configuration) -> some View {
+        let shadowOpacity: Double = colorScheme == .dark ? 0.5 : 0.12
         configuration.label
             .foregroundStyle(.primary)
             .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(
+            .frame(height: 30)
+            .background {
                 Capsule(style: .continuous)
-                    .fill(
-                        configuration.isPressed
-                            ? Color(nsColor: .labelColor).opacity(0.12)
-                            : isHovered
-                                ? Color(nsColor: .labelColor).opacity(0.06)
-                                : Color.clear
-                    )
-            )
+                    .fill(configuration.isPressed ? pressFill : isHovered ? hoverFill : normalFill)
+                    .shadow(color: Color.black.opacity(shadowOpacity), radius: 1.5, y: 0.5)
+            }
             .contentShape(Capsule())
             .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    isHovered = hovering
-                }
+                isHovered = hovering
             }
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
@@ -5187,16 +5194,16 @@ private struct TahoeActionBarMenuButton: NSViewRepresentable {
             let cornerRadius = bounds.height / 2  // Capsule
             let path = CGPath(roundedRect: bounds, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
 
-            // Background fill (Xcode/Finder-like: gray on hover, transparent normally)
+            // Background fill (Xcode/Finder-like: white on hover, transparent normally)
             if isMenuOpen {
                 let labelColor = NSColor.labelColor.cgColor
                 ctx.addPath(path)
                 ctx.setFillColor(labelColor.copy(alpha: 0.12) ?? CGColor(gray: 0, alpha: 0.12))
                 ctx.fillPath()
             } else if isHovered {
-                let labelColor = NSColor.labelColor.cgColor
+                let controlColor = NSColor.controlColor.cgColor
                 ctx.addPath(path)
-                ctx.setFillColor(labelColor.copy(alpha: 0.06) ?? CGColor(gray: 0, alpha: 0.06))
+                ctx.setFillColor(controlColor)
                 ctx.fillPath()
             }
             // Normal state: no fill (transparent)
@@ -5369,7 +5376,7 @@ extension EnvironmentValues {
 
 /// Tahoe-style action bar button: capsule shape, Xcode/Finder-like L&F.
 /// Default: icon at full opacity, transparent background.
-/// Hover: icon unchanged, gray background.
+/// Hover: icon unchanged, white background (matches Finder/Xcode toolbar style).
 private struct TahoeActionBarButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
@@ -5385,17 +5392,15 @@ private struct TahoeActionBarButtonStyle: ButtonStyle {
                 Capsule(style: .continuous)
                     .fill(
                         configuration.isPressed
-                            ? Color(nsColor: .labelColor).opacity(0.12)
+                            ? Color(nsColor: .labelColor).opacity(0.22)
                             : isHovered
-                                ? Color(nsColor: .labelColor).opacity(0.06)
+                                ? Color(nsColor: .labelColor).opacity(0.12)
                                 : Color.clear
                     )
             )
             .contentShape(Capsule())
             .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    isHovered = hovering
-                }
+                isHovered = hovering
             }
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
@@ -5403,27 +5408,32 @@ private struct TahoeActionBarButtonStyle: ButtonStyle {
 }
 
 private struct TahoeToolbarButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) private var colorScheme
     @State private var isHovered = false
 
+    private var normalFill: Color {
+        colorScheme == .dark ? Color(white: 0.18) : Color.white
+    }
+    private var hoverFill: Color {
+        colorScheme == .dark ? Color(white: 0.26) : Color(white: 0.92)
+    }
+    private var pressFill: Color {
+        colorScheme == .dark ? Color(white: 0.32) : Color(white: 0.76)
+    }
+
     func makeBody(configuration: Configuration) -> some View {
+        let shadowOpacity: Double = colorScheme == .dark ? 0.5 : 0.12
         configuration.label
             .foregroundStyle(.primary)
             .frame(width: 30, height: 30)
-            .background(
+            .background {
                 Capsule(style: .continuous)
-                    .fill(
-                        configuration.isPressed
-                            ? Color(nsColor: .labelColor).opacity(0.12)
-                            : isHovered
-                                ? Color(nsColor: .labelColor).opacity(0.06)
-                                : Color.clear
-                    )
-            )
+                    .fill(configuration.isPressed ? pressFill : isHovered ? hoverFill : normalFill)
+                    .shadow(color: Color.black.opacity(shadowOpacity), radius: 1.5, y: 0.5)
+            }
             .contentShape(Capsule())
             .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    isHovered = hovering
-                }
+                isHovered = hovering
             }
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
