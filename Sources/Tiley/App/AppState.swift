@@ -510,6 +510,15 @@ final class AppState: NSObject, NSMenuDelegate {
         updateStatusMenu()
     }
 
+    /// Sets window level based on current state: `.normal` while the
+    /// permissions panel is shown, `.floating` otherwise.
+    private func applyWindowLevel() {
+        let level: NSWindow.Level = isShowingPermissionsOnly ? .normal : .floating
+        for controller in mainWindowControllers.values {
+            controller.window?.level = level
+        }
+    }
+
     func showPermissionsOnly() {
         isShowingLayoutGrid = false
         isEditingSettings = true
@@ -521,6 +530,7 @@ final class AppState: NSObject, NSMenuDelegate {
         guard isShowingPermissionsOnly else { return }
         isShowingPermissionsOnly = false
         isEditingSettings = false
+        applyWindowLevel()
     }
 
     func apply(settings: SettingsSnapshot) {
@@ -3906,6 +3916,7 @@ final class AppState: NSObject, NSMenuDelegate {
             mainWindowControllers[displayID]?.show()
         }
         isRecreatingWindows = false
+        applyWindowLevel()
     }
 
     private func openAllScreenWindows() {
@@ -3962,6 +3973,7 @@ final class AppState: NSObject, NSMenuDelegate {
             }
             perfLog("all windows shown (reused)")
             isRecreatingWindows = false
+            applyWindowLevel()
         } else {
             // --- Recreate path: screen configuration changed ---
             mainWindowControllers.removeAll()
@@ -3976,6 +3988,7 @@ final class AppState: NSObject, NSMenuDelegate {
             if secondaryScreens.isEmpty {
                 perfLog("all windows shown (single screen, new)")
                 isRecreatingWindows = false
+                applyWindowLevel()
             } else {
                 DispatchQueue.main.async { [weak self] in
                     guard let self else { return }
@@ -3986,6 +3999,7 @@ final class AppState: NSObject, NSMenuDelegate {
                     }
                     perfLog("secondary windows shown (deferred, new)")
                     self.isRecreatingWindows = false
+                    self.applyWindowLevel()
                 }
             }
         }
@@ -4217,7 +4231,11 @@ final class AppState: NSObject, NSMenuDelegate {
     private func handleAppDidBecomeActive() {
         guard isShowingPermissionsOnly else { return }
         refreshAccessibilityState()
-        guard accessibilityGranted else { return }
+        guard accessibilityGranted else {
+            // Re-show the permissions panel when the user switches back without granting access
+            openMainWindow()
+            return
+        }
         dismissPermissionsOnly()
         activeLayoutTarget = initialLayoutTarget()
         if let activeLayoutTarget {
