@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.5] - 2026-03-29
+
 ### Fixed
 
 - Windows displaced to show a selected target now correctly restore to their original positions even when the user cycles through targets rapidly
@@ -497,7 +499,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.4...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.5...HEAD
+[4.0.5]: https://github.com/yusuke/tiley/releases/tag/v4.0.5
 [4.0.4]: https://github.com/yusuke/tiley/releases/tag/v4.0.4
 [4.0.3]: https://github.com/yusuke/tiley/releases/tag/v4.0.3
 [4.0.2]: https://github.com/yusuke/tiley/releases/tag/v4.0.2

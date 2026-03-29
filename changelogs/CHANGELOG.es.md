@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.5] - 2026-03-29
+
 ### Corregido
 
 - Las ventanas desplazadas para mostrar la ventana de destino seleccionada ahora se restauran correctamente a su posición original incluso al ciclar rápidamente

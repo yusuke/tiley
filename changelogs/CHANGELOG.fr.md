@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.5] - 2026-03-29
+
 ### Corrigé
 
 - Les fenêtres déplacées pour afficher la fenêtre cible sélectionnée reviennent désormais correctement à leur position d'origine, même lors d'un changement rapide de cible

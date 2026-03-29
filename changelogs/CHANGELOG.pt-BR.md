@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.5] - 2026-03-29
+
 ### Corrigido
 
 - Janelas deslocadas para exibir a janela de destino selecionada agora retornam corretamente à posição original mesmo ao ciclar rapidamente

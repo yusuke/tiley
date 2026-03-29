@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.5] - 2026-03-29
+
 ### Behoben
 
 - Fenster, die zur Anzeige des ausgewählten Zielfensters verschoben wurden, werden jetzt auch bei schnellem Wechsel korrekt an ihre ursprüngliche Position zurückgebracht
