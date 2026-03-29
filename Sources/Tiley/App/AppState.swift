@@ -1694,13 +1694,19 @@ final class AppState: NSObject, NSMenuDelegate {
         var moves: [(window: AXUIElement, from: CGPoint, to: CGPoint)] = []
 
         // Restore windows that were displaced but no longer need to be.
+        // Don't remove entries from displacedWindowFrames yet — defer
+        // removal until the animation completes. If the animation is
+        // cancelled (e.g. by rapid cycling), the entries remain so that
+        // clearWindowCyclingState can still restore them.
         let toRestore = Set(displacedWindowFrames.keys).subtracting(shouldDisplace)
+        var restoringWIDs: [CGWindowID] = []
         for wid in toRestore {
-            if let originalOrigin = displacedWindowFrames.removeValue(forKey: wid),
+            if let originalOrigin = displacedWindowFrames[wid],
                let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
                let window = target.windowElement {
                 let (currentPos, _) = accessibilityService.readPositionAndSize(of: window)
                 moves.append((window: window, from: currentPos, to: originalOrigin))
+                restoringWIDs.append(wid)
             }
         }
 
@@ -1743,15 +1749,28 @@ final class AppState: NSObject, NSMenuDelegate {
             moves.append((window: window, from: currentPos, to: destination))
         }
 
-        animateWindowMoves(moves)
+        animateWindowMoves(moves) { [weak self] in
+            // Animation completed naturally — safe to remove restored entries.
+            for wid in restoringWIDs {
+                self?.displacedWindowFrames.removeValue(forKey: wid)
+            }
+        }
     }
 
     /// Animates multiple window moves simultaneously over a short duration.
-    private func animateWindowMoves(_ moves: [(window: AXUIElement, from: CGPoint, to: CGPoint)]) {
+    /// The optional `completion` closure is called only when the animation
+    /// finishes naturally (all steps complete). It is NOT called when the
+    /// animation is cancelled by a subsequent call — this lets callers
+    /// defer cleanup (e.g. removing `displacedWindowFrames` entries) so
+    /// the entries survive cancellation and can be restored later.
+    private func animateWindowMoves(_ moves: [(window: AXUIElement, from: CGPoint, to: CGPoint)], completion: (() -> Void)? = nil) {
         displacementAnimationTimer?.cancel()
         displacementAnimationTimer = nil
 
-        guard !moves.isEmpty else { return }
+        guard !moves.isEmpty else {
+            completion?()
+            return
+        }
 
         // Filter out moves with negligible distance.
         let significantMoves = moves.filter {
@@ -1761,6 +1780,7 @@ final class AppState: NSObject, NSMenuDelegate {
             for move in moves {
                 accessibilityService.setPosition(move.to, for: move.window)
             }
+            completion?()
             return
         }
 
@@ -1785,6 +1805,7 @@ final class AppState: NSObject, NSMenuDelegate {
             if step >= totalSteps {
                 timer.cancel()
                 self?.displacementAnimationTimer = nil
+                completion?()
             }
         }
         displacementAnimationTimer = timer

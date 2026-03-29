@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Windows displaced to show a selected target now correctly restore to their original positions even when the user cycles through targets rapidly
+
 ## [4.0.4] - 2026-03-29
 
 ### Added

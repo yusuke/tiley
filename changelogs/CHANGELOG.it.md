@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Le finestre spostate per mostrare la finestra di destinazione selezionata ora vengono ripristinate correttamente alla posizione originale anche durante la navigazione rapida
+
 ## [4.0.4] - 2026-03-29
 
 ### Aggiunto
