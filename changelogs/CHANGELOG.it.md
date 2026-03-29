@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.8] - 2026-03-30
+
 ### Corretto
 
 - Il pannello delle autorizzazioni non viene più visualizzato sopra altre app e finestre di dialogo del sistema durante la richiesta di accesso all'accessibilità
