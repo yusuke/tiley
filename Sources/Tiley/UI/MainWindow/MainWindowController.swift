@@ -98,7 +98,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = false
-        window.level = .floating
+        // Always start at normal level; AppState promotes to .floating
+        // after accessibility permission has been granted.
+        window.level = .normal
         let displayID = self.targetScreen.displayID
         window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
         window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary]
