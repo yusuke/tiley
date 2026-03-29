@@ -4,6 +4,14 @@
 
 ## [4.0.4] - 2026-03-29
 
+### Añadido
+
+- Al pasar el cursor sobre un preset, la vista previa del mini-pantalla muestra barras de título de ventana (icono de app, nombre de app, título de ventana)
+
+### Cambiado
+
+- La barra de título de la vista previa de diseño a tamaño real ahora muestra el nombre de la app junto con el título de la ventana (formato: "Nombre de App — Título de Ventana")
+
 ## [4.0.3] - 2026-03-29
 
 ### Añadido
@@ -11,7 +19,6 @@
 - Los presets con múltiples diseños ahora redimensionan varias ventanas incluso con una sola ventana seleccionada, usando el orden Z real (la ventana más al frente primero)
 - Cuando las ventanas seleccionadas son menos que las definiciones de diseño, la ventana seleccionada siempre se trata como primaria y los espacios restantes se llenan por orden Z
 - Al pasar el cursor sobre un preset con múltiples diseños, las filas de ventanas afectadas en la barra lateral se resaltan con los colores del diseño (azul, verde, naranja, púrpura)
-- Al pasar el cursor sobre un preset, la vista previa del mini-pantalla muestra barras de título de ventana (icono de app, nombre de app, título de ventana)
 
 ## [4.0.2] - 2026-03-29
 

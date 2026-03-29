@@ -3,34 +3,106 @@
     <channel>
         <title>Tiley</title>
         <item>
-            <title>4.0.2</title>
+            <title>4.0.4</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>При наведении на пресет в мини-экране предварительного просмотра отображаются заголовки окон (значок приложения, имя приложения, заголовок окна)</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Заголовок окна в полноразмерном предварительном просмотре макета теперь отображает имя приложения вместе с заголовком окна (формат: «Имя приложения — Заголовок окна»)</li>
+</ul>]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
 <ul>
-<li>Presets com múltiplos layouts agora redimensionam várias janelas mesmo com apenas uma janela selecionada, usando a ordem Z real (janela mais à frente primeiro)</li>
-<li>Ao passar o cursor sobre um preset com múltiplos layouts, as linhas das janelas afetadas na barra lateral são destacadas com as cores do layout (azul, verde, laranja, roxo)</li>
+<li>Ao passar o cursor sobre um preset, a pré-visualização da mini-tela mostra barras de título das janelas (ícone do app, nome do app, título da janela)</li>
 </ul>
 <h3>Alterado</h3>
 <ul>
-<li>A pré-visualização de layout em tamanho real agora mostra apenas as pré-visualizações para o número de seleções definidas na predefinição (janelas selecionadas além do número de seleções da predefinição não são mais exibidas)</li>
+<li>A barra de título da pré-visualização de layout em tamanho real agora exibe o nome do app junto com o título da janela (formato: "Nome do App — Título da Janela")</li>
 </ul>]]></description>
             <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
 <ul>
-<li>I preset con layout multipli ora ridimensionano più finestre anche con una sola finestra selezionata, utilizzando l'ordine Z effettivo (la finestra più in primo piano per prima)</li>
-<li>Al passaggio del mouse su un preset con layout multipli, le righe delle finestre interessate nella barra laterale vengono evidenziate con i colori del layout (blu, verde, arancione, viola)</li>
+<li>Al passaggio del mouse su un preset, l'anteprima del mini-schermo mostra le barre del titolo delle finestre (icona app, nome app, titolo finestra)</li>
 </ul>
 <h3>Modificato</h3>
 <ul>
-<li>L'anteprima del layout a dimensioni reali ora mostra solo le anteprime per il numero di selezioni definite nel preset (le finestre selezionate in eccesso rispetto al numero di selezioni del preset non vengono più visualizzate)</li>
+<li>La barra del titolo dell'anteprima layout a dimensione reale ora mostra il nome dell'app insieme al titolo della finestra (formato: "Nome App — Titolo Finestra")</li>
 </ul>]]></description>
             <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
 <ul>
-<li>Les presets multi-disposition redimensionnent maintenant plusieurs fenêtres même avec une seule fenêtre sélectionnée, en utilisant l'ordre Z réel (fenêtre la plus en avant en premier)</li>
-<li>Au survol d'un preset multi-disposition, les lignes des fenêtres concernées dans la barre latérale sont mises en surbrillance avec les couleurs de disposition (bleu, vert, orange, violet)</li>
+<li>Au survol d'un preset, l'aperçu du mini-écran affiche les barres de titre des fenêtres (icône d'app, nom d'app, titre de fenêtre)</li>
 </ul>
 <h3>Modifié</h3>
 <ul>
-<li>L'aperçu de disposition en taille réelle n'affiche désormais que les aperçus correspondant au nombre de sélections définies dans le préréglage (les fenêtres sélectionnées au-delà du nombre de sélections du préréglage ne sont plus affichées)</li>
+<li>La barre de titre de l'aperçu de disposition en taille réelle affiche désormais le nom de l'app avec le titre de la fenêtre (format : « Nom de l'App — Titre de la Fenêtre »)</li>
 </ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Al pasar el cursor sobre un preset, la vista previa del mini-pantalla muestra barras de título de ventana (icono de app, nombre de app, título de ventana)</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>La barra de título de la vista previa de diseño a tamaño real ahora muestra el nombre de la app junto con el título de la ventana (formato: "Nombre de App — Título de Ventana")</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Beim Hovern über ein Preset zeigt die Mini-Bildschirm-Layoutvorschau Fenster-Titelleisten (App-Symbol, App-Name, Fenstertitel) an</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Die Titelleiste der Layoutvorschau in Originalgröße zeigt nun den App-Namen zusammen mit dem Fenstertitel an (Format: „App-Name — Fenstertitel")</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>懸停預設時，迷你螢幕佈局預覽顯示視窗標題列（應用程式圖示、應用程式名稱、視窗標題）</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>實際大小佈局預覽的標題列現在同時顯示應用程式名稱和視窗標題（格式：「應用程式名稱 — 視窗標題」）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>悬停预设时，迷你屏幕布局预览显示窗口标题栏（应用图标、应用名称、窗口标题）</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>实际大小布局预览的标题栏现在同时显示应用名称和窗口标题（格式："应用名称 — 窗口标题"）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>프리셋 호버 시 미니 스크린 레이아웃 프리뷰에 창 타이틀 바(앱 아이콘, 앱 이름, 창 제목) 표시</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>실물 크기 레이아웃 프리뷰의 타이틀 바에 앱 이름과 창 제목을 함께 표시하도록 변경 ("앱 이름 — 창 제목" 형식)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>プリセットホバー時にミニスクリーンのレイアウトプレビューにウインドウのタイトルバー（アプリアイコン・アプリ名・ウインドウ名）を表示</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>実寸大レイアウトプレビューのタイトルバーにアプリ名とウインドウ名を併記するように変更（「アプリ名 — ウインドウ名」形式）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Mini-screen layout preview shows window title bars (app icon, app name, window title) when hovering over any preset</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Full-size layout preview title bar now shows app name alongside window title (format: "App Name — Window Title")</li>
+</ul>]]></description>
+            <pubDate>Sun, 29 Mar 2026 02:14:44 +0900</pubDate>
+            <sparkle:version>404</sparkle:version>
+            <sparkle:shortVersionString>4.0.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.4/Tiley-4.0.4.zip" length="5600684" type="application/octet-stream" sparkle:edSignature="Gg7DbpDk+0EARRgXQjy+7MN+8r+plTIcz+4YmLeZ+o/IZvn89kQb8F9zyT22JaH2d4ZvHcUuFzlBfVRwzxp1Ag=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.4/Tiley404-402.delta" sparkle:deltaFrom="402" length="272234" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="BLXQo/4zAvclKoLkugKmI3qxiBcZXZ7NNVLZzgRpUaqtJMr5k7ExF4CNCq8Mp3iWaima3TNXLM5qae+KYRt+DA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>4.0.2</title>
             <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
 <ul>
 <li>Los presets con múltiples diseños ahora redimensionan varias ventanas incluso con una sola ventana seleccionada, usando el orden Z real (la ventana más al frente primero)</li>
@@ -98,7 +170,7 @@
             <sparkle:version>402</sparkle:version>
             <sparkle:shortVersionString>4.0.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.3/Tiley-4.0.3.zip" length="5592315" type="application/octet-stream" sparkle:edSignature="thN2RXCus/3gVpkuMOAE2TFhti/gNP5VBaV5uDOOwj7raQEYHzxS4oV3q9jU8ZOiunozAQrbmen6VCqlctK+CQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.4/Tiley-4.0.3.zip" length="5592315" type="application/octet-stream" sparkle:edSignature="thN2RXCus/3gVpkuMOAE2TFhti/gNP5VBaV5uDOOwj7raQEYHzxS4oV3q9jU8ZOiunozAQrbmen6VCqlctK+CQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.2/Tiley402-401.delta" sparkle:deltaFrom="401" length="259406" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="QWKr7pIyvbtBIgfZLKh5SCxFRjbs2O/DDzH5azcLWL5eR7FWT+AWPmjdq2jjb3nQh5LLLyPL/tNc+uYZZaUNCg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.2/Tiley402-400.delta" sparkle:deltaFrom="400" length="276354" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="VK7pst2eUNMF/Wdts8/+s0ES0x4nzgaIG3xAPsTBgPw7DWFRg1lPQYU/AD9/EHUAvOPfAjaPvh58xjt123+DCA=="/>
@@ -109,6 +181,61 @@
         </item>
         <item>
             <title>4.0.1</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Палитра цветов выделений теперь циклически чередует синий, зелёный, оранжевый и фиолетовый (4 цвета), 5-е выделение совпадает с 1-м</li>
+<li>Стандартные пресеты (Левая/Правая/Верхняя/Нижняя половина) теперь включают противоположную половину как вторичное выделение</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>A paleta de cores de seleção agora cicla entre azul, verde, laranja e roxo (4 cores), de modo que a 5ª seleção corresponde à 1ª</li>
+<li>As predefinições padrão (Metade esquerda/direita/superior/inferior) agora incluem a metade oposta como seleção secundária</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>La palette dei colori di selezione ora cicla tra blu, verde, arancione e viola (4 colori), in modo che la 5ª selezione corrisponda alla 1ª</li>
+<li>I preset predefiniti (Metà sinistra/destra/superiore/inferiore) ora includono la metà opposta come selezione secondaria</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>La palette de couleurs de sélection cycle désormais entre bleu, vert, orange et violet (4 couleurs), la 5e sélection ayant la même couleur que la 1re</li>
+<li>Les préréglages par défaut (Moitié gauche/droite/haute/basse) incluent désormais la moitié opposée comme sélection secondaire</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>La paleta de colores de selección ahora cicla entre azul, verde, naranja y púrpura (4 colores), de modo que la 5ª selección coincide con la 1ª</li>
+<li>Los preajustes predeterminados (Mitad izquierda/derecha/superior/inferior) ahora incluyen la mitad opuesta como selección secundaria</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Auswahlfarbpalette auf 4 Farben (Blau, Grün, Orange, Lila) geändert, sodass die 5. Auswahl dieselbe Farbe wie die 1. hat</li>
+<li>Standardvorlagen (Linke/Rechte/Obere/Untere Hälfte) enthalten jetzt die gegenüberliegende Hälfte als sekundäre Auswahl</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>選擇顏色調色盤改為藍、綠、橙、紫4色循環，第5個選擇與第1個顏色相同</li>
+<li>預設佈局（左半/右半/上半/下半）現包含對側半螢幕作為輔助選擇</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>选择颜色调色板改为蓝、绿、橙、紫4色循环，第5个选择与第1个颜色相同</li>
+<li>默认预设（左半/右半/上半/下半）现包含对侧半屏作为辅助选择</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>선택 색상 팔레트를 파랑, 초록, 주황, 보라 4색 순환으로 변경하여 5번째 선택이 1번째와 동일한 색상으로 표시</li>
+<li>기본 프리셋(왼쪽/오른쪽/위/아래 절반)에 보조 선택으로 반대쪽 절반 추가</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>セレクションカラーパレットを青・緑・オレンジ・紫の4色サイクルに変更し、5番目が1番目と同じ色に</li>
+<li>デフォルトプリセット（左半分/右半分/上半分/下半分）にセカンダリとして反対側の半分を追加</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Selection color palette now cycles as blue, green, orange, purple (4 colors) so the 5th selection matches the 1st</li>
+<li>Default presets (Left/Right/Top/Bottom Half) now include a secondary selection for the opposite half</li>
+</ul>]]></description>
             <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
 <ul>
 <li>Палитра цветов выделений теперь циклически чередует синий, зелёный, оранжевый и фиолетовый (4 цвета), 5-е выделение совпадает с 1-м</li>
@@ -280,735 +407,6 @@
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-332.delta" sparkle:deltaFrom="332" length="449970" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aSt8+mJnYpKpFPw9YnDWASAbNfoHWGB1KoHAf6OqZxs+uR9fLF5hT7KAvHNXGbb3QffWT0BIfuJxcE7z2C6BBw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-331.delta" sparkle:deltaFrom="331" length="581822" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="MbaAC5w4Ow7gSzVCEBrLNZ7T/G56dAqY7h7SMWD8V9s/ijjtQ6RZUAGQEPtoEQRTPGDPACf51CxsqTXf64xDAQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.1/Tiley401-330.delta" sparkle:deltaFrom="330" length="625054" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="xmzRj5uEKUMFXRNjqNJbU5XICOLOwXjMfQkrdomNvoHcyV93SWklJaQS44JEmYvGwOc9ZgiPiK5QVL0PidSxAw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.0.0</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Пресеты макетов с множественным выделением: определяйте несколько областей сетки для одного пресета, чтобы размещать разные окна в разных позициях</li>
-  - Каждое перетаскивание в редакторе пресетов добавляет новое выделение (1-е, 2-е, 3-е, ...)
-  - Каждое выделение показывает свой номер индекса и кнопку удаления
-  - Наложение выделений предотвращается (с визуальной обратной связью)
-  - При применении пресета с множественным выделением окна назначаются по порядку выбора: первое выбранное окно получает выделение 1, следующее — выделение 2 и т.д.
-  - Миниатюры и превью в реальном размере отображают все выделения индексированными цветами
-  - Выделения сетки имеют отступ 1pt от краёв экрана для лучшей видимости
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Порядок нескольких окон теперь следует порядку выбора вместо Z-порядка боковой панели</li>
-  - Первое выбранное окно всегда основное; окна, добавленные через Cmd+клик, добавляются по порядку
-  - Выбор диапазона Shift+клик сохраняет якорное окно как основное
-  - Влияет на применение пресетов, вынос на передний план (Enter) и отображение превью
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Predefinições de layout com seleção múltipla: defina múltiplas regiões de grade por predefinição para posicionar diferentes janelas em diferentes locais</li>
-  - Cada arraste no editor de predefinições adiciona uma nova seleção (1ª, 2ª, 3ª, ...)
-  - Cada seleção exibe seu número de índice e um botão de exclusão
-  - A sobreposição de seleções é impedida (com feedback visual)
-  - Ao aplicar uma predefinição com seleção múltipla, as janelas são atribuídas por ordem de seleção: a primeira janela selecionada recebe a seleção 1, a próxima a seleção 2, etc.
-  - As miniaturas e as visualizações em tamanho real exibem todas as seleções com cores indexadas
-  - As seleções de grade têm uma margem de 1pt das bordas da tela para melhor visibilidade
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A ordenação de múltiplas janelas agora segue a ordem de seleção em vez da ordem Z da barra lateral</li>
-  - A primeira janela selecionada é sempre a principal; janelas adicionadas com Cmd+clique são adicionadas em ordem
-  - A seleção por intervalo com Shift+clique mantém a janela âncora como principal
-  - Afeta a aplicação de predefinições, trazer para frente (Enter) e exibição de visualização
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Preset di layout a selezione multipla: definisci più aree della griglia per preset per posizionare finestre diverse in posizioni diverse</li>
-  - Ogni trascinamento nell'editor dei preset aggiunge una nuova selezione (1ª, 2ª, 3ª, ...)
-  - Ogni selezione mostra il suo numero di indice e un pulsante di eliminazione
-  - La sovrapposizione delle selezioni viene impedita (con feedback visivo)
-  - Quando si applica un preset a selezione multipla, le finestre vengono assegnate per ordine di selezione: la prima finestra selezionata ottiene la selezione 1, la successiva la selezione 2, ecc.
-  - Le miniature e le anteprime a dimensione reale mostrano tutte le selezioni con colori indicizzati
-  - Le selezioni della griglia hanno un margine di 1pt dai bordi dello schermo per una migliore visibilità
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>L'ordine delle finestre multiple ora segue l'ordine di selezione anziché l'ordine Z della barra laterale</li>
-  - La prima finestra selezionata è sempre la principale; le finestre aggiunte con Cmd+clic vengono aggiunte in ordine
-  - La selezione per intervallo con Shift+clic mantiene la finestra di ancoraggio come principale
-  - Influisce sull'applicazione dei preset, sul portare in primo piano (Invio) e sulla visualizzazione dell'anteprima
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Préréglages de disposition à sélection multiple : définissez plusieurs zones de grille par préréglage pour positionner différentes fenêtres à différents emplacements</li>
-  - Chaque glisser dans l'éditeur de préréglages ajoute une nouvelle sélection (1ère, 2ème, 3ème, ...)
-  - Chaque sélection affiche son numéro d'index et un bouton de suppression
-  - Le chevauchement des sélections est empêché (avec retour visuel)
-  - Lors de l'application d'un préréglage à sélection multiple, les fenêtres sont assignées par ordre de sélection : la première fenêtre sélectionnée reçoit la sélection 1, la suivante la sélection 2, etc.
-  - Les miniatures et les aperçus en taille réelle affichent toutes les sélections avec des couleurs indexées
-  - Les sélections de grille ont une marge de 1pt depuis les bords d'écran pour une meilleure visibilité
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>L'ordre des fenêtres multiples suit désormais l'ordre de sélection au lieu de l'ordre Z de la barre latérale</li>
-  - La première fenêtre sélectionnée est toujours la principale ; les fenêtres ajoutées par Cmd+clic sont ajoutées dans l'ordre
-  - La sélection par plage Shift+clic conserve la fenêtre d'ancrage comme principale
-  - Affecte l'application des préréglages, la mise au premier plan (Entrée) et l'affichage de l'aperçu
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Preajustes de diseño con selección múltiple: define múltiples regiones de cuadrícula por preajuste para colocar diferentes ventanas en diferentes posiciones</li>
-  - Cada arrastre en el editor de preajustes añade una nueva selección (1ª, 2ª, 3ª, ...)
-  - Cada selección muestra su número de índice y un botón de eliminar
-  - Se previene la superposición de selecciones (con retroalimentación visual)
-  - Al aplicar un preajuste con selección múltiple, las ventanas se asignan por orden de selección: la primera ventana seleccionada obtiene la selección 1, la siguiente la selección 2, etc.
-  - Las miniaturas y las vistas previas a tamaño real muestran todas las selecciones con colores indexados
-  - Las selecciones de cuadrícula tienen un margen de 1pt desde los bordes de pantalla para mejor visibilidad
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>El orden de múltiples ventanas ahora sigue el orden de selección en lugar del orden Z de la barra lateral</li>
-  - La primera ventana seleccionada siempre es la principal; las ventanas añadidas con Cmd+clic se agregan en orden
-  - La selección por rango con Shift+clic mantiene la ventana ancla como principal
-  - Afecta la aplicación de preajustes, traer al frente (Enter) y la vista previa
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Mehrfachauswahl-Layout-Vorlagen: Definieren Sie mehrere Rasterbereiche pro Vorlage, um verschiedene Fenster an verschiedenen Positionen anzuordnen</li>
-  - Jedes Ziehen im Vorlagen-Editor fügt eine neue Auswahl hinzu (1., 2., 3., ...)
-  - Jede Auswahl zeigt ihre Indexnummer und einen Löschbutton
-  - Überlappende Auswahlen werden verhindert (mit visuellem Feedback)
-  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Auswahlreihenfolge zugewiesen: zuerst ausgewähltes Fenster erhält Auswahl 1, nächstes Auswahl 2 usw.
-  - Vorlagen-Miniaturansichten und Echtgrößen-Vorschauen zeigen alle Auswahlen mit indizierten Farben
-  - Rasterauswahlen haben einen 1pt-Rand vom Bildschirmrand für bessere Sichtbarkeit
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Mehrfenster-Reihenfolge folgt jetzt der Auswahlreihenfolge statt der Seitenleisten-Z-Reihenfolge</li>
-  - Das zuerst ausgewählte Fenster ist immer primär; per Cmd+Klick hinzugefügte Fenster werden in Reihenfolge angehängt
-  - Shift+Klick-Bereichsauswahl behält das Ankerfenster als primär
-  - Betrifft Layout-Vorlagen-Anwendung, In den Vordergrund bringen (Enter) und Vorschauanzeige
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多選佈局預設：在一個預設中定義多個網格區域，將不同視窗放置到不同位置</li>
-  - 在預設編輯器中每次拖曳都會新增選擇區域（第1個、第2個、第3個…）
-  - 每個選擇區域顯示索引編號和刪除按鈕
-  - 防止選擇區域重疊（附視覺回饋）
-  - 套用多選預設時按選擇順序分配視窗：最先選擇的視窗對應選擇1，下一個選擇的視窗對應選擇2，依此類推
-  - 預設縮圖和實際尺寸預覽以索引顏色顯示所有選擇區域
-  - 網格選擇區域從螢幕邊緣留出1pt邊距以提高可見性
-</ul>
-<h3>變更</h3>
-<ul>
-<li>多視窗排序從側邊欄Z順序改為選擇順序</li>
-  - 最先選擇的視窗始終為主視窗，Cmd+點擊新增的視窗按新增順序排列
-  - Shift+點擊範圍選擇中錨點視窗保持為主視窗
-  - 影響佈局預設套用、置於最前（Enter）和預覽顯示
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多选布局预设：在一个预设中定义多个网格区域，将不同窗口放置到不同位置</li>
-  - 在预设编辑器中每次拖拽都会添加新的选择区域（第1个、第2个、第3个…）
-  - 每个选择区域显示索引编号和删除按钮
-  - 防止选择区域重叠（带视觉反馈）
-  - 应用多选预设时按选择顺序分配窗口：最先选择的窗口对应选择1，下一个选择的窗口对应选择2，依此类推
-  - 预设缩略图和实际尺寸预览以索引颜色显示所有选择区域
-  - 网格选择区域从屏幕边缘留出1pt边距以提高可见性
-</ul>
-<h3>变更</h3>
-<ul>
-<li>多窗口排序从侧边栏Z顺序改为选择顺序</li>
-  - 最先选择的窗口始终为主窗口，Cmd+点击添加的窗口按添加顺序排列
-  - Shift+点击范围选择中锚点窗口保持为主窗口
-  - 影响布局预设应用、置于最前（Enter）和预览显示
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>다중 선택 레이아웃 프리셋: 하나의 프리셋에 여러 그리드 영역을 정의하여 다른 창을 다른 위치에 배치 가능</li>
-  - 프리셋 편집기에서 드래그할 때마다 새 선택 영역 추가 (1번째, 2번째, 3번째...)
-  - 각 선택 영역에 인덱스 번호와 삭제 버튼 표시
-  - 선택 영역 간 겹침 방지 (시각적 피드백 포함)
-  - 다중 선택 프리셋 적용 시 선택 순서에 따라 창 할당: 처음 선택한 창이 선택 1, 다음 선택한 창이 선택 2 등
-  - 프리셋 썸네일과 실제 크기 미리보기에 모든 선택 영역을 인덱스 색상으로 표시
-  - 그리드 선택 영역은 화면 가장자리에서 1pt 여백으로 가시성 향상
-</ul>
-<h3>변경</h3>
-<ul>
-<li>다중 창 순서가 사이드바 Z순서에서 선택 순서로 변경</li>
-  - 처음 선택한 창이 항상 프라이머리, Cmd+클릭으로 추가한 창은 추가 순서대로 배치
-  - Shift+클릭 범위 선택에서는 앵커 창이 프라이머리 유지
-  - 레이아웃 프리셋 적용, 최전면화(Enter), 미리보기 표시에 영향
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>複数セレクション対応レイアウトプリセット：1つのプリセットに複数のグリッド領域を定義し、異なるウインドウを異なる位置に配置可能に</li>
-  - プリセットエディタでドラッグするたびに新しいセレクションを追加（1番目、2番目、3番目…）
-  - 各セレクションにはインデックス番号と削除ボタンを表示
-  - セレクション同士の重なりを防止（視覚的フィードバック付き）
-  - 複数セレクションプリセットの適用時、ウインドウは選択順で割り当て：最初に選択したウインドウがセレクション1、次に選択したウインドウがセレクション2…
-  - プリセットのサムネイルと実サイズプレビューにすべてのセレクションをインデックス色で表示
-  - グリッドのセレクションは画面端から1ptのマージンで見やすく表示
-</ul>
-<h3>変更</h3>
-<ul>
-<li>複数ウインドウの順序がサイドバーのZ順から選択順に変更</li>
-  - 最初に選択したウインドウが常にプライマリ、Cmd+クリックで追加したウインドウは追加順に並ぶ
-  - Shift+クリックの範囲選択ではアンカーウインドウがプライマリを維持
-  - レイアウトプリセットの適用、最前面化（Enter）、プレビュー表示に影響
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Multi-selection layout presets: define multiple grid regions per preset for arranging different windows in different positions</li>
-  - Each drag in the preset editor appends a new selection (1st, 2nd, 3rd, ...)
-  - Selections show their index number and a delete button for easy management
-  - Overlapping selections are prevented with visual feedback
-  - When applying a multi-selection preset, windows are assigned by selection order: the initially selected window gets selection 1, the next selected window gets selection 2, etc.
-  - Preset thumbnails and real-size previews display all selections with distinct indexed colors
-  - Grid selections have a 1pt margin from physical screen edges for better visibility
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Multi-window ordering now follows selection order instead of sidebar Z-order</li>
-  - The initially selected window is always primary; subsequently Cmd+clicked windows are appended in order
-  - Shift+click range selections keep the anchor window as primary
-  - Affects layout preset application, Bring to Front (Enter), and preview display
-</ul>]]></description>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Пресеты макетов с множественным выделением: определяйте несколько областей сетки для одного пресета, чтобы размещать разные окна в разных позициях</li>
-  - Каждое перетаскивание в редакторе пресетов добавляет новое выделение (1-е, 2-е, 3-е, ...)
-  - Каждое выделение показывает свой номер индекса и кнопку удаления
-  - Наложение выделений предотвращается (с визуальной обратной связью)
-  - При применении пресета с множественным выделением окна назначаются по порядку выбора: первое выбранное окно получает выделение 1, следующее — выделение 2 и т.д.
-  - Миниатюры и превью в реальном размере отображают все выделения индексированными цветами
-  - Выделения сетки имеют отступ 1pt от краёв экрана для лучшей видимости
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Порядок нескольких окон теперь следует порядку выбора вместо Z-порядка боковой панели</li>
-  - Первое выбранное окно всегда основное; окна, добавленные через Cmd+клик, добавляются по порядку
-  - Выбор диапазона Shift+клик сохраняет якорное окно как основное
-  - Влияет на применение пресетов, вынос на передний план (Enter) и отображение превью
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Predefinições de layout com seleção múltipla: defina múltiplas regiões de grade por predefinição para posicionar diferentes janelas em diferentes locais</li>
-  - Cada arraste no editor de predefinições adiciona uma nova seleção (1ª, 2ª, 3ª, ...)
-  - Cada seleção exibe seu número de índice e um botão de exclusão
-  - A sobreposição de seleções é impedida (com feedback visual)
-  - Ao aplicar uma predefinição com seleção múltipla, as janelas são atribuídas por ordem de seleção: a primeira janela selecionada recebe a seleção 1, a próxima a seleção 2, etc.
-  - As miniaturas e as visualizações em tamanho real exibem todas as seleções com cores indexadas
-  - As seleções de grade têm uma margem de 1pt das bordas da tela para melhor visibilidade
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A ordenação de múltiplas janelas agora segue a ordem de seleção em vez da ordem Z da barra lateral</li>
-  - A primeira janela selecionada é sempre a principal; janelas adicionadas com Cmd+clique são adicionadas em ordem
-  - A seleção por intervalo com Shift+clique mantém a janela âncora como principal
-  - Afeta a aplicação de predefinições, trazer para frente (Enter) e exibição de visualização
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Preset di layout a selezione multipla: definisci più aree della griglia per preset per posizionare finestre diverse in posizioni diverse</li>
-  - Ogni trascinamento nell'editor dei preset aggiunge una nuova selezione (1ª, 2ª, 3ª, ...)
-  - Ogni selezione mostra il suo numero di indice e un pulsante di eliminazione
-  - La sovrapposizione delle selezioni viene impedita (con feedback visivo)
-  - Quando si applica un preset a selezione multipla, le finestre vengono assegnate per ordine di selezione: la prima finestra selezionata ottiene la selezione 1, la successiva la selezione 2, ecc.
-  - Le miniature e le anteprime a dimensione reale mostrano tutte le selezioni con colori indicizzati
-  - Le selezioni della griglia hanno un margine di 1pt dai bordi dello schermo per una migliore visibilità
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>L'ordine delle finestre multiple ora segue l'ordine di selezione anziché l'ordine Z della barra laterale</li>
-  - La prima finestra selezionata è sempre la principale; le finestre aggiunte con Cmd+clic vengono aggiunte in ordine
-  - La selezione per intervallo con Shift+clic mantiene la finestra di ancoraggio come principale
-  - Influisce sull'applicazione dei preset, sul portare in primo piano (Invio) e sulla visualizzazione dell'anteprima
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Préréglages de disposition à sélection multiple : définissez plusieurs zones de grille par préréglage pour positionner différentes fenêtres à différents emplacements</li>
-  - Chaque glisser dans l'éditeur de préréglages ajoute une nouvelle sélection (1ère, 2ème, 3ème, ...)
-  - Chaque sélection affiche son numéro d'index et un bouton de suppression
-  - Le chevauchement des sélections est empêché (avec retour visuel)
-  - Lors de l'application d'un préréglage à sélection multiple, les fenêtres sont assignées par ordre de sélection : la première fenêtre sélectionnée reçoit la sélection 1, la suivante la sélection 2, etc.
-  - Les miniatures et les aperçus en taille réelle affichent toutes les sélections avec des couleurs indexées
-  - Les sélections de grille ont une marge de 1pt depuis les bords d'écran pour une meilleure visibilité
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>L'ordre des fenêtres multiples suit désormais l'ordre de sélection au lieu de l'ordre Z de la barre latérale</li>
-  - La première fenêtre sélectionnée est toujours la principale ; les fenêtres ajoutées par Cmd+clic sont ajoutées dans l'ordre
-  - La sélection par plage Shift+clic conserve la fenêtre d'ancrage comme principale
-  - Affecte l'application des préréglages, la mise au premier plan (Entrée) et l'affichage de l'aperçu
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Preajustes de diseño con selección múltiple: define múltiples regiones de cuadrícula por preajuste para colocar diferentes ventanas en diferentes posiciones</li>
-  - Cada arrastre en el editor de preajustes añade una nueva selección (1ª, 2ª, 3ª, ...)
-  - Cada selección muestra su número de índice y un botón de eliminar
-  - Se previene la superposición de selecciones (con retroalimentación visual)
-  - Al aplicar un preajuste con selección múltiple, las ventanas se asignan por orden de selección: la primera ventana seleccionada obtiene la selección 1, la siguiente la selección 2, etc.
-  - Las miniaturas y las vistas previas a tamaño real muestran todas las selecciones con colores indexados
-  - Las selecciones de cuadrícula tienen un margen de 1pt desde los bordes de pantalla para mejor visibilidad
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>El orden de múltiples ventanas ahora sigue el orden de selección en lugar del orden Z de la barra lateral</li>
-  - La primera ventana seleccionada siempre es la principal; las ventanas añadidas con Cmd+clic se agregan en orden
-  - La selección por rango con Shift+clic mantiene la ventana ancla como principal
-  - Afecta la aplicación de preajustes, traer al frente (Enter) y la vista previa
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Mehrfachauswahl-Layout-Vorlagen: Definieren Sie mehrere Rasterbereiche pro Vorlage, um verschiedene Fenster an verschiedenen Positionen anzuordnen</li>
-  - Jedes Ziehen im Vorlagen-Editor fügt eine neue Auswahl hinzu (1., 2., 3., ...)
-  - Jede Auswahl zeigt ihre Indexnummer und einen Löschbutton
-  - Überlappende Auswahlen werden verhindert (mit visuellem Feedback)
-  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Auswahlreihenfolge zugewiesen: zuerst ausgewähltes Fenster erhält Auswahl 1, nächstes Auswahl 2 usw.
-  - Vorlagen-Miniaturansichten und Echtgrößen-Vorschauen zeigen alle Auswahlen mit indizierten Farben
-  - Rasterauswahlen haben einen 1pt-Rand vom Bildschirmrand für bessere Sichtbarkeit
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Mehrfenster-Reihenfolge folgt jetzt der Auswahlreihenfolge statt der Seitenleisten-Z-Reihenfolge</li>
-  - Das zuerst ausgewählte Fenster ist immer primär; per Cmd+Klick hinzugefügte Fenster werden in Reihenfolge angehängt
-  - Shift+Klick-Bereichsauswahl behält das Ankerfenster als primär
-  - Betrifft Layout-Vorlagen-Anwendung, In den Vordergrund bringen (Enter) und Vorschauanzeige
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多選佈局預設：在一個預設中定義多個網格區域，將不同視窗放置到不同位置</li>
-  - 在預設編輯器中每次拖曳都會新增選擇區域（第1個、第2個、第3個…）
-  - 每個選擇區域顯示索引編號和刪除按鈕
-  - 防止選擇區域重疊（附視覺回饋）
-  - 套用多選預設時按選擇順序分配視窗：最先選擇的視窗對應選擇1，下一個選擇的視窗對應選擇2，依此類推
-  - 預設縮圖和實際尺寸預覽以索引顏色顯示所有選擇區域
-  - 網格選擇區域從螢幕邊緣留出1pt邊距以提高可見性
-</ul>
-<h3>變更</h3>
-<ul>
-<li>多視窗排序從側邊欄Z順序改為選擇順序</li>
-  - 最先選擇的視窗始終為主視窗，Cmd+點擊新增的視窗按新增順序排列
-  - Shift+點擊範圍選擇中錨點視窗保持為主視窗
-  - 影響佈局預設套用、置於最前（Enter）和預覽顯示
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多选布局预设：在一个预设中定义多个网格区域，将不同窗口放置到不同位置</li>
-  - 在预设编辑器中每次拖拽都会添加新的选择区域（第1个、第2个、第3个…）
-  - 每个选择区域显示索引编号和删除按钮
-  - 防止选择区域重叠（带视觉反馈）
-  - 应用多选预设时按选择顺序分配窗口：最先选择的窗口对应选择1，下一个选择的窗口对应选择2，依此类推
-  - 预设缩略图和实际尺寸预览以索引颜色显示所有选择区域
-  - 网格选择区域从屏幕边缘留出1pt边距以提高可见性
-</ul>
-<h3>变更</h3>
-<ul>
-<li>多窗口排序从侧边栏Z顺序改为选择顺序</li>
-  - 最先选择的窗口始终为主窗口，Cmd+点击添加的窗口按添加顺序排列
-  - Shift+点击范围选择中锚点窗口保持为主窗口
-  - 影响布局预设应用、置于最前（Enter）和预览显示
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>다중 선택 레이아웃 프리셋: 하나의 프리셋에 여러 그리드 영역을 정의하여 다른 창을 다른 위치에 배치 가능</li>
-  - 프리셋 편집기에서 드래그할 때마다 새 선택 영역 추가 (1번째, 2번째, 3번째...)
-  - 각 선택 영역에 인덱스 번호와 삭제 버튼 표시
-  - 선택 영역 간 겹침 방지 (시각적 피드백 포함)
-  - 다중 선택 프리셋 적용 시 선택 순서에 따라 창 할당: 처음 선택한 창이 선택 1, 다음 선택한 창이 선택 2 등
-  - 프리셋 썸네일과 실제 크기 미리보기에 모든 선택 영역을 인덱스 색상으로 표시
-  - 그리드 선택 영역은 화면 가장자리에서 1pt 여백으로 가시성 향상
-</ul>
-<h3>변경</h3>
-<ul>
-<li>다중 창 순서가 사이드바 Z순서에서 선택 순서로 변경</li>
-  - 처음 선택한 창이 항상 프라이머리, Cmd+클릭으로 추가한 창은 추가 순서대로 배치
-  - Shift+클릭 범위 선택에서는 앵커 창이 프라이머리 유지
-  - 레이아웃 프리셋 적용, 최전면화(Enter), 미리보기 표시에 영향
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>複数セレクション対応レイアウトプリセット：1つのプリセットに複数のグリッド領域を定義し、異なるウインドウを異なる位置に配置可能に</li>
-  - プリセットエディタでドラッグするたびに新しいセレクションを追加（1番目、2番目、3番目…）
-  - 各セレクションにはインデックス番号と削除ボタンを表示
-  - セレクション同士の重なりを防止（視覚的フィードバック付き）
-  - 複数セレクションプリセットの適用時、ウインドウは選択順で割り当て：最初に選択したウインドウがセレクション1、次に選択したウインドウがセレクション2…
-  - プリセットのサムネイルと実サイズプレビューにすべてのセレクションをインデックス色で表示
-  - グリッドのセレクションは画面端から1ptのマージンで見やすく表示
-</ul>
-<h3>変更</h3>
-<ul>
-<li>複数ウインドウの順序がサイドバーのZ順から選択順に変更</li>
-  - 最初に選択したウインドウが常にプライマリ、Cmd+クリックで追加したウインドウは追加順に並ぶ
-  - Shift+クリックの範囲選択ではアンカーウインドウがプライマリを維持
-  - レイアウトプリセットの適用、最前面化（Enter）、プレビュー表示に影響
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Multi-selection layout presets: define multiple grid regions per preset for arranging different windows in different positions</li>
-  - Each drag in the preset editor appends a new selection (1st, 2nd, 3rd, ...)
-  - Selections show their index number and a delete button for easy management
-  - Overlapping selections are prevented with visual feedback
-  - When applying a multi-selection preset, windows are assigned by selection order: the initially selected window gets selection 1, the next selected window gets selection 2, etc.
-  - Preset thumbnails and real-size previews display all selections with distinct indexed colors
-  - Grid selections have a 1pt margin from physical screen edges for better visibility
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Multi-window ordering now follows selection order instead of sidebar Z-order</li>
-  - The initially selected window is always primary; subsequently Cmd+clicked windows are appended in order
-  - Shift+click range selections keep the anchor window as primary
-  - Affects layout preset application, Bring to Front (Enter), and preview display
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Predefinições de layout com seleção múltipla: defina múltiplas regiões de grade por predefinição para posicionar diferentes janelas em diferentes locais</li>
-  - Cada arraste no editor de predefinições adiciona uma nova seleção (1ª, 2ª, 3ª, ...)
-  - Cada seleção exibe seu número de índice e um botão de exclusão
-  - A sobreposição de seleções é impedida (com feedback visual)
-  - Ao aplicar uma predefinição com seleção múltipla, as janelas são atribuídas por ordem de seleção: a primeira janela selecionada recebe a seleção 1, a próxima a seleção 2, etc.
-  - As miniaturas e as visualizações em tamanho real exibem todas as seleções com cores indexadas
-  - As seleções de grade têm uma margem de 1pt das bordas da tela para melhor visibilidade
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A ordenação de múltiplas janelas agora segue a ordem de seleção em vez da ordem Z da barra lateral</li>
-  - A primeira janela selecionada é sempre a principal; janelas adicionadas com Cmd+clique são adicionadas em ordem
-  - A seleção por intervalo com Shift+clique mantém a janela âncora como principal
-  - Afeta a aplicação de predefinições, trazer para frente (Enter) e exibição de visualização
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Preset di layout a selezione multipla: definisci più aree della griglia per preset per posizionare finestre diverse in posizioni diverse</li>
-  - Ogni trascinamento nell'editor dei preset aggiunge una nuova selezione (1ª, 2ª, 3ª, ...)
-  - Ogni selezione mostra il suo numero di indice e un pulsante di eliminazione
-  - La sovrapposizione delle selezioni viene impedita (con feedback visivo)
-  - Quando si applica un preset a selezione multipla, le finestre vengono assegnate per ordine di selezione: la prima finestra selezionata ottiene la selezione 1, la successiva la selezione 2, ecc.
-  - Le miniature e le anteprime a dimensione reale mostrano tutte le selezioni con colori indicizzati
-  - Le selezioni della griglia hanno un margine di 1pt dai bordi dello schermo per una migliore visibilità
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>L'ordine delle finestre multiple ora segue l'ordine di selezione anziché l'ordine Z della barra laterale</li>
-  - La prima finestra selezionata è sempre la principale; le finestre aggiunte con Cmd+clic vengono aggiunte in ordine
-  - La selezione per intervallo con Shift+clic mantiene la finestra di ancoraggio come principale
-  - Influisce sull'applicazione dei preset, sul portare in primo piano (Invio) e sulla visualizzazione dell'anteprima
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Préréglages de disposition à sélection multiple : définissez plusieurs zones de grille par préréglage pour positionner différentes fenêtres à différents emplacements</li>
-  - Chaque glisser dans l'éditeur de préréglages ajoute une nouvelle sélection (1ère, 2ème, 3ème, ...)
-  - Chaque sélection affiche son numéro d'index et un bouton de suppression
-  - Le chevauchement des sélections est empêché (avec retour visuel)
-  - Lors de l'application d'un préréglage à sélection multiple, les fenêtres sont assignées par ordre de sélection : la première fenêtre sélectionnée reçoit la sélection 1, la suivante la sélection 2, etc.
-  - Les miniatures et les aperçus en taille réelle affichent toutes les sélections avec des couleurs indexées
-  - Les sélections de grille ont une marge de 1pt depuis les bords d'écran pour une meilleure visibilité
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>L'ordre des fenêtres multiples suit désormais l'ordre de sélection au lieu de l'ordre Z de la barre latérale</li>
-  - La première fenêtre sélectionnée est toujours la principale ; les fenêtres ajoutées par Cmd+clic sont ajoutées dans l'ordre
-  - La sélection par plage Shift+clic conserve la fenêtre d'ancrage comme principale
-  - Affecte l'application des préréglages, la mise au premier plan (Entrée) et l'affichage de l'aperçu
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Preajustes de diseño con selección múltiple: define múltiples regiones de cuadrícula por preajuste para colocar diferentes ventanas en diferentes posiciones</li>
-  - Cada arrastre en el editor de preajustes añade una nueva selección (1ª, 2ª, 3ª, ...)
-  - Cada selección muestra su número de índice y un botón de eliminar
-  - Se previene la superposición de selecciones (con retroalimentación visual)
-  - Al aplicar un preajuste con selección múltiple, las ventanas se asignan por orden de selección: la primera ventana seleccionada obtiene la selección 1, la siguiente la selección 2, etc.
-  - Las miniaturas y las vistas previas a tamaño real muestran todas las selecciones con colores indexados
-  - Las selecciones de cuadrícula tienen un margen de 1pt desde los bordes de pantalla para mejor visibilidad
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>El orden de múltiples ventanas ahora sigue el orden de selección en lugar del orden Z de la barra lateral</li>
-  - La primera ventana seleccionada siempre es la principal; las ventanas añadidas con Cmd+clic se agregan en orden
-  - La selección por rango con Shift+clic mantiene la ventana ancla como principal
-  - Afecta la aplicación de preajustes, traer al frente (Enter) y la vista previa
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Mehrfachauswahl-Layout-Vorlagen: Definieren Sie mehrere Rasterbereiche pro Vorlage, um verschiedene Fenster an verschiedenen Positionen anzuordnen</li>
-  - Jedes Ziehen im Vorlagen-Editor fügt eine neue Auswahl hinzu (1., 2., 3., ...)
-  - Jede Auswahl zeigt ihre Indexnummer und einen Löschbutton
-  - Überlappende Auswahlen werden verhindert (mit visuellem Feedback)
-  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Auswahlreihenfolge zugewiesen: zuerst ausgewähltes Fenster erhält Auswahl 1, nächstes Auswahl 2 usw.
-  - Vorlagen-Miniaturansichten und Echtgrößen-Vorschauen zeigen alle Auswahlen mit indizierten Farben
-  - Rasterauswahlen haben einen 1pt-Rand vom Bildschirmrand für bessere Sichtbarkeit
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Mehrfenster-Reihenfolge folgt jetzt der Auswahlreihenfolge statt der Seitenleisten-Z-Reihenfolge</li>
-  - Das zuerst ausgewählte Fenster ist immer primär; per Cmd+Klick hinzugefügte Fenster werden in Reihenfolge angehängt
-  - Shift+Klick-Bereichsauswahl behält das Ankerfenster als primär
-  - Betrifft Layout-Vorlagen-Anwendung, In den Vordergrund bringen (Enter) und Vorschauanzeige
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多選佈局預設：在一個預設中定義多個網格區域，將不同視窗放置到不同位置</li>
-  - 在預設編輯器中每次拖曳都會新增選擇區域（第1個、第2個、第3個…）
-  - 每個選擇區域顯示索引編號和刪除按鈕
-  - 防止選擇區域重疊（附視覺回饋）
-  - 套用多選預設時按選擇順序分配視窗：最先選擇的視窗對應選擇1，下一個選擇的視窗對應選擇2，依此類推
-  - 預設縮圖和實際尺寸預覽以索引顏色顯示所有選擇區域
-  - 網格選擇區域從螢幕邊緣留出1pt邊距以提高可見性
-</ul>
-<h3>變更</h3>
-<ul>
-<li>多視窗排序從側邊欄Z順序改為選擇順序</li>
-  - 最先選擇的視窗始終為主視窗，Cmd+點擊新增的視窗按新增順序排列
-  - Shift+點擊範圍選擇中錨點視窗保持為主視窗
-  - 影響佈局預設套用、置於最前（Enter）和預覽顯示
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多选布局预设：在一个预设中定义多个网格区域，将不同窗口放置到不同位置</li>
-  - 在预设编辑器中每次拖拽都会添加新的选择区域（第1个、第2个、第3个…）
-  - 每个选择区域显示索引编号和删除按钮
-  - 防止选择区域重叠（带视觉反馈）
-  - 应用多选预设时按选择顺序分配窗口：最先选择的窗口对应选择1，下一个选择的窗口对应选择2，依此类推
-  - 预设缩略图和实际尺寸预览以索引颜色显示所有选择区域
-  - 网格选择区域从屏幕边缘留出1pt边距以提高可见性
-</ul>
-<h3>变更</h3>
-<ul>
-<li>多窗口排序从侧边栏Z顺序改为选择顺序</li>
-  - 最先选择的窗口始终为主窗口，Cmd+点击添加的窗口按添加顺序排列
-  - Shift+点击范围选择中锚点窗口保持为主窗口
-  - 影响布局预设应用、置于最前（Enter）和预览显示
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>다중 선택 레이아웃 프리셋: 하나의 프리셋에 여러 그리드 영역을 정의하여 다른 창을 다른 위치에 배치 가능</li>
-  - 프리셋 편집기에서 드래그할 때마다 새 선택 영역 추가 (1번째, 2번째, 3번째...)
-  - 각 선택 영역에 인덱스 번호와 삭제 버튼 표시
-  - 선택 영역 간 겹침 방지 (시각적 피드백 포함)
-  - 다중 선택 프리셋 적용 시 선택 순서에 따라 창 할당: 처음 선택한 창이 선택 1, 다음 선택한 창이 선택 2 등
-  - 프리셋 썸네일과 실제 크기 미리보기에 모든 선택 영역을 인덱스 색상으로 표시
-  - 그리드 선택 영역은 화면 가장자리에서 1pt 여백으로 가시성 향상
-</ul>
-<h3>변경</h3>
-<ul>
-<li>다중 창 순서가 사이드바 Z순서에서 선택 순서로 변경</li>
-  - 처음 선택한 창이 항상 프라이머리, Cmd+클릭으로 추가한 창은 추가 순서대로 배치
-  - Shift+클릭 범위 선택에서는 앵커 창이 프라이머리 유지
-  - 레이아웃 프리셋 적용, 최전면화(Enter), 미리보기 표시에 영향
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>複数セレクション対応レイアウトプリセット：1つのプリセットに複数のグリッド領域を定義し、異なるウインドウを異なる位置に配置可能に</li>
-  - プリセットエディタでドラッグするたびに新しいセレクションを追加（1番目、2番目、3番目…）
-  - 各セレクションにはインデックス番号と削除ボタンを表示
-  - セレクション同士の重なりを防止（視覚的フィードバック付き）
-  - 複数セレクションプリセットの適用時、ウインドウは選択順で割り当て：最初に選択したウインドウがセレクション1、次に選択したウインドウがセレクション2…
-  - プリセットのサムネイルと実サイズプレビューにすべてのセレクションをインデックス色で表示
-  - グリッドのセレクションは画面端から1ptのマージンで見やすく表示
-</ul>
-<h3>変更</h3>
-<ul>
-<li>複数ウインドウの順序がサイドバーのZ順から選択順に変更</li>
-  - 最初に選択したウインドウが常にプライマリ、Cmd+クリックで追加したウインドウは追加順に並ぶ
-  - Shift+クリックの範囲選択ではアンカーウインドウがプライマリを維持
-  - レイアウトプリセットの適用、最前面化（Enter）、プレビュー表示に影響
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Multi-selection layout presets: define multiple grid regions per preset for arranging different windows in different positions</li>
-  - Each drag in the preset editor appends a new selection (1st, 2nd, 3rd, ...)
-  - Selections show their index number and a delete button for easy management
-  - Overlapping selections are prevented with visual feedback
-  - When applying a multi-selection preset, windows are assigned by selection order: the initially selected window gets selection 1, the next selected window gets selection 2, etc.
-  - Preset thumbnails and real-size previews display all selections with distinct indexed colors
-  - Grid selections have a 1pt margin from physical screen edges for better visibility
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Multi-window ordering now follows selection order instead of sidebar Z-order</li>
-  - The initially selected window is always primary; subsequently Cmd+clicked windows are appended in order
-  - Shift+click range selections keep the anchor window as primary
-  - Affects layout preset application, Bring to Front (Enter), and preview display
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Predefinições de layout com seleção múltipla: defina múltiplas regiões de grade por predefinição para posicionar diferentes janelas em diferentes locais</li>
-  - Cada arraste no editor de predefinições adiciona uma nova seleção (1ª, 2ª, 3ª, ...)
-  - Cada seleção exibe seu número de índice e um botão de exclusão
-  - A sobreposição de seleções é impedida (com feedback visual)
-  - Ao aplicar uma predefinição com seleção múltipla, as janelas são atribuídas por ordem de seleção: a primeira janela selecionada recebe a seleção 1, a próxima a seleção 2, etc.
-  - As miniaturas e as visualizações em tamanho real exibem todas as seleções com cores indexadas
-  - As seleções de grade têm uma margem de 1pt das bordas da tela para melhor visibilidade
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>A ordenação de múltiplas janelas agora segue a ordem de seleção em vez da ordem Z da barra lateral</li>
-  - A primeira janela selecionada é sempre a principal; janelas adicionadas com Cmd+clique são adicionadas em ordem
-  - A seleção por intervalo com Shift+clique mantém a janela âncora como principal
-  - Afeta a aplicação de predefinições, trazer para frente (Enter) e exibição de visualização
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Preset di layout a selezione multipla: definisci più aree della griglia per preset per posizionare finestre diverse in posizioni diverse</li>
-  - Ogni trascinamento nell'editor dei preset aggiunge una nuova selezione (1ª, 2ª, 3ª, ...)
-  - Ogni selezione mostra il suo numero di indice e un pulsante di eliminazione
-  - La sovrapposizione delle selezioni viene impedita (con feedback visivo)
-  - Quando si applica un preset a selezione multipla, le finestre vengono assegnate per ordine di selezione: la prima finestra selezionata ottiene la selezione 1, la successiva la selezione 2, ecc.
-  - Le miniature e le anteprime a dimensione reale mostrano tutte le selezioni con colori indicizzati
-  - Le selezioni della griglia hanno un margine di 1pt dai bordi dello schermo per una migliore visibilità
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>L'ordine delle finestre multiple ora segue l'ordine di selezione anziché l'ordine Z della barra laterale</li>
-  - La prima finestra selezionata è sempre la principale; le finestre aggiunte con Cmd+clic vengono aggiunte in ordine
-  - La selezione per intervallo con Shift+clic mantiene la finestra di ancoraggio come principale
-  - Influisce sull'applicazione dei preset, sul portare in primo piano (Invio) e sulla visualizzazione dell'anteprima
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Préréglages de disposition à sélection multiple : définissez plusieurs zones de grille par préréglage pour positionner différentes fenêtres à différents emplacements</li>
-  - Chaque glisser dans l'éditeur de préréglages ajoute une nouvelle sélection (1ère, 2ème, 3ème, ...)
-  - Chaque sélection affiche son numéro d'index et un bouton de suppression
-  - Le chevauchement des sélections est empêché (avec retour visuel)
-  - Lors de l'application d'un préréglage à sélection multiple, les fenêtres sont assignées par ordre de sélection : la première fenêtre sélectionnée reçoit la sélection 1, la suivante la sélection 2, etc.
-  - Les miniatures et les aperçus en taille réelle affichent toutes les sélections avec des couleurs indexées
-  - Les sélections de grille ont une marge de 1pt depuis les bords d'écran pour une meilleure visibilité
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>L'ordre des fenêtres multiples suit désormais l'ordre de sélection au lieu de l'ordre Z de la barre latérale</li>
-  - La première fenêtre sélectionnée est toujours la principale ; les fenêtres ajoutées par Cmd+clic sont ajoutées dans l'ordre
-  - La sélection par plage Shift+clic conserve la fenêtre d'ancrage comme principale
-  - Affecte l'application des préréglages, la mise au premier plan (Entrée) et l'affichage de l'aperçu
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Preajustes de diseño con selección múltiple: define múltiples regiones de cuadrícula por preajuste para colocar diferentes ventanas en diferentes posiciones</li>
-  - Cada arrastre en el editor de preajustes añade una nueva selección (1ª, 2ª, 3ª, ...)
-  - Cada selección muestra su número de índice y un botón de eliminar
-  - Se previene la superposición de selecciones (con retroalimentación visual)
-  - Al aplicar un preajuste con selección múltiple, las ventanas se asignan por orden de selección: la primera ventana seleccionada obtiene la selección 1, la siguiente la selección 2, etc.
-  - Las miniaturas y las vistas previas a tamaño real muestran todas las selecciones con colores indexados
-  - Las selecciones de cuadrícula tienen un margen de 1pt desde los bordes de pantalla para mejor visibilidad
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>El orden de múltiples ventanas ahora sigue el orden de selección en lugar del orden Z de la barra lateral</li>
-  - La primera ventana seleccionada siempre es la principal; las ventanas añadidas con Cmd+clic se agregan en orden
-  - La selección por rango con Shift+clic mantiene la ventana ancla como principal
-  - Afecta la aplicación de preajustes, traer al frente (Enter) y la vista previa
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Mehrfachauswahl-Layout-Vorlagen: Definieren Sie mehrere Rasterbereiche pro Vorlage, um verschiedene Fenster an verschiedenen Positionen anzuordnen</li>
-  - Jedes Ziehen im Vorlagen-Editor fügt eine neue Auswahl hinzu (1., 2., 3., ...)
-  - Jede Auswahl zeigt ihre Indexnummer und einen Löschbutton
-  - Überlappende Auswahlen werden verhindert (mit visuellem Feedback)
-  - Bei Anwendung einer Mehrfachauswahl-Vorlage werden Fenster nach Auswahlreihenfolge zugewiesen: zuerst ausgewähltes Fenster erhält Auswahl 1, nächstes Auswahl 2 usw.
-  - Vorlagen-Miniaturansichten und Echtgrößen-Vorschauen zeigen alle Auswahlen mit indizierten Farben
-  - Rasterauswahlen haben einen 1pt-Rand vom Bildschirmrand für bessere Sichtbarkeit
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Mehrfenster-Reihenfolge folgt jetzt der Auswahlreihenfolge statt der Seitenleisten-Z-Reihenfolge</li>
-  - Das zuerst ausgewählte Fenster ist immer primär; per Cmd+Klick hinzugefügte Fenster werden in Reihenfolge angehängt
-  - Shift+Klick-Bereichsauswahl behält das Ankerfenster als primär
-  - Betrifft Layout-Vorlagen-Anwendung, In den Vordergrund bringen (Enter) und Vorschauanzeige
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多選佈局預設：在一個預設中定義多個網格區域，將不同視窗放置到不同位置</li>
-  - 在預設編輯器中每次拖曳都會新增選擇區域（第1個、第2個、第3個…）
-  - 每個選擇區域顯示索引編號和刪除按鈕
-  - 防止選擇區域重疊（附視覺回饋）
-  - 套用多選預設時按選擇順序分配視窗：最先選擇的視窗對應選擇1，下一個選擇的視窗對應選擇2，依此類推
-  - 預設縮圖和實際尺寸預覽以索引顏色顯示所有選擇區域
-  - 網格選擇區域從螢幕邊緣留出1pt邊距以提高可見性
-</ul>
-<h3>變更</h3>
-<ul>
-<li>多視窗排序從側邊欄Z順序改為選擇順序</li>
-  - 最先選擇的視窗始終為主視窗，Cmd+點擊新增的視窗按新增順序排列
-  - Shift+點擊範圍選擇中錨點視窗保持為主視窗
-  - 影響佈局預設套用、置於最前（Enter）和預覽顯示
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>多选布局预设：在一个预设中定义多个网格区域，将不同窗口放置到不同位置</li>
-  - 在预设编辑器中每次拖拽都会添加新的选择区域（第1个、第2个、第3个…）
-  - 每个选择区域显示索引编号和删除按钮
-  - 防止选择区域重叠（带视觉反馈）
-  - 应用多选预设时按选择顺序分配窗口：最先选择的窗口对应选择1，下一个选择的窗口对应选择2，依此类推
-  - 预设缩略图和实际尺寸预览以索引颜色显示所有选择区域
-  - 网格选择区域从屏幕边缘留出1pt边距以提高可见性
-</ul>
-<h3>变更</h3>
-<ul>
-<li>多窗口排序从侧边栏Z顺序改为选择顺序</li>
-  - 最先选择的窗口始终为主窗口，Cmd+点击添加的窗口按添加顺序排列
-  - Shift+点击范围选择中锚点窗口保持为主窗口
-  - 影响布局预设应用、置于最前（Enter）和预览显示
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>다중 선택 레이아웃 프리셋: 하나의 프리셋에 여러 그리드 영역을 정의하여 다른 창을 다른 위치에 배치 가능</li>
-  - 프리셋 편집기에서 드래그할 때마다 새 선택 영역 추가 (1번째, 2번째, 3번째...)
-  - 각 선택 영역에 인덱스 번호와 삭제 버튼 표시
-  - 선택 영역 간 겹침 방지 (시각적 피드백 포함)
-  - 다중 선택 프리셋 적용 시 선택 순서에 따라 창 할당: 처음 선택한 창이 선택 1, 다음 선택한 창이 선택 2 등
-  - 프리셋 썸네일과 실제 크기 미리보기에 모든 선택 영역을 인덱스 색상으로 표시
-  - 그리드 선택 영역은 화면 가장자리에서 1pt 여백으로 가시성 향상
-</ul>
-<h3>변경</h3>
-<ul>
-<li>다중 창 순서가 사이드바 Z순서에서 선택 순서로 변경</li>
-  - 처음 선택한 창이 항상 프라이머리, Cmd+클릭으로 추가한 창은 추가 순서대로 배치
-  - Shift+클릭 범위 선택에서는 앵커 창이 프라이머리 유지
-  - 레이아웃 프리셋 적용, 최전면화(Enter), 미리보기 표시에 영향
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>複数セレクション対応レイアウトプリセット：1つのプリセットに複数のグリッド領域を定義し、異なるウインドウを異なる位置に配置可能に</li>
-  - プリセットエディタでドラッグするたびに新しいセレクションを追加（1番目、2番目、3番目…）
-  - 各セレクションにはインデックス番号と削除ボタンを表示
-  - セレクション同士の重なりを防止（視覚的フィードバック付き）
-  - 複数セレクションプリセットの適用時、ウインドウは選択順で割り当て：最初に選択したウインドウがセレクション1、次に選択したウインドウがセレクション2…
-  - プリセットのサムネイルと実サイズプレビューにすべてのセレクションをインデックス色で表示
-  - グリッドのセレクションは画面端から1ptのマージンで見やすく表示
-</ul>
-<h3>変更</h3>
-<ul>
-<li>複数ウインドウの順序がサイドバーのZ順から選択順に変更</li>
-  - 最初に選択したウインドウが常にプライマリ、Cmd+クリックで追加したウインドウは追加順に並ぶ
-  - Shift+クリックの範囲選択ではアンカーウインドウがプライマリを維持
-  - レイアウトプリセットの適用、最前面化（Enter）、プレビュー表示に影響
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Multi-selection layout presets: define multiple grid regions per preset for arranging different windows in different positions</li>
-  - Each drag in the preset editor appends a new selection (1st, 2nd, 3rd, ...)
-  - Selections show their index number and a delete button for easy management
-  - Overlapping selections are prevented with visual feedback
-  - When applying a multi-selection preset, windows are assigned by selection order: the initially selected window gets selection 1, the next selected window gets selection 2, etc.
-  - Preset thumbnails and real-size previews display all selections with distinct indexed colors
-  - Grid selections have a 1pt margin from physical screen edges for better visibility
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Multi-window ordering now follows selection order instead of sidebar Z-order</li>
-  - The initially selected window is always primary; subsequently Cmd+clicked windows are appended in order
-  - Shift+click range selections keep the anchor window as primary
-  - Affects layout preset application, Bring to Front (Enter), and preview display
-</ul>]]></description>
-            <pubDate>Sun, 29 Mar 2026 00:24:55 +0900</pubDate>
-            <sparkle:version>400</sparkle:version>
-            <sparkle:shortVersionString>4.0.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.2/Tiley-4.0.0.zip" length="5583300" type="application/octet-stream" sparkle:edSignature="qv0FuxE2qX1Ckbt2EXyb7HRohm1KS/LvKIPqbwlpJs7IK62Dj/R8Rll1bWtXwGDDSUUJiJ22HSJxwO/tL6HlCQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley400-340.delta" sparkle:deltaFrom="340" length="380930" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="3YZG3Fg0Rak27nKJNc/MXmiyvcgig0VPv4+kHLbMOYUeKDX2ILLUJ68t14Y5lphPh/3M/btwJXD2YniiTFw9Bg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley400-332.delta" sparkle:deltaFrom="332" length="450214" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="rL7pJarfJ8d60DzpNNXbsbyQNqjCxXv1xmxwkLg6CaR5sFSxBDtab37RCbxzmU4HxApKRnq4sBzLgAjg26DMBQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley400-331.delta" sparkle:deltaFrom="331" length="580402" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="YTX+4dsU6jG98Z33uSIiKe1wQilYJ/8pEyukA5PnsZkYr5mOjPPLWWxLJmuhHegNfIpCFpGh4p5z9f5MUcYlCA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley400-330.delta" sparkle:deltaFrom="330" length="622610" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="a0pQUpmu1hs1Qdkd8oXKup2Vw/zuuYnkdhhumpp15eQ5T1DGQxqLB7/6ZWck92deagnoNT+o62hefDwWkDqEDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.0/Tiley400-329.delta" sparkle:deltaFrom="329" length="633294" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ypBMWbWxqdK50NwUJDKCm6JrAIZTLOUUZpZj/Xy0yYCcbzXB2qz2uhhFQNxBdSQE09UpeQg1anyG1PswcLV2Dg=="/>
             </sparkle:deltas>
         </item>
     </channel>

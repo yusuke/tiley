@@ -4,6 +4,14 @@
 
 ## [4.0.4] - 2026-03-29
 
+### Aggiunto
+
+- Al passaggio del mouse su un preset, l'anteprima del mini-schermo mostra le barre del titolo delle finestre (icona app, nome app, titolo finestra)
+
+### Modificato
+
+- La barra del titolo dell'anteprima layout a dimensione reale ora mostra il nome dell'app insieme al titolo della finestra (formato: "Nome App — Titolo Finestra")
+
 ## [4.0.3] - 2026-03-29
 
 ### Aggiunto
@@ -11,7 +19,6 @@
 - I preset con layout multipli ora ridimensionano più finestre anche con una sola finestra selezionata, utilizzando l'ordine Z effettivo (la finestra più in primo piano per prima)
 - Quando le finestre selezionate sono meno delle definizioni di layout, la finestra selezionata viene sempre trattata come principale e gli slot rimanenti vengono riempiti per ordine Z
 - Al passaggio del mouse su un preset con layout multipli, le righe delle finestre interessate nella barra laterale vengono evidenziate con i colori del layout (blu, verde, arancione, viola)
-- Al passaggio del mouse su un preset, l'anteprima del mini-schermo mostra le barre del titolo delle finestre (icona app, nome app, titolo finestra)
 
 ## [4.0.2] - 2026-03-29
 

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [4.0.4] - 2026-03-29
 
+### Added
+
+- Mini-screen layout preview shows window title bars (app icon, app name, window title) when hovering over any preset
+
+### Changed
+
+- Full-size layout preview title bar now shows app name alongside window title (format: "App Name — Window Title")
+
 ## [4.0.3] - 2026-03-29
 
 ### Added
@@ -16,7 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Multi-layout presets now resize multiple windows even with a single window selected — windows are picked by actual z-order (frontmost first)
 - When selected windows are fewer than preset layout definitions, the selected window is always treated as primary and remaining slots are filled from z-order
 - Sidebar window rows highlight with layout colors (blue, green, orange, purple) when hovering over a multi-layout preset
-- Mini-screen layout preview shows window title bars (app icon, app name, window title) when hovering over any preset
 
 ## [4.0.2] - 2026-03-29
 

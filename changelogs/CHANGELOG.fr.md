@@ -4,6 +4,14 @@
 
 ## [4.0.4] - 2026-03-29
 
+### Ajouté
+
+- Au survol d'un preset, l'aperçu du mini-écran affiche les barres de titre des fenêtres (icône d'app, nom d'app, titre de fenêtre)
+
+### Modifié
+
+- La barre de titre de l'aperçu de disposition en taille réelle affiche désormais le nom de l'app avec le titre de la fenêtre (format : « Nom de l'App — Titre de la Fenêtre »)
+
 ## [4.0.3] - 2026-03-29
 
 ### Ajouté
@@ -11,7 +19,6 @@
 - Les presets multi-disposition redimensionnent maintenant plusieurs fenêtres même avec une seule fenêtre sélectionnée, en utilisant l'ordre Z réel (fenêtre la plus en avant en premier)
 - Lorsque les fenêtres sélectionnées sont moins nombreuses que les définitions de disposition, la fenêtre sélectionnée est toujours traitée comme principale et les emplacements restants sont remplis par ordre Z
 - Au survol d'un preset multi-disposition, les lignes des fenêtres concernées dans la barre latérale sont mises en surbrillance avec les couleurs de disposition (bleu, vert, orange, violet)
-- Au survol d'un preset, l'aperçu du mini-écran affiche les barres de titre des fenêtres (icône d'app, nom d'app, titre de fenêtre)
 
 ## [4.0.2] - 2026-03-29
 
