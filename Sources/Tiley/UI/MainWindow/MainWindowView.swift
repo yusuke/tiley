@@ -282,16 +282,11 @@ struct MainWindowView: View {
             scalingRaw = Int(NSImageScaling.scaleProportionallyUpOrDown.rawValue)
             allowClipping = true
             isTiled = false
-        } else if let scalingRawOpt = opts?[.imageScaling] as? Int {
-            // Custom image with explicit desktopImageOptions (older macOS) — use them directly
-            scalingRaw = scalingRawOpt
-            allowClipping = opts?[.allowClipping] as? Bool ?? false
-            isTiled = false
         } else if isCustomImage, let placement = storeInfo?.placement {
-            // Custom image on macOS 15+ where desktopImageOptions no longer includes imageScaling.
-            // Read the placement from the wallpaper Store plist instead.
+            // Custom image with Store plist placement (macOS 15+ and some macOS 14 installs).
+            // The Store plist is the most reliable source for display mode on modern macOS.
             switch placement {
-            case "Tile":
+            case "Tiled", "Tile":
                 scalingRaw = nil
                 allowClipping = false
                 isTiled = true
@@ -312,6 +307,19 @@ struct MainWindowView: View {
                 allowClipping = true
                 isTiled = false
             }
+        } else if let scalingRawOpt = opts?[.imageScaling] as? Int {
+            // Custom image with explicit desktopImageOptions (older macOS without Store plist) —
+            // use them directly. imageScaling is absent for tile mode, so this branch
+            // only fires for non-tiled modes.
+            scalingRaw = scalingRawOpt
+            allowClipping = opts?[.allowClipping] as? Bool ?? false
+            isTiled = false
+        } else if isCustomImage, opts != nil, opts?[.imageScaling] == nil {
+            // Older macOS tile mode: desktopImageOptions exists but does NOT contain
+            // imageScaling or allowClipping — this is the classic tile mode indicator.
+            scalingRaw = nil
+            allowClipping = false
+            isTiled = true
         } else {
             // System preset wallpaper (landscapes, cityscapes, etc.) with no useful metadata.
             // macOS always renders these as proportional fill (scale to cover, clip sides).
@@ -362,13 +370,38 @@ struct MainWindowView: View {
         guard let data = try? Data(contentsOf: storeURL),
               let root = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
         else { return nil }
-        // Walk: AllSpacesAndDisplays > Desktop > Content
-        guard let allSpaces = root["AllSpacesAndDisplays"] as? [String: Any],
-              let desktop = allSpaces["Desktop"] as? [String: Any],
-              let content = desktop["Content"] as? [String: Any],
-              let choices = content["Choices"] as? [[String: Any]],
-              let first = choices.first
-        else { return nil }
+        // Try multiple plist paths to find the active Desktop content.
+        // macOS versions vary in where they store the wallpaper info:
+        //   - AllSpacesAndDisplays > Desktop > Content  (older macOS)
+        //   - SystemDefault > Desktop > Content          (macOS Tahoe+)
+        //   - Displays > {UUID} > Desktop > Content      (per-display override)
+        let content: [String: Any]
+        let first: [String: Any]
+        if let allSpaces = root["AllSpacesAndDisplays"] as? [String: Any],
+           let desktop = allSpaces["Desktop"] as? [String: Any],
+           let c = desktop["Content"] as? [String: Any],
+           let choices = c["Choices"] as? [[String: Any]],
+           let f = choices.first {
+            content = c
+            first = f
+        } else if let sysDefault = root["SystemDefault"] as? [String: Any],
+                  let desktop = sysDefault["Desktop"] as? [String: Any],
+                  let c = desktop["Content"] as? [String: Any],
+                  let choices = c["Choices"] as? [[String: Any]],
+                  let f = choices.first {
+            content = c
+            first = f
+        } else if let displays = root["Displays"] as? [String: Any],
+                  let firstDisplay = displays.values.first(where: { ($0 as? [String: Any])?["Desktop"] != nil }) as? [String: Any],
+                  let desktop = firstDisplay["Desktop"] as? [String: Any],
+                  let c = desktop["Content"] as? [String: Any],
+                  let choices = c["Choices"] as? [[String: Any]],
+                  let f = choices.first {
+            content = c
+            first = f
+        } else {
+            return nil
+        }
 
         // For custom image wallpapers the choice Configuration has type="imageFile" and a URL.
         // Check if it matches rawURL to confirm this is a custom (user-provided) image.
@@ -466,6 +499,15 @@ struct MainWindowView: View {
             // Mac icons that form the wallpaper's main visual.
             let path = "/System/Library/ExtensionKit/Extensions/WallpaperMacintoshExtension.appex/Contents/Resources/IconGarden.png"
             return firstExisting([path])
+
+        case "default":
+            // macOS Tahoe default wallpaper (Lake Tahoe). The extension bundle is
+            // NeptuneOneWallpaper.appex and contains TahoeLight/TahoeDark thumbnails.
+            let suffix = isDark ? "TahoeDark" : "TahoeLight"
+            let base = "/System/Library/ExtensionKit/Extensions/NeptuneOneWallpaper.appex/Contents/Resources"
+            return firstExisting([
+                "\(base)/\(suffix).heic",
+            ])
 
         default:
             return nil
