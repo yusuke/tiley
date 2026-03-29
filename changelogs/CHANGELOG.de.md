@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.6] - 2026-03-29
+
 ### Hinzugefügt
 
 - Beim Überfahren eines Multi-Layout-Presets werden Layout-Indexnummern im Mini-Bildschirm-Raster, in der Originalgrößen-Vorschau und in der Seitenleisten-Fensterliste angezeigt, sodass unabhängig vom Farbsehvermögen sofort erkennbar ist, welches Layout auf welches Fenster angewendet wird

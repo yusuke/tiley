@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.6] - 2026-03-29
+
 ### Adicionado
 
 - Ao passar o cursor sobre um preset de múltiplos layouts, números de índice de layout são exibidos na grade de mini tela, na pré-visualização em tamanho real e na lista de janelas da barra lateral, permitindo identificar intuitivamente qual layout se aplica a cada janela independentemente da percepção de cores

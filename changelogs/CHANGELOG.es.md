@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.6] - 2026-03-29
+
 ### Añadido
 
 - Al pasar el cursor sobre un preset de múltiples diseños, se muestran números de índice de diseño en la cuadrícula de mini pantalla, la vista previa a tamaño real y la lista de ventanas de la barra lateral, permitiendo identificar intuitivamente qué diseño se aplica a cada ventana independientemente de la percepción del color

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.6] - 2026-03-29
+
 ### Ajouté
 
 - Le survol d’un preset multi-disposition affiche désormais les numéros d’index de disposition sur la grille mini-écran, l’aperçu en taille réelle et la liste des fenêtres de la barre latérale, permettant d’identifier intuitivement quelle disposition s’applique à chaque fenêtre indépendamment de la perception des couleurs

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.6] - 2026-03-29
+
 ### Added
 
 - Hovering over a multi-layout preset now shows layout index numbers on the mini-screen grid, full-size preview rectangles, and sidebar window list items, making it easy to see which layout applies to which window regardless of color vision
@@ -511,7 +513,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.5...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.6...HEAD
+[4.0.6]: https://github.com/yusuke/tiley/releases/tag/v4.0.6
 [4.0.5]: https://github.com/yusuke/tiley/releases/tag/v4.0.5
 [4.0.4]: https://github.com/yusuke/tiley/releases/tag/v4.0.4
 [4.0.3]: https://github.com/yusuke/tiley/releases/tag/v4.0.3

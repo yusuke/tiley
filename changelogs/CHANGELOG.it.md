@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.6] - 2026-03-29
+
 ### Aggiunto
 
 - Passando il cursore su un preset multi-layout, vengono mostrati i numeri di indice del layout sulla griglia mini-schermo, sull'anteprima a dimensione reale e sulla lista finestre della barra laterale, rendendo immediatamente chiaro quale layout viene applicato a ciascuna finestra indipendentemente dalla percezione dei colori
