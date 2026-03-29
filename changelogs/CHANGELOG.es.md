@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- El panel de permisos ya no flota sobre otras aplicaciones y diálogos del sistema al solicitar acceso de accesibilidad
+
 ## [4.0.7] - 2026-03-29
 
 ### Corregido

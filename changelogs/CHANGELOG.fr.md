@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Le panneau des autorisations n'est plus affiché au-dessus des autres applications et des fenêtres système lors de la demande d'accès à l'accessibilité
+
 ## [4.0.7] - 2026-03-29
 
 ### Corrigé

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Das Berechtigungsfenster wird beim Anfordern von Bedienungshilfenzugriff nicht mehr über anderen Apps und Systemdialogen angezeigt
+
 ## [4.0.7] - 2026-03-29
 
 ### Behoben

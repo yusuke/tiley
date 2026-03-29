@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Permissions panel window is no longer floating above other apps and OS dialogs while requesting accessibility access
+
 ## [4.0.7] - 2026-03-29
 
 ### Fixed

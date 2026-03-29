@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- O painel de permissões não é mais exibido sobre outros aplicativos e diálogos do sistema ao solicitar acesso de acessibilidade
+
 ## [4.0.7] - 2026-03-29
 
 ### Corrigido
