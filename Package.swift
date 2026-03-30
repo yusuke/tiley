@@ -22,8 +22,8 @@ let package = Package(
                 .product(name: "TelemetryDeck", package: "SwiftSDK"),
             ],
             resources: [
-                .copy("menu-icon.pdf"),
-                .copy("Images")
+                .copy("Resources/menu-icon.pdf"),
+                .copy("Resources/Images")
             ],
             linkerSettings: [
                 .linkedFramework("AppKit"),
