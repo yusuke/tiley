@@ -29,7 +29,8 @@ extension AppState {
             button.action = #selector(handleStatusItemButtonClick)
             button.sendAction(on: [.leftMouseUp])
         }
-        if let iconURL = resourceBundle.url(forResource: "menu-icon", withExtension: "pdf"),
+        if let iconURL = resourceBundle.url(forResource: "menu-icon", withExtension: "pdf", subdirectory: "Images")
+            ?? resourceBundle.url(forResource: "menu-icon", withExtension: "pdf"),
            let icon = NSImage(contentsOf: iconURL),
            let button = item.button {
             icon.isTemplate = true
