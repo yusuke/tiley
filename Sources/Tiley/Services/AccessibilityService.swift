@@ -454,18 +454,30 @@ final class AccessibilityService {
 
         // 2b. Verify that the size actually changed.  Some apps (e.g. Chrome)
         //     return .success but silently ignore the size change.  In that
-        //     case, bounce the window to the bottom of the primary screen,
-        //     resize there, then let steps 3–4 move it to the final position.
+        //     case, bounce the window to the top-left of the visible area
+        //     (giving maximum room to expand), resize there, then let
+        //     steps 3–4 move it to the final position.
         let (_, afterSize) = readPositionAndSize(of: window)
         let sizeUnchanged = abs(afterSize.width - size.width) > 2
                          || abs(afterSize.height - size.height) > 2
         if sizeUnchanged {
-            let primaryHeight = NSScreen.screens.first?.frame.height ?? 1200
-            var bottomOfPrimary = CGPoint(x: 0, y: primaryHeight - 1)
-            if let v = AXValueCreate(.cgPoint, &bottomOfPrimary) {
+            let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 1200
+            let visibleMaxY = NSScreen.screens.first?.visibleFrame.maxY ?? primaryMaxY
+            var topOfVisible = CGPoint(x: 0, y: primaryMaxY - visibleMaxY)
+            if let v = AXValueCreate(.cgPoint, &topOfVisible) {
                 AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
             }
             AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+
+            // If the size is still wrong after bounce, the app truly
+            // refuses to resize.  Restore the window to the target
+            // position so the bounce doesn't leave it stranded.
+            let (_, afterBounceSize) = readPositionAndSize(of: window)
+            let stillWrong = abs(afterBounceSize.width - size.width) > 2
+                          || abs(afterBounceSize.height - size.height) > 2
+            if stillWrong {
+                AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+            }
         }
 
         // 3. Nudge position 1px off-target so the AX subsystem won't
