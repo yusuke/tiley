@@ -1,0 +1,435 @@
+import AppKit
+import Carbon
+
+extension AppState {
+
+    // MARK: - Hide / Quit
+
+    func hideMainWindow() {
+        hideAllMainWindows()
+    }
+
+    func quitApp() {
+        NSApp.terminate(nil)
+    }
+
+    func reopenMainWindowFromDock() {
+        refreshAccessibilityState()
+        guard accessibilityGranted else {
+            showPermissionsOnly()
+            return
+        }
+        if !isEditingSettings && !isShowingLayoutGrid {
+            activeLayoutTarget = initialLayoutTarget()
+            if let activeLayoutTarget {
+                isShowingLayoutGrid = true
+                launchMessage = String(
+                    format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                    activeLayoutTarget.appName
+                )
+            } else if let lastTargetPID,
+                      let name = NSRunningApplication(processIdentifier: lastTargetPID)?.localizedName {
+                isShowingLayoutGrid = true
+                launchMessage = String(
+                    format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                    name
+                )
+            } else {
+                launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt to activate target window")
+            }
+        }
+        openMainWindow()
+    }
+
+    @objc func quit() {
+        quitApp()
+    }
+
+    // MARK: - Window Target Resolution
+
+    func resolveWindowTarget() -> WindowTarget? {
+        if let frontmostApp = NSWorkspace.shared.frontmostApplication,
+           frontmostApp.processIdentifier == getpid(),
+           lastTargetPID == nil {
+            launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt when frontmost app is self")
+            return nil
+        }
+
+        guard let target = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) else {
+            let frontmost = NSWorkspace.shared.frontmostApplication
+            let frontmostName = frontmost?.localizedName ?? NSLocalizedString("Unknown", comment: "Unknown app name fallback")
+            let frontmostPID = frontmost?.processIdentifier ?? 0
+            hidePreviewOverlay()
+            launchMessage = String(
+                format: NSLocalizedString("No standard focused window was found. frontmost=%@(%d) preferred=%d", comment: "Focused window diagnostic"),
+                frontmostName,
+                frontmostPID,
+                lastTargetPID ?? 0
+            )
+            return nil
+        }
+        return target
+    }
+
+    func initialLayoutTarget() -> WindowTarget? {
+        guard accessibilityGranted else { return nil }
+        guard let target = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) else {
+            hidePreviewOverlay()
+            return nil
+        }
+        layoutPreviewController?.hide()
+        layoutPreviewController = makeLayoutPreviewController(for: target)
+        return target
+    }
+
+    // MARK: - Accessibility
+
+    func refreshAccessibilityState() {
+        accessibilityGranted = accessibilityService.checkAccess(prompt: false)
+    }
+
+    // MARK: - Target App Reactivation
+
+    @discardableResult
+    func reactivateLastTargetApp(clearingState: Bool) -> Bool {
+        guard let lastTargetPID else { return false }
+        let activated = NSRunningApplication(processIdentifier: lastTargetPID)?.activate() ?? false
+        if clearingState {
+            self.lastTargetPID = nil
+        }
+        return activated
+    }
+
+    func refocusLastTargetApp() {
+        guard let lastTargetPID else { return }
+        NSRunningApplication(processIdentifier: lastTargetPID)?.activate()
+    }
+
+    // MARK: - Main Window Lifecycle
+
+    func handleMainWindowHidden(displayID: CGDirectDisplayID) {
+        // During an activation-policy switch the window is temporarily hidden
+        // by macOS. Don't reset UI state — the window will be restored shortly.
+        guard !isSwitchingActivationPolicy else { return }
+        // During window controller recreation the old windows are dismissed.
+        // Don't reset UI state — new windows are about to be shown.
+        guard !isRecreatingWindows else { return }
+        // If any Tiley window is still visible, don't reset state.
+        let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
+        if anyVisible { return }
+        hidePreviewOverlay()
+        isEditingSettings = false
+        isShowingPermissionsOnly = false
+        isShowingLayoutGrid = false
+        activeLayoutTarget = nil
+        clearResizabilityCache()
+        clearWindowCyclingState()
+        registerAllHotKeys()
+        if !NSApp.isActive {
+            refocusLastTargetApp()
+        }
+    }
+
+    func handleMainWindowEscape() -> Bool {
+        if isEditingSettings {
+            cancelSettingsEditing()
+            return true
+        }
+        if isEditingLayoutPresets {
+            isEditingLayoutPresets = false
+            return true
+        }
+        if isShowingLayoutGrid {
+            cancelLayoutGrid()
+            return true
+        }
+        return false
+    }
+
+    var targetWindowController: MainWindowController? {
+        guard let id = targetScreenDisplayID else { return nil }
+        return mainWindowControllers[id]
+    }
+
+    func windowControllerForScreen(frame screenFrame: CGRect) -> MainWindowController? {
+        guard let screen = NSScreen.screens.first(where: { $0.frame == screenFrame }) else { return nil }
+        return mainWindowControllers[screen.displayID]
+    }
+
+    func openMainWindow() {
+        debugLog("openMainWindow start (isShowingLayoutGrid=\(isShowingLayoutGrid ? 1 : 0), isEditingSettings=\(isEditingSettings ? 1 : 0))")
+        if isEditingSettings || isShowingPermissionsOnly {
+            openTargetScreenWindow()
+        } else if isShowingLayoutGrid {
+            NSApp.activate(ignoringOtherApps: true)
+            openAllScreenWindows()
+        } else {
+            openTargetScreenWindow()
+        }
+    }
+
+    func openTargetScreenWindow() {
+        openTargetScreenWindow(on: targetScreenForWindow())
+    }
+
+    func openTargetScreenWindow(on targetScreen: NSScreen) {
+        let displayID = targetScreen.displayID
+        targetScreenDisplayID = displayID
+
+        // Use dismissSilently() to avoid triggering handleMainWindowHidden
+        // which would re-register preset global hotkeys and reset state.
+        // Set isRecreatingWindows to suppress windowDidResignKey state resets
+        // that occur when the old key window is ordered out during recreation.
+        isRecreatingWindows = true
+        for controller in mainWindowControllers.values {
+            controller.dismissSilently()
+        }
+
+        if !isEditingSettings, let existingCtrl = mainWindowControllers[displayID] {
+            // Reuse existing controller — just update state and show.
+            // Discard secondary controllers that are no longer needed.
+            mainWindowControllers = mainWindowControllers.filter { $0.key == displayID }
+            existingCtrl.prepareForReuse(screenRole: .target, targetScreen: targetScreen)
+            NSApp.activate(ignoringOtherApps: true)
+            selectedLayoutPresetID = nil
+            existingCtrl.show()
+        } else {
+            // Always recreate when entering settings to avoid stale SwiftUI
+            // layout state that causes Toggle switch knobs to render incorrectly.
+            mainWindowControllers.removeAll()
+            mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
+            NSApp.activate(ignoringOtherApps: true)
+            selectedLayoutPresetID = nil
+            mainWindowControllers[displayID]?.show()
+        }
+        isRecreatingWindows = false
+        applyWindowLevel()
+    }
+
+    func openAllScreenWindows() {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        func perfLog(_ label: String) {
+            let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+            debugLog("openAllScreenWindows: \(label) (t=\(String(format: "%.1f", elapsed))ms)")
+        }
+        let screens = NSScreen.screens
+        perfLog("start (screens=\(screens.count))")
+        guard !screens.isEmpty else { return }
+
+        let targetScreen: NSScreen
+        if let screenFrame = activeLayoutTarget?.screenFrame,
+           let screen = NSScreen.screen(containing: screenFrame) {
+            targetScreen = screen
+        } else {
+            targetScreen = NSScreen.main ?? screens.first!
+        }
+        targetScreenDisplayID = targetScreen.displayID
+
+        let currentDisplayIDs = Set(screens.map { $0.displayID })
+        let cachedDisplayIDs = Set(mainWindowControllers.keys)
+        let canReuse = currentDisplayIDs == cachedDisplayIDs && !cachedDisplayIDs.isEmpty
+
+        // Use dismissSilently() to avoid triggering handleMainWindowHidden
+        // which would re-register preset global hotkeys and reset state.
+        // Set isRecreatingWindows to suppress windowDidResignKey state resets
+        // that occur when the old key window is ordered out during recreation.
+        isRecreatingWindows = true
+        for controller in mainWindowControllers.values {
+            controller.dismissSilently()
+        }
+
+        if canReuse {
+            // --- Reuse path: same screens, just update state and show ---
+            // prepareForReuse is <1ms so we show ALL windows synchronously.
+            perfLog("reusing controllers")
+            selectedLayoutPresetID = nil
+
+            let targetCtrl = mainWindowControllers[targetScreen.displayID]!
+            targetCtrl.prepareForReuse(screenRole: .target, targetScreen: targetScreen)
+            targetCtrl.show(asKey: true)
+            perfLog("target window shown (reused)")
+
+            for screen in screens where screen.displayID != targetScreen.displayID {
+                if let ctrl = mainWindowControllers[screen.displayID] {
+                    ctrl.prepareForReuse(
+                        screenRole: .secondary(screen: screen),
+                        targetScreen: screen
+                    )
+                    ctrl.show(asKey: false)
+                }
+            }
+            perfLog("all windows shown (reused)")
+            isRecreatingWindows = false
+            applyWindowLevel()
+        } else {
+            // --- Recreate path: screen configuration changed ---
+            mainWindowControllers.removeAll()
+            perfLog("dismissed old controllers (recreate)")
+
+            selectedLayoutPresetID = nil
+            mainWindowControllers[targetScreen.displayID] = createWindowController(for: targetScreen, isTarget: true)
+            mainWindowControllers[targetScreen.displayID]?.show(asKey: true)
+            perfLog("target window shown (new)")
+
+            let secondaryScreens = screens.filter { $0.displayID != targetScreen.displayID }
+            if secondaryScreens.isEmpty {
+                perfLog("all windows shown (single screen, new)")
+                isRecreatingWindows = false
+                applyWindowLevel()
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    for screen in secondaryScreens {
+                        let displayID = screen.displayID
+                        self.mainWindowControllers[displayID] = self.createWindowController(for: screen, isTarget: false)
+                        self.mainWindowControllers[displayID]?.show(asKey: false)
+                    }
+                    perfLog("secondary windows shown (deferred, new)")
+                    self.isRecreatingWindows = false
+                    self.applyWindowLevel()
+                }
+            }
+        }
+    }
+
+    func closeSecondaryWindows() {
+        for (displayID, controller) in mainWindowControllers {
+            if displayID != targetScreenDisplayID {
+                controller.dismissSilently()
+            }
+        }
+        mainWindowControllers = mainWindowControllers.filter { $0.key == targetScreenDisplayID }
+    }
+
+    func hideAllMainWindows() {
+        for controller in mainWindowControllers.values {
+            controller.hide()
+        }
+    }
+
+    func targetScreenForWindow() -> NSScreen {
+        if let screenFrame = activeLayoutTarget?.screenFrame,
+           let screen = NSScreen.screen(containing: screenFrame) {
+            return screen
+        }
+        return NSScreen.main ?? NSScreen.screens.first!
+    }
+
+    func createWindowController(for screen: NSScreen, isTarget: Bool) -> MainWindowController {
+        let perfStart = CFAbsoluteTimeGetCurrent()
+        let displayID = screen.displayID
+        let role: ScreenRole = isTarget ? .target : .secondary(screen: screen)
+
+        let controller = MainWindowController(
+            appState: self,
+            screenRole: role,
+            targetScreen: screen,
+            onHide: { [weak self] in
+                Task { @MainActor in
+                    self?.handleMainWindowHidden(displayID: displayID)
+                }
+            },
+            onEscape: { [weak self] in
+                guard let self else { return false }
+                return self.handleMainWindowEscape()
+            },
+            onLocalShortcut: { [weak self] shortcut in
+                guard let self else { return false }
+                return self.handleLocalShortcut(shortcut)
+            },
+            onKeyCommand: { [weak self] event in
+                guard let self else { return false }
+                return self.handleMainWindowKeyCommand(event)
+            }
+        )
+        let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
+        debugLog("createWindowController displayID=\(displayID) isTarget=\(isTarget ? 1 : 0) (\(String(format: "%.1f", elapsed))ms)")
+        return controller
+    }
+
+    // MARK: - Key Commands
+
+    func handleMainWindowKeyCommand(_ event: NSEvent) -> Bool {
+        guard !isEditingSettings else { return false }
+
+        // Check configurable window cycling shortcuts.
+        let eventShortcut = HotKeyShortcut.from(event: event, requireModifiers: false)
+        if let shortcut = eventShortcut {
+            if displayShortcutSettings.selectNextWindow.localEnabled,
+               let s = displayShortcutSettings.selectNextWindow.local, s == shortcut {
+                cycleTargetWindow(forward: true)
+                return true
+            }
+            if displayShortcutSettings.selectPreviousWindow.localEnabled,
+               let s = displayShortcutSettings.selectPreviousWindow.local, s == shortcut {
+                cycleTargetWindow(forward: false)
+                return true
+            }
+            if displayShortcutSettings.bringToFront.localEnabled,
+               let s = displayShortcutSettings.bringToFront.local, s == shortcut {
+                if selectedWindowIndices.count > 1 {
+                    raiseSelectedWindows()
+                } else {
+                    raiseCurrentTargetWindow()
+                }
+                return true
+            }
+            if displayShortcutSettings.closeOrQuit.localEnabled,
+               let s = displayShortcutSettings.closeOrQuit.local, s == shortcut {
+                if selectedWindowIndices.count > 1 {
+                    closeSelectedWindows()
+                } else {
+                    let idx = activeTargetIndex
+                    if idx >= 0, idx < availableWindowTargets.count {
+                        let target = availableWindowTargets[idx]
+                        let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
+                        let windowCount = availableWindowTargets.filter { $0.processIdentifier == target.processIdentifier }.count
+                        if isFinder || windowCount > 1 {
+                            closeWindowTarget(at: idx)
+                        } else {
+                            quitApp(at: idx)
+                        }
+                    }
+                }
+                return true
+            }
+        }
+
+        switch Int(event.keyCode) {
+        case kVK_ANSI_Slash where event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty:
+            if selectedWindowIndices.count > 1 {
+                closeSelectedWindows()
+            } else {
+                let idx = activeTargetIndex
+                if idx >= 0, idx < availableWindowTargets.count {
+                    let target = availableWindowTargets[idx]
+                    let isFinder = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier == "com.apple.finder"
+                    let windowCount = availableWindowTargets.filter { $0.processIdentifier == target.processIdentifier }.count
+                    if isFinder || windowCount > 1 {
+                        closeWindowTarget(at: idx)
+                    } else {
+                        quitApp(at: idx)
+                    }
+                }
+            }
+            return true
+        case kVK_ANSI_A where event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
+            selectAllWindows()
+            return true
+        case kVK_ANSI_F where event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
+            // Handled in MainWindowController.performKeyEquivalent which checks first responder.
+            return false
+        default:
+            return false
+        }
+    }
+
+    // MARK: - Layout Preview
+
+    func makeLayoutPreviewController(for target: WindowTarget) -> LayoutPreviewOverlayController {
+        LayoutPreviewOverlayController(
+            screenFrame: target.screenFrame,
+            visibleFrame: target.visibleFrame
+        )
+    }
+}
