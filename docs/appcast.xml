@@ -3,6 +3,87 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.0.9</title>
+            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
+<ul>
+<li>Изменение размера окна не срабатывало и позиция смещалась для некоторых приложений: позиция отскока при отклонении начального изменения размера находилась внизу экрана (нет места для расширения), из-за чего окно оставалось в неправильной позиции. Теперь отскок происходит к верхней части видимой области, а при повторной неудаче позиция явно восстанавливается</li>
+<li>Смещённые окна иногда не возвращались в исходное положение после выбора фонового окна: восстановление искало окна в списке, который мог устареть, что приводило к сбоям. Теперь ссылки на окна хранятся непосредственно в данных отслеживания смещения, а очистка откладывается до завершения анимации восстановления</li>
+<li>Кнопки «Добавить сочетание» / «Добавить глобальное сочетание» реагировали только на клики вблизи центра: отступы и фон перемещены внутрь метки кнопки, чтобы вся видимая область была кликабельной</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Redimensionamento de janela falhava e a posição ficava deslocada em certos aplicativos: a posição de rebote quando o redimensionamento inicial era rejeitado ficava na parte inferior da tela (sem espaço para expandir), deixando a janela em uma posição incorreta. Agora o rebote vai para o topo da área visível e a posição é restaurada explicitamente se o redimensionamento continuar falhando</li>
+<li>Janelas deslocadas às vezes não eram restauradas à posição original após selecionar uma janela em segundo plano: a restauração buscava janelas em uma lista que poderia estar desatualizada, causando falhas. Agora as referências de janela são armazenadas diretamente nos dados de rastreamento de deslocamento, e a limpeza é adiada até a conclusão da animação de restauração</li>
+<li>Os botões "Adicionar atalho" / "Adicionar atalho global" só respondiam a cliques perto do centro: o preenchimento e o fundo foram movidos para dentro do rótulo do botão para que toda a área visível seja clicável</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Il ridimensionamento della finestra falliva e la posizione veniva spostata per alcune applicazioni: la posizione di rimbalzo quando il ridimensionamento iniziale veniva rifiutato era in fondo allo schermo (nessuno spazio per espandersi), lasciando la finestra in una posizione errata. Ora il rimbalzo avviene nella parte superiore dell'area visibile e la posizione viene ripristinata esplicitamente se il ridimensionamento continua a fallire</li>
+<li>Le finestre spostate a volte non venivano ripristinate nella posizione originale dopo aver selezionato una finestra in background: il ripristino cercava le finestre in un elenco potenzialmente obsoleto, causando errori. I riferimenti alle finestre vengono ora memorizzati direttamente nei dati di tracciamento dello spostamento e la pulizia viene posticipata fino al completamento dell'animazione di ripristino</li>
+<li>I pulsanti "Aggiungi scorciatoia" / "Aggiungi scorciatoia globale" rispondevano solo ai clic vicino al centro: padding e sfondo sono stati spostati all'interno dell'etichetta del pulsante in modo che l'intera area visibile sia cliccabile</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Le redimensionnement de fenêtre échouait et la position était décalée pour certaines applications : la position de rebond lorsque le redimensionnement initial était rejeté se trouvait en bas de l'écran (pas d'espace pour s'agrandir), laissant la fenêtre à une position incorrecte. Le rebond se fait désormais vers le haut de la zone visible et la position est explicitement restaurée si le redimensionnement échoue toujours</li>
+<li>Les fenêtres déplacées n'étaient parfois pas restaurées à leur position d'origine après la sélection d'une fenêtre en arrière-plan : la restauration recherchait les fenêtres dans une liste potentiellement obsolète, entraînant des échecs. Les références de fenêtre sont désormais stockées directement dans les données de suivi de déplacement, et le nettoyage est différé jusqu'à la fin de l'animation de restauration</li>
+<li>Les boutons « Ajouter un raccourci » / « Ajouter un raccourci global » ne répondaient qu'aux clics près du centre : le remplissage et l'arrière-plan ont été déplacés à l'intérieur du label du bouton afin que toute la zone visible soit cliquable</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>El redimensionamiento de ventanas fallaba y la posición se desplazaba en ciertas aplicaciones: la posición de rebote cuando el redimensionamiento inicial era rechazado estaba en la parte inferior de la pantalla (sin espacio para expandir), dejando la ventana en una posición incorrecta. Ahora rebota a la parte superior del área visible y restaura explícitamente la posición si el redimensionamiento sigue fallando</li>
+<li>Las ventanas desplazadas a veces no se restauraban a su posición original después de seleccionar una ventana de fondo: la restauración buscaba ventanas en una lista que podía estar desactualizada, causando fallos. Ahora se almacenan las referencias de ventana directamente en los datos de seguimiento de desplazamiento y se aplaza la limpieza hasta que la animación de restauración se complete</li>
+<li>Los botones "Añadir atajo" / "Añadir atajo global" solo respondían a clics cerca del centro: se movieron el relleno y el fondo dentro de la etiqueta del botón para que toda el área visible sea clicable</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Fenstergrößenänderung schlug bei bestimmten Apps fehl und die Position wurde verschoben: Die Fallback-Bounce-Position bei abgelehnter Größenänderung lag am unteren Bildschirmrand (kein Platz zum Vergrößern), wodurch das Fenster an einer falschen Position hängen blieb. Bounce erfolgt jetzt zum oberen Rand des sichtbaren Bereichs, und bei erneutem Fehlschlag wird die Position explizit wiederhergestellt</li>
+<li>Verschobene Fenster wurden nach Auswahl eines Hintergrundfensters manchmal nicht an ihre ursprüngliche Position zurückgesetzt: Die Wiederherstellung suchte in einer möglicherweise veralteten Fensterliste, was zum Fehlschlag führen konnte. Fensterreferenzen werden jetzt direkt in den Verschiebungs-Tracking-Daten gespeichert, und die Bereinigung wird bis zum Abschluss der Wiederherstellungsanimation verzögert</li>
+<li>Die Schaltflächen „Tastenkürzel hinzufügen" / „Globales Kürzel hinzufügen" reagierten nur bei Klicks nahe der Mitte: Innenabstand und Hintergrund wurden in das Button-Label verschoben, sodass der gesamte sichtbare Bereich klickbar ist</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正某些應用程式中視窗調整大小失敗且位置偏移的問題：初次調整大小被忽略時，回彈位置位於螢幕底部（無擴展空間），導致視窗停留在錯誤位置。現在回彈到可見區域頂部，調整大小仍失敗時明確恢復位置</li>
+<li>修正選擇背景視窗後，被移開的視窗有時無法恢復到原始位置的問題：恢復時依賴可能已過時的視窗列表進行查找，導致恢復失敗。現在直接在位移追蹤資料中儲存視窗參考，並將清理延遲到恢復動畫完成之後</li>
+<li>修正「新增快捷鍵」/「新增全域快捷鍵」按鈕僅在中心附近點擊才有反應的問題：將內邊距和背景移入按鈕標籤內部，使整個可見區域均可點擊</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复某些应用中窗口调整大小失败且位置偏移的问题：初次调整大小被忽略时，回弹位置位于屏幕底部（无扩展空间），导致窗口停留在错误位置。现在回弹到可见区域顶部，调整大小仍失败时显式恢复位置</li>
+<li>修复选择背景窗口后，被移开的窗口有时无法恢复到原始位置的问题：恢复时依赖可能已过时的窗口列表进行查找，导致恢复失败。现在直接在位移跟踪数据中存储窗口引用，并将清理推迟到恢复动画完成之后</li>
+<li>修复"添加快捷键"/"添加全局快捷键"按钮仅在中心附近点击才有响应的问题：将内边距和背景移入按钮标签内部，使整个可见区域均可点击</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>특정 앱에서 윈도우 크기 조정이 실패하고 위치가 어긋나는 문제 수정: 초기 크기 조정이 무시되었을 때 바운스 위치가 화면 하단(확장 여지 없음)이어서 윈도우가 잘못된 위치에 남겨졌음. 바운스 위치를 가시 영역 상단으로 변경하고 크기 조정 실패 시 위치를 명시적으로 복원</li>
+<li>배경 윈도우를 선택한 후 대피된 윈도우가 원래 위치로 복원되지 않는 경우가 있는 문제 수정: 복원 시 오래된 목록에서 윈도우를 검색했기 때문에 실패할 수 있었음. 대피 추적 데이터에 윈도우 참조를 직접 저장하고, 복원 애니메이션이 완료될 때까지 정리를 지연하도록 개선</li>
+<li>"단축키 추가" / "전역 단축키 추가" 버튼이 중앙 근처 클릭에만 반응하던 문제 수정: 패딩과 배경을 버튼 레이블 내부로 이동하여 표시 영역 전체를 클릭 가능하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>特定のアプリでウインドウのリサイズが失敗し位置がずれる問題を修正: 初回リサイズが無視された際のバウンス先が画面最下部（拡大余地なし）だったためウインドウが不正な位置に取り残されていた。バウンス先を可視領域の上端に変更し、リサイズ失敗時は位置を明示的に復元するよう改善</li>
+<li>奥にあるウインドウを選択した際、待避したウインドウが元の位置に戻らないことがある問題を修正: 復元時にウインドウリストから再検索していたため、リストが更新されると復元に失敗していた。待避時にウインドウ参照を直接保持するよう変更し、復元アニメーション完了までトラッキングデータのクリアを遅延させるよう改善</li>
+<li>「ショートカットを追加」/「グローバルショートカットを追加」ボタンが中央付近のクリックしか反応しなかった問題を修正: パディングと背景をボタンラベル内に移動し、表示領域全体をクリック可能に変更</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Window resize failing and position getting displaced for certain apps: the fallback bounce position used when the initial resize is silently rejected was at the bottom of the screen (no room to expand), causing the window to get stuck at an incorrect position; now bounces to the top of the visible area and explicitly restores position if the resize still fails</li>
+<li>Displaced windows sometimes not restored to their original positions after selecting a background window: restoration relied on looking up windows in a list that could become stale; now stores window references directly in the displacement tracking data, and defers cleanup until the restoration animation completes</li>
+<li>"Add Shortcut" / "Add Global Shortcut" buttons only responded to clicks near the center; moved padding and background inside the button label so the entire visible area is clickable</li>
+</ul>]]></description>
+            <pubDate>Mon, 30 Mar 2026 18:45:45 +0900</pubDate>
+            <sparkle:version>409</sparkle:version>
+            <sparkle:shortVersionString>4.0.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley-4.0.9.zip" length="5613748" type="application/octet-stream" sparkle:edSignature="wtEyLsaD4bwyMsikm6qkX87b85Cgt1g08nBU5ULtXH1nWwQCLF1f2obb6j1g0mklgDx2ps33EF7rhgLbKPlUBw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-408.delta" sparkle:deltaFrom="408" length="450690" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="hDpvPdmJhQRjNiBGcBQENpbR9fPlTx4cWAjg4b9jrqcGRWOMGR3AODCPWJCQNZDhaohWliZoU2HMdo/NMtwICQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-407.delta" sparkle:deltaFrom="407" length="1297086" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="wvlji45xUxokP1dmeSUSfneaGBjOMMyfUeUZX7HL6yboG9yvNecRfLQjpeB9ZBrV4YaFQwh6RUptXBXJx1iVCw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-406.delta" sparkle:deltaFrom="406" length="1318814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bhjcf+lfZbuqIehONs2yyjyXw7SJjRQXDsxRrnOQmM0G7qpxNSv1m9F+n/WivQxE02X6NglaXW0aZf6mOt2wCQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-405.delta" sparkle:deltaFrom="405" length="1401486" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="MIfe29IPR8gCA8md7EnMIrnYniDdPvViZj1/nHMelcXNPf1kCMxyndAUXeEq3HdO9g6sX8dx1UliPzYFLQ0oAA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-404.delta" sparkle:deltaFrom="404" length="1402646" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NhyD0Hi5k3cUO0Ab5HJQm7KzQnei+ZZnD/Gq+RZpfdsGMSd9+Bw24lFKDPjhWgianEZYBHuM7uhk0wIuOdm3Aw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.0.8</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -70,11 +151,71 @@
 <li>Wallpaper preview not displayed on macOS Tahoe 26.4: adapted to wallpaper Store plist structure change (`Desktop` → `Linked` key), added support for Photos wallpapers via wallpaper agent BMP cache, added `FillScreen` placement value (Tahoe's replacement for `Stretch`), and enabled display mode settings for non-system wallpaper providers</li>
 <li>Center and tile wallpaper display modes rendered images too small when the image had non-72 DPI metadata (e.g. Retina screenshots at 144 DPI); now always uses actual pixel dimensions</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>O painel de permissões não é mais exibido sobre outros aplicativos e diálogos do sistema ao solicitar acesso de acessibilidade</li>
+<li>A pré-visualização do papel de parede não era exibida no macOS Tahoe 26.4: adaptação à mudança de estrutura do plist da Store de papéis de parede (`Desktop` → chave `Linked`), papéis de parede de Fotos são carregados do cache BMP do agente de papéis de parede, adicionado o valor de posicionamento `FillScreen` (substituto de `Stretch` no Tahoe), e habilitadas as configurações de modo de exibição para provedores de papéis de parede não do sistema</li>
+<li>Os modos de exibição centralizado e lado a lado renderizavam as imagens muito pequenas quando os metadados DPI da imagem não eram 72 (ex.: capturas de tela Retina a 144 DPI); agora sempre são utilizadas as dimensões reais em pixels</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Il pannello delle autorizzazioni non viene più visualizzato sopra altre app e finestre di dialogo del sistema durante la richiesta di accesso all'accessibilità</li>
+<li>L'anteprima dello sfondo non veniva visualizzata su macOS Tahoe 26.4: adattamento al cambiamento di struttura del plist dello Store sfondi (`Desktop` → chiave `Linked`), gli sfondi Foto vengono caricati dalla cache BMP dell'agente sfondi, aggiunto il valore di posizionamento `FillScreen` (sostituto di `Stretch` su Tahoe), e abilitate le impostazioni della modalità di visualizzazione per i fornitori di sfondi non di sistema</li>
+<li>Le modalità di visualizzazione centrata e a mosaico renderizzavano le immagini troppo piccole quando i metadati DPI dell'immagine non erano 72 (ad es. screenshot Retina a 144 DPI); ora vengono sempre utilizzate le dimensioni reali in pixel</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Le panneau des autorisations n'est plus affiché au-dessus des autres applications et des fenêtres système lors de la demande d'accès à l'accessibilité</li>
+<li>L'aperçu du fond d'écran ne s'affichait pas sous macOS Tahoe 26.4 : adaptation au changement de structure du plist du Store de fonds d'écran (`Desktop` → clé `Linked`), les fonds d'écran Photos sont chargés depuis le cache BMP de l'agent de fonds d'écran, ajout de la valeur de placement `FillScreen` (remplacement de `Stretch` sous Tahoe), et activation des paramètres de mode d'affichage pour les fournisseurs de fonds d'écran non système</li>
+<li>Les modes d'affichage centré et mosaïque affichaient les images trop petites lorsque les métadonnées DPI de l'image n'étaient pas 72 (par ex. captures d'écran Retina à 144 DPI) ; les dimensions réelles en pixels sont désormais toujours utilisées</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>El panel de permisos ya no flota sobre otras aplicaciones y diálogos del sistema al solicitar acceso de accesibilidad</li>
+<li>La vista previa del fondo de pantalla no se mostraba en macOS Tahoe 26.4: adaptación al cambio de estructura del plist del Store de fondos de pantalla (`Desktop` → clave `Linked`), los fondos de Fotos se cargan desde la caché BMP del agente de fondos de pantalla, se añadió el valor de colocación `FillScreen` (reemplazo de `Stretch` en Tahoe), y se habilitó la configuración del modo de visualización para proveedores de fondos no del sistema</li>
+<li>Los modos de visualización centrado y en mosaico renderizaban las imágenes demasiado pequeñas cuando los metadatos DPI de la imagen no eran 72 (p. ej., capturas de pantalla Retina a 144 DPI); ahora siempre se utilizan las dimensiones reales en píxeles</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Das Berechtigungsfenster wird beim Anfordern von Bedienungshilfenzugriff nicht mehr über anderen Apps und Systemdialogen angezeigt</li>
+<li>Hintergrundvorschau wurde unter macOS Tahoe 26.4 nicht angezeigt: Anpassung an die Strukturänderung der Hintergrund-Store-plist (`Desktop` → `Linked`-Schlüssel), Fotos-Hintergründe werden aus dem BMP-Cache des Hintergrund-Agenten geladen, `FillScreen`-Platzierungswert (Tahoes Ersatz für `Stretch`) hinzugefügt, Anzeigemodus-Einstellungen für Nicht-System-Hintergrundanbieter aktiviert</li>
+<li>Zentrierte und gekachelte Hintergrund-Anzeigemodi stellten Bilder zu klein dar, wenn die DPI-Metadaten des Bildes nicht 72 waren (z. B. Retina-Screenshots mit 144 DPI); es werden nun immer die tatsächlichen Pixelmaße verwendet</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正在請求輔助使用權限時，權限面板視窗不再浮於其他應用程式和系統對話框之上的問題</li>
+<li>修正 macOS Tahoe 26.4 上桌布預覽不顯示的問題：適配桌布 Store plist 結構變更（`Desktop` → `Linked` 鍵），照片桌布透過桌布代理 BMP 快取載入，新增 `FillScreen` 配置值（Tahoe 中替代 `Stretch`），啟用非系統桌布提供者的顯示模式設定</li>
+<li>修正當圖片 DPI 中繼資料不為 72 時（如 144 DPI 的 Retina 截圖），置中和拼貼桌布顯示模式中圖片渲染過小的問題。現在始終使用實際像素尺寸</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复在请求辅助功能权限时，权限面板窗口不再浮于其他应用程序和系统对话框之上的问题</li>
+<li>修复 macOS Tahoe 26.4 上壁纸预览不显示的问题：适配壁纸 Store plist 结构变更（`Desktop` → `Linked` 键），照片壁纸通过壁纸代理 BMP 缓存加载，添加 `FillScreen` 布局值（Tahoe 中替代 `Stretch`），启用非系统壁纸提供者的显示模式设置</li>
+<li>修复当图片 DPI 元数据不为 72 时（如 144 DPI 的 Retina 截图），居中和平铺壁纸显示模式中图片渲染过小的问题。现在始终使用实际像素尺寸</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>접근성 권한 요청 중 권한 패널 창이 다른 앱 및 OS 다이얼로그 위에 표시되지 않도록 수정</li>
+<li>macOS Tahoe 26.4에서 배경화면 미리보기가 표시되지 않는 문제 수정: 배경화면 Store plist 구조 변경(`Desktop` → `Linked` 키) 대응, 사진 배경화면은 배경화면 에이전트 BMP 캐시에서 로드, `FillScreen` 배치 값(Tahoe에서 `Stretch` 대체) 추가, 비시스템 배경화면 제공자의 표시 모드 설정 활성화</li>
+<li>이미지의 DPI 메타데이터가 72가 아닌 경우(예: 144 DPI Retina 스크린샷) 중앙 및 타일 배경화면 표시 모드에서 이미지가 너무 작게 렌더링되는 문제 수정. 항상 실제 픽셀 크기를 사용하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>アクセシビリティアクセスの許可を求めている間、パーミッション画面のウインドウが他のアプリや OS のダイアログよりも前面に表示されなくなった</li>
+<li>macOS Tahoe 26.4 で壁紙プレビューが表示されない問題を修正：壁紙 Store plist の構造変更（`Desktop` → `Linked` キー）に対応、「あなたの写真」壁紙は壁紙エージェントの BMP キャッシュから読み込み、`FillScreen` 配置値（Tahoe での `Stretch` の代替）を追加、非システム壁紙プロバイダでの表示モード設定を有効化</li>
+<li>画像の DPI メタデータが 72 以外の場合（Retina スクリーンショットの 144 DPI など）、「中央に表示」や「タイル状に表示」で画像が小さく表示される問題を修正。常に実際のピクセル寸法を使用するよう変更</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Permissions panel window is no longer floating above other apps and OS dialogs while requesting accessibility access</li>
+<li>Wallpaper preview not displayed on macOS Tahoe 26.4: adapted to wallpaper Store plist structure change (`Desktop` → `Linked` key), added support for Photos wallpapers via wallpaper agent BMP cache, added `FillScreen` placement value (Tahoe's replacement for `Stretch`), and enabled display mode settings for non-system wallpaper providers</li>
+<li>Center and tile wallpaper display modes rendered images too small when the image had non-72 DPI metadata (e.g. Retina screenshots at 144 DPI); now always uses actual pixel dimensions</li>
+</ul>]]></description>
             <pubDate>Mon, 30 Mar 2026 01:54:40 +0900</pubDate>
             <sparkle:version>408</sparkle:version>
             <sparkle:shortVersionString>4.0.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.8/Tiley-4.0.8.zip" length="5607859" type="application/octet-stream" sparkle:edSignature="mQ0vPiEu+lnSk2d+vXav8sANg4H+hECLadxv1QwcrEFwTk4JbhS+oEa3Swyiq/vTUooMj/ZcP6GJpezGcpElAQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley-4.0.8.zip" length="5607859" type="application/octet-stream" sparkle:edSignature="mQ0vPiEu+lnSk2d+vXav8sANg4H+hECLadxv1QwcrEFwTk4JbhS+oEa3Swyiq/vTUooMj/ZcP6GJpezGcpElAQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.8/Tiley408-407.delta" sparkle:deltaFrom="407" length="1063250" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="JCGmuT6FH7zKR5L+kO+uwoqoeEgXElWsiD86sJ0+jH5aQMTSxbGe38aZtCCGKpDP3MBGom7clP7oKxJn6tdlCA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.8/Tiley408-406.delta" sparkle:deltaFrom="406" length="1103306" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="U21tZBtE8AkvDwHZNRIq1C5P/NNMrNypA33Y1S0UwJLYY4NqQRfr1GVeEZ5PHPj+PzYlkXGcv/ZZuwsPkAMJCg=="/>
@@ -190,401 +331,66 @@
 <li>Tiled wallpaper display mode was not reflected in the mini-screen preview (the placement value "Tiled" from the macOS wallpaper Store plist was not matched correctly)</li>
 <li>Added debug logging for wallpaper resolution pipeline to help diagnose wallpaper display issues</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>O modo de exibição lado a lado do papel de parede não era refletido na pré-visualização da minitela (o valor de posicionamento "Tiled" do plist da Store de papéis de parede do macOS não era correspondido corretamente)</li>
+<li>Adicionado registro de depuração para o pipeline de resolução de papel de parede para ajudar a diagnosticar problemas de exibição</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>La modalità di visualizzazione a mosaico dello sfondo non veniva riflessa nell'anteprima del mini schermo (il valore di posizionamento "Tiled" dal plist dello Store sfondi di macOS non veniva abbinato correttamente)</li>
+<li>Aggiunta registrazione di debug per la pipeline di risoluzione dello sfondo per aiutare a diagnosticare problemi di visualizzazione</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Le mode d'affichage mosaïque du fond d'écran n'était pas reflété dans l'aperçu du mini-écran (la valeur de placement « Tiled » du plist du Store de fonds d'écran macOS n'était pas correctement reconnue)</li>
+<li>Ajout de journaux de débogage pour le pipeline de résolution du fond d'écran afin d'aider au diagnostic des problèmes d'affichage</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>El modo de visualización de fondo de pantalla en mosaico no se reflejaba en la vista previa de la mini pantalla (el valor de colocación "Tiled" del plist del Store de fondos de pantalla de macOS no se correspondía correctamente)</li>
+<li>Se añadió registro de depuración para la canalización de resolución de fondos de pantalla para ayudar a diagnosticar problemas de visualización</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Der gekachelte Hintergrund-Anzeigemodus wurde in der Mini-Bildschirmvorschau nicht korrekt dargestellt (der Platzierungswert „Tiled" aus der macOS-Hintergrund-Store-plist wurde nicht korrekt zugeordnet)</li>
+<li>Debug-Protokollierung für die Hintergrund-Auflösungspipeline hinzugefügt, um Hintergrund-Anzeigeprobleme zu diagnostizieren</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正拼貼桌布顯示模式未在迷你螢幕預覽中反映的問題（macOS 桌布 Store plist 中的配置值 "Tiled" 未被正確匹配）</li>
+<li>新增桌布解析管線的除錯日誌，以協助診斷桌布顯示問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复平铺壁纸显示模式未在迷你屏幕预览中反映的问题（macOS 壁纸 Store plist 中的配置值 "Tiled" 未被正确匹配）</li>
+<li>添加壁纸解析管道的调试日志，以帮助诊断壁纸显示问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>타일 배경화면 표시 모드가 미니 화면 미리보기에 반영되지 않던 문제 수정 (macOS 배경화면 Store plist의 배치 값 "Tiled"가 올바르게 매칭되지 않았음)</li>
+<li>배경화면 표시 문제 진단을 위해 배경화면 해석 파이프라인에 디버그 로그 추가</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>壁紙のタイル表示モードがミニスクリーンプレビューに反映されない不具合を修正（macOS 壁紙 Store plist の配置値 "Tiled" が正しくマッチされていなかった）</li>
+<li>壁紙表示の問題を診断するため、壁紙解決パイプラインにデバッグログを追加</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Tiled wallpaper display mode was not reflected in the mini-screen preview (the placement value "Tiled" from the macOS wallpaper Store plist was not matched correctly)</li>
+<li>Added debug logging for wallpaper resolution pipeline to help diagnose wallpaper display issues</li>
+</ul>]]></description>
             <pubDate>Sun, 29 Mar 2026 18:48:19 +0900</pubDate>
             <sparkle:version>407</sparkle:version>
             <sparkle:shortVersionString>4.0.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.8/Tiley-4.0.7.zip" length="5602292" type="application/octet-stream" sparkle:edSignature="tKk2U96Lb5dgZnjzDkxe4n4cneR2WDwjI3vO9t5TsfS3gsXkjQkAacjMVzDCCcxa3zIWaIxeIVQZWVMY2R/4Dw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley-4.0.7.zip" length="5602292" type="application/octet-stream" sparkle:edSignature="tKk2U96Lb5dgZnjzDkxe4n4cneR2WDwjI3vO9t5TsfS3gsXkjQkAacjMVzDCCcxa3zIWaIxeIVQZWVMY2R/4Dw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.7/Tiley407-406.delta" sparkle:deltaFrom="406" length="237770" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9MzJUrTI/VDP4FFj62c83T4/Jb0JKsf8/l1qdNlmAaGZlNj5KNT26VWrj0rrezEwV9/ALk5fLYA48bbuy5KpAQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.7/Tiley407-405.delta" sparkle:deltaFrom="405" length="366202" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bQaHBjZP63riXroD5BmEAp2MShzIy1H1P75JvJ9XX9MgInbT/2wluSss7Nz0EkMPYOLzMTlMb3r8cWMJdLzBBw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.7/Tiley407-404.delta" sparkle:deltaFrom="404" length="383666" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OiVSgPBwV5oYbPyWkA5GwhSzJsXqk12TzEugHKa0ni9wFYwZDqP7h+q2hYccUKfh8CYrJS59eg1SoFvU74SoDA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.7/Tiley407-402.delta" sparkle:deltaFrom="402" length="427802" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="IRY9ls3UMFbLpanvPaIUeZ6wj9qyBnXhNLUF+bGMcnI4lzgiiB+vGKRMwANAU0jJWVu+d8blWR3zP9YzDGWbDA=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.0.6</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>При наведении на пресет с несколькими макетами отображаются номера индексов макетов на мини-сетке экрана, в полноразмерном предпросмотре и в списке окон боковой панели, что позволяет интуитивно определить применяемый макет для каждого окна независимо от особенностей цветовосприятия</li>
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Интерфейс окна настроек доработан в соответствии с визуальным стилем macOS Tahoe: кнопки панели инструментов и панели действий унифицированы в форме капсулы с адаптивными фонами при наведении/нажатии, карточки разделов настроек получили светло-серый фон без рамки, переключатели уменьшены до размера системных настроек, список сочетаний клавиш реструктурирован с выделением раздела «Клавиши перемещения на дисплей»</li>
-</ul>
-<h3>Исправлено</h3>
-<ul>
-<li>Окна боковой панели, превышающие количество макетов пресета, теперь корректно отображаются цветом последнего макета вместо цвета основного выделения</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao passar o cursor sobre um preset de múltiplos layouts, números de índice de layout são exibidos na grade de mini tela, na pré-visualização em tamanho real e na lista de janelas da barra lateral, permitindo identificar intuitivamente qual layout se aplica a cada janela independentemente da percepção de cores</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>Interface da janela de configurações ajustada para corresponder ao visual do macOS Tahoe: botões da barra de ferramentas e de ação unificados com formato de cápsula e fundos de hover/pressão adaptativos ao sistema, cartões de seç��o de configurações com fundo cinza claro sem borda, alternadores redimensionados para o tamanho das Preferências do Sistema, e lista de atalhos reestruturada com uma seção independente "Atalhos para mover ao monitor"</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Janelas da barra lateral que excedem o número de layouts do preset agora exibem corretamente a cor do último layout em vez da cor de seleção principal</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Passando il cursore su un preset multi-layout, vengono mostrati i numeri di indice del layout sulla griglia mini-schermo, sull'anteprima a dimensione reale e sulla lista finestre della barra laterale, rendendo immediatamente chiaro quale layout viene applicato a ciascuna finestra indipendentemente dalla percezione dei colori</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>Interfaccia della finestra di impostazioni ottimizzata per adattarsi al look &amp; feel di macOS Tahoe: pulsanti della barra degli strumenti e della barra delle azioni unificati con forma a capsula e sfondi hover/pressione adattivi al sistema, schede sezione impostazioni con sfondo grigio chiaro senza bordo, toggle ridimensionati alla dimensione di Preferenze di Sistema, e lista scorciatoie ristrutturata con una sezione indipendente "Scorciatoie spostamento display"</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Le finestre della barra laterale che superano il numero di layout del preset ora mostrano correttamente il colore dell'ultimo layout invece del colore di selezione principale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Le survol d’un preset multi-disposition affiche désormais les numéros d’index de disposition sur la grille mini-écran, l’aperçu en taille réelle et la liste des fenêtres de la barre latérale, permettant d’identifier intuitivement quelle disposition s’applique à chaque fenêtre indépendamment de la perception des couleurs</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>Interface de la fenêtre de réglages affinée pour correspondre au look &amp; feel de macOS Tahoe : boutons de la barre d'outils et de la barre d'actions unifiés en forme de capsule avec des fonds de survol/pression adaptatifs au système, cartes de section de réglages avec fond gris clair sans bordure, boutons bascule redimensionnés à la taille de Préférences Système, et liste des raccourcis restructurée avec une section indépendante « Raccourcis déplacer vers l'écran »</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Les fenêtres de la barre latérale dépassant le nombre de dispositions du preset affichent désormais correctement la couleur de la dernière disposition au lieu de la couleur de sélection principale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al pasar el cursor sobre un preset de múltiples diseños, se muestran números de índice de diseño en la cuadrícula de mini pantalla, la vista previa a tamaño real y la lista de ventanas de la barra lateral, permitiendo identificar intuitivamente qué diseño se aplica a cada ventana independientemente de la percepción del color</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Ajustada la interfaz de la ventana de ajustes para adaptarse al aspecto visual de macOS Tahoe: botones de la barra de herramientas y de acción unificados con forma de cápsula y fondos de hover/pulsación adaptativos al sistema, tarjetas de sección de ajustes con fondo gris claro sin borde, interruptores redimensionados al tamaño de Preferencias del Sistema, y lista de atajos reestructurada con una sección independiente "Atajos para mover a pantalla"</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Las ventanas de la barra lateral que exceden el número de diseños del preset ahora muestran correctamente el color del último diseño en lugar del color de selección principal</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Beim Überfahren eines Multi-Layout-Presets werden Layout-Indexnummern im Mini-Bildschirm-Raster, in der Originalgrößen-Vorschau und in der Seitenleisten-Fensterliste angezeigt, sodass unabhängig vom Farbsehvermögen sofort erkennbar ist, welches Layout auf welches Fenster angewendet wird</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Einstellungsfenster-UI an das macOS Tahoe Look &amp; Feel angepasst: Toolbar- und Action-Bar-Schaltflächen vereinheitlicht auf Kapselform mit systemadaptiven Hover-/Press-Hintergründen, Einstellungsbereich-Karten ohne Rahmen mit hellem Grau-Hintergrund, Umschalter auf System-Einstellungen-Größe verkleinert, Tastenkürzel-Liste neu strukturiert mit eigenem Bereich „Tastenkürzel zum Verschieben auf Display"</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Seitenleisten-Fenster, die die Preset-Layout-Anzahl überschreiten, werden jetzt korrekt in der Farbe des letzten Layouts statt in der primären Auswahlfarbe angezeigt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>懸停多佈局預設時，在迷你螢幕網格、實際大小預覽和側邊欄視窗列表上顯示佈局索引編號，無論色覺特徵如何都能直覺了解各視窗將套用哪個佈局</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>調整設定介面 UI 以符合 macOS Tahoe 視覺風格：工具列與動作列按鈕統一為膠囊形狀並採用系統自適應懸停/按壓背景色，設定分組卡片改為無外框淺灰色背景，切換開關大小調整為與系統設定一致，快速鍵列表重新整理並將「移至顯示器快速鍵」拆分為獨立區段</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正側邊欄中超出預設佈局數量的視窗顯示為主選擇顏色而非最後佈局顏色的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>悬停多布局预设时，在迷你屏幕网格、实际大小预览和侧边栏窗口列表上显示布局索引编号，无论色觉特征如何都能直观了解各窗口将应用哪个布局</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>调整设置界面 UI 以符合 macOS Tahoe 视觉风格：工具栏与操作栏按钮统一为胶囊形状并采用系统自适应悬停/按压背景色，设置分组卡片改为无边框淡灰色背景，开关大小调整为与系统设置一致，快捷键列表重新整理并将"移动到显示器快捷键"拆分为独立分区</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复侧边栏中超出预设布局数量的窗口显示为主选择颜色而非最后布局颜色的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>멀티 레이아웃 프리셋에 호버 시 미니 화면 그리드, 실제 크기 미리보기, 사이드바 창 목록에 레이아웃 인덱스 번호를 표시하여 색각 특성에 관계없이 어떤 레이아웃이 적용되는지 직관적으로 파악 가능</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>macOS Tahoe의 L&amp;F에 맞게 설정 화면 UI 조정: 툴바·액션 바 버튼을 캡슐 형태 및 시스템 적응형 호버/프레스 배경으로 통일, 설정 섹션 카드를 테두리 없는 연한 회색 배경으로 변경, 토글 크기를 시스템 설정과 동일하게 축소, 단축키 목록을 재구성하고 "디스플레이 이동 단축키" 섹션 독립</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>프리셋 레이아웃 수를 초과하는 사이드바 창이 기본 선택 색상 대신 마지막 레이아웃 색상으로 올바르게 표시되도록 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>マルチレイアウトプリセットにホバーした際、ミニ画面グリッド・実寸大プレビュー・サイドバーのウインドウリストにレイアウトインデックス番号を表示し、色覚特性によらずどのレイアウトが適用されるか直感的に把握可能に</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>macOS Tahoe の L&amp;F に馴染むよう設定画面の UI を調整: ツールバー・アクションバーボタンをカプセル形状＋システム適応型ホバー/プレス背景に統一、設定セクションカードを枠線なし薄グレー背景に変更、トグルサイズをシステム設定に合わせて縮小、ショートカット一覧を再構成し「ディスプレイ移動ショートカット」セクションを独立</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>プリセットのレイアウト数を超えるサイドバーのウインドウが、プライマリ選択色ではなく最後のレイアウト色で正しく表示されるよう修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Hovering over a multi-layout preset now shows layout index numbers on the mini-screen grid, full-size preview rectangles, and sidebar window list items, making it easy to see which layout applies to which window regardless of color vision</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Fine-tuned the settings window UI to match macOS Tahoe look and feel: toolbar and action bar buttons now use capsule shape with system-adaptive hover/press fills, settings section cards use a subtle gray background without borders, toggles are sized to match System Settings, and shortcut rows are restructured with a dedicated "Display Move Shortcuts" section</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Sidebar windows beyond the preset layout count now correctly show the last layout's color instead of the primary selection color</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao passar o cursor sobre um preset de múltiplos layouts, números de índice de layout são exibidos na grade de mini tela, na pré-visualização em tamanho real e na lista de janelas da barra lateral, permitindo identificar intuitivamente qual layout se aplica a cada janela independentemente da percepção de cores</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>Interface da janela de configurações ajustada para corresponder ao visual do macOS Tahoe: botões da barra de ferramentas e de ação unificados com formato de cápsula e fundos de hover/pressão adaptativos ao sistema, cartões de seç��o de configurações com fundo cinza claro sem borda, alternadores redimensionados para o tamanho das Preferências do Sistema, e lista de atalhos reestruturada com uma seção independente "Atalhos para mover ao monitor"</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Janelas da barra lateral que excedem o número de layouts do preset agora exibem corretamente a cor do último layout em vez da cor de seleção principal</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Passando il cursore su un preset multi-layout, vengono mostrati i numeri di indice del layout sulla griglia mini-schermo, sull'anteprima a dimensione reale e sulla lista finestre della barra laterale, rendendo immediatamente chiaro quale layout viene applicato a ciascuna finestra indipendentemente dalla percezione dei colori</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>Interfaccia della finestra di impostazioni ottimizzata per adattarsi al look &amp; feel di macOS Tahoe: pulsanti della barra degli strumenti e della barra delle azioni unificati con forma a capsula e sfondi hover/pressione adattivi al sistema, schede sezione impostazioni con sfondo grigio chiaro senza bordo, toggle ridimensionati alla dimensione di Preferenze di Sistema, e lista scorciatoie ristrutturata con una sezione indipendente "Scorciatoie spostamento display"</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Le finestre della barra laterale che superano il numero di layout del preset ora mostrano correttamente il colore dell'ultimo layout invece del colore di selezione principale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Le survol d’un preset multi-disposition affiche désormais les numéros d’index de disposition sur la grille mini-écran, l’aperçu en taille réelle et la liste des fenêtres de la barre latérale, permettant d’identifier intuitivement quelle disposition s’applique à chaque fenêtre indépendamment de la perception des couleurs</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>Interface de la fenêtre de réglages affinée pour correspondre au look &amp; feel de macOS Tahoe : boutons de la barre d'outils et de la barre d'actions unifiés en forme de capsule avec des fonds de survol/pression adaptatifs au système, cartes de section de réglages avec fond gris clair sans bordure, boutons bascule redimensionnés à la taille de Préférences Système, et liste des raccourcis restructurée avec une section indépendante « Raccourcis déplacer vers l'écran »</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Les fenêtres de la barre latérale dépassant le nombre de dispositions du preset affichent désormais correctement la couleur de la dernière disposition au lieu de la couleur de sélection principale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al pasar el cursor sobre un preset de múltiples diseños, se muestran números de índice de diseño en la cuadrícula de mini pantalla, la vista previa a tamaño real y la lista de ventanas de la barra lateral, permitiendo identificar intuitivamente qué diseño se aplica a cada ventana independientemente de la percepción del color</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Ajustada la interfaz de la ventana de ajustes para adaptarse al aspecto visual de macOS Tahoe: botones de la barra de herramientas y de acción unificados con forma de cápsula y fondos de hover/pulsación adaptativos al sistema, tarjetas de sección de ajustes con fondo gris claro sin borde, interruptores redimensionados al tamaño de Preferencias del Sistema, y lista de atajos reestructurada con una sección independiente "Atajos para mover a pantalla"</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Las ventanas de la barra lateral que exceden el número de diseños del preset ahora muestran correctamente el color del último diseño en lugar del color de selección principal</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Beim Überfahren eines Multi-Layout-Presets werden Layout-Indexnummern im Mini-Bildschirm-Raster, in der Originalgrößen-Vorschau und in der Seitenleisten-Fensterliste angezeigt, sodass unabhängig vom Farbsehvermögen sofort erkennbar ist, welches Layout auf welches Fenster angewendet wird</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Einstellungsfenster-UI an das macOS Tahoe Look &amp; Feel angepasst: Toolbar- und Action-Bar-Schaltflächen vereinheitlicht auf Kapselform mit systemadaptiven Hover-/Press-Hintergründen, Einstellungsbereich-Karten ohne Rahmen mit hellem Grau-Hintergrund, Umschalter auf System-Einstellungen-Größe verkleinert, Tastenkürzel-Liste neu strukturiert mit eigenem Bereich „Tastenkürzel zum Verschieben auf Display"</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Seitenleisten-Fenster, die die Preset-Layout-Anzahl überschreiten, werden jetzt korrekt in der Farbe des letzten Layouts statt in der primären Auswahlfarbe angezeigt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>懸停多佈局預設時，在迷你螢幕網格、實際大小預覽和側邊欄視窗列表上顯示佈局索引編號，無論色覺特徵如何都能直覺了解各視窗將套用哪個佈局</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>調整設定介面 UI 以符合 macOS Tahoe 視覺風格：工具列與動作列按鈕統一為膠囊形狀並採用系統自適應懸停/按壓背景色，設定分組卡片改為無外框淺灰色背景，切換開關大小調整為與系統設定一致，快速鍵列表重新整理並將「移至顯示器快速鍵」拆分為獨立區段</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正側邊欄中超出預設佈局數量的視窗顯示為主選擇顏色而非最後佈局顏色的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>悬停多布局预设时，在迷你屏幕网格、实际大小预览和侧边栏窗口列表上显示布局索引编号，无论色觉特征如何都能直观了解各窗口将应用哪个布局</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>调整设置界面 UI 以符合 macOS Tahoe 视觉风格：工具栏与操作栏按钮统一为胶囊形状并采用系统自适应悬停/按压背景色，设置分组卡片改为无边框淡灰色背景，开关大小调整为与系统设置一致，快捷键列表重新整理并将"移动到显示器快捷键"拆分为独立分区</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复侧边栏中超出预设布局数量的窗口显示为主选择颜色而非最后布局颜色的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>멀티 레이아웃 프리셋에 호버 시 미니 화면 그리드, 실제 크기 미리보기, 사이드바 창 목록에 레이아웃 인덱스 번호를 표시하여 색각 특성에 관계없이 어떤 레이아웃이 적용되는지 직관적으로 파악 가능</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>macOS Tahoe의 L&amp;F에 맞게 설정 화면 UI 조정: 툴바·액션 바 버튼을 캡슐 형태 및 시스템 적응형 호버/프레스 배경으로 통일, 설정 섹션 카드를 테두리 없는 연한 회색 배경으로 변경, 토글 크기를 시스템 설정과 동일하게 축소, 단축키 목록을 재구성하고 "디스플레이 이동 단축키" 섹션 독립</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>프리셋 레이아웃 수를 초과하는 사이드바 창이 기본 선택 색상 대신 마지막 레이아웃 색상으로 올바르게 표시되도록 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>マルチレイアウトプリセットにホバーした際、ミニ画面グリッド・実寸大プレビュー・サイドバーのウインドウリストにレイアウトインデックス番号を表示し、色覚特性によらずどのレイアウトが適用されるか直感的に把握可能に</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>macOS Tahoe の L&amp;F に馴染むよう設定画面の UI を調整: ツールバー・アクションバーボタンをカプセル形状＋システム適応型ホバー/プレス背景に統一、設定セクションカードを枠線なし薄グレー背景に変更、トグルサイズをシステム設定に合わせて縮小、ショートカット一覧を再構成し「ディスプレイ移動ショートカット」セクションを独立</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>プリセットのレイアウト数を超えるサイドバーのウインドウが、プライマリ選択色ではなく最後のレイアウト色で正しく表示されるよう修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Hovering over a multi-layout preset now shows layout index numbers on the mini-screen grid, full-size preview rectangles, and sidebar window list items, making it easy to see which layout applies to which window regardless of color vision</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Fine-tuned the settings window UI to match macOS Tahoe look and feel: toolbar and action bar buttons now use capsule shape with system-adaptive hover/press fills, settings section cards use a subtle gray background without borders, toggles are sized to match System Settings, and shortcut rows are restructured with a dedicated "Display Move Shortcuts" section</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Sidebar windows beyond the preset layout count now correctly show the last layout's color instead of the primary selection color</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Ao passar o cursor sobre um preset de múltiplos layouts, números de índice de layout são exibidos na grade de mini tela, na pré-visualização em tamanho real e na lista de janelas da barra lateral, permitindo identificar intuitivamente qual layout se aplica a cada janela independentemente da percepção de cores</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>Interface da janela de configurações ajustada para corresponder ao visual do macOS Tahoe: botões da barra de ferramentas e de ação unificados com formato de cápsula e fundos de hover/pressão adaptativos ao sistema, cartões de seç��o de configurações com fundo cinza claro sem borda, alternadores redimensionados para o tamanho das Preferências do Sistema, e lista de atalhos reestruturada com uma seção independente "Atalhos para mover ao monitor"</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Janelas da barra lateral que excedem o número de layouts do preset agora exibem corretamente a cor do último layout em vez da cor de seleção principal</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Passando il cursore su un preset multi-layout, vengono mostrati i numeri di indice del layout sulla griglia mini-schermo, sull'anteprima a dimensione reale e sulla lista finestre della barra laterale, rendendo immediatamente chiaro quale layout viene applicato a ciascuna finestra indipendentemente dalla percezione dei colori</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>Interfaccia della finestra di impostazioni ottimizzata per adattarsi al look &amp; feel di macOS Tahoe: pulsanti della barra degli strumenti e della barra delle azioni unificati con forma a capsula e sfondi hover/pressione adattivi al sistema, schede sezione impostazioni con sfondo grigio chiaro senza bordo, toggle ridimensionati alla dimensione di Preferenze di Sistema, e lista scorciatoie ristrutturata con una sezione indipendente "Scorciatoie spostamento display"</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Le finestre della barra laterale che superano il numero di layout del preset ora mostrano correttamente il colore dell'ultimo layout invece del colore di selezione principale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Le survol d’un preset multi-disposition affiche désormais les numéros d’index de disposition sur la grille mini-écran, l’aperçu en taille réelle et la liste des fenêtres de la barre latérale, permettant d’identifier intuitivement quelle disposition s’applique à chaque fenêtre indépendamment de la perception des couleurs</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>Interface de la fenêtre de réglages affinée pour correspondre au look &amp; feel de macOS Tahoe : boutons de la barre d'outils et de la barre d'actions unifiés en forme de capsule avec des fonds de survol/pression adaptatifs au système, cartes de section de réglages avec fond gris clair sans bordure, boutons bascule redimensionnés à la taille de Préférences Système, et liste des raccourcis restructurée avec une section indépendante « Raccourcis déplacer vers l'écran »</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Les fenêtres de la barre latérale dépassant le nombre de dispositions du preset affichent désormais correctement la couleur de la dernière disposition au lieu de la couleur de sélection principale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Al pasar el cursor sobre un preset de múltiples diseños, se muestran números de índice de diseño en la cuadrícula de mini pantalla, la vista previa a tamaño real y la lista de ventanas de la barra lateral, permitiendo identificar intuitivamente qué diseño se aplica a cada ventana independientemente de la percepción del color</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Ajustada la interfaz de la ventana de ajustes para adaptarse al aspecto visual de macOS Tahoe: botones de la barra de herramientas y de acción unificados con forma de cápsula y fondos de hover/pulsación adaptativos al sistema, tarjetas de sección de ajustes con fondo gris claro sin borde, interruptores redimensionados al tamaño de Preferencias del Sistema, y lista de atajos reestructurada con una sección independiente "Atajos para mover a pantalla"</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Las ventanas de la barra lateral que exceden el número de diseños del preset ahora muestran correctamente el color del último diseño en lugar del color de selección principal</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Beim Überfahren eines Multi-Layout-Presets werden Layout-Indexnummern im Mini-Bildschirm-Raster, in der Originalgrößen-Vorschau und in der Seitenleisten-Fensterliste angezeigt, sodass unabhängig vom Farbsehvermögen sofort erkennbar ist, welches Layout auf welches Fenster angewendet wird</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>Einstellungsfenster-UI an das macOS Tahoe Look &amp; Feel angepasst: Toolbar- und Action-Bar-Schaltflächen vereinheitlicht auf Kapselform mit systemadaptiven Hover-/Press-Hintergründen, Einstellungsbereich-Karten ohne Rahmen mit hellem Grau-Hintergrund, Umschalter auf System-Einstellungen-Größe verkleinert, Tastenkürzel-Liste neu strukturiert mit eigenem Bereich „Tastenkürzel zum Verschieben auf Display"</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Seitenleisten-Fenster, die die Preset-Layout-Anzahl überschreiten, werden jetzt korrekt in der Farbe des letzten Layouts statt in der primären Auswahlfarbe angezeigt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>懸停多佈局預設時，在迷你螢幕網格、實際大小預覽和側邊欄視窗列表上顯示佈局索引編號，無論色覺特徵如何都能直覺了解各視窗將套用哪個佈局</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>調整設定介面 UI 以符合 macOS Tahoe 視覺風格：工具列與動作列按鈕統一為膠囊形狀並採用系統自適應懸停/按壓背景色，設定分組卡片改為無外框淺灰色背景，切換開關大小調整為與系統設定一致，快速鍵列表重新整理並將「移至顯示器快速鍵」拆分為獨立區段</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正側邊欄中超出預設佈局數量的視窗顯示為主選擇顏色而非最後佈局顏色的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>悬停多布局预设时，在迷你屏幕网格、实际大小预览和侧边栏窗口列表上显示布局索引编号，无论色觉特征如何都能直观了解各窗口将应用哪个布局</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>调整设置界面 UI 以符合 macOS Tahoe 视觉风格：工具栏与操作栏按钮统一为胶囊形状并采用系统自适应悬停/按压背景色，设置分组卡片改为无边框淡灰色背景，开关大小调整为与系统设置一致，快捷键列表重新整理并将"移动到显示器快捷键"拆分为独立分区</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复侧边栏中超出预设布局数量的窗口显示为主选择颜色而非最后布局颜色的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>멀티 레이아웃 프리셋에 호버 시 미니 화면 그리드, 실제 크기 미리보기, 사이드바 창 목록에 레이아웃 인덱스 번호를 표시하여 색각 특성에 관계없이 어떤 레이아웃이 적용되는지 직관적으로 파악 가능</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>macOS Tahoe의 L&amp;F에 맞게 설정 화면 UI 조정: 툴바·액션 바 버튼을 캡슐 형태 및 시스템 적응형 호버/프레스 배경으로 통일, 설정 섹션 카드를 테두리 없는 연한 회색 배경으로 변경, 토글 크기를 시스템 설정과 동일하게 축소, 단축키 목록을 재구성하고 "디스플레이 이동 단축키" 섹션 독립</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>프리셋 레이아웃 수를 초과하는 사이드바 창이 기본 선택 색상 대신 마지막 레이아웃 색상으로 올바르게 표시되도록 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>マルチレイアウトプリセットにホバーした際、ミニ画面グリッド・実寸大プレビュー・サイドバーのウインドウリストにレイアウトインデックス番号を表示し、色覚特性によらずどのレイアウトが適用されるか直感的に把握可能に</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>macOS Tahoe の L&amp;F に馴染むよう設定画面の UI を調整: ツールバー・アクションバーボタンをカプセル形状＋システム適応型ホバー/プレス背景に統一、設定セクションカードを枠線なし薄グレー背景に変更、トグルサイズをシステム設定に合わせて縮小、ショートカット一覧を再構成し「ディスプレイ移動ショートカット」セクションを独立</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>プリセットのレイアウト数を超えるサイドバーのウインドウが、プライマリ選択色ではなく最後のレイアウト色で正しく表示されるよう修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Hovering over a multi-layout preset now shows layout index numbers on the mini-screen grid, full-size preview rectangles, and sidebar window list items, making it easy to see which layout applies to which window regardless of color vision</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Fine-tuned the settings window UI to match macOS Tahoe look and feel: toolbar and action bar buttons now use capsule shape with system-adaptive hover/press fills, settings section cards use a subtle gray background without borders, toggles are sized to match System Settings, and shortcut rows are restructured with a dedicated "Display Move Shortcuts" section</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Sidebar windows beyond the preset layout count now correctly show the last layout's color instead of the primary selection color</li>
-</ul>]]></description>
-            <pubDate>Sun, 29 Mar 2026 15:30:44 +0900</pubDate>
-            <sparkle:version>406</sparkle:version>
-            <sparkle:shortVersionString>4.0.6</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.8/Tiley-4.0.6.zip" length="5597162" type="application/octet-stream" sparkle:edSignature="0oHGf2Bz4g9UUMFdVisjvcaIN5FjJdAWYwUZWl9Z+e/ZYmU+L8qBfRtAU6QVw30wMZoq2kp1mS7XuWz2BdEfBw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.6/Tiley406-405.delta" sparkle:deltaFrom="405" length="346362" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="WZDQgW30bayC5KJ2QjjsNT91p4awkwlcIF1aixszXN6dPfQfZ6XihDdSLB7pqoVqK9V5Ybeh/GZqMAmsXVE+DA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.6/Tiley406-404.delta" sparkle:deltaFrom="404" length="363918" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nEN9AiJKY17pAwXOzN5bubyAkYU/FVCGWjIUO6kGrcSBHrXEpLab02ugFIt5PdIF1wLP8kQq9dQP0nyl7zpUBQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.6/Tiley406-402.delta" sparkle:deltaFrom="402" length="397586" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PJ4Mo5jH7/jREvvL38nuUZaZR/Cc6bqB3+f49MEd2dX4inP9BLOT99KynG7Ta9d0UxdR7fxrJ7ZAEH0xPJE0CQ=="/>
             </sparkle:deltas>
         </item>
     </channel>
