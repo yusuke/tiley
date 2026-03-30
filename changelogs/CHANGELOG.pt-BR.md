@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Redimensionamento de janela falhava e a posição ficava deslocada em certos aplicativos: a posição de rebote quando o redimensionamento inicial era rejeitado ficava na parte inferior da tela (sem espaço para expandir), deixando a janela em uma posição incorreta. Agora o rebote vai para o topo da área visível e a posição é restaurada explicitamente se o redimensionamento continuar falhando
+- Janelas deslocadas às vezes não eram restauradas à posição original após selecionar uma janela em segundo plano: a restauração buscava janelas em uma lista que poderia estar desatualizada, causando falhas. Agora as referências de janela são armazenadas diretamente nos dados de rastreamento de deslocamento, e a limpeza é adiada até a conclusão da animação de restauração
+
 ## [4.0.8] - 2026-03-30
 
 ### Corrigido

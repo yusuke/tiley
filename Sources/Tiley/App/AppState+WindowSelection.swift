@@ -422,6 +422,10 @@ extension AppState {
         if animateRestore {
             restoreDisplacedWindowsAnimated()
         } else {
+            // Cancel any in-flight restoration animation so it doesn't
+            // continue moving windows after the instant restore.
+            restorationAnimationTimer?.cancel()
+            restorationAnimationTimer = nil
             restoreDisplacedWindows()
         }
         originalFrontmostPID = nil
@@ -466,11 +470,9 @@ extension AppState {
         let toRestore = Set(displacedWindowFrames.keys).subtracting(shouldDisplace)
         var restoringWIDs: [CGWindowID] = []
         for wid in toRestore {
-            if let originalOrigin = displacedWindowFrames[wid],
-               let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
-               let window = target.windowElement {
-                let (currentPos, _) = accessibilityService.readPositionAndSize(of: window)
-                moves.append((window: window, from: currentPos, to: originalOrigin))
+            if let entry = displacedWindowFrames[wid] {
+                let (currentPos, _) = accessibilityService.readPositionAndSize(of: entry.window)
+                moves.append((window: entry.window, from: currentPos, to: entry.origin))
                 restoringWIDs.append(wid)
             }
         }
@@ -503,7 +505,7 @@ extension AppState {
             // Save original position if not already tracked.
             if displacedWindowFrames[wid] == nil {
                 let (axPos, _) = accessibilityService.readPositionAndSize(of: window)
-                displacedWindowFrames[wid] = axPos
+                displacedWindowFrames[wid] = (origin: axPos, window: window)
             }
 
             let destination = CGPoint(x: target.frame.minX, y: nextY)
@@ -587,11 +589,8 @@ extension AppState {
     /// Restores all displaced windows back to their original positions instantly.
     func restoreDisplacedWindows() {
         guard !displacedWindowFrames.isEmpty else { return }
-        for (wid, originalOrigin) in displacedWindowFrames {
-            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
-               let window = target.windowElement {
-                accessibilityService.setPosition(originalOrigin, for: window)
-            }
+        for (_, entry) in displacedWindowFrames {
+            accessibilityService.setPosition(entry.origin, for: entry.window)
         }
         displacedWindowFrames.removeAll()
     }
@@ -603,14 +602,10 @@ extension AppState {
         guard !displacedWindowFrames.isEmpty else { return }
 
         var moves: [(window: AXUIElement, from: CGPoint, to: CGPoint)] = []
-        for (wid, originalOrigin) in displacedWindowFrames {
-            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
-               let window = target.windowElement {
-                let (currentPos, _) = accessibilityService.readPositionAndSize(of: window)
-                moves.append((window: window, from: currentPos, to: originalOrigin))
-            }
+        for (_, entry) in displacedWindowFrames {
+            let (currentPos, _) = accessibilityService.readPositionAndSize(of: entry.window)
+            moves.append((window: entry.window, from: currentPos, to: entry.origin))
         }
-        displacedWindowFrames.removeAll()
 
         restorationAnimationTimer?.cancel()
         restorationAnimationTimer = nil
@@ -622,6 +617,7 @@ extension AppState {
             for move in moves {
                 accessibilityService.setPosition(move.to, for: move.window)
             }
+            displacedWindowFrames.removeAll()
             return
         }
 
@@ -644,6 +640,7 @@ extension AppState {
             if step >= totalSteps {
                 timer.cancel()
                 self?.restorationAnimationTimer = nil
+                self?.displacedWindowFrames.removeAll()
             }
         }
         restorationAnimationTimer = timer

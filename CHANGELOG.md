@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Window resize failing and position getting displaced for certain apps: the fallback bounce position used when the initial resize is silently rejected was at the bottom of the screen (no room to expand), causing the window to get stuck at an incorrect position; now bounces to the top of the visible area and explicitly restores position if the resize still fails
+- Displaced windows sometimes not restored to their original positions after selecting a background window: restoration relied on looking up windows in a list that could become stale; now stores window references directly in the displacement tracking data, and defers cleanup until the restoration animation completes
+
 ## [4.0.8] - 2026-03-30
 
 ### Fixed

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Fenstergrößenänderung schlug bei bestimmten Apps fehl und die Position wurde verschoben: Die Fallback-Bounce-Position bei abgelehnter Größenänderung lag am unteren Bildschirmrand (kein Platz zum Vergrößern), wodurch das Fenster an einer falschen Position hängen blieb. Bounce erfolgt jetzt zum oberen Rand des sichtbaren Bereichs, und bei erneutem Fehlschlag wird die Position explizit wiederhergestellt
+- Verschobene Fenster wurden nach Auswahl eines Hintergrundfensters manchmal nicht an ihre ursprüngliche Position zurückgesetzt: Die Wiederherstellung suchte in einer möglicherweise veralteten Fensterliste, was zum Fehlschlag führen konnte. Fensterreferenzen werden jetzt direkt in den Verschiebungs-Tracking-Daten gespeichert, und die Bereinigung wird bis zum Abschluss der Wiederherstellungsanimation verzögert
+
 ## [4.0.8] - 2026-03-30
 
 ### Behoben

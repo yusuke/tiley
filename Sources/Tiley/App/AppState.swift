@@ -198,8 +198,11 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Separate timer for restoring displaced windows after confirmation.
     @ObservationIgnored var restorationAnimationTimer: DispatchSourceTimer?
     /// Maps window IDs that have been moved off-screen to their original
-    /// positions, so they can be restored when selection changes or cycling ends.
-    @ObservationIgnored var displacedWindowFrames: [CGWindowID: CGPoint] = [:]
+    /// positions and AX elements, so they can be restored when selection
+    /// changes or cycling ends.  Storing the `AXUIElement` directly avoids
+    /// relying on `availableWindowTargets` at restoration time — the list
+    /// may have been refreshed and the entry could be missing.
+    @ObservationIgnored var displacedWindowFrames: [CGWindowID: (origin: CGPoint, window: AXUIElement)] = [:]
     /// The index to select after the next `refreshAvailableWindows` call.
     @ObservationIgnored var pendingTargetIndexAfterClose: Int?
     @ObservationIgnored var displayHighlightWindow: NSWindow?

@@ -40,6 +40,22 @@
 		70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A652F64347E005173A5 /* AppDelegate.swift */; };
 		70B56A6C2F64347E005173A5 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A662F64347E005173A5 /* AppState.swift */; };
 		70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B56A682F64347E005173A5 /* UpdaterSupport.swift */; };
+		70EE534C2F7A7A0C0007968D /* AppState+LayoutPresets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53442F7A7A0C0007968D /* AppState+LayoutPresets.swift */; };
+		70EE534D2F7A7A0C0007968D /* AppState+WorkspaceObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE534B2F7A7A0C0007968D /* AppState+WorkspaceObserver.swift */; };
+		70EE534E2F7A7A0C0007968D /* AppState+WindowActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53492F7A7A0C0007968D /* AppState+WindowActions.swift */; };
+		70EE534F2F7A7A0C0007968D /* AppState+DisplayMovement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53422F7A7A0C0007968D /* AppState+DisplayMovement.swift */; };
+		70EE53502F7A7A0C0007968D /* AppState+WindowSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE534A2F7A7A0C0007968D /* AppState+WindowSelection.swift */; };
+		70EE53512F7A7A0C0007968D /* AppState+MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53452F7A7A0C0007968D /* AppState+MainWindow.swift */; };
+		70EE53522F7A7A0C0007968D /* AppState+Overlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53462F7A7A0C0007968D /* AppState+Overlay.swift */; };
+		70EE53532F7A7A0C0007968D /* AppState+HotKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53432F7A7A0C0007968D /* AppState+HotKeys.swift */; };
+		70EE53542F7A7A0C0007968D /* AppState+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53472F7A7A0C0007968D /* AppState+Persistence.swift */; };
+		70EE53552F7A7A0C0007968D /* AppState+StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53482F7A7A0C0007968D /* AppState+StatusBar.swift */; };
+		70EE535C2F7A7A170007968D /* NotchViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53562F7A7A170007968D /* NotchViews.swift */; };
+		70EE535D2F7A7A170007968D /* PresetEditingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53572F7A7A170007968D /* PresetEditingViews.swift */; };
+		70EE535E2F7A7A170007968D /* TahoeStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53592F7A7A170007968D /* TahoeStyles.swift */; };
+		70EE535F2F7A7A170007968D /* TooltipViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE535A2F7A7A170007968D /* TooltipViews.swift */; };
+		70EE53602F7A7A170007968D /* WindowSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE535B2F7A7A170007968D /* WindowSearchField.swift */; };
+		70EE53612F7A7A170007968D /* ScreenArrangementViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53582F7A7A170007968D /* ScreenArrangementViews.swift */; };
 		70F7B0282F768B8C004F17E3 /* WindowHighlightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +91,22 @@
 		70B56A662F64347E005173A5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		70B56A672F64347E005173A5 /* TileyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileyApp.swift; sourceTree = "<group>"; };
 		70B56A682F64347E005173A5 /* UpdaterSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSupport.swift; sourceTree = "<group>"; };
+		70EE53422F7A7A0C0007968D /* AppState+DisplayMovement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+DisplayMovement.swift"; sourceTree = "<group>"; };
+		70EE53432F7A7A0C0007968D /* AppState+HotKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+HotKeys.swift"; sourceTree = "<group>"; };
+		70EE53442F7A7A0C0007968D /* AppState+LayoutPresets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+LayoutPresets.swift"; sourceTree = "<group>"; };
+		70EE53452F7A7A0C0007968D /* AppState+MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+MainWindow.swift"; sourceTree = "<group>"; };
+		70EE53462F7A7A0C0007968D /* AppState+Overlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Overlay.swift"; sourceTree = "<group>"; };
+		70EE53472F7A7A0C0007968D /* AppState+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Persistence.swift"; sourceTree = "<group>"; };
+		70EE53482F7A7A0C0007968D /* AppState+StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+StatusBar.swift"; sourceTree = "<group>"; };
+		70EE53492F7A7A0C0007968D /* AppState+WindowActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+WindowActions.swift"; sourceTree = "<group>"; };
+		70EE534A2F7A7A0C0007968D /* AppState+WindowSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+WindowSelection.swift"; sourceTree = "<group>"; };
+		70EE534B2F7A7A0C0007968D /* AppState+WorkspaceObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+WorkspaceObserver.swift"; sourceTree = "<group>"; };
+		70EE53562F7A7A170007968D /* NotchViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchViews.swift; sourceTree = "<group>"; };
+		70EE53572F7A7A170007968D /* PresetEditingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetEditingViews.swift; sourceTree = "<group>"; };
+		70EE53582F7A7A170007968D /* ScreenArrangementViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenArrangementViews.swift; sourceTree = "<group>"; };
+		70EE53592F7A7A170007968D /* TahoeStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeStyles.swift; sourceTree = "<group>"; };
+		70EE535A2F7A7A170007968D /* TooltipViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipViews.swift; sourceTree = "<group>"; };
+		70EE535B2F7A7A170007968D /* WindowSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSearchField.swift; sourceTree = "<group>"; };
 		70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHighlightController.swift; sourceTree = "<group>"; };
 		A00000000000000000000011 /* Tiley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tiley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000000000000000000012 /* Tiley-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tiley-Info.plist"; sourceTree = "<group>"; };
@@ -109,6 +141,12 @@
 		7012E05C2F65B653003EC442 /* MainWindow */ = {
 			isa = PBXGroup;
 			children = (
+				70EE53562F7A7A170007968D /* NotchViews.swift */,
+				70EE53572F7A7A170007968D /* PresetEditingViews.swift */,
+				70EE53582F7A7A170007968D /* ScreenArrangementViews.swift */,
+				70EE53592F7A7A170007968D /* TahoeStyles.swift */,
+				70EE535A2F7A7A170007968D /* TooltipViews.swift */,
+				70EE535B2F7A7A170007968D /* WindowSearchField.swift */,
 				7012E0592F65B653003EC442 /* MainWindowController.swift */,
 				7012E05A2F65B653003EC442 /* MainWindowView.swift */,
 				7012E05B2F65B653003EC442 /* ShortcutRecorderField.swift */,
@@ -161,6 +199,16 @@
 		70B56A692F64347E005173A5 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				70EE53422F7A7A0C0007968D /* AppState+DisplayMovement.swift */,
+				70EE53432F7A7A0C0007968D /* AppState+HotKeys.swift */,
+				70EE53442F7A7A0C0007968D /* AppState+LayoutPresets.swift */,
+				70EE53452F7A7A0C0007968D /* AppState+MainWindow.swift */,
+				70EE53462F7A7A0C0007968D /* AppState+Overlay.swift */,
+				70EE53472F7A7A0C0007968D /* AppState+Persistence.swift */,
+				70EE53482F7A7A0C0007968D /* AppState+StatusBar.swift */,
+				70EE53492F7A7A0C0007968D /* AppState+WindowActions.swift */,
+				70EE534A2F7A7A0C0007968D /* AppState+WindowSelection.swift */,
+				70EE534B2F7A7A0C0007968D /* AppState+WorkspaceObserver.swift */,
 				70B56A652F64347E005173A5 /* AppDelegate.swift */,
 				70B56A662F64347E005173A5 /* AppState.swift */,
 				70B56A672F64347E005173A5 /* TileyApp.swift */,
@@ -248,7 +296,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2620;
-				LastUpgradeCheck = 2630;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					A00000000000000000000015 = {
 						CreatedOnToolsVersion = 26.2;
@@ -308,8 +356,24 @@
 				70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */,
 				703BB10A2F742EE700CB3140 /* DisplayShortcutSettings.swift in Sources */,
 				701526292F6EF349001E8095 /* DockReader.swift in Sources */,
+				70EE534C2F7A7A0C0007968D /* AppState+LayoutPresets.swift in Sources */,
+				70EE534D2F7A7A0C0007968D /* AppState+WorkspaceObserver.swift in Sources */,
+				70EE534E2F7A7A0C0007968D /* AppState+WindowActions.swift in Sources */,
+				70EE534F2F7A7A0C0007968D /* AppState+DisplayMovement.swift in Sources */,
+				70EE53502F7A7A0C0007968D /* AppState+WindowSelection.swift in Sources */,
+				70EE53512F7A7A0C0007968D /* AppState+MainWindow.swift in Sources */,
+				70EE53522F7A7A0C0007968D /* AppState+Overlay.swift in Sources */,
+				70EE53532F7A7A0C0007968D /* AppState+HotKeys.swift in Sources */,
+				70EE53542F7A7A0C0007968D /* AppState+Persistence.swift in Sources */,
+				70EE53552F7A7A0C0007968D /* AppState+StatusBar.swift in Sources */,
 				7015262F2F6EF356001E8095 /* GridModels.swift in Sources */,
 				701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */,
+				70EE535C2F7A7A170007968D /* NotchViews.swift in Sources */,
+				70EE535D2F7A7A170007968D /* PresetEditingViews.swift in Sources */,
+				70EE535E2F7A7A170007968D /* TahoeStyles.swift in Sources */,
+				70EE535F2F7A7A170007968D /* TooltipViews.swift in Sources */,
+				70EE53602F7A7A170007968D /* WindowSearchField.swift in Sources */,
+				70EE53612F7A7A170007968D /* ScreenArrangementViews.swift in Sources */,
 				7015262A2F6EF349001E8095 /* WindowManager.swift in Sources */,
 				7015262B2F6EF349001E8095 /* AccessibilityService.swift in Sources */,
 				70AABB022F900001001E8095 /* CGSPrivate.swift in Sources */,
@@ -442,7 +506,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 408;
+				CURRENT_PROJECT_VERSION = 409;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -454,7 +518,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.0.8;
+				MARKETING_VERSION = 4.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -475,7 +539,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 408;
+				CURRENT_PROJECT_VERSION = 409;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
@@ -488,7 +552,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.0.8;
+				MARKETING_VERSION = 4.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
