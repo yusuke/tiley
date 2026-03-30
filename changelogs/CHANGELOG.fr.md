@@ -6,6 +6,7 @@
 
 - Le redimensionnement de fenêtre échouait et la position était décalée pour certaines applications : la position de rebond lorsque le redimensionnement initial était rejeté se trouvait en bas de l'écran (pas d'espace pour s'agrandir), laissant la fenêtre à une position incorrecte. Le rebond se fait désormais vers le haut de la zone visible et la position est explicitement restaurée si le redimensionnement échoue toujours
 - Les fenêtres déplacées n'étaient parfois pas restaurées à leur position d'origine après la sélection d'une fenêtre en arrière-plan : la restauration recherchait les fenêtres dans une liste potentiellement obsolète, entraînant des échecs. Les références de fenêtre sont désormais stockées directement dans les données de suivi de déplacement, et le nettoyage est différé jusqu'à la fin de l'animation de restauration
+- Les boutons « Ajouter un raccourci » / « Ajouter un raccourci global » ne répondaient qu'aux clics près du centre : le remplissage et l'arrière-plan ont été déplacés à l'intérieur du label du bouton afin que toute la zone visible soit cliquable
 
 ## [4.0.8] - 2026-03-30
 

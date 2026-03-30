@@ -289,18 +289,19 @@ struct AddShortcutButton<Label: View>: View {
         Button(action: action) {
             label
                 .frame(minHeight: ShortcutBadgeLabelView.badgeContentHeight)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 3)
+                .contentShape(Rectangle())
+                .background(
+                    RoundedRectangle(cornerRadius: 5, style: .continuous)
+                        .fill(isHovered ? ThemeColors.presetCellBackground(for: colorScheme).opacity(0.8) : ThemeColors.presetCellBackground(for: colorScheme))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 5, style: .continuous)
+                        .stroke(isHovered ? Color.accentColor.opacity(0.5) : ThemeColors.presetCellBorder(for: colorScheme), lineWidth: isHovered ? 1 : 0.5)
+                )
         }
         .buttonStyle(.plain)
-        .padding(.horizontal, 5)
-        .padding(.vertical, 3)
-        .background(
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(isHovered ? ThemeColors.presetCellBackground(for: colorScheme).opacity(0.8) : ThemeColors.presetCellBackground(for: colorScheme))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .stroke(isHovered ? Color.accentColor.opacity(0.5) : ThemeColors.presetCellBorder(for: colorScheme), lineWidth: isHovered ? 1 : 0.5)
-        )
         .onHover { hovering in
             isHovered = hovering
         }

@@ -6,6 +6,7 @@
 
 - Il ridimensionamento della finestra falliva e la posizione veniva spostata per alcune applicazioni: la posizione di rimbalzo quando il ridimensionamento iniziale veniva rifiutato era in fondo allo schermo (nessuno spazio per espandersi), lasciando la finestra in una posizione errata. Ora il rimbalzo avviene nella parte superiore dell'area visibile e la posizione viene ripristinata esplicitamente se il ridimensionamento continua a fallire
 - Le finestre spostate a volte non venivano ripristinate nella posizione originale dopo aver selezionato una finestra in background: il ripristino cercava le finestre in un elenco potenzialmente obsoleto, causando errori. I riferimenti alle finestre vengono ora memorizzati direttamente nei dati di tracciamento dello spostamento e la pulizia viene posticipata fino al completamento dell'animazione di ripristino
+- I pulsanti "Aggiungi scorciatoia" / "Aggiungi scorciatoia globale" rispondevano solo ai clic vicino al centro: padding e sfondo sono stati spostati all'interno dell'etichetta del pulsante in modo che l'intera area visibile sia cliccabile
 
 ## [4.0.8] - 2026-03-30
 

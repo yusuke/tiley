@@ -6,6 +6,7 @@
 
 - El redimensionamiento de ventanas fallaba y la posición se desplazaba en ciertas aplicaciones: la posición de rebote cuando el redimensionamiento inicial era rechazado estaba en la parte inferior de la pantalla (sin espacio para expandir), dejando la ventana en una posición incorrecta. Ahora rebota a la parte superior del área visible y restaura explícitamente la posición si el redimensionamiento sigue fallando
 - Las ventanas desplazadas a veces no se restauraban a su posición original después de seleccionar una ventana de fondo: la restauración buscaba ventanas en una lista que podía estar desactualizada, causando fallos. Ahora se almacenan las referencias de ventana directamente en los datos de seguimiento de desplazamiento y se aplaza la limpieza hasta que la animación de restauración se complete
+- Los botones "Añadir atajo" / "Añadir atajo global" solo respondían a clics cerca del centro: se movieron el relleno y el fondo dentro de la etiqueta del botón para que toda el área visible sea clicable
 
 ## [4.0.8] - 2026-03-30
 
