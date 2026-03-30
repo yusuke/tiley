@@ -2773,6 +2773,8 @@ struct MainWindowView: View {
                     #endif
                 }
             }
+
+            AcknowledgementsSection()
         }
         .font(.system(size: 13))
     }

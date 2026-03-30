@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Abschnitt für Drittanbieter-Lizenzhinweise in den Einstellungen (Sparkle, TelemetryDeck)
+
 ## [4.0.9] - 2026-03-30
 
 ### Behoben

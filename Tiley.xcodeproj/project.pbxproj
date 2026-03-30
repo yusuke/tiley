@@ -52,6 +52,7 @@
 		70EE53792F7A941D0007968D /* system-en.png in Resources */ = {isa = PBXBuildFile; fileRef = 70EE53652F7A941D0007968D /* system-en.png */; };
 		70EE537A2F7A941D0007968D /* system-ja.png in Resources */ = {isa = PBXBuildFile; fileRef = 70EE53662F7A941D0007968D /* system-ja.png */; };
 		70EE537B2F7A941D0007968D /* dialog-ja.png in Resources */ = {isa = PBXBuildFile; fileRef = 70EE53632F7A941D0007968D /* dialog-ja.png */; };
+		70EE537D2F7A98BC0007968D /* AcknowledgementsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE537C2F7A98BC0007968D /* AcknowledgementsSection.swift */; };
 		70F7B0282F768B8C004F17E3 /* WindowHighlightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */; };
 /* End PBXBuildFile section */
 
@@ -109,6 +110,7 @@
 		70EE53702F7A941D0007968D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70EE53712F7A941D0007968D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		70EE53722F7A941D0007968D /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		70EE537C2F7A98BC0007968D /* AcknowledgementsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsSection.swift; sourceTree = "<group>"; };
 		70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHighlightController.swift; sourceTree = "<group>"; };
 		A00000000000000000000011 /* Tiley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tiley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000000000000000000012 /* Tiley-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tiley-Info.plist"; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 		7012E05C2F65B653003EC442 /* MainWindow */ = {
 			isa = PBXGroup;
 			children = (
+				70EE537C2F7A98BC0007968D /* AcknowledgementsSection.swift */,
 				70EE53562F7A7A170007968D /* NotchViews.swift */,
 				70EE53572F7A7A170007968D /* PresetEditingViews.swift */,
 				70EE53582F7A7A170007968D /* ScreenArrangementViews.swift */,
@@ -373,6 +376,7 @@
 			files = (
 				701526162F6EECE3001E8095 /* DesktopPictureBackgroundView.swift in Sources */,
 				70B56A6A2F64347E005173A5 /* TileyApp.swift in Sources */,
+				70EE537D2F7A98BC0007968D /* AcknowledgementsSection.swift in Sources */,
 				70B56A6B2F64347E005173A5 /* AppDelegate.swift in Sources */,
 				703BB10A2F742EE700CB3140 /* DisplayShortcutSettings.swift in Sources */,
 				701526292F6EF349001E8095 /* DockReader.swift in Sources */,
@@ -547,7 +551,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 409;
+				CURRENT_PROJECT_VERSION = 410;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -559,7 +563,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.0.9;
+				MARKETING_VERSION = 4.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -580,7 +584,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 409;
+				CURRENT_PROJECT_VERSION = 410;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
@@ -593,7 +597,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.0.9;
+				MARKETING_VERSION = 4.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

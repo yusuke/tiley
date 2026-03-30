@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Third-party license acknowledgements section in Settings (Sparkle, TelemetryDeck)
+
 ## [4.0.9] - 2026-03-30
 
 ### Fixed

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Sección de reconocimientos de licencias de terceros en Ajustes (Sparkle, TelemetryDeck)
+
 ## [4.0.9] - 2026-03-30
 
 ### Corregido

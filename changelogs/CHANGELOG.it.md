@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Sezione riconoscimenti per le licenze di terze parti nelle Impostazioni (Sparkle, TelemetryDeck)
+
 ## [4.0.9] - 2026-03-30
 
 ### Corretto

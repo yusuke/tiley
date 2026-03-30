@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Section de remerciements pour les licences tierces dans les Réglages (Sparkle, TelemetryDeck)
+
 ## [4.0.9] - 2026-03-30
 
 ### Corrigé
