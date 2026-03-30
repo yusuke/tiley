@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.9] - 2026-03-30
+
 ### Corretto
 
 - Il ridimensionamento della finestra falliva e la posizione veniva spostata per alcune applicazioni: la posizione di rimbalzo quando il ridimensionamento iniziale veniva rifiutato era in fondo allo schermo (nessuno spazio per espandersi), lasciando la finestra in una posizione errata. Ora il rimbalzo avviene nella parte superiore dell'area visibile e la posizione viene ripristinata esplicitamente se il ridimensionamento continua a fallire

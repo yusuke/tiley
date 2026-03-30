@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.9] - 2026-03-30
+
 ### Corrigé
 
 - Le redimensionnement de fenêtre échouait et la position était décalée pour certaines applications : la position de rebond lorsque le redimensionnement initial était rejeté se trouvait en bas de l'écran (pas d'espace pour s'agrandir), laissant la fenêtre à une position incorrecte. Le rebond se fait désormais vers le haut de la zone visible et la position est explicitement restaurée si le redimensionnement échoue toujours

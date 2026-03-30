@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.9] - 2026-03-30
+
 ### Behoben
 
 - Fenstergrößenänderung schlug bei bestimmten Apps fehl und die Position wurde verschoben: Die Fallback-Bounce-Position bei abgelehnter Größenänderung lag am unteren Bildschirmrand (kein Platz zum Vergrößern), wodurch das Fenster an einer falschen Position hängen blieb. Bounce erfolgt jetzt zum oberen Rand des sichtbaren Bereichs, und bei erneutem Fehlschlag wird die Position explizit wiederhergestellt

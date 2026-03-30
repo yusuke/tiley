@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.9] - 2026-03-30
+
 ### Corregido
 
 - El redimensionamiento de ventanas fallaba y la posición se desplazaba en ciertas aplicaciones: la posición de rebote cuando el redimensionamiento inicial era rechazado estaba en la parte inferior de la pantalla (sin espacio para expandir), dejando la ventana en una posición incorrecta. Ahora rebota a la parte superior del área visible y restaura explícitamente la posición si el redimensionamiento sigue fallando

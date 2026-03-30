@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.9] - 2026-03-30
+
 ### Corrigido
 
 - Redimensionamento de janela falhava e a posição ficava deslocada em certos aplicativos: a posição de rebote quando o redimensionamento inicial era rejeitado ficava na parte inferior da tela (sem espaço para expandir), deixando a janela em uma posição incorreta. Agora o rebote vai para o topo da área visível e a posição é restaurada explicitamente se o redimensionamento continuar falhando

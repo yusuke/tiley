@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.9] - 2026-03-30
+
 ### Fixed
 
 - Window resize failing and position getting displaced for certain apps: the fallback bounce position used when the initial resize is silently rejected was at the bottom of the screen (no room to expand), causing the window to get stuck at an incorrect position; now bounces to the top of the visible area and explicitly restores position if the resize still fails
@@ -534,7 +536,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.8...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.9...HEAD
+[4.0.9]: https://github.com/yusuke/tiley/releases/tag/v4.0.9
 [4.0.8]: https://github.com/yusuke/tiley/releases/tag/v4.0.8
 [4.0.7]: https://github.com/yusuke/tiley/releases/tag/v4.0.7
 [4.0.6]: https://github.com/yusuke/tiley/releases/tag/v4.0.6
