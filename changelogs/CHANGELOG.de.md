@@ -4,6 +4,7 @@
 
 ### Hinzugefügt
 
+- Fensterwechsel bei gehaltenen Modifikatortasten (Cmd+Tab-ähnlich): Nach dem Öffnen des Overlays die Toggle-Modifikatortasten gedrückt halten und die Auslösetaste wiederholt drücken, um zwischen Fenstern zu wechseln; beim Loslassen der Modifikatortasten wird das ausgewählte Fenster in den Vordergrund gebracht; Layout-Lokalkürzel bei gehaltenen Modifikatortasten anwenden
 - Abschnitt für Drittanbieter-Lizenzhinweise in den Einstellungen (Sparkle, TelemetryDeck)
 
 ### Geändert

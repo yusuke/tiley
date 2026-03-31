@@ -229,6 +229,7 @@ extension AppState {
     /// Immediately dismisses the overlay, layout grid, and all main windows
     /// so the user doesn't wait for subsequent (potentially slow) AX operations.
     func dismissOverlayImmediately() {
+        removeModifierReleaseMonitor()
         windowHighlightController?.hide()
         windowHighlightController = nil
         hidePreviewOverlay()

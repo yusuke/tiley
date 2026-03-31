@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Modifier-held window cycling (Cmd+Tab-like interaction): hold the toggle modifier keys after opening the overlay, then press the trigger key repeatedly to cycle through windows; release the modifiers to bring the selected window to front; press a layout local shortcut key while holding modifiers to apply that layout
 - Third-party license acknowledgements section in Settings (Sparkle, TelemetryDeck)
 
 ### Changed

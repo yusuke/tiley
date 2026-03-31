@@ -117,6 +117,7 @@ extension AppState {
         // If any Tiley window is still visible, don't reset state.
         let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
         if anyVisible { return }
+        removeModifierReleaseMonitor()
         hidePreviewOverlay()
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
@@ -339,6 +340,17 @@ extension AppState {
 
     // MARK: - Key Commands
 
+    /// Returns true if `eventShortcut` matches `expected`, also considering
+    /// modifier-held mode where the toggle modifiers may be held alongside
+    /// the expected shortcut's modifiers.
+    private func matchesShortcut(_ eventShortcut: HotKeyShortcut, _ expected: HotKeyShortcut) -> Bool {
+        if eventShortcut == expected { return true }
+        if let stripped = strippedShortcut(eventShortcut) {
+            return stripped == expected
+        }
+        return false
+    }
+
     func handleMainWindowKeyCommand(_ event: NSEvent) -> Bool {
         guard !isEditingSettings else { return false }
 
@@ -346,17 +358,17 @@ extension AppState {
         let eventShortcut = HotKeyShortcut.from(event: event, requireModifiers: false)
         if let shortcut = eventShortcut {
             if displayShortcutSettings.selectNextWindow.localEnabled,
-               let s = displayShortcutSettings.selectNextWindow.local, s == shortcut {
+               let s = displayShortcutSettings.selectNextWindow.local, matchesShortcut(shortcut, s) {
                 cycleTargetWindow(forward: true)
                 return true
             }
             if displayShortcutSettings.selectPreviousWindow.localEnabled,
-               let s = displayShortcutSettings.selectPreviousWindow.local, s == shortcut {
+               let s = displayShortcutSettings.selectPreviousWindow.local, matchesShortcut(shortcut, s) {
                 cycleTargetWindow(forward: false)
                 return true
             }
             if displayShortcutSettings.bringToFront.localEnabled,
-               let s = displayShortcutSettings.bringToFront.local, s == shortcut {
+               let s = displayShortcutSettings.bringToFront.local, matchesShortcut(shortcut, s) {
                 if selectedWindowIndices.count > 1 {
                     raiseSelectedWindows()
                 } else {
@@ -365,7 +377,7 @@ extension AppState {
                 return true
             }
             if displayShortcutSettings.closeOrQuit.localEnabled,
-               let s = displayShortcutSettings.closeOrQuit.local, s == shortcut {
+               let s = displayShortcutSettings.closeOrQuit.local, matchesShortcut(shortcut, s) {
                 if selectedWindowIndices.count > 1 {
                     closeSelectedWindows()
                 } else {

@@ -371,4 +371,80 @@ extension AppState {
             }
         }
     }
+
+    // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
+
+    /// Installs global+local flagsChanged monitors to detect when the toggle
+    /// modifier keys are released, enabling Cmd+Tab-like window cycling.
+    func installModifierReleaseMonitor() {
+        let toggleMods = hotKeyShortcut.modifiers
+        guard toggleMods != 0 else { return }
+
+        removeModifierReleaseMonitor()
+
+        let handler: (NSEvent) -> Void = { [weak self] event in
+            guard let self else { return }
+            let currentMods = HotKeyShortcut.carbonModifiers(from: event.modifierFlags)
+            if (currentMods & toggleMods) != toggleMods {
+                // Toggle modifiers released — confirm the current selection.
+                Task { @MainActor in
+                    self.confirmModifierHeldSelection()
+                }
+            }
+        }
+
+        modifierReleaseGlobalMonitor = NSEvent.addGlobalMonitorForEvents(
+            matching: .flagsChanged, handler: handler
+        )
+        modifierReleaseLocalMonitor = NSEvent.addLocalMonitorForEvents(
+            matching: .flagsChanged
+        ) { event in
+            handler(event)
+            return event
+        }
+        isModifierHeldMode = true
+    }
+
+    /// Removes the modifier-release monitors and exits modifier-held mode.
+    func removeModifierReleaseMonitor() {
+        if let monitor = modifierReleaseGlobalMonitor {
+            NSEvent.removeMonitor(monitor)
+            modifierReleaseGlobalMonitor = nil
+        }
+        if let monitor = modifierReleaseLocalMonitor {
+            NSEvent.removeMonitor(monitor)
+            modifierReleaseLocalMonitor = nil
+        }
+        isModifierHeldMode = false
+        hasActedDuringModifierHeld = false
+    }
+
+    /// Called when the user releases the toggle modifiers.
+    /// If the user interacted (cycled windows or applied a layout), confirms
+    /// the current selection. Otherwise just exits modifier-held mode.
+    func confirmModifierHeldSelection() {
+        guard isShowingLayoutGrid else {
+            removeModifierReleaseMonitor()
+            return
+        }
+        let acted = hasActedDuringModifierHeld
+        removeModifierReleaseMonitor()
+
+        guard acted else { return }
+
+        if selectedWindowIndices.count > 1 {
+            raiseSelectedWindows()
+        } else {
+            raiseCurrentTargetWindow()
+        }
+    }
+
+    /// Returns a copy of `shortcut` with the toggle modifier keys stripped,
+    /// or nil if not in modifier-held mode or stripping changes nothing.
+    func strippedShortcut(_ shortcut: HotKeyShortcut) -> HotKeyShortcut? {
+        guard isModifierHeldMode else { return nil }
+        let stripped = shortcut.modifiers & ~hotKeyShortcut.modifiers
+        guard stripped != shortcut.modifiers else { return nil }
+        return HotKeyShortcut(keyCode: shortcut.keyCode, modifiers: stripped)
+    }
 }

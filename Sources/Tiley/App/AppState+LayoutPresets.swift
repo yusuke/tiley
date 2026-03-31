@@ -146,13 +146,22 @@ extension AppState {
 
     func handleLocalShortcut(_ shortcut: HotKeyShortcut) -> Bool {
         guard isShowingLayoutGrid, !isEditingSettings else { return false }
-        if let preset = layoutPresets.first(where: { $0.localShortcuts.contains(shortcut) }) {
-            applyPresetOnMouseScreen(id: preset.id)
-            return true
-        }
-        if let action = displayShortcutLocalAction(for: shortcut) {
-            executeDisplayShortcutLocal(action)
-            return true
+
+        // When in modifier-held mode, also try matching with the toggle
+        // modifiers stripped (e.g. Shift+Cmd+M → M).
+        let candidates = [shortcut, strippedShortcut(shortcut)].compactMap { $0 }
+
+        for s in candidates {
+            if let preset = layoutPresets.first(where: { $0.localShortcuts.contains(s) }) {
+                removeModifierReleaseMonitor()
+                applyPresetOnMouseScreen(id: preset.id)
+                return true
+            }
+            if let action = displayShortcutLocalAction(for: s) {
+                removeModifierReleaseMonitor()
+                executeDisplayShortcutLocal(action)
+                return true
+            }
         }
         return false
     }

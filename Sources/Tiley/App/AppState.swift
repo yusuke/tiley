@@ -208,6 +208,16 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var pendingTargetIndexAfterClose: Int?
     @ObservationIgnored var displayHighlightWindow: NSWindow?
 
+    // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
+    /// True when the user opened the overlay and is still holding the toggle modifiers.
+    var isModifierHeldMode = false
+    /// True when the user pressed an additional key (cycling or layout shortcut)
+    /// while in modifier-held mode. Used to decide whether releasing modifiers
+    /// should confirm the selection or just exit modifier-held mode.
+    @ObservationIgnored var hasActedDuringModifierHeld = false
+    @ObservationIgnored var modifierReleaseGlobalMonitor: Any?
+    @ObservationIgnored var modifierReleaseLocalMonitor: Any?
+
     /// True while the user is cycling through target windows (Tab/arrow/click
     /// in the sidebar).  Used to suppress Tiley from hiding itself when the
     /// target app is briefly activated to bring its window to the front.
@@ -596,6 +606,7 @@ final class AppState: NSObject, NSMenuDelegate {
     func beginSettingsEditing() {
         let mainFrame = targetWindowController?.window?.frame
         activeLayoutTarget = initialLayoutTarget()
+        removeModifierReleaseMonitor()
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
@@ -609,6 +620,7 @@ final class AppState: NSObject, NSMenuDelegate {
     func beginSettingsEditing(on screen: NSScreen) {
         let mainFrame = targetWindowController?.window?.frame
         activeLayoutTarget = initialLayoutTarget()
+        removeModifierReleaseMonitor()
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
@@ -640,6 +652,11 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         if isShowingLayoutGrid {
+            if isModifierHeldMode {
+                hasActedDuringModifierHeld = true
+                cycleTargetWindow(forward: true)
+                return
+            }
             cancelLayoutGrid()
             return
         }
@@ -668,6 +685,9 @@ final class AppState: NSObject, NSMenuDelegate {
         perfLog("openMainWindow done")
         // Show a highlight border around the initially selected (frontmost) window.
         showHighlightForActiveTarget()
+        // Enter modifier-held mode so that re-pressing the trigger key cycles
+        // windows and releasing the modifiers confirms the selection.
+        installModifierReleaseMonitor()
         // Bump version after the window is open so the view picks up the latest
         // target info and window list.
         windowTargetListVersion += 1
@@ -910,6 +930,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func cancelLayoutGrid() {
+        removeModifierReleaseMonitor()
         hidePreviewOverlay()
         isShowingLayoutGrid = false
         activeLayoutTarget = nil

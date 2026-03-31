@@ -4,6 +4,7 @@
 
 ### Aggiunto
 
+- Cambio finestra con tasti modificatori tenuti premuti (stile Cmd+Tab): dopo aver aperto l'overlay, tieni premuti i tasti modificatori e premi ripetutamente il tasto di attivazione per scorrere le finestre; rilascia i tasti modificatori per portare la finestra selezionata in primo piano; premi le scorciatoie locali del layout mentre tieni premuti i tasti modificatori per applicare il layout corrispondente
 - Sezione riconoscimenti per le licenze di terze parti nelle Impostazioni (Sparkle, TelemetryDeck)
 
 ### Modificato
