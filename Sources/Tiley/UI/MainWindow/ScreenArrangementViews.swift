@@ -31,8 +31,6 @@ struct MoveToDisplayButton: View {
 
 struct MoveToDisplayButtonLabel: View {
     let targetScreen: NSScreen
-    @Environment(\.tahoeActionBarHovered) private var isHovered
-    @Environment(\.isEnabled) private var isEnabled
 
     var body: some View {
         HStack(spacing: 2) {
@@ -45,13 +43,8 @@ struct MoveToDisplayButtonLabel: View {
             }())
                 .font(.system(size: 8, weight: .bold))
                 .frame(width: 10, height: 10)
-            ZStack {
-                ScreenArrangementIcon(highlightDisplayID: targetScreen.displayID, size: 12, color: .secondary)
-                    .opacity(isHovered && isEnabled ? 0 : 1)
-                ScreenArrangementIcon(highlightDisplayID: targetScreen.displayID, size: 12, color: .primary)
-                    .opacity(isHovered && isEnabled ? 1 : 0)
-            }
-            .frame(width: 12, height: 12)
+            ScreenArrangementIcon(highlightDisplayID: targetScreen.displayID, size: 12, color: .primary)
+                .frame(width: 12, height: 12)
         }
         .frame(width: 32, height: 24)
     }
