@@ -33,13 +33,13 @@ struct DisplayShortcutSettings: Codable, Equatable {
         globalEnabled: false
     )
     static let defaultSelectNextWindow = DisplayShortcutEntry(
-        local: HotKeyShortcut(keyCode: UInt32(kVK_Tab), modifiers: 0),
+        local: HotKeyShortcut(keyCode: UInt32(kVK_Space), modifiers: 0),
         global: nil,
         localEnabled: true,
         globalEnabled: false
     )
     static let defaultSelectPreviousWindow = DisplayShortcutEntry(
-        local: HotKeyShortcut(keyCode: UInt32(kVK_Tab), modifiers: UInt32(shiftKey)),
+        local: HotKeyShortcut(keyCode: UInt32(kVK_Space), modifiers: UInt32(shiftKey)),
         global: nil,
         localEnabled: true,
         globalEnabled: false

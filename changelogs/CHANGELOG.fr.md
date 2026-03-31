@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Le raccourci par défaut pour sélectionner la fenêtre suivante est passé de Tab à Space ; la fenêtre précédente est passée de Shift+Tab à Shift+Space
+
 ## [4.1.0] - 2026-03-31
 
 ### Ajouté

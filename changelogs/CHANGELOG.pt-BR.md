@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- O atalho padrão para selecionar a próxima janela foi alterado de Tab para Space; a janela anterior foi alterada de Shift+Tab para Shift+Space
+
 ## [4.1.0] - 2026-03-31
 
 ### Adicionado
