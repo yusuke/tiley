@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-03-31
+
 ### Added
 
 - Modifier-held window cycling (Cmd+Tab-like interaction): hold the toggle modifier keys after opening the overlay, then press the trigger key repeatedly to cycle through windows; release the modifiers to bring the selected window to front; press a layout local shortcut key while holding modifiers to apply that layout
@@ -550,7 +552,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.0.9...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/yusuke/tiley/releases/tag/v4.1.0
 [4.0.9]: https://github.com/yusuke/tiley/releases/tag/v4.0.9
 [4.0.8]: https://github.com/yusuke/tiley/releases/tag/v4.0.8
 [4.0.7]: https://github.com/yusuke/tiley/releases/tag/v4.0.7

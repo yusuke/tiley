@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-03-31
+
 ### Añadido
 
 - Cambio de ventana manteniendo teclas modificadoras (estilo Cmd+Tab): tras abrir la superposición, mantenga las teclas modificadoras de alternancia y pulse la tecla de activación repetidamente para recorrer las ventanas; al soltar las teclas modificadoras, la ventana seleccionada pasa al frente; pulse atajos locales de diseño mientras mantiene las teclas modificadoras para aplicar el diseño correspondiente

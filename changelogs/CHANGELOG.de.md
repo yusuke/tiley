@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-03-31
+
 ### Hinzugefügt
 
 - Fensterwechsel bei gehaltenen Modifikatortasten (Cmd+Tab-ähnlich): Nach dem Öffnen des Overlays die Toggle-Modifikatortasten gedrückt halten und die Auslösetaste wiederholt drücken, um zwischen Fenstern zu wechseln; beim Loslassen der Modifikatortasten wird das ausgewählte Fenster in den Vordergrund gebracht; Layout-Lokalkürzel bei gehaltenen Modifikatortasten anwenden

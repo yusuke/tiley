@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-03-31
+
 ### Ajouté
 
 - Changement de fenêtre en maintenant les touches de modification (style Cmd+Tab) : après avoir ouvert le panneau, maintenez les touches de modification et appuyez sur la touche de déclenchement pour parcourir les fenêtres ; relâchez les touches de modification pour mettre la fenêtre sélectionnée au premier plan ; appuyez sur un raccourci local de disposition tout en maintenant les touches de modification pour appliquer la disposition

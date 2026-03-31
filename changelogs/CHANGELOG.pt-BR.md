@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-03-31
+
 ### Adicionado
 
 - Alternância de janelas mantendo teclas modificadoras pressionadas (estilo Cmd+Tab): após abrir a sobreposição, mantenha as teclas modificadoras de alternância pressionadas e pressione a tecla de ativação repetidamente para alternar entre janelas; ao soltar as teclas modificadoras, a janela selecionada é trazida para frente; pressione atalhos locais de layout enquanto mantém as teclas modificadoras para aplicar o layout correspondente
