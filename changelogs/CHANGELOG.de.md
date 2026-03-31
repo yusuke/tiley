@@ -5,6 +5,7 @@
 ### Geändert
 
 - Standard-Tastenkürzel für die Auswahl des nächsten Fensters von Tab auf Space geändert; vorheriges Fenster von Shift+Tab auf Shift+Space geändert
+- Verschobene Fenster kehren beim Schließen des Overlays nun immer animiert an ihre ursprüngliche Position zurück
 
 ## [4.1.0] - 2026-03-31
 

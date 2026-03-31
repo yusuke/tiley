@@ -5,6 +5,7 @@
 ### Alterado
 
 - O atalho padrão para selecionar a próxima janela foi alterado de Tab para Space; a janela anterior foi alterada de Shift+Tab para Shift+Space
+- As janelas deslocadas agora sempre retornam à posição original com animação ao fechar a sobreposição
 
 ## [4.1.0] - 2026-03-31
 

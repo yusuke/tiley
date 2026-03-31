@@ -5,6 +5,7 @@
 ### Modifié
 
 - Le raccourci par défaut pour sélectionner la fenêtre suivante est passé de Tab à Space ; la fenêtre précédente est passée de Shift+Tab à Shift+Space
+- Les fenêtres déplacées reviennent désormais toujours à leur position d'origine avec une animation lors de la fermeture de la superposition
 
 ## [4.1.0] - 2026-03-31
 

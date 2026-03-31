@@ -5,6 +5,7 @@
 ### Cambiado
 
 - El atajo predeterminado para seleccionar la siguiente ventana cambió de Tab a Space; la ventana anterior cambió de Shift+Tab a Shift+Space
+- Las ventanas desplazadas ahora siempre regresan a su posición original con animación al cerrar la superposición
 
 ## [4.1.0] - 2026-03-31
 

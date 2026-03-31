@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Default shortcut for selecting the next window changed from Tab to Space; previous window changed from Shift+Tab to Shift+Space
+- Displaced windows now always animate back to their original positions when the overlay is dismissed
 
 ## [4.1.0] - 2026-03-31
 

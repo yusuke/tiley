@@ -413,7 +413,7 @@ extension AppState {
         }
     }
 
-    func clearWindowCyclingState(animateRestore: Bool = false) {
+    func clearWindowCyclingState(animateRestore: Bool = true) {
         windowHighlightController?.hide()
         windowHighlightController = nil
         CATransaction.flush()

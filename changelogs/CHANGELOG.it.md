@@ -5,6 +5,7 @@
 ### Modificato
 
 - La scorciatoia predefinita per selezionare la finestra successiva è stata cambiata da Tab a Space; la finestra precedente da Shift+Tab a Shift+Space
+- Le finestre spostate ora tornano sempre alla posizione originale con animazione alla chiusura dell'overlay
 
 ## [4.1.0] - 2026-03-31
 
