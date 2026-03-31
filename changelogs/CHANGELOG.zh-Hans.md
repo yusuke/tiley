@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-03-31
+
 ### 变更
 
 - 选择下一个窗口的默认快捷键从 Tab 改为 Space，选择上一个窗口从 Shift+Tab 改为 Shift+Space

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-03-31
+
 ### 變更
 
 - 選擇下一個視窗的預設快捷鍵從 Tab 改為 Space，選擇上一個視窗從 Shift+Tab 改為 Shift+Space

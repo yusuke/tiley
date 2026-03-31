@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-03-31
+
 ### 변경
 
 - 다음 윈도우 선택 기본 단축키를 Tab에서 Space로, 이전 윈도우를 Shift+Tab에서 Shift+Space로 변경

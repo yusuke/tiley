@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-03-31
+
 ### Changed
 
 - Default shortcut for selecting the next window changed from Tab to Space; previous window changed from Shift+Tab to Shift+Space
@@ -557,7 +559,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.1.1...HEAD
+[4.1.1]: https://github.com/yusuke/tiley/releases/tag/v4.1.1
 [4.1.0]: https://github.com/yusuke/tiley/releases/tag/v4.1.0
 [4.0.9]: https://github.com/yusuke/tiley/releases/tag/v4.0.9
 [4.0.8]: https://github.com/yusuke/tiley/releases/tag/v4.0.8
