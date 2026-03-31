@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Third-party license acknowledgements section in Settings (Sparkle, TelemetryDeck)
 
+### Changed
+
+- Settings and Permissions panels are now separate windows at normal (non-floating) level, so Sparkle update dialogs and other OS windows can appear above them
+- Sidebar is now always visible; the sidebar show/hide toggle button has been removed
+- Settings button moved from the footer bar to the left edge of the sidebar action bar
+- Mini screen preview now always has rounded corners on all four sides, regardless of display type
+- Miniature window title bar now shows the application name alongside the window title
+- "Update available" badge replaced with a red dot on the settings button and a tooltip; the settings panel shows a popover on the "Check for Updates" button instead
+
 ## [4.0.9] - 2026-03-30
 
 ### Fixed

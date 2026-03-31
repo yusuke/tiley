@@ -118,8 +118,6 @@ extension AppState {
         let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
         if anyVisible { return }
         hidePreviewOverlay()
-        isEditingSettings = false
-        isShowingPermissionsOnly = false
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
         clearResizabilityCache()
@@ -131,10 +129,6 @@ extension AppState {
     }
 
     func handleMainWindowEscape() -> Bool {
-        if isEditingSettings {
-            cancelSettingsEditing()
-            return true
-        }
         if isEditingLayoutPresets {
             isEditingLayoutPresets = false
             return true
@@ -157,10 +151,8 @@ extension AppState {
     }
 
     func openMainWindow() {
-        debugLog("openMainWindow start (isShowingLayoutGrid=\(isShowingLayoutGrid ? 1 : 0), isEditingSettings=\(isEditingSettings ? 1 : 0))")
-        if isEditingSettings || isShowingPermissionsOnly {
-            openTargetScreenWindow()
-        } else if isShowingLayoutGrid {
+        debugLog("openMainWindow start (isShowingLayoutGrid=\(isShowingLayoutGrid ? 1 : 0))")
+        if isShowingLayoutGrid {
             NSApp.activate(ignoringOtherApps: true)
             openAllScreenWindows()
         } else {
@@ -185,7 +177,7 @@ extension AppState {
             controller.dismissSilently()
         }
 
-        if !isEditingSettings, let existingCtrl = mainWindowControllers[displayID] {
+        if let existingCtrl = mainWindowControllers[displayID] {
             // Reuse existing controller — just update state and show.
             // Discard secondary controllers that are no longer needed.
             mainWindowControllers = mainWindowControllers.filter { $0.key == displayID }
@@ -194,8 +186,6 @@ extension AppState {
             selectedLayoutPresetID = nil
             existingCtrl.show()
         } else {
-            // Always recreate when entering settings to avoid stale SwiftUI
-            // layout state that causes Toggle switch knobs to render incorrectly.
             mainWindowControllers.removeAll()
             mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
             NSApp.activate(ignoringOtherApps: true)

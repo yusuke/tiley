@@ -75,26 +75,25 @@ extension AppState {
         // Re-register display hotkeys so newly connected displays become active
         // and disconnected display hotkeys are cleaned up.
         registerDisplayHotKeys()
-        guard isShowingLayoutGrid, !isEditingSettings, !isShowingPermissionsOnly else { return }
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
         openAllScreenWindows()
     }
 
     func handleAppDidResignActive() {
         guard !isSwitchingActivationPolicy else { return }
         guard !isRecreatingWindows else { return }
-        guard !isShowingPermissionsOnly else { return }
+        // Don't hide windows if the permissions or settings window is open —
+        // the user may be switching to System Settings or another app briefly.
+        guard permissionsWindowController == nil else { return }
+        guard settingsWindowController == nil else { return }
         hidePreviewOverlay()
         hideMainWindow()
     }
 
     func handleAppDidBecomeActive() {
-        guard isShowingPermissionsOnly else { return }
+        guard permissionsWindowController != nil else { return }
         refreshAccessibilityState()
-        guard accessibilityGranted else {
-            // Re-show the permissions panel when the user switches back without granting access
-            openMainWindow()
-            return
-        }
+        guard accessibilityGranted else { return }
         dismissPermissionsOnly()
         activeLayoutTarget = initialLayoutTarget()
         if let activeLayoutTarget {

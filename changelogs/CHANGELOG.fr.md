@@ -6,6 +6,15 @@
 
 - Section de remerciements pour les licences tierces dans les Réglages (Sparkle, TelemetryDeck)
 
+### Modifié
+
+- Les panneaux Réglages et Autorisations sont désormais des fenêtres indépendantes au niveau normal (non flottant), permettant aux dialogues de mise à jour Sparkle et autres fenêtres système de s'afficher au-dessus
+- La barre latérale est désormais toujours visible ; le bouton d'affichage/masquage a été supprimé
+- Le bouton des réglages a été déplacé de la barre inférieure vers l'extrémité gauche de la barre d'actions de la barre latérale
+- L'aperçu mini-écran a désormais des coins arrondis sur les quatre côtés quel que soit le type d'écran
+- La barre de titre de la fenêtre miniature affiche désormais le nom de l'application en plus du titre de la fenêtre
+- Le badge « Mise à jour disponible » a été remplacé par un point rouge sur le bouton des réglages et une infobulle ; dans le panneau des réglages, un popover s'affiche sur le bouton « Vérifier les mises à jour »
+
 ## [4.0.9] - 2026-03-30
 
 ### Corrigé

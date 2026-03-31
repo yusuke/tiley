@@ -1,6 +1,4 @@
 import AppKit
-import Carbon
-import Sparkle
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -8,12 +6,7 @@ struct MainWindowView: View {
     private static let windowCornerRadius: CGFloat = 20
     private static let layoutPanelHorizontalPadding: CGFloat = 8
     private static let layoutGridAspectHeightRatio: CGFloat = 0.75
-    private static let footerLeadingWidth: CGFloat = 36
-    private static let footerTrailingWidth: CGFloat = 88
-    private static let footerHeight: CGFloat = 28
     private static let footerBottomPadding: CGFloat = 8
-    private static let layoutFooterTopPadding: CGFloat = 8
-    private static let layoutFooterBottomPadding: CGFloat = 0
     private static let layoutGridTopPadding: CGFloat = 8
     private static let layoutPresetsTopPadding: CGFloat = 0
     private static let presetRowHeight: CGFloat = 44
@@ -26,13 +19,12 @@ struct MainWindowView: View {
     private static let defaultGridColumns = 6
     private static let defaultGridRows = 6
     private static let defaultGridGap: CGFloat = 0
-    private static let sidebarWidth: CGFloat = 180
+    private static let sidebarWidth: CGFloat = MainWindowController.sidebarWidth
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.screenContext) private var screenContext
     var appState: AppState
     var screenRole: ScreenRole
-    @State private var draftSettings: AppState.SettingsSnapshot
     @State private var activeLayoutSelection: GridSelection?
     @State private var editingPresetID: UUID?
     @State private var editingPresetNameID: UUID?
@@ -51,7 +43,6 @@ struct MainWindowView: View {
     @State private var didReorderDuringDrag = false
     @State private var isPerformingDrop = false
     @State private var dragEndTask: Task<Void, Never>?
-    @State private var isHoveringGridSection = false
     @State private var windowSearchText = ""
     @State private var debouncedSearchText = ""
     @State private var searchDebounceTask: Task<Void, Never>?
@@ -68,7 +59,6 @@ struct MainWindowView: View {
     init(appState: AppState, screenRole: ScreenRole = .target) {
         self.appState = appState
         self.screenRole = screenRole
-        _draftSettings = State(initialValue: appState.settingsSnapshot)
     }
 
     struct DesktopPictureInfo {
@@ -612,33 +602,15 @@ struct MainWindowView: View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
                 Color(nsColor: .windowBackgroundColor)
-                    .opacity(appState.isEditingSettings || appState.isShowingPermissionsOnly ? 1.0 : 0.86)
+                    .opacity(0.86)
 
-                if appState.isShowingPermissionsOnly {
-                    permissionsOnlyPanel(size: geometry.size)
-                } else if appState.isEditingSettings {
-                    settingsPanel(size: geometry.size)
-                } else {
-                    layoutGridPanel(size: geometry.size)
-                }
+                layoutGridPanel(size: geometry.size)
             }
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)
             .clipShape(RoundedRectangle(cornerRadius: Self.windowCornerRadius, style: .continuous))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear {
-            if appState.isEditingSettings, isHoveringGridSection {
-                appState.updateSettingsPreview(draftSettings)
-            }
-        }
-        .onChange(of: appState.isEditingSettings) { _, isEditing in
-            if isEditing {
-                draftSettings = appState.settingsSnapshot
-            } else {
-                appState.hidePreviewOverlay()
-                isHoveringGridSection = false
-            }
-        }
+        .ignoresSafeArea()
         .onChange(of: appState.isShowingLayoutGrid) { _, isShowing in
             if isShowing {
                 windowSearchText = ""
@@ -655,27 +627,13 @@ struct MainWindowView: View {
                 editingPresetID = nil
             }
         }
-        .onChange(of: draftSettings) { _, newValue in
-            guard appState.isEditingSettings, isHoveringGridSection else { return }
-            appState.updateSettingsPreview(newValue)
-        }
         .onChange(of: appState.windowTargetMenuRequestVersion) { _, _ in
-            if !appState.isSidebarVisible {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    appState.isSidebarVisible = true
-                }
-            }
             withAnimation(.easeInOut(duration: 0.15)) {
                 isSearchFieldVisible = true
             }
             windowSearchFocusTrigger += 1
         }
         .onChange(of: appState.windowSearchFocusRequestVersion) { _, _ in
-            if !appState.isSidebarVisible {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    appState.isSidebarVisible = true
-                }
-            }
             withAnimation(.easeInOut(duration: 0.15)) {
                 isSearchFieldVisible = true
             }
@@ -686,7 +644,6 @@ struct MainWindowView: View {
             windowSearchBlurTrigger += 1
             withAnimation(.easeInOut(duration: 0.2)) {
                 isSearchFieldVisible = false
-                appState.isSidebarVisible = false
             }
         }
         .onChange(of: windowSearchText) { _, newValue in
@@ -715,9 +672,6 @@ struct MainWindowView: View {
         }
         .onChange(of: appState.windowTargetListVersion) { _, _ in
             appInfoCache.invalidate()
-            if appState.hasUsedTabCycling {
-                showSidebarIfNeeded()
-            }
         }
         .onChange(of: appState.selectedLayoutPresetID) { _, selectedID in
             if let hoveredPresetID, selectedID != hoveredPresetID {
@@ -742,79 +696,6 @@ struct MainWindowView: View {
         }
     }
 
-    private func settingsPanel(size: CGSize) -> some View {
-        VStack(spacing: 0) {
-            // Tahoe-style title bar
-            HStack {
-                Button {
-                    dismissPresetNameEditingIfNeeded()
-                    appState.apply(settings: draftSettings)
-                    draftSettings = appState.settingsSnapshot
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 13, weight: .semibold))
-                }
-                .buttonStyle(TahoeToolbarButtonStyle())
-                .help("Back")
-
-                Spacer()
-
-                HStack(spacing: 6) {
-                    Image(nsImage: NSApp.applicationIconImage)
-                        .resizable()
-                        .interpolation(.high)
-                        .frame(width: 20, height: 20)
-                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-
-                    Text(NSLocalizedString("Settings", comment: "Settings window title"))
-                        .font(.system(size: 13, weight: .semibold))
-                }
-
-                Spacer()
-
-                Button {
-                    appState.quitApp()
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "power")
-                            .font(.system(size: 10, weight: .semibold))
-                        Text(NSLocalizedString("Quit Tiley", comment: "Quit button"))
-                            .font(.system(size: 11, weight: .medium))
-                    }
-                }
-                .buttonStyle(TahoeQuitButtonStyle())
-                .help(NSLocalizedString("Quit Tiley", comment: "Quit button tooltip"))
-            }
-            .padding(.top, 10)
-            .padding(.bottom, 4)
-            .padding(.horizontal, 8)
-
-            Divider()
-                .opacity(0.5)
-
-            ScrollView {
-                settingsEditor
-                    .padding(.horizontal, 12)
-                    .padding(.top, 12)
-                    .padding(.bottom, 12)
-            }
-        }
-        .frame(width: size.width, height: size.height, alignment: .topLeading)
-    }
-
-    private static let permissionsImageLocale: String = {
-        let lang = Locale.preferredLanguages.first ?? "en"
-        return lang.hasPrefix("ja") ? "ja" : "en"
-    }()
-
-    private static var resourceBundle: Bundle {
-        #if SWIFT_PACKAGE
-        Bundle.module
-        #else
-        Bundle.main
-        #endif
-    }
-
     /// Returns the thumbnail size for the preset grid preview, matching the
     /// visible screen area's aspect ratio (excluding menu bar and Dock).
     private static func presetGridThumbnailSize(for screenContext: ScreenContext?) -> CGSize {
@@ -831,105 +712,8 @@ struct MainWindowView: View {
         return CGSize(width: fitW, height: fitH)
     }
 
-    private static func permissionsImage(named name: String) -> NSImage? {
-        let fileName = "\(name)-\(permissionsImageLocale)"
-        let url = resourceBundle.url(forResource: fileName, withExtension: "png", subdirectory: "Images")
-            ?? resourceBundle.url(forResource: fileName, withExtension: "png")
-        guard let url else { return nil }
-        return NSImage(contentsOf: url)
-    }
-
-    private func permissionsOnlyPanel(size: CGSize) -> some View {
-        VStack(spacing: 0) {
-            // Tahoe-style title bar
-            HStack {
-                Spacer()
-
-                HStack(spacing: 6) {
-                    Image(nsImage: NSApp.applicationIconImage)
-                        .resizable()
-                        .interpolation(.high)
-                        .frame(width: 20, height: 20)
-                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-
-                    Text("Tiley")
-                        .font(.system(size: 13, weight: .semibold))
-                }
-
-                Spacer()
-
-                Button {
-                    appState.quitApp()
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "power")
-                            .font(.system(size: 10, weight: .semibold))
-                        Text(NSLocalizedString("Quit Tiley", comment: "Quit button"))
-                            .font(.system(size: 11, weight: .medium))
-                    }
-                }
-                .buttonStyle(TahoeQuitButtonStyle())
-                .help(NSLocalizedString("Quit Tiley", comment: "Quit button tooltip"))
-            }
-            .padding(.top, 10)
-            .padding(.bottom, 4)
-            .padding(.horizontal, 8)
-
-            Divider()
-                .opacity(0.5)
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    TahoeSettingsSection(title: NSLocalizedString("Permissions", comment: "Settings section")) {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Label(
-                                    appState.accessibilityGranted
-                                        ? NSLocalizedString("Accessibility enabled", comment: "")
-                                        : NSLocalizedString("Accessibility required", comment: ""),
-                                    systemImage: appState.accessibilityGranted ? "checkmark.shield" : "exclamationmark.shield"
-                                )
-                                .foregroundStyle(appState.accessibilityGranted ? .green : .orange)
-                                Spacer()
-                                Button("Open Prompt") {
-                                    appState.requestAccessibilityAccess()
-                                }
-                                    }
-                            Text("Window movement on macOS requires Accessibility permission.")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-
-                            permissionsScreenshot(named: "dialog")
-                            permissionsScreenshot(named: "system")
-                        }
-                    }
-                }
-                .font(.system(size: 13))
-                .padding(.horizontal, 12)
-                .padding(.top, 12)
-                .padding(.bottom, 12)
-            }
-        }
-        .frame(width: size.width, height: size.height, alignment: .topLeading)
-    }
-
-    @ViewBuilder
-    private func permissionsScreenshot(named name: String) -> some View {
-        if let nsImage = Self.permissionsImage(named: name) {
-            Image(nsImage: nsImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .stroke(ThemeColors.screenshotBorder(for: colorScheme), lineWidth: 1)
-                )
-        }
-    }
-
     private func layoutGridPanel(size: CGSize) -> some View {
-        let hasSidebar = appState.isSidebarVisible
-        let mainContentWidth = hasSidebar ? size.width - Self.sidebarWidth - 1 : size.width
+        let mainContentWidth = size.width - Self.sidebarWidth - 1
         let fullCompositeWidth = mainContentWidth - (Self.layoutPanelHorizontalPadding * 2)
 
         // Use the full screen aspect ratio so the composite area (menu bar + grid + Dock)
@@ -970,10 +754,7 @@ struct MainWindowView: View {
         let minPresetCount: CGFloat = min(CGFloat(appState.displayedLayoutPresets.count), 4)
         let minPresetsHeight = minPresetCount * Self.presetRowHeight
             + max(0, minPresetCount - 1) * Self.presetRowSpacing
-        let nonCompositeHeight = Self.layoutFooterTopPadding
-            + Self.footerHeight
-            + Self.layoutFooterBottomPadding
-            + Self.layoutGridTopPadding
+        let nonCompositeHeight = Self.layoutGridTopPadding
             + Self.layoutPresetsTopPadding
             + Self.presetsPanelChromeHeight
             + minPresetsHeight
@@ -1003,9 +784,6 @@ struct MainWindowView: View {
         let availablePresetsHeight = max(
             0,
             size.height
-                - Self.layoutFooterTopPadding
-                - Self.footerHeight
-                - Self.layoutFooterBottomPadding
                 - Self.layoutGridTopPadding
                 - compositeHeight
                 - Self.layoutPresetsTopPadding
@@ -1013,16 +791,9 @@ struct MainWindowView: View {
         )
 
         return HStack(spacing: 0) {
-            if hasSidebar {
-                windowListSidebar(height: size.height)
-            }
+            windowListSidebar(height: size.height)
 
             VStack(spacing: 0) {
-                layoutGridFooterBar
-                    .padding(.horizontal, Self.layoutPanelHorizontalPadding)
-                    .padding(.top, Self.layoutFooterTopPadding)
-                    .padding(.bottom, Self.layoutFooterBottomPadding)
-
                 screenCompositeView(
                     compositeWidth: compositeWidth,
                     compositeHeight: compositeHeight,
@@ -1035,7 +806,7 @@ struct MainWindowView: View {
                     gridHeight: gridHeight
                 )
                 .padding(.horizontal, Self.layoutPanelHorizontalPadding)
-                .padding(.top, 4)
+                .padding(.top, Self.layoutGridTopPadding)
 
                 layoutPresetsPanel(availableHeight: availablePresetsHeight)
                     .padding(.horizontal, Self.layoutPanelHorizontalPadding)
@@ -1121,7 +892,7 @@ struct MainWindowView: View {
                                 }
                                 Spacer()
                             }
-                            .padding(.leading, menuBarHeight * 0.4 + fontSize * 0.5)
+                            .padding(.leading, menuBarHeight * 0.4 + fontSize * 0.5 + 2)
                             .fixedSize(horizontal: true, vertical: false)
                             .minimumScaleFactor(0.5)
                             .frame(width: leftAreaWidth, height: menuBarHeight, alignment: .leading)
@@ -1345,26 +1116,8 @@ struct MainWindowView: View {
     }
 
     /// Returns the clip shape for the screen composite view.
-    /// Built-in (laptop) display: rounded top-left and top-right corners only.
-    /// External displays: no corner radius.
-    private var compositeClipShape: UnevenRoundedRectangle {
-        if isBuiltInDisplay {
-            return UnevenRoundedRectangle(
-                topLeadingRadius: 8,
-                bottomLeadingRadius: 0,
-                bottomTrailingRadius: 0,
-                topTrailingRadius: 8,
-                style: .continuous
-            )
-        } else {
-            return UnevenRoundedRectangle(
-                topLeadingRadius: 0,
-                bottomLeadingRadius: 0,
-                bottomTrailingRadius: 0,
-                topTrailingRadius: 0,
-                style: .continuous
-            )
-        }
+    private var compositeClipShape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: 8, style: .continuous)
     }
 
     /// Whether the current screen is the built-in laptop display.
@@ -1445,57 +1198,6 @@ struct MainWindowView: View {
                 .font(.system(size: 10))
                 .foregroundStyle(.tertiary)
         }
-    }
-
-    private var layoutGridFooterBar: some View {
-        HStack(spacing: 8) {
-            // Leading: sidebar toggle button
-            Button {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    appState.isSidebarVisible.toggle()
-                }
-            } label: {
-                Image(systemName: "sidebar.left")
-                    .font(.system(size: 13, weight: .medium))
-            }
-            .buttonStyle(TahoeToolbarButtonStyle())
-            .instantTooltip(appState.isSidebarVisible
-                ? NSLocalizedString("Hide sidebar", comment: "Sidebar toggle tooltip when visible")
-                : NSLocalizedString("Show sidebar", comment: "Sidebar toggle tooltip when hidden"))
-
-            targetInfoContent
-
-            Spacer(minLength: 0)
-
-            // Trailing: update badge + gear button (shown on all screens)
-            if appState.showsUpdateIndicator {
-                UpdateAvailableBadge()
-                    .fixedSize()
-            }
-            Button {
-                dismissPresetNameEditingIfNeeded()
-                draftSettings = appState.settingsSnapshot
-                if case .secondary(let screen) = screenRole {
-                    appState.beginSettingsEditing(on: screen)
-                } else if let frame = screenContext?.screenFrame,
-                          let screen = NSScreen.screens.first(where: { $0.frame == frame }) {
-                    appState.beginSettingsEditing(on: screen)
-                } else {
-                    appState.beginSettingsEditing()
-                }
-            } label: {
-                #if DEBUG
-                Text("🐛")
-                    .font(.system(size: 13))
-                #else
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 13, weight: .medium))
-                #endif
-            }
-            .buttonStyle(TahoeToolbarButtonStyle())
-            .instantTooltip(NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
-        }
-        .frame(height: Self.footerHeight)
     }
 
     private func layoutPresetsPanel(availableHeight: CGFloat) -> some View {
@@ -1776,6 +1478,42 @@ struct MainWindowView: View {
         VStack(spacing: 0) {
             // Action bar (always visible)
             HStack(spacing: 4) {
+                // Settings button at the leading edge
+                Button {
+                    dismissPresetNameEditingIfNeeded()
+                    if case .secondary(let screen) = screenRole {
+                        appState.beginSettingsEditing(on: screen)
+                    } else if let frame = screenContext?.screenFrame,
+                              let screen = NSScreen.screens.first(where: { $0.frame == frame }) {
+                        appState.beginSettingsEditing(on: screen)
+                    } else {
+                        appState.beginSettingsEditing()
+                    }
+                } label: {
+                    #if DEBUG
+                    Text("🐛")
+                        .font(.system(size: 11))
+                        .frame(width: 28, height: 24)
+                    #else
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 11, weight: .medium))
+                        .frame(width: 28, height: 24)
+                    #endif
+                }
+                .buttonStyle(TahoeActionBarButtonStyle())
+                .frame(width: 28, height: 24)
+                .overlay(alignment: .topTrailing) {
+                    if appState.showsUpdateIndicator {
+                        Circle()
+                            .fill(Color.red)
+                            .frame(width: 7, height: 7)
+                            .offset(x: -2, y: 3)
+                    }
+                }
+                .instantTooltip(appState.showsUpdateIndicator
+                    ? NSLocalizedString("Update available", comment: "Badge shown when an update is available")
+                    : NSLocalizedString("Settings (⌘,)", comment: "Settings button tooltip"))
+
                 Spacer(minLength: 0)
                 sidebarActionButtons
             }
@@ -2557,641 +2295,6 @@ struct MainWindowView: View {
 
     // MARK: - Target Info (secondary screens)
 
-    private var targetInfoContent: some View {
-        HStack(spacing: 6) {
-            if let icon = appState.currentLayoutTargetIcon {
-                Image(nsImage: icon)
-                    .resizable()
-                    .interpolation(.high)
-                    .frame(width: 22, height: 22)
-                    .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-            }
-
-            if let secondary = appState.currentLayoutTargetSecondaryText {
-                Text("\(appState.currentLayoutTargetPrimaryText) — \(secondary)")
-                    .font(.system(size: 12, weight: .semibold))
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-            } else {
-                Text(appState.currentLayoutTargetPrimaryText)
-                    .font(.system(size: 12, weight: .semibold))
-                    .lineLimit(1)
-            }
-        }
-    }
-
-    private var settingsEditor: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if let updater = appState.updater {
-                TahoeSettingsSection(title: NSLocalizedString("Updates", comment: "Settings section")) {
-                    VStack(spacing: 0) {
-                        TahoeSettingsRow(label: NSLocalizedString("Automatically check for updates", comment: ""), systemImage: "exclamationmark.circle", iconAlignment: .center) {
-                            Toggle("", isOn: Binding(
-                                get: { updater.automaticallyChecksForUpdates },
-                                set: { updater.automaticallyChecksForUpdates = $0 }
-                            ))
-                            .toggleStyle(.switch)
-                            .controlSize(.mini)
-                            .labelsHidden()
-                        }
-                        .padding(.vertical, 4)
-
-                        Divider().opacity(0.4)
-
-                        HStack {
-                            Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?")")
-                                .font(.system(size: 12))
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            if appState.showsUpdateIndicator {
-                                UpdateAvailableBadge()
-                            }
-                            CheckForUpdatesView(updater: updater)
-                        }
-                        .padding(.vertical, 4)
-                    }
-                }
-            }
-
-            TahoeSettingsSection(title: NSLocalizedString("Grid", comment: "Settings section")) {
-                VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Rows", comment: ""), systemImage: "square.split.1x2", iconAlignment: .center) {
-                        Stepper("\(draftSettings.rows)", value: $draftSettings.rows, in: 2...12)
-                            .labelsHidden()
-                        Text("\(draftSettings.rows)")
-                            .monospacedDigit()
-                            .foregroundStyle(.secondary)
-                            .frame(width: 20, alignment: .trailing)
-                    }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    TahoeSettingsRow(label: NSLocalizedString("Columns", comment: ""), systemImage: "square.split.2x1", iconAlignment: .center) {
-                        Stepper("\(draftSettings.columns)", value: $draftSettings.columns, in: 2...12)
-                            .labelsHidden()
-                        Text("\(draftSettings.columns)")
-                            .monospacedDigit()
-                            .foregroundStyle(.secondary)
-                            .frame(width: 20, alignment: .trailing)
-                    }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    VStack(spacing: 4) {
-                        TahoeSettingsRow(label: NSLocalizedString("Gap", comment: ""), systemImage: "square.split.2x2", iconAlignment: .center) {
-                            Text("\(Int(draftSettings.gap)) pt")
-                                .monospacedDigit()
-                                .foregroundStyle(.secondary)
-                        }
-                        Slider(value: $draftSettings.gap, in: 0...24, step: 1)
-                    }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    HStack {
-                        Spacer()
-                        Button("Reset Grid to Default") {
-                            draftSettings.columns = Self.defaultGridColumns
-                            draftSettings.rows = Self.defaultGridRows
-                            draftSettings.gap = Self.defaultGridGap
-                        }
-                        .disabled(isGridAtDefault)
-                    }
-                    .padding(.vertical, 4)
-                }
-            }
-            .onHover { hovering in
-                isHoveringGridSection = hovering
-                if hovering {
-                    appState.updateSettingsPreview(draftSettings)
-                } else {
-                    appState.hidePreviewOverlay()
-                }
-            }
-
-            TahoeSettingsSection(title: NSLocalizedString("Layouts", comment: "Settings section")) {
-                HStack {
-                    Text("Reset the layout preset list to the defaults.")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                    Spacer()
-                    Button("Restore Defaults") {
-                        dismissPresetNameEditingIfNeeded()
-                        appState.resetLayoutPresetsToDefault()
-                    }
-                    .disabled(isLayoutPresetsAtDefault)
-                }
-            }
-
-            displayShortcutsSection
-
-            TahoeSettingsSection(title: NSLocalizedString("Startup", comment: "Settings section")) {
-                VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Launch at login", comment: ""), systemImage: "power", iconAlignment: .center) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.launchAtLoginEnabled },
-                            set: { newValue in
-                                _ = appState.setLaunchAtLoginEnabled(newValue)
-                                draftSettings.launchAtLoginEnabled = appState.launchAtLoginEnabled
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .controlSize(.mini)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    TahoeSettingsRow(label: NSLocalizedString("Show menu icon", comment: ""), systemImage: "menubar.rectangle", iconAlignment: .center) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.menuIconVisible },
-                            set: { newValue in
-                                appState.setMenuIconVisible(newValue)
-                                draftSettings.menuIconVisible = appState.menuIconVisible
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .controlSize(.mini)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
-
-                    Divider().opacity(0.4)
-
-                    TahoeSettingsRow(label: NSLocalizedString("Show Dock icon", comment: ""), systemImage: "dock.rectangle", iconAlignment: .center) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.dockIconVisible },
-                            set: { newValue in
-                                appState.setDockIconVisible(newValue)
-                                draftSettings.dockIconVisible = appState.dockIconVisible
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .controlSize(.mini)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
-                }
-            }
-
-            TahoeSettingsSection(title: NSLocalizedString("Debug", comment: "Settings section")) {
-                VStack(spacing: 0) {
-                    TahoeSettingsRow(label: NSLocalizedString("Write debug log to ~/tiley.log", comment: ""), systemImage: "ladybug", iconAlignment: .center) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.enableDebugLog },
-                            set: { newValue in
-                                draftSettings.enableDebugLog = newValue
-                                appState.enableDebugLog = newValue
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .controlSize(.mini)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
-
-                    #if DEBUG
-                    Divider().opacity(0.4)
-
-                    TahoeSettingsRow(label: NSLocalizedString("Simulate update available appearance", comment: "Debug toggle to preview the update-available UI")) {
-                        Toggle("", isOn: Binding(
-                            get: { draftSettings.debugSimulateUpdate },
-                            set: { newValue in
-                                draftSettings.debugSimulateUpdate = newValue
-                                appState.debugSimulateUpdate = newValue
-                            }
-                        ))
-                        .toggleStyle(.switch)
-                        .controlSize(.mini)
-                        .labelsHidden()
-                    }
-                    .padding(.vertical, 4)
-                    #endif
-                }
-            }
-
-            AcknowledgementsSection()
-        }
-        .font(.system(size: 13))
-    }
-
-    @ViewBuilder
-    private var showTileyShortcutRow: some View {
-        let keyPath = "showTiley.global"
-        let isRecording = recordingDisplayShortcutKey == keyPath && recordingDisplayShortcutIsGlobal == true
-        let hasShortcut = !draftSettings.hotKeyShortcut.isEmpty
-
-        TahoeSettingsRow(label: NSLocalizedString("Show Tiley", comment: "Shortcut action to show Tiley overlay"), systemImage: "macwindow") {
-            if isRecording {
-                CompactShortcutRecorderField(
-                    onShortcutRecorded: { newShortcut in
-                        var s = newShortcut
-                        s.isGlobal = true
-                        draftSettings.hotKeyShortcut = s
-                        recordingDisplayShortcutKey = nil
-                        appState.setShortcutRecordingActive(false)
-                    },
-                    onRecordingChange: { recording in
-                        if !recording {
-                            recordingDisplayShortcutKey = nil
-                            appState.setShortcutRecordingActive(false)
-                        }
-                    },
-                    validateShortcut: { candidate in
-                        validateDisplayShortcut(candidate, excludeKeyPath: keyPath)
-                    }
-                )
-                .frame(width: 120, height: 22)
-            } else if hasShortcut {
-                DisplayShortcutBadgeLabelView(
-                    shortcut: draftSettings.hotKeyShortcut,
-                    isGlobal: true,
-                    onTap: {
-                        recordingDisplayShortcutKey = keyPath
-                        recordingDisplayShortcutIsGlobal = true
-                        appState.setShortcutRecordingActive(true)
-                    },
-                    onDelete: {
-                        draftSettings.hotKeyShortcut = .empty
-                    }
-                )
-            } else {
-                AddShortcutButton(colorScheme: colorScheme, tooltip: NSLocalizedString("Add Global Shortcut", comment: "Tooltip for add global shortcut button")) {
-                    HStack(spacing: 2) {
-                        Image(systemName: "globe")
-                            .font(.system(size: 8, weight: .semibold))
-                        Image(systemName: "plus")
-                            .font(.system(size: 9, weight: .semibold))
-                    }
-                    .foregroundStyle(.secondary)
-                } action: {
-                    recordingDisplayShortcutKey = keyPath
-                    recordingDisplayShortcutIsGlobal = true
-                    appState.setShortcutRecordingActive(true)
-                }
-            }
-        }
-        .padding(.vertical, 4)
-    }
-
-    private var isGridAtDefault: Bool {
-        draftSettings.columns == Self.defaultGridColumns &&
-        draftSettings.rows == Self.defaultGridRows &&
-        draftSettings.gap == Self.defaultGridGap
-    }
-
-    private var isLayoutPresetsAtDefault: Bool {
-        let defaults = LayoutPreset.defaultPresets(rows: appState.rows, columns: appState.columns)
-        guard appState.layoutPresets.count == defaults.count else { return false }
-        return zip(appState.layoutPresets, defaults).allSatisfy { current, def in
-            current.name == def.name &&
-            current.selection == def.selection &&
-            current.secondarySelections == def.secondarySelections &&
-            current.baseRows == def.baseRows &&
-            current.baseColumns == def.baseColumns &&
-            current.shortcuts == def.shortcuts
-        }
-    }
-
-    private var isShortcutsAtDefault: Bool {
-        draftSettings.hotKeyShortcut == .default &&
-        draftSettings.displayShortcutSettings.selectNextWindow == DisplayShortcutSettings.defaultSelectNextWindow &&
-        draftSettings.displayShortcutSettings.selectPreviousWindow == DisplayShortcutSettings.defaultSelectPreviousWindow &&
-        draftSettings.displayShortcutSettings.bringToFront == DisplayShortcutSettings.defaultBringToFront &&
-        draftSettings.displayShortcutSettings.closeOrQuit == DisplayShortcutSettings.defaultCloseOrQuit
-    }
-
-    private var displayShortcutsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-        TahoeSettingsSection(title: NSLocalizedString("Shortcuts", comment: "Settings section for shortcuts")) {
-            VStack(spacing: 0) {
-                    // Show Tiley (global-only shortcut, formerly separate "Shortcut" section)
-                    showTileyShortcutRow
-
-                    Divider().opacity(0.4)
-
-                    localOnlyShortcutRow(
-                        label: NSLocalizedString("Select Next Window", comment: "Shortcut action to select next window"),
-                        binding: $draftSettings.displayShortcutSettings.selectNextWindow.local,
-                        enabledBinding: $draftSettings.displayShortcutSettings.selectNextWindow.localEnabled,
-                        keyPath: "selectNextWindow.local",
-                        iconContent: AnyView(
-                            HStack(spacing: 1) {
-                                Image(systemName: "arrow.down")
-                                    .font(.system(size: 9, weight: .semibold))
-                                Image(systemName: "sidebar.left")
-                                    .font(.system(size: 12, weight: .regular))
-                            }
-                            .foregroundStyle(.secondary)
-                        )
-                    )
-
-                    Divider().opacity(0.4)
-
-                    localOnlyShortcutRow(
-                        label: NSLocalizedString("Select Previous Window", comment: "Shortcut action to select previous window"),
-                        binding: $draftSettings.displayShortcutSettings.selectPreviousWindow.local,
-                        enabledBinding: $draftSettings.displayShortcutSettings.selectPreviousWindow.localEnabled,
-                        keyPath: "selectPreviousWindow.local",
-                        iconContent: AnyView(
-                            HStack(spacing: 1) {
-                                Image(systemName: "arrow.up")
-                                    .font(.system(size: 9, weight: .semibold))
-                                Image(systemName: "sidebar.left")
-                                    .font(.system(size: 12, weight: .regular))
-                            }
-                            .foregroundStyle(.secondary)
-                        )
-                    )
-
-                    Divider().opacity(0.4)
-
-                    localOnlyShortcutRow(
-                        label: NSLocalizedString("Bring to Front", comment: "Shortcut action to bring selected window to front"),
-                        binding: $draftSettings.displayShortcutSettings.bringToFront.local,
-                        enabledBinding: $draftSettings.displayShortcutSettings.bringToFront.localEnabled,
-                        keyPath: "bringToFront.local",
-                        systemImage: "macwindow.stack"
-                    )
-
-                    Divider().opacity(0.4)
-
-                    localOnlyShortcutRow(
-                        label: NSLocalizedString("Close / Quit", comment: "Shortcut action to close window or quit app"),
-                        binding: $draftSettings.displayShortcutSettings.closeOrQuit.local,
-                        enabledBinding: $draftSettings.displayShortcutSettings.closeOrQuit.localEnabled,
-                        keyPath: "closeOrQuit.local",
-                        iconContent: AnyView(
-                            Image(systemName: "xmark.circle")
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(.secondary)
-                                .padding(.trailing, 1)
-                        )
-                    )
-
-                    Divider().opacity(0.4)
-
-                    HStack {
-                        Spacer()
-                        Button(NSLocalizedString("Reset to Default", comment: "Reset shortcut to default")) {
-                            dismissPresetNameEditingIfNeeded()
-                            draftSettings.hotKeyShortcut = .default
-                            draftSettings.displayShortcutSettings.selectNextWindow = DisplayShortcutSettings.defaultSelectNextWindow
-                            draftSettings.displayShortcutSettings.selectPreviousWindow = DisplayShortcutSettings.defaultSelectPreviousWindow
-                            draftSettings.displayShortcutSettings.bringToFront = DisplayShortcutSettings.defaultBringToFront
-                            draftSettings.displayShortcutSettings.closeOrQuit = DisplayShortcutSettings.defaultCloseOrQuit
-                        }
-                        .disabled(isShortcutsAtDefault)
-                    }
-                    .padding(.vertical, 4)
-            }
-        }
-
-        TahoeSettingsSection(title: NSLocalizedString("Display Move Shortcuts", comment: "Settings section for display move shortcuts")) {
-            VStack(spacing: 0) {
-                    displayShortcutRow(
-                    label: NSLocalizedString("Move to Primary Display", comment: "Display shortcut action"),
-                    localBinding: $draftSettings.displayShortcutSettings.moveToPrimary.local,
-                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrimary.localEnabled,
-                    globalBinding: $draftSettings.displayShortcutSettings.moveToPrimary.global,
-                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrimary.globalEnabled,
-                    localKeyPath: "moveToPrimary.local",
-                    globalKeyPath: "moveToPrimary.global",
-                    systemImage: "dot.scope.display"
-                )
-
-                Divider().opacity(0.4)
-
-                displayShortcutRow(
-                    label: NSLocalizedString("Move to Next Display", comment: "Display shortcut action"),
-                    localBinding: $draftSettings.displayShortcutSettings.moveToNext.local,
-                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToNext.localEnabled,
-                    globalBinding: $draftSettings.displayShortcutSettings.moveToNext.global,
-                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToNext.globalEnabled,
-                    localKeyPath: "moveToNext.local",
-                    globalKeyPath: "moveToNext.global",
-                    iconContent: AnyView(
-                        HStack(spacing: 1) {
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 9, weight: .semibold))
-                            Image(systemName: "display")
-                                .font(.system(size: 12, weight: .regular))
-                        }
-                        .foregroundStyle(.secondary)
-                    )
-                )
-
-                Divider().opacity(0.4)
-
-                displayShortcutRow(
-                    label: NSLocalizedString("Move to Previous Display", comment: "Display shortcut action"),
-                    localBinding: $draftSettings.displayShortcutSettings.moveToPrevious.local,
-                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrevious.localEnabled,
-                    globalBinding: $draftSettings.displayShortcutSettings.moveToPrevious.global,
-                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToPrevious.globalEnabled,
-                    localKeyPath: "moveToPrevious.local",
-                    globalKeyPath: "moveToPrevious.global",
-                    iconContent: AnyView(
-                        HStack(spacing: 1) {
-                            Image(systemName: "arrow.left")
-                                .font(.system(size: 9, weight: .semibold))
-                            Image(systemName: "display")
-                                .font(.system(size: 12, weight: .regular))
-                        }
-                        .foregroundStyle(.secondary)
-                    )
-                )
-
-                Divider().opacity(0.4)
-
-                displayShortcutRow(
-                    label: NSLocalizedString("Move to Other Display", comment: "Display shortcut action - shows popup menu"),
-                    localBinding: $draftSettings.displayShortcutSettings.moveToOther.local,
-                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToOther.localEnabled,
-                    globalBinding: $draftSettings.displayShortcutSettings.moveToOther.global,
-                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToOther.globalEnabled,
-                    localKeyPath: "moveToOther.local",
-                    globalKeyPath: "moveToOther.global",
-                    systemImage: "filemenu.and.selection"
-                )
-
-                let resolver = DisplayFingerprintResolver()
-                ForEach(resolver.displays, id: \.displayID) { resolved in
-                    Divider().opacity(0.4)
-
-                    let fp = resolved.fingerprint
-                    let occ = resolved.occurrenceIndex
-                    let did = resolved.displayID
-                    let name = resolver.displayName(for: resolved)
-                    let keyBase = "moveToDisplay.\(fp.vendorNumber).\(fp.modelNumber).\(fp.serialNumber).\(occ)"
-                    displayShortcutRow(
-                        label: String(format: NSLocalizedString("Move to %@", comment: "Display shortcut action for specific display"), name),
-                        localBinding: Binding(
-                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.local },
-                            set: {
-                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
-                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.local = $0
-                            }
-                        ),
-                        localEnabledBinding: Binding(
-                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.localEnabled ?? false },
-                            set: {
-                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
-                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.localEnabled = $0
-                            }
-                        ),
-                        globalBinding: Binding(
-                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.global },
-                            set: {
-                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
-                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.global = $0
-                            }
-                        ),
-                        globalEnabledBinding: Binding(
-                            get: { draftSettings.displayShortcutSettings.entry(for: fp, occurrenceIndex: occ)?.shortcuts.globalEnabled ?? false },
-                            set: {
-                                let idx = draftSettings.displayShortcutSettings.ensureEntry(for: fp, occurrenceIndex: occ)
-                                draftSettings.displayShortcutSettings.moveToDisplay[idx].shortcuts.globalEnabled = $0
-                            }
-                        ),
-                        localKeyPath: "\(keyBase).local",
-                        globalKeyPath: "\(keyBase).global",
-                        systemImage: "display.and.arrow.down"
-                    )
-                    .onHover { hovering in
-                        if hovering {
-                            appState.showDisplayHighlight(displayID: did)
-                        } else {
-                            appState.hideDisplayHighlight()
-                        }
-                    }
-                }
-            }
-        }
-        } // end VStack
-    }
-
-    @ViewBuilder
-    private func localOnlyShortcutRow(
-        label: String,
-        binding: Binding<HotKeyShortcut?>,
-        enabledBinding: Binding<Bool>,
-        keyPath: String,
-        systemImage: String? = nil,
-        systemImageWeight: Font.Weight = .regular,
-        iconContent: AnyView? = nil
-    ) -> some View {
-        TahoeSettingsRow(label: label, systemImage: systemImage, systemImageWeight: systemImageWeight, iconContent: iconContent) {
-            displayShortcutBadgeOrRecorder(
-                binding: binding,
-                enabledBinding: enabledBinding,
-                keyPath: keyPath,
-                isGlobal: false
-            )
-        }
-        .padding(.vertical, 4)
-        .contentShape(Rectangle())
-    }
-
-    @ViewBuilder
-    private func displayShortcutRow(
-        label: String,
-        localBinding: Binding<HotKeyShortcut?>,
-        localEnabledBinding: Binding<Bool>,
-        globalBinding: Binding<HotKeyShortcut?>,
-        globalEnabledBinding: Binding<Bool>,
-        localKeyPath: String,
-        globalKeyPath: String,
-        systemImage: String? = nil,
-        iconContent: AnyView? = nil
-    ) -> some View {
-        TahoeSettingsRow(label: label, systemImage: systemImage, iconContent: iconContent) {
-            displayShortcutBadgeOrRecorder(
-                binding: globalBinding,
-                enabledBinding: globalEnabledBinding,
-                keyPath: globalKeyPath,
-                isGlobal: true
-            )
-        }
-        .padding(.vertical, 4)
-        .contentShape(Rectangle())
-    }
-
-    @ViewBuilder
-    private func displayShortcutBadgeOrRecorder(
-        binding: Binding<HotKeyShortcut?>,
-        enabledBinding: Binding<Bool>,
-        keyPath: String,
-        isGlobal: Bool
-    ) -> some View {
-        let isRecording = recordingDisplayShortcutKey == keyPath && recordingDisplayShortcutIsGlobal == isGlobal
-        let hasShortcut = binding.wrappedValue != nil && binding.wrappedValue?.isEmpty == false
-
-        if isRecording {
-            CompactShortcutRecorderField(
-                onShortcutRecorded: { newShortcut in
-                    var s = newShortcut
-                    s.isGlobal = isGlobal
-                    binding.wrappedValue = s
-                    enabledBinding.wrappedValue = true
-                    recordingDisplayShortcutKey = nil
-                    appState.setShortcutRecordingActive(false)
-                },
-                onRecordingChange: { recording in
-                    if !recording {
-                        recordingDisplayShortcutKey = nil
-                        appState.setShortcutRecordingActive(false)
-                    }
-                },
-                validateShortcut: { candidate in
-                    validateDisplayShortcut(candidate, excludeKeyPath: keyPath)
-                }
-            )
-            .frame(width: 120, height: 22)
-        } else if hasShortcut {
-            DisplayShortcutBadgeLabelView(
-                shortcut: binding.wrappedValue!,
-                isGlobal: isGlobal,
-                onTap: {
-                    recordingDisplayShortcutKey = keyPath
-                    recordingDisplayShortcutIsGlobal = isGlobal
-                    appState.setShortcutRecordingActive(true)
-                },
-                onDelete: {
-                    binding.wrappedValue = nil
-                    enabledBinding.wrappedValue = false
-                }
-            )
-        } else {
-            AddShortcutButton(colorScheme: colorScheme, tooltip: isGlobal
-                ? NSLocalizedString("Add Global Shortcut", comment: "Tooltip for add global shortcut button")
-                : NSLocalizedString("Add Shortcut", comment: "Tooltip for add shortcut button")
-            ) {
-                if isGlobal {
-                    HStack(spacing: 2) {
-                        Image(systemName: "globe")
-                            .font(.system(size: 8, weight: .semibold))
-                        Image(systemName: "plus")
-                            .font(.system(size: 9, weight: .semibold))
-                    }
-                    .foregroundStyle(.secondary)
-                } else {
-                    Image(systemName: "plus")
-                        .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                }
-            } action: {
-                recordingDisplayShortcutKey = keyPath
-                recordingDisplayShortcutIsGlobal = isGlobal
-                appState.setShortcutRecordingActive(true)
-            }
-        }
-    }
-
     @ViewBuilder
     private func layoutPresetRow(_ preset: LayoutPreset) -> some View {
         let isInEditMode = editingPresetID == preset.id
@@ -3836,95 +2939,6 @@ struct MainWindowView: View {
         }
     }
 
-    /// Validates a shortcut candidate against **draft** settings instead of the committed appState,
-    /// so that a shortcut deleted in the draft can be immediately re-assigned.
-    private func validateDisplayShortcut(_ candidate: HotKeyShortcut, excludeKeyPath: String) -> String? {
-        // Reserved keys
-        if !candidate.isGlobal {
-            // Check against configured window action shortcuts (excluding self).
-            if !excludeKeyPath.hasPrefix("selectNextWindow") && !excludeKeyPath.hasPrefix("selectPreviousWindow") && !excludeKeyPath.hasPrefix("bringToFront") && !excludeKeyPath.hasPrefix("closeOrQuit") {
-                if draftWindowActionConflicts(with: candidate) {
-                    return NSLocalizedString("This shortcut is already used for a window action.", comment: "Shortcut conflict with window action")
-                }
-            }
-            if candidate.keyCode == UInt32(kVK_ANSI_F), candidate.modifiers == UInt32(cmdKey) {
-                return NSLocalizedString("⌘F is reserved for searching the window list.", comment: "Cmd+F shortcut reserved for window search")
-            }
-        }
-
-        // Check against draft hotKeyShortcut (Show Tiley)
-        if excludeKeyPath != "showTiley.global" {
-            let bareCandidate = HotKeyShortcut(keyCode: candidate.keyCode, modifiers: candidate.modifiers)
-            let bareHotKey = HotKeyShortcut(keyCode: draftSettings.hotKeyShortcut.keyCode, modifiers: draftSettings.hotKeyShortcut.modifiers)
-            if !draftSettings.hotKeyShortcut.isEmpty && bareCandidate == bareHotKey {
-                return NSLocalizedString("This shortcut is already used by the global shortcut.", comment: "Layout shortcut conflict with app global shortcut")
-            }
-        }
-
-        // Check layout presets
-        if appState.layoutPresets.contains(where: { $0.shortcuts.contains(where: {
-            $0.keyCode == candidate.keyCode && $0.modifiers == candidate.modifiers && $0.isGlobal == candidate.isGlobal
-        }) }) {
-            return NSLocalizedString("This shortcut is already used by a layout.", comment: "Display shortcut conflict with layout preset")
-        }
-
-        // Check other draft display shortcuts (excluding the current slot)
-        let ds = draftSettings.displayShortcutSettings
-        var allSlots: [(String, HotKeyShortcut)] = []
-        let suffix = candidate.isGlobal ? ".global" : ".local"
-        if let s = candidate.isGlobal ? ds.moveToPrimary.global : ds.moveToPrimary.local {
-            allSlots.append(("moveToPrimary\(suffix)", s))
-        }
-        if let s = candidate.isGlobal ? ds.moveToNext.global : ds.moveToNext.local {
-            allSlots.append(("moveToNext\(suffix)", s))
-        }
-        if let s = candidate.isGlobal ? ds.moveToPrevious.global : ds.moveToPrevious.local {
-            allSlots.append(("moveToPrevious\(suffix)", s))
-        }
-        if let s = candidate.isGlobal ? ds.moveToOther.global : ds.moveToOther.local {
-            allSlots.append(("moveToOther\(suffix)", s))
-        }
-        for entry in ds.moveToDisplay {
-            let fp = entry.fingerprint
-            let keyBase = "moveToDisplay.\(fp.vendorNumber).\(fp.modelNumber).\(fp.serialNumber).\(entry.occurrenceIndex)"
-            if let s = candidate.isGlobal ? entry.shortcuts.global : entry.shortcuts.local {
-                allSlots.append(("\(keyBase)\(suffix)", s))
-            }
-        }
-        if let s = candidate.isGlobal ? ds.selectNextWindow.global : ds.selectNextWindow.local {
-            allSlots.append(("selectNextWindow\(suffix)", s))
-        }
-        if let s = candidate.isGlobal ? ds.selectPreviousWindow.global : ds.selectPreviousWindow.local {
-            allSlots.append(("selectPreviousWindow\(suffix)", s))
-        }
-        if let s = candidate.isGlobal ? ds.bringToFront.global : ds.bringToFront.local {
-            allSlots.append(("bringToFront\(suffix)", s))
-        }
-        if let s = candidate.isGlobal ? ds.closeOrQuit.global : ds.closeOrQuit.local {
-            allSlots.append(("closeOrQuit\(suffix)", s))
-        }
-        for (kp, s) in allSlots where kp != excludeKeyPath {
-            if s.keyCode == candidate.keyCode && s.modifiers == candidate.modifiers {
-                return NSLocalizedString("This shortcut is already used by another display shortcut.", comment: "Display shortcut conflict with another display shortcut")
-            }
-        }
-
-        return nil
-    }
-
-    /// Checks if a shortcut conflicts with the draft window action shortcuts.
-    private func draftWindowActionConflicts(with shortcut: HotKeyShortcut) -> Bool {
-        let ds = draftSettings.displayShortcutSettings
-        if ds.selectNextWindow.localEnabled,
-           let s = ds.selectNextWindow.local, s == shortcut { return true }
-        if ds.selectPreviousWindow.localEnabled,
-           let s = ds.selectPreviousWindow.local, s == shortcut { return true }
-        if ds.bringToFront.localEnabled,
-           let s = ds.bringToFront.local, s == shortcut { return true }
-        if ds.closeOrQuit.localEnabled,
-           let s = ds.closeOrQuit.local, s == shortcut { return true }
-        return false
-    }
 
     private func dismissPresetNameEditingIfNeeded(except id: UUID? = nil) {
         guard let editingPresetNameID, editingPresetNameID != id else { return }
@@ -3936,14 +2950,6 @@ struct MainWindowView: View {
         let isEditing = editingPresetID != nil || recordingPresetShortcutID != nil || editingPresetNameID != nil
         if appState.isEditingLayoutPresets != isEditing {
             appState.isEditingLayoutPresets = isEditing
-        }
-    }
-
-    private func showSidebarIfNeeded() {
-        if !appState.isSidebarVisible {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                appState.isSidebarVisible = true
-            }
         }
     }
 

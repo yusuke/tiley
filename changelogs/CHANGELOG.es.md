@@ -6,6 +6,15 @@
 
 - Sección de reconocimientos de licencias de terceros en Ajustes (Sparkle, TelemetryDeck)
 
+### Cambiado
+
+- Los paneles de Ajustes y Permisos son ahora ventanas independientes a nivel normal (no flotante), para que los diálogos de actualización de Sparkle y otras ventanas del sistema puedan mostrarse encima
+- La barra lateral ahora está siempre visible; se ha eliminado el botón de mostrar/ocultar
+- El botón de ajustes se ha movido de la barra inferior al extremo izquierdo de la barra de acciones de la barra lateral
+- La vista previa de mini pantalla ahora tiene esquinas redondeadas en los cuatro lados independientemente del tipo de pantalla
+- La barra de título de la ventana en miniatura ahora muestra el nombre de la aplicación junto al título de la ventana
+- La insignia "Actualización disponible" se ha reemplazado por un punto rojo en el botón de ajustes y un tooltip; en el panel de ajustes se muestra un popover en el botón "Buscar actualizaciones"
+
 ## [4.0.9] - 2026-03-30
 
 ### Corregido

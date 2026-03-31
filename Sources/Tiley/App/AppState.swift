@@ -90,7 +90,6 @@ final class AppState: NSObject, NSMenuDelegate {
     }
     var accessibilityGranted = false
     var isEditingSettings = false
-    var isShowingPermissionsOnly = false
     var isShowingLayoutGrid = false
     var columns = 6 {
         didSet { UserDefaults.standard.set(columns, forKey: UserDefaultsKey.columns) }
@@ -147,6 +146,8 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var lastStatusIconAppearance: NSAppearance.Name?
     /// Re-entrancy guard for `applyStatusItemIcon()`.
     @ObservationIgnored var isApplyingStatusIcon = false
+    @ObservationIgnored var settingsWindowController: SettingsWindowController?
+    @ObservationIgnored var permissionsWindowController: PermissionsWindowController?
     @ObservationIgnored var mainWindowControllers: [CGDirectDisplayID: MainWindowController] = [:]
     @ObservationIgnored var targetScreenDisplayID: CGDirectDisplayID?
     @ObservationIgnored var screenChangeTask: Task<Void, Never>?
@@ -244,13 +245,6 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Only the window on the display matching `moveToOtherDisplayTargetID` should respond.
     var moveToOtherDisplayRequestVersion: Int = 0
     @ObservationIgnored var moveToOtherDisplayTargetID: CGDirectDisplayID = 0
-    /// Whether the window list sidebar is visible (shared across all windows).
-    var isSidebarVisible: Bool = UserDefaults.standard.object(forKey: UserDefaultsKey.windowListSidebarVisible) != nil
-        ? UserDefaults.standard.bool(forKey: UserDefaultsKey.windowListSidebarVisible)
-        : true {
-        didSet { UserDefaults.standard.set(isSidebarVisible, forKey: UserDefaultsKey.windowListSidebarVisible) }
-    }
-
     var settingsSnapshot: SettingsSnapshot {
         SettingsSnapshot(
             columns: columns,
@@ -526,27 +520,25 @@ final class AppState: NSObject, NSMenuDelegate {
         updateStatusMenu()
     }
 
-    /// Sets window level based on current state: `.normal` while the
-    /// permissions panel is shown, `.floating` otherwise.
+    /// Sets the main (grid/sidebar) windows to floating level.
     func applyWindowLevel() {
-        let level: NSWindow.Level = isShowingPermissionsOnly ? .normal : .floating
         for controller in mainWindowControllers.values {
-            controller.window?.level = level
+            controller.window?.level = .floating
         }
     }
 
     func showPermissionsOnly() {
-        isShowingLayoutGrid = false
-        isEditingSettings = true
-        isShowingPermissionsOnly = true
-        openMainWindow()
+        hideAllMainWindows()
+        if permissionsWindowController == nil {
+            permissionsWindowController = PermissionsWindowController(appState: self)
+        }
+        permissionsWindowController?.show()
     }
 
     func dismissPermissionsOnly() {
-        guard isShowingPermissionsOnly else { return }
-        isShowingPermissionsOnly = false
-        isEditingSettings = false
-        applyWindowLevel()
+        guard permissionsWindowController != nil else { return }
+        permissionsWindowController?.dismiss()
+        permissionsWindowController = nil
     }
 
     func apply(settings: SettingsSnapshot) {
@@ -574,6 +566,8 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterDisplayHotKeys()
         registerMainHotKey()
         hidePreviewOverlay()
+        settingsWindowController?.dismiss()
+        settingsWindowController = nil
         isEditingSettings = false
         isShowingLayoutGrid = true
         activeLayoutTarget = initialLayoutTarget()
@@ -584,6 +578,8 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func cancelSettingsEditing() {
         hidePreviewOverlay()
+        settingsWindowController?.dismiss()
+        settingsWindowController = nil
         isEditingSettings = false
         isShowingLayoutGrid = true
         // Only register the main toggle hotkey; keep preset and display global
@@ -598,24 +594,35 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func beginSettingsEditing() {
+        let mainFrame = targetWindowController?.window?.frame
         activeLayoutTarget = initialLayoutTarget()
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
         windowHighlightController?.hide()
         windowHighlightController = nil
-        closeSecondaryWindows()
-        openMainWindow()
+        hideAllMainWindows()
+        settingsWindowController = SettingsWindowController(appState: self, mainWindowFrame: mainFrame)
+        settingsWindowController?.show()
     }
 
     func beginSettingsEditing(on screen: NSScreen) {
+        let mainFrame = targetWindowController?.window?.frame
         activeLayoutTarget = initialLayoutTarget()
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
         windowHighlightController?.hide()
         windowHighlightController = nil
-        openTargetScreenWindow(on: screen)
+        hideAllMainWindows()
+        settingsWindowController = SettingsWindowController(appState: self, mainWindowFrame: mainFrame)
+        settingsWindowController?.show()
+    }
+
+    /// Called when the settings window is closed externally (e.g. by the window manager).
+    func handleSettingsWindowClosed() {
+        guard isEditingSettings else { return }
+        cancelSettingsEditing()
     }
 
     func toggleOverlay() {
@@ -1104,7 +1111,6 @@ final class AppState: NSObject, NSMenuDelegate {
         debugLog("handleStatusItemButtonClick start")
         if isEditingSettings {
             cancelSettingsEditing()
-            openMainWindow()
             return
         }
         if isShowingLayoutGrid {

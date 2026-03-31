@@ -6,6 +6,15 @@
 
 - Sezione riconoscimenti per le licenze di terze parti nelle Impostazioni (Sparkle, TelemetryDeck)
 
+### Modificato
+
+- I pannelli Impostazioni e Autorizzazioni sono ora finestre separate a livello normale (non flottante), in modo che le finestre di aggiornamento di Sparkle e altre finestre di sistema possano essere visualizzate sopra
+- La barra laterale è ora sempre visibile; il pulsante mostra/nascondi è stato rimosso
+- Il pulsante delle impostazioni è stato spostato dalla barra inferiore all'estremità sinistra della barra delle azioni nella barra laterale
+- L'anteprima mini schermo ora ha angoli arrotondati su tutti e quattro i lati indipendentemente dal tipo di display
+- La barra del titolo della finestra in miniatura ora mostra il nome dell'applicazione insieme al titolo della finestra
+- Il badge "Aggiornamento disponibile" è stato sostituito con un punto rosso sul pulsante delle impostazioni e un tooltip; nel pannello delle impostazioni viene mostrato un popover sul pulsante "Verifica aggiornamenti"
+
 ## [4.0.9] - 2026-03-30
 
 ### Corretto

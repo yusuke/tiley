@@ -3,8 +3,22 @@ import SwiftUI
 struct MiniatureWindowView: View {
     let titleBarHeight: CGFloat
     var appIcon: NSImage?
+    var appName: String?
     var windowTitle: String?
     @Environment(\.colorScheme) private var colorScheme
+
+    private var titleBarText: String? {
+        let app = (appName ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let title = (windowTitle ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if !app.isEmpty && !title.isEmpty && app != title {
+            return "\(app) — \(title)"
+        } else if !app.isEmpty {
+            return app
+        } else if !title.isEmpty {
+            return title
+        }
+        return nil
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -15,7 +29,7 @@ struct MiniatureWindowView: View {
             let buttonSpacing = buttonDiameter * 0.55
             let buttonLeftPadding = buttonDiameter * 0.8
             let showButtons = w > 30 && titleBarHeight > 6
-            let hasTitle = !(windowTitle ?? "").isEmpty
+            let hasTitle = titleBarText != nil
             // Space occupied by the three traffic-light buttons + padding
             let buttonsTrailingEdge = buttonLeftPadding + buttonDiameter * 3 + buttonSpacing * 2 + buttonDiameter * 0.5
             let titleBarFontSize = max(4, titleBarHeight * 0.6)
@@ -39,8 +53,8 @@ struct MiniatureWindowView: View {
                                             .frame(width: titleBarHeight * 0.6, height: titleBarHeight * 0.6)
                                             .clipShape(RoundedRectangle(cornerRadius: 2, style: .continuous))
                                     }
-                                    if hasTitle {
-                                        Text(windowTitle!)
+                                    if let text = titleBarText {
+                                        Text(text)
                                             .font(.system(size: titleBarFontSize))
                                             .foregroundStyle(titleTextColor)
                                             .lineLimit(1)

@@ -71,7 +71,7 @@ final class TooltipHoverView: NSView {
     }
 
     private func showTooltip() {
-        guard popover == nil else { return }
+        guard popover == nil, !tooltipText.isEmpty else { return }
         let p = NSPopover()
         p.behavior = .semitransient
         p.animates = false

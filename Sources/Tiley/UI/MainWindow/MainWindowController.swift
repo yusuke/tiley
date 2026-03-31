@@ -25,8 +25,8 @@ private struct MainWindowRootView: View {
 }
 
 final class MainWindowController: NSWindowController, NSWindowDelegate {
-    private static let windowWidth: CGFloat = 559
-    private static let sidebarWidth: CGFloat = 180
+    static let windowWidth: CGFloat = 570
+    static let sidebarWidth: CGFloat = 220
     private static let minimumWindowHeight: CGFloat = 780
     private static let extraWindowHeight: CGFloat = 55
     private static let visibleFrameInset: CGFloat = 16
@@ -37,11 +37,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private static let layoutPresetRowSpacing: CGFloat = 8
     private static let footerHeight: CGFloat = 44
     private static let contentVerticalPadding: CGFloat = 102
-    private static let settingsHeight: CGFloat = 620
-    private static let permissionsOnlyHeight: CGFloat = 750
-    // Keep layout mode slightly translucent while keeping settings mode fully opaque for readability.
     private static let layoutModeWindowAlpha: CGFloat = 0.99
-    private static let settingsModeWindowAlpha: CGFloat = 1.0
 
     private weak var appState: AppState?
     private(set) var screenRole: ScreenRole
@@ -79,7 +75,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         perfLog("windowSize + screenContext")
         let view = MainWindowRootView(appState: appState, screenState: screenState)
         perfLog("MainWindowRootView created")
-        let hostingView = ZeroInsetHostingView(rootView: view)
+        let hostingView = NSHostingView(rootView: view)
         hostingView.frame = NSRect(origin: .zero, size: initialSize)
         hostingView.autoresizingMask = [.width, .height]
         perfLog("NSHostingView created")
@@ -98,8 +94,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = false
-        // Always start at normal level; AppState promotes to .floating
-        // after accessibility permission has been granted.
+        // Start at normal level; AppState promotes to .floating via applyWindowLevel().
         window.level = .normal
         let displayID = self.targetScreen.displayID
         window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
@@ -112,9 +107,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         if screenRole.isTarget {
             window.setFrameAutosaveName("TileyMainWindow")
         }
-        window.standardWindowButton(.closeButton)?.isHidden = true
-        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
-        window.standardWindowButton(.zoomButton)?.isHidden = true
         window.hideHandler = onHide
         window.escapeHandler = onEscape
         window.localShortcutHandler = onLocalShortcut
@@ -209,9 +201,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         // this callback. Suppress state resets so the new mode is preserved.
         guard appState?.isRecreatingWindows != true else { return }
         appState?.hidePreviewOverlay()
-        // Keep the permissions-only panel visible so the user can grant access
-        // in System Settings and return to Tiley.
-        guard appState?.isShowingPermissionsOnly != true else { return }
         // Hide all Tiley windows when the app loses focus, not just this one.
         // Secondary windows don't receive windowDidResignKey because they
         // were never the key window.
@@ -229,8 +218,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
     private func observeWindowModeChanges(_ appState: AppState) {
         withObservationTracking {
-            _ = appState.isEditingSettings
-            _ = appState.isShowingPermissionsOnly
             _ = appState.layoutPresets
         } onChange: { [weak self] in
             Task { @MainActor [weak self] in
@@ -276,7 +263,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
         let screenFrame = currentScreenFrame(for: window, preferredScreen: preferredScreen)
         let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole)
-        let targetAlpha = (appState?.isEditingSettings == true || appState?.isShowingPermissionsOnly == true) ? Self.settingsModeWindowAlpha : Self.layoutModeWindowAlpha
+        let targetAlpha = Self.layoutModeWindowAlpha
 
         var frame = window.frame
         frame.size = targetSize
@@ -405,11 +392,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     private static func windowSize(for appState: AppState?, visibleFrame: CGRect?, screenFrame: CGRect? = nil, screenRole: ScreenRole = .target) -> NSSize {
-        if appState?.isShowingPermissionsOnly == true {
-            return NSSize(width: windowWidth, height: permissionsOnlyHeight)
-        }
-        let showSidebar = appState?.isEditingSettings != true
-        let totalWidth = showSidebar ? windowWidth + sidebarWidth + 1 : windowWidth
+        let totalWidth = windowWidth + sidebarWidth + 1
         let presetCount = CGFloat(appState?.displayedLayoutPresets.count ?? 0)
         let maxHeight = maxAllowedHeight(in: visibleFrame)
 
@@ -445,9 +428,14 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             + layoutPresetsHeaderHeight
             + layoutRowsHeight
             + layoutSpacingHeight
-        let idealHeight = max(minimumWindowHeight, settingsHeight, layoutHeight) + extraWindowHeight
+        let idealHeight = max(minimumWindowHeight, layoutHeight) + extraWindowHeight
         let height = min(idealHeight, maxHeight)
         return NSSize(width: totalWidth, height: height)
+    }
+
+    /// Returns the size that the main (grid) window would use for the given frames.
+    static func mainWindowSize(for appState: AppState, visibleFrame: CGRect, screenFrame: CGRect) -> NSSize {
+        windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame)
     }
 
     private static func maxAllowedHeight(in visibleFrame: CGRect?) -> CGFloat {
@@ -539,22 +527,3 @@ private final class MainAppWindow: NSWindow {
     }
 }
 
-private final class ZeroInsetHostingView<Content: View>: NSHostingView<Content> {
-    override var safeAreaInsets: NSEdgeInsets {
-        NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
-
-    override var additionalSafeAreaInsets: NSEdgeInsets {
-        get { NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) }
-        set { }
-    }
-
-    override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
-        true
-    }
-
-    override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
-        window?.titlebarAppearsTransparent = true
-    }
-}

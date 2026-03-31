@@ -6,6 +6,15 @@
 
 - Abschnitt für Drittanbieter-Lizenzhinweise in den Einstellungen (Sparkle, TelemetryDeck)
 
+### Geändert
+
+- Einstellungs- und Berechtigungsfenster sind jetzt separate Fenster auf normaler (nicht schwebender) Ebene, sodass Sparkle-Update-Dialoge und andere Systemfenster darüber angezeigt werden können
+- Die Seitenleiste ist jetzt immer sichtbar; die Ein-/Ausblenden-Schaltfläche wurde entfernt
+- Einstellungs-Schaltfläche von der Fußleiste an den linken Rand der Seitenleisten-Aktionsleiste verschoben
+- Die Minibildschirm-Vorschau hat jetzt unabhängig vom Displaytyp an allen vier Ecken abgerundete Ecken
+- Die Titelleiste des Miniaturfensters zeigt jetzt den Anwendungsnamen zusammen mit dem Fenstertitel an
+- Das „Update verfügbar"-Abzeichen wurde durch einen roten Punkt auf der Einstellungs-Schaltfläche und einen Tooltip ersetzt; im Einstellungsfenster wird ein Popover auf der „Nach Updates suchen"-Schaltfläche angezeigt
+
 ## [4.0.9] - 2026-03-30
 
 ### Behoben

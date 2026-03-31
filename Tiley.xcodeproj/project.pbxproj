@@ -53,6 +53,10 @@
 		70EE537A2F7A941D0007968D /* system-ja.png in Resources */ = {isa = PBXBuildFile; fileRef = 70EE53662F7A941D0007968D /* system-ja.png */; };
 		70EE537B2F7A941D0007968D /* dialog-ja.png in Resources */ = {isa = PBXBuildFile; fileRef = 70EE53632F7A941D0007968D /* dialog-ja.png */; };
 		70EE537D2F7A98BC0007968D /* AcknowledgementsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE537C2F7A98BC0007968D /* AcknowledgementsSection.swift */; };
+		70EE53832F7ADF520007968D /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE537E2F7ADF520007968D /* PermissionsView.swift */; };
+		70EE53842F7ADF520007968D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53802F7ADF520007968D /* SettingsView.swift */; };
+		70EE53852F7ADF520007968D /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE53812F7ADF520007968D /* SettingsWindowController.swift */; };
+		70EE53862F7ADF520007968D /* PermissionsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE537F2F7ADF520007968D /* PermissionsWindowController.swift */; };
 		70F7B0282F768B8C004F17E3 /* WindowHighlightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */; };
 /* End PBXBuildFile section */
 
@@ -111,6 +115,10 @@
 		70EE53712F7A941D0007968D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		70EE53722F7A941D0007968D /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		70EE537C2F7A98BC0007968D /* AcknowledgementsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsSection.swift; sourceTree = "<group>"; };
+		70EE537E2F7ADF520007968D /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
+		70EE537F2F7ADF520007968D /* PermissionsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsWindowController.swift; sourceTree = "<group>"; };
+		70EE53802F7ADF520007968D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		70EE53812F7ADF520007968D /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		70F7B0262F768B8C004F17E3 /* WindowHighlightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHighlightController.swift; sourceTree = "<group>"; };
 		A00000000000000000000011 /* Tiley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tiley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000000000000000000012 /* Tiley-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tiley-Info.plist"; sourceTree = "<group>"; };
@@ -162,6 +170,7 @@
 		7012E05D2F65B653003EC442 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				70EE53822F7ADF520007968D /* Settings */,
 				70F7B0272F768B8C004F17E3 /* Overlay */,
 				7012E0582F65B653003EC442 /* Layout */,
 				7012E05C2F65B653003EC442 /* MainWindow */,
@@ -238,6 +247,17 @@
 				70EE53742F7A941D0007968D /* Localization */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		70EE53822F7ADF520007968D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				70EE537E2F7ADF520007968D /* PermissionsView.swift */,
+				70EE537F2F7ADF520007968D /* PermissionsWindowController.swift */,
+				70EE53802F7ADF520007968D /* SettingsView.swift */,
+				70EE53812F7ADF520007968D /* SettingsWindowController.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		70F7B0272F768B8C004F17E3 /* Overlay */ = {
@@ -374,6 +394,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70EE53832F7ADF520007968D /* PermissionsView.swift in Sources */,
+				70EE53842F7ADF520007968D /* SettingsView.swift in Sources */,
+				70EE53852F7ADF520007968D /* SettingsWindowController.swift in Sources */,
+				70EE53862F7ADF520007968D /* PermissionsWindowController.swift in Sources */,
 				701526162F6EECE3001E8095 /* DesktopPictureBackgroundView.swift in Sources */,
 				70B56A6A2F64347E005173A5 /* TileyApp.swift in Sources */,
 				70EE537D2F7A98BC0007968D /* AcknowledgementsSection.swift in Sources */,

@@ -6,6 +6,15 @@
 
 - Seção de agradecimentos de licenças de terceiros nas Configurações (Sparkle, TelemetryDeck)
 
+### Alterado
+
+- Os painéis de Configurações e Permissões agora são janelas independentes em nível normal (não flutuante), para que diálogos de atualização do Sparkle e outras janelas do sistema possam ser exibidos acima
+- A barra lateral agora está sempre visível; o botão de mostrar/ocultar foi removido
+- O botão de configurações foi movido da barra inferior para a extremidade esquerda da barra de ações da barra lateral
+- A visualização de mini tela agora tem cantos arredondados nos quatro lados independentemente do tipo de tela
+- A barra de título da janela em miniatura agora exibe o nome do aplicativo junto ao título da janela
+- O emblema "Atualização disponível" foi substituído por um ponto vermelho no botão de configurações e uma dica; no painel de configurações, um popover é exibido no botão "Verificar atualizações"
+
 ## [4.0.9] - 2026-03-30
 
 ### Corrigido

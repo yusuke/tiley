@@ -58,6 +58,7 @@ struct LayoutGridWorkspaceView: View {
                     MiniatureWindowView(
                         titleBarHeight: titleBarPx,
                         appIcon: wf.appIcon,
+                        appName: wf.appName,
                         windowTitle: wf.windowTitle
                     )
                     .frame(width: winW, height: winH)
@@ -151,7 +152,8 @@ struct LayoutGridWorkspaceView: View {
                             MiniatureWindowView(
                                 titleBarHeight: titleBarPx,
                                 appIcon: info.appIcon,
-                                windowTitle: info.windowTitle.isEmpty ? info.appName : "\(info.appName) — \(info.windowTitle)"
+                                appName: info.appName,
+                                windowTitle: info.windowTitle.isEmpty ? nil : info.windowTitle
                             )
                             .frame(width: selRect.width, height: selRect.height)
                             .position(x: selRect.midX, y: selRect.midY)
@@ -179,7 +181,8 @@ struct LayoutGridWorkspaceView: View {
                         MiniatureWindowView(
                             titleBarHeight: titleBarPx,
                             appIcon: info.appIcon,
-                            windowTitle: info.windowTitle.isEmpty ? info.appName : "\(info.appName) — \(info.windowTitle)"
+                            appName: info.appName,
+                            windowTitle: info.windowTitle.isEmpty ? nil : info.windowTitle
                         )
                         .frame(width: selRect.width, height: selRect.height)
                         .position(x: selRect.midX, y: selRect.midY)
