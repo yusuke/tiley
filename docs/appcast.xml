@@ -3,10 +3,142 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.2.1</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Добавлен индикатор шеврона к кнопке изменения размера, чтобы было понятно, что она открывает выпадающее меню</li>
+<li>Улучшен тайминг действия изменения размера: окно Tiley исчезает до изменения размера целевого окна, что делает взаимодействие более интуитивным</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Adicionado indicador chevron ao botão de redimensionar para deixar claro que abre um menu suspenso</li>
+<li>Melhorado o timing da ação de redimensionar para que a janela do Tiley desapareça antes de redimensionar a janela alvo, tornando a interação mais intuitiva</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Aggiunto indicatore chevron al pulsante di ridimensionamento per rendere più chiaro che apre un menu a discesa</li>
+<li>Migliorato il timing dell'azione di ridimensionamento in modo che la finestra di Tiley scompaia prima del ridimensionamento della finestra di destinazione, rendendo l'interazione più intuitiva</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Ajout d'un indicateur chevron au bouton de redimensionnement pour indiquer clairement qu'il ouvre un menu déroulant</li>
+<li>Amélioration du timing de l'action de redimensionnement pour que la fenêtre Tiley disparaisse avant le redimensionnement de la fenêtre cible, rendant l'interaction plus intuitive</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Se añadió un indicador de chevron al botón de redimensionar para dejar claro que abre un menú desplegable</li>
+<li>Se mejoró el timing de la acción de redimensionar para que la ventana de Tiley desaparezca antes de redimensionar la ventana objetivo, haciendo la interacción más intuitiva</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Chevron-Anzeige zur Größenänderungs-Schaltfläche hinzugefügt, um deutlicher zu machen, dass es sich um ein Dropdown-Menü handelt</li>
+<li>Timing der Größenänderung verbessert, sodass das Tiley-Fenster verschwindet, bevor das Zielfenster angepasst wird, was die Bedienung intuitiver macht</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>在調整大小工具列按鈕上新增了下拉箭頭，使其更清楚地表明這是一個下拉選單</li>
+<li>改進了調整大小操作的時機，使 Tiley 視窗在目標視窗調整大小之前消失，操作更加直覺</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>在调整大小工具栏按钮上添加了下拉箭头，使其更清楚地表明这是一个下拉菜单</li>
+<li>改进了调整大小操作的时机，使 Tiley 窗口在目标窗口调整大小之前消失，操作更加直观</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>크기 조절 도구 모음 버튼에 셰브론 표시를 추가하여 드롭다운 메뉴임을 더 명확하게 표시</li>
+<li>크기 조절 동작 타이밍을 개선하여 대상 창 크기 조절 전에 Tiley 창이 사라지도록 변경하여 더 직관적인 조작감 제공</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>リサイズツールバーボタンにシェブロン（▼）を追加し、プルダウンメニューであることをより分かりやすく表示</li>
+<li>リサイズ動作のタイミングを調整し、対象ウインドウのリサイズ前にTileyのウインドウが消えるようにして、より直感的な操作感に改善</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Added chevron indicator to the resize toolbar button to make it clearer that it opens a dropdown menu</li>
+<li>Improved resize action timing so the Tiley window disappears before the target window is resized, making the interaction feel more intuitive</li>
+</ul>]]></description>
+            <pubDate>Sat, 04 Apr 2026 00:43:28 +0900</pubDate>
+            <sparkle:version>421</sparkle:version>
+            <sparkle:shortVersionString>4.2.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley-4.2.1.zip" length="5714911" type="application/octet-stream" sparkle:edSignature="vJ3xaFiMfpksiU442WOQCLzvjo4QZ5hPOsU00cyMpGzYZoq3vowVKn9QD3fYrg1anOOcxvqPPs5cS5EKSLuTBg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-420.delta" sparkle:deltaFrom="420" length="195530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="fNzawS2f5lKY3saLHMBijApR1zdpMLcQrioUI3YNp46zDBRdlM82aWXMA40CJCnZYgknhd5dUmQFN9toNTHmAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-412.delta" sparkle:deltaFrom="412" length="358630" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="azOEni7hfyEF2ex0+VBZ704gMywSnryyygWDaoAk2tMYdsKNHuRDMHH1jMdxhnf0TzSHi4BM7LUwe4F6kPmrAA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-411.delta" sparkle:deltaFrom="411" length="456130" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="I1YseFRbt9XuSjmreWp/nRMmC3ztm0aNnoPuoZKxVFA7zz91l7KIOF5pv/LRwo+0MKotFCVYfA3JfQSj+YsLBg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-410.delta" sparkle:deltaFrom="410" length="1277178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="1FvfzTVaxtnFSqrz+VbDUAmU2bVF9xx0UqLSbJD8xTt4twVTeNXeOfAoU7gaKROYna7ZtXSO0O3Hk3gLkWmkCQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-409.delta" sparkle:deltaFrom="409" length="1475166" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="s8JZvF7bD1w2wk4C6aRzJF7hXhC++4jxyGsvaFMDnrH0RzdzfFlrAZn7xg+YF2KRPIdJ8cOUAQcDw62hLEBGCw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.2.0</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
 <li>Изменение размера окон до предустановленных размеров (16:9, 16:10, 4:3, 9:16) с помощью кнопки на панели инструментов или контекстного меню; размеры, превышающие текущий экран, автоматически исключаются</li>
+<li>Предварительный просмотр при наведении на пункты меню изменения размера: наложение в реальном размере на целевом экране и миниатюра окна на сетке (в том же стиле, что и предварительный просмотр предустановленных макетов)</li>
+<li>Миниатюра окна (с заголовком и значком приложения) отображается во время выделения перетаскиванием на сетке</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Redimensionar janelas para tamanhos predefinidos (16:9, 16:10, 4:3, 9:16) pelo botão da barra de ferramentas ou menu de contexto; tamanhos que excedem a tela atual são excluídos automaticamente</li>
+<li>Pré-visualização ao vivo ao passar o mouse sobre os itens do menu de redimensionamento: sobreposição em tamanho real na tela de destino e pré-visualização em miniatura na grade (mesmo estilo da pré-visualização de layouts predefinidos)</li>
+<li>Pré-visualização de janela em miniatura (com barra de título e ícone do app) exibida durante a seleção por arrasto na grade</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Ridimensionamento delle finestre a dimensioni predefinite (16:9, 16:10, 4:3, 9:16) dal pulsante della barra degli strumenti o dal menu contestuale; le dimensioni che superano lo schermo corrente vengono escluse automaticamente</li>
+<li>Anteprima dal vivo al passaggio del mouse sugli elementi del menu di ridimensionamento: sovrapposizione a dimensione reale sullo schermo di destinazione e anteprima finestra in miniatura sulla griglia (stesso stile dell'anteprima dei layout predefiniti)</li>
+<li>Anteprima finestra in miniatura (con barra del titolo e icona dell'app) mostrata durante la selezione trascinando sulla griglia</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Redimensionner les fenêtres à des tailles prédéfinies (16:9, 16:10, 4:3, 9:16) depuis le bouton de la barre d'outils ou le menu contextuel ; les tailles dépassant l'écran actuel sont automatiquement exclues</li>
+<li>Aperçu en direct au survol des éléments du menu de redimensionnement : superposition taille réelle sur l'écran cible et aperçu miniature sur la grille (même style que l'aperçu des dispositions prédéfinies)</li>
+<li>Aperçu de fenêtre miniature (avec barre de titre et icône d'app) affiché pendant la sélection par glisser sur la grille</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Redimensionar ventanas a tamaños predefinidos (16:9, 16:10, 4:3, 9:16) desde el botón de la barra de herramientas o el menú contextual; los tamaños que excedan la pantalla actual se excluyen automáticamente</li>
+<li>Vista previa en vivo al pasar sobre los elementos del menú de redimensionado: superposición a tamaño real en la pantalla destino y vista previa en miniatura en la cuadrícula (mismo estilo que la vista previa de diseños predefinidos)</li>
+<li>Vista previa de ventana en miniatura (con barra de título e icono de la app) durante la selección por arrastre en la cuadrícula</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Fenster über die Symbolleiste oder das Kontextmenü auf vordefinierte Größen (16:9, 16:10, 4:3, 9:16) ändern; Größen, die den aktuellen Bildschirm überschreiten, werden automatisch ausgeschlossen</li>
+<li>Live-Vorschau beim Überfahren von Größenänderungs-Menüeinträgen: Echtgröße-Overlay auf dem Zielbildschirm und Miniatur-Fenstervorschau im Raster (gleicher Stil wie die Voreinstellungs-Layout-Vorschau)</li>
+<li>Miniatur-Fenstervorschau (mit Titelleiste und App-Symbol) wird jetzt während der Raster-Auswahl per Ziehen angezeigt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>透過工具列按鈕或右鍵選單將視窗調整為預設大小（16:9、16:10、4:3、9:16）；超出目前螢幕的尺寸會自動排除</li>
+<li>懸停在調整大小選單項目上時，在目標螢幕上顯示實際大小預覽，在格線上顯示縮略視窗預覽（與預設佈局懸停樣式相同）</li>
+<li>在格線拖曳選取期間顯示縮略視窗預覽（包含標題列和應用程式圖示）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>通过工具栏按钮或右键菜单将窗口调整为预设大小（16:9、16:10、4:3、9:16）；超出当前屏幕的尺寸会自动排除</li>
+<li>悬停在调整大小菜单项上时，在目标屏幕上显示实际大小预览，在网格上显示缩略窗口预览（与预设布局悬停样式相同）</li>
+<li>在网格拖动选择期间显示缩略窗口预览（包含标题栏和应用图标）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>도구 모음 버튼 또는 오른쪽 클릭 메뉴에서 창을 사전 정의된 크기(16:9, 16:10, 4:3, 9:16)로 조절하는 기능 추가; 현재 화면을 초과하는 크기는 자동으로 제외</li>
+<li>크기 조절 메뉴 항목에 마우스를 올리면 대상 화면에 실제 크기 미리보기와 그리드에 미니어처 창 미리보기 표시 (프리셋 레이아웃 호버와 동일한 스타일)</li>
+<li>그리드 드래그 선택 중 미니어처 창 미리보기(제목 표시줄 및 앱 아이콘 포함) 표시</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>ツールバーボタンまたは右クリックメニューからウインドウを規定のサイズ（16:9、16:10、4:3、9:16）にリサイズする機能を追加。現在のスクリーンに収まらないサイズは自動的に除外</li>
+<li>リサイズメニューのアイテムをホバーすると、対象スクリーン上に実寸プレビューとグリッド上にミニチュアウインドウプレビューを表示（プリセットレイアウトのホバーと同じスタイル）</li>
+<li>グリッドのドラッグ選択中にミニチュアウインドウプレビュー（タイトルバー・アプリアイコン付き）を表示</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Resize window to predefined sizes (16:9, 16:10, 4:3, 9:16) from the toolbar button or right-click context menu; sizes that exceed the current screen are automatically excluded</li>
+<li>Live preview when hovering over resize menu items: real-size overlay on the target screen and miniature window preview on the grid, matching the preset layout hover style</li>
+<li>Miniature window preview (with title bar and app icon) now shown on the grid during drag selection</li>
 </ul>]]></description>
             <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
 <ul>
@@ -52,7 +184,7 @@
             <sparkle:version>420</sparkle:version>
             <sparkle:shortVersionString>4.2.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.0/Tiley-4.2.0.zip" length="5712622" type="application/octet-stream" sparkle:edSignature="S2ruL9SMvejDh1lSdlDw1A0EIl4CFd/pXeG7Tp61pXPox+yGtHkpOpgncDWHwLKM3aZqiO9R2/vNmVynN9xxDA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley-4.2.0.zip" length="5712622" type="application/octet-stream" sparkle:edSignature="S2ruL9SMvejDh1lSdlDw1A0EIl4CFd/pXeG7Tp61pXPox+yGtHkpOpgncDWHwLKM3aZqiO9R2/vNmVynN9xxDA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.0/Tiley420-412.delta" sparkle:deltaFrom="412" length="354226" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kLR6bhN7uZ91UgouVYXLGjlkL6cjtmuWLERPgsPDYOoXZK5TcnxZRwAp+UXFY3uUAyuRkDYiwPZ0sJUc2VNyBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.0/Tiley420-411.delta" sparkle:deltaFrom="411" length="454954" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bkDqQZuFGykbL4S4d3TRYtyr2A+aapNjsRALN4Y9Ar4LqRli5+SIOqvx+qxBtGK6074QzM/99nwOVMPwluidDQ=="/>
@@ -420,187 +552,187 @@
 <li>Fixed the overlay not opening when the frontmost application has no windows (e.g. Finder with no open windows, menu bar-only apps); now falls back to the topmost visible window on screen</li>
 <li>Fixed window position not being applied correctly on non-primary displays for some apps (e.g. Notion); added post-resize position verification with retry loop to handle apps that asynchronously revert position after a size change</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Emblemas de índice de ordem de seleção exibidos à direita dos itens de janela na barra lateral quando duas ou mais janelas estão selecionadas</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>A lista de janelas na barra lateral agora é pré-armazenada em cache em segundo plano por meio de listeners de eventos do workspace (ativação, inicialização e encerramento de apps), aparecendo instantaneamente ao abrir a sobreposição</li>
+<li>Melhorado o comportamento de destaque dos itens agrupados por aplicativo na barra lateral. O cabeçalho do aplicativo só é exibido como selecionado quando todas as suas janelas estão selecionadas, e ao passar o mouse sobre o cabeçalho, tanto o cabeçalho quanto todas as janelas filhas são destacados</li>
+<li>Melhoria no comportamento de saída do modo tela cheia: agora define o atributo AXFullScreen diretamente (com pressionamento de botão como fallback), aguardando até 2 segundos para a conclusão da animação</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o problema de o overlay não abrir quando o aplicativo em primeiro plano não tem janelas. Agora é exibida uma mensagem "Sem janelas" e o arrasto é desativado</li>
+<li>Corrigido o problema de a área de trabalho do Finder ser tratada como uma janela redimensionável. Quando a área de trabalho está em foco, a janela real mais à frente do Finder é selecionada, ou "Sem janelas" é exibido se não houver nenhuma</li>
+<li>Corrigido problema em que a sobreposição não abria quando o aplicativo em primeiro plano não possui janelas (por exemplo, Finder sem janelas abertas, aplicativos apenas de barra de menus); agora utiliza a janela visível mais à frente na tela</li>
+<li>Corrigido problema em que a posição da janela não era aplicada corretamente em monitores não principais para alguns apps (ex.: Notion). Adicionada verificação de posição com lógica de tentativa após o redimensionamento para lidar com apps que revertem a posição de forma assíncrona</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Badge con indice dell'ordine di selezione visualizzati a destra degli elementi finestra nella barra laterale quando sono selezionate due o più finestre</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>L'elenco delle finestre nella barra laterale viene ora pre-memorizzato in background tramite listener di eventi del workspace (attivazione, avvio e chiusura delle app), in modo da apparire istantaneamente all'apertura dell'overlay</li>
+<li>Migliorato il comportamento dell'evidenziazione per gli elementi della barra laterale raggruppati per applicazione. L'intestazione dell'app viene mostrata come selezionata solo quando tutte le sue finestre sono selezionate, e passando il mouse sull'intestazione vengono evidenziati sia l'intestazione che tutte le finestre figlie</li>
+<li>Migliorato il comportamento di uscita dallo schermo intero: ora imposta direttamente l'attributo AXFullScreen (con pressione del pulsante come fallback), attendendo fino a 2 secondi per il completamento dell'animazione</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Risolto il problema per cui l'overlay non si apriva quando l'applicazione in primo piano non ha finestre. Ora viene mostrato un messaggio "Nessuna finestra" e il trascinamento viene disabilitato</li>
+<li>Risolto il problema per cui il desktop del Finder veniva trattato come una finestra ridimensionabile. Quando il desktop è in primo piano, viene ora selezionata la finestra reale del Finder più in primo piano, oppure viene mostrato "Nessuna finestra" se non ne esistono</li>
+<li>Corretto il problema per cui l'overlay non si apriva quando l'applicazione in primo piano non aveva finestre (ad es. Finder senza finestre aperte, app solo barra dei menu); ora viene utilizzata la finestra visibile più in alto sullo schermo</li>
+<li>Corretta la posizione della finestra che non veniva applicata correttamente su display non principali per alcune app (es. Notion). Aggiunta verifica della posizione con logica di ritentativo dopo il ridimensionamento per gestire le app che ripristinano la posizione in modo asincrono</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Badges d'index d'ordre de sélection affichés à droite des éléments de fenêtre dans la barre latérale lorsque deux fenêtres ou plus sont sélectionnées</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>La liste des fenêtres dans la barre latérale est désormais pré-mise en cache en arrière-plan via des écouteurs d'événements de l'espace de travail (activation, lancement et fermeture d'applications), et s'affiche instantanément à l'ouverture de la superposition</li>
+<li>Amélioration du comportement de mise en surbrillance des éléments groupés par application dans la barre latérale. L'en-tête de l'application n'est affiché comme sélectionné que lorsque toutes ses fenêtres sont sélectionnées, et le survol de l'en-tête met en surbrillance à la fois l'en-tête et toutes ses fenêtres enfants</li>
+<li>Amélioration du comportement de sortie du plein écran : définit désormais l'attribut AXFullScreen directement (avec appui sur le bouton en secours), en attendant jusqu'à 2 secondes la fin de l'animation</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du problème où l'overlay ne s'ouvrait pas lorsque l'application au premier plan n'a pas de fenêtres. Un message « Aucune fenêtre » est affiché et le glisser est désactivé</li>
+<li>Correction du bureau du Finder traité comme une fenêtre redimensionnable. Lorsque le bureau est au premier plan, la fenêtre réelle du Finder la plus en avant est ciblée, ou « Aucune fenêtre » est affiché s'il n'en existe aucune</li>
+<li>Correction d'un problème où l'overlay ne s'ouvrait pas lorsque l'application au premier plan n'a pas de fenêtre (par exemple, Finder sans fenêtre ouverte, applications uniquement dans la barre de menus) ; utilise maintenant la fenêtre visible la plus en avant sur l'écran</li>
+<li>Correction d'un problème où la position de la fenêtre n'était pas correctement appliquée sur les écrans non principaux pour certaines applications (ex. Notion). Ajout d'une vérification de position avec tentatives de réessai après le redimensionnement pour gérer les applications qui réinitialisent la position de manière asynchrone</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Insignias de índice de orden de selección en el lado derecho de los elementos de ventana de la barra lateral cuando se seleccionan dos o más ventanas</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>La lista de ventanas en la barra lateral ahora se precarga en segundo plano mediante listeners de eventos del espacio de trabajo (activación, inicio y cierre de aplicaciones), por lo que aparece instantáneamente al abrir la superposición</li>
+<li>Mejorado el comportamiento de resaltado de los elementos agrupados por aplicación en la barra lateral. El encabezado de la aplicación solo se muestra como seleccionado cuando todas sus ventanas están seleccionadas, y al pasar el cursor sobre el encabezado se resaltan tanto el encabezado como todas sus ventanas secundarias</li>
+<li>Mejora del comportamiento de salida de pantalla completa: ahora establece el atributo AXFullScreen directamente (con pulsación de botón como respaldo), esperando hasta 2 segundos para que se complete la animación</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido el problema de que la superposición no se abría cuando la aplicación en primer plano no tiene ventanas. Ahora se muestra un mensaje "Sin ventanas" y se desactiva el arrastre</li>
+<li>Corregido que el escritorio del Finder se tratara como una ventana redimensionable. Cuando el escritorio está enfocado, ahora se selecciona la ventana real del Finder más al frente, o se muestra "Sin ventanas" si no existe ninguna</li>
+<li>Corregido el problema de que la superposición no se abría cuando la aplicación en primer plano no tiene ventanas (por ejemplo, Finder sin ventanas abiertas, aplicaciones solo de barra de menú); ahora se recurre a la ventana visible más al frente en la pantalla</li>
+<li>Corregido el problema de que la posición de la ventana no se aplicaba correctamente en pantallas no principales para algunas aplicaciones (p. ej., Notion). Se añadió verificación de posición con reintento tras el redimensionamiento para gestionar aplicaciones que revierten la posición de forma asíncrona</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Auswahlreihenfolge-Indexabzeichen werden rechts neben Seitenleisten-Fensterelementen angezeigt, wenn zwei oder mehr Fenster ausgewählt sind</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Die Fensterliste in der Seitenleiste wird nun über Workspace-Ereignis-Listener (App-Aktivierung, -Start, -Beendigung) im Hintergrund vorab zwischengespeichert, sodass sie beim Öffnen des Overlays sofort angezeigt wird</li>
+<li>Hervorhebungsverhalten für nach App gruppierte Seitenleistenelemente verbessert. Der App-Header wird nur noch als ausgewählt angezeigt, wenn alle zugehörigen Fenster ausgewählt sind, und beim Überfahren des App-Headers werden sowohl der Header als auch alle untergeordneten Fenster hervorgehoben</li>
+<li>Verbessertes Verhalten beim Beenden des Vollbildmodus: AXFullScreen-Attribut wird jetzt direkt gesetzt (mit Tastendruck als Fallback), Wartezeit bis zu 2 Sekunden für den Abschluss der Animation</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Problem behoben, dass sich das Overlay nicht öffnete, wenn die vorderste Anwendung keine Fenster hat. Es wird nun eine „Keine Fenster"-Meldung angezeigt und das Ziehen deaktiviert</li>
+<li>Problem behoben, dass Finders Desktop als größenveränderbares Fenster behandelt wurde. Bei fokussiertem Desktop wird nun das vorderste echte Finder-Fenster ausgewählt, oder „Keine Fenster" angezeigt, wenn keines vorhanden ist</li>
+<li>Overlay öffnete sich nicht, wenn die vorderste Anwendung keine Fenster hat (z. B. Finder ohne offene Fenster, reine Menüleisten-Apps); es wird nun auf das oberste sichtbare Fenster auf dem Bildschirm zurückgegriffen</li>
+<li>Fensterposition wurde bei einigen Apps (z. B. Notion) auf nicht-primären Bildschirmen nicht korrekt angewendet. Positionsüberprüfung mit Wiederholungslogik nach der Größenänderung hinzugefügt, um Apps zu behandeln, die die Position asynchron zurücksetzen</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>選擇兩個或更多視窗時，側邊欄視窗項目右側顯示選擇順序索引徽章</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>側邊欄的視窗列表現在透過工作區事件監聽器（應用程式啟用、啟動、終止）在背景預快取，開啟疊加層時視窗列表即時顯示</li>
+<li>改善了按應用程式分組的側邊欄項目的醒目提示行為。應用程式標題僅在所有視窗均被選取時才顯示為選取狀態，滑鼠懸停在應用程式標題上時會同時醒目提示標題及其所有子視窗</li>
+<li>改進全螢幕退出行為：改為直接設定 AXFullScreen 屬性（按鈕按下作為後備方案），並等待動畫完成最多 2 秒</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正最前方應用程式沒有視窗時覆蓋層不開啟的問題。現在會顯示「沒有視窗」訊息並停用拖曳操作</li>
+<li>修正 Finder 的桌面被當作可調整大小的視窗的問題。當桌面取得焦點時，現在會選擇 Finder 最前面的實際視窗作為目標；如果沒有視窗則顯示「沒有視窗」</li>
+<li>修正了最前面的應用程式沒有視窗時（如沒有開啟視窗的 Finder、僅選單列應用程式等）無法開啟疊加層的問題；現在會回退到螢幕上最前面的可見視窗</li>
+<li>修正部分應用程式（如 Notion）在非主顯示器上視窗位置未正確套用的問題。新增調整大小後的位置驗證與重試邏輯，以處理應用程式非同步還原位置的情況</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>选择两个或更多窗口时，侧边栏窗口项右侧显示选择顺序索引徽章</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>侧边栏的窗口列表现在通过工作区事件监听器（应用激活、启动、终止）在后台预缓存，打开叠加层时窗口列表即时显示</li>
+<li>改进了按应用分组的侧边栏项目的高亮行为。应用标题仅在所有窗口均被选中时才显示为选中状态，鼠标悬停在应用标题上时会同时高亮标题及其所有子窗口</li>
+<li>改进全屏退出行为：改为直接设置 AXFullScreen 属性（按钮按下作为后备方案），并等待动画完成最多 2 秒</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复最前方应用程序没有窗口时覆盖层不打开的问题。现在会显示"无窗口"消息并禁用拖拽操作</li>
+<li>修复 Finder 的桌面被当作可调整大小的窗口的问题。当桌面获得焦点时，现在会选择 Finder 的最前面的实际窗口作为目标；如果没有窗口则显示"无窗口"</li>
+<li>修复了最前面的应用程序没有窗口时（如没有打开窗口的 Finder、仅菜单栏应用等）无法打开叠加层的问题；现在会回退到屏幕上最前面的可见窗口</li>
+<li>修复部分应用（如 Notion）在非主显示器上窗口位置未正确应用的问题。添加了调整大小后的位置验证与重试逻辑，以处理应用异步恢复位置的情况</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>2개 이상의 윈도우 선택 시 사이드바 윈도우 항목 오른쪽에 선택 순서 인덱스 배지 표시</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>사이드바의 윈도우 목록을 워크스페이스 이벤트 리스너(앱 활성화, 실행, 종료)를 통해 백그라운드에서 사전 캐싱하도록 변경. 오버레이를 열면 윈도우 목록이 즉시 표시됨</li>
+<li>앱별로 그룹화된 사이드바 항목의 하이라이트 동작 개선. 앱 헤더는 모든 윈도우가 선택된 경우에만 선택 상태로 표시되며, 앱 헤더에 마우스를 올리면 헤더와 모든 하위 윈도우가 동시에 하이라이트됨</li>
+<li>전체 화면 해제 동작 개선: AXFullScreen 속성을 직접 설정하는 방식으로 변경하고(버튼 누르기 폴백 포함), 애니메이션 완료까지 최대 2초 대기하도록 변경</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>최전면 애플리케이션에 윈도우가 없을 때 오버레이가 열리지 않던 문제 수정. '윈도우 없음' 메시지를 표시하고 드래그 조작을 비활성화</li>
+<li>Finder의 데스크톱이 크기 조절 가능한 윈도우로 취급되던 문제 수정. 데스크톱에 포커스가 있을 때 Finder의 최전면 실제 윈도우를 대상으로 하며, 윈도우가 없으면 '윈도우 없음'을 표시</li>
+<li>최전면 애플리케이션에 창이 없는 경우(창이 열리지 않은 Finder, 메뉴 바 전용 앱 등) 오버레이가 열리지 않는 문제 수정. 화면에서 가장 앞에 있는 가시 창을 대체 대상으로 사용하도록 변경</li>
+<li>일부 앱(예: Notion)에서 비주 디스플레이의 창 위치가 올바르게 적용되지 않는 문제를 수정. 크기 변경 후 앱이 비동기적으로 위치를 되돌리는 경우를 처리하기 위해 위치 검증 및 재시도 로직 추가</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>2つ以上のウインドウを選択している場合、サイドバーのウインドウアイテム右側に選択順のインデックスバッジを表示</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>サイドバーのウインドウ一覧をワークスペースイベント（アプリ切替・起動・終了）のリスナーによりバックグラウンドで事前キャッシュするよう変更。オーバーレイを開いた瞬間にウインドウ一覧が表示されるように改善</li>
+<li>アプリケーション別にグループ化されたサイドバーアイテムのハイライト挙動を改善。アプリヘッダーの選択状態はすべてのウインドウが選択されている場合のみ表示されるようになり、アプリヘッダーにホバーするとヘッダーとすべての子ウインドウが同時にハイライトされるように変更</li>
+<li>フルスクリーン解除の挙動を改善：AXFullScreen 属性を直接設定する方式に変更（フォールバックとしてボタン押下も使用）、アニメーション完了まで最大2秒待機するよう変更</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>最前面のアプリケーションにウインドウがない場合にオーバーレイが開かない問題を修正。「ウインドウがありません」メッセージを表示し、ドラッグ操作を無効化するよう変更</li>
+<li>Finder のデスクトップがリサイズ可能なウインドウとして扱われていた問題を修正。デスクトップにフォーカスがある場合は Finder の最前面の実ウインドウを対象とし、ウインドウがない場合は「ウインドウがありません」を表示</li>
+<li>最前面のアプリケーションがウインドウを持たない場合（ウインドウ未表示の Finder やメニューバー専用アプリなど）にオーバーレイが開かない問題を修正。画面上で最前面にある可視ウインドウをフォールバックターゲットとして使用するように変更</li>
+<li>一部のアプリ（Notion など）で非プライマリディスプレイ上のウインドウ位置が正しく適用されない問題を修正。リサイズ後にアプリが非同期的に位置を戻すケースに対応するため、位置の検証・リトライ処理を追加</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Selection order index badges now appear on the right side of sidebar window items when two or more windows are selected</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Window list in the sidebar is now pre-cached in the background via workspace event listeners (app activation, launch, termination), so it appears instantly when the overlay opens</li>
+<li>Improved highlight behavior for app-grouped sidebar items: the app header is now only shown as selected when all its windows are selected, and hovering over an app header highlights both the header and all its child windows</li>
+<li>Improved fullscreen exit behavior: now sets the AXFullScreen attribute directly with a button-press fallback, and waits up to 2 seconds for the animation to complete</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed the overlay not opening when the frontmost application has no windows; the overlay now opens with a "No windows" message and drag is disabled</li>
+<li>Fixed Finder's desktop being treated as a resizable window; when the desktop is focused, Tiley now targets Finder's frontmost real window instead, or shows "No windows" if none exist</li>
+<li>Fixed the overlay not opening when the frontmost application has no windows (e.g. Finder with no open windows, menu bar-only apps); now falls back to the topmost visible window on screen</li>
+<li>Fixed window position not being applied correctly on non-primary displays for some apps (e.g. Notion); added post-resize position verification with retry loop to handle apps that asynchronously revert position after a size change</li>
+</ul>]]></description>
             <pubDate>Fri, 03 Apr 2026 22:08:18 +0900</pubDate>
             <sparkle:version>412</sparkle:version>
             <sparkle:shortVersionString>4.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.0/Tiley-4.1.2.zip" length="5673422" type="application/octet-stream" sparkle:edSignature="rUwhRrWRYgMS4OJyHPHCFmPCyrqYqGiMudi/bWDc+Eq1ElhyEMoaX9w9GRrDMueCERKsTD1r4rzEbMcMs3zjAg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley-4.1.2.zip" length="5673422" type="application/octet-stream" sparkle:edSignature="rUwhRrWRYgMS4OJyHPHCFmPCyrqYqGiMudi/bWDc+Eq1ElhyEMoaX9w9GRrDMueCERKsTD1r4rzEbMcMs3zjAg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-411.delta" sparkle:deltaFrom="411" length="378982" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dhX1ngLwTgGb3Yf2tDaf160EIuLUqqWFiUCLesYWIC3dD/uoIoR5bsRTFJmLRF5bACxd4Xt1GEEvZYH6MnD7CA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-410.delta" sparkle:deltaFrom="410" length="1199582" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="raSF6oRPvBSOFP/0nx8o01hgEQVTShs2zue+9TueAadqlJEc1yKqImDVCANlWyatGqXZ+tdyNFL+PPI9DDz5Dw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-409.delta" sparkle:deltaFrom="409" length="1418758" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="MowpFa2vRkeY1lT/aryQdVkd/l7rLTJGz5K0eVoDhI5GMzeW5D03t8b39K3b0AJIgHcj3WyBp8yJ5rtySy4LBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-408.delta" sparkle:deltaFrom="408" length="1512354" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nIn+TVs3KwlbymYvP52MjvjUD5DATKCva/fyZch8gtPParsVjqfok095uL+TF7uFa1rImGg9WCxLOTQpsyQKAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-407.delta" sparkle:deltaFrom="407" length="707834" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="uLop9+AFe5Z/JHzyu/7JzhMY/7HXeTXT566pY+avXNpan5shEqAoYuCbo/RKZk4NJ0uNz+z5MnCslRFVb6JIBw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.1.1</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>Сочетание клавиш по умолчанию для выбора следующего окна изменено с Tab на Space; предыдущего окна — с Shift+Tab на Shift+Space</li>
-<li>Смещённые окна теперь всегда возвращаются на исходную позицию с анимацией при закрытии оверлея</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>O atalho padrão para selecionar a próxima janela foi alterado de Tab para Space; a janela anterior foi alterada de Shift+Tab para Shift+Space</li>
-<li>As janelas deslocadas agora sempre retornam à posição original com animação ao fechar a sobreposição</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>La scorciatoia predefinita per selezionare la finestra successiva è stata cambiata da Tab a Space; la finestra precedente da Shift+Tab a Shift+Space</li>
-<li>Le finestre spostate ora tornano sempre alla posizione originale con animazione alla chiusura dell'overlay</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Le raccourci par défaut pour sélectionner la fenêtre suivante est passé de Tab à Space ; la fenêtre précédente est passée de Shift+Tab à Shift+Space</li>
-<li>Les fenêtres déplacées reviennent désormais toujours à leur position d'origine avec une animation lors de la fermeture de la superposition</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>El atajo predeterminado para seleccionar la siguiente ventana cambió de Tab a Space; la ventana anterior cambió de Shift+Tab a Shift+Space</li>
-<li>Las ventanas desplazadas ahora siempre regresan a su posición original con animación al cerrar la superposición</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Standard-Tastenkürzel für die Auswahl des nächsten Fensters von Tab auf Space geändert; vorheriges Fenster von Shift+Tab auf Shift+Space geändert</li>
-<li>Verschobene Fenster kehren beim Schließen des Overlays nun immer animiert an ihre ursprüngliche Position zurück</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>選擇下一個視窗的預設快捷鍵從 Tab 改為 Space，選擇上一個視窗從 Shift+Tab 改為 Shift+Space</li>
-<li>關閉疊加層時，被移開的視窗現在一律以動畫方式返回原始位置</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>选择下一个窗口的默认快捷键从 Tab 改为 Space，选择上一个窗口从 Shift+Tab 改为 Shift+Space</li>
-<li>关闭叠加层时，被移开的窗口现在始终以动画方式返回原始位置</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>다음 윈도우 선택 기본 단축키를 Tab에서 Space로, 이전 윈도우를 Shift+Tab에서 Shift+Space로 변경</li>
-<li>오버레이를 닫을 때 대피된 윈도우가 항상 애니메이션과 함께 원래 위치로 복귀하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>次のウインドウを選択するデフォルトショートカットを Tab から Space に変更、前のウインドウを Shift+Tab から Shift+Space に変更</li>
-<li>オーバーレイを閉じたとき、待避されたウインドウが常にアニメーション付きで元の位置に戻るよう変更</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Default shortcut for selecting the next window changed from Tab to Space; previous window changed from Shift+Tab to Shift+Space</li>
-<li>Displaced windows now always animate back to their original positions when the overlay is dismissed</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>O atalho padrão para selecionar a próxima janela foi alterado de Tab para Space; a janela anterior foi alterada de Shift+Tab para Shift+Space</li>
-<li>As janelas deslocadas agora sempre retornam à posição original com animação ao fechar a sobreposição</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>La scorciatoia predefinita per selezionare la finestra successiva è stata cambiata da Tab a Space; la finestra precedente da Shift+Tab a Shift+Space</li>
-<li>Le finestre spostate ora tornano sempre alla posizione originale con animazione alla chiusura dell'overlay</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Le raccourci par défaut pour sélectionner la fenêtre suivante est passé de Tab à Space ; la fenêtre précédente est passée de Shift+Tab à Shift+Space</li>
-<li>Les fenêtres déplacées reviennent désormais toujours à leur position d'origine avec une animation lors de la fermeture de la superposition</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>El atajo predeterminado para seleccionar la siguiente ventana cambió de Tab a Space; la ventana anterior cambió de Shift+Tab a Shift+Space</li>
-<li>Las ventanas desplazadas ahora siempre regresan a su posición original con animación al cerrar la superposición</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Standard-Tastenkürzel für die Auswahl des nächsten Fensters von Tab auf Space geändert; vorheriges Fenster von Shift+Tab auf Shift+Space geändert</li>
-<li>Verschobene Fenster kehren beim Schließen des Overlays nun immer animiert an ihre ursprüngliche Position zurück</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>選擇下一個視窗的預設快捷鍵從 Tab 改為 Space，選擇上一個視窗從 Shift+Tab 改為 Shift+Space</li>
-<li>關閉疊加層時，被移開的視窗現在一律以動畫方式返回原始位置</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>选择下一个窗口的默认快捷键从 Tab 改为 Space，选择上一个窗口从 Shift+Tab 改为 Shift+Space</li>
-<li>关闭叠加层时，被移开的窗口现在始终以动画方式返回原始位置</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>다음 윈도우 선택 기본 단축키를 Tab에서 Space로, 이전 윈도우를 Shift+Tab에서 Shift+Space로 변경</li>
-<li>오버레이를 닫을 때 대피된 윈도우가 항상 애니메이션과 함께 원래 위치로 복귀하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>次のウインドウを選択するデフォルトショートカットを Tab から Space に変更、前のウインドウを Shift+Tab から Shift+Space に変更</li>
-<li>オーバーレイを閉じたとき、待避されたウインドウが常にアニメーション付きで元の位置に戻るよう変更</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Default shortcut for selecting the next window changed from Tab to Space; previous window changed from Shift+Tab to Shift+Space</li>
-<li>Displaced windows now always animate back to their original positions when the overlay is dismissed</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>O atalho padrão para selecionar a próxima janela foi alterado de Tab para Space; a janela anterior foi alterada de Shift+Tab para Shift+Space</li>
-<li>As janelas deslocadas agora sempre retornam à posição original com animação ao fechar a sobreposição</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>La scorciatoia predefinita per selezionare la finestra successiva è stata cambiata da Tab a Space; la finestra precedente da Shift+Tab a Shift+Space</li>
-<li>Le finestre spostate ora tornano sempre alla posizione originale con animazione alla chiusura dell'overlay</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Le raccourci par défaut pour sélectionner la fenêtre suivante est passé de Tab à Space ; la fenêtre précédente est passée de Shift+Tab à Shift+Space</li>
-<li>Les fenêtres déplacées reviennent désormais toujours à leur position d'origine avec une animation lors de la fermeture de la superposition</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>El atajo predeterminado para seleccionar la siguiente ventana cambió de Tab a Space; la ventana anterior cambió de Shift+Tab a Shift+Space</li>
-<li>Las ventanas desplazadas ahora siempre regresan a su posición original con animación al cerrar la superposición</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Standard-Tastenkürzel für die Auswahl des nächsten Fensters von Tab auf Space geändert; vorheriges Fenster von Shift+Tab auf Shift+Space geändert</li>
-<li>Verschobene Fenster kehren beim Schließen des Overlays nun immer animiert an ihre ursprüngliche Position zurück</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>選擇下一個視窗的預設快捷鍵從 Tab 改為 Space，選擇上一個視窗從 Shift+Tab 改為 Shift+Space</li>
-<li>關閉疊加層時，被移開的視窗現在一律以動畫方式返回原始位置</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>选择下一个窗口的默认快捷键从 Tab 改为 Space，选择上一个窗口从 Shift+Tab 改为 Shift+Space</li>
-<li>关闭叠加层时，被移开的窗口现在始终以动画方式返回原始位置</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>다음 윈도우 선택 기본 단축키를 Tab에서 Space로, 이전 윈도우를 Shift+Tab에서 Shift+Space로 변경</li>
-<li>오버레이를 닫을 때 대피된 윈도우가 항상 애니메이션과 함께 원래 위치로 복귀하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>次のウインドウを選択するデフォルトショートカットを Tab から Space に変更、前のウインドウを Shift+Tab から Shift+Space に変更</li>
-<li>オーバーレイを閉じたとき、待避されたウインドウが常にアニメーション付きで元の位置に戻るよう変更</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Default shortcut for selecting the next window changed from Tab to Space; previous window changed from Shift+Tab to Shift+Space</li>
-<li>Displaced windows now always animate back to their original positions when the overlay is dismissed</li>
-</ul>]]></description>
-            <pubDate>Tue, 31 Mar 2026 21:42:37 +0900</pubDate>
-            <sparkle:version>411</sparkle:version>
-            <sparkle:shortVersionString>4.1.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.0/Tiley-4.1.1.zip" length="5646030" type="application/octet-stream" sparkle:edSignature="8Nrc05OIIJBJnw5uK3/3y0qs7QqF0WaJiy+LtfxPdr7LSLMt5lhB4PazzRwwFcni8jaPH+Cuj/UmjL0TzY2TAA=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley411-410.delta" sparkle:deltaFrom="410" length="836018" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="wn4m+OEmWAlvLfe7hlbo5a5xIVgRi7nF1kMKdrYXY54A1S6EULidTiMHIuYIFshdLX830aCCKL8CiPrjZeg0CA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley411-409.delta" sparkle:deltaFrom="409" length="1324858" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ujenoXBRX76tB0ZtUwC8/kQBI/L9VTm22qo1zPcVQKfsHNNJ0khC2hkmkIRM9TLfRu3UKJldHlzCvR5/fQBCDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley411-408.delta" sparkle:deltaFrom="408" length="1443706" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="xQsRurhoOF2ueL/Bz2GbcyjoARrwI/CcB+KSMALfcJ2lvsl12rUkvHcS66mxgWENvBmPDMZgnxLn0ybbiUCvDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley411-407.delta" sparkle:deltaFrom="407" length="640458" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dJTDAUHr41Ep491/sRonaCbmSKnR8MeoRUdO+MxvJ5uISq/AwPvVJWRKwQwIjaZzlalI0JRJO4B5C7/tzAU/Bw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley411-406.delta" sparkle:deltaFrom="406" length="648654" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="k8rO/8KSHHHQH3o2twxlwnn340JrNCbc9w9YwOyD5cMDA9ZF/mVcrrjPmu4aJKhRNPSfRnrXPUZmZ3Xn+wwYCg=="/>
             </sparkle:deltas>
         </item>
     </channel>
