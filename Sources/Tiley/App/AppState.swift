@@ -175,7 +175,6 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var cachedResizability: WindowResizability?
     @ObservationIgnored var cachedResizabilityPID: pid_t?
     @ObservationIgnored var layoutPreviewController: LayoutPreviewOverlayController?
-    @ObservationIgnored var windowHighlightController: WindowHighlightController?
     @ObservationIgnored var availableWindowTargets: [WindowTarget] = []
     /// Mission Control space list (empty when detection is unavailable).
     @ObservationIgnored var spaceList: [SpaceInfo] = []
@@ -497,7 +496,6 @@ final class AppState: NSObject, NSMenuDelegate {
         Task { @MainActor [weak self] in
             if showMainWindowOnLaunch {
                 self?.openMainWindow()
-                self?.showHighlightForActiveTarget()
             }
             self?.promptLaunchAtLoginIfNeeded()
         }
@@ -583,7 +581,6 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = initialLayoutTarget()
         launchMessage = NSLocalizedString("Applied grid settings.", comment: "Settings applied confirmation")
         openMainWindow()
-        showHighlightForActiveTarget()
     }
 
     func cancelSettingsEditing() {
@@ -600,7 +597,6 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = initialLayoutTarget()
         launchMessage = NSLocalizedString("Canceled settings changes.", comment: "Settings canceled confirmation")
         openMainWindow()
-        showHighlightForActiveTarget()
     }
 
     func beginSettingsEditing() {
@@ -610,8 +606,6 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
-        windowHighlightController?.hide()
-        windowHighlightController = nil
         hideAllMainWindows()
         settingsWindowController = SettingsWindowController(appState: self, mainWindowFrame: mainFrame)
         settingsWindowController?.show()
@@ -624,8 +618,6 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
-        windowHighlightController?.hide()
-        windowHighlightController = nil
         hideAllMainWindows()
         settingsWindowController = SettingsWindowController(appState: self, mainWindowFrame: mainFrame)
         settingsWindowController?.show()
@@ -683,8 +675,6 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingLayoutGrid = true
         openMainWindow()
         perfLog("openMainWindow done")
-        // Show a highlight border around the initially selected (frontmost) window.
-        showHighlightForActiveTarget()
         // Enter modifier-held mode so that re-pressing the trigger key cycles
         // windows and releasing the modifiers confirms the selection.
         installModifierReleaseMonitor()

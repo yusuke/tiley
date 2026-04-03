@@ -359,21 +359,13 @@ extension AppState {
             }
         }
 
-        // 1. Hide the old highlight and flush the change so it is
-        //    visually removed before any window movement begins.
-        windowHighlightController?.hide()
-        windowHighlightController = nil
         CATransaction.flush()
 
-        // 2. Move windows that occlude the selected target off-screen so it
-        //    becomes visible without changing focus.
+        // Move windows that occlude the selected target off-screen so it
+        // becomes visible without changing focus.
         if newTarget.cgWindowID != 0 {
             displaceOccludingWindows(for: newTarget)
         }
-
-        // 3. Show the highlight border last, after the target is fully visible.
-        windowHighlightController = WindowHighlightController()
-        windowHighlightController?.show(around: newTarget.frame)
     }
 
     func refreshAvailableWindows() {
@@ -414,8 +406,6 @@ extension AppState {
     }
 
     func clearWindowCyclingState(animateRestore: Bool = true) {
-        windowHighlightController?.hide()
-        windowHighlightController = nil
         CATransaction.flush()
         displacementAnimationTimer?.cancel()
         displacementAnimationTimer = nil
@@ -579,12 +569,6 @@ extension AppState {
         timer.resume()
     }
 
-    /// Shows a highlight border around the current `activeLayoutTarget`.
-    func showHighlightForActiveTarget() {
-        guard let frame = activeLayoutTarget?.frame else { return }
-        windowHighlightController = WindowHighlightController()
-        windowHighlightController?.show(around: frame)
-    }
 
     /// Restores all displaced windows back to their original positions instantly.
     func restoreDisplacedWindows() {
@@ -671,9 +655,6 @@ extension AppState {
             format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
             fallback.appName
         )
-        windowHighlightController?.hide()
-        windowHighlightController = WindowHighlightController()
-        windowHighlightController?.show(around: fallback.frame)
     }
 
     /// If the target's app is hidden (Cmd-H), unhide it so the window becomes
