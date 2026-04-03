@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-04
+
 ### Added
 
 - Resize window to predefined sizes (16:9, 16:10, 4:3, 9:16) from the toolbar button or right-click context menu; sizes that exceed the current screen are automatically excluded
@@ -582,7 +584,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.1.2...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/yusuke/tiley/releases/tag/v4.2.0
 [4.1.2]: https://github.com/yusuke/tiley/releases/tag/v4.1.2
 [4.1.1]: https://github.com/yusuke/tiley/releases/tag/v4.1.1
 [4.1.0]: https://github.com/yusuke/tiley/releases/tag/v4.1.0

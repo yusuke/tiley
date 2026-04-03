@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-04
+
 ### Adicionado
 
 - Redimensionar janelas para tamanhos predefinidos (16:9, 16:10, 4:3, 9:16) pelo botão da barra de ferramentas ou menu de contexto; tamanhos que excedem a tela atual são excluídos automaticamente

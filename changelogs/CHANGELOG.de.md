@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-04
+
 ### Hinzugefügt
 
 - Fenster über die Symbolleiste oder das Kontextmenü auf vordefinierte Größen (16:9, 16:10, 4:3, 9:16) ändern; Größen, die den aktuellen Bildschirm überschreiten, werden automatisch ausgeschlossen
