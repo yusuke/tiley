@@ -3,6 +3,208 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.1.2</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Значки порядкового индекса выбора отображаются справа от элементов окон в боковой панели при выборе двух и более окон</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Список окон в боковой панели теперь предварительно кэшируется в фоновом режиме через слушатели событий рабочего пространства (активация, запуск и завершение приложений), поэтому он отображается мгновенно при открытии оверлея</li>
+<li>Улучшено поведение подсветки элементов боковой панели, сгруппированных по приложениям. Заголовок приложения отображается как выбранный только когда выбраны все его окна, а при наведении курсора на заголовок подсвечиваются и заголовок, и все дочерние окна</li>
+<li>Улучшено поведение выхода из полноэкранного режима: теперь напрямую устанавливается атрибут AXFullScreen (с нажатием кнопки в качестве запасного варианта), ожидание завершения анимации до 2 секунд</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена проблема, при которой оверлей не открывался, когда у активного приложения нет окон. Теперь отображается сообщение «Нет окон» и перетаскивание отключено</li>
+<li>Исправлена проблема, при которой рабочий стол Finder обрабатывался как окно с изменяемым размером. При фокусе на рабочем столе теперь выбирается переднее реальное окно Finder, или отображается «Нет окон», если окон нет</li>
+<li>Исправлена проблема, при которой оверлей не открывался, когда активное приложение не имеет окон (например, Finder без открытых окон, приложения только в строке меню); теперь используется самое верхнее видимое окно на экране</li>
+<li>Исправлена проблема, при которой положение окна не применялось корректно на неосновных дисплеях для некоторых приложений (например, Notion). Добавлена проверка положения с повторными попытками после изменения размера для обработки приложений, которые асинхронно сбрасывают положение</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Emblemas de índice de ordem de seleção exibidos à direita dos itens de janela na barra lateral quando duas ou mais janelas estão selecionadas</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>A lista de janelas na barra lateral agora é pré-armazenada em cache em segundo plano por meio de listeners de eventos do workspace (ativação, inicialização e encerramento de apps), aparecendo instantaneamente ao abrir a sobreposição</li>
+<li>Melhorado o comportamento de destaque dos itens agrupados por aplicativo na barra lateral. O cabeçalho do aplicativo só é exibido como selecionado quando todas as suas janelas estão selecionadas, e ao passar o mouse sobre o cabeçalho, tanto o cabeçalho quanto todas as janelas filhas são destacados</li>
+<li>Melhoria no comportamento de saída do modo tela cheia: agora define o atributo AXFullScreen diretamente (com pressionamento de botão como fallback), aguardando até 2 segundos para a conclusão da animação</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o problema de o overlay não abrir quando o aplicativo em primeiro plano não tem janelas. Agora é exibida uma mensagem "Sem janelas" e o arrasto é desativado</li>
+<li>Corrigido o problema de a área de trabalho do Finder ser tratada como uma janela redimensionável. Quando a área de trabalho está em foco, a janela real mais à frente do Finder é selecionada, ou "Sem janelas" é exibido se não houver nenhuma</li>
+<li>Corrigido problema em que a sobreposição não abria quando o aplicativo em primeiro plano não possui janelas (por exemplo, Finder sem janelas abertas, aplicativos apenas de barra de menus); agora utiliza a janela visível mais à frente na tela</li>
+<li>Corrigido problema em que a posição da janela não era aplicada corretamente em monitores não principais para alguns apps (ex.: Notion). Adicionada verificação de posição com lógica de tentativa após o redimensionamento para lidar com apps que revertem a posição de forma assíncrona</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Badge con indice dell'ordine di selezione visualizzati a destra degli elementi finestra nella barra laterale quando sono selezionate due o più finestre</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>L'elenco delle finestre nella barra laterale viene ora pre-memorizzato in background tramite listener di eventi del workspace (attivazione, avvio e chiusura delle app), in modo da apparire istantaneamente all'apertura dell'overlay</li>
+<li>Migliorato il comportamento dell'evidenziazione per gli elementi della barra laterale raggruppati per applicazione. L'intestazione dell'app viene mostrata come selezionata solo quando tutte le sue finestre sono selezionate, e passando il mouse sull'intestazione vengono evidenziati sia l'intestazione che tutte le finestre figlie</li>
+<li>Migliorato il comportamento di uscita dallo schermo intero: ora imposta direttamente l'attributo AXFullScreen (con pressione del pulsante come fallback), attendendo fino a 2 secondi per il completamento dell'animazione</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Risolto il problema per cui l'overlay non si apriva quando l'applicazione in primo piano non ha finestre. Ora viene mostrato un messaggio "Nessuna finestra" e il trascinamento viene disabilitato</li>
+<li>Risolto il problema per cui il desktop del Finder veniva trattato come una finestra ridimensionabile. Quando il desktop è in primo piano, viene ora selezionata la finestra reale del Finder più in primo piano, oppure viene mostrato "Nessuna finestra" se non ne esistono</li>
+<li>Corretto il problema per cui l'overlay non si apriva quando l'applicazione in primo piano non aveva finestre (ad es. Finder senza finestre aperte, app solo barra dei menu); ora viene utilizzata la finestra visibile più in alto sullo schermo</li>
+<li>Corretta la posizione della finestra che non veniva applicata correttamente su display non principali per alcune app (es. Notion). Aggiunta verifica della posizione con logica di ritentativo dopo il ridimensionamento per gestire le app che ripristinano la posizione in modo asincrono</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Badges d'index d'ordre de sélection affichés à droite des éléments de fenêtre dans la barre latérale lorsque deux fenêtres ou plus sont sélectionnées</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>La liste des fenêtres dans la barre latérale est désormais pré-mise en cache en arrière-plan via des écouteurs d'événements de l'espace de travail (activation, lancement et fermeture d'applications), et s'affiche instantanément à l'ouverture de la superposition</li>
+<li>Amélioration du comportement de mise en surbrillance des éléments groupés par application dans la barre latérale. L'en-tête de l'application n'est affiché comme sélectionné que lorsque toutes ses fenêtres sont sélectionnées, et le survol de l'en-tête met en surbrillance à la fois l'en-tête et toutes ses fenêtres enfants</li>
+<li>Amélioration du comportement de sortie du plein écran : définit désormais l'attribut AXFullScreen directement (avec appui sur le bouton en secours), en attendant jusqu'à 2 secondes la fin de l'animation</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du problème où l'overlay ne s'ouvrait pas lorsque l'application au premier plan n'a pas de fenêtres. Un message « Aucune fenêtre » est affiché et le glisser est désactivé</li>
+<li>Correction du bureau du Finder traité comme une fenêtre redimensionnable. Lorsque le bureau est au premier plan, la fenêtre réelle du Finder la plus en avant est ciblée, ou « Aucune fenêtre » est affiché s'il n'en existe aucune</li>
+<li>Correction d'un problème où l'overlay ne s'ouvrait pas lorsque l'application au premier plan n'a pas de fenêtre (par exemple, Finder sans fenêtre ouverte, applications uniquement dans la barre de menus) ; utilise maintenant la fenêtre visible la plus en avant sur l'écran</li>
+<li>Correction d'un problème où la position de la fenêtre n'était pas correctement appliquée sur les écrans non principaux pour certaines applications (ex. Notion). Ajout d'une vérification de position avec tentatives de réessai après le redimensionnement pour gérer les applications qui réinitialisent la position de manière asynchrone</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Insignias de índice de orden de selección en el lado derecho de los elementos de ventana de la barra lateral cuando se seleccionan dos o más ventanas</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>La lista de ventanas en la barra lateral ahora se precarga en segundo plano mediante listeners de eventos del espacio de trabajo (activación, inicio y cierre de aplicaciones), por lo que aparece instantáneamente al abrir la superposición</li>
+<li>Mejorado el comportamiento de resaltado de los elementos agrupados por aplicación en la barra lateral. El encabezado de la aplicación solo se muestra como seleccionado cuando todas sus ventanas están seleccionadas, y al pasar el cursor sobre el encabezado se resaltan tanto el encabezado como todas sus ventanas secundarias</li>
+<li>Mejora del comportamiento de salida de pantalla completa: ahora establece el atributo AXFullScreen directamente (con pulsación de botón como respaldo), esperando hasta 2 segundos para que se complete la animación</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido el problema de que la superposición no se abría cuando la aplicación en primer plano no tiene ventanas. Ahora se muestra un mensaje "Sin ventanas" y se desactiva el arrastre</li>
+<li>Corregido que el escritorio del Finder se tratara como una ventana redimensionable. Cuando el escritorio está enfocado, ahora se selecciona la ventana real del Finder más al frente, o se muestra "Sin ventanas" si no existe ninguna</li>
+<li>Corregido el problema de que la superposición no se abría cuando la aplicación en primer plano no tiene ventanas (por ejemplo, Finder sin ventanas abiertas, aplicaciones solo de barra de menú); ahora se recurre a la ventana visible más al frente en la pantalla</li>
+<li>Corregido el problema de que la posición de la ventana no se aplicaba correctamente en pantallas no principales para algunas aplicaciones (p. ej., Notion). Se añadió verificación de posición con reintento tras el redimensionamiento para gestionar aplicaciones que revierten la posición de forma asíncrona</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Auswahlreihenfolge-Indexabzeichen werden rechts neben Seitenleisten-Fensterelementen angezeigt, wenn zwei oder mehr Fenster ausgewählt sind</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Die Fensterliste in der Seitenleiste wird nun über Workspace-Ereignis-Listener (App-Aktivierung, -Start, -Beendigung) im Hintergrund vorab zwischengespeichert, sodass sie beim Öffnen des Overlays sofort angezeigt wird</li>
+<li>Hervorhebungsverhalten für nach App gruppierte Seitenleistenelemente verbessert. Der App-Header wird nur noch als ausgewählt angezeigt, wenn alle zugehörigen Fenster ausgewählt sind, und beim Überfahren des App-Headers werden sowohl der Header als auch alle untergeordneten Fenster hervorgehoben</li>
+<li>Verbessertes Verhalten beim Beenden des Vollbildmodus: AXFullScreen-Attribut wird jetzt direkt gesetzt (mit Tastendruck als Fallback), Wartezeit bis zu 2 Sekunden für den Abschluss der Animation</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Problem behoben, dass sich das Overlay nicht öffnete, wenn die vorderste Anwendung keine Fenster hat. Es wird nun eine „Keine Fenster"-Meldung angezeigt und das Ziehen deaktiviert</li>
+<li>Problem behoben, dass Finders Desktop als größenveränderbares Fenster behandelt wurde. Bei fokussiertem Desktop wird nun das vorderste echte Finder-Fenster ausgewählt, oder „Keine Fenster" angezeigt, wenn keines vorhanden ist</li>
+<li>Overlay öffnete sich nicht, wenn die vorderste Anwendung keine Fenster hat (z. B. Finder ohne offene Fenster, reine Menüleisten-Apps); es wird nun auf das oberste sichtbare Fenster auf dem Bildschirm zurückgegriffen</li>
+<li>Fensterposition wurde bei einigen Apps (z. B. Notion) auf nicht-primären Bildschirmen nicht korrekt angewendet. Positionsüberprüfung mit Wiederholungslogik nach der Größenänderung hinzugefügt, um Apps zu behandeln, die die Position asynchron zurücksetzen</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>選擇兩個或更多視窗時，側邊欄視窗項目右側顯示選擇順序索引徽章</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>側邊欄的視窗列表現在透過工作區事件監聽器（應用程式啟用、啟動、終止）在背景預快取，開啟疊加層時視窗列表即時顯示</li>
+<li>改善了按應用程式分組的側邊欄項目的醒目提示行為。應用程式標題僅在所有視窗均被選取時才顯示為選取狀態，滑鼠懸停在應用程式標題上時會同時醒目提示標題及其所有子視窗</li>
+<li>改進全螢幕退出行為：改為直接設定 AXFullScreen 屬性（按鈕按下作為後備方案），並等待動畫完成最多 2 秒</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正最前方應用程式沒有視窗時覆蓋層不開啟的問題。現在會顯示「沒有視窗」訊息並停用拖曳操作</li>
+<li>修正 Finder 的桌面被當作可調整大小的視窗的問題。當桌面取得焦點時，現在會選擇 Finder 最前面的實際視窗作為目標；如果沒有視窗則顯示「沒有視窗」</li>
+<li>修正了最前面的應用程式沒有視窗時（如沒有開啟視窗的 Finder、僅選單列應用程式等）無法開啟疊加層的問題；現在會回退到螢幕上最前面的可見視窗</li>
+<li>修正部分應用程式（如 Notion）在非主顯示器上視窗位置未正確套用的問題。新增調整大小後的位置驗證與重試邏輯，以處理應用程式非同步還原位置的情況</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>选择两个或更多窗口时，侧边栏窗口项右侧显示选择顺序索引徽章</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>侧边栏的窗口列表现在通过工作区事件监听器（应用激活、启动、终止）在后台预缓存，打开叠加层时窗口列表即时显示</li>
+<li>改进了按应用分组的侧边栏项目的高亮行为。应用标题仅在所有窗口均被选中时才显示为选中状态，鼠标悬停在应用标题上时会同时高亮标题及其所有子窗口</li>
+<li>改进全屏退出行为：改为直接设置 AXFullScreen 属性（按钮按下作为后备方案），并等待动画完成最多 2 秒</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复最前方应用程序没有窗口时覆盖层不打开的问题。现在会显示"无窗口"消息并禁用拖拽操作</li>
+<li>修复 Finder 的桌面被当作可调整大小的窗口的问题。当桌面获得焦点时，现在会选择 Finder 的最前面的实际窗口作为目标；如果没有窗口则显示"无窗口"</li>
+<li>修复了最前面的应用程序没有窗口时（如没有打开窗口的 Finder、仅菜单栏应用等）无法打开叠加层的问题；现在会回退到屏幕上最前面的可见窗口</li>
+<li>修复部分应用（如 Notion）在非主显示器上窗口位置未正确应用的问题。添加了调整大小后的位置验证与重试逻辑，以处理应用异步恢复位置的情况</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>2개 이상의 윈도우 선택 시 사이드바 윈도우 항목 오른쪽에 선택 순서 인덱스 배지 표시</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>사이드바의 윈도우 목록을 워크스페이스 이벤트 리스너(앱 활성화, 실행, 종료)를 통해 백그라운드에서 사전 캐싱하도록 변경. 오버레이를 열면 윈도우 목록이 즉시 표시됨</li>
+<li>앱별로 그룹화된 사이드바 항목의 하이라이트 동작 개선. 앱 헤더는 모든 윈도우가 선택된 경우에만 선택 상태로 표시되며, 앱 헤더에 마우스를 올리면 헤더와 모든 하위 윈도우가 동시에 하이라이트됨</li>
+<li>전체 화면 해제 동작 개선: AXFullScreen 속성을 직접 설정하는 방식으로 변경하고(버튼 누르기 폴백 포함), 애니메이션 완료까지 최대 2초 대기하도록 변경</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>최전면 애플리케이션에 윈도우가 없을 때 오버레이가 열리지 않던 문제 수정. '윈도우 없음' 메시지를 표시하고 드래그 조작을 비활성화</li>
+<li>Finder의 데스크톱이 크기 조절 가능한 윈도우로 취급되던 문제 수정. 데스크톱에 포커스가 있을 때 Finder의 최전면 실제 윈도우를 대상으로 하며, 윈도우가 없으면 '윈도우 없음'을 표시</li>
+<li>최전면 애플리케이션에 창이 없는 경우(창이 열리지 않은 Finder, 메뉴 바 전용 앱 등) 오버레이가 열리지 않는 문제 수정. 화면에서 가장 앞에 있는 가시 창을 대체 대상으로 사용하도록 변경</li>
+<li>일부 앱(예: Notion)에서 비주 디스플레이의 창 위치가 올바르게 적용되지 않는 문제를 수정. 크기 변경 후 앱이 비동기적으로 위치를 되돌리는 경우를 처리하기 위해 위치 검증 및 재시도 로직 추가</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>2つ以上のウインドウを選択している場合、サイドバーのウインドウアイテム右側に選択順のインデックスバッジを表示</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>サイドバーのウインドウ一覧をワークスペースイベント（アプリ切替・起動・終了）のリスナーによりバックグラウンドで事前キャッシュするよう変更。オーバーレイを開いた瞬間にウインドウ一覧が表示されるように改善</li>
+<li>アプリケーション別にグループ化されたサイドバーアイテムのハイライト挙動を改善。アプリヘッダーの選択状態はすべてのウインドウが選択されている場合のみ表示されるようになり、アプリヘッダーにホバーするとヘッダーとすべての子ウインドウが同時にハイライトされるように変更</li>
+<li>フルスクリーン解除の挙動を改善：AXFullScreen 属性を直接設定する方式に変更（フォールバックとしてボタン押下も使用）、アニメーション完了まで最大2秒待機するよう変更</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>最前面のアプリケーションにウインドウがない場合にオーバーレイが開かない問題を修正。「ウインドウがありません」メッセージを表示し、ドラッグ操作を無効化するよう変更</li>
+<li>Finder のデスクトップがリサイズ可能なウインドウとして扱われていた問題を修正。デスクトップにフォーカスがある場合は Finder の最前面の実ウインドウを対象とし、ウインドウがない場合は「ウインドウがありません」を表示</li>
+<li>最前面のアプリケーションがウインドウを持たない場合（ウインドウ未表示の Finder やメニューバー専用アプリなど）にオーバーレイが開かない問題を修正。画面上で最前面にある可視ウインドウをフォールバックターゲットとして使用するように変更</li>
+<li>一部のアプリ（Notion など）で非プライマリディスプレイ上のウインドウ位置が正しく適用されない問題を修正。リサイズ後にアプリが非同期的に位置を戻すケースに対応するため、位置の検証・リトライ処理を追加</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Selection order index badges now appear on the right side of sidebar window items when two or more windows are selected</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Window list in the sidebar is now pre-cached in the background via workspace event listeners (app activation, launch, termination), so it appears instantly when the overlay opens</li>
+<li>Improved highlight behavior for app-grouped sidebar items: the app header is now only shown as selected when all its windows are selected, and hovering over an app header highlights both the header and all its child windows</li>
+<li>Improved fullscreen exit behavior: now sets the AXFullScreen attribute directly with a button-press fallback, and waits up to 2 seconds for the animation to complete</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed the overlay not opening when the frontmost application has no windows; the overlay now opens with a "No windows" message and drag is disabled</li>
+<li>Fixed Finder's desktop being treated as a resizable window; when the desktop is focused, Tiley now targets Finder's frontmost real window instead, or shows "No windows" if none exist</li>
+<li>Fixed the overlay not opening when the frontmost application has no windows (e.g. Finder with no open windows, menu bar-only apps); now falls back to the topmost visible window on screen</li>
+<li>Fixed window position not being applied correctly on non-primary displays for some apps (e.g. Notion); added post-resize position verification with retry loop to handle apps that asynchronously revert position after a size change</li>
+</ul>]]></description>
+            <pubDate>Fri, 03 Apr 2026 22:08:18 +0900</pubDate>
+            <sparkle:version>412</sparkle:version>
+            <sparkle:shortVersionString>4.1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley-4.1.2.zip" length="5673422" type="application/octet-stream" sparkle:edSignature="rUwhRrWRYgMS4OJyHPHCFmPCyrqYqGiMudi/bWDc+Eq1ElhyEMoaX9w9GRrDMueCERKsTD1r4rzEbMcMs3zjAg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-411.delta" sparkle:deltaFrom="411" length="378982" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dhX1ngLwTgGb3Yf2tDaf160EIuLUqqWFiUCLesYWIC3dD/uoIoR5bsRTFJmLRF5bACxd4Xt1GEEvZYH6MnD7CA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-410.delta" sparkle:deltaFrom="410" length="1199582" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="raSF6oRPvBSOFP/0nx8o01hgEQVTShs2zue+9TueAadqlJEc1yKqImDVCANlWyatGqXZ+tdyNFL+PPI9DDz5Dw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-409.delta" sparkle:deltaFrom="409" length="1418758" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="MowpFa2vRkeY1lT/aryQdVkd/l7rLTJGz5K0eVoDhI5GMzeW5D03t8b39K3b0AJIgHcj3WyBp8yJ5rtySy4LBQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-408.delta" sparkle:deltaFrom="408" length="1512354" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nIn+TVs3KwlbymYvP52MjvjUD5DATKCva/fyZch8gtPParsVjqfok095uL+TF7uFa1rImGg9WCxLOTQpsyQKAw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley412-407.delta" sparkle:deltaFrom="407" length="707834" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="uLop9+AFe5Z/JHzyu/7JzhMY/7HXeTXT566pY+avXNpan5shEqAoYuCbo/RKZk4NJ0uNz+z5MnCslRFVb6JIBw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.1.1</title>
             <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
 <ul>
@@ -59,11 +261,61 @@
 <li>Default shortcut for selecting the next window changed from Tab to Space; previous window changed from Shift+Tab to Shift+Space</li>
 <li>Displaced windows now always animate back to their original positions when the overlay is dismissed</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>O atalho padrão para selecionar a próxima janela foi alterado de Tab para Space; a janela anterior foi alterada de Shift+Tab para Shift+Space</li>
+<li>As janelas deslocadas agora sempre retornam à posição original com animação ao fechar a sobreposição</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>La scorciatoia predefinita per selezionare la finestra successiva è stata cambiata da Tab a Space; la finestra precedente da Shift+Tab a Shift+Space</li>
+<li>Le finestre spostate ora tornano sempre alla posizione originale con animazione alla chiusura dell'overlay</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Le raccourci par défaut pour sélectionner la fenêtre suivante est passé de Tab à Space ; la fenêtre précédente est passée de Shift+Tab à Shift+Space</li>
+<li>Les fenêtres déplacées reviennent désormais toujours à leur position d'origine avec une animation lors de la fermeture de la superposition</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>El atajo predeterminado para seleccionar la siguiente ventana cambió de Tab a Space; la ventana anterior cambió de Shift+Tab a Shift+Space</li>
+<li>Las ventanas desplazadas ahora siempre regresan a su posición original con animación al cerrar la superposición</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Standard-Tastenkürzel für die Auswahl des nächsten Fensters von Tab auf Space geändert; vorheriges Fenster von Shift+Tab auf Shift+Space geändert</li>
+<li>Verschobene Fenster kehren beim Schließen des Overlays nun immer animiert an ihre ursprüngliche Position zurück</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>選擇下一個視窗的預設快捷鍵從 Tab 改為 Space，選擇上一個視窗從 Shift+Tab 改為 Shift+Space</li>
+<li>關閉疊加層時，被移開的視窗現在一律以動畫方式返回原始位置</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>选择下一个窗口的默认快捷键从 Tab 改为 Space，选择上一个窗口从 Shift+Tab 改为 Shift+Space</li>
+<li>关闭叠加层时，被移开的窗口现在始终以动画方式返回原始位置</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>다음 윈도우 선택 기본 단축키를 Tab에서 Space로, 이전 윈도우를 Shift+Tab에서 Shift+Space로 변경</li>
+<li>오버레이를 닫을 때 대피된 윈도우가 항상 애니메이션과 함께 원래 위치로 복귀하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>次のウインドウを選択するデフォルトショートカットを Tab から Space に変更、前のウインドウを Shift+Tab から Shift+Space に変更</li>
+<li>オーバーレイを閉じたとき、待避されたウインドウが常にアニメーション付きで元の位置に戻るよう変更</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Default shortcut for selecting the next window changed from Tab to Space; previous window changed from Shift+Tab to Shift+Space</li>
+<li>Displaced windows now always animate back to their original positions when the overlay is dismissed</li>
+</ul>]]></description>
             <pubDate>Tue, 31 Mar 2026 21:42:37 +0900</pubDate>
             <sparkle:version>411</sparkle:version>
             <sparkle:shortVersionString>4.1.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley-4.1.1.zip" length="5646030" type="application/octet-stream" sparkle:edSignature="8Nrc05OIIJBJnw5uK3/3y0qs7QqF0WaJiy+LtfxPdr7LSLMt5lhB4PazzRwwFcni8jaPH+Cuj/UmjL0TzY2TAA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley-4.1.1.zip" length="5646030" type="application/octet-stream" sparkle:edSignature="8Nrc05OIIJBJnw5uK3/3y0qs7QqF0WaJiy+LtfxPdr7LSLMt5lhB4PazzRwwFcni8jaPH+Cuj/UmjL0TzY2TAA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley411-410.delta" sparkle:deltaFrom="410" length="836018" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="wn4m+OEmWAlvLfe7hlbo5a5xIVgRi7nF1kMKdrYXY54A1S6EULidTiMHIuYIFshdLX830aCCKL8CiPrjZeg0CA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley411-409.delta" sparkle:deltaFrom="409" length="1324858" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ujenoXBRX76tB0ZtUwC8/kQBI/L9VTm22qo1zPcVQKfsHNNJ0khC2hkmkIRM9TLfRu3UKJldHlzCvR5/fQBCDg=="/>
@@ -368,218 +620,157 @@
 <li>Miniature window title bar now shows the application name alongside the window title</li>
 <li>"Update available" badge replaced with a red dot on the settings button and a tooltip; the settings panel shows a popover on the "Check for Updates" button instead</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Alternância de janelas mantendo teclas modificadoras pressionadas (estilo Cmd+Tab): após abrir a sobreposição, mantenha as teclas modificadoras de alternância pressionadas e pressione a tecla de ativação repetidamente para alternar entre janelas; ao soltar as teclas modificadoras, a janela selecionada é trazida para frente; pressione atalhos locais de layout enquanto mantém as teclas modificadoras para aplicar o layout correspondente</li>
+<li>Seção de agradecimentos de licenças de terceiros nas Configurações (Sparkle, TelemetryDeck)</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>Os painéis de Configurações e Permissões agora são janelas independentes em nível normal (não flutuante), para que diálogos de atualização do Sparkle e outras janelas do sistema possam ser exibidos acima</li>
+<li>A barra lateral agora está sempre visível; o botão de mostrar/ocultar foi removido</li>
+<li>O botão de configurações foi movido da barra inferior para a extremidade esquerda da barra de ações da barra lateral</li>
+<li>A visualização de mini tela agora tem cantos arredondados nos quatro lados independentemente do tipo de tela</li>
+<li>A barra de título da janela em miniatura agora exibe o nome do aplicativo junto ao título da janela</li>
+<li>O emblema "Atualização disponível" foi substituído por um ponto vermelho no botão de configurações e uma dica; no painel de configurações, um popover é exibido no botão "Verificar atualizações"</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Cambio finestra con tasti modificatori tenuti premuti (stile Cmd+Tab): dopo aver aperto l'overlay, tieni premuti i tasti modificatori e premi ripetutamente il tasto di attivazione per scorrere le finestre; rilascia i tasti modificatori per portare la finestra selezionata in primo piano; premi le scorciatoie locali del layout mentre tieni premuti i tasti modificatori per applicare il layout corrispondente</li>
+<li>Sezione riconoscimenti per le licenze di terze parti nelle Impostazioni (Sparkle, TelemetryDeck)</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>I pannelli Impostazioni e Autorizzazioni sono ora finestre separate a livello normale (non flottante), in modo che le finestre di aggiornamento di Sparkle e altre finestre di sistema possano essere visualizzate sopra</li>
+<li>La barra laterale è ora sempre visibile; il pulsante mostra/nascondi è stato rimosso</li>
+<li>Il pulsante delle impostazioni è stato spostato dalla barra inferiore all'estremità sinistra della barra delle azioni nella barra laterale</li>
+<li>L'anteprima mini schermo ora ha angoli arrotondati su tutti e quattro i lati indipendentemente dal tipo di display</li>
+<li>La barra del titolo della finestra in miniatura ora mostra il nome dell'applicazione insieme al titolo della finestra</li>
+<li>Il badge "Aggiornamento disponibile" è stato sostituito con un punto rosso sul pulsante delle impostazioni e un tooltip; nel pannello delle impostazioni viene mostrato un popover sul pulsante "Verifica aggiornamenti"</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Changement de fenêtre en maintenant les touches de modification (style Cmd+Tab) : après avoir ouvert le panneau, maintenez les touches de modification et appuyez sur la touche de déclenchement pour parcourir les fenêtres ; relâchez les touches de modification pour mettre la fenêtre sélectionnée au premier plan ; appuyez sur un raccourci local de disposition tout en maintenant les touches de modification pour appliquer la disposition</li>
+<li>Section de remerciements pour les licences tierces dans les Réglages (Sparkle, TelemetryDeck)</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>Les panneaux Réglages et Autorisations sont désormais des fenêtres indépendantes au niveau normal (non flottant), permettant aux dialogues de mise à jour Sparkle et autres fenêtres système de s'afficher au-dessus</li>
+<li>La barre latérale est désormais toujours visible ; le bouton d'affichage/masquage a été supprimé</li>
+<li>Le bouton des réglages a été déplacé de la barre inférieure vers l'extrémité gauche de la barre d'actions de la barre latérale</li>
+<li>L'aperçu mini-écran a désormais des coins arrondis sur les quatre côtés quel que soit le type d'écran</li>
+<li>La barre de titre de la fenêtre miniature affiche désormais le nom de l'application en plus du titre de la fenêtre</li>
+<li>Le badge « Mise à jour disponible » a été remplacé par un point rouge sur le bouton des réglages et une infobulle ; dans le panneau des réglages, un popover s'affiche sur le bouton « Vérifier les mises à jour »</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Cambio de ventana manteniendo teclas modificadoras (estilo Cmd+Tab): tras abrir la superposición, mantenga las teclas modificadoras de alternancia y pulse la tecla de activación repetidamente para recorrer las ventanas; al soltar las teclas modificadoras, la ventana seleccionada pasa al frente; pulse atajos locales de diseño mientras mantiene las teclas modificadoras para aplicar el diseño correspondiente</li>
+<li>Sección de reconocimientos de licencias de terceros en Ajustes (Sparkle, TelemetryDeck)</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Los paneles de Ajustes y Permisos son ahora ventanas independientes a nivel normal (no flotante), para que los diálogos de actualización de Sparkle y otras ventanas del sistema puedan mostrarse encima</li>
+<li>La barra lateral ahora está siempre visible; se ha eliminado el botón de mostrar/ocultar</li>
+<li>El botón de ajustes se ha movido de la barra inferior al extremo izquierdo de la barra de acciones de la barra lateral</li>
+<li>La vista previa de mini pantalla ahora tiene esquinas redondeadas en los cuatro lados independientemente del tipo de pantalla</li>
+<li>La barra de título de la ventana en miniatura ahora muestra el nombre de la aplicación junto al título de la ventana</li>
+<li>La insignia "Actualización disponible" se ha reemplazado por un punto rojo en el botón de ajustes y un tooltip; en el panel de ajustes se muestra un popover en el botón "Buscar actualizaciones"</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Fensterwechsel bei gehaltenen Modifikatortasten (Cmd+Tab-ähnlich): Nach dem Öffnen des Overlays die Toggle-Modifikatortasten gedrückt halten und die Auslösetaste wiederholt drücken, um zwischen Fenstern zu wechseln; beim Loslassen der Modifikatortasten wird das ausgewählte Fenster in den Vordergrund gebracht; Layout-Lokalkürzel bei gehaltenen Modifikatortasten anwenden</li>
+<li>Abschnitt für Drittanbieter-Lizenzhinweise in den Einstellungen (Sparkle, TelemetryDeck)</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Einstellungs- und Berechtigungsfenster sind jetzt separate Fenster auf normaler (nicht schwebender) Ebene, sodass Sparkle-Update-Dialoge und andere Systemfenster darüber angezeigt werden können</li>
+<li>Die Seitenleiste ist jetzt immer sichtbar; die Ein-/Ausblenden-Schaltfläche wurde entfernt</li>
+<li>Einstellungs-Schaltfläche von der Fußleiste an den linken Rand der Seitenleisten-Aktionsleiste verschoben</li>
+<li>Die Minibildschirm-Vorschau hat jetzt unabhängig vom Displaytyp an allen vier Ecken abgerundete Ecken</li>
+<li>Die Titelleiste des Miniaturfensters zeigt jetzt den Anwendungsnamen zusammen mit dem Fenstertitel an</li>
+<li>Das „Update verfügbar"-Abzeichen wurde durch einen roten Punkt auf der Einstellungs-Schaltfläche und einen Tooltip ersetzt; im Einstellungsfenster wird ein Popover auf der „Nach Updates suchen"-Schaltfläche angezeigt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>按住修飾鍵切換視窗功能（類似 Cmd+Tab 操作）：開啟覆疊層後按住切換修飾鍵並重複按觸發鍵可逐一切換視窗，放開修飾鍵後所選視窗移至最前面；按住修飾鍵時按佈局本地快捷鍵可套用相應佈局</li>
+<li>在設定中新增第三方授權條款致謝區段（Sparkle、TelemetryDeck）</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>將設定和權限面板分離為獨立的一般（非浮動）層級視窗，使 Sparkle 更新對話框和其他系統視窗可以顯示在其上方</li>
+<li>側邊欄現在始終顯示；移除了側邊欄顯示/隱藏切換按鈕</li>
+<li>將設定按鈕從底部列移至側邊欄動作列的最左端</li>
+<li>迷你螢幕預覽現在無論顯示器類型如何，四個角均為圓角</li>
+<li>縮圖視窗標題列現在同時顯示應用程式名稱和視窗標題</li>
+<li>將「有可用更新」徽章替換為設定按鈕上的紅點和工具提示；設定面板中在「檢查更新」按鈕上以彈出視窗顯示</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>按住修饰键切换窗口功能（类似 Cmd+Tab 操作）：打开叠加层后按住切换修饰键并反复按触发键可逐个切换窗口，松开修饰键后所选窗口移至最前面；按住修饰键时按布局本地快捷键可应用相应布局</li>
+<li>在设置中添加第三方许可证致谢部分（Sparkle、TelemetryDeck）</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>将设置和权限面板分离为独立的普通（非浮动）级别窗口，使 Sparkle 更新对话框和其他系统窗口可以显示在其上方</li>
+<li>侧边栏现在始终显示；移除了侧边栏显示/隐藏切换按钮</li>
+<li>将设置按钮从底部栏移至侧边栏操作栏的最左端</li>
+<li>迷你屏幕预览现在无论显示器类型如何，四个角均为圆角</li>
+<li>缩略窗口标题栏现在同时显示应用程序名称和窗口标题</li>
+<li>将"有可用更新"徽章替换为设置按钮上的红点和工具提示；设置面板中在"检查更新"按钮上以弹出窗口显示</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>수정자 키를 누른 채 윈도우 전환 기능 추가 (Cmd+Tab 스타일): 오버레이를 연 후 토글 수정자 키를 누른 채 트리거 키를 반복 누르면 윈도우가 순차 전환되며, 수정자 키를 놓으면 선택된 윈도우가 최전면으로 이동. 수정자 키를 누른 채 레이아웃 로컬 단축키를 누르면 해당 레이아웃 적용</li>
+<li>설정 화면에 서드파티 라이선스 표시 섹션 추가 (Sparkle, TelemetryDeck)</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>설정 및 권한 패널을 별도의 일반(비플로팅) 레벨 윈도우로 분리하여 Sparkle 업데이트 대화상자 및 기타 OS 윈도우가 위에 표시되도록 변경</li>
+<li>사이드바를 항상 표시하도록 변경하고 사이드바 표시/숨기기 토글 버튼 제거</li>
+<li>설정 버튼을 푸터 바에서 사이드바 액션 바 왼쪽 끝으로 이동</li>
+<li>미니 스크린 프리뷰의 모서리를 디스플레이 유형에 관계없이 네 모서리 모두 둥글게 처리</li>
+<li>미니어처 윈도우 타이틀 바에 윈도우 제목과 함께 앱 이름 표시</li>
+<li>"업데이트 사용 가능" 배지를 설정 버튼의 빨간 점과 툴팁으로 대체; 설정 패널에서는 "업데이트 확인" 버튼에 팝오버로 표시</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>修飾キーを押し続けたままウインドウを切り替える機能を追加（Cmd+Tab ライクな操作）: オーバーレイ表示後にトグル修飾キーを押したままトリガーキーを繰り返し押すとウインドウが順次切り替わり、修飾キーを離すと選択中のウインドウが最前面に移動。修飾キーを押したままレイアウトのローカルショートカットを押すとレイアウトを適用</li>
+<li>設定画面にサードパーティライセンス表示セクションを追加（Sparkle、TelemetryDeck）</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>設定画面と権限画面を独立したウインドウに分離し、通常レベル（非フローティング）で表示するよう変更。Sparkle のアップデートダイアログや他の OS ウインドウが前面に表示されるように</li>
+<li>サイドバーを常時表示に変更し、表示/非表示トグルボタンを廃止</li>
+<li>設定ボタンをフッターバーからサイドバーのアクションバー左端に移動</li>
+<li>ミニスクリーンプレビューの角丸をディスプレイの種類に関わらず4隅すべてに適用</li>
+<li>ミニチュアウインドウのタイトルバーにアプリケーション名をウインドウタイトルと併せて表示</li>
+<li>「アップデートがあります」バッジを設定ボタンの赤ドットとツールチップに変更。設定画面では「アップデートを確認」ボタンにポップオーバーで表示</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Modifier-held window cycling (Cmd+Tab-like interaction): hold the toggle modifier keys after opening the overlay, then press the trigger key repeatedly to cycle through windows; release the modifiers to bring the selected window to front; press a layout local shortcut key while holding modifiers to apply that layout</li>
+<li>Third-party license acknowledgements section in Settings (Sparkle, TelemetryDeck)</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Settings and Permissions panels are now separate windows at normal (non-floating) level, so Sparkle update dialogs and other OS windows can appear above them</li>
+<li>Sidebar is now always visible; the sidebar show/hide toggle button has been removed</li>
+<li>Settings button moved from the footer bar to the left edge of the sidebar action bar</li>
+<li>Mini screen preview now always has rounded corners on all four sides, regardless of display type</li>
+<li>Miniature window title bar now shows the application name alongside the window title</li>
+<li>"Update available" badge replaced with a red dot on the settings button and a tooltip; the settings panel shows a popover on the "Check for Updates" button instead</li>
+</ul>]]></description>
             <pubDate>Tue, 31 Mar 2026 14:41:51 +0900</pubDate>
             <sparkle:version>410</sparkle:version>
             <sparkle:shortVersionString>4.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley-4.1.0.zip" length="5644724" type="application/octet-stream" sparkle:edSignature="OqHEgiRnIbgwWpUJGbdSK0vuZg58tW9a25/C9caY6nc8DgwnOCpqRyBLr40k63d4EDyxHnVaqk2VZCzRTcPMBQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.2/Tiley-4.1.0.zip" length="5644724" type="application/octet-stream" sparkle:edSignature="OqHEgiRnIbgwWpUJGbdSK0vuZg58tW9a25/C9caY6nc8DgwnOCpqRyBLr40k63d4EDyxHnVaqk2VZCzRTcPMBQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.0/Tiley410-409.delta" sparkle:deltaFrom="409" length="503374" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="6T/QPR4bFnLMfXpzTQfh5T6m4RyMDXFXq5ozLC1Q+zg0x/uZQgCkKLKQVmsNtBb2tzhjnlF9AX/bb4O9RoLHBA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.0/Tiley410-408.delta" sparkle:deltaFrom="408" length="622630" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="RvWs6mmq6kl4Q+gd+xxbrA6s5rbeNsJOr2hZEySqjmdhR8w0fyIKffC60Qs4cCA/Xp+xzhbJitXEHymXuXjyAg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.0/Tiley410-407.delta" sparkle:deltaFrom="407" length="1460802" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2KcK8RIc0UXhpy3VutAhuz0StF2w+HJ3XGHZ9AlEVR1poYcUw/JRggHPtP7Hm0ufhfA7DbB0r96+rAYkw2pBCw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.0/Tiley410-406.delta" sparkle:deltaFrom="406" length="1469010" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="QM/xHKbAEFgfU8P8gNS/GORnIhtexl3ykMev886G0YlLuYWUNU2DCk8RyxAhtVEY9teZzLdTnA4K8JvEKhvcAA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.0/Tiley410-405.delta" sparkle:deltaFrom="405" length="1535026" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="q6U+TOyGR2YMyi13rfdSHmxrYUhaovE7Code6Z/s5lReaV8+2gIhr5sYEg6Ng2i/pP7OpjSCSwd2GkNqg/EOCw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.0.9</title>
-            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
-<ul>
-<li>Изменение размера окна не срабатывало и позиция смещалась для некоторых приложений: позиция отскока при отклонении начального изменения размера находилась внизу экрана (нет места для расширения), из-за чего окно оставалось в неправильной позиции. Теперь отскок происходит к верхней части видимой области, а при повторной неудаче позиция явно восстанавливается</li>
-<li>Смещённые окна иногда не возвращались в исходное положение после выбора фонового окна: восстановление искало окна в списке, который мог устареть, что приводило к сбоям. Теперь ссылки на окна хранятся непосредственно в данных отслеживания смещения, а очистка откладывается до завершения анимации восстановления</li>
-<li>Кнопки «Добавить сочетание» / «Добавить глобальное сочетание» реагировали только на клики вблизи центра: отступы и фон перемещены внутрь метки кнопки, чтобы вся видимая область была кликабельной</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Redimensionamento de janela falhava e a posição ficava deslocada em certos aplicativos: a posição de rebote quando o redimensionamento inicial era rejeitado ficava na parte inferior da tela (sem espaço para expandir), deixando a janela em uma posição incorreta. Agora o rebote vai para o topo da área visível e a posição é restaurada explicitamente se o redimensionamento continuar falhando</li>
-<li>Janelas deslocadas às vezes não eram restauradas à posição original após selecionar uma janela em segundo plano: a restauração buscava janelas em uma lista que poderia estar desatualizada, causando falhas. Agora as referências de janela são armazenadas diretamente nos dados de rastreamento de deslocamento, e a limpeza é adiada até a conclusão da animação de restauração</li>
-<li>Os botões "Adicionar atalho" / "Adicionar atalho global" só respondiam a cliques perto do centro: o preenchimento e o fundo foram movidos para dentro do rótulo do botão para que toda a área visível seja clicável</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Il ridimensionamento della finestra falliva e la posizione veniva spostata per alcune applicazioni: la posizione di rimbalzo quando il ridimensionamento iniziale veniva rifiutato era in fondo allo schermo (nessuno spazio per espandersi), lasciando la finestra in una posizione errata. Ora il rimbalzo avviene nella parte superiore dell'area visibile e la posizione viene ripristinata esplicitamente se il ridimensionamento continua a fallire</li>
-<li>Le finestre spostate a volte non venivano ripristinate nella posizione originale dopo aver selezionato una finestra in background: il ripristino cercava le finestre in un elenco potenzialmente obsoleto, causando errori. I riferimenti alle finestre vengono ora memorizzati direttamente nei dati di tracciamento dello spostamento e la pulizia viene posticipata fino al completamento dell'animazione di ripristino</li>
-<li>I pulsanti "Aggiungi scorciatoia" / "Aggiungi scorciatoia globale" rispondevano solo ai clic vicino al centro: padding e sfondo sono stati spostati all'interno dell'etichetta del pulsante in modo che l'intera area visibile sia cliccabile</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Le redimensionnement de fenêtre échouait et la position était décalée pour certaines applications : la position de rebond lorsque le redimensionnement initial était rejeté se trouvait en bas de l'écran (pas d'espace pour s'agrandir), laissant la fenêtre à une position incorrecte. Le rebond se fait désormais vers le haut de la zone visible et la position est explicitement restaurée si le redimensionnement échoue toujours</li>
-<li>Les fenêtres déplacées n'étaient parfois pas restaurées à leur position d'origine après la sélection d'une fenêtre en arrière-plan : la restauration recherchait les fenêtres dans une liste potentiellement obsolète, entraînant des échecs. Les références de fenêtre sont désormais stockées directement dans les données de suivi de déplacement, et le nettoyage est différé jusqu'à la fin de l'animation de restauration</li>
-<li>Les boutons « Ajouter un raccourci » / « Ajouter un raccourci global » ne répondaient qu'aux clics près du centre : le remplissage et l'arrière-plan ont été déplacés à l'intérieur du label du bouton afin que toute la zone visible soit cliquable</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>El redimensionamiento de ventanas fallaba y la posición se desplazaba en ciertas aplicaciones: la posición de rebote cuando el redimensionamiento inicial era rechazado estaba en la parte inferior de la pantalla (sin espacio para expandir), dejando la ventana en una posición incorrecta. Ahora rebota a la parte superior del área visible y restaura explícitamente la posición si el redimensionamiento sigue fallando</li>
-<li>Las ventanas desplazadas a veces no se restauraban a su posición original después de seleccionar una ventana de fondo: la restauración buscaba ventanas en una lista que podía estar desactualizada, causando fallos. Ahora se almacenan las referencias de ventana directamente en los datos de seguimiento de desplazamiento y se aplaza la limpieza hasta que la animación de restauración se complete</li>
-<li>Los botones "Añadir atajo" / "Añadir atajo global" solo respondían a clics cerca del centro: se movieron el relleno y el fondo dentro de la etiqueta del botón para que toda el área visible sea clicable</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Fenstergrößenänderung schlug bei bestimmten Apps fehl und die Position wurde verschoben: Die Fallback-Bounce-Position bei abgelehnter Größenänderung lag am unteren Bildschirmrand (kein Platz zum Vergrößern), wodurch das Fenster an einer falschen Position hängen blieb. Bounce erfolgt jetzt zum oberen Rand des sichtbaren Bereichs, und bei erneutem Fehlschlag wird die Position explizit wiederhergestellt</li>
-<li>Verschobene Fenster wurden nach Auswahl eines Hintergrundfensters manchmal nicht an ihre ursprüngliche Position zurückgesetzt: Die Wiederherstellung suchte in einer möglicherweise veralteten Fensterliste, was zum Fehlschlag führen konnte. Fensterreferenzen werden jetzt direkt in den Verschiebungs-Tracking-Daten gespeichert, und die Bereinigung wird bis zum Abschluss der Wiederherstellungsanimation verzögert</li>
-<li>Die Schaltflächen „Tastenkürzel hinzufügen" / „Globales Kürzel hinzufügen" reagierten nur bei Klicks nahe der Mitte: Innenabstand und Hintergrund wurden in das Button-Label verschoben, sodass der gesamte sichtbare Bereich klickbar ist</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正某些應用程式中視窗調整大小失敗且位置偏移的問題：初次調整大小被忽略時，回彈位置位於螢幕底部（無擴展空間），導致視窗停留在錯誤位置。現在回彈到可見區域頂部，調整大小仍失敗時明確恢復位置</li>
-<li>修正選擇背景視窗後，被移開的視窗有時無法恢復到原始位置的問題：恢復時依賴可能已過時的視窗列表進行查找，導致恢復失敗。現在直接在位移追蹤資料中儲存視窗參考，並將清理延遲到恢復動畫完成之後</li>
-<li>修正「新增快捷鍵」/「新增全域快捷鍵」按鈕僅在中心附近點擊才有反應的問題：將內邊距和背景移入按鈕標籤內部，使整個可見區域均可點擊</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复某些应用中窗口调整大小失败且位置偏移的问题：初次调整大小被忽略时，回弹位置位于屏幕底部（无扩展空间），导致窗口停留在错误位置。现在回弹到可见区域顶部，调整大小仍失败时显式恢复位置</li>
-<li>修复选择背景窗口后，被移开的窗口有时无法恢复到原始位置的问题：恢复时依赖可能已过时的窗口列表进行查找，导致恢复失败。现在直接在位移跟踪数据中存储窗口引用，并将清理推迟到恢复动画完成之后</li>
-<li>修复"添加快捷键"/"添加全局快捷键"按钮仅在中心附近点击才有响应的问题：将内边距和背景移入按钮标签内部，使整个可见区域均可点击</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>특정 앱에서 윈도우 크기 조정이 실패하고 위치가 어긋나는 문제 수정: 초기 크기 조정이 무시되었을 때 바운스 위치가 화면 하단(확장 여지 없음)이어서 윈도우가 잘못된 위치에 남겨졌음. 바운스 위치를 가시 영역 상단으로 변경하고 크기 조정 실패 시 위치를 명시적으로 복원</li>
-<li>배경 윈도우를 선택한 후 대피된 윈도우가 원래 위치로 복원되지 않는 경우가 있는 문제 수정: 복원 시 오래된 목록에서 윈도우를 검색했기 때문에 실패할 수 있었음. 대피 추적 데이터에 윈도우 참조를 직접 저장하고, 복원 애니메이션이 완료될 때까지 정리를 지연하도록 개선</li>
-<li>"단축키 추가" / "전역 단축키 추가" 버튼이 중앙 근처 클릭에만 반응하던 문제 수정: 패딩과 배경을 버튼 레이블 내부로 이동하여 표시 영역 전체를 클릭 가능하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>特定のアプリでウインドウのリサイズが失敗し位置がずれる問題を修正: 初回リサイズが無視された際のバウンス先が画面最下部（拡大余地なし）だったためウインドウが不正な位置に取り残されていた。バウンス先を可視領域の上端に変更し、リサイズ失敗時は位置を明示的に復元するよう改善</li>
-<li>奥にあるウインドウを選択した際、待避したウインドウが元の位置に戻らないことがある問題を修正: 復元時にウインドウリストから再検索していたため、リストが更新されると復元に失敗していた。待避時にウインドウ参照を直接保持するよう変更し、復元アニメーション完了までトラッキングデータのクリアを遅延させるよう改善</li>
-<li>「ショートカットを追加」/「グローバルショートカットを追加」ボタンが中央付近のクリックしか反応しなかった問題を修正: パディングと背景をボタンラベル内に移動し、表示領域全体をクリック可能に変更</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Window resize failing and position getting displaced for certain apps: the fallback bounce position used when the initial resize is silently rejected was at the bottom of the screen (no room to expand), causing the window to get stuck at an incorrect position; now bounces to the top of the visible area and explicitly restores position if the resize still fails</li>
-<li>Displaced windows sometimes not restored to their original positions after selecting a background window: restoration relied on looking up windows in a list that could become stale; now stores window references directly in the displacement tracking data, and defers cleanup until the restoration animation completes</li>
-<li>"Add Shortcut" / "Add Global Shortcut" buttons only responded to clicks near the center; moved padding and background inside the button label so the entire visible area is clickable</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Redimensionamento de janela falhava e a posição ficava deslocada em certos aplicativos: a posição de rebote quando o redimensionamento inicial era rejeitado ficava na parte inferior da tela (sem espaço para expandir), deixando a janela em uma posição incorreta. Agora o rebote vai para o topo da área visível e a posição é restaurada explicitamente se o redimensionamento continuar falhando</li>
-<li>Janelas deslocadas às vezes não eram restauradas à posição original após selecionar uma janela em segundo plano: a restauração buscava janelas em uma lista que poderia estar desatualizada, causando falhas. Agora as referências de janela são armazenadas diretamente nos dados de rastreamento de deslocamento, e a limpeza é adiada até a conclusão da animação de restauração</li>
-<li>Os botões "Adicionar atalho" / "Adicionar atalho global" só respondiam a cliques perto do centro: o preenchimento e o fundo foram movidos para dentro do rótulo do botão para que toda a área visível seja clicável</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Il ridimensionamento della finestra falliva e la posizione veniva spostata per alcune applicazioni: la posizione di rimbalzo quando il ridimensionamento iniziale veniva rifiutato era in fondo allo schermo (nessuno spazio per espandersi), lasciando la finestra in una posizione errata. Ora il rimbalzo avviene nella parte superiore dell'area visibile e la posizione viene ripristinata esplicitamente se il ridimensionamento continua a fallire</li>
-<li>Le finestre spostate a volte non venivano ripristinate nella posizione originale dopo aver selezionato una finestra in background: il ripristino cercava le finestre in un elenco potenzialmente obsoleto, causando errori. I riferimenti alle finestre vengono ora memorizzati direttamente nei dati di tracciamento dello spostamento e la pulizia viene posticipata fino al completamento dell'animazione di ripristino</li>
-<li>I pulsanti "Aggiungi scorciatoia" / "Aggiungi scorciatoia globale" rispondevano solo ai clic vicino al centro: padding e sfondo sono stati spostati all'interno dell'etichetta del pulsante in modo che l'intera area visibile sia cliccabile</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Le redimensionnement de fenêtre échouait et la position était décalée pour certaines applications : la position de rebond lorsque le redimensionnement initial était rejeté se trouvait en bas de l'écran (pas d'espace pour s'agrandir), laissant la fenêtre à une position incorrecte. Le rebond se fait désormais vers le haut de la zone visible et la position est explicitement restaurée si le redimensionnement échoue toujours</li>
-<li>Les fenêtres déplacées n'étaient parfois pas restaurées à leur position d'origine après la sélection d'une fenêtre en arrière-plan : la restauration recherchait les fenêtres dans une liste potentiellement obsolète, entraînant des échecs. Les références de fenêtre sont désormais stockées directement dans les données de suivi de déplacement, et le nettoyage est différé jusqu'à la fin de l'animation de restauration</li>
-<li>Les boutons « Ajouter un raccourci » / « Ajouter un raccourci global » ne répondaient qu'aux clics près du centre : le remplissage et l'arrière-plan ont été déplacés à l'intérieur du label du bouton afin que toute la zone visible soit cliquable</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>El redimensionamiento de ventanas fallaba y la posición se desplazaba en ciertas aplicaciones: la posición de rebote cuando el redimensionamiento inicial era rechazado estaba en la parte inferior de la pantalla (sin espacio para expandir), dejando la ventana en una posición incorrecta. Ahora rebota a la parte superior del área visible y restaura explícitamente la posición si el redimensionamiento sigue fallando</li>
-<li>Las ventanas desplazadas a veces no se restauraban a su posición original después de seleccionar una ventana de fondo: la restauración buscaba ventanas en una lista que podía estar desactualizada, causando fallos. Ahora se almacenan las referencias de ventana directamente en los datos de seguimiento de desplazamiento y se aplaza la limpieza hasta que la animación de restauración se complete</li>
-<li>Los botones "Añadir atajo" / "Añadir atajo global" solo respondían a clics cerca del centro: se movieron el relleno y el fondo dentro de la etiqueta del botón para que toda el área visible sea clicable</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Fenstergrößenänderung schlug bei bestimmten Apps fehl und die Position wurde verschoben: Die Fallback-Bounce-Position bei abgelehnter Größenänderung lag am unteren Bildschirmrand (kein Platz zum Vergrößern), wodurch das Fenster an einer falschen Position hängen blieb. Bounce erfolgt jetzt zum oberen Rand des sichtbaren Bereichs, und bei erneutem Fehlschlag wird die Position explizit wiederhergestellt</li>
-<li>Verschobene Fenster wurden nach Auswahl eines Hintergrundfensters manchmal nicht an ihre ursprüngliche Position zurückgesetzt: Die Wiederherstellung suchte in einer möglicherweise veralteten Fensterliste, was zum Fehlschlag führen konnte. Fensterreferenzen werden jetzt direkt in den Verschiebungs-Tracking-Daten gespeichert, und die Bereinigung wird bis zum Abschluss der Wiederherstellungsanimation verzögert</li>
-<li>Die Schaltflächen „Tastenkürzel hinzufügen" / „Globales Kürzel hinzufügen" reagierten nur bei Klicks nahe der Mitte: Innenabstand und Hintergrund wurden in das Button-Label verschoben, sodass der gesamte sichtbare Bereich klickbar ist</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正某些應用程式中視窗調整大小失敗且位置偏移的問題：初次調整大小被忽略時，回彈位置位於螢幕底部（無擴展空間），導致視窗停留在錯誤位置。現在回彈到可見區域頂部，調整大小仍失敗時明確恢復位置</li>
-<li>修正選擇背景視窗後，被移開的視窗有時無法恢復到原始位置的問題：恢復時依賴可能已過時的視窗列表進行查找，導致恢復失敗。現在直接在位移追蹤資料中儲存視窗參考，並將清理延遲到恢復動畫完成之後</li>
-<li>修正「新增快捷鍵」/「新增全域快捷鍵」按鈕僅在中心附近點擊才有反應的問題：將內邊距和背景移入按鈕標籤內部，使整個可見區域均可點擊</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复某些应用中窗口调整大小失败且位置偏移的问题：初次调整大小被忽略时，回弹位置位于屏幕底部（无扩展空间），导致窗口停留在错误位置。现在回弹到可见区域顶部，调整大小仍失败时显式恢复位置</li>
-<li>修复选择背景窗口后，被移开的窗口有时无法恢复到原始位置的问题：恢复时依赖可能已过时的窗口列表进行查找，导致恢复失败。现在直接在位移跟踪数据中存储窗口引用，并将清理推迟到恢复动画完成之后</li>
-<li>修复"添加快捷键"/"添加全局快捷键"按钮仅在中心附近点击才有响应的问题：将内边距和背景移入按钮标签内部，使整个可见区域均可点击</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>특정 앱에서 윈도우 크기 조정이 실패하고 위치가 어긋나는 문제 수정: 초기 크기 조정이 무시되었을 때 바운스 위치가 화면 하단(확장 여지 없음)이어서 윈도우가 잘못된 위치에 남겨졌음. 바운스 위치를 가시 영역 상단으로 변경하고 크기 조정 실패 시 위치를 명시적으로 복원</li>
-<li>배경 윈도우를 선택한 후 대피된 윈도우가 원래 위치로 복원되지 않는 경우가 있는 문제 수정: 복원 시 오래된 목록에서 윈도우를 검색했기 때문에 실패할 수 있었음. 대피 추적 데이터에 윈도우 참조를 직접 저장하고, 복원 애니메이션이 완료될 때까지 정리를 지연하도록 개선</li>
-<li>"단축키 추가" / "전역 단축키 추가" 버튼이 중앙 근처 클릭에만 반응하던 문제 수정: 패딩과 배경을 버튼 레이블 내부로 이동하여 표시 영역 전체를 클릭 가능하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>特定のアプリでウインドウのリサイズが失敗し位置がずれる問題を修正: 初回リサイズが無視された際のバウンス先が画面最下部（拡大余地なし）だったためウインドウが不正な位置に取り残されていた。バウンス先を可視領域の上端に変更し、リサイズ失敗時は位置を明示的に復元するよう改善</li>
-<li>奥にあるウインドウを選択した際、待避したウインドウが元の位置に戻らないことがある問題を修正: 復元時にウインドウリストから再検索していたため、リストが更新されると復元に失敗していた。待避時にウインドウ参照を直接保持するよう変更し、復元アニメーション完了までトラッキングデータのクリアを遅延させるよう改善</li>
-<li>「ショートカットを追加」/「グローバルショートカットを追加」ボタンが中央付近のクリックしか反応しなかった問題を修正: パディングと背景をボタンラベル内に移動し、表示領域全体をクリック可能に変更</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Window resize failing and position getting displaced for certain apps: the fallback bounce position used when the initial resize is silently rejected was at the bottom of the screen (no room to expand), causing the window to get stuck at an incorrect position; now bounces to the top of the visible area and explicitly restores position if the resize still fails</li>
-<li>Displaced windows sometimes not restored to their original positions after selecting a background window: restoration relied on looking up windows in a list that could become stale; now stores window references directly in the displacement tracking data, and defers cleanup until the restoration animation completes</li>
-<li>"Add Shortcut" / "Add Global Shortcut" buttons only responded to clicks near the center; moved padding and background inside the button label so the entire visible area is clickable</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Redimensionamento de janela falhava e a posição ficava deslocada em certos aplicativos: a posição de rebote quando o redimensionamento inicial era rejeitado ficava na parte inferior da tela (sem espaço para expandir), deixando a janela em uma posição incorreta. Agora o rebote vai para o topo da área visível e a posição é restaurada explicitamente se o redimensionamento continuar falhando</li>
-<li>Janelas deslocadas às vezes não eram restauradas à posição original após selecionar uma janela em segundo plano: a restauração buscava janelas em uma lista que poderia estar desatualizada, causando falhas. Agora as referências de janela são armazenadas diretamente nos dados de rastreamento de deslocamento, e a limpeza é adiada até a conclusão da animação de restauração</li>
-<li>Os botões "Adicionar atalho" / "Adicionar atalho global" só respondiam a cliques perto do centro: o preenchimento e o fundo foram movidos para dentro do rótulo do botão para que toda a área visível seja clicável</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Il ridimensionamento della finestra falliva e la posizione veniva spostata per alcune applicazioni: la posizione di rimbalzo quando il ridimensionamento iniziale veniva rifiutato era in fondo allo schermo (nessuno spazio per espandersi), lasciando la finestra in una posizione errata. Ora il rimbalzo avviene nella parte superiore dell'area visibile e la posizione viene ripristinata esplicitamente se il ridimensionamento continua a fallire</li>
-<li>Le finestre spostate a volte non venivano ripristinate nella posizione originale dopo aver selezionato una finestra in background: il ripristino cercava le finestre in un elenco potenzialmente obsoleto, causando errori. I riferimenti alle finestre vengono ora memorizzati direttamente nei dati di tracciamento dello spostamento e la pulizia viene posticipata fino al completamento dell'animazione di ripristino</li>
-<li>I pulsanti "Aggiungi scorciatoia" / "Aggiungi scorciatoia globale" rispondevano solo ai clic vicino al centro: padding e sfondo sono stati spostati all'interno dell'etichetta del pulsante in modo che l'intera area visibile sia cliccabile</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Le redimensionnement de fenêtre échouait et la position était décalée pour certaines applications : la position de rebond lorsque le redimensionnement initial était rejeté se trouvait en bas de l'écran (pas d'espace pour s'agrandir), laissant la fenêtre à une position incorrecte. Le rebond se fait désormais vers le haut de la zone visible et la position est explicitement restaurée si le redimensionnement échoue toujours</li>
-<li>Les fenêtres déplacées n'étaient parfois pas restaurées à leur position d'origine après la sélection d'une fenêtre en arrière-plan : la restauration recherchait les fenêtres dans une liste potentiellement obsolète, entraînant des échecs. Les références de fenêtre sont désormais stockées directement dans les données de suivi de déplacement, et le nettoyage est différé jusqu'à la fin de l'animation de restauration</li>
-<li>Les boutons « Ajouter un raccourci » / « Ajouter un raccourci global » ne répondaient qu'aux clics près du centre : le remplissage et l'arrière-plan ont été déplacés à l'intérieur du label du bouton afin que toute la zone visible soit cliquable</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>El redimensionamiento de ventanas fallaba y la posición se desplazaba en ciertas aplicaciones: la posición de rebote cuando el redimensionamiento inicial era rechazado estaba en la parte inferior de la pantalla (sin espacio para expandir), dejando la ventana en una posición incorrecta. Ahora rebota a la parte superior del área visible y restaura explícitamente la posición si el redimensionamiento sigue fallando</li>
-<li>Las ventanas desplazadas a veces no se restauraban a su posición original después de seleccionar una ventana de fondo: la restauración buscaba ventanas en una lista que podía estar desactualizada, causando fallos. Ahora se almacenan las referencias de ventana directamente en los datos de seguimiento de desplazamiento y se aplaza la limpieza hasta que la animación de restauración se complete</li>
-<li>Los botones "Añadir atajo" / "Añadir atajo global" solo respondían a clics cerca del centro: se movieron el relleno y el fondo dentro de la etiqueta del botón para que toda el área visible sea clicable</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Fenstergrößenänderung schlug bei bestimmten Apps fehl und die Position wurde verschoben: Die Fallback-Bounce-Position bei abgelehnter Größenänderung lag am unteren Bildschirmrand (kein Platz zum Vergrößern), wodurch das Fenster an einer falschen Position hängen blieb. Bounce erfolgt jetzt zum oberen Rand des sichtbaren Bereichs, und bei erneutem Fehlschlag wird die Position explizit wiederhergestellt</li>
-<li>Verschobene Fenster wurden nach Auswahl eines Hintergrundfensters manchmal nicht an ihre ursprüngliche Position zurückgesetzt: Die Wiederherstellung suchte in einer möglicherweise veralteten Fensterliste, was zum Fehlschlag führen konnte. Fensterreferenzen werden jetzt direkt in den Verschiebungs-Tracking-Daten gespeichert, und die Bereinigung wird bis zum Abschluss der Wiederherstellungsanimation verzögert</li>
-<li>Die Schaltflächen „Tastenkürzel hinzufügen" / „Globales Kürzel hinzufügen" reagierten nur bei Klicks nahe der Mitte: Innenabstand und Hintergrund wurden in das Button-Label verschoben, sodass der gesamte sichtbare Bereich klickbar ist</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正某些應用程式中視窗調整大小失敗且位置偏移的問題：初次調整大小被忽略時，回彈位置位於螢幕底部（無擴展空間），導致視窗停留在錯誤位置。現在回彈到可見區域頂部，調整大小仍失敗時明確恢復位置</li>
-<li>修正選擇背景視窗後，被移開的視窗有時無法恢復到原始位置的問題：恢復時依賴可能已過時的視窗列表進行查找，導致恢復失敗。現在直接在位移追蹤資料中儲存視窗參考，並將清理延遲到恢復動畫完成之後</li>
-<li>修正「新增快捷鍵」/「新增全域快捷鍵」按鈕僅在中心附近點擊才有反應的問題：將內邊距和背景移入按鈕標籤內部，使整個可見區域均可點擊</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复某些应用中窗口调整大小失败且位置偏移的问题：初次调整大小被忽略时，回弹位置位于屏幕底部（无扩展空间），导致窗口停留在错误位置。现在回弹到可见区域顶部，调整大小仍失败时显式恢复位置</li>
-<li>修复选择背景窗口后，被移开的窗口有时无法恢复到原始位置的问题：恢复时依赖可能已过时的窗口列表进行查找，导致恢复失败。现在直接在位移跟踪数据中存储窗口引用，并将清理推迟到恢复动画完成之后</li>
-<li>修复"添加快捷键"/"添加全局快捷键"按钮仅在中心附近点击才有响应的问题：将内边距和背景移入按钮标签内部，使整个可见区域均可点击</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>특정 앱에서 윈도우 크기 조정이 실패하고 위치가 어긋나는 문제 수정: 초기 크기 조정이 무시되었을 때 바운스 위치가 화면 하단(확장 여지 없음)이어서 윈도우가 잘못된 위치에 남겨졌음. 바운스 위치를 가시 영역 상단으로 변경하고 크기 조정 실패 시 위치를 명시적으로 복원</li>
-<li>배경 윈도우를 선택한 후 대피된 윈도우가 원래 위치로 복원되지 않는 경우가 있는 문제 수정: 복원 시 오래된 목록에서 윈도우를 검색했기 때문에 실패할 수 있었음. 대피 추적 데이터에 윈도우 참조를 직접 저장하고, 복원 애니메이션이 완료될 때까지 정리를 지연하도록 개선</li>
-<li>"단축키 추가" / "전역 단축키 추가" 버튼이 중앙 근처 클릭에만 반응하던 문제 수정: 패딩과 배경을 버튼 레이블 내부로 이동하여 표시 영역 전체를 클릭 가능하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>特定のアプリでウインドウのリサイズが失敗し位置がずれる問題を修正: 初回リサイズが無視された際のバウンス先が画面最下部（拡大余地なし）だったためウインドウが不正な位置に取り残されていた。バウンス先を可視領域の上端に変更し、リサイズ失敗時は位置を明示的に復元するよう改善</li>
-<li>奥にあるウインドウを選択した際、待避したウインドウが元の位置に戻らないことがある問題を修正: 復元時にウインドウリストから再検索していたため、リストが更新されると復元に失敗していた。待避時にウインドウ参照を直接保持するよう変更し、復元アニメーション完了までトラッキングデータのクリアを遅延させるよう改善</li>
-<li>「ショートカットを追加」/「グローバルショートカットを追加」ボタンが中央付近のクリックしか反応しなかった問題を修正: パディングと背景をボタンラベル内に移動し、表示領域全体をクリック可能に変更</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Window resize failing and position getting displaced for certain apps: the fallback bounce position used when the initial resize is silently rejected was at the bottom of the screen (no room to expand), causing the window to get stuck at an incorrect position; now bounces to the top of the visible area and explicitly restores position if the resize still fails</li>
-<li>Displaced windows sometimes not restored to their original positions after selecting a background window: restoration relied on looking up windows in a list that could become stale; now stores window references directly in the displacement tracking data, and defers cleanup until the restoration animation completes</li>
-<li>"Add Shortcut" / "Add Global Shortcut" buttons only responded to clicks near the center; moved padding and background inside the button label so the entire visible area is clickable</li>
-</ul>]]></description>
-            <pubDate>Mon, 30 Mar 2026 18:45:45 +0900</pubDate>
-            <sparkle:version>409</sparkle:version>
-            <sparkle:shortVersionString>4.0.9</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.1.1/Tiley-4.0.9.zip" length="5613748" type="application/octet-stream" sparkle:edSignature="wtEyLsaD4bwyMsikm6qkX87b85Cgt1g08nBU5ULtXH1nWwQCLF1f2obb6j1g0mklgDx2ps33EF7rhgLbKPlUBw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-408.delta" sparkle:deltaFrom="408" length="450690" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="hDpvPdmJhQRjNiBGcBQENpbR9fPlTx4cWAjg4b9jrqcGRWOMGR3AODCPWJCQNZDhaohWliZoU2HMdo/NMtwICQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-407.delta" sparkle:deltaFrom="407" length="1297086" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="wvlji45xUxokP1dmeSUSfneaGBjOMMyfUeUZX7HL6yboG9yvNecRfLQjpeB9ZBrV4YaFQwh6RUptXBXJx1iVCw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-406.delta" sparkle:deltaFrom="406" length="1318814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bhjcf+lfZbuqIehONs2yyjyXw7SJjRQXDsxRrnOQmM0G7qpxNSv1m9F+n/WivQxE02X6NglaXW0aZf6mOt2wCQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-405.delta" sparkle:deltaFrom="405" length="1401486" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="MIfe29IPR8gCA8md7EnMIrnYniDdPvViZj1/nHMelcXNPf1kCMxyndAUXeEq3HdO9g6sX8dx1UliPzYFLQ0oAA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.0.9/Tiley409-404.delta" sparkle:deltaFrom="404" length="1402646" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NhyD0Hi5k3cUO0Ab5HJQm7KzQnei+ZZnD/Gq+RZpfdsGMSd9+Bw24lFKDPjhWgianEZYBHuM7uhk0wIuOdm3Aw=="/>
             </sparkle:deltas>
         </item>
     </channel>
