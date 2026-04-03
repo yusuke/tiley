@@ -248,6 +248,21 @@ struct LayoutGridWorkspaceView: View {
                         border: borderColor,
                         divider: borderColor.opacity(0.3)
                     )
+
+                    // Overlay miniature window on drag selection
+                    if let wf = windowFrameRelative {
+                        let menuBarFraction = wf.menuBarHeightFraction
+                        let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                        MiniatureWindowView(
+                            titleBarHeight: titleBarPx,
+                            appIcon: wf.appIcon,
+                            appName: wf.appName,
+                            windowTitle: wf.windowTitle
+                        )
+                        .frame(width: selRect.width, height: selRect.height)
+                        .position(x: selRect.midX, y: selRect.midY)
+                        .allowsHitTesting(false)
+                    }
                 }
             }
             .contentShape(Rectangle())
