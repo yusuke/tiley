@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Emblemas de índice de ordem de seleção exibidos à direita dos itens de janela na barra lateral quando duas ou mais janelas estão selecionadas
+
 ### Alterado
 
 - A lista de janelas na barra lateral agora é pré-armazenada em cache em segundo plano por meio de listeners de eventos do workspace (ativação, inicialização e encerramento de apps), aparecendo instantaneamente ao abrir a sobreposição

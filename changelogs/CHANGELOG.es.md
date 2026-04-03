@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Insignias de índice de orden de selección en el lado derecho de los elementos de ventana de la barra lateral cuando se seleccionan dos o más ventanas
+
 ### Cambiado
 
 - La lista de ventanas en la barra lateral ahora se precarga en segundo plano mediante listeners de eventos del espacio de trabajo (activación, inicio y cierre de aplicaciones), por lo que aparece instantáneamente al abrir la superposición

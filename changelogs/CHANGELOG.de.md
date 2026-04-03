@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Auswahlreihenfolge-Indexabzeichen werden rechts neben Seitenleisten-Fensterelementen angezeigt, wenn zwei oder mehr Fenster ausgewählt sind
+
 ### Geändert
 
 - Die Fensterliste in der Seitenleiste wird nun über Workspace-Ereignis-Listener (App-Aktivierung, -Start, -Beendigung) im Hintergrund vorab zwischengespeichert, sodass sie beim Öffnen des Overlays sofort angezeigt wird

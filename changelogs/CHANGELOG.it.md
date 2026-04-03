@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Badge con indice dell'ordine di selezione visualizzati a destra degli elementi finestra nella barra laterale quando sono selezionate due o più finestre
+
 ### Modificato
 
 - L'elenco delle finestre nella barra laterale viene ora pre-memorizzato in background tramite listener di eventi del workspace (attivazione, avvio e chiusura delle app), in modo da apparire istantaneamente all'apertura dell'overlay

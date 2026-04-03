@@ -400,6 +400,12 @@ final class AppState: NSObject, NSMenuDelegate {
         return selectedWindowIndices.count > 1
     }
 
+    /// The selection order of window indices (for displaying selection index badges).
+    var currentSelectionOrder: [Int] {
+        _ = windowTargetListVersion
+        return selectionOrder
+    }
+
     /// The display ID of the screen currently hosting the layout target.
     var currentTargetScreenDisplayID: CGDirectDisplayID? {
         targetScreenDisplayID

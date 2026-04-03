@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Badges d'index d'ordre de sélection affichés à droite des éléments de fenêtre dans la barre latérale lorsque deux fenêtres ou plus sont sélectionnées
+
 ### Modifié
 
 - La liste des fenêtres dans la barre latérale est désormais pré-mise en cache en arrière-plan via des écouteurs d'événements de l'espace de travail (activation, lancement et fermeture d'applications), et s'affiche instantanément à l'ouverture de la superposition

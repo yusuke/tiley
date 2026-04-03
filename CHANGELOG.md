@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Selection order index badges now appear on the right side of sidebar window items when two or more windows are selected
+
 ### Changed
 
 - Window list in the sidebar is now pre-cached in the background via workspace event listeners (app activation, launch, termination), so it appears instantly when the overlay opens

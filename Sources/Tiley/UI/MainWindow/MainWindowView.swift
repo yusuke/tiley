@@ -2212,6 +2212,17 @@ struct MainWindowView: View {
                                 .fill(ThemeColors.indexedSelectionFill(index: ci, for: colorScheme))
                         )
                         .padding(.trailing, 4)
+                } else if appState.isMultiSelection,
+                          let selIdx = appState.currentSelectionOrder.firstIndex(of: item.id) {
+                    Text("\(selIdx + 1)")
+                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(width: 16, height: 16)
+                        .background(
+                            Circle()
+                                .fill(ThemeColors.indexedSelectionFill(index: 0, for: colorScheme))
+                        )
+                        .padding(.trailing, 4)
                 }
             }
             .animation(nil, value: isHovered)
