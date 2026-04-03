@@ -16,6 +16,7 @@ extension AppState {
                     self?.lastTargetPID = app.processIdentifier
                     self?.refreshAccessibilityState()
                     self?.updateStatusMenu()
+                    self?.scheduleWindowListCacheRefresh()
                 }
             }
         }
@@ -69,6 +70,40 @@ extension AppState {
                 }
             }
         }
+
+        // Listen for app launches and terminations to pre-cache the window list.
+        appLaunchTerminationTask = Task { [weak self] in
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    let notifications = NSWorkspace.shared.notificationCenter.notifications(
+                        named: NSWorkspace.didLaunchApplicationNotification
+                    )
+                    for await _ in notifications {
+                        guard !Task.isCancelled else { break }
+                        // Delay slightly so the new app's window has time to appear.
+                        try? await Task.sleep(nanoseconds: 500_000_000)
+                        guard !Task.isCancelled else { break }
+                        await MainActor.run { [weak self] in
+                            self?.scheduleWindowListCacheRefresh()
+                        }
+                    }
+                }
+                group.addTask {
+                    let notifications = NSWorkspace.shared.notificationCenter.notifications(
+                        named: NSWorkspace.didTerminateApplicationNotification
+                    )
+                    for await _ in notifications {
+                        guard !Task.isCancelled else { break }
+                        await MainActor.run { [weak self] in
+                            self?.scheduleWindowListCacheRefresh()
+                        }
+                    }
+                }
+            }
+        }
+
+        // Perform an initial cache so the window list is ready on first open.
+        scheduleWindowListCacheRefresh()
     }
 
     func handleScreenConfigurationChange() {
@@ -88,6 +123,34 @@ extension AppState {
         guard settingsWindowController == nil else { return }
         hidePreviewOverlay()
         hideMainWindow()
+    }
+
+    /// Schedules a debounced background refresh of the window list cache.
+    /// Multiple rapid calls cancel previous in-flight fetches so only the
+    /// latest request completes. The overlay is not affected; when it opens
+    /// it will use whatever cache is available at that moment.
+    func scheduleWindowListCacheRefresh() {
+        // Don't cache while the overlay is visible — refreshAvailableWindows
+        // handles the live list and we don't want to interfere.
+        guard !isShowingLayoutGrid else { return }
+        guard let wm = windowManager else { return }
+        windowListCacheTask?.cancel()
+        windowListCacheTask = Task.detached { [weak self] in
+            // Small debounce so rapid events (e.g. several apps activating in
+            // quick succession) coalesce into a single fetch.
+            try? await Task.sleep(nanoseconds: 150_000_000)
+            guard !Task.isCancelled else { return }
+            let captured = wm.captureAllWindows(includeOtherSpaces: true)
+            guard !Task.isCancelled else { return }
+            await MainActor.run { [weak self] in
+                guard let self, !self.isShowingLayoutGrid else { return }
+                self.cachedWindowTargets = captured.targets
+                self.cachedSpaceList = captured.spaceList
+                self.cachedActiveSpaceIDs = captured.activeSpaceIDs
+                self.hasWindowListCache = true
+                debugLog("Window list cache updated: \(captured.targets.count) windows")
+            }
+        }
     }
 
     func handleAppDidBecomeActive() {

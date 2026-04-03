@@ -127,6 +127,8 @@ extension AppState {
         if !NSApp.isActive {
             refocusLastTargetApp()
         }
+        // Pre-cache the window list for next overlay open.
+        scheduleWindowListCacheRefresh()
     }
 
     func handleMainWindowEscape() -> Bool {

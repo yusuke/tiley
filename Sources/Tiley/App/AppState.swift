@@ -180,6 +180,18 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var spaceList: [SpaceInfo] = []
     /// The currently active Mission Control space IDs (one per display).
     @ObservationIgnored var activeSpaceIDs: Set<UInt64> = []
+
+    // MARK: - Background window list pre-caching
+    /// Pre-cached window targets fetched in the background so the sidebar is
+    /// ready when the overlay opens.
+    @ObservationIgnored var cachedWindowTargets: [WindowTarget] = []
+    @ObservationIgnored var cachedSpaceList: [SpaceInfo] = []
+    @ObservationIgnored var cachedActiveSpaceIDs: Set<UInt64> = []
+    /// True when a valid cache exists that can be used by toggleOverlay.
+    @ObservationIgnored var hasWindowListCache = false
+    /// Task for background pre-caching; debounced via cancellation.
+    @ObservationIgnored var windowListCacheTask: Task<Void, Never>?
+    @ObservationIgnored var appLaunchTerminationTask: Task<Void, Never>?
     @ObservationIgnored var activeTargetIndex: Int = 0
     /// All currently selected window indices for multi-selection.
     /// Invariant: always contains `activeTargetIndex`.
@@ -518,6 +530,8 @@ final class AppState: NSObject, NSMenuDelegate {
         appActivationTask?.cancel()
         appDeactivationTask?.cancel()
         screenChangeTask?.cancel()
+        windowListCacheTask?.cancel()
+        appLaunchTerminationTask?.cancel()
     }
 
     func requestAccessibilityAccess() {
@@ -683,8 +697,35 @@ final class AppState: NSObject, NSMenuDelegate {
         windowTargetListVersion += 1
         // Asynchronously fetch the actual menu bar titles from the target app.
         fetchTargetMenuBarTitles()
-        // Defer window list population so it doesn't block overlay appearance.
-        isLoadingWindowList = true
+        // Use the pre-cached window list if available so the sidebar is
+        // populated instantly. A deferred refresh still runs afterwards to
+        // pick up any very-recent changes.
+        if hasWindowListCache {
+            availableWindowTargets = cachedWindowTargets
+            spaceList = cachedSpaceList
+            activeSpaceIDs = cachedActiveSpaceIDs
+            hasWindowListCache = false
+            windowTargetListVersion += 1
+            // Set activeTargetIndex to match the current target.
+            if let current = activeLayoutTarget {
+                activeTargetIndex = availableWindowTargets.firstIndex(where: {
+                    $0.processIdentifier == current.processIdentifier
+                    && $0.windowElement == current.windowElement
+                }) ?? availableWindowTargets.firstIndex(where: {
+                    $0.processIdentifier == current.processIdentifier
+                    && $0.windowTitle == current.windowTitle
+                }) ?? 0
+            } else {
+                activeTargetIndex = 0
+            }
+            selectedWindowIndices = [activeTargetIndex]
+            selectionOrder = [activeTargetIndex]
+            isLoadingWindowList = false
+            debugLog("Used cached window list: \(availableWindowTargets.count) windows")
+        } else {
+            isLoadingWindowList = true
+        }
+        // Deferred refresh to pick up any changes since the cache was built.
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.refreshAvailableWindows()
