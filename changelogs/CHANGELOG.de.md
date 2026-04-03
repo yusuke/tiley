@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.2] - 2026-04-03
+
 ### Hinzugefügt
 
 - Auswahlreihenfolge-Indexabzeichen werden rechts neben Seitenleisten-Fensterelementen angezeigt, wenn zwei oder mehr Fenster ausgewählt sind

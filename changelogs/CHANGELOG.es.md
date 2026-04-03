@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.2] - 2026-04-03
+
 ### Añadido
 
 - Insignias de índice de orden de selección en el lado derecho de los elementos de ventana de la barra lateral cuando se seleccionan dos o más ventanas

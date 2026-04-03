@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.2] - 2026-04-03
+
 ### Adicionado
 
 - Emblemas de índice de ordem de seleção exibidos à direita dos itens de janela na barra lateral quando duas ou mais janelas estão selecionadas

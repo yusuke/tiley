@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.1.2] - 2026-04-03
+
 ### Added
 
 - Selection order index badges now appear on the right side of sidebar window items when two or more windows are selected
@@ -576,7 +578,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.1.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.1.2...HEAD
+[4.1.2]: https://github.com/yusuke/tiley/releases/tag/v4.1.2
 [4.1.1]: https://github.com/yusuke/tiley/releases/tag/v4.1.1
 [4.1.0]: https://github.com/yusuke/tiley/releases/tag/v4.1.0
 [4.0.9]: https://github.com/yusuke/tiley/releases/tag/v4.0.9

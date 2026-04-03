@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.2] - 2026-04-03
+
 ### Aggiunto
 
 - Badge con indice dell'ordine di selezione visualizzati a destra degli elementi finestra nella barra laterale quando sono selezionate due o più finestre
