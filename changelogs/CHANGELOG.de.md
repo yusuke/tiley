@@ -5,6 +5,7 @@
 ### Geändert
 
 - Die Fensterliste in der Seitenleiste wird nun über Workspace-Ereignis-Listener (App-Aktivierung, -Start, -Beendigung) im Hintergrund vorab zwischengespeichert, sodass sie beim Öffnen des Overlays sofort angezeigt wird
+- Hervorhebungsverhalten für nach App gruppierte Seitenleistenelemente verbessert. Der App-Header wird nur noch als ausgewählt angezeigt, wenn alle zugehörigen Fenster ausgewählt sind, und beim Überfahren des App-Headers werden sowohl der Header als auch alle untergeordneten Fenster hervorgehoben
 
 ### Behoben
 

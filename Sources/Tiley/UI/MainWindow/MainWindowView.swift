@@ -50,6 +50,7 @@ struct MainWindowView: View {
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
+    @State private var hoveredAppHeaderPID: pid_t?
     @State private var hoveredScreenHeaderID: CGDirectDisplayID?
     @State private var hoveredEmptyScreenID: CGDirectDisplayID?
     @State private var isSearchFieldFocused = false
@@ -2018,15 +2019,15 @@ struct MainWindowView: View {
 
     private func appHeaderRow(pid: pid_t, appName: String) -> some View {
         let isExplicitlySelected = sidebarSelection == .appHeader(pid: pid, appName: appName)
-        // Also highlight when any child window of this app is in the selection.
-        let hasSelectedChild: Bool = {
+        // Only highlight when ALL child windows of this app are selected.
+        let allChildrenSelected: Bool = {
             let targets = appState.windowTargetList
             let selectedIndices = appState.currentSelectedWindowIndices
-            return selectedIndices.contains(where: { idx in
-                idx < targets.count && targets[idx].processIdentifier == pid
-            })
+            let appIndices = targets.indices.filter { targets[$0].processIdentifier == pid }
+            return !appIndices.isEmpty && appIndices.allSatisfy { selectedIndices.contains($0) }
         }()
-        let isSelected = isExplicitlySelected || hasSelectedChild
+        let isSelected = isExplicitlySelected || allChildrenSelected
+        let isHovered = hoveredAppHeaderPID == pid
 
         return Button {
             sidebarSelection = .appHeader(pid: pid, appName: appName)
@@ -2052,7 +2053,7 @@ struct MainWindowView: View {
             .padding(.bottom, 1)
             .background(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(ThemeColors.presetRowBackground(selected: isSelected, for: colorScheme))
+                    .fill(ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -2061,6 +2062,7 @@ struct MainWindowView: View {
         }
         .buttonStyle(.plain)
         .contentShape(Rectangle())
+        .onHover { hovering in hoveredAppHeaderPID = hovering ? pid : nil }
         .contextMenu {
             let otherScreens = otherScreensForApp(pid: pid)
             if !otherScreens.isEmpty {
@@ -2136,7 +2138,7 @@ struct MainWindowView: View {
         let isPrimary = item.id == appState.currentWindowTargetIndex
         let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
         let isSelected = isPrimary || isInSelection
-        let isHovered = hoveredWindowIndex == item.id
+        let isHovered = hoveredWindowIndex == item.id || (item.isUnderAppHeader && hoveredAppHeaderPID == item.pid)
         let presetColorIndex = appState.presetHoverHighlights[item.id]
 
         return Button {

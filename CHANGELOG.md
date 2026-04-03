@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Window list in the sidebar is now pre-cached in the background via workspace event listeners (app activation, launch, termination), so it appears instantly when the overlay opens
+- Improved highlight behavior for app-grouped sidebar items: the app header is now only shown as selected when all its windows are selected, and hovering over an app header highlights both the header and all its child windows
 
 ### Fixed
 

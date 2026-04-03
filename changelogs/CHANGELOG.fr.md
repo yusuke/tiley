@@ -5,6 +5,7 @@
 ### Modifié
 
 - La liste des fenêtres dans la barre latérale est désormais pré-mise en cache en arrière-plan via des écouteurs d'événements de l'espace de travail (activation, lancement et fermeture d'applications), et s'affiche instantanément à l'ouverture de la superposition
+- Amélioration du comportement de mise en surbrillance des éléments groupés par application dans la barre latérale. L'en-tête de l'application n'est affiché comme sélectionné que lorsque toutes ses fenêtres sont sélectionnées, et le survol de l'en-tête met en surbrillance à la fois l'en-tête et toutes ses fenêtres enfants
 
 ### Corrigé
 

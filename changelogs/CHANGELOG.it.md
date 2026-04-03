@@ -5,6 +5,7 @@
 ### Modificato
 
 - L'elenco delle finestre nella barra laterale viene ora pre-memorizzato in background tramite listener di eventi del workspace (attivazione, avvio e chiusura delle app), in modo da apparire istantaneamente all'apertura dell'overlay
+- Migliorato il comportamento dell'evidenziazione per gli elementi della barra laterale raggruppati per applicazione. L'intestazione dell'app viene mostrata come selezionata solo quando tutte le sue finestre sono selezionate, e passando il mouse sull'intestazione vengono evidenziati sia l'intestazione che tutte le finestre figlie
 
 ### Corretto
 
