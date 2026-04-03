@@ -2,11 +2,18 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Adicionado indicador chevron ao botão de redimensionar para deixar claro que abre um menu suspenso
+- Melhorado o timing da ação de redimensionar para que a janela do Tiley desapareça antes de redimensionar a janela alvo, tornando a interação mais intuitiva
+
 ## [4.2.0] - 2026-04-04
 
 ### Adicionado
 
 - Redimensionar janelas para tamanhos predefinidos (16:9, 16:10, 4:3, 9:16) pelo botão da barra de ferramentas ou menu de contexto; tamanhos que excedem a tela atual são excluídos automaticamente
+- Pré-visualização ao vivo ao passar o mouse sobre os itens do menu de redimensionamento: sobreposição em tamanho real na tela de destino e pré-visualização em miniatura na grade (mesmo estilo da pré-visualização de layouts predefinidos)
+- Pré-visualização de janela em miniatura (com barra de título e ícone do app) exibida durante a seleção por arrasto na grade
 
 ## [4.1.2] - 2026-04-03
 

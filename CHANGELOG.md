@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Added chevron indicator to the resize toolbar button to make it clearer that it opens a dropdown menu
+- Improved resize action timing so the Tiley window disappears before the target window is resized, making the interaction feel more intuitive
+
 ## [4.2.0] - 2026-04-04
 
 ### Added
 
 - Resize window to predefined sizes (16:9, 16:10, 4:3, 9:16) from the toolbar button or right-click context menu; sizes that exceed the current screen are automatically excluded
+- Live preview when hovering over resize menu items: real-size overlay on the target screen and miniature window preview on the grid, matching the preset layout hover style
+- Miniature window preview (with title bar and app icon) now shown on the grid during drag selection
 
 ## [4.1.2] - 2026-04-03
 

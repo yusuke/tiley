@@ -2,11 +2,18 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Ajout d'un indicateur chevron au bouton de redimensionnement pour indiquer clairement qu'il ouvre un menu déroulant
+- Amélioration du timing de l'action de redimensionnement pour que la fenêtre Tiley disparaisse avant le redimensionnement de la fenêtre cible, rendant l'interaction plus intuitive
+
 ## [4.2.0] - 2026-04-04
 
 ### Ajouté
 
 - Redimensionner les fenêtres à des tailles prédéfinies (16:9, 16:10, 4:3, 9:16) depuis le bouton de la barre d'outils ou le menu contextuel ; les tailles dépassant l'écran actuel sont automatiquement exclues
+- Aperçu en direct au survol des éléments du menu de redimensionnement : superposition taille réelle sur l'écran cible et aperçu miniature sur la grille (même style que l'aperçu des dispositions prédéfinies)
+- Aperçu de fenêtre miniature (avec barre de titre et icône d'app) affiché pendant la sélection par glisser sur la grille
 
 ## [4.1.2] - 2026-04-03
 

@@ -2,11 +2,18 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Aggiunto indicatore chevron al pulsante di ridimensionamento per rendere più chiaro che apre un menu a discesa
+- Migliorato il timing dell'azione di ridimensionamento in modo che la finestra di Tiley scompaia prima del ridimensionamento della finestra di destinazione, rendendo l'interazione più intuitiva
+
 ## [4.2.0] - 2026-04-04
 
 ### Aggiunto
 
 - Ridimensionamento delle finestre a dimensioni predefinite (16:9, 16:10, 4:3, 9:16) dal pulsante della barra degli strumenti o dal menu contestuale; le dimensioni che superano lo schermo corrente vengono escluse automaticamente
+- Anteprima dal vivo al passaggio del mouse sugli elementi del menu di ridimensionamento: sovrapposizione a dimensione reale sullo schermo di destinazione e anteprima finestra in miniatura sulla griglia (stesso stile dell'anteprima dei layout predefiniti)
+- Anteprima finestra in miniatura (con barra del titolo e icona dell'app) mostrata durante la selezione trascinando sulla griglia
 
 ## [4.1.2] - 2026-04-03
 

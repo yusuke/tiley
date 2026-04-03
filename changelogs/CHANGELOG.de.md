@@ -2,11 +2,18 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Chevron-Anzeige zur Größenänderungs-Schaltfläche hinzugefügt, um deutlicher zu machen, dass es sich um ein Dropdown-Menü handelt
+- Timing der Größenänderung verbessert, sodass das Tiley-Fenster verschwindet, bevor das Zielfenster angepasst wird, was die Bedienung intuitiver macht
+
 ## [4.2.0] - 2026-04-04
 
 ### Hinzugefügt
 
 - Fenster über die Symbolleiste oder das Kontextmenü auf vordefinierte Größen (16:9, 16:10, 4:3, 9:16) ändern; Größen, die den aktuellen Bildschirm überschreiten, werden automatisch ausgeschlossen
+- Live-Vorschau beim Überfahren von Größenänderungs-Menüeinträgen: Echtgröße-Overlay auf dem Zielbildschirm und Miniatur-Fenstervorschau im Raster (gleicher Stil wie die Voreinstellungs-Layout-Vorschau)
+- Miniatur-Fenstervorschau (mit Titelleiste und App-Symbol) wird jetzt während der Raster-Auswahl per Ziehen angezeigt
 
 ## [4.1.2] - 2026-04-03
 

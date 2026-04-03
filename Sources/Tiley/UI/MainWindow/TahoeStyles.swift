@@ -483,7 +483,7 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
         view.coordinator = context.coordinator
         view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(equalToConstant: 28),
+            view.widthAnchor.constraint(equalToConstant: 38),
             view.heightAnchor.constraint(equalToConstant: 24),
         ])
         return view
@@ -573,10 +573,17 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
             // Use NSMenuDelegate to track highlighted item for live preview
             menu.delegate = coord
 
+            coord.didSelectItem = false
+            coord.selectedSize = nil
             menu.popUp(positioning: nil, at: NSPoint(x: 0, y: bounds.height + 2), in: self)
 
-            // Menu closed — clean up
-            coord.hidePreview()
+            if coord.didSelectItem, let size = coord.selectedSize {
+                // Item was selected: fire onSelect directly.
+                // resizeWindow handles hideResizePreview + hideMainWindow before AX operations.
+                coord.onSelect(size)
+            } else {
+                coord.hidePreview()
+            }
 
             isMenuOpen = false
             isHovered = false
@@ -588,28 +595,37 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
             let cornerRadius = bounds.height / 2
             let path = CGPath(roundedRect: bounds, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
 
-            if isMenuOpen {
+            if isMenuOpen || isHovered {
                 let labelColor = NSColor.labelColor.cgColor
                 ctx.addPath(path)
                 ctx.setFillColor(labelColor.copy(alpha: 0.12) ?? CGColor(gray: 0, alpha: 0.12))
                 ctx.fillPath()
-            } else if isHovered {
-                let controlColor = NSColor.controlColor.cgColor
-                ctx.addPath(path)
-                ctx.setFillColor(controlColor)
-                ctx.fillPath()
             }
 
             let tintColor: NSColor = !isEnabled ? .tertiaryLabelColor : .labelColor
+
+            // Main icon (shifted left to make room for chevron)
             let symbolName = coordinator?.symbolName ?? "square.resize.up"
             let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .bold)
             if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
                 .withSymbolConfiguration(config) {
                 let tinted = image.tinted(with: tintColor)
                 let imageSize = tinted.size
-                let x = (bounds.width - imageSize.width) / 2
+                let chevronSpace: CGFloat = 10
+                let x = (bounds.width - chevronSpace - imageSize.width) / 2
                 let y = (bounds.height - imageSize.height) / 2
                 tinted.draw(in: NSRect(x: x, y: y, width: imageSize.width, height: imageSize.height))
+            }
+
+            // Chevron down (right side)
+            let chevronConfig = NSImage.SymbolConfiguration(pointSize: 7, weight: .bold)
+            if let chevron = NSImage(systemSymbolName: "chevron.down", accessibilityDescription: nil)?
+                .withSymbolConfiguration(chevronConfig) {
+                let tintedChevron = chevron.tinted(with: tintColor)
+                let chevronSize = tintedChevron.size
+                let cx = bounds.width - chevronSize.width - 5
+                let cy = (bounds.height - chevronSize.height) / 2
+                tintedChevron.draw(in: NSRect(x: cx, y: cy, width: chevronSize.width, height: chevronSize.height))
             }
         }
     }
@@ -624,6 +640,8 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
         var windowScreen: NSScreen? = nil
         var onPreview: ((CGRect, NSScreen) -> Void)? = nil
         var onPreviewHide: (() -> Void)? = nil
+        var didSelectItem = false
+        var selectedSize: CGSize?
 
         init(symbolName: String, disabled: Bool, colorScheme: ColorScheme,
              groupedPresets: [(ratio: String, presets: [WindowResizePreset])], onSelect: @escaping (CGSize) -> Void) {
@@ -636,8 +654,8 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
 
         @objc func menuAction(_ sender: NSMenuItem) {
             guard let sizeValue = sender.representedObject as? NSValue else { return }
-            let size = sizeValue.sizeValue
-            onSelect(CGSize(width: size.width, height: size.height))
+            didSelectItem = true
+            selectedSize = CGSize(width: sizeValue.sizeValue.width, height: sizeValue.sizeValue.height)
         }
 
         // MARK: NSMenuDelegate
@@ -649,12 +667,17 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
         }
 
         func menuDidClose(_ menu: NSMenu) {
-            hidePreview()
+            // Skip hiding preview when an item was selected — resizeWindow handles dismissal.
+            if !didSelectItem {
+                hidePreview()
+            }
+            didSelectItem = false
         }
 
         private func handleHighlightChange(_ item: NSMenuItem?, menuWindow: NSWindow?) {
             guard let item, let sizeValue = item.representedObject as? NSValue else {
-                hidePreview()
+                // Don't hide on nil highlight — keep last preview visible.
+                // Preview is cleaned up by menuDidClose or resizeWindow.
                 return
             }
             let presetSize = CGSize(width: sizeValue.sizeValue.width, height: sizeValue.sizeValue.height)

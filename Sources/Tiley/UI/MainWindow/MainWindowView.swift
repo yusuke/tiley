@@ -1912,7 +1912,7 @@ struct MainWindowView: View {
                 appState.hideResizePreview()
             }
         )
-        .frame(width: 28, height: 24)
+        .frame(width: 38, height: 24)
         .instantTooltip(NSLocalizedString("Resize", comment: "Action bar tooltip for resize button"))
     }
 
