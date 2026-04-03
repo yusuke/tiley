@@ -20,6 +20,8 @@ struct LayoutGridWorkspaceView: View {
     var committedSelections: [GridSelection] = []
     /// Called when the user clicks the "x" button on a committed selection.
     var onDeleteSelection: ((Int) -> Void)?
+    /// When true, drag interactions are disabled and a "No windows" message is shown.
+    var isDragDisabled: Bool = false
     let onSelectionChange: (GridSelection?) -> Void
     let onHoverChange: ((GridSelection?) -> Void)?
     let onSelectionCommit: (GridSelection) -> Void
@@ -46,9 +48,23 @@ struct LayoutGridWorkspaceView: View {
                         .clipShape(RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous))
                 }
 
+                // "No windows" overlay when drag is disabled (no target window)
+                if isDragDisabled {
+                    VStack(spacing: 4) {
+                        Image(systemName: "macwindow")
+                            .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.12))
+                            .foregroundStyle(.primary)
+                        Text(NSLocalizedString("No windows", comment: "Shown in the grid when there are no windows to arrange"))
+                            .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.06, weight: .medium))
+                            .foregroundStyle(.primary)
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .allowsHitTesting(false)
+                }
+
                 // Miniature window showing current window position
                 // Hidden when highlight window info is shown to avoid visual clutter.
-                if highlightWindowInfo.isEmpty,
+                if !isDragDisabled, highlightWindowInfo.isEmpty,
                    let wf = windowFrameRelative, wf.width > 0, wf.height > 0 {
                     let winW = wf.width * geometry.size.width
                     let winH = wf.height * geometry.size.height
@@ -215,7 +231,7 @@ struct LayoutGridWorkspaceView: View {
             }
             .contentShape(Rectangle())
             .onContinuousHover { phase in
-                guard !isDragging else { return }
+                guard !isDragging, !isDragDisabled else { return }
                 switch phase {
                 case .active(let location):
                     let hoveredCell = cell(at: location, cellWidth: cellWidth, cellHeight: cellHeight)
@@ -237,6 +253,7 @@ struct LayoutGridWorkspaceView: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
+                        guard !isDragDisabled else { return }
                         isDragging = true
                         hoverCell = nil
                         onHoverChange?(nil)
@@ -254,6 +271,7 @@ struct LayoutGridWorkspaceView: View {
                         updateSelection(row: cell.row, column: cell.column)
                     }
                     .onEnded { value in
+                        guard !isDragDisabled else { return }
                         isDragging = false
                         isOutsideGrid = false
                         guard isInsideGrid(value.location, in: geometry.size),

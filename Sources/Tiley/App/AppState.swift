@@ -667,23 +667,22 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
 
-        guard let target = resolveWindowTarget() else {
-            perfLog("resolveWindowTarget returned nil")
-            return
-        }
-        perfLog("resolveWindowTarget done")
+        let target = resolveWindowTarget()
+        perfLog("resolveWindowTarget done (\(target?.appName ?? "nil"))")
 
         activeLayoutTarget = target
         layoutPreviewController?.hide()
-        layoutPreviewController = makeLayoutPreviewController(for: target)
-        perfLog("makeLayoutPreviewController done")
-        lastTargetPID = target.processIdentifier
+        if let target {
+            layoutPreviewController = makeLayoutPreviewController(for: target)
+            perfLog("makeLayoutPreviewController done")
+            lastTargetPID = target.processIdentifier
+        }
         // If the frontmost app differs from the target (e.g. a windowless app is
         // frontmost), remember its PID so that ESC restores it.
         let currentFrontmost = NSWorkspace.shared.frontmostApplication
         if let currentFrontmost,
            currentFrontmost.processIdentifier != getpid(),
-           currentFrontmost.processIdentifier != target.processIdentifier {
+           currentFrontmost.processIdentifier != (target?.processIdentifier ?? 0) {
             originalFrontmostPID = currentFrontmost.processIdentifier
         } else {
             originalFrontmostPID = nil
@@ -705,7 +704,9 @@ final class AppState: NSObject, NSMenuDelegate {
         // target info and window list.
         windowTargetListVersion += 1
         // Asynchronously fetch the actual menu bar titles from the target app.
-        fetchTargetMenuBarTitles()
+        if target != nil {
+            fetchTargetMenuBarTitles()
+        }
         // Use the pre-cached window list if available so the sidebar is
         // populated instantly. A deferred refresh still runs afterwards to
         // pick up any very-recent changes.
@@ -746,10 +747,14 @@ final class AppState: NSObject, NSMenuDelegate {
             // Verify it still exists; if not, fall back to the next window.
             self.revalidateActiveTarget()
         }
-        launchMessage = String(
-            format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-            target.appName
-        )
+        if let target {
+            launchMessage = String(
+                format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                target.appName
+            )
+        } else {
+            launchMessage = NSLocalizedString("No windows available.", comment: "Message when no windows are available to arrange")
+        }
         TelemetryDeck.signal("gridOverlayOpened")
         perfLog("toggleOverlay end")
     }

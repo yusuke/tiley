@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Fixed the overlay not opening when the frontmost application has no windows; the overlay now opens with a "No windows" message and drag is disabled
+- Fixed Finder's desktop being treated as a resizable window; when the desktop is focused, Tiley now targets Finder's frontmost real window instead, or shows "No windows" if none exist
 - Fixed the overlay not opening when the frontmost application has no windows (e.g. Finder with no open windows, menu bar-only apps); now falls back to the topmost visible window on screen
 - Fixed window position not being applied correctly on non-primary displays for some apps (e.g. Notion); added post-resize position verification with retry loop to handle apps that asynchronously revert position after a size change
 

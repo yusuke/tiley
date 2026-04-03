@@ -6,6 +6,7 @@
 "Applied grid settings." = "グリッド設定を適用しました。";
 "Canceled settings changes." = "設定変更を取り消しました。";
 "No active target window." = "アクティブな対象ウインドウがありません。";
+"No windows available." = "ウインドウがありません。";
 "Canceled layout selection." = "レイアウト選択をキャンセルしました。";
 "Moved %@ to %@." = "%@ を %@ に移動しました。";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ を %@ に移動しました（ウインドウの制約によりサイズが調整されました）。";

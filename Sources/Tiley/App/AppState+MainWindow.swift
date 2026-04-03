@@ -55,39 +55,47 @@ extension AppState {
             return nil
         }
 
-        if let target = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) {
-            return target
+        // Get all real standard windows (CGWindowList excludes desktop elements).
+        let (allTargets, _, _) = windowManager?.captureAllWindows() ?? ([], [], [])
+
+        if let focused = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) {
+            // Validate the focused window exists in the real window list.
+            // Finder's desktop is returned by AX but excluded from CGWindowList,
+            // so it won't match here.
+            let tolerance: CGFloat = 5
+            let isRealWindow = allTargets.contains {
+                $0.processIdentifier == focused.processIdentifier
+                && abs($0.frame.origin.x - focused.frame.origin.x) < tolerance
+                && abs($0.frame.origin.y - focused.frame.origin.y) < tolerance
+                && abs($0.frame.width - focused.frame.width) < tolerance
+                && abs($0.frame.height - focused.frame.height) < tolerance
+            }
+            if isRealWindow {
+                return focused
+            }
+            // The focused window is not a real window (e.g. Finder's desktop).
+            // Try to find a real window from the same app instead.
+            if let sameApp = allTargets.first(where: { $0.processIdentifier == focused.processIdentifier }) {
+                debugLog("resolveWindowTarget: focused window is desktop/non-standard, using real window from \(sameApp.appName)")
+                return sameApp
+            }
+            debugLog("resolveWindowTarget: focused window (\(focused.appName)) is desktop/non-standard with no real windows")
         }
 
         // Frontmost app may have no windows (menu bar app, Finder with no windows, etc.).
         // Fall back to the topmost visible window on screen.
-        let (allTargets, _, _) = windowManager?.captureAllWindows() ?? ([], [], [])
         if let fallback = allTargets.first {
-            debugLog("resolveWindowTarget: frontmost app has no window, falling back to topmost visible window: \(fallback.appName)")
+            debugLog("resolveWindowTarget: falling back to topmost visible window: \(fallback.appName)")
             return fallback
         }
 
-        let frontmost = NSWorkspace.shared.frontmostApplication
-        let frontmostName = frontmost?.localizedName ?? NSLocalizedString("Unknown", comment: "Unknown app name fallback")
-        let frontmostPID = frontmost?.processIdentifier ?? 0
         hidePreviewOverlay()
-        launchMessage = String(
-            format: NSLocalizedString("No standard focused window was found. frontmost=%@(%d) preferred=%d", comment: "Focused window diagnostic"),
-            frontmostName,
-            frontmostPID,
-            lastTargetPID ?? 0
-        )
         return nil
     }
 
     func initialLayoutTarget() -> WindowTarget? {
         guard accessibilityGranted else { return nil }
-        let target: WindowTarget
-        if let focused = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) {
-            target = focused
-        } else if let fallback = windowManager?.captureAllWindows().targets.first {
-            target = fallback
-        } else {
+        guard let target = resolveWindowTarget() else {
             hidePreviewOverlay()
             return nil
         }

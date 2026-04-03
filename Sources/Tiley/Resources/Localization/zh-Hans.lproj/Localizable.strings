@@ -6,6 +6,7 @@
 "Applied grid settings." = "已应用网格设置。";
 "Canceled settings changes." = "已取消设置更改。";
 "No active target window." = "没有活动目标窗口。";
+"No windows available." = "没有可用的窗口。";
 "Canceled layout selection." = "已取消布局选择。";
 "Moved %@ to %@." = "已将 %@ 移动到 %@。";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "已将 %@ 移动到 %@（因窗口限制，大小已调整）。";

@@ -6,6 +6,7 @@
 "Applied grid settings." = "Rastereinstellungen angewendet.";
 "Canceled settings changes." = "Einstellungsänderungen verworfen.";
 "No active target window." = "Kein aktives Zielfenster.";
+"No windows available." = "Keine Fenster verfügbar.";
 "Canceled layout selection." = "Layoutauswahl abgebrochen.";
 "Moved %@ to %@." = "%@ nach %@ verschoben.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ nach %@ verschoben (Größe aufgrund von Fensterbeschränkungen angepasst).";

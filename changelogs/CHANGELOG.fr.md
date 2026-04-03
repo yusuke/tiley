@@ -8,6 +8,8 @@
 
 ### Corrigé
 
+- Correction du problème où l'overlay ne s'ouvrait pas lorsque l'application au premier plan n'a pas de fenêtres. Un message « Aucune fenêtre » est affiché et le glisser est désactivé
+- Correction du bureau du Finder traité comme une fenêtre redimensionnable. Lorsque le bureau est au premier plan, la fenêtre réelle du Finder la plus en avant est ciblée, ou « Aucune fenêtre » est affiché s'il n'en existe aucune
 - Correction d'un problème où l'overlay ne s'ouvrait pas lorsque l'application au premier plan n'a pas de fenêtre (par exemple, Finder sans fenêtre ouverte, applications uniquement dans la barre de menus) ; utilise maintenant la fenêtre visible la plus en avant sur l'écran
 - Correction d'un problème où la position de la fenêtre n'était pas correctement appliquée sur les écrans non principaux pour certaines applications (ex. Notion). Ajout d'une vérification de position avec tentatives de réessai après le redimensionnement pour gérer les applications qui réinitialisent la position de manière asynchrone
 

@@ -8,6 +8,8 @@
 
 ### Corregido
 
+- Corregido el problema de que la superposición no se abría cuando la aplicación en primer plano no tiene ventanas. Ahora se muestra un mensaje "Sin ventanas" y se desactiva el arrastre
+- Corregido que el escritorio del Finder se tratara como una ventana redimensionable. Cuando el escritorio está enfocado, ahora se selecciona la ventana real del Finder más al frente, o se muestra "Sin ventanas" si no existe ninguna
 - Corregido el problema de que la superposición no se abría cuando la aplicación en primer plano no tiene ventanas (por ejemplo, Finder sin ventanas abiertas, aplicaciones solo de barra de menú); ahora se recurre a la ventana visible más al frente en la pantalla
 - Corregido el problema de que la posición de la ventana no se aplicaba correctamente en pantallas no principales para algunas aplicaciones (p. ej., Notion). Se añadió verificación de posición con reintento tras el redimensionamiento para gestionar aplicaciones que revierten la posición de forma asíncrona
 

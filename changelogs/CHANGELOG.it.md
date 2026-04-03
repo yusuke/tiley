@@ -8,6 +8,8 @@
 
 ### Corretto
 
+- Risolto il problema per cui l'overlay non si apriva quando l'applicazione in primo piano non ha finestre. Ora viene mostrato un messaggio "Nessuna finestra" e il trascinamento viene disabilitato
+- Risolto il problema per cui il desktop del Finder veniva trattato come una finestra ridimensionabile. Quando il desktop è in primo piano, viene ora selezionata la finestra reale del Finder più in primo piano, oppure viene mostrato "Nessuna finestra" se non ne esistono
 - Corretto il problema per cui l'overlay non si apriva quando l'applicazione in primo piano non aveva finestre (ad es. Finder senza finestre aperte, app solo barra dei menu); ora viene utilizzata la finestra visibile più in alto sullo schermo
 - Corretta la posizione della finestra che non veniva applicata correttamente su display non principali per alcune app (es. Notion). Aggiunta verifica della posizione con logica di ritentativo dopo il ridimensionamento per gestire le app che ripristinano la posizione in modo asincrono
 

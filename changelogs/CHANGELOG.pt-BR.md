@@ -8,6 +8,8 @@
 
 ### Corrigido
 
+- Corrigido o problema de o overlay não abrir quando o aplicativo em primeiro plano não tem janelas. Agora é exibida uma mensagem "Sem janelas" e o arrasto é desativado
+- Corrigido o problema de a área de trabalho do Finder ser tratada como uma janela redimensionável. Quando a área de trabalho está em foco, a janela real mais à frente do Finder é selecionada, ou "Sem janelas" é exibido se não houver nenhuma
 - Corrigido problema em que a sobreposição não abria quando o aplicativo em primeiro plano não possui janelas (por exemplo, Finder sem janelas abertas, aplicativos apenas de barra de menus); agora utiliza a janela visível mais à frente na tela
 - Corrigido problema em que a posição da janela não era aplicada corretamente em monitores não principais para alguns apps (ex.: Notion). Adicionada verificação de posição com lógica de tentativa após o redimensionamento para lidar com apps que revertem a posição de forma assíncrona
 

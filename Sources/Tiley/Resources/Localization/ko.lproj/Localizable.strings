@@ -6,6 +6,7 @@
 "Applied grid settings." = "그리드 설정을 적용했습니다.";
 "Canceled settings changes." = "설정 변경을 취소했습니다.";
 "No active target window." = "활성 대상 창이 없습니다.";
+"No windows available." = "사용 가능한 윈도우가 없습니다.";
 "Canceled layout selection." = "레이아웃 선택을 취소했습니다.";
 "Moved %@ to %@." = "%@을(를) %@로 이동했습니다.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@을(를) %@로 이동했습니다(창 제약으로 인해 크기가 조정됨).";

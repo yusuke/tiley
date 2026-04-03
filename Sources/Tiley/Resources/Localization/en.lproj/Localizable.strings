@@ -6,6 +6,7 @@
 "Applied grid settings." = "Applied grid settings.";
 "Canceled settings changes." = "Canceled settings changes.";
 "No active target window." = "No active target window.";
+"No windows available." = "No windows available.";
 "Canceled layout selection." = "Canceled layout selection.";
 "Moved %@ to %@." = "Moved %@ to %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "Moved %@ to %@ (size adjusted due to window constraints).";

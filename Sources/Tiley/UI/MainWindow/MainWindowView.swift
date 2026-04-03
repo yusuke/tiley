@@ -972,6 +972,7 @@ struct MainWindowView: View {
                             }
                             appState.updateLayoutPreview(nil)
                         },
+                        isDragDisabled: appState.activeLayoutTarget == nil,
                         onSelectionChange: { selection in
                             if editingPresetID == nil {
                                 dismissPresetNameEditingIfNeeded()

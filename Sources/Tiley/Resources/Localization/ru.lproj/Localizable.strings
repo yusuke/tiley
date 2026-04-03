@@ -6,6 +6,7 @@
 "Applied grid settings." = "Настройки сетки применены.";
 "Canceled settings changes." = "Изменения настроек отменены.";
 "No active target window." = "Нет активного целевого окна.";
+"No windows available." = "Нет доступных окон.";
 "Canceled layout selection." = "Выбор компоновки отменён.";
 "Moved %@ to %@." = "%@ перемещено в %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ перемещено в %@ (размер скорректирован из-за ограничений окна).";

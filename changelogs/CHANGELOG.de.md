@@ -8,6 +8,8 @@
 
 ### Behoben
 
+- Problem behoben, dass sich das Overlay nicht öffnete, wenn die vorderste Anwendung keine Fenster hat. Es wird nun eine „Keine Fenster"-Meldung angezeigt und das Ziehen deaktiviert
+- Problem behoben, dass Finders Desktop als größenveränderbares Fenster behandelt wurde. Bei fokussiertem Desktop wird nun das vorderste echte Finder-Fenster ausgewählt, oder „Keine Fenster" angezeigt, wenn keines vorhanden ist
 - Overlay öffnete sich nicht, wenn die vorderste Anwendung keine Fenster hat (z. B. Finder ohne offene Fenster, reine Menüleisten-Apps); es wird nun auf das oberste sichtbare Fenster auf dem Bildschirm zurückgegriffen
 - Fensterposition wurde bei einigen Apps (z. B. Notion) auf nicht-primären Bildschirmen nicht korrekt angewendet. Positionsüberprüfung mit Wiederholungslogik nach der Größenänderung hinzugefügt, um Apps zu behandeln, die die Position asynchron zurücksetzen
 

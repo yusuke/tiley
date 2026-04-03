@@ -6,6 +6,7 @@
 "Applied grid settings." = "Configurações de grade aplicadas.";
 "Canceled settings changes." = "Alterações de configurações canceladas.";
 "No active target window." = "Nenhuma janela alvo ativa.";
+"No windows available." = "Nenhuma janela disponível.";
 "Canceled layout selection." = "Seleção de layout cancelada.";
 "Moved %@ to %@." = "%@ movido para %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ movido para %@ (tamanho ajustado devido a restrições da janela).";

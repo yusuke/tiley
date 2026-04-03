@@ -6,6 +6,7 @@
 "Applied grid settings." = "Configuración de cuadrícula aplicada.";
 "Canceled settings changes." = "Cambios de configuración cancelados.";
 "No active target window." = "No hay ventana activa.";
+"No windows available." = "No hay ventanas disponibles.";
 "Canceled layout selection." = "Selección de diseño cancelada.";
 "Moved %@ to %@." = "Se movió %@ a %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "Se movió %@ a %@ (tamaño ajustado por restricciones de ventana).";
