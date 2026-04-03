@@ -824,11 +824,12 @@ final class AppState: NSObject, NSMenuDelegate {
 
         for (windowPosition, idx) in orderedIndices.enumerated() {
             var target = availableWindowTargets[idx]
-            target = unhideAppIfNeeded(target)
 
             // Map window position to selection: clamp to last available selection.
             let selectionIndex = min(windowPosition, allSelections.count - 1)
             let sel = allSelections[selectionIndex]
+
+            target = unhideAppIfNeeded(target)
 
             let frame = GridCalculator.frame(
                 for: sel,
@@ -930,8 +931,9 @@ final class AppState: NSObject, NSMenuDelegate {
 
         for (position, idx) in orderedIndices.enumerated() {
             var target = availableWindowTargets[idx]
-            target = unhideAppIfNeeded(target)
             let sel = selections[position]
+
+            target = unhideAppIfNeeded(target)
 
             let frame = GridCalculator.frame(
                 for: sel,

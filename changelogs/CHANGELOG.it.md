@@ -10,6 +10,7 @@
 
 - L'elenco delle finestre nella barra laterale viene ora pre-memorizzato in background tramite listener di eventi del workspace (attivazione, avvio e chiusura delle app), in modo da apparire istantaneamente all'apertura dell'overlay
 - Migliorato il comportamento dell'evidenziazione per gli elementi della barra laterale raggruppati per applicazione. L'intestazione dell'app viene mostrata come selezionata solo quando tutte le sue finestre sono selezionate, e passando il mouse sull'intestazione vengono evidenziati sia l'intestazione che tutte le finestre figlie
+- Migliorato il comportamento di uscita dallo schermo intero: ora imposta direttamente l'attributo AXFullScreen (con pressione del pulsante come fallback), attendendo fino a 2 secondi per il completamento dell'animazione
 
 ### Corretto
 

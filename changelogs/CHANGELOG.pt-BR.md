@@ -10,6 +10,7 @@
 
 - A lista de janelas na barra lateral agora é pré-armazenada em cache em segundo plano por meio de listeners de eventos do workspace (ativação, inicialização e encerramento de apps), aparecendo instantaneamente ao abrir a sobreposição
 - Melhorado o comportamento de destaque dos itens agrupados por aplicativo na barra lateral. O cabeçalho do aplicativo só é exibido como selecionado quando todas as suas janelas estão selecionadas, e ao passar o mouse sobre o cabeçalho, tanto o cabeçalho quanto todas as janelas filhas são destacados
+- Melhoria no comportamento de saída do modo tela cheia: agora define o atributo AXFullScreen diretamente (com pressionamento de botão como fallback), aguardando até 2 segundos para a conclusão da animação
 
 ### Corrigido
 

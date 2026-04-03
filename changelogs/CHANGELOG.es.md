@@ -10,6 +10,7 @@
 
 - La lista de ventanas en la barra lateral ahora se precarga en segundo plano mediante listeners de eventos del espacio de trabajo (activación, inicio y cierre de aplicaciones), por lo que aparece instantáneamente al abrir la superposición
 - Mejorado el comportamiento de resaltado de los elementos agrupados por aplicación en la barra lateral. El encabezado de la aplicación solo se muestra como seleccionado cuando todas sus ventanas están seleccionadas, y al pasar el cursor sobre el encabezado se resaltan tanto el encabezado como todas sus ventanas secundarias
+- Mejora del comportamiento de salida de pantalla completa: ahora establece el atributo AXFullScreen directamente (con pulsación de botón como respaldo), esperando hasta 2 segundos para que se complete la animación
 
 ### Corregido
 

@@ -266,9 +266,18 @@ final class AccessibilityService {
         return changed
     }
 
+    /// Returns `true` when the window is in native macOS fullscreen mode.
+    func isFullScreen(_ window: AXUIElement) -> Bool {
+        var value: CFTypeRef?
+        let result = AXUIElementCopyAttributeValue(window, "AXFullScreen" as CFString, &value)
+        guard result == .success, let fs = value as? Bool else { return false }
+        return fs
+    }
+
     /// Checks whether the window is in native macOS fullscreen mode and,
-    /// if so, exits fullscreen by pressing the AXFullScreenButton.  Waits
-    /// up to ~1 s for the transition animation to finish before returning.
+    /// if so, exits fullscreen.  Tries setting the AXFullScreen attribute
+    /// directly, then falls back to pressing AXFullScreenButton.  Waits
+    /// up to ~2 s for the transition animation to finish before returning.
     func exitFullScreenIfNeeded(_ window: AXUIElement) {
         var value: CFTypeRef?
         let result = AXUIElementCopyAttributeValue(window, "AXFullScreen" as CFString, &value)
@@ -276,14 +285,20 @@ final class AccessibilityService {
               let isFullScreen = value as? Bool,
               isFullScreen else { return }
 
-        // Press the fullscreen button to toggle out of fullscreen.
-        var fsButton: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(window, "AXFullScreenButton" as CFString, &fsButton) == .success,
-              let button = fsButton else { return }
-        AXUIElementPerformAction(button as! AXUIElement, kAXPressAction as CFString)
+        // Preferred: set the attribute directly.
+        let setResult = AXUIElementSetAttributeValue(window, "AXFullScreen" as CFString, kCFBooleanFalse)
 
-        // Wait for the fullscreen exit animation to complete (up to ~1s).
-        for _ in 0..<20 {
+        // Fallback: press the fullscreen button if direct set failed.
+        if setResult != .success {
+            var fsButton: CFTypeRef?
+            if AXUIElementCopyAttributeValue(window, "AXFullScreenButton" as CFString, &fsButton) == .success,
+               let button = fsButton {
+                AXUIElementPerformAction(button as! AXUIElement, kAXPressAction as CFString)
+            }
+        }
+
+        // Wait for the fullscreen exit animation to complete (up to ~2s).
+        for _ in 0..<40 {
             usleep(50_000) // 50 ms
             var newValue: CFTypeRef?
             let r = AXUIElementCopyAttributeValue(window, "AXFullScreen" as CFString, &newValue)
