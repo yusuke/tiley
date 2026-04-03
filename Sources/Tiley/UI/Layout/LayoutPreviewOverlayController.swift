@@ -299,7 +299,7 @@ private struct SelectionPreviewOverlayView: View {
         let titleText: String? = {
             let a = (appName ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
             let t = (windowTitle ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            if !a.isEmpty && !t.isEmpty { return "\(a) — \(t)" }
+            if !a.isEmpty && !t.isEmpty && a != t { return "\(a) — \(t)" }
             if !a.isEmpty { return a }
             if !t.isEmpty { return t }
             return nil
