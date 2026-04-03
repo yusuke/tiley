@@ -2030,9 +2030,11 @@ struct MainWindowView: View {
         let isHovered = hoveredAppHeaderPID == pid
 
         return Button {
+            let flags = NSApp.currentEvent?.modifierFlags ?? []
+            let shift = flags.contains(.shift)
+            let cmd = flags.contains(.command)
             sidebarSelection = .appHeader(pid: pid, appName: appName)
-            // Select all windows of this app.
-            appState.selectAllWindowsOfApp(pid: pid)
+            appState.selectAllWindowsOfApp(pid: pid, shift: shift, cmd: cmd)
         } label: {
             HStack(spacing: 6) {
                 if let icon = appInfoCache.icon(for: pid) {
@@ -2057,7 +2059,7 @@ struct MainWindowView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .stroke(ThemeColors.presetRowBorder(selected: isSelected, for: colorScheme), lineWidth: isSelected ? 1 : 0)
+                    .stroke(ThemeColors.presetRowBorder(selected: isExplicitlySelected, for: colorScheme), lineWidth: isExplicitlySelected ? 1 : 0)
             )
         }
         .buttonStyle(.plain)
@@ -2139,6 +2141,7 @@ struct MainWindowView: View {
         let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
         let isSelected = isPrimary || isInSelection
         let isHovered = hoveredWindowIndex == item.id || (item.isUnderAppHeader && hoveredAppHeaderPID == item.pid)
+        let showBorderOnHeader = item.isUnderAppHeader && sidebarSelection == .appHeader(pid: item.pid, appName: item.appName)
         let presetColorIndex = appState.presetHoverHighlights[item.id]
 
         return Button {
@@ -2197,8 +2200,8 @@ struct MainWindowView: View {
                     .stroke(
                         presetColorIndex != nil
                             ? ThemeColors.indexedSidebarHighlightBorder(index: presetColorIndex!, for: colorScheme)
-                            : ThemeColors.presetRowBorder(selected: isPrimary, for: colorScheme),
-                        lineWidth: presetColorIndex != nil ? 1 : (isSelected ? 1 : 0)
+                            : ThemeColors.presetRowBorder(selected: isPrimary && !showBorderOnHeader, for: colorScheme),
+                        lineWidth: presetColorIndex != nil ? 1 : ((isSelected && !showBorderOnHeader) ? 1 : 0)
                     )
             )
             .overlay(alignment: .trailing) {

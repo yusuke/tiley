@@ -172,7 +172,7 @@ extension AppState {
     }
 
     /// Select all windows belonging to the given app (PID).
-    func selectAllWindowsOfApp(pid: pid_t) {
+    func selectAllWindowsOfApp(pid: pid_t, shift: Bool = false, cmd: Bool = false) {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
 
         if originalFrontmostPID == nil {
@@ -181,18 +181,61 @@ extension AppState {
             initialZOrderWindowIDs = availableWindowTargets.map(\.cgWindowID).filter { $0 != 0 }
         }
 
-        let indices = availableWindowTargets.indices.filter { availableWindowTargets[$0].processIdentifier == pid }
-        guard !indices.isEmpty else { return }
-        selectedWindowIndices = Set(indices)
-        // Selection order: current active first (if in this app), then rest in index order.
-        let currentActive = activeTargetIndex
-        if indices.contains(currentActive) {
-            selectionOrder = [currentActive] + indices.filter { $0 != currentActive }
+        let appIndices = availableWindowTargets.indices.filter { availableWindowTargets[$0].processIdentifier == pid }
+        guard !appIndices.isEmpty else { return }
+
+        if cmd {
+            // Cmd+click: toggle all windows of this app in/out of the selection.
+            let allAlreadySelected = appIndices.allSatisfy { selectedWindowIndices.contains($0) }
+            if allAlreadySelected {
+                // Remove all app windows, but don't leave selection empty.
+                let remaining = selectedWindowIndices.subtracting(appIndices)
+                if !remaining.isEmpty {
+                    selectedWindowIndices = remaining
+                    selectionOrder.removeAll { appIndices.contains($0) }
+                    if appIndices.contains(activeTargetIndex) {
+                        activeTargetIndex = selectionOrder.first ?? remaining.first!
+                    }
+                }
+                // else: all selected items belong to this app → no-op (keep selection)
+            } else {
+                // Add all app windows to the selection.
+                selectedWindowIndices.formUnion(appIndices)
+                let newIndices = appIndices.filter { !selectionOrder.contains($0) }
+                selectionOrder.append(contentsOf: newIndices)
+                activeTargetIndex = appIndices.first!
+            }
+        } else if shift {
+            // Shift+click: select contiguous range from anchor to the app group boundaries.
+            let anchor = selectionAnchorIndex ?? activeTargetIndex
+            let order: [Int]
+            if !sidebarWindowOrder.isEmpty {
+                order = sidebarWindowOrder.filter { $0 < availableWindowTargets.count }
+            } else {
+                order = Array(availableWindowTargets.indices)
+            }
+            // Find the sidebar positions of the app's first and last windows.
+            let appPositions = appIndices.compactMap { order.firstIndex(of: $0) }
+            guard let appFirst = appPositions.min(), let appLast = appPositions.max(),
+                  let anchorPos = order.firstIndex(of: anchor) else { return }
+            // Extend range from anchor to the farthest edge of the app group.
+            let lo = min(anchorPos, appFirst)
+            let hi = max(anchorPos, appLast)
+            let rangeIndices = Array(order[lo...hi])
+            selectedWindowIndices = Set(rangeIndices)
+            let previousOrder = selectionOrder.filter { selectedWindowIndices.contains($0) }
+            let newIndices = rangeIndices.filter { !previousOrder.contains($0) }
+            selectionOrder = previousOrder + newIndices
+            activeTargetIndex = appIndices.first!
+            // Don't update selectionAnchorIndex on shift-click.
         } else {
-            selectionOrder = indices
+            // Plain click: select all app windows in index order.
+            selectedWindowIndices = Set(appIndices)
+            selectionOrder = appIndices
+            selectionAnchorIndex = appIndices.first
+            activeTargetIndex = appIndices.first!
         }
-        selectionAnchorIndex = nil
-        activeTargetIndex = selectionOrder.first!
+
         windowTargetListVersion += 1
         applyTargetAtCurrentIndex()
     }
