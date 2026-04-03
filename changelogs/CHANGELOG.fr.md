@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction d'un problème où la position de la fenêtre n'était pas correctement appliquée sur les écrans non principaux pour certaines applications (ex. Notion). Ajout d'une vérification de position avec tentatives de réessai après le redimensionnement pour gérer les applications qui réinitialisent la position de manière asynchrone
+
 ## [4.1.1] - 2026-03-31
 
 ### Modifié

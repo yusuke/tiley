@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed window position not being applied correctly on non-primary displays for some apps (e.g. Notion); added post-resize position verification with retry loop to handle apps that asynchronously revert position after a size change
+
 ## [4.1.1] - 2026-03-31
 
 ### Changed

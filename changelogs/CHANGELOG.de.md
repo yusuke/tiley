@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Fensterposition wurde bei einigen Apps (z. B. Notion) auf nicht-primären Bildschirmen nicht korrekt angewendet. Positionsüberprüfung mit Wiederholungslogik nach der Größenänderung hinzugefügt, um Apps zu behandeln, die die Position asynchron zurücksetzen
+
 ## [4.1.1] - 2026-03-31
 
 ### Geändert

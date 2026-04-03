@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Corretta la posizione della finestra che non veniva applicata correttamente su display non principali per alcune app (es. Notion). Aggiunta verifica della posizione con logica di ritentativo dopo il ridimensionamento per gestire le app che ripristinano la posizione in modo asincrono
+
 ## [4.1.1] - 2026-03-31
 
 ### Modificato

@@ -500,6 +500,22 @@ final class AccessibilityService {
         // 5. Set final position — always treated as a change because it
         //    differs from the nudged value.
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+
+        // 6. Verify position stuck — some apps asynchronously revert
+        //    position after a size change even on the primary screen.
+        for attempt in 0..<3 {
+            let (afterPos, _) = readPositionAndSize(of: window)
+            let posOK = abs(afterPos.x - origin.x) <= 4
+                     && abs(afterPos.y - origin.y) <= 4
+            guard !posOK else { break }
+            usleep(attempt == 0 ? 50_000 : 100_000)
+            var retryNudge = origin
+            retryNudge.y += 1
+            if let v = AXValueCreate(.cgPoint, &retryNudge) {
+                AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
+            }
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+        }
     }
 
     /// For non-primary screens: first try to resize directly on the
@@ -597,7 +613,25 @@ final class AccessibilityService {
             AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         }
 
-        // 6. Re-raise in case the bounce changed z-order.
+        // 6. Verify position stuck — some apps (e.g. Electron/Notion)
+        //    asynchronously revert position after a size change, and the
+        //    revert can take longer than the 50 ms wait in step 3.
+        //    Retry up to 3 times with increasing waits.
+        for attempt in 0..<3 {
+            let (afterPos, _) = readPositionAndSize(of: window)
+            let posOK = abs(afterPos.x - origin.x) <= 4
+                     && abs(afterPos.y - origin.y) <= 4
+            guard !posOK else { break }
+            usleep(attempt == 0 ? 50_000 : 100_000) // 50 ms, then 100 ms
+            var retryNudge = origin
+            retryNudge.y += 1
+            if let v = AXValueCreate(.cgPoint, &retryNudge) {
+                AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
+            }
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+        }
+
+        // 7. Re-raise in case the bounce changed z-order.
         raiseWindow(window)
     }
 

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Corregido el problema de que la posición de la ventana no se aplicaba correctamente en pantallas no principales para algunas aplicaciones (p. ej., Notion). Se añadió verificación de posición con reintento tras el redimensionamiento para gestionar aplicaciones que revierten la posición de forma asíncrona
+
 ## [4.1.1] - 2026-03-31
 
 ### Cambiado
