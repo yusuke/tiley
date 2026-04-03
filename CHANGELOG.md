@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Resize window to predefined sizes (16:9, 16:10, 4:3, 9:16) from the toolbar button or right-click context menu; sizes that exceed the current screen are automatically excluded
+
 ## [4.1.2] - 2026-04-03
 
 ### Added

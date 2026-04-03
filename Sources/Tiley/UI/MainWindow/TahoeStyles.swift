@@ -459,6 +459,239 @@ struct TahoeActionBarMenuButton: NSViewRepresentable {
     }
 }
 
+// MARK: - TahoeResizeMenuButton
+
+/// Finder-style dropdown menu button for window resize presets.
+/// Grouped sections with aspect-ratio headers.
+/// Shows on-screen overlay + mini screen preview on hover.
+struct TahoeResizeMenuButton: NSViewRepresentable {
+    let symbolName: String
+    let disabled: Bool
+    let colorScheme: ColorScheme
+    let groupedPresets: [(ratio: String, presets: [WindowResizePreset])]
+    let onSelect: (CGSize) -> Void
+    /// Current window position in AX coordinates (top-left origin on primary screen).
+    var windowAXPosition: CGPoint = .zero
+    /// Screen the window resides on.
+    var windowScreen: NSScreen? = nil
+    /// Callbacks for showing/hiding preview via AppState.
+    var onPreview: ((CGRect, NSScreen) -> Void)? = nil
+    var onPreviewHide: (() -> Void)? = nil
+
+    func makeNSView(context: Context) -> ResizeMenuButtonView {
+        let view = ResizeMenuButtonView()
+        view.coordinator = context.coordinator
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.widthAnchor.constraint(equalToConstant: 28),
+            view.heightAnchor.constraint(equalToConstant: 24),
+        ])
+        return view
+    }
+
+    func updateNSView(_ nsView: ResizeMenuButtonView, context: Context) {
+        let coord = context.coordinator
+        coord.symbolName = symbolName
+        coord.disabled = disabled
+        coord.colorScheme = colorScheme
+        coord.groupedPresets = groupedPresets
+        coord.onSelect = onSelect
+        coord.windowAXPosition = windowAXPosition
+        coord.windowScreen = windowScreen
+        coord.onPreview = onPreview
+        coord.onPreviewHide = onPreviewHide
+        nsView.isEnabled = !disabled
+        nsView.needsDisplay = true
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(symbolName: symbolName, disabled: disabled, colorScheme: colorScheme,
+                    groupedPresets: groupedPresets, onSelect: onSelect)
+    }
+
+    final class ResizeMenuButtonView: NSView {
+        weak var coordinator: Coordinator?
+        private var isHovered = false
+        private var isMenuOpen = false
+        private var trackingArea: NSTrackingArea?
+
+        override var isFlipped: Bool { true }
+        var isEnabled: Bool = true
+
+        override func updateTrackingAreas() {
+            super.updateTrackingAreas()
+            if let ta = trackingArea { removeTrackingArea(ta) }
+            let ta = NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeInKeyWindow], owner: self)
+            addTrackingArea(ta)
+            trackingArea = ta
+        }
+
+        override func mouseEntered(with event: NSEvent) {
+            guard isEnabled else { return }
+            isHovered = true
+            needsDisplay = true
+        }
+
+        override func mouseExited(with event: NSEvent) {
+            isHovered = false
+            needsDisplay = true
+        }
+
+        override func mouseDown(with event: NSEvent) {
+            guard isEnabled else { return }
+            showMenuProgrammatically()
+        }
+
+        func showMenuProgrammatically() {
+            guard isEnabled, let coord = coordinator else { return }
+            isMenuOpen = true
+            needsDisplay = true
+
+            let menu = NSMenu()
+            for (groupIndex, group) in coord.groupedPresets.enumerated() {
+                if groupIndex > 0 {
+                    menu.addItem(.separator())
+                }
+                // Section header
+                let header = NSMenuItem(title: group.ratio, action: nil, keyEquivalent: "")
+                header.isEnabled = false
+                let headerAttrs: [NSAttributedString.Key: Any] = [
+                    .font: NSFont.systemFont(ofSize: 11, weight: .semibold),
+                    .foregroundColor: NSColor.secondaryLabelColor,
+                ]
+                header.attributedTitle = NSAttributedString(string: group.ratio, attributes: headerAttrs)
+                menu.addItem(header)
+
+                for preset in group.presets {
+                    let mi = NSMenuItem(title: preset.label, action: #selector(Coordinator.menuAction(_:)), keyEquivalent: "")
+                    mi.target = coord
+                    mi.representedObject = NSValue(size: preset.size)
+                    menu.addItem(mi)
+                }
+            }
+
+            // Use NSMenuDelegate to track highlighted item for live preview
+            menu.delegate = coord
+
+            menu.popUp(positioning: nil, at: NSPoint(x: 0, y: bounds.height + 2), in: self)
+
+            // Menu closed — clean up
+            coord.hidePreview()
+
+            isMenuOpen = false
+            isHovered = false
+            needsDisplay = true
+        }
+
+        override func draw(_ dirtyRect: NSRect) {
+            guard let ctx = NSGraphicsContext.current?.cgContext else { return }
+            let cornerRadius = bounds.height / 2
+            let path = CGPath(roundedRect: bounds, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
+
+            if isMenuOpen {
+                let labelColor = NSColor.labelColor.cgColor
+                ctx.addPath(path)
+                ctx.setFillColor(labelColor.copy(alpha: 0.12) ?? CGColor(gray: 0, alpha: 0.12))
+                ctx.fillPath()
+            } else if isHovered {
+                let controlColor = NSColor.controlColor.cgColor
+                ctx.addPath(path)
+                ctx.setFillColor(controlColor)
+                ctx.fillPath()
+            }
+
+            let tintColor: NSColor = !isEnabled ? .tertiaryLabelColor : .labelColor
+            let symbolName = coordinator?.symbolName ?? "square.resize.up"
+            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .bold)
+            if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
+                .withSymbolConfiguration(config) {
+                let tinted = image.tinted(with: tintColor)
+                let imageSize = tinted.size
+                let x = (bounds.width - imageSize.width) / 2
+                let y = (bounds.height - imageSize.height) / 2
+                tinted.draw(in: NSRect(x: x, y: y, width: imageSize.width, height: imageSize.height))
+            }
+        }
+    }
+
+    class Coordinator: NSObject, NSMenuDelegate {
+        var symbolName: String
+        var disabled: Bool
+        var colorScheme: ColorScheme
+        var groupedPresets: [(ratio: String, presets: [WindowResizePreset])]
+        var onSelect: (CGSize) -> Void
+        var windowAXPosition: CGPoint = .zero
+        var windowScreen: NSScreen? = nil
+        var onPreview: ((CGRect, NSScreen) -> Void)? = nil
+        var onPreviewHide: (() -> Void)? = nil
+
+        init(symbolName: String, disabled: Bool, colorScheme: ColorScheme,
+             groupedPresets: [(ratio: String, presets: [WindowResizePreset])], onSelect: @escaping (CGSize) -> Void) {
+            self.symbolName = symbolName
+            self.disabled = disabled
+            self.colorScheme = colorScheme
+            self.groupedPresets = groupedPresets
+            self.onSelect = onSelect
+        }
+
+        @objc func menuAction(_ sender: NSMenuItem) {
+            guard let sizeValue = sender.representedObject as? NSValue else { return }
+            let size = sizeValue.sizeValue
+            onSelect(CGSize(width: size.width, height: size.height))
+        }
+
+        // MARK: NSMenuDelegate
+
+        func menu(_ menu: NSMenu, willHighlight item: NSMenuItem?) {
+            debugLog("[resize] willHighlight: \(item?.title ?? "nil")")
+            let menuWindow = NSApp.windows.first { String(describing: type(of: $0)).contains("MenuWindow") }
+            handleHighlightChange(item, menuWindow: menuWindow)
+        }
+
+        func menuDidClose(_ menu: NSMenu) {
+            hidePreview()
+        }
+
+        private func handleHighlightChange(_ item: NSMenuItem?, menuWindow: NSWindow?) {
+            guard let item, let sizeValue = item.representedObject as? NSValue else {
+                hidePreview()
+                return
+            }
+            let presetSize = CGSize(width: sizeValue.sizeValue.width, height: sizeValue.sizeValue.height)
+            guard let screen = windowScreen else { return }
+
+            // Compute preview frame in AppKit coordinates
+            let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
+            let destVisible = screen.visibleFrame
+            let visibleAXTop = primaryMaxY - destVisible.maxY
+            let visibleAXLeft = destVisible.minX
+            let visibleAXRight = destVisible.maxX
+            let visibleAXBottom = primaryMaxY - destVisible.minY
+
+            var pos = windowAXPosition
+            if pos.x + presetSize.width > visibleAXRight {
+                pos.x = visibleAXRight - presetSize.width
+            }
+            pos.x = max(pos.x, visibleAXLeft)
+            if pos.y + presetSize.height > visibleAXBottom {
+                pos.y = visibleAXBottom - presetSize.height
+            }
+            pos.y = max(pos.y, visibleAXTop)
+
+            // Convert AX coordinates to AppKit frame (bottom-left origin)
+            let appKitY = primaryMaxY - pos.y - presetSize.height
+            let previewFrame = CGRect(x: pos.x, y: appKitY, width: presetSize.width, height: presetSize.height)
+
+            // Show both real-size overlay and grid preview via AppState
+            onPreview?(previewFrame, screen)
+        }
+
+        func hidePreview() {
+            onPreviewHide?()
+        }
+    }
+}
+
 // MARK: - NSImage Tinting Extension
 
 extension NSImage {

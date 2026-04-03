@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Ridimensionamento delle finestre a dimensioni predefinite (16:9, 16:10, 4:3, 9:16) dal pulsante della barra degli strumenti o dal menu contestuale; le dimensioni che superano lo schermo corrente vengono escluse automaticamente
+
 ## [4.1.2] - 2026-04-03
 
 ### Aggiunto

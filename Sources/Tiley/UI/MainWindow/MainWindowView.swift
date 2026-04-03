@@ -951,6 +951,7 @@ struct MainWindowView: View {
                         desktopPictureInfo: desktopPictureInfo,
                         showDesktopPicture: false,
                         windowFrameRelative: screenRole.isTarget ? appState.currentLayoutTargetRelativeFrame : nil,
+                        resizePreviewRelativeFrame: appState.resizePreviewRelativeFrame,
                         screenEdgeInsets: gridScreenEdgeInsets,
                         committedSelections: editingPresetCommittedSelections,
                         onDeleteSelection: { index in
@@ -1654,6 +1655,9 @@ struct MainWindowView: View {
         let sameAppCount = hasSelection ? targets.filter { $0.processIdentifier == pid }.count : 0
         let otherScreens = hasSelection ? otherScreensForWindow(at: idx) : []
 
+        // Resize to predefined size
+        resizeButton(index: idx, disabled: !hasSelection)
+
         // Move to other display
         let windowScreen: NSScreen? = hasSelection ? NSScreen.screen(containing: targets[idx].screenFrame) : nil
         let thisDisplayID = screenContext.flatMap { ctx in
@@ -1866,6 +1870,50 @@ struct MainWindowView: View {
                 appState.hideMainWindow()
             }
         )
+    }
+
+    /// Resize button: dropdown menu with predefined sizes filtered by current screen.
+    @ViewBuilder
+    private func resizeButton(index idx: Int, disabled: Bool) -> some View {
+        let targets = appState.windowTargetList
+        let screen: NSScreen? = (!disabled && idx < targets.count)
+            ? NSScreen.screen(containing: targets[idx].screenFrame) ?? NSScreen.screens.first
+            : NSScreen.screens.first
+        let groupedPresets = screen.map { WindowResizePreset.presetsAvailable(on: $0) } ?? []
+        let noPresets = groupedPresets.isEmpty
+
+        // Read current window AX position and info for hover preview
+        let selectedTarget = (!disabled && idx < targets.count) ? targets[idx] : nil
+        let windowAXPos: CGPoint = {
+            guard let window = selectedTarget?.windowElement else { return .zero }
+            let (pos, _) = appState.accessibilityService.readPositionAndSize(of: window)
+            return pos
+        }()
+        let targetAppIcon: NSImage? = selectedTarget.flatMap {
+            NSRunningApplication(processIdentifier: $0.processIdentifier)?.icon
+        }
+        let targetWindowTitle = selectedTarget?.windowTitle
+        let targetAppName = selectedTarget?.appName
+
+        TahoeResizeMenuButton(
+            symbolName: "square.resize.up",
+            disabled: disabled || noPresets,
+            colorScheme: colorScheme,
+            groupedPresets: groupedPresets,
+            onSelect: { size in
+                appState.resizeWindow(at: idx, to: size)
+            },
+            windowAXPosition: windowAXPos,
+            windowScreen: screen,
+            onPreview: { frame, screen in
+                appState.showResizePreview(frame: frame, on: screen, windowTitle: targetWindowTitle, appName: targetAppName, appIcon: targetAppIcon)
+            },
+            onPreviewHide: {
+                appState.hideResizePreview()
+            }
+        )
+        .frame(width: 28, height: 24)
+        .instantTooltip(NSLocalizedString("Resize", comment: "Action bar tooltip for resize button"))
     }
 
     /// Shared move-to-display button: single-click for 2 displays, dropdown for 3+.
@@ -2252,6 +2300,33 @@ struct MainWindowView: View {
                             systemImage: "rectangle.portrait.and.arrow.right"
                         )
                     }
+                }
+                Divider()
+            }
+
+            // Resize submenu
+            let resizeScreen: NSScreen? = {
+                let targets = appState.windowTargetList
+                guard item.id >= 0, item.id < targets.count else { return NSScreen.screens.first }
+                return NSScreen.screen(containing: targets[item.id].screenFrame) ?? NSScreen.screens.first
+            }()
+            let resizeGroups = resizeScreen.map { WindowResizePreset.presetsAvailable(on: $0) } ?? []
+            if !resizeGroups.isEmpty {
+                Menu {
+                    ForEach(Array(resizeGroups.enumerated()), id: \.offset) { _, group in
+                        Section(group.ratio) {
+                            ForEach(Array(group.presets.enumerated()), id: \.offset) { _, preset in
+                                Button(preset.label) {
+                                    appState.resizeWindow(at: item.id, to: preset.size)
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    Label(
+                        NSLocalizedString("Resize", comment: "Context menu item for resize submenu"),
+                        systemImage: "square.resize.up"
+                    )
                 }
                 Divider()
             }

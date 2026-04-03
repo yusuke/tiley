@@ -258,6 +258,9 @@ final class AppState: NSObject, NSMenuDelegate {
         let windowTitle: String
     }
     var presetHoverWindowInfo: [PresetHoverWindowInfo] = []
+
+    /// Relative frame for resize preview on the grid (set during resize menu hover).
+    var resizePreviewRelativeFrame: WindowFrameRelative?
     /// Incremented to signal Cmd+F when search field IS focused: hide sidebar.
     var windowSearchHideRequestVersion: Int = 0
     /// Current window search query, synced from the UI for filtered cycling.

@@ -305,4 +305,59 @@ extension AppState {
             self?.refreshAvailableWindows()
         }
     }
+
+    /// Resize a window to the given size, keeping its top-left position.
+    /// If the resized window would extend beyond the screen, it is shifted to fit.
+    func resizeWindow(at index: Int, to newSize: CGSize) {
+        guard index >= 0, index < availableWindowTargets.count else { return }
+        let target = availableWindowTargets[index]
+        guard let window = target.windowElement else { return }
+
+        hideMainWindow()
+
+        let screen = NSScreen.screen(containing: target.screenFrame) ?? NSScreen.screens.first!
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
+        let destVisible = screen.visibleFrame
+
+        let (currentPos, _) = accessibilityService.readPositionAndSize(of: window)
+
+        // Apply new size
+        var size = newSize
+        if let sizeVal = AXValueCreate(.cgSize, &size) {
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeVal)
+        }
+
+        // Re-read actual size (app may constrain it)
+        let (_, actualSize) = accessibilityService.readPositionAndSize(of: window)
+
+        // Visible frame bounds in AX coordinates (top-left origin on primary screen)
+        let visibleAXTop = primaryMaxY - destVisible.maxY
+        let visibleAXLeft = destVisible.minX
+        let visibleAXRight = destVisible.maxX
+        let visibleAXBottom = primaryMaxY - destVisible.minY
+
+        // Adjust position to keep window on screen
+        var newPos = currentPos
+        if newPos.x + actualSize.width > visibleAXRight {
+            newPos.x = visibleAXRight - actualSize.width
+        }
+        newPos.x = max(newPos.x, visibleAXLeft)
+
+        if newPos.y + actualSize.height > visibleAXBottom {
+            newPos.y = visibleAXBottom - actualSize.height
+        }
+        newPos.y = max(newPos.y, visibleAXTop)
+
+        if let posVal = AXValueCreate(.cgPoint, &newPos) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, posVal)
+        }
+
+        // Bring the resized window to front
+        accessibilityService.raiseWindow(window)
+        NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.refreshAvailableWindows()
+        }
+    }
 }

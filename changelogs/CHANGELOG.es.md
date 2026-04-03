@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Redimensionar ventanas a tamaños predefinidos (16:9, 16:10, 4:3, 9:16) desde el botón de la barra de herramientas o el menú contextual; los tamaños que excedan la pantalla actual se excluyen automáticamente
+
 ## [4.1.2] - 2026-04-03
 
 ### Añadido

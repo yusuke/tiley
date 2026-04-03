@@ -99,6 +99,23 @@ final class LayoutPreviewOverlayController: NSWindowController {
         present(behind: parentWindow)
     }
 
+    /// Show a resize preview rectangle at the given frame (in AppKit screen coordinates).
+    func showResizePreview(frame: CGRect, behind parentWindow: NSWindow?, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil) {
+        let rootView = SelectionPreviewOverlayView(
+            frame: frame,
+            resizability: .both,
+            windowSize: nil,
+            screenFrame: screenFrame,
+            appIcon: appIcon,
+            windowTitle: windowTitle,
+            appName: appName,
+            colorIndex: 0
+        )
+        window?.contentView = NSHostingView(rootView: rootView)
+        window?.level = .normal
+        present(behind: parentWindow)
+    }
+
     func hide() {
         guard let window else {
             attachedParentWindow = nil

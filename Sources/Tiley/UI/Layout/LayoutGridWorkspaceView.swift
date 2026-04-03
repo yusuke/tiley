@@ -14,6 +14,8 @@ struct LayoutGridWorkspaceView: View {
     /// composite view renders the wallpaper at a larger scale).
     var showDesktopPicture: Bool = true
     var windowFrameRelative: WindowFrameRelative?
+    /// Resize preview frame shown during resize menu hover.
+    var resizePreviewRelativeFrame: WindowFrameRelative?
     /// Insets from grid edges that correspond to physical screen edges (not menu bar/Dock).
     var screenEdgeInsets: EdgeInsets = EdgeInsets()
     /// Committed selections displayed in edit mode (indexed from 0).
@@ -63,8 +65,8 @@ struct LayoutGridWorkspaceView: View {
                 }
 
                 // Miniature window showing current window position
-                // Hidden when highlight window info is shown to avoid visual clutter.
-                if !isDragDisabled, highlightWindowInfo.isEmpty,
+                // Hidden when highlight window info is shown or resize preview is active.
+                if !isDragDisabled, highlightWindowInfo.isEmpty, resizePreviewRelativeFrame == nil,
                    let wf = windowFrameRelative, wf.width > 0, wf.height > 0 {
                     let winW = wf.width * geometry.size.width
                     let winH = wf.height * geometry.size.height
@@ -79,6 +81,25 @@ struct LayoutGridWorkspaceView: View {
                     )
                     .frame(width: winW, height: winH)
                     .position(x: winX, y: winY)
+                    .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
+                    .allowsHitTesting(false)
+                }
+
+                // Resize preview (shown during resize menu hover)
+                if let rf = resizePreviewRelativeFrame, rf.width > 0, rf.height > 0 {
+                    let rW = rf.width * geometry.size.width
+                    let rH = rf.height * geometry.size.height
+                    let rX = rf.x * geometry.size.width + rW / 2
+                    let rY = rf.y * geometry.size.height + rH / 2
+                    let titleBarPx = max(4, rf.menuBarHeightFraction * geometry.size.height * 1.5)
+                    MiniatureWindowView(
+                        titleBarHeight: titleBarPx,
+                        appIcon: rf.appIcon,
+                        appName: rf.appName,
+                        windowTitle: rf.windowTitle
+                    )
+                    .frame(width: rW, height: rH)
+                    .position(x: rX, y: rY)
                     .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
                     .allowsHitTesting(false)
                 }

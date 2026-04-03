@@ -290,3 +290,80 @@ enum GridCalculator {
         return CGRect(x: x.rounded(), y: y.rounded(), width: width.rounded(), height: height.rounded())
     }
 }
+
+// MARK: - Window Resize Presets
+
+struct WindowResizePreset {
+    let width: Int
+    let height: Int
+    let ratioLabel: String
+
+    var label: String { "\(width) x \(height) (\(ratioLabel))" }
+    var size: CGSize { CGSize(width: CGFloat(width), height: CGFloat(height)) }
+
+    static let all: [(ratio: String, presets: [WindowResizePreset])] = [
+        ("16:9", [
+            WindowResizePreset(width: 15360, height: 8640, ratioLabel: "16:9"),
+            WindowResizePreset(width: 7680, height: 4320, ratioLabel: "16:9"),
+            WindowResizePreset(width: 5120, height: 2880, ratioLabel: "16:9"),
+            WindowResizePreset(width: 3840, height: 2160, ratioLabel: "16:9"),
+            WindowResizePreset(width: 3200, height: 1800, ratioLabel: "16:9"),
+            WindowResizePreset(width: 2560, height: 1440, ratioLabel: "16:9"),
+            WindowResizePreset(width: 1920, height: 1080, ratioLabel: "16:9"),
+            WindowResizePreset(width: 1600, height: 900, ratioLabel: "16:9"),
+            WindowResizePreset(width: 1280, height: 720, ratioLabel: "16:9"),
+            WindowResizePreset(width: 854, height: 480, ratioLabel: "16:9"),
+            WindowResizePreset(width: 640, height: 360, ratioLabel: "16:9"),
+            WindowResizePreset(width: 426, height: 240, ratioLabel: "16:9"),
+        ]),
+        ("16:10", [
+            WindowResizePreset(width: 15360, height: 9600, ratioLabel: "16:10"),
+            WindowResizePreset(width: 7680, height: 4800, ratioLabel: "16:10"),
+            WindowResizePreset(width: 5120, height: 3200, ratioLabel: "16:10"),
+            WindowResizePreset(width: 3840, height: 2400, ratioLabel: "16:10"),
+            WindowResizePreset(width: 3200, height: 2000, ratioLabel: "16:10"),
+            WindowResizePreset(width: 2560, height: 1600, ratioLabel: "16:10"),
+            WindowResizePreset(width: 1920, height: 1200, ratioLabel: "16:10"),
+            WindowResizePreset(width: 1600, height: 1000, ratioLabel: "16:10"),
+            WindowResizePreset(width: 1280, height: 800, ratioLabel: "16:10"),
+            WindowResizePreset(width: 1200, height: 760, ratioLabel: "16:10"),
+            WindowResizePreset(width: 1024, height: 665, ratioLabel: "16:10"),
+        ]),
+        ("4:3", [
+            WindowResizePreset(width: 15360, height: 11520, ratioLabel: "4:3"),
+            WindowResizePreset(width: 7680, height: 5760, ratioLabel: "4:3"),
+            WindowResizePreset(width: 5120, height: 3840, ratioLabel: "4:3"),
+            WindowResizePreset(width: 3840, height: 2880, ratioLabel: "4:3"),
+            WindowResizePreset(width: 3200, height: 2400, ratioLabel: "4:3"),
+            WindowResizePreset(width: 2560, height: 1920, ratioLabel: "4:3"),
+            WindowResizePreset(width: 1920, height: 1440, ratioLabel: "4:3"),
+            WindowResizePreset(width: 1600, height: 1200, ratioLabel: "4:3"),
+            WindowResizePreset(width: 1280, height: 960, ratioLabel: "4:3"),
+            WindowResizePreset(width: 854, height: 640, ratioLabel: "4:3"),
+            WindowResizePreset(width: 640, height: 480, ratioLabel: "4:3"),
+            WindowResizePreset(width: 426, height: 320, ratioLabel: "4:3"),
+        ]),
+        ("9:16", [
+            WindowResizePreset(width: 8640, height: 15360, ratioLabel: "9:16"),
+            WindowResizePreset(width: 4320, height: 7680, ratioLabel: "9:16"),
+            WindowResizePreset(width: 2880, height: 5120, ratioLabel: "9:16"),
+            WindowResizePreset(width: 2160, height: 3840, ratioLabel: "9:16"),
+            WindowResizePreset(width: 1800, height: 3200, ratioLabel: "9:16"),
+            WindowResizePreset(width: 1440, height: 2560, ratioLabel: "9:16"),
+            WindowResizePreset(width: 1080, height: 1920, ratioLabel: "9:16"),
+            WindowResizePreset(width: 900, height: 1600, ratioLabel: "9:16"),
+            WindowResizePreset(width: 720, height: 1280, ratioLabel: "9:16"),
+            WindowResizePreset(width: 480, height: 854, ratioLabel: "9:16"),
+            WindowResizePreset(width: 360, height: 640, ratioLabel: "9:16"),
+        ]),
+    ]
+
+    /// Returns presets that fit within the given screen's visible frame, grouped by aspect ratio.
+    static func presetsAvailable(on screen: NSScreen) -> [(ratio: String, presets: [WindowResizePreset])] {
+        let visible = screen.visibleFrame
+        return all.compactMap { group in
+            let filtered = group.presets.filter { CGFloat($0.width) <= visible.width && CGFloat($0.height) <= visible.height }
+            return filtered.isEmpty ? nil : (ratio: group.ratio, presets: filtered)
+        }
+    }
+}
