@@ -8,6 +8,7 @@
 
 ### Behoben
 
+- Overlay öffnete sich nicht, wenn die vorderste Anwendung keine Fenster hat (z. B. Finder ohne offene Fenster, reine Menüleisten-Apps); es wird nun auf das oberste sichtbare Fenster auf dem Bildschirm zurückgegriffen
 - Fensterposition wurde bei einigen Apps (z. B. Notion) auf nicht-primären Bildschirmen nicht korrekt angewendet. Positionsüberprüfung mit Wiederholungslogik nach der Größenänderung hinzugefügt, um Apps zu behandeln, die die Position asynchron zurücksetzen
 
 ## [4.1.1] - 2026-03-31

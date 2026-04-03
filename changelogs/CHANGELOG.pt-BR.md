@@ -8,6 +8,7 @@
 
 ### Corrigido
 
+- Corrigido problema em que a sobreposição não abria quando o aplicativo em primeiro plano não possui janelas (por exemplo, Finder sem janelas abertas, aplicativos apenas de barra de menus); agora utiliza a janela visível mais à frente na tela
 - Corrigido problema em que a posição da janela não era aplicada corretamente em monitores não principais para alguns apps (ex.: Notion). Adicionada verificação de posição com lógica de tentativa após o redimensionamento para lidar com apps que revertem a posição de forma assíncrona
 
 ## [4.1.1] - 2026-03-31

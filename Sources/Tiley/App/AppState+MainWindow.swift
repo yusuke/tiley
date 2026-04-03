@@ -55,25 +55,39 @@ extension AppState {
             return nil
         }
 
-        guard let target = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) else {
-            let frontmost = NSWorkspace.shared.frontmostApplication
-            let frontmostName = frontmost?.localizedName ?? NSLocalizedString("Unknown", comment: "Unknown app name fallback")
-            let frontmostPID = frontmost?.processIdentifier ?? 0
-            hidePreviewOverlay()
-            launchMessage = String(
-                format: NSLocalizedString("No standard focused window was found. frontmost=%@(%d) preferred=%d", comment: "Focused window diagnostic"),
-                frontmostName,
-                frontmostPID,
-                lastTargetPID ?? 0
-            )
-            return nil
+        if let target = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) {
+            return target
         }
-        return target
+
+        // Frontmost app may have no windows (menu bar app, Finder with no windows, etc.).
+        // Fall back to the topmost visible window on screen.
+        let (allTargets, _, _) = windowManager?.captureAllWindows() ?? ([], [], [])
+        if let fallback = allTargets.first {
+            debugLog("resolveWindowTarget: frontmost app has no window, falling back to topmost visible window: \(fallback.appName)")
+            return fallback
+        }
+
+        let frontmost = NSWorkspace.shared.frontmostApplication
+        let frontmostName = frontmost?.localizedName ?? NSLocalizedString("Unknown", comment: "Unknown app name fallback")
+        let frontmostPID = frontmost?.processIdentifier ?? 0
+        hidePreviewOverlay()
+        launchMessage = String(
+            format: NSLocalizedString("No standard focused window was found. frontmost=%@(%d) preferred=%d", comment: "Focused window diagnostic"),
+            frontmostName,
+            frontmostPID,
+            lastTargetPID ?? 0
+        )
+        return nil
     }
 
     func initialLayoutTarget() -> WindowTarget? {
         guard accessibilityGranted else { return nil }
-        guard let target = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) else {
+        let target: WindowTarget
+        if let focused = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) {
+            target = focused
+        } else if let fallback = windowManager?.captureAllWindows().targets.first {
+            target = fallback
+        } else {
             hidePreviewOverlay()
             return nil
         }

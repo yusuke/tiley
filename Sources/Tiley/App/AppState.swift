@@ -678,7 +678,16 @@ final class AppState: NSObject, NSMenuDelegate {
         layoutPreviewController = makeLayoutPreviewController(for: target)
         perfLog("makeLayoutPreviewController done")
         lastTargetPID = target.processIdentifier
-        originalFrontmostPID = nil
+        // If the frontmost app differs from the target (e.g. a windowless app is
+        // frontmost), remember its PID so that ESC restores it.
+        let currentFrontmost = NSWorkspace.shared.frontmostApplication
+        if let currentFrontmost,
+           currentFrontmost.processIdentifier != getpid(),
+           currentFrontmost.processIdentifier != target.processIdentifier {
+            originalFrontmostPID = currentFrontmost.processIdentifier
+        } else {
+            originalFrontmostPID = nil
+        }
         isEditingSettings = false
         // Unregister preset and display global hotkeys while the overlay is visible
         // so that key events reach the NSWindow's performKeyEquivalent and can be
