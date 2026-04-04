@@ -5,6 +5,13 @@
 ### Geändert
 
 - Overlay-Fenster werden jetzt mit Transparenz Null vorgerendert und auf dem Bildschirm gehalten, sodass zum Anzeigen des Layout-Rasters nur eine Änderung des Alphawerts erforderlich ist — die wahrgenommene Latenz wird deutlich reduziert
+- Das Einstellungsfenster wird jetzt automatisch geschlossen, wenn eine andere Anwendung angeklickt wird; Tiley bleibt ausgeblendet, bis das globale Tastenkürzel erneut gedrückt wird
+
+### Behoben
+
+- Klick auf das Dock-Symbol bei geöffnetem Einstellungsfenster zeigte „Keine Fenster" anstelle der Einstellungen
+- Das Einstellungsfenster verschwand dauerhaft beim Deaktivieren von „Dock-Symbol anzeigen"
+- Das globale Tastenkürzel funktionierte nicht mehr, nachdem das Einstellungsfenster den Fokus an eine andere Anwendung verloren hatte
 
 ## [4.2.1] - 2026-04-04
 

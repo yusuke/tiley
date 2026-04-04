@@ -19,7 +19,14 @@ extension AppState {
             showPermissionsOnly()
             return
         }
-        if !isEditingSettings && !isShowingLayoutGrid {
+
+        // If the settings window is already open, just bring it back.
+        if isEditingSettings {
+            settingsWindowController?.show()
+            return
+        }
+
+        if !isShowingLayoutGrid {
             activeLayoutTarget = initialLayoutTarget()
             if let activeLayoutTarget {
                 isShowingLayoutGrid = true
@@ -39,6 +46,38 @@ extension AppState {
             }
         }
         openMainWindow()
+
+        // Populate the sidebar window list — same pattern as toggleOverlay().
+        if hasWindowListCache {
+            availableWindowTargets = cachedWindowTargets
+            spaceList = cachedSpaceList
+            activeSpaceIDs = cachedActiveSpaceIDs
+            hasWindowListCache = false
+            windowTargetListVersion += 1
+            if let current = activeLayoutTarget {
+                activeTargetIndex = availableWindowTargets.firstIndex(where: {
+                    $0.processIdentifier == current.processIdentifier
+                    && $0.windowElement == current.windowElement
+                }) ?? availableWindowTargets.firstIndex(where: {
+                    $0.processIdentifier == current.processIdentifier
+                    && $0.windowTitle == current.windowTitle
+                }) ?? 0
+            } else {
+                activeTargetIndex = 0
+            }
+            selectedWindowIndices = [activeTargetIndex]
+            selectionOrder = [activeTargetIndex]
+            isLoadingWindowList = false
+        } else {
+            isLoadingWindowList = true
+        }
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.refreshAvailableWindows()
+            self.isLoadingWindowList = false
+            self.revalidateActiveTarget()
+        }
+        windowTargetListVersion += 1
     }
 
     @objc func quit() {

@@ -5,6 +5,13 @@
 ### Alterado
 
 - As janelas de sobreposição agora são pré-renderizadas com opacidade zero e mantidas na tela, de modo que exibir a grade de layout requer apenas uma alteração de alfa — reduzindo significativamente a latência percebida
+- A janela de configurações agora fecha automaticamente ao clicar em outro aplicativo; o Tiley permanece oculto até que o atalho global seja pressionado novamente
+
+### Corrigido
+
+- Corrigido o clique no ícone do Dock exibindo "Sem janelas" em vez das configurações quando a janela de configurações estava aberta
+- Corrigido a janela de configurações desaparecendo permanentemente ao desativar "Mostrar ícone do Dock"
+- Corrigido o atalho global que parava de funcionar após a janela de configurações perder o foco para outro aplicativo
 
 ## [4.2.1] - 2026-04-04
 

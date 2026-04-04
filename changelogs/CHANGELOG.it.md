@@ -5,6 +5,13 @@
 ### Modificato
 
 - Le finestre di sovrapposizione vengono ora pre-renderizzate con opacità zero e mantenute sullo schermo, quindi la visualizzazione della griglia di layout richiede solo una modifica dell'alfa — riducendo significativamente la latenza percepita
+- La finestra delle impostazioni ora si chiude automaticamente quando si fa clic su un'altra applicazione; Tiley rimane nascosto fino a quando non viene premuta nuovamente la scorciatoia globale
+
+### Corretto
+
+- Corretto il clic sull'icona del Dock che mostrava "Nessuna finestra" invece delle impostazioni quando la finestra delle impostazioni era aperta
+- Corretto la finestra delle impostazioni che scompariva permanentemente quando si disattivava "Mostra icona del Dock"
+- Corretto la scorciatoia globale che smetteva di funzionare dopo che la finestra delle impostazioni perdeva il focus a favore di un'altra applicazione
 
 ## [4.2.1] - 2026-04-04
 

@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Overlay windows are now pre-rendered with zero opacity and kept on screen, so showing the layout grid only requires an alpha change instead of a full window draw — significantly reducing perceived latency
+- Settings window now automatically dismisses when the user clicks another application, keeping Tiley hidden until the global shortcut is pressed again
+
+### Fixed
+
+- Fixed clicking the Dock icon showing "No windows" instead of the settings window when settings were already open
+- Fixed settings window disappearing permanently when toggling "Show Dock icon" off
+- Fixed global shortcut not working after the settings window lost focus to another application
 
 ## [4.2.1] - 2026-04-04
 

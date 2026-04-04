@@ -229,6 +229,10 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         // to settings mode), the old key window is ordered out which triggers
         // this callback. Suppress state resets so the new mode is preserved.
         guard appState?.isRecreatingWindows != true else { return }
+        // During activation-policy switches (e.g. toggling the Dock icon),
+        // macOS deactivates the app and fires this callback. Don't hide
+        // windows — they will be restored after the switch completes.
+        guard appState?.isSwitchingActivationPolicy != true else { return }
         appState?.hidePreviewOverlay()
         // Hide all Tiley windows when the app loses focus, not just this one.
         // Secondary windows don't receive windowDidResignKey because they

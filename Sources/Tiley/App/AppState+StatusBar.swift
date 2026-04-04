@@ -226,7 +226,9 @@ extension AppState {
             // Switching to .accessory causes macOS to hide all windows and
             // fire windowDidResignKey, which normally resets UI state via
             // handleMainWindowHidden(). Use a flag to suppress that reset.
-            let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
+            let anyMainVisible = mainWindowControllers.values.contains { $0.isVisible }
+            let settingsVisible = settingsWindowController?.window?.isVisible == true
+            let anyVisible = anyMainVisible || settingsVisible
             isSwitchingActivationPolicy = true
             // Transition through .prohibited to force macOS to fully
             // de-register the Dock tile, then back to .accessory.
@@ -238,12 +240,16 @@ extension AppState {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
                     guard let self else { return }
                     self.isSwitchingActivationPolicy = false
-                    for (displayID, controller) in self.mainWindowControllers {
-                        if displayID != self.targetScreenDisplayID {
-                            controller.show(asKey: true)
+                    if settingsVisible {
+                        self.settingsWindowController?.show()
+                    } else {
+                        for (displayID, controller) in self.mainWindowControllers {
+                            if displayID != self.targetScreenDisplayID {
+                                controller.show(asKey: true)
+                            }
                         }
+                        self.targetWindowController?.show(asKey: true)
                     }
-                    self.targetWindowController?.show(asKey: true)
                     NSApp.activate(ignoringOtherApps: true)
                 }
             } else {

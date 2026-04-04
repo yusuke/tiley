@@ -75,6 +75,13 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         window?.orderOut(nil)
     }
 
+    func windowDidResignKey(_ notification: Notification) {
+        // When the user clicks another app, dismiss the settings window
+        // so Tiley fully hides and the global shortcut can reopen it.
+        guard !NSApp.isActive else { return }
+        appState?.handleSettingsWindowDeactivated()
+    }
+
     func windowWillClose(_ notification: Notification) {
         appState?.handleSettingsWindowClosed()
     }

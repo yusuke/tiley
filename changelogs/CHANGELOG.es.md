@@ -5,6 +5,13 @@
 ### Cambiado
 
 - Las ventanas de superposición ahora se pre-renderizan con opacidad cero y se mantienen en pantalla, por lo que mostrar la cuadrícula de diseño solo requiere un cambio de alfa, reduciendo significativamente la latencia percibida
+- La ventana de configuración ahora se cierra automáticamente al hacer clic en otra aplicación; Tiley permanece oculto hasta que se presione el atajo global nuevamente
+
+### Corregido
+
+- Corregido que al hacer clic en el icono del Dock con la ventana de configuración abierta se mostraba "Sin ventanas" en lugar de la configuración
+- Corregido que la ventana de configuración desaparecía permanentemente al desactivar "Mostrar icono del Dock"
+- Corregido que el atajo global dejaba de funcionar después de que la ventana de configuración perdía el foco hacia otra aplicación
 
 ## [4.2.1] - 2026-04-04
 

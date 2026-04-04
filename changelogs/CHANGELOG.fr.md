@@ -5,6 +5,13 @@
 ### Modifié
 
 - Les fenêtres de superposition sont désormais pré-rendues avec une opacité nulle et maintenues à l'écran, de sorte que l'affichage de la grille de disposition ne nécessite qu'un changement d'alpha — réduisant considérablement la latence perçue
+- La fenêtre des réglages se ferme désormais automatiquement lorsque l'utilisateur clique sur une autre application ; Tiley reste masqué jusqu'à ce que le raccourci global soit utilisé à nouveau
+
+### Corrigé
+
+- Correction du clic sur l'icône du Dock affichant « Aucune fenêtre » au lieu des réglages lorsque la fenêtre des réglages était ouverte
+- Correction de la fenêtre des réglages disparaissant définitivement lors de la désactivation de « Afficher l'icône du Dock »
+- Correction du raccourci global ne fonctionnant plus après que la fenêtre des réglages a perdu le focus au profit d'une autre application
 
 ## [4.2.1] - 2026-04-04
 

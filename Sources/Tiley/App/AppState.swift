@@ -652,6 +652,24 @@ final class AppState: NSObject, NSMenuDelegate {
         cancelSettingsEditing()
     }
 
+    /// Called when the settings window loses focus because the user clicked
+    /// another app.  Dismisses the settings and fully hides Tiley so the
+    /// global shortcut can reopen it.
+    func handleSettingsWindowDeactivated() {
+        guard isEditingSettings else { return }
+        guard !isSwitchingActivationPolicy else { return }
+        hidePreviewOverlay()
+        settingsWindowController?.dismiss()
+        settingsWindowController = nil
+        isEditingSettings = false
+        isShowingLayoutGrid = false
+        activeLayoutTarget = nil
+        clearResizabilityCache()
+        clearWindowCyclingState()
+        registerAllHotKeys()
+        scheduleWindowListCacheRefresh()
+    }
+
     func toggleOverlay() {
         let perfStart = CFAbsoluteTimeGetCurrent()
         func perfLog(_ label: String) {
