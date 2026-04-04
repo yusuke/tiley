@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-04
+
 ### Geändert
 
 - Chevron-Anzeige zur Größenänderungs-Schaltfläche hinzugefügt, um deutlicher zu machen, dass es sich um ein Dropdown-Menü handelt

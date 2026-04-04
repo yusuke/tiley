@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-04
+
 ### Modifié
 
 - Ajout d'un indicateur chevron au bouton de redimensionnement pour indiquer clairement qu'il ouvre un menu déroulant

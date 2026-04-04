@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-04
+
 ### Cambiado
 
 - Se añadió un indicador de chevron al botón de redimensionar para dejar claro que abre un menú desplegable

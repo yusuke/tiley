@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-04
+
 ### Changed
 
 - Added chevron indicator to the resize toolbar button to make it clearer that it opens a dropdown menu
@@ -591,7 +593,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.1...HEAD
+[4.2.1]: https://github.com/yusuke/tiley/releases/tag/v4.2.1
 [4.2.0]: https://github.com/yusuke/tiley/releases/tag/v4.2.0
 [4.1.2]: https://github.com/yusuke/tiley/releases/tag/v4.1.2
 [4.1.1]: https://github.com/yusuke/tiley/releases/tag/v4.1.1

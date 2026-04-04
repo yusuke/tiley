@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-04
+
 ### Modificato
 
 - Aggiunto indicatore chevron al pulsante di ridimensionamento per rendere più chiaro che apre un menu a discesa

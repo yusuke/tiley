@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-04
+
 ### Alterado
 
 - Adicionado indicador chevron ao botão de redimensionar para deixar claro que abre um menu suspenso
