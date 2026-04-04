@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- As janelas de sobreposição agora são pré-renderizadas com opacidade zero e mantidas na tela, de modo que exibir a grade de layout requer apenas uma alteração de alfa — reduzindo significativamente a latência percebida
+
 ## [4.2.1] - 2026-04-04
 
 ### Alterado

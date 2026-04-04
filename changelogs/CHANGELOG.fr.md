@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Les fenêtres de superposition sont désormais pré-rendues avec une opacité nulle et maintenues à l'écran, de sorte que l'affichage de la grille de disposition ne nécessite qu'un changement d'alpha — réduisant considérablement la latence perçue
+
 ## [4.2.1] - 2026-04-04
 
 ### Modifié

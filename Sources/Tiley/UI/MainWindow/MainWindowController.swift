@@ -136,22 +136,38 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let destinationScreen = preferredDisplayScreen(for: window)
         applyWindowMode(animated: false, preferredScreen: destinationScreen)
         positionWindow(preferredScreen: destinationScreen)
-        if asKey {
-            window?.makeKeyAndOrderFront(nil)
+        window?.ignoresMouseEvents = false
+        if window?.isVisible == true {
+            // Window is already on screen (kept alive with alphaValue=0).
+            // Just restore alpha and key status — no orderFront needed.
+            window?.alphaValue = Self.layoutModeWindowAlpha
+            if asKey {
+                window?.makeKey()
+            }
         } else {
-            window?.orderFront(nil)
+            if asKey {
+                window?.makeKeyAndOrderFront(nil)
+            } else {
+                window?.orderFront(nil)
+            }
         }
         // Prevent the search field from auto-focusing when the window opens.
         window?.makeFirstResponder(window?.contentView)
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
-        debugLog("MainWindowController.show done asKey=\(asKey ? 1 : 0) (\(String(format: "%.1f", elapsed))ms)")
+        debugLog("MainWindowController.show done asKey=\(asKey ? 1 : 0) preRendered=\(window?.isVisible == true ? 1 : 0) (\(String(format: "%.1f", elapsed))ms)")
     }
 
     func hide() {
         guard !isHidingWindow else { return }
         isHidingWindow = true
         appState?.hidePreviewOverlay()
-        window?.orderOut(nil)
+        // Keep the window on screen but fully transparent so it stays
+        // pre-rendered in the backing store for instant re-show.
+        window?.alphaValue = 0
+        window?.ignoresMouseEvents = true
+        // Demote to normal level so the invisible window doesn't block
+        // other apps' floating panels.
+        window?.level = .normal
         onHide()
         isHidingWindow = false
     }
@@ -176,12 +192,25 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
     /// Dismiss the window without firing the onHide callback.
     /// Used when recreating window controllers to avoid triggering state resets.
+    /// Keeps the window on screen (alphaValue=0) for instant re-show.
     func dismissSilently() {
+        window?.alphaValue = 0
+        window?.ignoresMouseEvents = true
+        window?.level = .normal
+    }
+
+    /// Fully remove the window from screen. Use when the controller is about
+    /// to be discarded (e.g. screen configuration change).
+    func teardown() {
         window?.orderOut(nil)
     }
 
+    /// Whether the window is logically visible to the user (alpha > 0).
+    /// Note: after hide()/dismissSilently() the window remains on screen
+    /// with alphaValue=0, so NSWindow.isVisible is still true.
     var isVisible: Bool {
-        window?.isVisible ?? false
+        guard let window else { return false }
+        return window.isVisible && window.alphaValue > 0
     }
 
     var nsWindow: NSWindow? {
@@ -263,7 +292,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
         let screenFrame = currentScreenFrame(for: window, preferredScreen: preferredScreen)
         let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole)
-        let targetAlpha = Self.layoutModeWindowAlpha
 
         var frame = window.frame
         frame.size = targetSize
@@ -271,13 +299,11 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
         let sizeChanged = window.minSize != targetSize || window.maxSize != targetSize
         let frameChanged = !window.frame.equalTo(frame)
-        let alphaChanged = window.alphaValue != targetAlpha
 
-        guard sizeChanged || frameChanged || alphaChanged else { return }
+        guard sizeChanged || frameChanged else { return }
 
         window.minSize = targetSize
         window.maxSize = targetSize
-        window.alphaValue = targetAlpha
         if frameChanged {
             window.setFrame(frame, display: true, animate: animated)
         }

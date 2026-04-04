@@ -204,13 +204,19 @@ extension AppState {
 
         if let existingCtrl = mainWindowControllers[displayID] {
             // Reuse existing controller — just update state and show.
-            // Discard secondary controllers that are no longer needed.
+            // Fully remove secondary controllers that are no longer needed.
+            for (id, ctrl) in mainWindowControllers where id != displayID {
+                ctrl.teardown()
+            }
             mainWindowControllers = mainWindowControllers.filter { $0.key == displayID }
             existingCtrl.prepareForReuse(screenRole: .target, targetScreen: targetScreen)
             NSApp.activate(ignoringOtherApps: true)
             selectedLayoutPresetID = nil
             existingCtrl.show()
         } else {
+            for controller in mainWindowControllers.values {
+                controller.teardown()
+            }
             mainWindowControllers.removeAll()
             mainWindowControllers[displayID] = createWindowController(for: targetScreen, isTarget: true)
             NSApp.activate(ignoringOtherApps: true)
@@ -278,6 +284,10 @@ extension AppState {
             applyWindowLevel()
         } else {
             // --- Recreate path: screen configuration changed ---
+            // Fully remove old windows from screen since controllers will be discarded.
+            for controller in mainWindowControllers.values {
+                controller.teardown()
+            }
             mainWindowControllers.removeAll()
             perfLog("dismissed old controllers (recreate)")
 
@@ -310,7 +320,7 @@ extension AppState {
     func closeSecondaryWindows() {
         for (displayID, controller) in mainWindowControllers {
             if displayID != targetScreenDisplayID {
-                controller.dismissSilently()
+                controller.teardown()
             }
         }
         mainWindowControllers = mainWindowControllers.filter { $0.key == targetScreenDisplayID }

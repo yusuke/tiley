@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Overlay windows are now pre-rendered with zero opacity and kept on screen, so showing the layout grid only requires an alpha change instead of a full window draw — significantly reducing perceived latency
+
 ## [4.2.1] - 2026-04-04
 
 ### Changed

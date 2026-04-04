@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Le finestre di sovrapposizione vengono ora pre-renderizzate con opacità zero e mantenute sullo schermo, quindi la visualizzazione della griglia di layout richiede solo una modifica dell'alfa — riducendo significativamente la latenza percepita
+
 ## [4.2.1] - 2026-04-04
 
 ### Modificato

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Overlay-Fenster werden jetzt mit Transparenz Null vorgerendert und auf dem Bildschirm gehalten, sodass zum Anzeigen des Layout-Rasters nur eine Änderung des Alphawerts erforderlich ist — die wahrgenommene Latenz wird deutlich reduziert
+
 ## [4.2.1] - 2026-04-04
 
 ### Geändert
