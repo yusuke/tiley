@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.2] - 2026-04-04
+
 ### Cambiado
 
 - Las ventanas de superposición ahora se pre-renderizan con opacidad cero y se mantienen en pantalla, por lo que mostrar la cuadrícula de diseño solo requiere un cambio de alfa, reduciendo significativamente la latencia percibida

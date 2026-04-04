@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.2.2] - 2026-04-04
+
 ### Changed
 
 - Overlay windows are now pre-rendered with zero opacity and kept on screen, so showing the layout grid only requires an alpha change instead of a full window draw — significantly reducing perceived latency
@@ -604,7 +606,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.2...HEAD
+[4.2.2]: https://github.com/yusuke/tiley/releases/tag/v4.2.2
 [4.2.1]: https://github.com/yusuke/tiley/releases/tag/v4.2.1
 [4.2.0]: https://github.com/yusuke/tiley/releases/tag/v4.2.0
 [4.1.2]: https://github.com/yusuke/tiley/releases/tag/v4.1.2
