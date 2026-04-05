@@ -359,15 +359,6 @@ extension AppState {
         }
     }
 
-    func closeSecondaryWindows() {
-        for (displayID, controller) in mainWindowControllers {
-            if displayID != targetScreenDisplayID {
-                controller.teardown()
-            }
-        }
-        mainWindowControllers = mainWindowControllers.filter { $0.key == targetScreenDisplayID }
-    }
-
     func hideAllMainWindows() {
         for controller in mainWindowControllers.values {
             controller.hide()

@@ -302,11 +302,6 @@ struct DisplayFingerprintResolver {
         return matching[occurrenceIndex - 1]
     }
 
-    /// Returns all resolved displays matching a fingerprint.
-    func resolveAll(_ fingerprint: DisplayFingerprint) -> [ResolvedDisplay] {
-        displays.filter { $0.fingerprint == fingerprint }
-    }
-
     /// Finds the resolved display for a given `CGDirectDisplayID`.
     func resolve(displayID: CGDirectDisplayID) -> ResolvedDisplay? {
         displays.first { $0.displayID == displayID }

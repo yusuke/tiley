@@ -34,42 +34,6 @@ extension AppState {
         return nil
     }
 
-    /// Returns a conflict message if the given display shortcut conflicts with existing shortcuts.
-    /// `excludeKeyPath` identifies which slot is being edited so it can be excluded from the check.
-    func displayShortcutConflictMessage(for shortcut: HotKeyShortcut, excludeKeyPath: String) -> String? {
-        // Check reserved keys (same rules as layout shortcuts for local shortcuts).
-        if !shortcut.isGlobal {
-            // Check against configured window action shortcuts (excluding self).
-            if !excludeKeyPath.hasPrefix("selectNextWindow") && !excludeKeyPath.hasPrefix("selectPreviousWindow") && !excludeKeyPath.hasPrefix("bringToFront") && !excludeKeyPath.hasPrefix("closeOrQuit") {
-                if windowActionShortcutConflicts(with: shortcut) {
-                    return NSLocalizedString("This shortcut is already used for a window action.", comment: "Shortcut conflict with window action")
-                }
-            }
-            if shortcut.keyCode == UInt32(kVK_ANSI_F), shortcut.modifiers == UInt32(cmdKey) {
-                return NSLocalizedString("⌘F is reserved for searching the window list.", comment: "Cmd+F shortcut reserved for window search")
-            }
-        }
-
-        if shortcut == hotKeyShortcut {
-            return NSLocalizedString("This shortcut is already used by the global shortcut.", comment: "Layout shortcut conflict with app global shortcut")
-        }
-
-        // Check layout presets.
-        if layoutPresets.contains(where: { $0.shortcuts.contains(shortcut) }) {
-            return NSLocalizedString("This shortcut is already used by a layout.", comment: "Display shortcut conflict with layout preset")
-        }
-
-        // Check other display shortcuts (excluding the current slot).
-        let allSlots = allDisplayShortcutSlots(isGlobal: shortcut.isGlobal)
-        for (keyPath, s) in allSlots where keyPath != excludeKeyPath {
-            if s == shortcut {
-                return NSLocalizedString("This shortcut is already used by another display shortcut.", comment: "Display shortcut conflict with another display shortcut")
-            }
-        }
-
-        return nil
-    }
-
     /// Collects all assigned display shortcuts (local or global).
     /// Returns true if the given shortcut conflicts with a configured window action shortcut
     /// (window cycling or bring to front).

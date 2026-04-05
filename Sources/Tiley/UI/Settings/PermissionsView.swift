@@ -76,11 +76,11 @@ struct PermissionsView: View {
                                     )
                                     .foregroundStyle(appState.accessibilityGranted ? .green : .orange)
                                     Spacer()
-                                    Button("Open Prompt") {
+                                    Button(NSLocalizedString("Open Prompt", comment: "Accessibility prompt button")) {
                                         appState.requestAccessibilityAccess()
                                     }
                                         }
-                                Text("Window movement on macOS requires Accessibility permission.")
+                                Text(NSLocalizedString("Window movement on macOS requires Accessibility permission.", comment: "Accessibility permission description"))
                                     .font(.caption)
                                     .foregroundStyle(.tertiary)
 

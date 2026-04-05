@@ -57,16 +57,6 @@ extension AppState {
         registerPresetHotKeys()
     }
 
-    func moveLayoutPresetToEnd(from sourceID: UUID?) {
-        guard let sourceID else { return }
-        guard let sourceIndex = layoutPresets.firstIndex(where: { $0.id == sourceID }) else { return }
-        let preset = layoutPresets.remove(at: sourceIndex)
-        layoutPresets.append(preset)
-        selectedLayoutPresetID = preset.id
-        saveLayoutPresets()
-        registerPresetHotKeys()
-    }
-
     // MARK: - Query / Select / Apply
 
     func isPersistedLayoutPreset(_ id: UUID) -> Bool {
@@ -75,29 +65,6 @@ extension AppState {
 
     func selectLayoutPreset(_ id: UUID) {
         selectedLayoutPresetID = id
-    }
-
-    @discardableResult
-    func applySelectedLayoutPreset() -> Bool {
-        guard let id = selectedLayoutPresetID else { return false }
-        applyPresetOnMouseScreen(id: id)
-        return true
-    }
-
-    func moveLayoutPresetSelection(by offset: Int) {
-        guard offset != 0 else { return }
-        let presets = displayedLayoutPresets
-        guard !presets.isEmpty else { return }
-        let ids = presets.map(\.id)
-        guard let selectedID = selectedLayoutPresetID,
-              let currentIndex = ids.firstIndex(of: selectedID) else {
-            selectedLayoutPresetID = offset > 0 ? ids.first : ids.last
-            return
-        }
-        let count = ids.count
-        let rawIndex = (currentIndex + offset) % count
-        let wrappedIndex = rawIndex >= 0 ? rawIndex : rawIndex + count
-        selectedLayoutPresetID = ids[wrappedIndex]
     }
 
     func applyLayoutPreset(id: UUID) {
