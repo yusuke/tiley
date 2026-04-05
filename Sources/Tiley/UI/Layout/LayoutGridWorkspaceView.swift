@@ -141,6 +141,25 @@ struct LayoutGridWorkspaceView: View {
                     }
                 }
 
+                // Miniature window overlay on single-cell hover
+                if let hover = hoverCell, !isDragging, activeSelection == nil,
+                   highlightSelection == nil, highlightSelections.isEmpty,
+                   committedSelections.isEmpty,
+                   let wf = windowFrameRelative {
+                    let frame = rectForCell(row: hover.row, column: hover.column, width: cellWidth, height: cellHeight)
+                    let menuBarFraction = wf.menuBarHeightFraction
+                    let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                    MiniatureWindowView(
+                        titleBarHeight: titleBarPx,
+                        appIcon: wf.appIcon,
+                        appName: wf.appName,
+                        windowTitle: wf.windowTitle
+                    )
+                    .frame(width: frame.width, height: frame.height)
+                    .position(x: frame.midX, y: frame.midY)
+                    .allowsHitTesting(false)
+                }
+
                 // Committed selections (edit mode)
                 ForEach(Array(committedSelections.enumerated()), id: \.offset) { index, sel in
                     let norm = sel.normalized

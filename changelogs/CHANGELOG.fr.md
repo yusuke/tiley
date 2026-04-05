@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Le survol d'une cellule de la grille affiche désormais un aperçu de fenêtre miniature avec l'icône de l'application et la barre de titre, au lieu d'un simple rectangle bleu, harmonisant l'apparence avec la sélection par glisser
+
 ## [4.2.2] - 2026-04-04
 
 ### Modifié

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Il passaggio del mouse su una cella della griglia ora mostra un'anteprima della finestra in miniatura con l'icona dell'app e la barra del titolo, al posto di un semplice rettangolo blu, uniformando l'aspetto con la selezione tramite trascinamento
+
 ## [4.2.2] - 2026-04-04
 
 ### Modificato

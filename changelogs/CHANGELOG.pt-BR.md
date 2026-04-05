@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Ao passar o mouse sobre uma célula da grade, agora é exibida uma pré-visualização de janela em miniatura com o ícone do app e a barra de título, em vez de um simples retângulo azul, unificando a aparência com a seleção por arrasto
+
 ## [4.2.2] - 2026-04-04
 
 ### Alterado

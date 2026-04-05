@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Grid cell hover now shows a miniature window preview (with app icon and title bar) instead of a plain blue rectangle, matching the drag selection appearance
+
 ## [4.2.2] - 2026-04-04
 
 ### Changed

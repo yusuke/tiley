@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Al pasar el cursor sobre una celda de la cuadrícula, ahora se muestra una vista previa de ventana en miniatura con el icono de la app y la barra de título, en lugar de un simple rectángulo azul, unificando la apariencia con la selección por arrastre
+
 ## [4.2.2] - 2026-04-04
 
 ### Cambiado
