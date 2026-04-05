@@ -769,7 +769,7 @@ final class AccessibilityService {
                     // Z-order position in the CG list is undefined.
                     offScreenCurrentSpaceEntries.append(entry)
                 }
-                // Drop windows that are off-screen with no space info.
+                // else: drop windows that are off-screen with no space info.
             }
             // Sort on-screen entries by the guaranteed Z-order from the
             // separate on-screen-only query (front-to-back).
@@ -784,6 +784,7 @@ final class AccessibilityService {
         } else {
             currentSpaceEntries = cgEntries
         }
+        perfLog("space filtering done: currentSpace=\(currentSpaceEntries.count) offScreenCurrent=\(offScreenCurrentSpaceEntries.count) otherSpace=\(otherSpaceEntries.count)")
 
         // Collect unique PIDs preserving first-seen order.
         // Exclude PIDs of hidden apps so they are handled in the hidden-apps section below.
@@ -859,6 +860,22 @@ final class AccessibilityService {
                 let unusedIndices = axInfos.indices.filter { !usedAXWindows.contains(ObjectIdentifier(axInfos[$0].element)) }
                 if unusedIndices.count == 1 {
                     matchedIndex = unusedIndices[0]
+                }
+            }
+
+            // Fallback: match by size alone when positions don't match (e.g.
+            // during Show Desktop dismissal animation where CG reports
+            // transitioning positions but AX reports final resting positions).
+            // Only use this when the size uniquely identifies one unused window.
+            if matchedIndex == nil {
+                let unusedIndices = axInfos.indices.filter { !usedAXWindows.contains(ObjectIdentifier(axInfos[$0].element)) }
+                let sizeTolerance: CGFloat = 5
+                let sizeMatches = unusedIndices.filter { i in
+                    abs(axInfos[i].size.width - cgEntry.bounds.width) < sizeTolerance
+                    && abs(axInfos[i].size.height - cgEntry.bounds.height) < sizeTolerance
+                }
+                if sizeMatches.count == 1 {
+                    matchedIndex = sizeMatches[0]
                 }
             }
 

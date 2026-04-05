@@ -747,6 +747,16 @@ final class AppState: NSObject, NSMenuDelegate {
                 NSApp.activate(ignoringOtherApps: true)
                 self.targetWindowController?.window?.makeKeyAndOrderFront(nil)
                 self.isSwitchingActivationPolicy = false
+                // Refresh window list now that the dismissal animation has
+                // settled and windows are back on-screen.  The earlier deferred
+                // refresh ran during the animation and may have missed windows
+                // whose CG/AX positions were still transitioning.
+                self.refreshAvailableWindows()
+                self.selectedWindowIndices = [self.activeTargetIndex]
+                self.selectionOrder = [self.activeTargetIndex]
+                self.windowTargetListVersion += 1
+                self.revalidateActiveTarget()
+                debugLog("Post-expose refresh done: \(self.availableWindowTargets.count) windows, activeTargetIndex=\(self.activeTargetIndex)")
             }
         }
         // Enter modifier-held mode so that re-pressing the trigger key cycles
@@ -791,6 +801,10 @@ final class AppState: NSObject, NSMenuDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.refreshAvailableWindows()
+            // Reset to single selection — the user has not had a chance to
+            // multi-select yet, and index mapping may have shifted.
+            self.selectedWindowIndices = [self.activeTargetIndex]
+            self.selectionOrder = [self.activeTargetIndex]
             self.isLoadingWindowList = false
             debugLog("refreshAvailableWindows done (deferred)")
 
