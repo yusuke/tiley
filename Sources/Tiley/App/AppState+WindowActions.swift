@@ -339,7 +339,12 @@ extension AppState {
             }
         }
 
-        // Reset selection and refresh.
+        // Reset to single selection so the next focused window is the sole selection.
+        selectedWindowIndices.removeAll()
+        selectionOrder.removeAll()
+        selectionAnchorIndex = nil
+
+        // Refresh after a short delay to let windows close.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             self?.refreshAvailableWindows()
         }

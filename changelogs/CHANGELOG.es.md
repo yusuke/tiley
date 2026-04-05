@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- El menú contextual ahora incluye "Cerrar N ventanas" cuando hay varias ventanas seleccionadas; las apps con una sola ventana se cierran completamente en lugar de solo cerrar la ventana, y la selección se restablece a una sola ventana después
+
 ### Cambiado
 
 - Al pasar el cursor sobre una celda de la cuadrícula, ahora se muestra una vista previa de ventana en miniatura con el icono de la app y la barra de título, en lugar de un simple rectángulo azul, unificando la apariencia con la selección por arrastre

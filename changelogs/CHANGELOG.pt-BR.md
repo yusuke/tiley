@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- O menu de contexto agora inclui "Fechar N janelas" quando várias janelas estão selecionadas; apps com apenas uma janela são encerrados em vez de apenas fechar a janela, e a seleção é redefinida para uma única janela após o fechamento
+
 ### Alterado
 
 - Ao passar o mouse sobre uma célula da grade, agora é exibida uma pré-visualização de janela em miniatura com o ícone do app e a barra de título, em vez de um simples retângulo azul, unificando a aparência com a seleção por arrasto

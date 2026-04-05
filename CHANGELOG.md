@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Right-click context menu now includes "Close N windows" when multiple windows are selected; apps with only one window are quit instead of just closing the window, and selection resets to a single window afterward
+
 ### Changed
 
 - Grid cell hover now shows a miniature window preview (with app icon and title bar) instead of a plain blue rectangle, matching the drag selection appearance

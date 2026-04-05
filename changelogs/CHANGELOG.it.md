@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Il menu contestuale ora include "Chiudi N finestre" quando sono selezionate più finestre; le app con una sola finestra vengono terminate invece di chiudere solo la finestra, e la selezione viene ripristinata a una singola finestra dopo la chiusura
+
 ### Modificato
 
 - Il passaggio del mouse su una cella della griglia ora mostra un'anteprima della finestra in miniatura con l'icona dell'app e la barra del titolo, al posto di un semplice rettangolo blu, uniformando l'aspetto con la selezione tramite trascinamento

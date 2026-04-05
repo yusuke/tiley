@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Das Kontextmenü enthält nun „N Fenster schließen", wenn mehrere Fenster ausgewählt sind; Apps mit nur einem Fenster werden beendet statt nur das Fenster zu schließen, und die Auswahl wird danach auf ein einzelnes Fenster zurückgesetzt
+
 ### Geändert
 
 - Beim Überfahren einer Rasterzelle wird nun eine Miniatur-Fenstervorschau mit App-Symbol und Titelleiste angezeigt, anstatt eines einfachen blauen Rechtecks – passend zur Darstellung während des Ziehens

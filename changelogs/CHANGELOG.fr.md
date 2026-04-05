@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Le menu contextuel inclut désormais « Fermer N fenêtres » lorsque plusieurs fenêtres sont sélectionnées ; les apps n'ayant qu'une seule fenêtre sont quittées au lieu de simplement fermer la fenêtre, et la sélection est réinitialisée à une seule fenêtre après la fermeture
+
 ### Modifié
 
 - Le survol d'une cellule de la grille affiche désormais un aperçu de fenêtre miniature avec l'icône de l'application et la barre de titre, au lieu d'un simple rectangle bleu, harmonisant l'apparence avec la sélection par glisser

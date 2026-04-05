@@ -2331,6 +2331,19 @@ struct MainWindowView: View {
                 Divider()
             }
 
+            if appState.isMultiSelection, appState.currentSelectedWindowIndices.contains(item.id) {
+                let count = appState.currentSelectedWindowIndices.count
+                Button {
+                    appState.closeSelectedWindows()
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Close %d windows", comment: "Action bar tooltip for closing multiple windows"), count),
+                        systemImage: "xmark.rectangle.portrait"
+                    )
+                }
+                Divider()
+            }
+
             if item.isUnderAppHeader || item.isFinder {
                 Button {
                     appState.closeWindowTarget(at: item.id)
