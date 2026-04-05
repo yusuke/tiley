@@ -6,6 +6,11 @@
 
 - Beim Überfahren einer Rasterzelle wird nun eine Miniatur-Fenstervorschau mit App-Symbol und Titelleiste angezeigt, anstatt eines einfachen blauen Rechtecks – passend zur Darstellung während des Ziehens
 
+### Behoben
+
+- Rastervorschau-Overlay wurde beim Überfahren des Rasterbereichs in den Einstellungen nicht angezeigt
+- Rastervorschau-Overlay wurde beim Ändern von Zeilen, Spalten oder Abstandswerten in den Einstellungen nicht in Echtzeit aktualisiert
+
 ## [4.2.2] - 2026-04-04
 
 ### Geändert

@@ -6,6 +6,11 @@
 
 - Le survol d'une cellule de la grille affiche désormais un aperçu de fenêtre miniature avec l'icône de l'application et la barre de titre, au lieu d'un simple rectangle bleu, harmonisant l'apparence avec la sélection par glisser
 
+### Corrigé
+
+- L'aperçu de la grille ne s'affichait pas au survol de la section Grille dans les Réglages
+- L'aperçu de la grille ne se mettait pas à jour en temps réel lors de la modification des valeurs de lignes, colonnes ou espacement dans les Réglages
+
 ## [4.2.2] - 2026-04-04
 
 ### Modifié

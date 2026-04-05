@@ -91,6 +91,11 @@ struct SettingsView: View {
                 appState.updateSettingsPreview(draftSettings)
             }
         }
+        .onChange(of: draftSettings) {
+            if isHoveringGridSection {
+                appState.updateSettingsPreview(draftSettings)
+            }
+        }
     }
 
     // MARK: - Settings Editor

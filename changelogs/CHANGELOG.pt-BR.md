@@ -6,6 +6,11 @@
 
 - Ao passar o mouse sobre uma célula da grade, agora é exibida uma pré-visualização de janela em miniatura com o ícone do app e a barra de título, em vez de um simples retângulo azul, unificando a aparência com a seleção por arrasto
 
+### Corrigido
+
+- A sobreposição de pré-visualização da grade não era exibida ao passar o mouse sobre a seção Grade nas Configurações
+- A sobreposição de pré-visualização da grade não era atualizada em tempo real ao alterar os valores de linhas, colunas ou espaçamento nas Configurações
+
 ## [4.2.2] - 2026-04-04
 
 ### Alterado

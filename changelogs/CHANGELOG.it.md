@@ -6,6 +6,11 @@
 
 - Il passaggio del mouse su una cella della griglia ora mostra un'anteprima della finestra in miniatura con l'icona dell'app e la barra del titolo, al posto di un semplice rettangolo blu, uniformando l'aspetto con la selezione tramite trascinamento
 
+### Corretto
+
+- L'anteprima della griglia non veniva visualizzata al passaggio del mouse sulla sezione Griglia nelle Impostazioni
+- L'anteprima della griglia non si aggiornava in tempo reale quando si modificavano i valori di righe, colonne o spaziatura nelle Impostazioni
+
 ## [4.2.2] - 2026-04-04
 
 ### Modificato

@@ -6,6 +6,11 @@
 
 - Al pasar el cursor sobre una celda de la cuadrícula, ahora se muestra una vista previa de ventana en miniatura con el icono de la app y la barra de título, en lugar de un simple rectángulo azul, unificando la apariencia con la selección por arrastre
 
+### Corregido
+
+- La superposición de vista previa de la cuadrícula no se mostraba al pasar el cursor sobre la sección de cuadrícula en Ajustes
+- La superposición de vista previa de la cuadrícula no se actualizaba en tiempo real al cambiar los valores de filas, columnas o espaciado en Ajustes
+
 ## [4.2.2] - 2026-04-04
 
 ### Cambiado

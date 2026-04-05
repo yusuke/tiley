@@ -175,6 +175,9 @@ extension AppState {
         // During window controller recreation the old windows are dismissed.
         // Don't reset UI state — new windows are about to be shown.
         guard !isRecreatingWindows else { return }
+        // Settings editing hides main windows but needs activeLayoutTarget to
+        // remain set so the grid preview overlay can be shown on hover.
+        guard !isEditingSettings else { return }
         // If any Tiley window is still visible, don't reset state.
         let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
         if anyVisible { return }

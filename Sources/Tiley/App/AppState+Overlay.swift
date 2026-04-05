@@ -211,7 +211,7 @@ extension AppState {
             rows: settings.rows,
             columns: settings.columns,
             gap: settings.gap,
-            behind: targetWindowController?.nsWindow
+            behind: settingsWindowController?.window ?? targetWindowController?.nsWindow
         )
     }
 
