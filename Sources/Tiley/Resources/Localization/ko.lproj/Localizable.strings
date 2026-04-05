@@ -11,7 +11,6 @@
 "Moved %@ to %@." = "%@을(를) %@로 이동했습니다.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@을(를) %@로 이동했습니다(창 제약으로 인해 크기가 조정됨).";
 "Unknown" = "알 수 없음";
-"No standard focused window was found. frontmost=%@(%d) preferred=%d" = "표준 포커스 창을 찾을 수 없습니다. frontmost=%@(%d) preferred=%d";
 "Quit Tiley" = "Tiley 종료";
 "Last Selection" = "마지막 선택";
 "Could not update login item: %@" = "로그인 항목을 업데이트할 수 없습니다: %@";
@@ -100,8 +99,6 @@
 "Confirm search criteria" = "검색 조건 확정";
 "Clear search criteria" = "검색 조건 지우기";
 "Close Tiley" = "Tiley 닫기";
-"Show sidebar" = "사이드바 표시";
-"Hide sidebar" = "사이드바 숨기기";
 "Settings (⌘,)" = "설정 (⌘,)";
 "Settings" = "설정";
 "Update available" = "업데이트 있음";
@@ -140,10 +137,7 @@
 "Move to Primary Display" = "주 디스플레이로 이동";
 "Move to Next Display" = "다음 디스플레이로 이동";
 "Move to Previous Display" = "이전 디스플레이로 이동";
-"Move to Display %d" = "디스플레이 %d(으)로 이동";
 "Global Shortcut" = "글로벌 단축키";
-"Record Shortcut" = "단축키 기록";
-"Record Global Shortcut" = "글로벌 단축키 기록";
 "This shortcut is already used by a display shortcut." = "이 단축키는 디스플레이 단축키에서 이미 사용 중입니다.";
 "This shortcut is already used by a layout." = "이 단축키는 레이아웃에서 이미 사용 중입니다.";
 "This shortcut is already used by another display shortcut." = "이 단축키는 다른 디스플레이 단축키에서 이미 사용 중입니다.";

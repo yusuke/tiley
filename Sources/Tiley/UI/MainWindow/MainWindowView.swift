@@ -2735,19 +2735,6 @@ struct MainWindowView: View {
         dismissShortcutEditingIfNeeded(except: id)
     }
 
-    private func beginPresetNameEdit(for preset: LayoutPreset) {
-        dismissShortcutEditingIfNeeded()
-        if let editingID = editingPresetNameID, editingID != preset.id {
-            commitPresetNameEdit(for: editingID)
-            appState.selectLayoutPreset(preset.id)
-            return
-        }
-        appState.selectLayoutPreset(preset.id)
-        editingPresetNameID = preset.id
-        editingPresetNameDraft = preset.name
-        appState.isEditingLayoutPresets = true
-    }
-
     private func commitPresetNameEdit(for id: UUID) {
         let trimmed = editingPresetNameDraft.trimmingCharacters(in: .whitespacesAndNewlines)
         let currentName = appState.displayedLayoutPresets.first(where: { $0.id == id })?.name ?? ""
@@ -2793,10 +2780,6 @@ struct MainWindowView: View {
             editingPresetID = nil
         }
         syncEditingLayoutPresetsFlag()
-    }
-
-    private func isShowingDeleteButton(for id: UUID) -> Bool {
-        editingPresetID == id || editingPresetNameID == id || recordingPresetShortcutID == id
     }
 
     private func isPresetSelected(_ id: UUID) -> Bool {

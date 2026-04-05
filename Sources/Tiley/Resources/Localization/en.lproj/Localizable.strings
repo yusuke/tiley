@@ -11,7 +11,6 @@
 "Moved %@ to %@." = "Moved %@ to %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "Moved %@ to %@ (size adjusted due to window constraints).";
 "Unknown" = "Unknown";
-"No standard focused window was found. frontmost=%@(%d) preferred=%d" = "No standard focused window was found. frontmost=%@(%d) preferred=%d";
 "Quit Tiley" = "Quit Tiley";
 "Last Selection" = "Last Selection";
 "Could not update login item: %@" = "Could not update login item: %@";
@@ -100,8 +99,6 @@
 "Confirm search criteria" = "Confirm search criteria";
 "Clear search criteria" = "Clear search criteria";
 "Close Tiley" = "Close Tiley";
-"Show sidebar" = "Show sidebar";
-"Hide sidebar" = "Hide sidebar";
 "Settings (⌘,)" = "Settings (⌘,)";
 "Settings" = "Settings";
 "Update available" = "Update available";
@@ -140,10 +137,7 @@
 "Move to Primary Display" = "Move to Primary Display";
 "Move to Next Display" = "Move to Next Display";
 "Move to Previous Display" = "Move to Previous Display";
-"Move to Display %d" = "Move to Display %d";
 "Global Shortcut" = "Global Shortcut";
-"Record Shortcut" = "Record Shortcut";
-"Record Global Shortcut" = "Record Global Shortcut";
 "This shortcut is already used by a display shortcut." = "This shortcut is already used by a display shortcut.";
 "This shortcut is already used by a layout." = "This shortcut is already used by a layout.";
 "This shortcut is already used by another display shortcut." = "This shortcut is already used by another display shortcut.";

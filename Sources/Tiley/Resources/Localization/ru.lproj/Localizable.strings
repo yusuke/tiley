@@ -11,7 +11,6 @@
 "Moved %@ to %@." = "%@ перемещено в %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ перемещено в %@ (размер скорректирован из-за ограничений окна).";
 "Unknown" = "Неизвестно";
-"No standard focused window was found. frontmost=%@(%d) preferred=%d" = "Стандартное активное окно не найдено. frontmost=%@(%d) preferred=%d";
 "Quit Tiley" = "Завершить Tiley";
 "Last Selection" = "Последний выбор";
 "Could not update login item: %@" = "Не удалось обновить объект входа: %@";
@@ -100,8 +99,6 @@
 "Confirm search criteria" = "Подтвердить условия поиска";
 "Clear search criteria" = "Очистить условия поиска";
 "Close Tiley" = "Закрыть Tiley";
-"Show sidebar" = "Показать боковую панель";
-"Hide sidebar" = "Скрыть боковую панель";
 "Settings (⌘,)" = "Настройки (⌘,)";
 "Settings" = "Настройки";
 "Update available" = "Доступно обновление";
@@ -140,10 +137,7 @@
 "Move to Primary Display" = "Переместить на основной экран";
 "Move to Next Display" = "Переместить на следующий экран";
 "Move to Previous Display" = "Переместить на предыдущий экран";
-"Move to Display %d" = "Переместить на экран %d";
 "Global Shortcut" = "Глобальная горячая клавиша";
-"Record Shortcut" = "Записать горячую клавишу";
-"Record Global Shortcut" = "Записать глобальную горячую клавишу";
 "This shortcut is already used by a display shortcut." = "Эта горячая клавиша уже используется горячей клавишей экрана.";
 "This shortcut is already used by a layout." = "Эта горячая клавиша уже используется макетом.";
 "This shortcut is already used by another display shortcut." = "Эта горячая клавиша уже используется другой горячей клавишей экрана.";

@@ -11,7 +11,6 @@
 "Moved %@ to %@." = "%@ movido para %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ movido para %@ (tamanho ajustado devido a restrições da janela).";
 "Unknown" = "Desconhecido";
-"No standard focused window was found. frontmost=%@(%d) preferred=%d" = "Nenhuma janela padrão em foco foi encontrada. frontmost=%@(%d) preferred=%d";
 "Quit Tiley" = "Encerrar Tiley";
 "Last Selection" = "Última seleção";
 "Could not update login item: %@" = "Não foi possível atualizar o item de login: %@";
@@ -100,8 +99,6 @@
 "Confirm search criteria" = "Confirmar critérios de busca";
 "Clear search criteria" = "Limpar critérios de busca";
 "Close Tiley" = "Fechar Tiley";
-"Show sidebar" = "Mostrar barra lateral";
-"Hide sidebar" = "Ocultar barra lateral";
 "Settings (⌘,)" = "Configurações (⌘,)";
 "Settings" = "Configurações";
 "Update available" = "Atualização disponível";
@@ -140,10 +137,7 @@
 "Move to Primary Display" = "Mover para a tela principal";
 "Move to Next Display" = "Mover para a próxima tela";
 "Move to Previous Display" = "Mover para a tela anterior";
-"Move to Display %d" = "Mover para a tela %d";
 "Global Shortcut" = "Atalho global";
-"Record Shortcut" = "Gravar atalho";
-"Record Global Shortcut" = "Gravar atalho global";
 "This shortcut is already used by a display shortcut." = "Este atalho já está em uso por um atalho de tela.";
 "This shortcut is already used by a layout." = "Este atalho já está em uso por um layout.";
 "This shortcut is already used by another display shortcut." = "Este atalho já está em uso por outro atalho de tela.";

@@ -11,7 +11,6 @@
 "Moved %@ to %@." = "已將 %@ 移動到 %@。";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "已將 %@ 移動到 %@（因視窗限制，大小已調整）。";
 "Unknown" = "未知";
-"No standard focused window was found. frontmost=%@(%d) preferred=%d" = "找不到標準的焦點視窗。frontmost=%@(%d) preferred=%d";
 "Quit Tiley" = "結束 Tiley";
 "Last Selection" = "上次選擇";
 "Could not update login item: %@" = "無法更新登入項目：%@";
@@ -100,8 +99,6 @@
 "Confirm search criteria" = "確認搜尋條件";
 "Clear search criteria" = "清除搜尋條件";
 "Close Tiley" = "關閉 Tiley";
-"Show sidebar" = "顯示側邊欄";
-"Hide sidebar" = "隱藏側邊欄";
 "Settings (⌘,)" = "設定 (⌘,)";
 "Settings" = "設定";
 "Update available" = "有可用更新";
@@ -140,10 +137,7 @@
 "Move to Primary Display" = "移至主顯示器";
 "Move to Next Display" = "移至下一個顯示器";
 "Move to Previous Display" = "移至上一個顯示器";
-"Move to Display %d" = "移至顯示器 %d";
 "Global Shortcut" = "全域快捷鍵";
-"Record Shortcut" = "錄製快捷鍵";
-"Record Global Shortcut" = "錄製全域快捷鍵";
 "This shortcut is already used by a display shortcut." = "此快捷鍵已被顯示器快捷鍵使用。";
 "This shortcut is already used by a layout." = "此快捷鍵已被佈局使用。";
 "This shortcut is already used by another display shortcut." = "此快捷鍵已被其他顯示器快捷鍵使用。";

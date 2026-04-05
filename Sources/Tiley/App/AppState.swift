@@ -1198,10 +1198,6 @@ final class AppState: NSObject, NSMenuDelegate {
         clearWindowCyclingState(animateRestore: true)
     }
 
-    @objc private func showLayoutGrid() {
-        toggleOverlay()
-    }
-
     @objc func handleStatusItemButtonClick() {
         debugLog("handleStatusItemButtonClick start")
         if isEditingSettings {
@@ -1213,10 +1209,6 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
         toggleOverlay()
-    }
-
-    @objc private func openAccessibilityPrompt() {
-        requestAccessibilityAccess()
     }
 
     @objc private func openSettings() {

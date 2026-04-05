@@ -11,7 +11,6 @@
 "Moved %@ to %@." = "%@ déplacé vers %@.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ déplacé vers %@ (taille ajustée en raison des contraintes de la fenêtre).";
 "Unknown" = "Inconnu";
-"No standard focused window was found. frontmost=%@(%d) preferred=%d" = "Aucune fenêtre active standard n'a été trouvée. frontmost=%@(%d) preferred=%d";
 "Quit Tiley" = "Quitter Tiley";
 "Last Selection" = "Dernière sélection";
 "Could not update login item: %@" = "Impossible de mettre à jour l'élément d'ouverture : %@";
@@ -100,8 +99,6 @@
 "Confirm search criteria" = "Confirmer les critères de recherche";
 "Clear search criteria" = "Effacer les critères de recherche";
 "Close Tiley" = "Fermer Tiley";
-"Show sidebar" = "Afficher la barre latérale";
-"Hide sidebar" = "Masquer la barre latérale";
 "Settings (⌘,)" = "Réglages (⌘,)";
 "Settings" = "Réglages";
 "Update available" = "Mise à jour disponible";
@@ -140,10 +137,7 @@
 "Move to Primary Display" = "Déplacer vers l'écran principal";
 "Move to Next Display" = "Déplacer vers l'écran suivant";
 "Move to Previous Display" = "Déplacer vers l'écran précédent";
-"Move to Display %d" = "Déplacer vers l'écran %d";
 "Global Shortcut" = "Raccourci global";
-"Record Shortcut" = "Enregistrer un raccourci";
-"Record Global Shortcut" = "Enregistrer un raccourci global";
 "This shortcut is already used by a display shortcut." = "Ce raccourci est déjà utilisé par un raccourci d'écran.";
 "This shortcut is already used by a layout." = "Ce raccourci est déjà utilisé par une disposition.";
 "This shortcut is already used by another display shortcut." = "Ce raccourci est déjà utilisé par un autre raccourci d'écran.";

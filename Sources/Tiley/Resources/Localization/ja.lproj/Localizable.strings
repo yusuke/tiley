@@ -11,7 +11,6 @@
 "Moved %@ to %@." = "%@ を %@ に移動しました。";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ を %@ に移動しました（ウインドウの制約によりサイズが調整されました）。";
 "Unknown" = "不明";
-"No standard focused window was found. frontmost=%@(%d) preferred=%d" = "標準的なフォーカスウインドウが見つかりませんでした。frontmost=%@(%d) preferred=%d";
 "Quit Tiley" = "Tileyを終了";
 "Last Selection" = "最後の選択";
 "Could not update login item: %@" = "ログイン項目を更新できませんでした: %@";
@@ -100,8 +99,6 @@
 "Confirm search criteria" = "検索条件を確定";
 "Clear search criteria" = "検索条件をクリア";
 "Close Tiley" = "Tileyを閉じる";
-"Show sidebar" = "サイドバーを表示";
-"Hide sidebar" = "サイドバーを非表示";
 "Settings (⌘,)" = "設定 (⌘,)";
 "Settings" = "設定";
 "Update available" = "アップデートがあります";
@@ -140,10 +137,7 @@
 "Move to Primary Display" = "主ディスプレイに移動";
 "Move to Next Display" = "次のディスプレイに移動";
 "Move to Previous Display" = "前のディスプレイに移動";
-"Move to Display %d" = "ディスプレイ %d に移動";
 "Global Shortcut" = "グローバルショートカット";
-"Record Shortcut" = "ショートカットを記録";
-"Record Global Shortcut" = "グローバルショートカットを記録";
 "This shortcut is already used by a display shortcut." = "このショートカットはディスプレイショートカットで使用されています。";
 "This shortcut is already used by a layout." = "このショートカットはレイアウトで使用されています。";
 "This shortcut is already used by another display shortcut." = "このショートカットは別のディスプレイショートカットで使用されています。";
