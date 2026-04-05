@@ -10,6 +10,8 @@
 
 - La superposición de vista previa de la cuadrícula no se mostraba al pasar el cursor sobre la sección de cuadrícula en Ajustes
 - La superposición de vista previa de la cuadrícula no se actualizaba en tiempo real al cambiar los valores de filas, columnas o espaciado en Ajustes
+- Se sale automáticamente de Mostrar Escritorio y Mission Control al invocar Tiley mediante el atajo global o el icono de la barra de menús
+- La ventana de superposición de Tiley ya no aparece en Mission Control / Exposé
 
 ## [4.2.2] - 2026-04-04
 

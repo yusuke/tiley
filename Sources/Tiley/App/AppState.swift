@@ -694,6 +694,16 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
 
+        // Dismiss "Show Desktop" or Mission Control if active.
+        // The dismissal animation may cause a brief didResignActive — suppress
+        // handleAppDidResignActive so it does not immediately hide the overlay.
+        let isDismissingExpose = CGSPrivate.isShowDesktopLikelyActive()
+            || CGSPrivate.isMissionControlLikelyActive()
+        if isDismissingExpose {
+            isSwitchingActivationPolicy = true
+        }
+        CGSPrivate.dismissDesktopExpose()
+
         let target = resolveWindowTarget()
         perfLog("resolveWindowTarget done (\(target?.appName ?? "nil"))")
 
@@ -724,6 +734,20 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingLayoutGrid = true
         openMainWindow()
         perfLog("openMainWindow done")
+        // After the expose-dismissal animation settles, re-activate Tiley
+        // (macOS activates the previous app when the animation completes)
+        // and clear the guard so normal resign-active behaviour resumes.
+        if isDismissingExpose {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self, self.isShowingLayoutGrid else {
+                    self?.isSwitchingActivationPolicy = false
+                    return
+                }
+                NSApp.activate(ignoringOtherApps: true)
+                self.targetWindowController?.window?.makeKeyAndOrderFront(nil)
+                self.isSwitchingActivationPolicy = false
+            }
+        }
         // Enter modifier-held mode so that re-pressing the trigger key cycles
         // windows and releasing the modifiers confirms the selection.
         installModifierReleaseMonitor()

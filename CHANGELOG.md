@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Fix grid preview overlay not appearing when hovering the Grid section in Settings
 - Fix grid preview overlay not updating in real time when changing rows, columns, or gap values in Settings
+- Dismiss Show Desktop and Mission Control states when invoking Tiley via global shortcut or menu bar icon
+- Prevent Tiley's overlay window from appearing in Mission Control / Exposé
 
 ## [4.2.2] - 2026-04-04
 

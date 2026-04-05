@@ -10,6 +10,8 @@
 
 - A sobreposição de pré-visualização da grade não era exibida ao passar o mouse sobre a seção Grade nas Configurações
 - A sobreposição de pré-visualização da grade não era atualizada em tempo real ao alterar os valores de linhas, colunas ou espaçamento nas Configurações
+- Os estados "Mostrar Área de Trabalho" e Mission Control são automaticamente encerrados ao invocar o Tiley pelo atalho global ou ícone da barra de menus
+- A janela de sobreposição do Tiley não aparece mais no Mission Control / Exposé
 
 ## [4.2.2] - 2026-04-04
 

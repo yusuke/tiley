@@ -1,3 +1,4 @@
+import AppKit
 import CoreGraphics
 import Foundation
 
@@ -95,5 +96,116 @@ enum CGSPrivate {
     static func orderWindow(_ windowID: CGWindowID, mode: Int32, relativeTo relativeToWindowID: CGWindowID = 0) -> Bool {
         guard let fn = _orderWindow, let cid = _mainConnectionID?() else { return false }
         return fn(cid, windowID, mode, relativeToWindowID) == .success
+    }
+
+    // MARK: - Show Desktop dismissal
+
+    /// `RTLD_DEFAULT` — searches all loaded dylibs (macOS defines it as `(void*)-2`).
+    private static let rtldDefault = UnsafeMutableRawPointer(bitPattern: -2)
+
+    private typealias CoreDockSendNotificationFunc = @convention(c) (CFString, Int32) -> Void
+
+    private static let _coreDockSendNotification: CoreDockSendNotificationFunc? = {
+        guard let sym = dlsym(rtldDefault, "CoreDockSendNotification") else { return nil }
+        return unsafeBitCast(sym, to: CoreDockSendNotificationFunc.self)
+    }()
+
+    /// Heuristic: returns `true` when "Show Desktop" is likely active.
+    ///
+    /// During Show Desktop, macOS pushes all normal windows far off-screen.
+    /// We detect this by checking if the majority of layer-0 windows have
+    /// their centre point well outside all display bounds.
+    static func isShowDesktopLikelyActive() -> Bool {
+        let myPID = getpid()
+        let screens = NSScreen.screens
+        guard !screens.isEmpty else { return false }
+
+        // Build union of all screen frames in CG coordinate space (origin at
+        // top-left of primary display). NSScreen uses bottom-left origin.
+        let primaryHeight = screens[0].frame.height
+        var totalBounds = CGRect.null
+        for screen in screens {
+            let cgOriginY = primaryHeight - screen.frame.maxY
+            let cgFrame = CGRect(x: screen.frame.origin.x, y: cgOriginY,
+                                 width: screen.frame.width, height: screen.frame.height)
+            totalBounds = totalBounds.union(cgFrame)
+        }
+        // Small margin — only consider windows whose centre is clearly
+        // outside all screens. During Show Desktop windows are pushed
+        // hundreds of pixels beyond the edge.
+        let expandedBounds = totalBounds.insetBy(dx: -50, dy: -50)
+
+        let options = CGWindowListOption([.optionOnScreenOnly, .excludeDesktopElements])
+        guard let list = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
+            return false
+        }
+
+        var normalCount = 0
+        var offScreenCount = 0
+
+        for info in list {
+            guard let layer = info[kCGWindowLayer as String] as? Int, layer == 0 else { continue }
+            guard let pid = info[kCGWindowOwnerPID as String] as? Int32, pid != myPID else { continue }
+            guard let bounds = info[kCGWindowBounds as String] as? [String: CGFloat] else { continue }
+            let w = bounds["Width"] ?? 0
+            let h = bounds["Height"] ?? 0
+            // Skip tiny windows (status items, invisible helpers, etc.)
+            guard w > 100 && h > 100 else { continue }
+
+            normalCount += 1
+            let center = CGPoint(x: (bounds["X"] ?? 0) + w / 2,
+                                 y: (bounds["Y"] ?? 0) + h / 2)
+            if !expandedBounds.contains(center) {
+                offScreenCount += 1
+            }
+        }
+
+        debugLog("isShowDesktopLikelyActive: normalCount=\(normalCount) offScreenCount=\(offScreenCount) expandedBounds=\(expandedBounds)")
+        // Majority of sizeable windows off-screen → likely Show Desktop.
+        // During normal use offScreenCount is 0; during Show Desktop most
+        // windows are pushed far beyond the screen edges.
+        return normalCount > 0 && offScreenCount > normalCount / 2
+    }
+
+    /// Heuristic: returns `true` when Mission Control is likely active.
+    ///
+    /// During Mission Control the Dock (or WindowManager) creates many
+    /// overlay windows at non-standard layers. In normal operation the Dock
+    /// has only a handful of windows.
+    static func isMissionControlLikelyActive() -> Bool {
+        let options = CGWindowListOption([.optionOnScreenOnly])
+        guard let list = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
+            return false
+        }
+        var dockOverlayCount = 0
+        for info in list {
+            guard let owner = info[kCGWindowOwnerName as String] as? String,
+                  owner == "Dock" || owner == "WindowManager" else { continue }
+            guard let layer = info[kCGWindowLayer as String] as? Int else { continue }
+            // Count Dock/WM windows at non-standard layers (> 0) which appear
+            // during Mission Control but not during normal operation.
+            if layer > 0 && layer < 1000 {
+                dockOverlayCount += 1
+            }
+        }
+        debugLog("isMissionControlLikelyActive: dockOverlayCount=\(dockOverlayCount)")
+        return dockOverlayCount > 5
+    }
+
+    /// Dismiss "Show Desktop" and/or Mission Control if either is active.
+    /// On macOS 26 `CoreDockSendNotification` toggles the state, so we only
+    /// send the notification when the corresponding state is detected.
+    static func dismissDesktopExpose() {
+        let showDesktop = isShowDesktopLikelyActive()
+        let missionControl = isMissionControlLikelyActive()
+        debugLog("dismissDesktopExpose: showDesktop=\(showDesktop) missionControl=\(missionControl)")
+        if showDesktop {
+            _coreDockSendNotification?("com.apple.showdesktop.awake" as CFString, 0)
+            debugLog("dismissDesktopExpose: sent showdesktop.awake")
+        }
+        if missionControl {
+            _coreDockSendNotification?("com.apple.expose.awake" as CFString, 0)
+            debugLog("dismissDesktopExpose: sent expose.awake")
+        }
     }
 }

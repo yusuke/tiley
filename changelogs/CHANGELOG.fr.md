@@ -10,6 +10,8 @@
 
 - L'aperçu de la grille ne s'affichait pas au survol de la section Grille dans les Réglages
 - L'aperçu de la grille ne se mettait pas à jour en temps réel lors de la modification des valeurs de lignes, colonnes ou espacement dans les Réglages
+- Les états « Afficher le bureau » et Mission Control sont automatiquement désactivés lors de l'appel de Tiley via le raccourci global ou l'icône de la barre des menus
+- La fenêtre de superposition de Tiley n'apparaît plus dans Mission Control / Exposé
 
 ## [4.2.2] - 2026-04-04
 

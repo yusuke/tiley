@@ -98,7 +98,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.level = .normal
         let displayID = self.targetScreen.displayID
         window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
-        window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary]
+        window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary, .transient]
         window.isReleasedWhenClosed = false
         window.autorecalculatesKeyViewLoop = false
         window.contentView = hostingView

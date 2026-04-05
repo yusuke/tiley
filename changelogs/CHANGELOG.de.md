@@ -10,6 +10,8 @@
 
 - Rastervorschau-Overlay wurde beim Überfahren des Rasterbereichs in den Einstellungen nicht angezeigt
 - Rastervorschau-Overlay wurde beim Ändern von Zeilen, Spalten oder Abstandswerten in den Einstellungen nicht in Echtzeit aktualisiert
+- „Schreibtisch anzeigen" und Mission Control werden beim Aufrufen von Tiley über das globale Tastenkürzel oder das Menüleistensymbol automatisch beendet
+- Tiley-Overlay-Fenster wird nicht mehr in Mission Control / Exposé angezeigt
 
 ## [4.2.2] - 2026-04-04
 

@@ -10,6 +10,8 @@
 
 - L'anteprima della griglia non veniva visualizzata al passaggio del mouse sulla sezione Griglia nelle Impostazioni
 - L'anteprima della griglia non si aggiornava in tempo reale quando si modificavano i valori di righe, colonne o spaziatura nelle Impostazioni
+- Gli stati "Mostra Scrivania" e Mission Control vengono automaticamente chiusi quando si richiama Tiley tramite la scorciatoia globale o l'icona nella barra dei menu
+- La finestra di sovrapposizione di Tiley non viene più visualizzata in Mission Control / Exposé
 
 ## [4.2.2] - 2026-04-04
 
