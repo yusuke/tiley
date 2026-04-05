@@ -921,6 +921,7 @@ final class AppState: NSObject, NSMenuDelegate {
         let allSelections = [selection] + secondarySelections
 
         dismissOverlayImmediately()
+        orderOutAllMainWindows()
 
         // Order selected window indices by selection order (first selected = primary).
         let orderedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
@@ -1033,6 +1034,7 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         dismissOverlayImmediately()
+        orderOutAllMainWindows()
 
         // Selected windows first, then fill from z-order.
         let orderedIndices = buildZOrderedWindowIndices(count: selections.count)
@@ -1151,6 +1153,7 @@ final class AppState: NSObject, NSMenuDelegate {
         )
 
         dismissOverlayImmediately()
+        orderOutAllMainWindows()
 
         do {
             let constrained: Bool
@@ -1226,6 +1229,7 @@ final class AppState: NSObject, NSMenuDelegate {
         )
 
         dismissOverlayImmediately()
+        orderOutAllMainWindows()
 
         do {
             let constrained: Bool

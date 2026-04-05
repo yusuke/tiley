@@ -145,6 +145,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
                 window?.makeKey()
             }
         } else {
+            window?.alphaValue = Self.layoutModeWindowAlpha
             if asKey {
                 window?.makeKeyAndOrderFront(nil)
             } else {

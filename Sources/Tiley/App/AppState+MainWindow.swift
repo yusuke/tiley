@@ -374,6 +374,18 @@ extension AppState {
         }
     }
 
+    /// Fully remove all main windows from screen (orderOut) so they don't
+    /// interfere visually during window resize operations. Unlike `hide()`
+    /// which keeps windows at alphaValue=0 for instant re-show, this method
+    /// removes them from the window server entirely and flushes the
+    /// transaction so the visual change is committed before returning.
+    func orderOutAllMainWindows() {
+        for controller in mainWindowControllers.values {
+            controller.window?.orderOut(nil)
+        }
+        CATransaction.flush()
+    }
+
     func targetScreenForWindow() -> NSScreen {
         if let screenFrame = activeLayoutTarget?.screenFrame,
            let screen = NSScreen.screen(containing: screenFrame) {
