@@ -1121,12 +1121,17 @@ final class AppState: NSObject, NSMenuDelegate {
         activeLayoutTarget = target
 
         let allSelections = [selection] + secondarySelections
-        if allSelections.count > 1 {
+        if selectedWindowIndices.count > 1 {
             if selectedWindowIndices.count >= allSelections.count {
                 applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
             } else {
                 applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
             }
+            return
+        }
+        if allSelections.count > 1 {
+            // Single window but multi-layout preset — fill from z-order.
+            applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
             return
         }
 

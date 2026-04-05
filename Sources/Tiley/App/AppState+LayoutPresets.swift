@@ -117,7 +117,7 @@ extension AppState {
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
         let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
-        if allSelections.count > 1 {
+        if selectedWindowIndices.count > 1 {
             if selectedWindowIndices.count >= allSelections.count {
                 // Enough selected windows — use explicit selection order.
                 let selection = allSelections[0]
@@ -127,6 +127,9 @@ extension AppState {
                 // Not enough selected windows — selected first, fill from z-order.
                 applyPresetToZOrderedWindows(selections: allSelections)
             }
+        } else if allSelections.count > 1 {
+            // Single window but multi-layout preset — fill from z-order.
+            applyPresetToZOrderedWindows(selections: allSelections)
         } else {
             apply(selection: allSelections.first ?? preset.scaledSelection(toRows: rows, columns: columns), to: target)
         }
