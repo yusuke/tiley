@@ -705,8 +705,24 @@ final class AppState: NSObject, NSMenuDelegate {
         }
         CGSPrivate.dismissDesktopExpose()
 
-        let target = resolveWindowTarget()
-        perfLog("resolveWindowTarget done (\(target?.appName ?? "nil"))")
+        // When dismissing Show Desktop / Mission Control, resolveWindowTarget()
+        // would capture windows mid-animation and likely fail to find the
+        // frontmost app's windows.  Instead, look up the target from the
+        // pre-cached window list using lastTargetPID (or the current frontmost
+        // app's PID).  The 0.5s post-expose callback will re-resolve once the
+        // animation has settled.
+        let target: WindowTarget?
+        if isDismissingExpose, hasWindowListCache {
+            let preferredPID = lastTargetPID
+                ?? NSWorkspace.shared.frontmostApplication?.processIdentifier
+            target = preferredPID.flatMap { pid in
+                cachedWindowTargets.first { $0.processIdentifier == pid }
+            } ?? cachedWindowTargets.first
+            perfLog("resolveWindowTarget from cache (\(target?.appName ?? "nil"))")
+        } else {
+            target = resolveWindowTarget()
+            perfLog("resolveWindowTarget done (\(target?.appName ?? "nil"))")
+        }
 
         activeLayoutTarget = target
         layoutPreviewController?.hide()
@@ -752,6 +768,27 @@ final class AppState: NSObject, NSMenuDelegate {
                 // refresh ran during the animation and may have missed windows
                 // whose CG/AX positions were still transitioning.
                 self.refreshAvailableWindows()
+                // Re-resolve the target — the initial resolveWindowTarget() ran
+                // during the animation when the frontmost app's windows may not
+                // have been discoverable yet.
+                if let freshTarget = self.resolveWindowTarget() {
+                    self.activeLayoutTarget = freshTarget
+                    self.lastTargetPID = freshTarget.processIdentifier
+                    self.clearResizabilityCache()
+                    self.layoutPreviewController?.hide()
+                    self.layoutPreviewController = self.makeLayoutPreviewController(for: freshTarget)
+                    self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
+                        $0.processIdentifier == freshTarget.processIdentifier
+                        && $0.windowElement == freshTarget.windowElement
+                    }) ?? self.availableWindowTargets.firstIndex(where: {
+                        $0.processIdentifier == freshTarget.processIdentifier
+                        && $0.windowTitle == freshTarget.windowTitle
+                    }) ?? 0
+                    self.launchMessage = String(
+                        format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                        freshTarget.appName
+                    )
+                }
                 self.selectedWindowIndices = [self.activeTargetIndex]
                 self.selectionOrder = [self.activeTargetIndex]
                 self.windowTargetListVersion += 1
@@ -798,20 +835,26 @@ final class AppState: NSObject, NSMenuDelegate {
             isLoadingWindowList = true
         }
         // Deferred refresh to pick up any changes since the cache was built.
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.refreshAvailableWindows()
-            // Reset to single selection — the user has not had a chance to
-            // multi-select yet, and index mapping may have shifted.
-            self.selectedWindowIndices = [self.activeTargetIndex]
-            self.selectionOrder = [self.activeTargetIndex]
-            self.isLoadingWindowList = false
-            debugLog("refreshAvailableWindows done (deferred)")
+        // Skip when dismissing Show Desktop / Mission Control — the 0.5s
+        // post-expose callback will perform a reliable refresh after the
+        // animation settles.  Running one here would capture an incomplete
+        // window list mid-animation and cause a visible flicker.
+        if !isDismissingExpose {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.refreshAvailableWindows()
+                // Reset to single selection — the user has not had a chance to
+                // multi-select yet, and index mapping may have shifted.
+                self.selectedWindowIndices = [self.activeTargetIndex]
+                self.selectionOrder = [self.activeTargetIndex]
+                self.isLoadingWindowList = false
+                debugLog("refreshAvailableWindows done (deferred)")
 
-            // The initially captured target may have been a transient window
-            // (e.g. Xcode's "Build Succeeded" HUD) that has since disappeared.
-            // Verify it still exists; if not, fall back to the next window.
-            self.revalidateActiveTarget()
+                // The initially captured target may have been a transient window
+                // (e.g. Xcode's "Build Succeeded" HUD) that has since disappeared.
+                // Verify it still exists; if not, fall back to the next window.
+                self.revalidateActiveTarget()
+            }
         }
         if let target {
             launchMessage = String(

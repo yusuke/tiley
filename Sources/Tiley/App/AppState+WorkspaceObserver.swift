@@ -140,6 +140,16 @@ extension AppState {
             // quick succession) coalesce into a single fetch.
             try? await Task.sleep(nanoseconds: 150_000_000)
             guard !Task.isCancelled else { return }
+            // Skip caching while "Show Desktop" or Mission Control is active.
+            // During these states windows are pushed off-screen and CG/AX
+            // positions diverge, producing an unreliable window list.
+            // The last good cache from before the state change is preserved.
+            let showDesktop = CGSPrivate.isShowDesktopLikelyActive()
+            let missionControl = CGSPrivate.isMissionControlLikelyActive()
+            if showDesktop || missionControl {
+                debugLog("Window list cache skipped (showDesktop=\(showDesktop) missionControl=\(missionControl))")
+                return
+            }
             let captured = wm.captureAllWindows(includeOtherSpaces: true)
             guard !Task.isCancelled else { return }
             await MainActor.run { [weak self] in
