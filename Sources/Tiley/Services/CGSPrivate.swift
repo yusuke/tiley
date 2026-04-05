@@ -160,11 +160,13 @@ enum CGSPrivate {
             }
         }
 
-        debugLog("isShowDesktopLikelyActive: normalCount=\(normalCount) offScreenCount=\(offScreenCount) expandedBounds=\(expandedBounds)")
-        // Majority of sizeable windows off-screen → likely Show Desktop.
-        // During normal use offScreenCount is 0; during Show Desktop most
-        // windows are pushed far beyond the screen edges.
-        return normalCount > 0 && offScreenCount > normalCount / 2
+        let onScreenCount = normalCount - offScreenCount
+        debugLog("isShowDesktopLikelyActive: normalCount=\(normalCount) offScreenCount=\(offScreenCount) onScreenCount=\(onScreenCount) expandedBounds=\(expandedBounds)")
+        // Show Desktop pushes ALL windows off-screen. If even one sizeable
+        // window remains on-screen, we are NOT in Show Desktop mode.
+        // Require at least 3 off-screen windows to avoid false positives
+        // from single-window edge cases.
+        return offScreenCount >= 3 && onScreenCount == 0
     }
 
     /// Heuristic: returns `true` when Mission Control is likely active.
@@ -192,10 +194,20 @@ enum CGSPrivate {
         return dockOverlayCount > 5
     }
 
+    /// Log the frontmost app state for Show Desktop debugging.
+    private static func logFrontmostState() {
+        let frontmost = NSWorkspace.shared.frontmostApplication
+        let bid = frontmost?.bundleIdentifier ?? "?"
+        let name = frontmost?.localizedName ?? "?"
+        let pid = frontmost?.processIdentifier ?? 0
+        debugLog("dismissDesktopExpose: frontmost=\(name) (\(bid)) pid=\(pid) myPID=\(getpid())")
+    }
+
     /// Dismiss "Show Desktop" and/or Mission Control if either is active.
     /// On macOS 26 `CoreDockSendNotification` toggles the state, so we only
     /// send the notification when the corresponding state is detected.
     static func dismissDesktopExpose() {
+        logFrontmostState()
         let showDesktop = isShowDesktopLikelyActive()
         let missionControl = isMissionControlLikelyActive()
         debugLog("dismissDesktopExpose: showDesktop=\(showDesktop) missionControl=\(missionControl)")
