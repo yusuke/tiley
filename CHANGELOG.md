@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Fix displaced (non-target) windows not returning to their original positions after applying a multi-window layout
 - "Last Selection" now correctly appears even when its primary layout matches a preset that has secondary layouts (e.g., manually selecting the upper half no longer gets hidden by the "Upper Half" preset which also includes a lower-half secondary layout)
 - Fix grid preview overlay not appearing when hovering the Grid section in Settings
 - Fix grid preview overlay not updating in real time when changing rows, columns, or gap values in Settings

@@ -963,9 +963,14 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
-        // Clear displaced window frames so restoreDisplacedWindowsAnimated()
-        // (called from recordSelectionAndHide) doesn't undo the positions
-        // we just set.
+        // Restore displaced windows that are NOT layout targets — they were
+        // pushed aside to reveal the selected window and need to return to
+        // their original positions.  Layout targets have already been moved
+        // to their new frames, so we only clear their entries.
+        let movedWIDs = Set(orderedIndices.map { availableWindowTargets[$0].cgWindowID })
+        for (wid, entry) in displacedWindowFrames where !movedWIDs.contains(wid) {
+            accessibilityService.setPosition(entry.origin, for: entry.window)
+        }
         displacedWindowFrames.removeAll()
 
         // Activate the primary window (frontmost in sidebar order) so it
@@ -1066,6 +1071,11 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
+        // Restore displaced windows that are NOT layout targets.
+        let movedWIDs2 = Set(orderedIndices.map { availableWindowTargets[$0].cgWindowID })
+        for (wid, entry) in displacedWindowFrames where !movedWIDs2.contains(wid) {
+            accessibilityService.setPosition(entry.origin, for: entry.window)
+        }
         displacedWindowFrames.removeAll()
 
         let primaryWindowTarget: WindowTarget? = orderedIndices.first.map { availableWindowTargets[$0] }

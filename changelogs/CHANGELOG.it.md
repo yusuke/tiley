@@ -9,6 +9,7 @@
 
 ### Corretto
 
+- Le finestre spostate (non target) ora tornano correttamente alla posizione originale dopo l'applicazione di un layout multi-finestra
 - "Ultima selezione" ora viene visualizzata correttamente anche quando il suo layout principale corrisponde a un preset che ha layout secondari (ad esempio, la selezione manuale della metà superiore non viene più nascosta dal preset "Metà superiore" che include anche un layout secondario per la metà inferiore)
 - L'anteprima della griglia non veniva visualizzata al passaggio del mouse sulla sezione Griglia nelle Impostazioni
 - L'anteprima della griglia non si aggiornava in tempo reale quando si modificavano i valori di righe, colonne o spaziatura nelle Impostazioni

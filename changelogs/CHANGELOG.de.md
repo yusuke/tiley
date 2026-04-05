@@ -9,6 +9,7 @@
 
 ### Behoben
 
+- Verschobene (Nicht-Ziel-)Fenster kehren nach Anwendung eines Multi-Fenster-Layouts nun korrekt an ihre ursprüngliche Position zurück
 - „Letzte Auswahl" wird nun korrekt angezeigt, auch wenn das primäre Layout mit einem Preset übereinstimmt, das sekundäre Layouts enthält (z. B. wird die manuelle Auswahl der oberen Hälfte nicht mehr durch das Preset „Obere Hälfte" ausgeblendet, das auch ein sekundäres Layout für die untere Hälfte enthält)
 - Rastervorschau-Overlay wurde beim Überfahren des Rasterbereichs in den Einstellungen nicht angezeigt
 - Rastervorschau-Overlay wurde beim Ändern von Zeilen, Spalten oder Abstandswerten in den Einstellungen nicht in Echtzeit aktualisiert
