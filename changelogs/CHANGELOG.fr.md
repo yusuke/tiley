@@ -9,6 +9,7 @@
 
 ### Corrigé
 
+- « Dernière sélection » s'affiche désormais correctement même lorsque sa disposition principale correspond à un préréglage comportant des dispositions secondaires (par exemple, la sélection manuelle de la moitié supérieure n'est plus masquée par le préréglage « Moitié supérieure » qui inclut également une disposition secondaire pour la moitié inférieure)
 - L'aperçu de la grille ne s'affichait pas au survol de la section Grille dans les Réglages
 - L'aperçu de la grille ne se mettait pas à jour en temps réel lors de la modification des valeurs de lignes, colonnes ou espacement dans les Réglages
 - Les états « Afficher le bureau » et Mission Control sont automatiquement désactivés lors de l'appel de Tiley via le raccourci global ou l'icône de la barre des menus

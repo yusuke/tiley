@@ -9,6 +9,7 @@
 
 ### Corrigido
 
+- "Última seleção" agora é exibida corretamente mesmo quando seu layout principal corresponde a um preset que possui layouts secundários (por exemplo, selecionar manualmente a metade superior não é mais ocultado pelo preset "Metade superior" que também inclui um layout secundário para a metade inferior)
 - A sobreposição de pré-visualização da grade não era exibida ao passar o mouse sobre a seção Grade nas Configurações
 - A sobreposição de pré-visualização da grade não era atualizada em tempo real ao alterar os valores de linhas, colunas ou espaçamento nas Configurações
 - Os estados "Mostrar Área de Trabalho" e Mission Control são automaticamente encerrados ao invocar o Tiley pelo atalho global ou ícone da barra de menus

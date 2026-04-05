@@ -212,7 +212,10 @@ extension AppState {
         )
 
         let candidateSelection = candidate.scaledSelection(toRows: rows, columns: columns)
-        guard !layoutPresets.contains(where: { $0.scaledSelection(toRows: rows, columns: columns) == candidateSelection }) else {
+        guard !layoutPresets.contains(where: {
+            $0.scaledSelection(toRows: rows, columns: columns) == candidateSelection
+            && $0.secondarySelections.isEmpty
+        }) else {
             return nil
         }
 

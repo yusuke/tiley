@@ -9,6 +9,7 @@
 
 ### Corregido
 
+- "Última selección" ahora se muestra correctamente incluso cuando su diseño principal coincide con un preset que tiene diseños secundarios (por ejemplo, seleccionar manualmente la mitad superior ya no queda oculto por el preset "Mitad superior" que también incluye un diseño secundario de la mitad inferior)
 - La superposición de vista previa de la cuadrícula no se mostraba al pasar el cursor sobre la sección de cuadrícula en Ajustes
 - La superposición de vista previa de la cuadrícula no se actualizaba en tiempo real al cambiar los valores de filas, columnas o espaciado en Ajustes
 - Se sale automáticamente de Mostrar Escritorio y Mission Control al invocar Tiley mediante el atajo global o el icono de la barra de menús
