@@ -5,6 +5,7 @@
 ### Cambiado
 
 - Al pasar el cursor sobre una celda de la cuadrícula, ahora se muestra una vista previa de ventana en miniatura con el icono de la app y la barra de título, en lugar de un simple rectángulo azul, unificando la apariencia con la selección por arrastre
+- Al cerrar una ventana mediante el menú contextual o la tecla "/", la barra lateral ahora selecciona el elemento debajo de la ventana cerrada; si no hay ninguno debajo, selecciona el de arriba
 
 ### Corregido
 

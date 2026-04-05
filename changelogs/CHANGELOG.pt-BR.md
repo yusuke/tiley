@@ -5,6 +5,7 @@
 ### Alterado
 
 - Ao passar o mouse sobre uma célula da grade, agora é exibida uma pré-visualização de janela em miniatura com o ícone do app e a barra de título, em vez de um simples retângulo azul, unificando a aparência com a seleção por arrasto
+- Ao fechar uma janela pelo menu de contexto ou pela tecla "/", a barra lateral agora seleciona o item abaixo da janela fechada; se não houver item abaixo, seleciona o item acima
 
 ### Corrigido
 

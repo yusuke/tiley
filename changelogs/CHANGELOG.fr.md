@@ -5,6 +5,7 @@
 ### Modifié
 
 - Le survol d'une cellule de la grille affiche désormais un aperçu de fenêtre miniature avec l'icône de l'application et la barre de titre, au lieu d'un simple rectangle bleu, harmonisant l'apparence avec la sélection par glisser
+- Après la fermeture d'une fenêtre via le menu contextuel ou la touche « / », la barre latérale sélectionne désormais l'élément situé en dessous de la fenêtre fermée ; s'il n'y a pas d'élément en dessous, l'élément au-dessus est sélectionné
 
 ### Corrigé
 

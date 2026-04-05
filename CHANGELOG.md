@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Grid cell hover now shows a miniature window preview (with app icon and title bar) instead of a plain blue rectangle, matching the drag selection appearance
+- After closing a window via right-click menu or "/" key, the sidebar now selects the item below the closed window; if there is no item below, it selects the item above
 
 ### Fixed
 

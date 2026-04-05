@@ -5,6 +5,7 @@
 ### Modificato
 
 - Il passaggio del mouse su una cella della griglia ora mostra un'anteprima della finestra in miniatura con l'icona dell'app e la barra del titolo, al posto di un semplice rettangolo blu, uniformando l'aspetto con la selezione tramite trascinamento
+- Dopo aver chiuso una finestra tramite il menu contestuale o il tasto "/", la barra laterale ora seleziona l'elemento sotto la finestra chiusa; se non c'è un elemento sotto, viene selezionato quello sopra
 
 ### Corretto
 

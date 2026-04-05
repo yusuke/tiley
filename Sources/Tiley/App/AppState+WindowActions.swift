@@ -17,14 +17,47 @@ extension AppState {
         clearWindowCyclingState(animateRestore: true)
     }
 
+    /// Returns the identity (PID, window element, title) of the window that should be
+    /// selected after closing the window(s) at the given indices, based on sidebar order.
+    /// Prefers the item below the lowest closed index in sidebar order; falls back to above.
+    private func nextSidebarTarget(afterClosing closedIndices: Set<Int>) -> (pid: pid_t, windowElement: AXUIElement?, windowTitle: String?)? {
+        let order: [Int]
+        if !sidebarWindowOrder.isEmpty {
+            order = sidebarWindowOrder.filter { $0 < availableWindowTargets.count }
+        } else {
+            order = Array(0..<availableWindowTargets.count)
+        }
+        guard !order.isEmpty else { return nil }
+
+        // Find the first sidebar position among the closed indices.
+        let closedPositions = order.enumerated().compactMap { closedIndices.contains($0.element) ? $0.offset : nil }
+        guard let firstClosedPos = closedPositions.min() else { return nil }
+
+        // Look for the first non-closed item below in sidebar order.
+        for pos in (firstClosedPos + 1)..<order.count {
+            let idx = order[pos]
+            if !closedIndices.contains(idx) {
+                let t = availableWindowTargets[idx]
+                return (t.processIdentifier, t.windowElement, t.windowTitle)
+            }
+        }
+        // Fall back to the first non-closed item above.
+        for pos in stride(from: firstClosedPos - 1, through: 0, by: -1) {
+            let idx = order[pos]
+            if !closedIndices.contains(idx) {
+                let t = availableWindowTargets[idx]
+                return (t.processIdentifier, t.windowElement, t.windowTitle)
+            }
+        }
+        return nil
+    }
+
     func closeWindowTarget(at index: Int) {
         guard index >= 0, index < availableWindowTargets.count else { return }
         let target = availableWindowTargets[index]
 
-        // Remember where the selection should land after the window disappears.
-        // The closed window will be removed, so `index` will point at the next one.
-        // If it was the last item, clamp to the new last item.
-        pendingTargetIndexAfterClose = index
+        // Remember which window to select after close, based on sidebar order.
+        pendingTargetAfterClose = nextSidebarTarget(afterClosing: [index])
 
         if let window = target.windowElement {
             accessibilityService.closeWindow(window)
@@ -57,6 +90,13 @@ extension AppState {
     func quitApp(at index: Int) {
         guard index >= 0, index < availableWindowTargets.count else { return }
         let target = availableWindowTargets[index]
+
+        // All windows of this app will disappear; collect their indices.
+        let closedIndices = Set(availableWindowTargets.enumerated()
+            .filter { $0.element.processIdentifier == target.processIdentifier }
+            .map(\.offset))
+        pendingTargetAfterClose = nextSidebarTarget(afterClosing: closedIndices)
+
         NSRunningApplication(processIdentifier: target.processIdentifier)?.terminate()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
@@ -266,8 +306,19 @@ extension AppState {
             totalByPID[target.processIdentifier, default: 0] += 1
         }
 
-        // Remember the lowest selected index for post-close selection.
-        pendingTargetIndexAfterClose = selectedWindowIndices.min()
+        // Collect all indices that will disappear (closed + quit app windows).
+        var allClosedIndices = selectedWindowIndices
+        // Pre-scan for apps that will be quit entirely — their other windows also disappear.
+        for (pid, selectedIndices) in selectedByPID {
+            let isFinder = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder"
+            let allSelected = selectedIndices.count >= (totalByPID[pid] ?? 0)
+            if allSelected && !isFinder {
+                for (i, t) in availableWindowTargets.enumerated() where t.processIdentifier == pid {
+                    allClosedIndices.insert(i)
+                }
+            }
+        }
+        pendingTargetAfterClose = nextSidebarTarget(afterClosing: allClosedIndices)
 
         var quittedPIDs: Set<pid_t> = []
         for (pid, selectedIndices) in selectedByPID {

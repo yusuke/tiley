@@ -5,6 +5,7 @@
 ### Geändert
 
 - Beim Überfahren einer Rasterzelle wird nun eine Miniatur-Fenstervorschau mit App-Symbol und Titelleiste angezeigt, anstatt eines einfachen blauen Rechtecks – passend zur Darstellung während des Ziehens
+- Nach dem Schließen eines Fensters über das Kontextmenü oder die „/"-Taste wird in der Seitenleiste nun das Element unterhalb des geschlossenen Fensters ausgewählt; wenn kein Element darunter vorhanden ist, wird das darüber liegende ausgewählt
 
 ### Behoben
 

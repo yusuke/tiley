@@ -418,14 +418,17 @@ extension AppState {
         activeSpaceIDs = captured?.activeSpaceIDs ?? []
         windowTargetListVersion += 1
 
-        if let pendingIndex = pendingTargetIndexAfterClose {
-            pendingTargetIndexAfterClose = nil
-            // Clamp to the new list bounds so the selection lands on the next window,
-            // or the new last window if the closed one was at the end.
-            if availableWindowTargets.isEmpty {
-                activeTargetIndex = 0
+        if let pending = pendingTargetAfterClose {
+            pendingTargetAfterClose = nil
+            // Find the pending target by PID + window element, falling back to PID + title.
+            if let matchIdx = availableWindowTargets.firstIndex(where: {
+                $0.processIdentifier == pending.pid && $0.windowElement == pending.windowElement
+            }) ?? availableWindowTargets.firstIndex(where: {
+                $0.processIdentifier == pending.pid && $0.windowTitle == pending.windowTitle
+            }) {
+                activeTargetIndex = matchIdx
             } else {
-                activeTargetIndex = min(pendingIndex, availableWindowTargets.count - 1)
+                activeTargetIndex = 0
             }
         } else if let current = activeLayoutTarget {
             activeTargetIndex = availableWindowTargets.firstIndex(where: {

@@ -215,8 +215,9 @@ final class AppState: NSObject, NSMenuDelegate {
     /// relying on `availableWindowTargets` at restoration time — the list
     /// may have been refreshed and the entry could be missing.
     @ObservationIgnored var displacedWindowFrames: [CGWindowID: (origin: CGPoint, window: AXUIElement)] = [:]
-    /// The index to select after the next `refreshAvailableWindows` call.
-    @ObservationIgnored var pendingTargetIndexAfterClose: Int?
+    /// The window to select after the next `refreshAvailableWindows` call,
+    /// identified by PID + window element + title so the match survives index shifts.
+    @ObservationIgnored var pendingTargetAfterClose: (pid: pid_t, windowElement: AXUIElement?, windowTitle: String?)?
     @ObservationIgnored var displayHighlightWindow: NSWindow?
 
     // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
