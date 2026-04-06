@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.3] - 2026-04-05
+
 ### Ajouté
 
 - Le menu contextuel inclut désormais « Fermer N fenêtres » lorsque plusieurs fenêtres sont sélectionnées ; les apps n'ayant qu'une seule fenêtre sont quittées au lieu de simplement fermer la fenêtre, et la sélection est réinitialisée à une seule fenêtre après la fermeture

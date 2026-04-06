@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.2.3] - 2026-04-05
+
 ### Added
 
 - Right-click context menu now includes "Close N windows" when multiple windows are selected; apps with only one window are quit instead of just closing the window, and selection resets to a single window afterward
@@ -624,7 +626,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.2...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.3...HEAD
+[4.2.3]: https://github.com/yusuke/tiley/releases/tag/v4.2.3
 [4.2.2]: https://github.com/yusuke/tiley/releases/tag/v4.2.2
 [4.2.1]: https://github.com/yusuke/tiley/releases/tag/v4.2.1
 [4.2.0]: https://github.com/yusuke/tiley/releases/tag/v4.2.0

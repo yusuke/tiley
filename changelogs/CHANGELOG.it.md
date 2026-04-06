@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.3] - 2026-04-05
+
 ### Aggiunto
 
 - Il menu contestuale ora include "Chiudi N finestre" quando sono selezionate più finestre; le app con una sola finestra vengono terminate invece di chiudere solo la finestra, e la selezione viene ripristinata a una singola finestra dopo la chiusura

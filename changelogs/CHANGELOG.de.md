@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.3] - 2026-04-05
+
 ### Hinzugefügt
 
 - Das Kontextmenü enthält nun „N Fenster schließen", wenn mehrere Fenster ausgewählt sind; Apps mit nur einem Fenster werden beendet statt nur das Fenster zu schließen, und die Auswahl wird danach auf ein einzelnes Fenster zurückgesetzt

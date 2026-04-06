@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.3] - 2026-04-05
+
 ### Adicionado
 
 - O menu de contexto agora inclui "Fechar N janelas" quando várias janelas estão selecionadas; apps com apenas uma janela são encerrados em vez de apenas fechar a janela, e a seleção é redefinida para uma única janela após o fechamento

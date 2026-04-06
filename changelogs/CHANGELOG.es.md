@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.2.3] - 2026-04-05
+
 ### Añadido
 
 - El menú contextual ahora incluye "Cerrar N ventanas" cuando hay varias ventanas seleccionadas; las apps con una sola ventana se cierran completamente en lugar de solo cerrar la ventana, y la selección se restablece a una sola ventana después
