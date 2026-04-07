@@ -20,32 +20,29 @@ extension AppState {
 
         // Use the sidebar display order so Tab cycles in the same visual order.
         let query = windowSearchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+
+        let matchesQuery: (Int) -> Bool = { i in
+            let target = self.availableWindowTargets[i]
+            let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            var appPart = target.appName
+            if let orig = Self.originalAppName(for: target.processIdentifier) {
+                appPart += " " + orig
+            }
+            return (appPart + " " + title).lowercased().isSubsequence(of: query)
+        }
+
         let filteredIndices: [Int]
         if !sidebarWindowOrder.isEmpty {
             // Use sidebar order, filtering out any stale indices.
             let valid = sidebarWindowOrder.filter { $0 < availableWindowTargets.count }
-            if query.isEmpty {
-                filteredIndices = valid
-            } else {
-                filteredIndices = valid.filter { i in
-                    let target = availableWindowTargets[i]
-                    let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                    return target.appName.lowercased().contains(query)
-                        || title.lowercased().contains(query)
-                }
-            }
+            filteredIndices = query.isEmpty ? valid : valid.filter(matchesQuery)
         } else {
             // Fallback: screen-ordered indices (sidebar not yet rendered).
-            var baseIndices: [Int]
+            let baseIndices: [Int]
             if query.isEmpty {
                 baseIndices = Array(availableWindowTargets.indices)
             } else {
-                baseIndices = availableWindowTargets.indices.filter { i in
-                    let target = availableWindowTargets[i]
-                    let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                    return target.appName.lowercased().contains(query)
-                        || title.lowercased().contains(query)
-                }
+                baseIndices = availableWindowTargets.indices.filter(matchesQuery)
             }
             filteredIndices = screenOrderedIndices(baseIndices)
         }
@@ -730,5 +727,16 @@ extension AppState {
             return freshTarget
         }
         return target
+    }
+
+    /// Returns the non-localized app name if it differs from the localized one.
+    private static func originalAppName(for pid: pid_t) -> String? {
+        guard let app = NSRunningApplication(processIdentifier: pid),
+              let bundleURL = app.bundleURL,
+              let bundle = Bundle(url: bundleURL),
+              let name = bundle.infoDictionary?["CFBundleName"] as? String,
+              name.lowercased() != app.localizedName?.lowercased()
+        else { return nil }
+        return name
     }
 }

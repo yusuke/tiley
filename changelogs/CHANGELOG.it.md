@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- La ricerca nella barra laterale ora utilizza la corrispondenza per sottosequenza — digitando "f1" si trova "Finder Users1" anche con caratteri non consecutivi
+- La ricerca nella barra laterale include anche il nome originale (non localizzato) dell'app, quindi "ai" corrisponde a "Mail" anche quando l'app viene visualizzata con un nome localizzato
+
 ## [4.2.3] - 2026-04-05
 
 ### Aggiunto

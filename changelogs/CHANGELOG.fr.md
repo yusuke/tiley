@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- La recherche dans la barre latérale utilise désormais la correspondance par sous-séquence — taper « f1 » correspond à « Finder Users1 » même avec des caractères non consécutifs
+- La recherche dans la barre latérale inclut également le nom original (non localisé) de l'app, ainsi « ai » correspond à « Mail » même si l'app est affichée avec un nom localisé
+
 ## [4.2.3] - 2026-04-05
 
 ### Ajouté

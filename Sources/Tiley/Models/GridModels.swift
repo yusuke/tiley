@@ -367,3 +367,17 @@ struct WindowResizePreset {
         }
     }
 }
+
+// MARK: - Subsequence Search
+
+extension String {
+    /// Returns `true` if all characters in `query` appear in `self` in order (subsequence match).
+    func isSubsequence(of query: String) -> Bool {
+        var searchIndex = self.startIndex
+        for ch in query {
+            guard let found = self[searchIndex...].firstIndex(of: ch) else { return false }
+            searchIndex = self.index(after: found)
+        }
+        return true
+    }
+}

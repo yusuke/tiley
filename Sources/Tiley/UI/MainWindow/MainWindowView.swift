@@ -1312,9 +1312,12 @@ struct MainWindowView: View {
         for (index, target) in targets.enumerated() {
             let title = target.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             if !query.isEmpty {
-                let matchesApp = target.appName.lowercased().contains(query)
-                let matchesTitle = title.lowercased().contains(query)
-                if !matchesApp && !matchesTitle { continue }
+                var appPart = target.appName
+                if let orig = appInfoCache.originalAppName(for: target.processIdentifier) {
+                    appPart += " " + orig
+                }
+                let combined = (appPart + " " + title).lowercased()
+                if !combined.isSubsequence(of: query) { continue }
             }
             let isFinder = appInfoCache.bundleID(for: target.processIdentifier) == "com.apple.finder"
             items.append(WindowListItem(

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Seitenleistensuche verwendet jetzt Teilsequenz-Matching — die Eingabe von „f1" findet „Finder Users1" auch bei nicht aufeinanderfolgenden Zeichen
+- Seitenleistensuche berücksichtigt auch den ursprünglichen (nicht lokalisierten) App-Namen, sodass „ai" auch „Mail" findet, wenn die App lokalisiert angezeigt wird
+
 ## [4.2.3] - 2026-04-05
 
 ### Hinzugefügt

@@ -113,6 +113,7 @@ struct NotchShape: Shape {
 final class AppInfoCache {
     private var icons: [pid_t: NSImage] = [:]
     private var bundleIDs: [pid_t: String] = [:]
+    private var originalNames: [pid_t: String?] = [:]
 
     func icon(for pid: pid_t) -> NSImage? {
         if let cached = icons[pid] { return cached }
@@ -128,8 +129,27 @@ final class AppInfoCache {
         return id
     }
 
+    /// Returns the non-localized (original) app name for the given PID, if different from the localized name.
+    func originalAppName(for pid: pid_t) -> String? {
+        if let cached = originalNames[pid] { return cached }  // returns String? from the dict
+        guard !originalNames.keys.contains(pid) else { return nil }  // already looked up, no result
+        guard let app = NSRunningApplication(processIdentifier: pid),
+              let bundleURL = app.bundleURL else { return nil }
+        let bundle = Bundle(url: bundleURL)
+        // Read CFBundleName from the root Info.plist (not the localized version).
+        let name = bundle?.infoDictionary?["CFBundleName"] as? String
+        // Only store if it differs from the localized name.
+        if let name, name.lowercased() != app.localizedName?.lowercased() {
+            originalNames[pid] = name
+            return name
+        }
+        originalNames[pid] = nil
+        return nil
+    }
+
     func invalidate() {
         icons.removeAll(keepingCapacity: true)
         bundleIDs.removeAll(keepingCapacity: true)
+        originalNames.removeAll(keepingCapacity: true)
     }
 }

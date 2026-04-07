@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- A busca na barra lateral agora usa correspondência por subsequência — digitar "f1" encontra "Finder Users1" mesmo com caracteres não consecutivos
+- A busca na barra lateral também pesquisa o nome original (não localizado) do app, então "ai" encontra "Mail" mesmo quando o app é exibido com um nome localizado
+
 ## [4.2.3] - 2026-04-05
 
 ### Adicionado
