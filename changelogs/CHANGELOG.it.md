@@ -7,6 +7,11 @@
 - La ricerca nella barra laterale ora utilizza la corrispondenza per sottosequenza — digitando "f1" si trova "Finder Users1" anche con caratteri non consecutivi
 - La ricerca nella barra laterale include anche il nome originale (non localizzato) dell'app, quindi "ai" corrisponde a "Mail" anche quando l'app viene visualizzata con un nome localizzato
 
+### Corretto
+
+- Corretto un problema per cui la chiusura di una finestra causava talvolta la selezione multipla involontaria delle finestre successive nella barra laterale
+- Corretto un problema per cui la finestra in miniatura sulla griglia non si aggiornava al nuovo obiettivo dopo la chiusura di una finestra
+
 ## [4.2.3] - 2026-04-05
 
 ### Aggiunto

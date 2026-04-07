@@ -7,6 +7,11 @@
 - La búsqueda en la barra lateral ahora utiliza coincidencia de subsecuencia: escribir "f1" coincide con "Finder Users1" incluso con caracteres no consecutivos
 - La búsqueda en la barra lateral también busca en el nombre original (no localizado) de la app, por lo que "ai" coincide con "Mail" aunque se muestre con un nombre localizado
 
+### Corregido
+
+- Corregido un problema donde al cerrar una ventana se seleccionaban involuntariamente varias ventanas posteriores en la barra lateral
+- Corregido un problema donde la ventana en miniatura de la cuadrícula no se actualizaba al nuevo objetivo tras cerrar una ventana
+
 ## [4.2.3] - 2026-04-05
 
 ### Añadido

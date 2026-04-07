@@ -7,6 +7,11 @@
 - Seitenleistensuche verwendet jetzt Teilsequenz-Matching — die Eingabe von „f1" findet „Finder Users1" auch bei nicht aufeinanderfolgenden Zeichen
 - Seitenleistensuche berücksichtigt auch den ursprünglichen (nicht lokalisierten) App-Namen, sodass „ai" auch „Mail" findet, wenn die App lokalisiert angezeigt wird
 
+### Behoben
+
+- Beim Schließen eines Fensters wurden nachfolgende Fenster in der Seitenleiste manchmal unbeabsichtigt mehrfach ausgewählt
+- Das Miniaturfenster im Raster wurde nach dem Schließen eines Fensters nicht auf das neue Ziel aktualisiert
+
 ## [4.2.3] - 2026-04-05
 
 ### Hinzugefügt

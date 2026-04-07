@@ -415,8 +415,10 @@ extension AppState {
         activeSpaceIDs = captured?.activeSpaceIDs ?? []
         windowTargetListVersion += 1
 
+        var didConsumePendingClose = false
         if let pending = pendingTargetAfterClose {
             pendingTargetAfterClose = nil
+            didConsumePendingClose = true
             // Find the pending target by PID + window element, falling back to PID + title.
             if let matchIdx = availableWindowTargets.firstIndex(where: {
                 $0.processIdentifier == pending.pid && $0.windowElement == pending.windowElement
@@ -439,12 +441,27 @@ extension AppState {
             activeTargetIndex = 0
         }
 
-        // Reconcile multi-selection: remove stale indices and ensure invariant.
-        selectedWindowIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }
-        selectionOrder = selectionOrder.filter { $0 < availableWindowTargets.count }
-        selectedWindowIndices.insert(activeTargetIndex)
-        if !selectionOrder.contains(activeTargetIndex) {
-            selectionOrder.insert(activeTargetIndex, at: 0)
+        if didConsumePendingClose {
+            // After a window close, reset to single selection so the next
+            // focused window is the sole selection (prevents stale indices
+            // from creating unintended multi-selection).
+            selectedWindowIndices = [activeTargetIndex]
+            selectionOrder = [activeTargetIndex]
+            selectionAnchorIndex = nil
+        } else {
+            // Reconcile multi-selection: remove stale indices and ensure invariant.
+            selectedWindowIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }
+            selectionOrder = selectionOrder.filter { $0 < availableWindowTargets.count }
+            selectedWindowIndices.insert(activeTargetIndex)
+            if !selectionOrder.contains(activeTargetIndex) {
+                selectionOrder.insert(activeTargetIndex, at: 0)
+            }
+        }
+
+        // Update the active target and overlay (e.g. miniature window) to
+        // reflect the new window list.
+        if !availableWindowTargets.isEmpty {
+            applyTargetAtCurrentIndex()
         }
     }
 

@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Sidebar search now uses subsequence matching — typing "f1" matches "Finder Users1" even when characters are non-consecutive
 - Sidebar search also matches against the original (non-localized) app name, so typing "ai" matches "Mail" even when the app is displayed as "メール"
 
+### Fixed
+
+- Fix closing a window sometimes causing unintended multi-selection of subsequent windows in the sidebar
+- Fix miniature window on the grid not updating to reflect the new target after closing a window
+
 ## [4.2.3] - 2026-04-05
 
 ### Added

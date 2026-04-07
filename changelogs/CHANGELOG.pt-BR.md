@@ -7,6 +7,11 @@
 - A busca na barra lateral agora usa correspondência por subsequência — digitar "f1" encontra "Finder Users1" mesmo com caracteres não consecutivos
 - A busca na barra lateral também pesquisa o nome original (não localizado) do app, então "ai" encontra "Mail" mesmo quando o app é exibido com um nome localizado
 
+### Corrigido
+
+- Corrigido um problema onde fechar uma janela às vezes causava a seleção múltipla involuntária das janelas seguintes na barra lateral
+- Corrigido um problema onde a janela em miniatura na grade não era atualizada para o novo alvo após fechar uma janela
+
 ## [4.2.3] - 2026-04-05
 
 ### Adicionado

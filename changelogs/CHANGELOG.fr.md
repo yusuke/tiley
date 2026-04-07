@@ -7,6 +7,11 @@
 - La recherche dans la barre latérale utilise désormais la correspondance par sous-séquence — taper « f1 » correspond à « Finder Users1 » même avec des caractères non consécutifs
 - La recherche dans la barre latérale inclut également le nom original (non localisé) de l'app, ainsi « ai » correspond à « Mail » même si l'app est affichée avec un nom localisé
 
+### Corrigé
+
+- Correction d'un problème où la fermeture d'une fenêtre entraînait parfois une sélection multiple involontaire des fenêtres suivantes dans la barre latérale
+- Correction d'un problème où la fenêtre miniature sur la grille ne se mettait pas à jour vers la nouvelle cible après la fermeture d'une fenêtre
+
 ## [4.2.3] - 2026-04-05
 
 ### Ajouté
