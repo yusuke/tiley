@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-04-07
+
 ### Modifié
 
 - La recherche dans la barre latérale utilise désormais la correspondance par sous-séquence — taper « f1 » correspond à « Finder Users1 » même avec des caractères non consécutifs

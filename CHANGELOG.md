@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-04-07
+
 ### Changed
 
 - Sidebar search now uses subsequence matching — typing "f1" matches "Finder Users1" even when characters are non-consecutive
@@ -636,7 +638,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.2.3...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/yusuke/tiley/releases/tag/v4.3.0
 [4.2.3]: https://github.com/yusuke/tiley/releases/tag/v4.2.3
 [4.2.2]: https://github.com/yusuke/tiley/releases/tag/v4.2.2
 [4.2.1]: https://github.com/yusuke/tiley/releases/tag/v4.2.1

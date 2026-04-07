@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-04-07
+
 ### Geändert
 
 - Seitenleistensuche verwendet jetzt Teilsequenz-Matching — die Eingabe von „f1" findet „Finder Users1" auch bei nicht aufeinanderfolgenden Zeichen

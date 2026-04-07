@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-04-07
+
 ### Alterado
 
 - A busca na barra lateral agora usa correspondência por subsequência — digitar "f1" encontra "Finder Users1" mesmo com caracteres não consecutivos
