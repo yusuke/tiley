@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-04-07
+
 ### Corrigé
 
 - Masquage de la fenêtre des réglages lorsque Sparkle affiche la boîte de dialogue de mise à jour, empêchant l'aperçu de la grille au survol de ramener la fenêtre des réglages au premier plan et de bloquer le bouton « Installer et redémarrer »

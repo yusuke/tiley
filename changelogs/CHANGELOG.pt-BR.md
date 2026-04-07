@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-04-07
+
 ### Corrigido
 
 - Ocultar a janela de configurações quando o Sparkle exibe o diálogo de atualização, evitando que a pré-visualização da grade ao passar o mouse traga a janela de configurações para frente e bloqueie o botão "Instalar e reiniciar"

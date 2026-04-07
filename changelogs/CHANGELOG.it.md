@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-04-07
+
 ### Corretto
 
 - La finestra delle impostazioni viene ora nascosta quando Sparkle mostra la finestra di aggiornamento, impedendo che l'anteprima della griglia al passaggio del mouse porti la finestra delle impostazioni in primo piano e blocchi il pulsante "Installa e riavvia"

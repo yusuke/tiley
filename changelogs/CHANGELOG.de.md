@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-04-07
+
 ### Behoben
 
 - Einstellungsfenster wird nun ausgeblendet, wenn Sparkle den Update-Dialog anzeigt, sodass die Rastervorschau beim Hover das Einstellungsfenster nicht mehr in den Vordergrund bringt und die Schaltfläche „Installieren und Neustarten" blockiert

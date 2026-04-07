@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-04-07
+
 ### Corregido
 
 - Se oculta la ventana de ajustes cuando Sparkle muestra el diálogo de actualización, evitando que la previsualización de la cuadrícula al pasar el cursor traiga la ventana de ajustes al frente y bloquee el botón "Instalar y reiniciar"

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-04-07
+
 ### Fixed
 
 - Hide the settings window when Sparkle shows an update dialog, preventing the grid preview hover from bringing the settings window to front and blocking the "Install and Restart" button
@@ -642,7 +644,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.1...HEAD
+[4.3.1]: https://github.com/yusuke/tiley/releases/tag/v4.3.1
 [4.3.0]: https://github.com/yusuke/tiley/releases/tag/v4.3.0
 [4.2.3]: https://github.com/yusuke/tiley/releases/tag/v4.2.3
 [4.2.2]: https://github.com/yusuke/tiley/releases/tag/v4.2.2
