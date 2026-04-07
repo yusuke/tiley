@@ -3,6 +3,131 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.3.0</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Поиск в боковой панели теперь использует сопоставление подпоследовательностей — ввод «f1» находит «Finder Users1» даже при непоследовательных символах</li>
+<li>Поиск в боковой панели также ищет по оригинальному (нелокализованному) имени приложения, поэтому «ai» находит «Mail», даже если приложение отображается с локализованным именем</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена ошибка, при которой закрытие окна иногда приводило к непреднамеренному выделению нескольких последующих окон в боковой панели</li>
+<li>Исправлена ошибка, при которой миниатюра окна на сетке не обновлялась на новую цель после закрытия окна</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>A busca na barra lateral agora usa correspondência por subsequência — digitar "f1" encontra "Finder Users1" mesmo com caracteres não consecutivos</li>
+<li>A busca na barra lateral também pesquisa o nome original (não localizado) do app, então "ai" encontra "Mail" mesmo quando o app é exibido com um nome localizado</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema onde fechar uma janela às vezes causava a seleção múltipla involuntária das janelas seguintes na barra lateral</li>
+<li>Corrigido um problema onde a janela em miniatura na grade não era atualizada para o novo alvo após fechar uma janela</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>La ricerca nella barra laterale ora utilizza la corrispondenza per sottosequenza — digitando "f1" si trova "Finder Users1" anche con caratteri non consecutivi</li>
+<li>La ricerca nella barra laterale include anche il nome originale (non localizzato) dell'app, quindi "ai" corrisponde a "Mail" anche quando l'app viene visualizzata con un nome localizzato</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto un problema per cui la chiusura di una finestra causava talvolta la selezione multipla involontaria delle finestre successive nella barra laterale</li>
+<li>Corretto un problema per cui la finestra in miniatura sulla griglia non si aggiornava al nuovo obiettivo dopo la chiusura di una finestra</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>La recherche dans la barre latérale utilise désormais la correspondance par sous-séquence — taper « f1 » correspond à « Finder Users1 » même avec des caractères non consécutifs</li>
+<li>La recherche dans la barre latérale inclut également le nom original (non localisé) de l'app, ainsi « ai » correspond à « Mail » même si l'app est affichée avec un nom localisé</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un problème où la fermeture d'une fenêtre entraînait parfois une sélection multiple involontaire des fenêtres suivantes dans la barre latérale</li>
+<li>Correction d'un problème où la fenêtre miniature sur la grille ne se mettait pas à jour vers la nouvelle cible après la fermeture d'une fenêtre</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>La búsqueda en la barra lateral ahora utiliza coincidencia de subsecuencia: escribir "f1" coincide con "Finder Users1" incluso con caracteres no consecutivos</li>
+<li>La búsqueda en la barra lateral también busca en el nombre original (no localizado) de la app, por lo que "ai" coincide con "Mail" aunque se muestre con un nombre localizado</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema donde al cerrar una ventana se seleccionaban involuntariamente varias ventanas posteriores en la barra lateral</li>
+<li>Corregido un problema donde la ventana en miniatura de la cuadrícula no se actualizaba al nuevo objetivo tras cerrar una ventana</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Seitenleistensuche verwendet jetzt Teilsequenz-Matching — die Eingabe von „f1" findet „Finder Users1" auch bei nicht aufeinanderfolgenden Zeichen</li>
+<li>Seitenleistensuche berücksichtigt auch den ursprünglichen (nicht lokalisierten) App-Namen, sodass „ai" auch „Mail" findet, wenn die App lokalisiert angezeigt wird</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Beim Schließen eines Fensters wurden nachfolgende Fenster in der Seitenleiste manchmal unbeabsichtigt mehrfach ausgewählt</li>
+<li>Das Miniaturfenster im Raster wurde nach dem Schließen eines Fensters nicht auf das neue Ziel aktualisiert</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>側邊欄搜尋現在支援子序列匹配——輸入「f1」即可匹配「Finder Users1」等非連續字元</li>
+<li>側邊欄搜尋同時匹配應用程式的原始（非本地化）名稱，輸入「ai」即可匹配顯示為本地化名稱的「Mail」</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正關閉視窗後側邊欄中後續視窗被意外多選的問題</li>
+<li>修正關閉視窗後網格上的微縮視窗未更新為新目標的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>侧边栏搜索现在支持子序列匹配——输入"f1"即可匹配"Finder Users1"等非连续字符</li>
+<li>侧边栏搜索同时匹配应用的原始（非本地化）名称，输入"ai"即可匹配显示为本地化名称的"Mail"</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复关闭窗口后侧边栏中后续窗口被意外多选的问题</li>
+<li>修复关闭窗口后网格上的微缩窗口未更新为新目标的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>사이드바 검색이 부분 문자열 매칭을 지원 — "f1"을 입력하면 연속되지 않은 문자가 포함된 "Finder Users1"도 검색됨</li>
+<li>사이드바 검색이 앱의 원래 이름(비현지화 이름)도 검색하여, "ai"로 "Mail"(현지화명과 다를 경우)도 매칭</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>창을 닫은 후 사이드바에서 이후 창이 의도치 않게 다중 선택되는 문제 수정</li>
+<li>창을 닫은 후 그리드의 미니어처 윈도우가 새 대상으로 업데이트되지 않는 문제 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>サイドバー検索がサブシーケンスマッチに対応 —「f1」で「Finder Users1」のように連続しない文字でもヒットするように</li>
+<li>サイドバー検索がアプリの元の名前（非ローカライズ名）にもマッチするように。「ai」で「メール」（Mail）がヒット</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>ウインドウを閉じた後、サイドバーで後続のウインドウが意図せず複数選択されることがある問題を修正</li>
+<li>ウインドウを閉じた後、グリッド上のミニチュアウインドウが新しいターゲットに更新されない問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Sidebar search now uses subsequence matching — typing "f1" matches "Finder Users1" even when characters are non-consecutive</li>
+<li>Sidebar search also matches against the original (non-localized) app name, so typing "ai" matches "Mail" even when the app is displayed as "メール"</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fix closing a window sometimes causing unintended multi-selection of subsequent windows in the sidebar</li>
+<li>Fix miniature window on the grid not updating to reflect the new target after closing a window</li>
+</ul>]]></description>
+            <pubDate>Tue, 07 Apr 2026 22:33:35 +0900</pubDate>
+            <sparkle:version>430</sparkle:version>
+            <sparkle:shortVersionString>4.3.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley-4.3.0.zip" length="5747013" type="application/octet-stream" sparkle:edSignature="F9dU/4juLV24Sh70ZTZihnaiia9TC9K7aqRF0B/eo7dcSGPjI5kSXWcSp4WrmcHfMFbSr9ti5ijP8f8u0qgGDQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-423.delta" sparkle:deltaFrom="423" length="244894" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2Z842b3CmTaVwKM7xHNcYk1DklSsByCsFHNeqqYmWRkhlDQaT7IzrPjsTOMQtQzk6DFelj0+JCZKaPZ8V9w2Ag=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-422.delta" sparkle:deltaFrom="422" length="371966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yWAoHFAw7ocBSf+DGzPiqQZLPXIuXlQWgXaAAf138Kg6EDA7gn3MuV6Qb536QyNLYy8+odLhOPpSn05f7YZdBw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-421.delta" sparkle:deltaFrom="421" length="385378" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="g+QVPrsjIDa/tHYE3FJyNq8C61MP4I3ACtIwh0/d4HU2xqkzgccfkL8wAMkDY7dyqr2b+JnPS9IwTWROX8smAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-420.delta" sparkle:deltaFrom="420" length="396078" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ngYf3cLC6zyaJkfbTAD9Jg0NJcaFkKvWOP21a/2828xrniF+QaFMWjk4lUo827cbzTaVddcvzSFTcLT7oLjyCg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-412.delta" sparkle:deltaFrom="412" length="469102" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9jlNTtdKE+fbdb2o7fkq7jUWhLQ0sZe0ulw5hsqAmEtUga2AQ51PoS10fYE7abicLiV+iSkowfpZdJGj3ThsDg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.2.3</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -202,11 +327,191 @@
 <li>Dismiss Show Desktop and Mission Control states when invoking Tiley via global shortcut or menu bar icon</li>
 <li>Prevent Tiley's overlay window from appearing in Mission Control / Exposé</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>O menu de contexto agora inclui "Fechar N janelas" quando várias janelas estão selecionadas; apps com apenas uma janela são encerrados em vez de apenas fechar a janela, e a seleção é redefinida para uma única janela após o fechamento</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>Ao passar o mouse sobre uma célula da grade, agora é exibida uma pré-visualização de janela em miniatura com o ícone do app e a barra de título, em vez de um simples retângulo azul, unificando a aparência com a seleção por arrasto</li>
+<li>Ao fechar uma janela pelo menu de contexto ou pela tecla "/", a barra lateral agora seleciona o item abaixo da janela fechada; se não houver item abaixo, seleciona o item acima</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Janelas deslocadas (não alvo) agora retornam corretamente à posição original após aplicar um layout de múltiplas janelas</li>
+<li>"Última seleção" agora é exibida corretamente mesmo quando seu layout principal corresponde a um preset que possui layouts secundários (por exemplo, selecionar manualmente a metade superior não é mais ocultado pelo preset "Metade superior" que também inclui um layout secundário para a metade inferior)</li>
+<li>A sobreposição de pré-visualização da grade não era exibida ao passar o mouse sobre a seção Grade nas Configurações</li>
+<li>A sobreposição de pré-visualização da grade não era atualizada em tempo real ao alterar os valores de linhas, colunas ou espaçamento nas Configurações</li>
+<li>Os estados "Mostrar Área de Trabalho" e Mission Control são automaticamente encerrados ao invocar o Tiley pelo atalho global ou ícone da barra de menus</li>
+<li>A janela de sobreposição do Tiley não aparece mais no Mission Control / Exposé</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Il menu contestuale ora include "Chiudi N finestre" quando sono selezionate più finestre; le app con una sola finestra vengono terminate invece di chiudere solo la finestra, e la selezione viene ripristinata a una singola finestra dopo la chiusura</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Il passaggio del mouse su una cella della griglia ora mostra un'anteprima della finestra in miniatura con l'icona dell'app e la barra del titolo, al posto di un semplice rettangolo blu, uniformando l'aspetto con la selezione tramite trascinamento</li>
+<li>Dopo aver chiuso una finestra tramite il menu contestuale o il tasto "/", la barra laterale ora seleziona l'elemento sotto la finestra chiusa; se non c'è un elemento sotto, viene selezionato quello sopra</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Le finestre spostate (non target) ora tornano correttamente alla posizione originale dopo l'applicazione di un layout multi-finestra</li>
+<li>"Ultima selezione" ora viene visualizzata correttamente anche quando il suo layout principale corrisponde a un preset che ha layout secondari (ad esempio, la selezione manuale della metà superiore non viene più nascosta dal preset "Metà superiore" che include anche un layout secondario per la metà inferiore)</li>
+<li>L'anteprima della griglia non veniva visualizzata al passaggio del mouse sulla sezione Griglia nelle Impostazioni</li>
+<li>L'anteprima della griglia non si aggiornava in tempo reale quando si modificavano i valori di righe, colonne o spaziatura nelle Impostazioni</li>
+<li>Gli stati "Mostra Scrivania" e Mission Control vengono automaticamente chiusi quando si richiama Tiley tramite la scorciatoia globale o l'icona nella barra dei menu</li>
+<li>La finestra di sovrapposizione di Tiley non viene più visualizzata in Mission Control / Exposé</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Le menu contextuel inclut désormais « Fermer N fenêtres » lorsque plusieurs fenêtres sont sélectionnées ; les apps n'ayant qu'une seule fenêtre sont quittées au lieu de simplement fermer la fenêtre, et la sélection est réinitialisée à une seule fenêtre après la fermeture</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>Le survol d'une cellule de la grille affiche désormais un aperçu de fenêtre miniature avec l'icône de l'application et la barre de titre, au lieu d'un simple rectangle bleu, harmonisant l'apparence avec la sélection par glisser</li>
+<li>Après la fermeture d'une fenêtre via le menu contextuel ou la touche « / », la barre latérale sélectionne désormais l'élément situé en dessous de la fenêtre fermée ; s'il n'y a pas d'élément en dessous, l'élément au-dessus est sélectionné</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Les fenêtres déplacées (non ciblées) reviennent désormais correctement à leur position d'origine après l'application d'une disposition multi-fenêtres</li>
+<li>« Dernière sélection » s'affiche désormais correctement même lorsque sa disposition principale correspond à un préréglage comportant des dispositions secondaires (par exemple, la sélection manuelle de la moitié supérieure n'est plus masquée par le préréglage « Moitié supérieure » qui inclut également une disposition secondaire pour la moitié inférieure)</li>
+<li>L'aperçu de la grille ne s'affichait pas au survol de la section Grille dans les Réglages</li>
+<li>L'aperçu de la grille ne se mettait pas à jour en temps réel lors de la modification des valeurs de lignes, colonnes ou espacement dans les Réglages</li>
+<li>Les états « Afficher le bureau » et Mission Control sont automatiquement désactivés lors de l'appel de Tiley via le raccourci global ou l'icône de la barre des menus</li>
+<li>La fenêtre de superposition de Tiley n'apparaît plus dans Mission Control / Exposé</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>El menú contextual ahora incluye "Cerrar N ventanas" cuando hay varias ventanas seleccionadas; las apps con una sola ventana se cierran completamente en lugar de solo cerrar la ventana, y la selección se restablece a una sola ventana después</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Al pasar el cursor sobre una celda de la cuadrícula, ahora se muestra una vista previa de ventana en miniatura con el icono de la app y la barra de título, en lugar de un simple rectángulo azul, unificando la apariencia con la selección por arrastre</li>
+<li>Al cerrar una ventana mediante el menú contextual o la tecla "/", la barra lateral ahora selecciona el elemento debajo de la ventana cerrada; si no hay ninguno debajo, selecciona el de arriba</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Las ventanas desplazadas (no objetivo) ahora vuelven correctamente a su posición original tras aplicar un diseño de múltiples ventanas</li>
+<li>"Última selección" ahora se muestra correctamente incluso cuando su diseño principal coincide con un preset que tiene diseños secundarios (por ejemplo, seleccionar manualmente la mitad superior ya no queda oculto por el preset "Mitad superior" que también incluye un diseño secundario de la mitad inferior)</li>
+<li>La superposición de vista previa de la cuadrícula no se mostraba al pasar el cursor sobre la sección de cuadrícula en Ajustes</li>
+<li>La superposición de vista previa de la cuadrícula no se actualizaba en tiempo real al cambiar los valores de filas, columnas o espaciado en Ajustes</li>
+<li>Se sale automáticamente de Mostrar Escritorio y Mission Control al invocar Tiley mediante el atajo global o el icono de la barra de menús</li>
+<li>La ventana de superposición de Tiley ya no aparece en Mission Control / Exposé</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Das Kontextmenü enthält nun „N Fenster schließen", wenn mehrere Fenster ausgewählt sind; Apps mit nur einem Fenster werden beendet statt nur das Fenster zu schließen, und die Auswahl wird danach auf ein einzelnes Fenster zurückgesetzt</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Beim Überfahren einer Rasterzelle wird nun eine Miniatur-Fenstervorschau mit App-Symbol und Titelleiste angezeigt, anstatt eines einfachen blauen Rechtecks – passend zur Darstellung während des Ziehens</li>
+<li>Nach dem Schließen eines Fensters über das Kontextmenü oder die „/"-Taste wird in der Seitenleiste nun das Element unterhalb des geschlossenen Fensters ausgewählt; wenn kein Element darunter vorhanden ist, wird das darüber liegende ausgewählt</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Verschobene (Nicht-Ziel-)Fenster kehren nach Anwendung eines Multi-Fenster-Layouts nun korrekt an ihre ursprüngliche Position zurück</li>
+<li>„Letzte Auswahl" wird nun korrekt angezeigt, auch wenn das primäre Layout mit einem Preset übereinstimmt, das sekundäre Layouts enthält (z. B. wird die manuelle Auswahl der oberen Hälfte nicht mehr durch das Preset „Obere Hälfte" ausgeblendet, das auch ein sekundäres Layout für die untere Hälfte enthält)</li>
+<li>Rastervorschau-Overlay wurde beim Überfahren des Rasterbereichs in den Einstellungen nicht angezeigt</li>
+<li>Rastervorschau-Overlay wurde beim Ändern von Zeilen, Spalten oder Abstandswerten in den Einstellungen nicht in Echtzeit aktualisiert</li>
+<li>„Schreibtisch anzeigen" und Mission Control werden beim Aufrufen von Tiley über das globale Tastenkürzel oder das Menüleistensymbol automatisch beendet</li>
+<li>Tiley-Overlay-Fenster wird nicht mehr in Mission Control / Exposé angezeigt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>選取多個視窗時，右鍵選單新增「關閉 N 個視窗」選項；只有一個視窗的應用程式會被結束而不是僅關閉視窗，關閉後選取會重設為單一視窗</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>網格儲存格懸停時現在顯示帶有應用程式圖示和標題列的迷你視窗預覽，取代原來的藍色矩形，與拖曳選取時的外觀保持一致</li>
+<li>透過右鍵選單或「/」鍵關閉視窗後，側邊欄現在會選取被關閉視窗下方的項目；如果下方沒有項目，則選取上方的項目</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正套用多視窗佈局後，非目標的位移視窗未恢復到原始位置的問題</li>
+<li>當預設包含次要佈局時（例如「上半部分」預設同時包含下半部分的次要佈局），即使主要佈局匹配，「上次選取」現在也能正確顯示</li>
+<li>修正在設定畫面的網格區域懸停時網格預覽疊加層不顯示的問題</li>
+<li>修正在設定畫面更改行數、列數或間距值時網格預覽疊加層不即時更新的問題</li>
+<li>透過全域快捷鍵或選單列圖示呼叫 Tiley 時，自動退出「顯示桌面」和 Mission Control 狀態</li>
+<li>修正 Tiley 覆蓋視窗在 Mission Control / Exposé 中可見的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>选择多个窗口时，右键菜单新增"关闭 N 个窗口"选项；只有一个窗口的应用会被退出而不是仅关闭窗口，关闭后选择会重置为单个窗口</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>网格单元格悬停时现在显示带有应用图标和标题栏的迷你窗口预览，取代原来的蓝色矩形，与拖拽选择时的外观保持一致</li>
+<li>通过右键菜单或"/"键关闭窗口后，侧边栏现在会选择被关闭窗口下方的项目；如果下方没有项目，则选择上方的项目</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复应用多窗口布局后，非目标的移位窗口未恢复到原始位置的问题</li>
+<li>当预设包含次要布局时（例如"上半部分"预设同时包含下半部分的次要布局），即使主要布局匹配，"上次选择"现在也能正确显示</li>
+<li>修复在设置界面的网格区域悬停时网格预览叠加层不显示的问题</li>
+<li>修复在设置界面更改行数、列数或间距值时网格预览叠加层不实时更新的问题</li>
+<li>通过全局快捷键或菜单栏图标调用 Tiley 时，自动退出"显示桌面"和 Mission Control 状态</li>
+<li>修复 Tiley 覆盖窗口在 Mission Control / Exposé 中可见的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>여러 창이 선택된 상태에서 오른쪽 클릭 메뉴에 "N개의 윈도우 닫기" 옵션 추가. 창이 하나뿐인 앱은 창을 닫는 대신 종료하며, 닫은 후 선택이 단일 창으로 초기화됨</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>그리드 셀 호버 시 단순한 파란색 사각형 대신 앱 아이콘과 제목 표시줄이 포함된 미니 윈도우 미리보기를 표시하여 드래그 선택 시 모양과 통일</li>
+<li>오른쪽 클릭 메뉴 또는 "/" 키로 창을 닫은 후, 사이드바에서 닫힌 창 아래에 있는 항목이 선택되도록 변경 (아래에 항목이 없으면 위의 항목을 선택)</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>다중 창 레이아웃 적용 후 대상이 아닌 대피 창이 원래 위치로 돌아가지 않는 문제 수정</li>
+<li>프리셋에 보조 레이아웃이 있는 경우(예: "상단 절반" 프리셋이 하단 절반 보조 레이아웃을 포함하는 경우), 기본 레이아웃이 일치하더라도 "마지막 선택"이 올바르게 표시되도록 수정</li>
+<li>설정 화면의 그리드 섹션에 마우스를 올려도 그리드 미리보기 오버레이가 표시되지 않는 문제 수정</li>
+<li>설정 화면에서 행, 열, 간격 값을 변경해도 그리드 미리보기 오버레이가 실시간으로 업데이트되지 않는 문제 수정</li>
+<li>글로벌 단축키 또는 메뉴 막대 아이콘으로 Tiley를 호출할 때 데스크탑 보기 및 Mission Control 상태를 자동으로 해제하도록 수정</li>
+<li>Tiley 오버레이 창이 Mission Control / Exposé에 표시되지 않도록 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>複数ウインドウ選択時の右クリックメニューに「N個のウインドウを閉じる」を追加。ウインドウが1つしかないアプリは閉じる代わりに終了し、閉じた後は選択が単一ウインドウにリセットされる</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>グリッドセルのホバー時に、単なる青い矩形ではなくアプリアイコンとタイトルバー付きのミニウインドウプレビューを表示するように変更し、ドラッグ中の表示と統一</li>
+<li>右クリックメニューまたは「/」キーでウインドウを閉じた後、サイドバーで閉じたウインドウの下にあるアイテムが選択されるように変更（下にアイテムがない場合は上のアイテムを選択）</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>マルチウインドウレイアウト適用後、レイアウト対象外の待避ウインドウが元の位置に戻らない不具合を修正</li>
+<li>プリセットにセカンダリレイアウトがある場合（例：「上半分」プリセットが下半分のセカンダリレイアウトを含む場合）、プライマリが一致していても「最後の選択」が正しく表示されるように修正</li>
+<li>設定画面のグリッドセクションをホバーしてもグリッドプレビューオーバーレイが表示されない問題を修正</li>
+<li>設定画面で行数・列数・ギャップを変更してもグリッドプレビューオーバーレイがリアルタイムで更新されない問題を修正</li>
+<li>グローバルショートカットまたはメニューバーアイコンでTileyを呼び出す際、デスクトップを表示やMission Controlの状態を自動的に解除するように修正</li>
+<li>Tileyのオーバーレイウインドウが Mission Control / Exposé に表示されないように修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Right-click context menu now includes "Close N windows" when multiple windows are selected; apps with only one window are quit instead of just closing the window, and selection resets to a single window afterward</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Grid cell hover now shows a miniature window preview (with app icon and title bar) instead of a plain blue rectangle, matching the drag selection appearance</li>
+<li>After closing a window via right-click menu or "/" key, the sidebar now selects the item below the closed window; if there is no item below, it selects the item above</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fix displaced (non-target) windows not returning to their original positions after applying a multi-window layout</li>
+<li>"Last Selection" now correctly appears even when its primary layout matches a preset that has secondary layouts (e.g., manually selecting the upper half no longer gets hidden by the "Upper Half" preset which also includes a lower-half secondary layout)</li>
+<li>Fix grid preview overlay not appearing when hovering the Grid section in Settings</li>
+<li>Fix grid preview overlay not updating in real time when changing rows, columns, or gap values in Settings</li>
+<li>Dismiss Show Desktop and Mission Control states when invoking Tiley via global shortcut or menu bar icon</li>
+<li>Prevent Tiley's overlay window from appearing in Mission Control / Exposé</li>
+</ul>]]></description>
             <pubDate>Sun, 05 Apr 2026 22:57:22 +0900</pubDate>
             <sparkle:version>423</sparkle:version>
             <sparkle:shortVersionString>4.2.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.3/Tiley-4.2.3.zip" length="5741863" type="application/octet-stream" sparkle:edSignature="Q+0ZLgKVeCpRgNhYVORHg1XPwP0uOo4Rgh0/fCcq9lVbG8oE7XqMyCgmuFRX2a4UK4/kDLup94QicYu+nZckCA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley-4.2.3.zip" length="5741863" type="application/octet-stream" sparkle:edSignature="Q+0ZLgKVeCpRgNhYVORHg1XPwP0uOo4Rgh0/fCcq9lVbG8oE7XqMyCgmuFRX2a4UK4/kDLup94QicYu+nZckCA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.3/Tiley423-422.delta" sparkle:deltaFrom="422" length="343734" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="RJS8hACwW6y0YpEUOrNBR/Po+gtSSHIVJ8PG/krAvfwnuio35m7RWhB/+1jy32AvLJsHLxswDoO5AnJbWbyVBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.3/Tiley423-421.delta" sparkle:deltaFrom="421" length="364990" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yH/oV1AkpsYFrPPdmRzALkEzfWSBhenlzSIlPGJT+HFJArBMKFfNvg7tlxEw/AHlQ4PL3U8s9tOAVJW00Hq9Ag=="/>
@@ -448,187 +753,127 @@
 <li>Fixed settings window disappearing permanently when toggling "Show Dock icon" off</li>
 <li>Fixed global shortcut not working after the settings window lost focus to another application</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>As janelas de sobreposição agora são pré-renderizadas com opacidade zero e mantidas na tela, de modo que exibir a grade de layout requer apenas uma alteração de alfa — reduzindo significativamente a latência percebida</li>
+<li>A janela de configurações agora fecha automaticamente ao clicar em outro aplicativo; o Tiley permanece oculto até que o atalho global seja pressionado novamente</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o clique no ícone do Dock exibindo "Sem janelas" em vez das configurações quando a janela de configurações estava aberta</li>
+<li>Corrigido a janela de configurações desaparecendo permanentemente ao desativar "Mostrar ícone do Dock"</li>
+<li>Corrigido o atalho global que parava de funcionar após a janela de configurações perder o foco para outro aplicativo</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Le finestre di sovrapposizione vengono ora pre-renderizzate con opacità zero e mantenute sullo schermo, quindi la visualizzazione della griglia di layout richiede solo una modifica dell'alfa — riducendo significativamente la latenza percepita</li>
+<li>La finestra delle impostazioni ora si chiude automaticamente quando si fa clic su un'altra applicazione; Tiley rimane nascosto fino a quando non viene premuta nuovamente la scorciatoia globale</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto il clic sull'icona del Dock che mostrava "Nessuna finestra" invece delle impostazioni quando la finestra delle impostazioni era aperta</li>
+<li>Corretto la finestra delle impostazioni che scompariva permanentemente quando si disattivava "Mostra icona del Dock"</li>
+<li>Corretto la scorciatoia globale che smetteva di funzionare dopo che la finestra delle impostazioni perdeva il focus a favore di un'altra applicazione</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Les fenêtres de superposition sont désormais pré-rendues avec une opacité nulle et maintenues à l'écran, de sorte que l'affichage de la grille de disposition ne nécessite qu'un changement d'alpha — réduisant considérablement la latence perçue</li>
+<li>La fenêtre des réglages se ferme désormais automatiquement lorsque l'utilisateur clique sur une autre application ; Tiley reste masqué jusqu'à ce que le raccourci global soit utilisé à nouveau</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du clic sur l'icône du Dock affichant « Aucune fenêtre » au lieu des réglages lorsque la fenêtre des réglages était ouverte</li>
+<li>Correction de la fenêtre des réglages disparaissant définitivement lors de la désactivation de « Afficher l'icône du Dock »</li>
+<li>Correction du raccourci global ne fonctionnant plus après que la fenêtre des réglages a perdu le focus au profit d'une autre application</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Las ventanas de superposición ahora se pre-renderizan con opacidad cero y se mantienen en pantalla, por lo que mostrar la cuadrícula de diseño solo requiere un cambio de alfa, reduciendo significativamente la latencia percibida</li>
+<li>La ventana de configuración ahora se cierra automáticamente al hacer clic en otra aplicación; Tiley permanece oculto hasta que se presione el atajo global nuevamente</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido que al hacer clic en el icono del Dock con la ventana de configuración abierta se mostraba "Sin ventanas" en lugar de la configuración</li>
+<li>Corregido que la ventana de configuración desaparecía permanentemente al desactivar "Mostrar icono del Dock"</li>
+<li>Corregido que el atajo global dejaba de funcionar después de que la ventana de configuración perdía el foco hacia otra aplicación</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Overlay-Fenster werden jetzt mit Transparenz Null vorgerendert und auf dem Bildschirm gehalten, sodass zum Anzeigen des Layout-Rasters nur eine Änderung des Alphawerts erforderlich ist — die wahrgenommene Latenz wird deutlich reduziert</li>
+<li>Das Einstellungsfenster wird jetzt automatisch geschlossen, wenn eine andere Anwendung angeklickt wird; Tiley bleibt ausgeblendet, bis das globale Tastenkürzel erneut gedrückt wird</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Klick auf das Dock-Symbol bei geöffnetem Einstellungsfenster zeigte „Keine Fenster" anstelle der Einstellungen</li>
+<li>Das Einstellungsfenster verschwand dauerhaft beim Deaktivieren von „Dock-Symbol anzeigen"</li>
+<li>Das globale Tastenkürzel funktionierte nicht mehr, nachdem das Einstellungsfenster den Fokus an eine andere Anwendung verloren hatte</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>覆蓋視窗現在以零透明度預先繪製並保持在螢幕上，因此顯示佈局網格時只需更改透明度，顯著減少感知延遲</li>
+<li>點擊其他應用程式時設定視窗會自動關閉，Tiley 保持隱藏直到再次按下全域快捷鍵</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了設定視窗開啟時點擊 Dock 圖示顯示「無視窗」而非設定畫面的問題</li>
+<li>修正了關閉「顯示 Dock 圖示」後設定視窗消失且無法恢復的問題</li>
+<li>修正了設定視窗失去焦點後全域快捷鍵無法使用的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>覆盖窗口现在以零透明度预渲染并保持在屏幕上，因此显示布局网格时只需更改透明度，显著减少感知延迟</li>
+<li>点击其他应用程序时设置窗口会自动关闭，Tiley 保持隐藏直到再次按下全局快捷键</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了设置窗口打开时点击 Dock 图标显示"无窗口"而非设置界面的问题</li>
+<li>修复了关闭"显示 Dock 图标"后设置窗口消失且无法恢复的问题</li>
+<li>修复了设置窗口失去焦点后全局快捷键无法使用的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>오버레이 창을 투명도 0으로 미리 렌더링하여 화면에 유지하도록 변경하여, 레이아웃 그리드 표시 시 알파 값만 변경하면 되므로 체감 지연 시간이 크게 감소</li>
+<li>다른 애플리케이션을 클릭하면 설정 창이 자동으로 닫히고, 글로벌 단축키를 다시 누를 때까지 Tiley가 숨겨지도록 변경</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>설정 창이 열려 있는 상태에서 Dock 아이콘을 클릭하면 설정 화면 대신 "윈도우 없음"이 표시되는 문제 수정</li>
+<li>"Dock 아이콘 표시"를 끄면 설정 창이 사라진 채 돌아오지 않는 문제 수정</li>
+<li>설정 창이 배경으로 이동한 후 글로벌 단축키가 작동하지 않는 문제 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>オーバーレイウインドウを透明度ゼロで事前描画し画面上に保持するようにしたため、レイアウトグリッドの表示時はアルファ値の変更だけで済み、体感的な表示遅延が大幅に低減</li>
+<li>他のアプリケーションをクリックすると設定ウインドウが自動的に閉じ、グローバルショートカットで再度表示するまでTileyが非表示になるように変更</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>設定ウインドウが開いている状態でDockアイコンをクリックすると、設定画面ではなく「ウインドウなし」と表示される問題を修正</li>
+<li>「Dockアイコンを表示」をオフにすると設定ウインドウが消えたまま戻らない問題を修正</li>
+<li>設定ウインドウが背面に回った後、グローバルショートカットが効かなくなる問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Overlay windows are now pre-rendered with zero opacity and kept on screen, so showing the layout grid only requires an alpha change instead of a full window draw — significantly reducing perceived latency</li>
+<li>Settings window now automatically dismisses when the user clicks another application, keeping Tiley hidden until the global shortcut is pressed again</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed clicking the Dock icon showing "No windows" instead of the settings window when settings were already open</li>
+<li>Fixed settings window disappearing permanently when toggling "Show Dock icon" off</li>
+<li>Fixed global shortcut not working after the settings window lost focus to another application</li>
+</ul>]]></description>
             <pubDate>Sat, 04 Apr 2026 23:31:25 +0900</pubDate>
             <sparkle:version>422</sparkle:version>
             <sparkle:shortVersionString>4.2.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.3/Tiley-4.2.2.zip" length="5722660" type="application/octet-stream" sparkle:edSignature="UbMI1q7iiLLkxEWjPZeTkC9f5MhCllhxQGzKo9Tt6GNv5p+AzGhfp3iJs+rP6118nO/eRMadJc/Nacxc3faKAw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley-4.2.2.zip" length="5722660" type="application/octet-stream" sparkle:edSignature="UbMI1q7iiLLkxEWjPZeTkC9f5MhCllhxQGzKo9Tt6GNv5p+AzGhfp3iJs+rP6118nO/eRMadJc/Nacxc3faKAw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.2/Tiley422-421.delta" sparkle:deltaFrom="421" length="227022" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yWdwMWB0VFtHn43kjP2HnUGyswDZfuB3pmP8GLyjyNqmFsRfhf1OguXENRfRvzHqYZRBUEfYb2BWkfbWvGfVDw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.2/Tiley422-420.delta" sparkle:deltaFrom="420" length="242186" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Z+yWxvH6SAdadEKFUq6xq9ZPdGMnjj5n/rnhM5fh0d8Uh522ZDKhRmj2IRDkiBa+vyGnRJViiTD7ceTa5WvNCg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.2/Tiley422-412.delta" sparkle:deltaFrom="412" length="378098" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="qRR14MBESaH07+e56leguNR4lJJbH/FBX4BEBmDnhrSqZAjU0UgPsQ4/SXFKvBcOUEqK9rBsSyn5nD+1IqQpBQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.2/Tiley422-411.delta" sparkle:deltaFrom="411" length="476962" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="N2CqJPM71UoC5SIwyxu0BXbn3qk8WFL7QJydZg+jDcDIyNtao4rhLJdatHl/4HDi6xduP8hvRb9/AvFyahb/AA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.2/Tiley422-410.delta" sparkle:deltaFrom="410" length="1298542" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="KmPeT9Sh4rcSvf8obhcH1pHFambMK3lVdcNO4GwghzCsryi+U8tbmzC6U5nLsaFMqyL/CHO4FssG5NwZFJRqAQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.2.1</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>Добавлен индикатор шеврона к кнопке изменения размера, чтобы было понятно, что она открывает выпадающее меню</li>
-<li>Улучшен тайминг действия изменения размера: окно Tiley исчезает до изменения размера целевого окна, что делает взаимодействие более интуитивным</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Adicionado indicador chevron ao botão de redimensionar para deixar claro que abre um menu suspenso</li>
-<li>Melhorado o timing da ação de redimensionar para que a janela do Tiley desapareça antes de redimensionar a janela alvo, tornando a interação mais intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Aggiunto indicatore chevron al pulsante di ridimensionamento per rendere più chiaro che apre un menu a discesa</li>
-<li>Migliorato il timing dell'azione di ridimensionamento in modo che la finestra di Tiley scompaia prima del ridimensionamento della finestra di destinazione, rendendo l'interazione più intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Ajout d'un indicateur chevron au bouton de redimensionnement pour indiquer clairement qu'il ouvre un menu déroulant</li>
-<li>Amélioration du timing de l'action de redimensionnement pour que la fenêtre Tiley disparaisse avant le redimensionnement de la fenêtre cible, rendant l'interaction plus intuitive</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Se añadió un indicador de chevron al botón de redimensionar para dejar claro que abre un menú desplegable</li>
-<li>Se mejoró el timing de la acción de redimensionar para que la ventana de Tiley desaparezca antes de redimensionar la ventana objetivo, haciendo la interacción más intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Chevron-Anzeige zur Größenänderungs-Schaltfläche hinzugefügt, um deutlicher zu machen, dass es sich um ein Dropdown-Menü handelt</li>
-<li>Timing der Größenänderung verbessert, sodass das Tiley-Fenster verschwindet, bevor das Zielfenster angepasst wird, was die Bedienung intuitiver macht</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>在調整大小工具列按鈕上新增了下拉箭頭，使其更清楚地表明這是一個下拉選單</li>
-<li>改進了調整大小操作的時機，使 Tiley 視窗在目標視窗調整大小之前消失，操作更加直覺</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>在调整大小工具栏按钮上添加了下拉箭头，使其更清楚地表明这是一个下拉菜单</li>
-<li>改进了调整大小操作的时机，使 Tiley 窗口在目标窗口调整大小之前消失，操作更加直观</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>크기 조절 도구 모음 버튼에 셰브론 표시를 추가하여 드롭다운 메뉴임을 더 명확하게 표시</li>
-<li>크기 조절 동작 타이밍을 개선하여 대상 창 크기 조절 전에 Tiley 창이 사라지도록 변경하여 더 직관적인 조작감 제공</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>リサイズツールバーボタンにシェブロン（▼）を追加し、プルダウンメニューであることをより分かりやすく表示</li>
-<li>リサイズ動作のタイミングを調整し、対象ウインドウのリサイズ前にTileyのウインドウが消えるようにして、より直感的な操作感に改善</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Added chevron indicator to the resize toolbar button to make it clearer that it opens a dropdown menu</li>
-<li>Improved resize action timing so the Tiley window disappears before the target window is resized, making the interaction feel more intuitive</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Adicionado indicador chevron ao botão de redimensionar para deixar claro que abre um menu suspenso</li>
-<li>Melhorado o timing da ação de redimensionar para que a janela do Tiley desapareça antes de redimensionar a janela alvo, tornando a interação mais intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Aggiunto indicatore chevron al pulsante di ridimensionamento per rendere più chiaro che apre un menu a discesa</li>
-<li>Migliorato il timing dell'azione di ridimensionamento in modo che la finestra di Tiley scompaia prima del ridimensionamento della finestra di destinazione, rendendo l'interazione più intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Ajout d'un indicateur chevron au bouton de redimensionnement pour indiquer clairement qu'il ouvre un menu déroulant</li>
-<li>Amélioration du timing de l'action de redimensionnement pour que la fenêtre Tiley disparaisse avant le redimensionnement de la fenêtre cible, rendant l'interaction plus intuitive</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Se añadió un indicador de chevron al botón de redimensionar para dejar claro que abre un menú desplegable</li>
-<li>Se mejoró el timing de la acción de redimensionar para que la ventana de Tiley desaparezca antes de redimensionar la ventana objetivo, haciendo la interacción más intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Chevron-Anzeige zur Größenänderungs-Schaltfläche hinzugefügt, um deutlicher zu machen, dass es sich um ein Dropdown-Menü handelt</li>
-<li>Timing der Größenänderung verbessert, sodass das Tiley-Fenster verschwindet, bevor das Zielfenster angepasst wird, was die Bedienung intuitiver macht</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>在調整大小工具列按鈕上新增了下拉箭頭，使其更清楚地表明這是一個下拉選單</li>
-<li>改進了調整大小操作的時機，使 Tiley 視窗在目標視窗調整大小之前消失，操作更加直覺</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>在调整大小工具栏按钮上添加了下拉箭头，使其更清楚地表明这是一个下拉菜单</li>
-<li>改进了调整大小操作的时机，使 Tiley 窗口在目标窗口调整大小之前消失，操作更加直观</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>크기 조절 도구 모음 버튼에 셰브론 표시를 추가하여 드롭다운 메뉴임을 더 명확하게 표시</li>
-<li>크기 조절 동작 타이밍을 개선하여 대상 창 크기 조절 전에 Tiley 창이 사라지도록 변경하여 더 직관적인 조작감 제공</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>リサイズツールバーボタンにシェブロン（▼）を追加し、プルダウンメニューであることをより分かりやすく表示</li>
-<li>リサイズ動作のタイミングを調整し、対象ウインドウのリサイズ前にTileyのウインドウが消えるようにして、より直感的な操作感に改善</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Added chevron indicator to the resize toolbar button to make it clearer that it opens a dropdown menu</li>
-<li>Improved resize action timing so the Tiley window disappears before the target window is resized, making the interaction feel more intuitive</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Adicionado indicador chevron ao botão de redimensionar para deixar claro que abre um menu suspenso</li>
-<li>Melhorado o timing da ação de redimensionar para que a janela do Tiley desapareça antes de redimensionar a janela alvo, tornando a interação mais intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Aggiunto indicatore chevron al pulsante di ridimensionamento per rendere più chiaro che apre un menu a discesa</li>
-<li>Migliorato il timing dell'azione di ridimensionamento in modo che la finestra di Tiley scompaia prima del ridimensionamento della finestra di destinazione, rendendo l'interazione più intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Ajout d'un indicateur chevron au bouton de redimensionnement pour indiquer clairement qu'il ouvre un menu déroulant</li>
-<li>Amélioration du timing de l'action de redimensionnement pour que la fenêtre Tiley disparaisse avant le redimensionnement de la fenêtre cible, rendant l'interaction plus intuitive</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Se añadió un indicador de chevron al botón de redimensionar para dejar claro que abre un menú desplegable</li>
-<li>Se mejoró el timing de la acción de redimensionar para que la ventana de Tiley desaparezca antes de redimensionar la ventana objetivo, haciendo la interacción más intuitiva</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Chevron-Anzeige zur Größenänderungs-Schaltfläche hinzugefügt, um deutlicher zu machen, dass es sich um ein Dropdown-Menü handelt</li>
-<li>Timing der Größenänderung verbessert, sodass das Tiley-Fenster verschwindet, bevor das Zielfenster angepasst wird, was die Bedienung intuitiver macht</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>在調整大小工具列按鈕上新增了下拉箭頭，使其更清楚地表明這是一個下拉選單</li>
-<li>改進了調整大小操作的時機，使 Tiley 視窗在目標視窗調整大小之前消失，操作更加直覺</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>在调整大小工具栏按钮上添加了下拉箭头，使其更清楚地表明这是一个下拉菜单</li>
-<li>改进了调整大小操作的时机，使 Tiley 窗口在目标窗口调整大小之前消失，操作更加直观</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>크기 조절 도구 모음 버튼에 셰브론 표시를 추가하여 드롭다운 메뉴임을 더 명확하게 표시</li>
-<li>크기 조절 동작 타이밍을 개선하여 대상 창 크기 조절 전에 Tiley 창이 사라지도록 변경하여 더 직관적인 조작감 제공</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>リサイズツールバーボタンにシェブロン（▼）を追加し、プルダウンメニューであることをより分かりやすく表示</li>
-<li>リサイズ動作のタイミングを調整し、対象ウインドウのリサイズ前にTileyのウインドウが消えるようにして、より直感的な操作感に改善</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Added chevron indicator to the resize toolbar button to make it clearer that it opens a dropdown menu</li>
-<li>Improved resize action timing so the Tiley window disappears before the target window is resized, making the interaction feel more intuitive</li>
-</ul>]]></description>
-            <pubDate>Sat, 04 Apr 2026 00:43:28 +0900</pubDate>
-            <sparkle:version>421</sparkle:version>
-            <sparkle:shortVersionString>4.2.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.3/Tiley-4.2.1.zip" length="5714911" type="application/octet-stream" sparkle:edSignature="vJ3xaFiMfpksiU442WOQCLzvjo4QZ5hPOsU00cyMpGzYZoq3vowVKn9QD3fYrg1anOOcxvqPPs5cS5EKSLuTBg=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-420.delta" sparkle:deltaFrom="420" length="195530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="fNzawS2f5lKY3saLHMBijApR1zdpMLcQrioUI3YNp46zDBRdlM82aWXMA40CJCnZYgknhd5dUmQFN9toNTHmAQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-412.delta" sparkle:deltaFrom="412" length="358630" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="azOEni7hfyEF2ex0+VBZ704gMywSnryyygWDaoAk2tMYdsKNHuRDMHH1jMdxhnf0TzSHi4BM7LUwe4F6kPmrAA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-411.delta" sparkle:deltaFrom="411" length="456130" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="I1YseFRbt9XuSjmreWp/nRMmC3ztm0aNnoPuoZKxVFA7zz91l7KIOF5pv/LRwo+0MKotFCVYfA3JfQSj+YsLBg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-410.delta" sparkle:deltaFrom="410" length="1277178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="1FvfzTVaxtnFSqrz+VbDUAmU2bVF9xx0UqLSbJD8xTt4twVTeNXeOfAoU7gaKROYna7ZtXSO0O3Hk3gLkWmkCQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.2.1/Tiley421-409.delta" sparkle:deltaFrom="409" length="1475166" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="s8JZvF7bD1w2wk4C6aRzJF7hXhC++4jxyGsvaFMDnrH0RzdzfFlrAZn7xg+YF2KRPIdJ8cOUAQcDw62hLEBGCw=="/>
             </sparkle:deltas>
         </item>
     </channel>
