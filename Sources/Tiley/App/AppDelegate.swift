@@ -460,12 +460,14 @@ extension AppDelegate: SPUStandardUserDriverDelegate {
 
     nonisolated func standardUserDriverWillHandleShowingUpdate(_ handleShowingUpdate: Bool, forUpdate update: SUAppcastItem, state: SPUUserUpdateState) {
         Task { @MainActor in
-            if state.userInitiated {
-                // User-initiated check: hide the settings window so the
-                // Sparkle alert is not obscured behind it.
+            if handleShowingUpdate {
+                // Sparkle is about to show the update dialog: hide the
+                // settings window so it doesn't obscure the dialog
+                // (e.g. grid-preview hover can bring the settings window
+                // to front and block the "Install and Restart" button).
                 wasSettingsVisibleBeforeUpdate = appState.isEditingSettings
                 appState.hideMainWindow()
-            } else if !handleShowingUpdate {
+            } else {
                 // Scheduled check where Sparkle defers to us: show a badge
                 // on the menu bar icon to gently notify the user.
                 appState.setUpdateBadge(true)

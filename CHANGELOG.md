@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Hide the settings window when Sparkle shows an update dialog, preventing the grid preview hover from bringing the settings window to front and blocking the "Install and Restart" button
+
 ## [4.3.0] - 2026-04-07
 
 ### Changed
