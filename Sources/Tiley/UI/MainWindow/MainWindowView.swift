@@ -1899,7 +1899,7 @@ struct MainWindowView: View {
         let targetAppName = selectedTarget?.appName
 
         TahoeResizeMenuButton(
-            symbolName: "square.resize.up",
+            symbolName: "arrow.up.left.and.arrow.down.right",
             disabled: disabled || noPresets,
             colorScheme: colorScheme,
             groupedPresets: groupedPresets,
@@ -2328,7 +2328,7 @@ struct MainWindowView: View {
                 } label: {
                     Label(
                         NSLocalizedString("Resize", comment: "Context menu item for resize submenu"),
-                        systemImage: "square.resize.up"
+                        systemImage: "arrow.up.left.and.arrow.down.right"
                     )
                 }
                 Divider()

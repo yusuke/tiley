@@ -605,8 +605,8 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
             let tintColor: NSColor = !isEnabled ? .tertiaryLabelColor : .labelColor
 
             // Main icon (shifted left to make room for chevron)
-            let symbolName = coordinator?.symbolName ?? "square.resize.up"
-            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .bold)
+            let symbolName = coordinator?.symbolName ?? "arrow.up.left.and.arrow.down.right"
+            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .regular)
             if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
                 .withSymbolConfiguration(config) {
                 let tinted = image.tinted(with: tintColor)
