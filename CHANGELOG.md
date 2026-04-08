@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.2] - 2026-04-08
+
 ### Fixed
 
 - Fixed a bug where two windows could be selected when invoking Tiley immediately after switching windows
@@ -648,7 +650,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.2...HEAD
+[4.3.2]: https://github.com/yusuke/tiley/releases/tag/v4.3.2
 [4.3.1]: https://github.com/yusuke/tiley/releases/tag/v4.3.1
 [4.3.0]: https://github.com/yusuke/tiley/releases/tag/v4.3.0
 [4.2.3]: https://github.com/yusuke/tiley/releases/tag/v4.2.3

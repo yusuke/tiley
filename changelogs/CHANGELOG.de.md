@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.2] - 2026-04-08
+
 ### Behoben
 
 - Fehler behoben, bei dem nach einem Fensterwechsel beim sofortigen Aufrufen von Tiley zwei Fenster ausgewählt werden konnten
