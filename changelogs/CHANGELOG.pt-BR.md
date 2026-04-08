@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Corrigido um bug onde duas janelas podiam ser selecionadas ao invocar o Tiley logo após trocar de janela
+
 ## [4.3.1] - 2026-04-07
 
 ### Corrigido

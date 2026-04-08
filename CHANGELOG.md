@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a bug where two windows could be selected when invoking Tiley immediately after switching windows
+
 ## [4.3.1] - 2026-04-07
 
 ### Fixed

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction d'un bug où deux fenêtres pouvaient être sélectionnées en invoquant Tiley juste après avoir changé de fenêtre
+
 ## [4.3.1] - 2026-04-07
 
 ### Corrigé

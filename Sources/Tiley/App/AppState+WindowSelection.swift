@@ -449,12 +449,22 @@ extension AppState {
             selectionOrder = [activeTargetIndex]
             selectionAnchorIndex = nil
         } else {
-            // Reconcile multi-selection: remove stale indices and ensure invariant.
+            // Reconcile selection: remove stale indices that exceed the new list size.
             selectedWindowIndices = selectedWindowIndices.filter { $0 < availableWindowTargets.count }
             selectionOrder = selectionOrder.filter { $0 < availableWindowTargets.count }
-            selectedWindowIndices.insert(activeTargetIndex)
-            if !selectionOrder.contains(activeTargetIndex) {
-                selectionOrder.insert(activeTargetIndex, at: 0)
+            if selectedWindowIndices.count <= 1 {
+                // Single-selection mode: reset to the active target so a shifted
+                // activeTargetIndex doesn't accidentally create a multi-selection.
+                selectedWindowIndices = [activeTargetIndex]
+                selectionOrder = [activeTargetIndex]
+                selectionAnchorIndex = nil
+            } else {
+                // User has explicitly multi-selected: keep the set but ensure the
+                // active target is included.
+                selectedWindowIndices.insert(activeTargetIndex)
+                if !selectionOrder.contains(activeTargetIndex) {
+                    selectionOrder.insert(activeTargetIndex, at: 0)
+                }
             }
         }
 

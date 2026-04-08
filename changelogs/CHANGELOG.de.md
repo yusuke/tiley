@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Fehler behoben, bei dem nach einem Fensterwechsel beim sofortigen Aufrufen von Tiley zwei Fenster ausgewählt werden konnten
+
 ## [4.3.1] - 2026-04-07
 
 ### Behoben
