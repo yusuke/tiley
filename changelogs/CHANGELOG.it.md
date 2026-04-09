@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.4] - 2026-04-09
+
 ### Corretto
 
 - La finestra delle impostazioni viene chiusa prima del controllo aggiornamenti di Sparkle, impedendo che l'anteprima della griglia al passaggio del mouse la porti in primo piano e nasconda i dialoghi di Sparkle. La finestra delle impostazioni viene ripristinata al termine del ciclo di aggiornamento

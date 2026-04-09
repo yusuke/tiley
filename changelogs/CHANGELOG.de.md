@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.4] - 2026-04-09
+
 ### Behoben
 
 - Einstellungsfenster wird vor der Sparkle-Updateprüfung geschlossen, damit die Rastervorschau beim Hover das Fenster nicht in den Vordergrund bringt und Sparkle-Dialoge verdeckt. Das Einstellungsfenster wird nach Abschluss des Updatezyklus wiederhergestellt
