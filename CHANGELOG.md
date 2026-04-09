@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Dismiss the settings window before Sparkle update checks so the grid preview hover cannot bring it to the front and block Sparkle dialogs; the settings window is restored after the update cycle finishes
+
 ## [4.3.3] - 2026-04-09
 
 ### Added

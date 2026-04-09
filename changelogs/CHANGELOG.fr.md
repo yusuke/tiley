@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Fermeture de la fenêtre des réglages avant la vérification des mises à jour Sparkle afin que l'aperçu de la grille au survol ne la ramène pas au premier plan et ne masque pas les dialogues Sparkle. La fenêtre des réglages est restaurée à la fin du cycle de mise à jour
+
 ## [4.3.3] - 2026-04-09
 
 ### Ajouté

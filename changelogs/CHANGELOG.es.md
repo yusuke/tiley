@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Se cierra la ventana de ajustes antes de la comprobación de actualizaciones de Sparkle para evitar que la previsualización de la cuadrícula al pasar el cursor la traiga al frente y oculte los diálogos de Sparkle. La ventana de ajustes se restaura tras finalizar el ciclo de actualización
+
 ## [4.3.3] - 2026-04-09
 
 ### Añadido

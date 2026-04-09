@@ -7,7 +7,7 @@ import TelemetryDeck
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let appState: AppState
-    private var wasSettingsVisibleBeforeUpdate = false
+    var wasSettingsVisibleBeforeUpdate = false
 
     lazy var updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(
         startingUpdater: !Bundle.main.bundlePath.contains("/.build/"),
@@ -446,7 +446,38 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-extension AppDelegate: SPUUpdaterDelegate {}
+extension AppDelegate: SPUUpdaterDelegate {
+    nonisolated func updater(_ updater: SPUUpdater, mayPerform updateCheck: SPUUpdateCheck) throws {
+        // Called before every update check (user-initiated or scheduled).
+        // Dismiss the settings window so it doesn't obscure Sparkle dialogs
+        // (e.g. grid-preview hover can bring the settings window to front
+        // and block the "Install and Restart" button).
+        MainActor.assumeIsolated {
+            if appState.isEditingSettings {
+                wasSettingsVisibleBeforeUpdate = true
+                appState.hidePreviewOverlay()
+                appState.settingsWindowController?.dismiss()
+                appState.settingsWindowController = nil
+                appState.isEditingSettings = false
+                appState.isShowingLayoutGrid = false
+                appState.activeLayoutTarget = nil
+                appState.clearResizabilityCache()
+                appState.clearWindowCyclingState()
+                appState.registerAllHotKeys()
+            }
+        }
+    }
+
+    nonisolated func updater(_ updater: SPUUpdater, didFinishUpdateCycleFor updateCheck: SPUUpdateCheck, error: (any Error)?) {
+        // Restore the settings window if it was visible before the update check.
+        Task { @MainActor in
+            if wasSettingsVisibleBeforeUpdate {
+                wasSettingsVisibleBeforeUpdate = false
+                appState.beginSettingsEditing()
+            }
+        }
+    }
+}
 
 extension AppDelegate: SPUStandardUserDriverDelegate {
     nonisolated var supportsGentleScheduledUpdateReminders: Bool { true }
@@ -459,13 +490,10 @@ extension AppDelegate: SPUStandardUserDriverDelegate {
     }
 
     nonisolated func standardUserDriverWillHandleShowingUpdate(_ handleShowingUpdate: Bool, forUpdate update: SUAppcastItem, state: SPUUserUpdateState) {
-        Task { @MainActor in
+        MainActor.assumeIsolated {
             if handleShowingUpdate {
-                // Sparkle is about to show the update dialog: hide the
-                // settings window so it doesn't obscure the dialog
-                // (e.g. grid-preview hover can bring the settings window
-                // to front and block the "Install and Restart" button).
-                wasSettingsVisibleBeforeUpdate = appState.isEditingSettings
+                // Also hide the grid overlay windows so they don't appear
+                // behind the Sparkle dialog.
                 appState.hideMainWindow()
             } else {
                 // Scheduled check where Sparkle defers to us: show a badge

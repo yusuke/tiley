@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- A janela de configurações é fechada antes da verificação de atualizações do Sparkle para evitar que a pré-visualização da grade ao passar o mouse a traga para frente e oculte os diálogos do Sparkle. A janela de configurações é restaurada após o término do ciclo de atualização
+
 ## [4.3.3] - 2026-04-09
 
 ### Adicionado
