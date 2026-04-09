@@ -3,6 +3,109 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.3.3</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Теперь окно можно перемещать перетаскиванием панели подсказок клавиатуры, области строки меню/Dock мини-экрана, пустых зон боковой панели и промежутков между кнопками панели инструментов</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Перетаскивание в верхней части сетки перемещало окно вместо выделения ячеек</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Agora é possível mover a janela arrastando a barra de dicas do teclado, as áreas de barra de menus/Dock da minitela, regiões vazias da barra lateral e espaços entre botões da barra de ferramentas</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Arrastar na parte superior da grade movia a janela em vez de selecionar células</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Ora è possibile spostare la finestra trascinando la barra dei suggerimenti tastiera, le aree barra dei menu/Dock del mini schermo, le zone vuote della barra laterale e gli spazi tra i pulsanti della barra degli strumenti</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Il trascinamento nella parte superiore della griglia spostava la finestra anziché selezionare le celle</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>La fenêtre peut désormais être déplacée en faisant glisser la barre d'indices clavier, les zones barre de menus/Dock du mini-écran, les zones vides de la barre latérale et les espaces entre les boutons de la barre d'outils</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Le glissement dans la partie supérieure de la grille déplaçait la fenêtre au lieu de sélectionner des cellules</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Ahora se puede arrastrar la ventana desde la barra de atajos de teclado, las áreas de barra de menú/Dock de la minipantalla, zonas vacías de la barra lateral y los espacios entre botones de la barra de herramientas</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Arrastrar en la parte superior de la cuadrícula movía la ventana en lugar de seleccionar celdas</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Das Fenster kann jetzt durch Ziehen der Tastaturhinweisleiste, der Menüleisten-/Dock-Bereiche des Minibildschirms, leerer Seitenleistenbereiche und Lücken in der Symbolleiste verschoben werden</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Ziehen im oberen Bereich des Rasters verschob das Fenster statt Zellen auszuwählen</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>現在可以透過拖曳鍵盤提示列、迷你螢幕的選單列/Dock 區域、側邊欄空白區域、工具列按鈕間隙來移動視窗</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了在網格上方拖曳時視窗會移動而非選取儲存格的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>现在可以通过拖动键盘提示栏、迷你屏幕的菜单栏/Dock区域、侧边栏空白区域、工具栏按钮间隙来移动窗口</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了在网格上部拖动时窗口会移动而非选择单元格的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>키보드 힌트 바, 미니 스크린의 메뉴 바/Dock 영역, 사이드바 빈 공간, 툴바 버튼 사이 등에서 창을 드래그하여 이동할 수 있게 됨</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>그리드 상단을 드래그할 때 셀 선택 대신 창이 이동되는 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>キーボードヒントバー、ミニスクリーンのメニューバー/Dock部分、サイドバーの空き領域、ツールバーのボタン間などからウインドウをドラッグ移動できるようになった</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>グリッド上部をドラッグするとセル選択ではなくウインドウが移動してしまう問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>The window can now be dragged to reposition from the keyboard hints bar, mini-screen chrome areas, empty sidebar regions, and toolbar gaps</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed dragging on the upper part of the grid unintentionally moving the window instead of selecting grid cells</li>
+</ul>]]></description>
+            <pubDate>Thu, 09 Apr 2026 22:09:38 +0900</pubDate>
+            <sparkle:version>433</sparkle:version>
+            <sparkle:shortVersionString>4.3.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley-4.3.3.zip" length="5754308" type="application/octet-stream" sparkle:edSignature="smbDp2io8V5DKCuPN15HXBMvBH1/fJ4BQRM16AYcQJ2qksBgycVzZNXAL1TEYz/23w+k8do0w3oBoGrdGs2MCQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-432.delta" sparkle:deltaFrom="432" length="248938" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0CGieGWtRPRAisPsS70QcKA8cOpVwu9V4Ai2MfPGuKzQbZOn29YEwyO6F+aAfN0xIKIYsP96yYwynYDppP9eAw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-431.delta" sparkle:deltaFrom="431" length="260598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="YZzdmIxQI781badqqSI2J2VD1GjPfj10Ay4kQhY6Abq6Eppg573CFB4boBbG76/1iAVLnnzBYqvlAVxasH9EAQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-430.delta" sparkle:deltaFrom="430" length="266394" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="quH9dvqQAroZHgRAenDxCRyZ8vGaOsuCKo1weEoHswz3Fhu68ZcyQJ+bb66k30NTVR8u/r158mblLJWr0tI0Bw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-423.delta" sparkle:deltaFrom="423" length="304778" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TcBv1YIY0iS87lGqXpW8T0PVz5oSsOXBvIJPW+2dPwv718dzg7/XpyrNSqhXaiYH8LB9OXo1MrBDD4xirG+lBg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-422.delta" sparkle:deltaFrom="422" length="406422" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kW1K2mT4mVvICrS+VnOOPos4kpqoN2/fqIBFhZDqfOEFBRWsgqmnbH7zpLxy+24bFhvx6K4WN0KmfJEFPUS5Dw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.3.2</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -48,11 +151,51 @@
 <ul>
 <li>Fixed a bug where two windows could be selected when invoking Tiley immediately after switching windows</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um bug onde duas janelas podiam ser selecionadas ao invocar o Tiley logo após trocar de janela</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto un bug per cui potevano essere selezionate due finestre quando si richiamava Tiley subito dopo aver cambiato finestra</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un bug où deux fenêtres pouvaient être sélectionnées en invoquant Tiley juste après avoir changé de fenêtre</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Se corrigió un error por el cual se podían seleccionar dos ventanas al invocar Tiley inmediatamente después de cambiar de ventana</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Fehler behoben, bei dem nach einem Fensterwechsel beim sofortigen Aufrufen von Tiley zwei Fenster ausgewählt werden konnten</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了切換視窗後立即呼叫 Tiley 時可能選取兩個視窗的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了切换窗口后立即调用 Tiley 时可能选中两个窗口的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>윈도우 전환 직후 Tiley를 호출하면 윈도우가 2개 선택되는 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>ウインドウ切り替え直後にTileyを呼び出すとウインドウが2つ選択されることがある問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed a bug where two windows could be selected when invoking Tiley immediately after switching windows</li>
+</ul>]]></description>
             <pubDate>Wed, 08 Apr 2026 13:53:51 +0900</pubDate>
             <sparkle:version>432</sparkle:version>
             <sparkle:shortVersionString>4.3.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley-4.3.2.zip" length="5747130" type="application/octet-stream" sparkle:edSignature="x87ZFZ2d9ej+gSIeYdgufYAnAdxvPPg1SrLgRELZ5NZ0Zx+gfRXHpTkign2yuoJ0RXXqYq8pTFUBWU0sITkPCQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley-4.3.2.zip" length="5747130" type="application/octet-stream" sparkle:edSignature="x87ZFZ2d9ej+gSIeYdgufYAnAdxvPPg1SrLgRELZ5NZ0Zx+gfRXHpTkign2yuoJ0RXXqYq8pTFUBWU0sITkPCQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley432-431.delta" sparkle:deltaFrom="431" length="150342" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aGdLAgB5NkNHPJGz5k9V2vv2HufaGBYmSDgx782eNCOBYeGWNLGqWXxPMWn0Qkrop9wi0VNA62Z152mYHKqIDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley432-430.delta" sparkle:deltaFrom="430" length="165314" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kWtBi3n1RUCtkIDdeK0J1R+OrkZex39LgOtgS/wAFoFxzBl/yGDkCwQiSq+g86r6LZKKiEFPl3/9d0nodRS7Bw=="/>
@@ -147,342 +290,57 @@
 <ul>
 <li>Hide the settings window when Sparkle shows an update dialog, preventing the grid preview hover from bringing the settings window to front and blocking the "Install and Restart" button</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Ocultar a janela de configurações quando o Sparkle exibe o diálogo de atualização, evitando que a pré-visualização da grade ao passar o mouse traga a janela de configurações para frente e bloqueie o botão "Instalar e reiniciar"</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>La finestra delle impostazioni viene ora nascosta quando Sparkle mostra la finestra di aggiornamento, impedendo che l'anteprima della griglia al passaggio del mouse porti la finestra delle impostazioni in primo piano e blocchi il pulsante "Installa e riavvia"</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Masquage de la fenêtre des réglages lorsque Sparkle affiche la boîte de dialogue de mise à jour, empêchant l'aperçu de la grille au survol de ramener la fenêtre des réglages au premier plan et de bloquer le bouton « Installer et redémarrer »</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Se oculta la ventana de ajustes cuando Sparkle muestra el diálogo de actualización, evitando que la previsualización de la cuadrícula al pasar el cursor traiga la ventana de ajustes al frente y bloquee el botón "Instalar y reiniciar"</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Einstellungsfenster wird nun ausgeblendet, wenn Sparkle den Update-Dialog anzeigt, sodass die Rastervorschau beim Hover das Einstellungsfenster nicht mehr in den Vordergrund bringt und die Schaltfläche „Installieren und Neustarten" blockiert</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正 Sparkle 顯示更新對話框時設定視窗未隱藏，導致格線預覽懸停將設定視窗帶到前台、遮擋「安裝並重新啟動」按鈕的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复 Sparkle 显示更新对话框时设置窗口未隐藏，导致网格预览悬停将设置窗口置于前台、遮挡"安装并重启"按钮的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>Sparkle 업데이트 대화상자가 표시될 때 설정 창을 숨기도록 수정하여, 그리드 미리보기 호버로 설정 창이 앞으로 나와 "설치 후 재시작" 버튼을 누를 수 없는 문제를 해결</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>Sparkle のアップデートダイアログ表示時に設定ウインドウを非表示にし、グリッドプレビューのホバーで設定ウインドウが前面に来て「インストールして再起動」ボタンを押せなくなる問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Hide the settings window when Sparkle shows an update dialog, preventing the grid preview hover from bringing the settings window to front and blocking the "Install and Restart" button</li>
+</ul>]]></description>
             <pubDate>Tue, 07 Apr 2026 22:50:02 +0900</pubDate>
             <sparkle:version>431</sparkle:version>
             <sparkle:shortVersionString>4.3.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley-4.3.1.zip" length="5747093" type="application/octet-stream" sparkle:edSignature="QtR7+SR7/FUzH8faP9VFNJTisx6E9VJo8Dltcn6oLt7t7RLTF1LEtrFKdCyR7p5ZQ4kgg/qIxBXuyKjIZ12UAg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley-4.3.1.zip" length="5747093" type="application/octet-stream" sparkle:edSignature="QtR7+SR7/FUzH8faP9VFNJTisx6E9VJo8Dltcn6oLt7t7RLTF1LEtrFKdCyR7p5ZQ4kgg/qIxBXuyKjIZ12UAg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.1/Tiley431-430.delta" sparkle:deltaFrom="430" length="140054" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="DkVYnYNrPIx9eSRW5bEP786BJ9xzez2ev34KRzk97f3+23pUq6nB4bJKe5VF2uyaHExG5e8j64X/V0OgVvz/DA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.1/Tiley431-423.delta" sparkle:deltaFrom="423" length="250710" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="y05z68OfEtarqsg0Hmxd8kC9Eq6mvlDpwGXtMeX0qtvV0wSmVw/Uq/R2tY3nIYYQNKtKxNiy+j+MlPlpk7rcDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.1/Tiley431-422.delta" sparkle:deltaFrom="422" length="375106" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="VjnpNTNkYnAy8YPK7Dvfc0KFKHr0bGaYxmigl0q5SFZ/hrO3rZXp6cW0H7CascPOjXY8qAbD+8o00MdRbuaFDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.1/Tiley431-421.delta" sparkle:deltaFrom="421" length="388246" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="tWkl3vPNc22J6FTe6p+0+6lLg2pDzVNwdgAzhO1rRJLmUjVF4geJWG0YwLr8kDCusc/HX99q3VMTALs73V/rDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.1/Tiley431-420.delta" sparkle:deltaFrom="420" length="397986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="7gqOZNTp7HN9zItM7TWLVgmY+BiTTMxpKGPkMSAtLA096riSz0nvmXekNtaZe6A2CVDQPCQQhvjpuZTNU/yBBg=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.3.0</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>Поиск в боковой панели теперь использует сопоставление подпоследовательностей — ввод «f1» находит «Finder Users1» даже при непоследовательных символах</li>
-<li>Поиск в боковой панели также ищет по оригинальному (нелокализованному) имени приложения, поэтому «ai» находит «Mail», даже если приложение отображается с локализованным именем</li>
-</ul>
-<h3>Исправлено</h3>
-<ul>
-<li>Исправлена ошибка, при которой закрытие окна иногда приводило к непреднамеренному выделению нескольких последующих окон в боковой панели</li>
-<li>Исправлена ошибка, при которой миниатюра окна на сетке не обновлялась на новую цель после закрытия окна</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>A busca na barra lateral agora usa correspondência por subsequência — digitar "f1" encontra "Finder Users1" mesmo com caracteres não consecutivos</li>
-<li>A busca na barra lateral também pesquisa o nome original (não localizado) do app, então "ai" encontra "Mail" mesmo quando o app é exibido com um nome localizado</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um problema onde fechar uma janela às vezes causava a seleção múltipla involuntária das janelas seguintes na barra lateral</li>
-<li>Corrigido um problema onde a janela em miniatura na grade não era atualizada para o novo alvo após fechar uma janela</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>La ricerca nella barra laterale ora utilizza la corrispondenza per sottosequenza — digitando "f1" si trova "Finder Users1" anche con caratteri non consecutivi</li>
-<li>La ricerca nella barra laterale include anche il nome originale (non localizzato) dell'app, quindi "ai" corrisponde a "Mail" anche quando l'app viene visualizzata con un nome localizzato</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto un problema per cui la chiusura di una finestra causava talvolta la selezione multipla involontaria delle finestre successive nella barra laterale</li>
-<li>Corretto un problema per cui la finestra in miniatura sulla griglia non si aggiornava al nuovo obiettivo dopo la chiusura di una finestra</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>La recherche dans la barre latérale utilise désormais la correspondance par sous-séquence — taper « f1 » correspond à « Finder Users1 » même avec des caractères non consécutifs</li>
-<li>La recherche dans la barre latérale inclut également le nom original (non localisé) de l'app, ainsi « ai » correspond à « Mail » même si l'app est affichée avec un nom localisé</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un problème où la fermeture d'une fenêtre entraînait parfois une sélection multiple involontaire des fenêtres suivantes dans la barre latérale</li>
-<li>Correction d'un problème où la fenêtre miniature sur la grille ne se mettait pas à jour vers la nouvelle cible après la fermeture d'une fenêtre</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>La búsqueda en la barra lateral ahora utiliza coincidencia de subsecuencia: escribir "f1" coincide con "Finder Users1" incluso con caracteres no consecutivos</li>
-<li>La búsqueda en la barra lateral también busca en el nombre original (no localizado) de la app, por lo que "ai" coincide con "Mail" aunque se muestre con un nombre localizado</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Corregido un problema donde al cerrar una ventana se seleccionaban involuntariamente varias ventanas posteriores en la barra lateral</li>
-<li>Corregido un problema donde la ventana en miniatura de la cuadrícula no se actualizaba al nuevo objetivo tras cerrar una ventana</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Seitenleistensuche verwendet jetzt Teilsequenz-Matching — die Eingabe von „f1" findet „Finder Users1" auch bei nicht aufeinanderfolgenden Zeichen</li>
-<li>Seitenleistensuche berücksichtigt auch den ursprünglichen (nicht lokalisierten) App-Namen, sodass „ai" auch „Mail" findet, wenn die App lokalisiert angezeigt wird</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Beim Schließen eines Fensters wurden nachfolgende Fenster in der Seitenleiste manchmal unbeabsichtigt mehrfach ausgewählt</li>
-<li>Das Miniaturfenster im Raster wurde nach dem Schließen eines Fensters nicht auf das neue Ziel aktualisiert</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>側邊欄搜尋現在支援子序列匹配——輸入「f1」即可匹配「Finder Users1」等非連續字元</li>
-<li>側邊欄搜尋同時匹配應用程式的原始（非本地化）名稱，輸入「ai」即可匹配顯示為本地化名稱的「Mail」</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正關閉視窗後側邊欄中後續視窗被意外多選的問題</li>
-<li>修正關閉視窗後網格上的微縮視窗未更新為新目標的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>侧边栏搜索现在支持子序列匹配——输入"f1"即可匹配"Finder Users1"等非连续字符</li>
-<li>侧边栏搜索同时匹配应用的原始（非本地化）名称，输入"ai"即可匹配显示为本地化名称的"Mail"</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复关闭窗口后侧边栏中后续窗口被意外多选的问题</li>
-<li>修复关闭窗口后网格上的微缩窗口未更新为新目标的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>사이드바 검색이 부분 문자열 매칭을 지원 — "f1"을 입력하면 연속되지 않은 문자가 포함된 "Finder Users1"도 검색됨</li>
-<li>사이드바 검색이 앱의 원래 이름(비현지화 이름)도 검색하여, "ai"로 "Mail"(현지화명과 다를 경우)도 매칭</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>창을 닫은 후 사이드바에서 이후 창이 의도치 않게 다중 선택되는 문제 수정</li>
-<li>창을 닫은 후 그리드의 미니어처 윈도우가 새 대상으로 업데이트되지 않는 문제 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>サイドバー検索がサブシーケンスマッチに対応 —「f1」で「Finder Users1」のように連続しない文字でもヒットするように</li>
-<li>サイドバー検索がアプリの元の名前（非ローカライズ名）にもマッチするように。「ai」で「メール」（Mail）がヒット</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>ウインドウを閉じた後、サイドバーで後続のウインドウが意図せず複数選択されることがある問題を修正</li>
-<li>ウインドウを閉じた後、グリッド上のミニチュアウインドウが新しいターゲットに更新されない問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Sidebar search now uses subsequence matching — typing "f1" matches "Finder Users1" even when characters are non-consecutive</li>
-<li>Sidebar search also matches against the original (non-localized) app name, so typing "ai" matches "Mail" even when the app is displayed as "メール"</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fix closing a window sometimes causing unintended multi-selection of subsequent windows in the sidebar</li>
-<li>Fix miniature window on the grid not updating to reflect the new target after closing a window</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>A busca na barra lateral agora usa correspondência por subsequência — digitar "f1" encontra "Finder Users1" mesmo com caracteres não consecutivos</li>
-<li>A busca na barra lateral também pesquisa o nome original (não localizado) do app, então "ai" encontra "Mail" mesmo quando o app é exibido com um nome localizado</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um problema onde fechar uma janela às vezes causava a seleção múltipla involuntária das janelas seguintes na barra lateral</li>
-<li>Corrigido um problema onde a janela em miniatura na grade não era atualizada para o novo alvo após fechar uma janela</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>La ricerca nella barra laterale ora utilizza la corrispondenza per sottosequenza — digitando "f1" si trova "Finder Users1" anche con caratteri non consecutivi</li>
-<li>La ricerca nella barra laterale include anche il nome originale (non localizzato) dell'app, quindi "ai" corrisponde a "Mail" anche quando l'app viene visualizzata con un nome localizzato</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto un problema per cui la chiusura di una finestra causava talvolta la selezione multipla involontaria delle finestre successive nella barra laterale</li>
-<li>Corretto un problema per cui la finestra in miniatura sulla griglia non si aggiornava al nuovo obiettivo dopo la chiusura di una finestra</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>La recherche dans la barre latérale utilise désormais la correspondance par sous-séquence — taper « f1 » correspond à « Finder Users1 » même avec des caractères non consécutifs</li>
-<li>La recherche dans la barre latérale inclut également le nom original (non localisé) de l'app, ainsi « ai » correspond à « Mail » même si l'app est affichée avec un nom localisé</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un problème où la fermeture d'une fenêtre entraînait parfois une sélection multiple involontaire des fenêtres suivantes dans la barre latérale</li>
-<li>Correction d'un problème où la fenêtre miniature sur la grille ne se mettait pas à jour vers la nouvelle cible après la fermeture d'une fenêtre</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>La búsqueda en la barra lateral ahora utiliza coincidencia de subsecuencia: escribir "f1" coincide con "Finder Users1" incluso con caracteres no consecutivos</li>
-<li>La búsqueda en la barra lateral también busca en el nombre original (no localizado) de la app, por lo que "ai" coincide con "Mail" aunque se muestre con un nombre localizado</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Corregido un problema donde al cerrar una ventana se seleccionaban involuntariamente varias ventanas posteriores en la barra lateral</li>
-<li>Corregido un problema donde la ventana en miniatura de la cuadrícula no se actualizaba al nuevo objetivo tras cerrar una ventana</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Seitenleistensuche verwendet jetzt Teilsequenz-Matching — die Eingabe von „f1" findet „Finder Users1" auch bei nicht aufeinanderfolgenden Zeichen</li>
-<li>Seitenleistensuche berücksichtigt auch den ursprünglichen (nicht lokalisierten) App-Namen, sodass „ai" auch „Mail" findet, wenn die App lokalisiert angezeigt wird</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Beim Schließen eines Fensters wurden nachfolgende Fenster in der Seitenleiste manchmal unbeabsichtigt mehrfach ausgewählt</li>
-<li>Das Miniaturfenster im Raster wurde nach dem Schließen eines Fensters nicht auf das neue Ziel aktualisiert</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>側邊欄搜尋現在支援子序列匹配——輸入「f1」即可匹配「Finder Users1」等非連續字元</li>
-<li>側邊欄搜尋同時匹配應用程式的原始（非本地化）名稱，輸入「ai」即可匹配顯示為本地化名稱的「Mail」</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正關閉視窗後側邊欄中後續視窗被意外多選的問題</li>
-<li>修正關閉視窗後網格上的微縮視窗未更新為新目標的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>侧边栏搜索现在支持子序列匹配——输入"f1"即可匹配"Finder Users1"等非连续字符</li>
-<li>侧边栏搜索同时匹配应用的原始（非本地化）名称，输入"ai"即可匹配显示为本地化名称的"Mail"</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复关闭窗口后侧边栏中后续窗口被意外多选的问题</li>
-<li>修复关闭窗口后网格上的微缩窗口未更新为新目标的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>사이드바 검색이 부분 문자열 매칭을 지원 — "f1"을 입력하면 연속되지 않은 문자가 포함된 "Finder Users1"도 검색됨</li>
-<li>사이드바 검색이 앱의 원래 이름(비현지화 이름)도 검색하여, "ai"로 "Mail"(현지화명과 다를 경우)도 매칭</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>창을 닫은 후 사이드바에서 이후 창이 의도치 않게 다중 선택되는 문제 수정</li>
-<li>창을 닫은 후 그리드의 미니어처 윈도우가 새 대상으로 업데이트되지 않는 문제 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>サイドバー検索がサブシーケンスマッチに対応 —「f1」で「Finder Users1」のように連続しない文字でもヒットするように</li>
-<li>サイドバー検索がアプリの元の名前（非ローカライズ名）にもマッチするように。「ai」で「メール」（Mail）がヒット</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>ウインドウを閉じた後、サイドバーで後続のウインドウが意図せず複数選択されることがある問題を修正</li>
-<li>ウインドウを閉じた後、グリッド上のミニチュアウインドウが新しいターゲットに更新されない問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Sidebar search now uses subsequence matching — typing "f1" matches "Finder Users1" even when characters are non-consecutive</li>
-<li>Sidebar search also matches against the original (non-localized) app name, so typing "ai" matches "Mail" even when the app is displayed as "メール"</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fix closing a window sometimes causing unintended multi-selection of subsequent windows in the sidebar</li>
-<li>Fix miniature window on the grid not updating to reflect the new target after closing a window</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>A busca na barra lateral agora usa correspondência por subsequência — digitar "f1" encontra "Finder Users1" mesmo com caracteres não consecutivos</li>
-<li>A busca na barra lateral também pesquisa o nome original (não localizado) do app, então "ai" encontra "Mail" mesmo quando o app é exibido com um nome localizado</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um problema onde fechar uma janela às vezes causava a seleção múltipla involuntária das janelas seguintes na barra lateral</li>
-<li>Corrigido um problema onde a janela em miniatura na grade não era atualizada para o novo alvo após fechar uma janela</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>La ricerca nella barra laterale ora utilizza la corrispondenza per sottosequenza — digitando "f1" si trova "Finder Users1" anche con caratteri non consecutivi</li>
-<li>La ricerca nella barra laterale include anche il nome originale (non localizzato) dell'app, quindi "ai" corrisponde a "Mail" anche quando l'app viene visualizzata con un nome localizzato</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto un problema per cui la chiusura di una finestra causava talvolta la selezione multipla involontaria delle finestre successive nella barra laterale</li>
-<li>Corretto un problema per cui la finestra in miniatura sulla griglia non si aggiornava al nuovo obiettivo dopo la chiusura di una finestra</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>La recherche dans la barre latérale utilise désormais la correspondance par sous-séquence — taper « f1 » correspond à « Finder Users1 » même avec des caractères non consécutifs</li>
-<li>La recherche dans la barre latérale inclut également le nom original (non localisé) de l'app, ainsi « ai » correspond à « Mail » même si l'app est affichée avec un nom localisé</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un problème où la fermeture d'une fenêtre entraînait parfois une sélection multiple involontaire des fenêtres suivantes dans la barre latérale</li>
-<li>Correction d'un problème où la fenêtre miniature sur la grille ne se mettait pas à jour vers la nouvelle cible après la fermeture d'une fenêtre</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>La búsqueda en la barra lateral ahora utiliza coincidencia de subsecuencia: escribir "f1" coincide con "Finder Users1" incluso con caracteres no consecutivos</li>
-<li>La búsqueda en la barra lateral también busca en el nombre original (no localizado) de la app, por lo que "ai" coincide con "Mail" aunque se muestre con un nombre localizado</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Corregido un problema donde al cerrar una ventana se seleccionaban involuntariamente varias ventanas posteriores en la barra lateral</li>
-<li>Corregido un problema donde la ventana en miniatura de la cuadrícula no se actualizaba al nuevo objetivo tras cerrar una ventana</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Seitenleistensuche verwendet jetzt Teilsequenz-Matching — die Eingabe von „f1" findet „Finder Users1" auch bei nicht aufeinanderfolgenden Zeichen</li>
-<li>Seitenleistensuche berücksichtigt auch den ursprünglichen (nicht lokalisierten) App-Namen, sodass „ai" auch „Mail" findet, wenn die App lokalisiert angezeigt wird</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Beim Schließen eines Fensters wurden nachfolgende Fenster in der Seitenleiste manchmal unbeabsichtigt mehrfach ausgewählt</li>
-<li>Das Miniaturfenster im Raster wurde nach dem Schließen eines Fensters nicht auf das neue Ziel aktualisiert</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>側邊欄搜尋現在支援子序列匹配——輸入「f1」即可匹配「Finder Users1」等非連續字元</li>
-<li>側邊欄搜尋同時匹配應用程式的原始（非本地化）名稱，輸入「ai」即可匹配顯示為本地化名稱的「Mail」</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正關閉視窗後側邊欄中後續視窗被意外多選的問題</li>
-<li>修正關閉視窗後網格上的微縮視窗未更新為新目標的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>侧边栏搜索现在支持子序列匹配——输入"f1"即可匹配"Finder Users1"等非连续字符</li>
-<li>侧边栏搜索同时匹配应用的原始（非本地化）名称，输入"ai"即可匹配显示为本地化名称的"Mail"</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复关闭窗口后侧边栏中后续窗口被意外多选的问题</li>
-<li>修复关闭窗口后网格上的微缩窗口未更新为新目标的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>사이드바 검색이 부분 문자열 매칭을 지원 — "f1"을 입력하면 연속되지 않은 문자가 포함된 "Finder Users1"도 검색됨</li>
-<li>사이드바 검색이 앱의 원래 이름(비현지화 이름)도 검색하여, "ai"로 "Mail"(현지화명과 다를 경우)도 매칭</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>창을 닫은 후 사이드바에서 이후 창이 의도치 않게 다중 선택되는 문제 수정</li>
-<li>창을 닫은 후 그리드의 미니어처 윈도우가 새 대상으로 업데이트되지 않는 문제 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>サイドバー検索がサブシーケンスマッチに対応 —「f1」で「Finder Users1」のように連続しない文字でもヒットするように</li>
-<li>サイドバー検索がアプリの元の名前（非ローカライズ名）にもマッチするように。「ai」で「メール」（Mail）がヒット</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>ウインドウを閉じた後、サイドバーで後続のウインドウが意図せず複数選択されることがある問題を修正</li>
-<li>ウインドウを閉じた後、グリッド上のミニチュアウインドウが新しいターゲットに更新されない問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Sidebar search now uses subsequence matching — typing "f1" matches "Finder Users1" even when characters are non-consecutive</li>
-<li>Sidebar search also matches against the original (non-localized) app name, so typing "ai" matches "Mail" even when the app is displayed as "メール"</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fix closing a window sometimes causing unintended multi-selection of subsequent windows in the sidebar</li>
-<li>Fix miniature window on the grid not updating to reflect the new target after closing a window</li>
-</ul>]]></description>
-            <pubDate>Tue, 07 Apr 2026 22:33:35 +0900</pubDate>
-            <sparkle:version>430</sparkle:version>
-            <sparkle:shortVersionString>4.3.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley-4.3.0.zip" length="5747013" type="application/octet-stream" sparkle:edSignature="F9dU/4juLV24Sh70ZTZihnaiia9TC9K7aqRF0B/eo7dcSGPjI5kSXWcSp4WrmcHfMFbSr9ti5ijP8f8u0qgGDQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-423.delta" sparkle:deltaFrom="423" length="244894" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2Z842b3CmTaVwKM7xHNcYk1DklSsByCsFHNeqqYmWRkhlDQaT7IzrPjsTOMQtQzk6DFelj0+JCZKaPZ8V9w2Ag=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-422.delta" sparkle:deltaFrom="422" length="371966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="yWAoHFAw7ocBSf+DGzPiqQZLPXIuXlQWgXaAAf138Kg6EDA7gn3MuV6Qb536QyNLYy8+odLhOPpSn05f7YZdBw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-421.delta" sparkle:deltaFrom="421" length="385378" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="g+QVPrsjIDa/tHYE3FJyNq8C61MP4I3ACtIwh0/d4HU2xqkzgccfkL8wAMkDY7dyqr2b+JnPS9IwTWROX8smAQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-420.delta" sparkle:deltaFrom="420" length="396078" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ngYf3cLC6zyaJkfbTAD9Jg0NJcaFkKvWOP21a/2828xrniF+QaFMWjk4lUo827cbzTaVddcvzSFTcLT7oLjyCg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.0/Tiley430-412.delta" sparkle:deltaFrom="412" length="469102" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9jlNTtdKE+fbdb2o7fkq7jUWhLQ0sZe0ulw5hsqAmEtUga2AQ51PoS10fYE7abicLiV+iSkowfpZdJGj3ThsDg=="/>
             </sparkle:deltas>
         </item>
     </channel>
