@@ -3,6 +3,65 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.3.5</title>
+            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
+<ul>
+<li>Исправлено несоответствие радиуса скругления углов миниатюрного окна на мини-экране при предварительном просмотре наведения и перетаскивания для соответствия выбранному окну</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigida a inconsistência do raio de canto da janela em miniatura na minitela durante as pré-visualizações de hover e arrasto para corresponder à janela selecionada</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretta l'incoerenza del raggio degli angoli della finestra in miniatura sullo schermo mini durante le anteprime al passaggio del mouse e durante il trascinamento per corrispondere alla finestra selezionata</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'incohérence du rayon d'angle de la fenêtre miniature sur le mini-écran lors des aperçus de survol et de glissement pour correspondre à la fenêtre sélectionnée</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregida la inconsistencia del radio de esquina de la ventana en miniatura en la mini pantalla durante las vistas previas de hover y arrastre para que coincida con la ventana seleccionada</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Inkonsistenter Eckenradius des Miniaturfensters auf dem Mini-Bildschirm bei Hover- und Drag-Vorschauen behoben, sodass er nun mit der statischen Fenstervorschau übereinstimmt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正迷你螢幕上懸停和拖曳預覽時微縮視窗的圓角半徑與已選視窗顯示不一致的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复迷你屏幕上悬停和拖动预览时微缩窗口的圆角半径与已选窗口显示不一致的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>미니 화면에서 호버 및 드래그 시 표시되는 미니어처 윈도우의 모서리 반경이 선택된 윈도우 표시와 다르던 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>ミニスクリーン上でホバー時・ドラッグ時に表示されるミニチュアウインドウの角丸半径が、選択中のウインドウ表示と異なっていた問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed miniature window corner radius inconsistency on the mini-screen during hover and drag previews to match the static window preview</li>
+</ul>]]></description>
+            <pubDate>Thu, 09 Apr 2026 23:38:13 +0900</pubDate>
+            <sparkle:version>435</sparkle:version>
+            <sparkle:shortVersionString>4.3.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley-4.3.5.zip" length="5755820" type="application/octet-stream" sparkle:edSignature="GHTmjenE1gEsOcCSwuxinGk+4a3vYppEJ4sQUOvc6AYDywzCSHsMJFuLpo2IndXtimuy01RXpE+o6Q55qV9dDw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-434.delta" sparkle:deltaFrom="434" length="170730" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Gy0LJI2DyvxiVfS1ZOO6FK44lFbXDHJ/27XbPmZDcfWmF7lAIuvCVxhMJGj5597ISSr0BAVlIF2EzDLMP5iPCg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-433.delta" sparkle:deltaFrom="433" length="243646" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OgGvY591d9KiTn9107i2O56mdWVzp+SheIXEcx0Q0Qgg/ZkNz57muXqWFsiNLDBzrlHyBF+sdWjZTlpa3nm3Bw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-432.delta" sparkle:deltaFrom="432" length="291346" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Syah/6AnlwdIryWpzpgEWwCwwR4amzWqyu84NHNLZQZn6H4ETqMEqktywVJcJJyBNCuVMYhUXCV0hVWSfxuLDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-431.delta" sparkle:deltaFrom="431" length="299454" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zBiwuR9NpnVpteikr36RnFWdNZz5BItjOugbr0A0SL+RPDPXh5+POmFXK1MrajcwYj3HOV5UbRA8maHD6n82Cg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-430.delta" sparkle:deltaFrom="430" length="297378" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="sZz4pMKkteFai1arJgRrLoYElQapJWTs4G6dvXiJ8erGUYLpKJcHSGD55rtyvvoMafTURCrLmQzXQpfuuqabAw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.3.4</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -48,11 +107,51 @@
 <ul>
 <li>Dismiss the settings window before Sparkle update checks so the grid preview hover cannot bring it to the front and block Sparkle dialogs; the settings window is restored after the update cycle finishes</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>A janela de configurações é fechada antes da verificação de atualizações do Sparkle para evitar que a pré-visualização da grade ao passar o mouse a traga para frente e oculte os diálogos do Sparkle. A janela de configurações é restaurada após o término do ciclo de atualização</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>La finestra delle impostazioni viene chiusa prima del controllo aggiornamenti di Sparkle, impedendo che l'anteprima della griglia al passaggio del mouse la porti in primo piano e nasconda i dialoghi di Sparkle. La finestra delle impostazioni viene ripristinata al termine del ciclo di aggiornamento</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Fermeture de la fenêtre des réglages avant la vérification des mises à jour Sparkle afin que l'aperçu de la grille au survol ne la ramène pas au premier plan et ne masque pas les dialogues Sparkle. La fenêtre des réglages est restaurée à la fin du cycle de mise à jour</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Se cierra la ventana de ajustes antes de la comprobación de actualizaciones de Sparkle para evitar que la previsualización de la cuadrícula al pasar el cursor la traiga al frente y oculte los diálogos de Sparkle. La ventana de ajustes se restaura tras finalizar el ciclo de actualización</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Einstellungsfenster wird vor der Sparkle-Updateprüfung geschlossen, damit die Rastervorschau beim Hover das Fenster nicht in den Vordergrund bringt und Sparkle-Dialoge verdeckt. Das Einstellungsfenster wird nach Abschluss des Updatezyklus wiederhergestellt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正 Sparkle 更新檢查前未關閉設定視窗，導致格線預覽懸停將設定視窗帶到前台、遮擋 Sparkle 對話框的問題。更新週期結束後自動恢復設定視窗</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复 Sparkle 更新检查前未关闭设置窗口，导致网格预览悬停将设置窗口置于前台、遮挡 Sparkle 对话框的问题。更新周期结束后自动恢复设置窗口</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>Sparkle 업데이트 확인 전에 설정 창을 닫아, 그리드 미리보기 호버로 설정 창이 앞으로 나와 Sparkle 대화상자를 가리는 문제를 수정. 업데이트 사이클 종료 후 설정 창을 복원하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>Sparkle のアップデート確認前に設定ウインドウを閉じ、グリッドプレビューのホバーで設定ウインドウが前面に来て Sparkle のダイアログを隠す問題を修正。アップデートサイクル終了後に設定ウインドウを復元するようにした</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Dismiss the settings window before Sparkle update checks so the grid preview hover cannot bring it to the front and block Sparkle dialogs; the settings window is restored after the update cycle finishes</li>
+</ul>]]></description>
             <pubDate>Thu, 09 Apr 2026 23:08:46 +0900</pubDate>
             <sparkle:version>434</sparkle:version>
             <sparkle:shortVersionString>4.3.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley-4.3.4.zip" length="5755361" type="application/octet-stream" sparkle:edSignature="dstcdfQ02AYXD9gU88Fu2jH0ggE2sKjzdR1UcZJr8LMTrHPteq5e7+eOh3nA+r/a2mbUjBgRpRW8DYFNRSs7Bw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley-4.3.4.zip" length="5755361" type="application/octet-stream" sparkle:edSignature="dstcdfQ02AYXD9gU88Fu2jH0ggE2sKjzdR1UcZJr8LMTrHPteq5e7+eOh3nA+r/a2mbUjBgRpRW8DYFNRSs7Bw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley434-433.delta" sparkle:deltaFrom="433" length="222366" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="d0S1SRZNZAukoVt8YoLHM1ND4vc1wVI+Pm652LwgKS6gOWUm1rJPQSBxyVat81jdvXV5MS/BvgfNLXSJR1MOBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley434-432.delta" sparkle:deltaFrom="432" length="282458" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="lAS2ng5ssVvIbrD/FvF2WecEN6856mkuA2qYeMMpJlC8scOCXJZ5IOvS/9iZR6ovGXFoL0BkYCJk/yOjBPLuDQ=="/>
@@ -231,156 +330,97 @@
 <ul>
 <li>Fixed dragging on the upper part of the grid unintentionally moving the window instead of selecting grid cells</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Agora é possível mover a janela arrastando a barra de dicas do teclado, as áreas de barra de menus/Dock da minitela, regiões vazias da barra lateral e espaços entre botões da barra de ferramentas</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Arrastar na parte superior da grade movia a janela em vez de selecionar células</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Ora è possibile spostare la finestra trascinando la barra dei suggerimenti tastiera, le aree barra dei menu/Dock del mini schermo, le zone vuote della barra laterale e gli spazi tra i pulsanti della barra degli strumenti</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Il trascinamento nella parte superiore della griglia spostava la finestra anziché selezionare le celle</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>La fenêtre peut désormais être déplacée en faisant glisser la barre d'indices clavier, les zones barre de menus/Dock du mini-écran, les zones vides de la barre latérale et les espaces entre les boutons de la barre d'outils</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Le glissement dans la partie supérieure de la grille déplaçait la fenêtre au lieu de sélectionner des cellules</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Ahora se puede arrastrar la ventana desde la barra de atajos de teclado, las áreas de barra de menú/Dock de la minipantalla, zonas vacías de la barra lateral y los espacios entre botones de la barra de herramientas</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Arrastrar en la parte superior de la cuadrícula movía la ventana en lugar de seleccionar celdas</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Das Fenster kann jetzt durch Ziehen der Tastaturhinweisleiste, der Menüleisten-/Dock-Bereiche des Minibildschirms, leerer Seitenleistenbereiche und Lücken in der Symbolleiste verschoben werden</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Ziehen im oberen Bereich des Rasters verschob das Fenster statt Zellen auszuwählen</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>現在可以透過拖曳鍵盤提示列、迷你螢幕的選單列/Dock 區域、側邊欄空白區域、工具列按鈕間隙來移動視窗</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了在網格上方拖曳時視窗會移動而非選取儲存格的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>现在可以通过拖动键盘提示栏、迷你屏幕的菜单栏/Dock区域、侧边栏空白区域、工具栏按钮间隙来移动窗口</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了在网格上部拖动时窗口会移动而非选择单元格的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>키보드 힌트 바, 미니 스크린의 메뉴 바/Dock 영역, 사이드바 빈 공간, 툴바 버튼 사이 등에서 창을 드래그하여 이동할 수 있게 됨</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>그리드 상단을 드래그할 때 셀 선택 대신 창이 이동되는 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>キーボードヒントバー、ミニスクリーンのメニューバー/Dock部分、サイドバーの空き領域、ツールバーのボタン間などからウインドウをドラッグ移動できるようになった</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>グリッド上部をドラッグするとセル選択ではなくウインドウが移動してしまう問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>The window can now be dragged to reposition from the keyboard hints bar, mini-screen chrome areas, empty sidebar regions, and toolbar gaps</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed dragging on the upper part of the grid unintentionally moving the window instead of selecting grid cells</li>
+</ul>]]></description>
             <pubDate>Thu, 09 Apr 2026 22:09:38 +0900</pubDate>
             <sparkle:version>433</sparkle:version>
             <sparkle:shortVersionString>4.3.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley-4.3.3.zip" length="5754308" type="application/octet-stream" sparkle:edSignature="smbDp2io8V5DKCuPN15HXBMvBH1/fJ4BQRM16AYcQJ2qksBgycVzZNXAL1TEYz/23w+k8do0w3oBoGrdGs2MCQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley-4.3.3.zip" length="5754308" type="application/octet-stream" sparkle:edSignature="smbDp2io8V5DKCuPN15HXBMvBH1/fJ4BQRM16AYcQJ2qksBgycVzZNXAL1TEYz/23w+k8do0w3oBoGrdGs2MCQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-432.delta" sparkle:deltaFrom="432" length="248938" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0CGieGWtRPRAisPsS70QcKA8cOpVwu9V4Ai2MfPGuKzQbZOn29YEwyO6F+aAfN0xIKIYsP96yYwynYDppP9eAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-431.delta" sparkle:deltaFrom="431" length="260598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="YZzdmIxQI781badqqSI2J2VD1GjPfj10Ay4kQhY6Abq6Eppg573CFB4boBbG76/1iAVLnnzBYqvlAVxasH9EAQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-430.delta" sparkle:deltaFrom="430" length="266394" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="quH9dvqQAroZHgRAenDxCRyZ8vGaOsuCKo1weEoHswz3Fhu68ZcyQJ+bb66k30NTVR8u/r158mblLJWr0tI0Bw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-423.delta" sparkle:deltaFrom="423" length="304778" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TcBv1YIY0iS87lGqXpW8T0PVz5oSsOXBvIJPW+2dPwv718dzg7/XpyrNSqhXaiYH8LB9OXo1MrBDD4xirG+lBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.3/Tiley433-422.delta" sparkle:deltaFrom="422" length="406422" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kW1K2mT4mVvICrS+VnOOPos4kpqoN2/fqIBFhZDqfOEFBRWsgqmnbH7zpLxy+24bFhvx6K4WN0KmfJEFPUS5Dw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.3.2</title>
-            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
-<ul>
-<li>Исправлена ошибка, при которой при вызове Tiley сразу после переключения окон могли быть выбраны два окна</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um bug onde duas janelas podiam ser selecionadas ao invocar o Tiley logo após trocar de janela</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto un bug per cui potevano essere selezionate due finestre quando si richiamava Tiley subito dopo aver cambiato finestra</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un bug où deux fenêtres pouvaient être sélectionnées en invoquant Tiley juste après avoir changé de fenêtre</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Se corrigió un error por el cual se podían seleccionar dos ventanas al invocar Tiley inmediatamente después de cambiar de ventana</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Fehler behoben, bei dem nach einem Fensterwechsel beim sofortigen Aufrufen von Tiley zwei Fenster ausgewählt werden konnten</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了切換視窗後立即呼叫 Tiley 時可能選取兩個視窗的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了切换窗口后立即调用 Tiley 时可能选中两个窗口的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>윈도우 전환 직후 Tiley를 호출하면 윈도우가 2개 선택되는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>ウインドウ切り替え直後にTileyを呼び出すとウインドウが2つ選択されることがある問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed a bug where two windows could be selected when invoking Tiley immediately after switching windows</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um bug onde duas janelas podiam ser selecionadas ao invocar o Tiley logo após trocar de janela</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto un bug per cui potevano essere selezionate due finestre quando si richiamava Tiley subito dopo aver cambiato finestra</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un bug où deux fenêtres pouvaient être sélectionnées en invoquant Tiley juste après avoir changé de fenêtre</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Se corrigió un error por el cual se podían seleccionar dos ventanas al invocar Tiley inmediatamente después de cambiar de ventana</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Fehler behoben, bei dem nach einem Fensterwechsel beim sofortigen Aufrufen von Tiley zwei Fenster ausgewählt werden konnten</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了切換視窗後立即呼叫 Tiley 時可能選取兩個視窗的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了切换窗口后立即调用 Tiley 时可能选中两个窗口的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>윈도우 전환 직후 Tiley를 호출하면 윈도우가 2개 선택되는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>ウインドウ切り替え直後にTileyを呼び出すとウインドウが2つ選択されることがある問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed a bug where two windows could be selected when invoking Tiley immediately after switching windows</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>Corrigido um bug onde duas janelas podiam ser selecionadas ao invocar o Tiley logo após trocar de janela</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>Corretto un bug per cui potevano essere selezionate due finestre quando si richiamava Tiley subito dopo aver cambiato finestra</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Correction d'un bug où deux fenêtres pouvaient être sélectionnées en invoquant Tiley juste après avoir changé de fenêtre</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Se corrigió un error por el cual se podían seleccionar dos ventanas al invocar Tiley inmediatamente después de cambiar de ventana</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Fehler behoben, bei dem nach einem Fensterwechsel beim sofortigen Aufrufen von Tiley zwei Fenster ausgewählt werden konnten</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正了切換視窗後立即呼叫 Tiley 時可能選取兩個視窗的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复了切换窗口后立即调用 Tiley 时可能选中两个窗口的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>윈도우 전환 직후 Tiley를 호출하면 윈도우가 2개 선택되는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>ウインドウ切り替え直後にTileyを呼び出すとウインドウが2つ選択されることがある問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Fixed a bug where two windows could be selected when invoking Tiley immediately after switching windows</li>
-</ul>]]></description>
-            <pubDate>Wed, 08 Apr 2026 13:53:51 +0900</pubDate>
-            <sparkle:version>432</sparkle:version>
-            <sparkle:shortVersionString>4.3.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley-4.3.2.zip" length="5747130" type="application/octet-stream" sparkle:edSignature="x87ZFZ2d9ej+gSIeYdgufYAnAdxvPPg1SrLgRELZ5NZ0Zx+gfRXHpTkign2yuoJ0RXXqYq8pTFUBWU0sITkPCQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley432-431.delta" sparkle:deltaFrom="431" length="150342" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aGdLAgB5NkNHPJGz5k9V2vv2HufaGBYmSDgx782eNCOBYeGWNLGqWXxPMWn0Qkrop9wi0VNA62Z152mYHKqIDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley432-430.delta" sparkle:deltaFrom="430" length="165314" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kWtBi3n1RUCtkIDdeK0J1R+OrkZex39LgOtgS/wAFoFxzBl/yGDkCwQiSq+g86r6LZKKiEFPl3/9d0nodRS7Bw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley432-423.delta" sparkle:deltaFrom="423" length="254202" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="xcbQAy8na6tcwVH1VnzwDOkCpxYNhmwlUxuPeGMhT4a5XVR8JIB5dg4xMmxt3RVMqXwcK6SM3aJ0BVCW1cLNAA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley432-422.delta" sparkle:deltaFrom="422" length="377530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="j1PV3GjJxnBE00gnV4ukoXbSEbm/lSEV9HkFAMqBmZU0mZyCeXgpGAyrPU2B97yCUlDQic0sVslVyU+bPMAUDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.2/Tiley432-421.delta" sparkle:deltaFrom="421" length="392066" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zz2+P0UaAJYwLUSAjdv200oAvbwHowqYcGfAvsr9teJZjdX7azmgSfaDj08QTEcy+POBRUIMPRSyEohtJ07gBg=="/>
             </sparkle:deltas>
         </item>
     </channel>
