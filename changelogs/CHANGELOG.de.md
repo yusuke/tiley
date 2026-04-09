@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [4.3.5] - 2026-04-09
+
+### Behoben
+
+- Inkonsistenter Eckenradius des Miniaturfensters auf dem Mini-Bildschirm bei Hover- und Drag-Vorschauen behoben, sodass er nun mit der statischen Fenstervorschau übereinstimmt
+
 ## [4.3.4] - 2026-04-09
 
 ### Behoben

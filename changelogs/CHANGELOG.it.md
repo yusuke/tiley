@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [4.3.5] - 2026-04-09
+
+### Corretto
+
+- Corretta l'incoerenza del raggio degli angoli della finestra in miniatura sullo schermo mini durante le anteprime al passaggio del mouse e durante il trascinamento per corrispondere alla finestra selezionata
+
 ## [4.3.4] - 2026-04-09
 
 ### Corretto

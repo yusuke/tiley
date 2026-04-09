@@ -5,6 +5,7 @@ struct MiniatureWindowView: View {
     var appIcon: NSImage?
     var appName: String?
     var windowTitle: String?
+    var cornerRadiusOverride: CGFloat?
     @Environment(\.colorScheme) private var colorScheme
 
     private var titleBarText: String? {
@@ -24,7 +25,7 @@ struct MiniatureWindowView: View {
         GeometryReader { geometry in
             let w = geometry.size.width
             let h = geometry.size.height
-            let cornerRadius = max(2, min(w, h) * 0.02)
+            let cornerRadius = cornerRadiusOverride ?? max(2, min(w, h) * 0.02)
             let buttonDiameter = max(2, titleBarHeight * 0.38)
             let buttonSpacing = buttonDiameter * 0.55
             let buttonLeftPadding = buttonDiameter * 0.8

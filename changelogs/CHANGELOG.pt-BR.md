@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [4.3.5] - 2026-04-09
+
+### Corrigido
+
+- Corrigida a inconsistência do raio de canto da janela em miniatura na minitela durante as pré-visualizações de hover e arrasto para corresponder à janela selecionada
+
 ## [4.3.4] - 2026-04-09
 
 ### Corrigido

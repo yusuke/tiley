@@ -149,11 +149,16 @@ struct LayoutGridWorkspaceView: View {
                     let frame = rectForCell(row: hover.row, column: hover.column, width: cellWidth, height: cellHeight)
                     let menuBarFraction = wf.menuBarHeightFraction
                     let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                    // Match corner radius with the static window preview
+                    let staticW = wf.width * geometry.size.width
+                    let staticH = wf.height * geometry.size.height
+                    let matchedRadius = max(2, min(staticW, staticH) * 0.02)
                     MiniatureWindowView(
                         titleBarHeight: titleBarPx,
                         appIcon: wf.appIcon,
                         appName: wf.appName,
-                        windowTitle: wf.windowTitle
+                        windowTitle: wf.windowTitle,
+                        cornerRadiusOverride: matchedRadius
                     )
                     .frame(width: frame.width, height: frame.height)
                     .position(x: frame.midX, y: frame.midY)
@@ -272,11 +277,16 @@ struct LayoutGridWorkspaceView: View {
                     if let wf = windowFrameRelative {
                         let menuBarFraction = wf.menuBarHeightFraction
                         let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                        // Match corner radius with the static window preview
+                        let staticW = wf.width * geometry.size.width
+                        let staticH = wf.height * geometry.size.height
+                        let matchedRadius = max(2, min(staticW, staticH) * 0.02)
                         MiniatureWindowView(
                             titleBarHeight: titleBarPx,
                             appIcon: wf.appIcon,
                             appName: wf.appName,
-                            windowTitle: wf.windowTitle
+                            windowTitle: wf.windowTitle,
+                            cornerRadiusOverride: matchedRadius
                         )
                         .frame(width: selRect.width, height: selRect.height)
                         .position(x: selRect.midX, y: selRect.midY)

@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [4.3.5] - 2026-04-09
+
+### Corregido
+
+- Corregida la inconsistencia del radio de esquina de la ventana en miniatura en la mini pantalla durante las vistas previas de hover y arrastre para que coincida con la ventana seleccionada
+
 ## [4.3.4] - 2026-04-09
 
 ### Corregido

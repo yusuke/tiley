@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [4.3.5] - 2026-04-09
+
+### Corrigé
+
+- Correction de l'incohérence du rayon d'angle de la fenêtre miniature sur le mini-écran lors des aperçus de survol et de glissement pour correspondre à la fenêtre sélectionnée
+
 ## [4.3.4] - 2026-04-09
 
 ### Corrigé
