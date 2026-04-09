@@ -808,6 +808,45 @@ struct TahoeToolbarButtonStyle: ButtonStyle {
     }
 }
 
+// MARK: - WindowDragArea
+
+/// Transparent hit-target that initiates a manual window drag.
+/// Use as `.background(WindowDragArea())` on toolbar / chrome regions.
+/// Uses `.contentShape(Rectangle())` so the full frame participates in
+/// SwiftUI hit-testing, then an `onChanged` DragGesture moves the window.
+struct WindowDragArea: View {
+    @State private var initialOrigin: CGPoint?
+    @State private var initialMouse: CGPoint?
+
+    var body: some View {
+        Color.clear
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 1)
+                    .onChanged { _ in
+                        guard let window = NSApp.keyWindow ?? NSApp.mainWindow else { return }
+                        // Use screen coordinates (NSEvent.mouseLocation) to avoid
+                        // feedback caused by the window-relative SwiftUI coordinate space.
+                        let mouse = NSEvent.mouseLocation
+                        if initialOrigin == nil {
+                            initialOrigin = CGPoint(x: window.frame.origin.x,
+                                                    y: window.frame.origin.y)
+                            initialMouse = mouse
+                        }
+                        guard let origin = initialOrigin, let start = initialMouse else { return }
+                        window.setFrameOrigin(NSPoint(
+                            x: origin.x + mouse.x - start.x,
+                            y: origin.y + mouse.y - start.y
+                        ))
+                    }
+                    .onEnded { _ in
+                        initialOrigin = nil
+                        initialMouse = nil
+                    }
+            )
+    }
+}
+
 struct UpdateAvailableBadge: View {
     var body: some View {
         Text(NSLocalizedString("Update available", comment: "Badge shown when an update is available"))

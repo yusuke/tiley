@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- La fenêtre peut désormais être déplacée en faisant glisser la barre d'indices clavier, les zones barre de menus/Dock du mini-écran, les zones vides de la barre latérale et les espaces entre les boutons de la barre d'outils
+
+### Corrigé
+
+- Le glissement dans la partie supérieure de la grille déplaçait la fenêtre au lieu de sélectionner des cellules
+
 ## [4.3.2] - 2026-04-08
 
 ### Corrigé

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Agora é possível mover a janela arrastando a barra de dicas do teclado, as áreas de barra de menus/Dock da minitela, regiões vazias da barra lateral e espaços entre botões da barra de ferramentas
+
+### Corrigido
+
+- Arrastar na parte superior da grade movia a janela em vez de selecionar células
+
 ## [4.3.2] - 2026-04-08
 
 ### Corrigido

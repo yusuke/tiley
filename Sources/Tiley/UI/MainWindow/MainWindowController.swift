@@ -94,6 +94,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = false
+        window.isMovable = false
         // Start at normal level; AppState promotes to .floating via applyWindowLevel().
         window.level = .normal
         let displayID = self.targetScreen.displayID
@@ -490,6 +491,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 }
 
 private final class MainAppWindow: NSWindow {
+    /// Width of the edge zone that allows window dragging.
+    private static let edgeDragInset: CGFloat = 6
+
     var hideHandler: (() -> Void)?
     var escapeHandler: (() -> Bool)?
     var localShortcutHandler: ((HotKeyShortcut) -> Bool)?
@@ -499,6 +503,39 @@ private final class MainAppWindow: NSWindow {
 
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { true }
+
+    // MARK: - Custom window dragging
+
+    /// Manually track the mouse to drag the window.  This bypasses
+    /// `isMovable` / `isMovableByWindowBackground` entirely, so it works
+    /// even when both are `false`.
+    func beginManualDrag(with event: NSEvent) {
+        let initialMouseScreen = NSEvent.mouseLocation
+        let initialOrigin = frame.origin
+
+        while true {
+            guard let next = nextEvent(matching: [.leftMouseDragged, .leftMouseUp]) else { break }
+            if next.type == .leftMouseUp { break }
+            let currentMouseScreen = NSEvent.mouseLocation
+            let dx = currentMouseScreen.x - initialMouseScreen.x
+            let dy = currentMouseScreen.y - initialMouseScreen.y
+            setFrameOrigin(NSPoint(x: initialOrigin.x + dx, y: initialOrigin.y + dy))
+        }
+    }
+
+    /// When no other view consumed the event and it falls through to the
+    /// window, allow dragging only from the thin edge zone.
+    override func mouseDown(with event: NSEvent) {
+        let loc = event.locationInWindow
+        let size = frame.size
+        let d = Self.edgeDragInset
+        let nearEdge = loc.x < d || loc.x > size.width - d
+            || loc.y < d || loc.y > size.height - d
+        if nearEdge {
+            beginManualDrag(with: event)
+        }
+        // Don't call super — prevents any built-in window drag.
+    }
 
     override func cancelOperation(_ sender: Any?) {
         if escapeHandler?() == true {

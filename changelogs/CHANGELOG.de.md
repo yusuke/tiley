@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Das Fenster kann jetzt durch Ziehen der Tastaturhinweisleiste, der Menüleisten-/Dock-Bereiche des Minibildschirms, leerer Seitenleistenbereiche und Lücken in der Symbolleiste verschoben werden
+
+### Behoben
+
+- Ziehen im oberen Bereich des Rasters verschob das Fenster statt Zellen auszuwählen
+
 ## [4.3.2] - 2026-04-08
 
 ### Behoben

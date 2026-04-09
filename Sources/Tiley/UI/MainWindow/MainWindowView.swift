@@ -602,8 +602,10 @@ struct MainWindowView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
-                Color(nsColor: .windowBackgroundColor)
-                    .opacity(0.86)
+                // Window background — also acts as a drag handle for any area
+                // not covered by interactive controls (buttons, grid, list rows).
+                WindowDragArea()
+                    .background(Color(nsColor: .windowBackgroundColor).opacity(0.86))
 
                 layoutGridPanel(size: geometry.size)
             }
@@ -905,6 +907,7 @@ struct MainWindowView: View {
                         .frame(width: compositeWidth, height: menuBarHeight)
                     }
                     .frame(width: compositeWidth, height: menuBarHeight)
+                    .allowsHitTesting(false)
                 }
 
                 // Middle row: optional left Dock, grid, optional right Dock
@@ -1157,33 +1160,37 @@ struct MainWindowView: View {
     }
 
     private var keyboardHintsBar: some View {
-        HStack(spacing: 12) {
-            if let nextShortcut = appState.displayShortcutSettings.selectNextWindow.local,
-               appState.displayShortcutSettings.selectNextWindow.localEnabled {
-                hintLabel(nextShortcut.compactDisplayString, NSLocalizedString("Next window", comment: "Status bar hint for next window"))
-            }
-            if let prevShortcut = appState.displayShortcutSettings.selectPreviousWindow.local,
-               appState.displayShortcutSettings.selectPreviousWindow.localEnabled {
-                hintLabel(prevShortcut.compactDisplayString, NSLocalizedString("Previous window", comment: "Status bar hint for previous window"))
-            }
-            if isSearchFieldFocused {
-                hintLabel("↩", NSLocalizedString("Confirm search criteria", comment: "Status bar hint for confirming search criteria"))
-                hintLabel("Esc", NSLocalizedString("Clear search criteria", comment: "Status bar hint for clearing search criteria"))
-            } else {
-                if let bringShortcut = appState.displayShortcutSettings.bringToFront.local,
-                   appState.displayShortcutSettings.bringToFront.localEnabled {
-                    hintLabel(bringShortcut.compactDisplayString, NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
+        WindowDragArea()
+            .frame(maxWidth: .infinity)
+            .frame(height: 24)
+            .background(.ultraThinMaterial)
+            .overlay {
+                HStack(spacing: 12) {
+                    if let nextShortcut = appState.displayShortcutSettings.selectNextWindow.local,
+                       appState.displayShortcutSettings.selectNextWindow.localEnabled {
+                        hintLabel(nextShortcut.compactDisplayString, NSLocalizedString("Next window", comment: "Status bar hint for next window"))
+                    }
+                    if let prevShortcut = appState.displayShortcutSettings.selectPreviousWindow.local,
+                       appState.displayShortcutSettings.selectPreviousWindow.localEnabled {
+                        hintLabel(prevShortcut.compactDisplayString, NSLocalizedString("Previous window", comment: "Status bar hint for previous window"))
+                    }
+                    if isSearchFieldFocused {
+                        hintLabel("↩", NSLocalizedString("Confirm search criteria", comment: "Status bar hint for confirming search criteria"))
+                        hintLabel("Esc", NSLocalizedString("Clear search criteria", comment: "Status bar hint for clearing search criteria"))
+                    } else {
+                        if let bringShortcut = appState.displayShortcutSettings.bringToFront.local,
+                           appState.displayShortcutSettings.bringToFront.localEnabled {
+                            hintLabel(bringShortcut.compactDisplayString, NSLocalizedString("Bring to front", comment: "Status bar hint for Enter key"))
+                        }
+                        if let closeShortcut = appState.displayShortcutSettings.closeOrQuit.local,
+                           appState.displayShortcutSettings.closeOrQuit.localEnabled {
+                            hintLabel(closeShortcut.compactDisplayString, slashKeyHintLabel)
+                        }
+                        hintLabel("Esc", NSLocalizedString("Close Tiley", comment: "Status bar hint for Escape to close"))
+                    }
                 }
-                if let closeShortcut = appState.displayShortcutSettings.closeOrQuit.local,
-                   appState.displayShortcutSettings.closeOrQuit.localEnabled {
-                    hintLabel(closeShortcut.compactDisplayString, slashKeyHintLabel)
-                }
-                hintLabel("Esc", NSLocalizedString("Close Tiley", comment: "Status bar hint for Escape to close"))
+                .allowsHitTesting(false)
             }
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 24)
-        .background(.ultraThinMaterial)
     }
 
     private func hintLabel(_ key: String, _ label: String) -> some View {

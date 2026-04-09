@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Ahora se puede arrastrar la ventana desde la barra de atajos de teclado, las áreas de barra de menú/Dock de la minipantalla, zonas vacías de la barra lateral y los espacios entre botones de la barra de herramientas
+
+### Corregido
+
+- Arrastrar en la parte superior de la cuadrícula movía la ventana en lugar de seleccionar celdas
+
 ## [4.3.2] - 2026-04-08
 
 ### Corregido

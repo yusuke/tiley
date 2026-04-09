@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Ora è possibile spostare la finestra trascinando la barra dei suggerimenti tastiera, le aree barra dei menu/Dock del mini schermo, le zone vuote della barra laterale e gli spazi tra i pulsanti della barra degli strumenti
+
+### Corretto
+
+- Il trascinamento nella parte superiore della griglia spostava la finestra anziché selezionare le celle
+
 ## [4.3.2] - 2026-04-08
 
 ### Corretto

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- The window can now be dragged to reposition from the keyboard hints bar, mini-screen chrome areas, empty sidebar regions, and toolbar gaps
+
+### Fixed
+
+- Fixed dragging on the upper part of the grid unintentionally moving the window instead of selecting grid cells
+
 ## [4.3.2] - 2026-04-08
 
 ### Fixed
