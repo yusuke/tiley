@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.3] - 2026-04-09
+
 ### Hinzugefügt
 
 - Das Fenster kann jetzt durch Ziehen der Tastaturhinweisleiste, der Menüleisten-/Dock-Bereiche des Minibildschirms, leerer Seitenleistenbereiche und Lücken in der Symbolleiste verschoben werden

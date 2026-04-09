@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.3] - 2026-04-09
+
 ### Aggiunto
 
 - Ora è possibile spostare la finestra trascinando la barra dei suggerimenti tastiera, le aree barra dei menu/Dock del mini schermo, le zone vuote della barra laterale e gli spazi tra i pulsanti della barra degli strumenti

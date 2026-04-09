@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.3] - 2026-04-09
+
 ### Added
 
 - The window can now be dragged to reposition from the keyboard hints bar, mini-screen chrome areas, empty sidebar regions, and toolbar gaps
@@ -658,7 +660,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.2...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.3...HEAD
+[4.3.3]: https://github.com/yusuke/tiley/releases/tag/v4.3.3
 [4.3.2]: https://github.com/yusuke/tiley/releases/tag/v4.3.2
 [4.3.1]: https://github.com/yusuke/tiley/releases/tag/v4.3.1
 [4.3.0]: https://github.com/yusuke/tiley/releases/tag/v4.3.0

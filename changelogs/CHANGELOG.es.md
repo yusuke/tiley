@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.3] - 2026-04-09
+
 ### Añadido
 
 - Ahora se puede arrastrar la ventana desde la barra de atajos de teclado, las áreas de barra de menú/Dock de la minipantalla, zonas vacías de la barra lateral y los espacios entre botones de la barra de herramientas

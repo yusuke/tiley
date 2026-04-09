@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.3] - 2026-04-09
+
 ### Adicionado
 
 - Agora é possível mover a janela arrastando a barra de dicas do teclado, as áreas de barra de menus/Dock da minitela, regiões vazias da barra lateral e espaços entre botões da barra de ferramentas

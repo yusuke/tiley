@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.3] - 2026-04-09
+
 ### Ajouté
 
 - La fenêtre peut désormais être déplacée en faisant glisser la barre d'indices clavier, les zones barre de menus/Dock du mini-écran, les zones vides de la barre latérale et les espaces entre les boutons de la barre d'outils
