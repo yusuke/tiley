@@ -70,7 +70,6 @@ extension AppState {
             availableWindowTargets = cachedWindowTargets
             spaceList = cachedSpaceList
             activeSpaceIDs = cachedActiveSpaceIDs
-            hasWindowListCache = false
             windowTargetListVersion += 1
             if let current = activeLayoutTarget {
                 activeTargetIndex = availableWindowTargets.firstIndex(where: {
@@ -152,7 +151,17 @@ extension AppState {
 
     func initialLayoutTarget() -> WindowTarget? {
         guard accessibilityGranted else { return nil }
-        guard let target = resolveWindowTarget() else {
+        let target: WindowTarget?
+        if hasWindowListCache {
+            let preferredPID = lastTargetPID
+                ?? NSWorkspace.shared.frontmostApplication?.processIdentifier
+            target = preferredPID.flatMap { pid in
+                cachedWindowTargets.first { $0.processIdentifier == pid }
+            } ?? cachedWindowTargets.first
+        } else {
+            target = resolveWindowTarget()
+        }
+        guard let target else {
             hidePreviewOverlay()
             return nil
         }

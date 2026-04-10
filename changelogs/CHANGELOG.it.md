@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Miglioramento significativo della velocità di apertura della finestra overlay. Le operazioni pesanti (query Accessibility/CoreGraphics, costruzione dell'anteprima layout) vengono eseguite in modo differito dopo la visualizzazione della finestra, e la lista finestre pre-memorizzata viene mantenuta tra le sessioni
+
 ## [4.3.6] - 2026-04-10
 
 ### Aggiunto

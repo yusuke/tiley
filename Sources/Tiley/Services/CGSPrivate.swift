@@ -207,9 +207,16 @@ enum CGSPrivate {
     /// On macOS 26 `CoreDockSendNotification` toggles the state, so we only
     /// send the notification when the corresponding state is detected.
     static func dismissDesktopExpose() {
+        dismissDesktopExpose(
+            showDesktop: isShowDesktopLikelyActive(),
+            missionControl: isMissionControlLikelyActive()
+        )
+    }
+
+    /// Dismiss Show Desktop / Mission Control using pre-computed detection results
+    /// to avoid redundant CGWindowList queries.
+    static func dismissDesktopExpose(showDesktop: Bool, missionControl: Bool) {
         logFrontmostState()
-        let showDesktop = isShowDesktopLikelyActive()
-        let missionControl = isMissionControlLikelyActive()
         debugLog("dismissDesktopExpose: showDesktop=\(showDesktop) missionControl=\(missionControl)")
         if showDesktop {
             _coreDockSendNotification?("com.apple.showdesktop.awake" as CFString, 0)

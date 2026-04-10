@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Amélioration significative de la vitesse d'ouverture de la fenêtre superposée. Les opérations lourdes (requêtes Accessibility/CoreGraphics, construction de l'aperçu de disposition) sont différées après l'affichage de la fenêtre, et la liste de fenêtres pré-mise en cache est conservée entre les sessions
+
 ## [4.3.6] - 2026-04-10
 
 ### Ajouté

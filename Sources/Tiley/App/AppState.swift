@@ -706,177 +706,174 @@ final class AppState: NSObject, NSMenuDelegate {
             return
         }
 
-        // Dismiss "Show Desktop" or Mission Control if active.
-        // The dismissal animation may cause a brief didResignActive — suppress
-        // handleAppDidResignActive so it does not immediately hide the overlay.
-        let isDismissingExpose = CGSPrivate.isShowDesktopLikelyActive()
-            || CGSPrivate.isMissionControlLikelyActive()
-        if isDismissingExpose {
-            isSwitchingActivationPolicy = true
-        }
-        CGSPrivate.dismissDesktopExpose()
+        // --- Phase 1: Show the window as fast as possible ---
+        // Set minimal state and flip alpha. Nothing in this phase may call
+        // AX / CG APIs or do any heavy work.  The RunLoop must yield
+        // immediately after so Core Animation commits the alpha change.
 
-        // When dismissing Show Desktop / Mission Control, resolveWindowTarget()
-        // would capture windows mid-animation and likely fail to find the
-        // frontmost app's windows.  Instead, look up the target from the
-        // pre-cached window list using lastTargetPID (or the current frontmost
-        // app's PID).  The 0.5s post-expose callback will re-resolve once the
-        // animation has settled.
-        let target: WindowTarget?
-        if isDismissingExpose, hasWindowListCache {
+        // Use the cached target if available (pure in-memory PID lookup).
+        // If no cache, keep the previous activeLayoutTarget — the pre-rendered
+        // window already shows the last-known state.  Phase 2 will resolve
+        // the accurate target.
+        if hasWindowListCache {
             let preferredPID = lastTargetPID
                 ?? NSWorkspace.shared.frontmostApplication?.processIdentifier
-            target = preferredPID.flatMap { pid in
+            let cachedTarget = preferredPID.flatMap { pid in
                 cachedWindowTargets.first { $0.processIdentifier == pid }
             } ?? cachedWindowTargets.first
-            perfLog("resolveWindowTarget from cache (\(target?.appName ?? "nil"))")
-        } else {
-            target = resolveWindowTarget()
-            perfLog("resolveWindowTarget done (\(target?.appName ?? "nil"))")
+            activeLayoutTarget = cachedTarget
+            if let cachedTarget {
+                lastTargetPID = cachedTarget.processIdentifier
+            }
         }
-
-        activeLayoutTarget = target
-        layoutPreviewController?.hide()
-        if let target {
-            layoutPreviewController = makeLayoutPreviewController(for: target)
-            perfLog("makeLayoutPreviewController done")
-            lastTargetPID = target.processIdentifier
-        }
-        // If the frontmost app differs from the target (e.g. a windowless app is
-        // frontmost), remember its PID so that ESC restores it.
+        // else: keep activeLayoutTarget from the previous session (may be nil
+        // on first launch, but the pre-rendered window handles that gracefully).
         let currentFrontmost = NSWorkspace.shared.frontmostApplication
         if let currentFrontmost,
            currentFrontmost.processIdentifier != getpid(),
-           currentFrontmost.processIdentifier != (target?.processIdentifier ?? 0) {
+           currentFrontmost.processIdentifier != (activeLayoutTarget?.processIdentifier ?? 0) {
             originalFrontmostPID = currentFrontmost.processIdentifier
         } else {
             originalFrontmostPID = nil
         }
         isEditingSettings = false
-        // Unregister preset and display global hotkeys while the overlay is visible
-        // so that key events reach the NSWindow's performKeyEquivalent and can be
-        // handled as local shortcuts. They are re-registered in handleMainWindowHidden().
         unregisterPresetHotKeys()
         unregisterDisplayHotKeys()
         windowSearchQuery = ""
         isShowingLayoutGrid = true
         openMainWindow()
-        perfLog("openMainWindow done")
-        // After the expose-dismissal animation settles, re-activate Tiley
-        // (macOS activates the previous app when the animation completes)
-        // and clear the guard so normal resign-active behaviour resumes.
-        if isDismissingExpose {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self, self.isShowingLayoutGrid else {
-                    self?.isSwitchingActivationPolicy = false
-                    return
+        perfLog("openMainWindow done (phase 1)")
+
+        // --- Phase 2: Post-show work on the next RunLoop iteration ---
+        // By deferring everything after the alpha flip, Core Animation
+        // commits the window appearance before we do any heavy lifting.
+        let hadCache = hasWindowListCache
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.isShowingLayoutGrid else { return }
+
+            // Dismiss "Show Desktop" or Mission Control if active.
+            let showDesktop = CGSPrivate.isShowDesktopLikelyActive()
+            let missionControl = CGSPrivate.isMissionControlLikelyActive()
+            let isDismissingExpose = showDesktop || missionControl
+            if isDismissingExpose {
+                self.isSwitchingActivationPolicy = true
+            }
+            CGSPrivate.dismissDesktopExpose(showDesktop: showDesktop, missionControl: missionControl)
+
+            // Resolve the target if the cache wasn't available in Phase 1.
+            if !hadCache {
+                let target = self.resolveWindowTarget()
+                self.activeLayoutTarget = target
+                if let target {
+                    self.lastTargetPID = target.processIdentifier
                 }
-                NSApp.activate(ignoringOtherApps: true)
-                self.targetWindowController?.window?.makeKeyAndOrderFront(nil)
-                self.isSwitchingActivationPolicy = false
-                // Refresh window list now that the dismissal animation has
-                // settled and windows are back on-screen.  The earlier deferred
-                // refresh ran during the animation and may have missed windows
-                // whose CG/AX positions were still transitioning.
-                self.refreshAvailableWindows()
-                // Re-resolve the target — the initial resolveWindowTarget() ran
-                // during the animation when the frontmost app's windows may not
-                // have been discoverable yet.
-                if let freshTarget = self.resolveWindowTarget() {
-                    self.activeLayoutTarget = freshTarget
-                    self.lastTargetPID = freshTarget.processIdentifier
-                    self.clearResizabilityCache()
-                    self.layoutPreviewController?.hide()
-                    self.layoutPreviewController = self.makeLayoutPreviewController(for: freshTarget)
-                    self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
-                        $0.processIdentifier == freshTarget.processIdentifier
-                        && $0.windowElement == freshTarget.windowElement
-                    }) ?? self.availableWindowTargets.firstIndex(where: {
-                        $0.processIdentifier == freshTarget.processIdentifier
-                        && $0.windowTitle == freshTarget.windowTitle
-                    }) ?? 0
-                    self.launchMessage = String(
-                        format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                        freshTarget.appName
-                    )
-                }
-                self.selectedWindowIndices = [self.activeTargetIndex]
-                self.selectionOrder = [self.activeTargetIndex]
+                perfLog("resolveWindowTarget done (\(target?.appName ?? "nil"))")
+            }
+            let target = self.activeLayoutTarget
+
+            // Build the layout preview overlay.
+            self.layoutPreviewController?.hide()
+            if let target {
+                self.layoutPreviewController = self.makeLayoutPreviewController(for: target)
+                perfLog("makeLayoutPreviewController done")
+            }
+
+            // Enter modifier-held mode.
+            self.installModifierReleaseMonitor()
+            self.windowTargetListVersion += 1
+
+            if target != nil {
+                self.fetchTargetMenuBarTitles()
+            }
+
+            // Populate the sidebar window list from cache or mark as loading.
+            // Do NOT clear hasWindowListCache here — the cache remains valid
+            // and will be reused if the overlay is quickly reopened.  The
+            // background refresh (scheduleWindowListCacheRefresh) already
+            // guards against overwriting during overlay display.
+            if self.hasWindowListCache {
+                self.availableWindowTargets = self.cachedWindowTargets
+                self.spaceList = self.cachedSpaceList
+                self.activeSpaceIDs = self.cachedActiveSpaceIDs
                 self.windowTargetListVersion += 1
-                self.revalidateActiveTarget()
-                debugLog("Post-expose refresh done: \(self.availableWindowTargets.count) windows, activeTargetIndex=\(self.activeTargetIndex)")
-            }
-        }
-        // Enter modifier-held mode so that re-pressing the trigger key cycles
-        // windows and releasing the modifiers confirms the selection.
-        installModifierReleaseMonitor()
-        // Bump version after the window is open so the view picks up the latest
-        // target info and window list.
-        windowTargetListVersion += 1
-        // Asynchronously fetch the actual menu bar titles from the target app.
-        if target != nil {
-            fetchTargetMenuBarTitles()
-        }
-        // Use the pre-cached window list if available so the sidebar is
-        // populated instantly. A deferred refresh still runs afterwards to
-        // pick up any very-recent changes.
-        if hasWindowListCache {
-            availableWindowTargets = cachedWindowTargets
-            spaceList = cachedSpaceList
-            activeSpaceIDs = cachedActiveSpaceIDs
-            hasWindowListCache = false
-            windowTargetListVersion += 1
-            // Set activeTargetIndex to match the current target.
-            if let current = activeLayoutTarget {
-                activeTargetIndex = availableWindowTargets.firstIndex(where: {
-                    $0.processIdentifier == current.processIdentifier
-                    && $0.windowElement == current.windowElement
-                }) ?? availableWindowTargets.firstIndex(where: {
-                    $0.processIdentifier == current.processIdentifier
-                    && $0.windowTitle == current.windowTitle
-                }) ?? 0
-            } else {
-                activeTargetIndex = 0
-            }
-            selectedWindowIndices = [activeTargetIndex]
-            selectionOrder = [activeTargetIndex]
-            isLoadingWindowList = false
-            debugLog("Used cached window list: \(availableWindowTargets.count) windows")
-        } else {
-            isLoadingWindowList = true
-        }
-        // Deferred refresh to pick up any changes since the cache was built.
-        // Skip when dismissing Show Desktop / Mission Control — the 0.5s
-        // post-expose callback will perform a reliable refresh after the
-        // animation settles.  Running one here would capture an incomplete
-        // window list mid-animation and cause a visible flicker.
-        if !isDismissingExpose {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.refreshAvailableWindows()
-                // Reset to single selection — the user has not had a chance to
-                // multi-select yet, and index mapping may have shifted.
+                if let current = self.activeLayoutTarget {
+                    self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
+                        $0.processIdentifier == current.processIdentifier
+                        && $0.windowElement == current.windowElement
+                    }) ?? self.availableWindowTargets.firstIndex(where: {
+                        $0.processIdentifier == current.processIdentifier
+                        && $0.windowTitle == current.windowTitle
+                    }) ?? 0
+                } else {
+                    self.activeTargetIndex = 0
+                }
                 self.selectedWindowIndices = [self.activeTargetIndex]
                 self.selectionOrder = [self.activeTargetIndex]
                 self.isLoadingWindowList = false
-                debugLog("refreshAvailableWindows done (deferred)")
-
-                // The initially captured target may have been a transient window
-                // (e.g. Xcode's "Build Succeeded" HUD) that has since disappeared.
-                // Verify it still exists; if not, fall back to the next window.
-                self.revalidateActiveTarget()
+                debugLog("Used cached window list: \(self.availableWindowTargets.count) windows")
+            } else {
+                self.isLoadingWindowList = true
             }
+
+            if let target {
+                self.launchMessage = String(
+                    format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                    target.appName
+                )
+            } else {
+                self.launchMessage = NSLocalizedString("No windows available.", comment: "Message when no windows are available to arrange")
+            }
+
+            // Deferred refresh to pick up changes since the cache was built.
+            if isDismissingExpose {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    guard let self, self.isShowingLayoutGrid else {
+                        self?.isSwitchingActivationPolicy = false
+                        return
+                    }
+                    NSApp.activate(ignoringOtherApps: true)
+                    self.targetWindowController?.window?.makeKeyAndOrderFront(nil)
+                    self.isSwitchingActivationPolicy = false
+                    self.refreshAvailableWindows()
+                    if let freshTarget = self.resolveWindowTarget() {
+                        self.activeLayoutTarget = freshTarget
+                        self.lastTargetPID = freshTarget.processIdentifier
+                        self.clearResizabilityCache()
+                        self.layoutPreviewController?.hide()
+                        self.layoutPreviewController = self.makeLayoutPreviewController(for: freshTarget)
+                        self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
+                            $0.processIdentifier == freshTarget.processIdentifier
+                            && $0.windowElement == freshTarget.windowElement
+                        }) ?? self.availableWindowTargets.firstIndex(where: {
+                            $0.processIdentifier == freshTarget.processIdentifier
+                            && $0.windowTitle == freshTarget.windowTitle
+                        }) ?? 0
+                        self.launchMessage = String(
+                            format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
+                            freshTarget.appName
+                        )
+                    }
+                    self.selectedWindowIndices = [self.activeTargetIndex]
+                    self.selectionOrder = [self.activeTargetIndex]
+                    self.windowTargetListVersion += 1
+                    self.revalidateActiveTarget()
+                    debugLog("Post-expose refresh done: \(self.availableWindowTargets.count) windows, activeTargetIndex=\(self.activeTargetIndex)")
+                }
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self, self.isShowingLayoutGrid else { return }
+                    self.refreshAvailableWindows()
+                    self.selectedWindowIndices = [self.activeTargetIndex]
+                    self.selectionOrder = [self.activeTargetIndex]
+                    self.isLoadingWindowList = false
+                    debugLog("refreshAvailableWindows done (deferred)")
+                    self.revalidateActiveTarget()
+                }
+            }
+
+            TelemetryDeck.signal("gridOverlayOpened")
+            perfLog("toggleOverlay phase 2 done")
         }
-        if let target {
-            launchMessage = String(
-                format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                target.appName
-            )
-        } else {
-            launchMessage = NSLocalizedString("No windows available.", comment: "Message when no windows are available to arrange")
-        }
-        TelemetryDeck.signal("gridOverlayOpened")
-        perfLog("toggleOverlay end")
     }
 
     func commitLayoutSelection(_ selection: GridSelection) {

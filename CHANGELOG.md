@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Significantly improved overlay window open speed by deferring heavy operations (Accessibility/CoreGraphics queries, layout preview construction) to after the window is visible, and keeping the pre-cached window list across sessions
+
 ## [4.3.6] - 2026-04-10
 
 ### Added

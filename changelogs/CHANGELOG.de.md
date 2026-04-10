@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Öffnungsgeschwindigkeit des Overlay-Fensters deutlich verbessert. Aufwendige Operationen (Accessibility-/CoreGraphics-Abfragen, Layout-Vorschau-Aufbau) werden nun erst nach dem Fensteraufbau ausgeführt, und die vorab zwischengespeicherte Fensterliste wird sitzungsübergreifend beibehalten
+
 ## [4.3.6] - 2026-04-10
 
 ### Hinzugefügt
