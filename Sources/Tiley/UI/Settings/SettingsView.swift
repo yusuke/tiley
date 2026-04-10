@@ -260,6 +260,16 @@ struct SettingsView: View {
                         .labelsHidden()
                     }
                     .padding(.vertical, 4)
+
+                    Divider().opacity(0.4)
+
+                    TahoeSettingsRow(label: NSLocalizedString("Show near icon when clicked", comment: "Show Tiley window near the menu bar or Dock icon"), systemImage: "cursorarrow.rays", iconAlignment: .center) {
+                        Toggle("", isOn: $draftSettings.showNearIcon)
+                            .toggleStyle(.switch)
+                            .controlSize(.mini)
+                            .labelsHidden()
+                    }
+                    .padding(.vertical, 4)
                 }
             }
 

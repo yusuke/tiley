@@ -43,6 +43,7 @@
 "Launch at login" = "Avvia al login";
 "Show menu icon" = "Mostra icona nella barra dei menu";
 "Show Dock icon" = "Mostra icona nel Dock";
+"Show near icon when clicked" = "Mostra vicino all'icona al clic";
 "Write debug log to ~/tiley.log" = "Scrivi log di debug in ~/tiley.log";
 "Reset to Default" = "Ripristina predefiniti";
 "Reset Grid to Default" = "Ripristina griglia";

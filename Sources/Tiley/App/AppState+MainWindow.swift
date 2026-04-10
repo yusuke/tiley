@@ -26,6 +26,24 @@ extension AppState {
             return
         }
 
+        if showNearIcon {
+            let mousePos = NSEvent.mouseLocation
+            if let screen = NSScreen.screens.first(where: { $0.frame.contains(mousePos) }) {
+                let sf = screen.frame
+                let vf = screen.visibleFrame
+                let dockOnBottom = vf.minY - sf.minY > 1
+                let dockOnLeft = vf.minX - sf.minX > 1
+                let dockOnRight = sf.maxX - vf.maxX > 1
+                if dockOnBottom {
+                    triggerIconCenter = NSPoint(x: mousePos.x, y: vf.minY)
+                } else if dockOnRight {
+                    triggerIconCenter = NSPoint(x: vf.maxX, y: mousePos.y)
+                } else if dockOnLeft {
+                    triggerIconCenter = NSPoint(x: vf.minX, y: mousePos.y)
+                }
+                triggerIconDisplayID = screen.displayID
+            }
+        }
         if !isShowingLayoutGrid {
             activeLayoutTarget = initialLayoutTarget()
             if let activeLayoutTarget {

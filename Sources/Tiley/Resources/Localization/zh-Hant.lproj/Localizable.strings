@@ -43,6 +43,7 @@
 "Launch at login" = "登入時啟動";
 "Show menu icon" = "顯示選單圖示";
 "Show Dock icon" = "顯示 Dock 圖示";
+"Show near icon when clicked" = "點擊圖示時在圖示附近顯示";
 "Write debug log to ~/tiley.log" = "將除錯日誌寫入 ~/tiley.log";
 "Reset to Default" = "重設為預設值";
 "Reset Grid to Default" = "將網格重設為預設值";

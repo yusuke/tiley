@@ -43,6 +43,7 @@
 "Launch at login" = "ログイン時に起動";
 "Show menu icon" = "メニューアイコンを表示";
 "Show Dock icon" = "Dockアイコンを表示";
+"Show near icon when clicked" = "アイコンクリック時にアイコン付近に表示";
 "Write debug log to ~/tiley.log" = "デバッグログを ~/tiley.log に書き出す";
 "Reset to Default" = "デフォルトに戻す";
 "Reset Grid to Default" = "グリッドをデフォルトに戻す";

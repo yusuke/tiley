@@ -70,6 +70,7 @@ final class AppState: NSObject, NSMenuDelegate {
         var menuIconVisible: Bool
         var dockIconVisible: Bool
         var quitAppOnLastWindowClose: Bool
+        var showNearIcon: Bool
         var enableDebugLog: Bool
         var debugSimulateUpdate: Bool
         var displayShortcutSettings: DisplayShortcutSettings
@@ -126,6 +127,9 @@ final class AppState: NSObject, NSMenuDelegate {
             applyDockIconBadge()
         }
     }
+    var showNearIcon = true {
+        didSet { UserDefaults.standard.set(showNearIcon, forKey: UserDefaultsKey.showNearIcon) }
+    }
     var displayShortcutSettings = DisplayShortcutSettings.default
     var layoutPresets: [LayoutPreset] = []
     var selectedLayoutPresetID: UUID?
@@ -150,6 +154,11 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var permissionsWindowController: PermissionsWindowController?
     @ObservationIgnored var mainWindowControllers: [CGDirectDisplayID: MainWindowController] = [:]
     @ObservationIgnored var targetScreenDisplayID: CGDirectDisplayID?
+    /// Screen-coordinate point where the trigger icon is located (menu bar icon center or Dock icon center).
+    /// Set before opening the main window; consumed by MainWindowController.positionWindow().
+    @ObservationIgnored var triggerIconCenter: NSPoint?
+    /// The display ID of the screen where the icon trigger occurred.
+    @ObservationIgnored var triggerIconDisplayID: CGDirectDisplayID?
     @ObservationIgnored var screenChangeTask: Task<Void, Never>?
     @ObservationIgnored var isSwitchingActivationPolicy = false
     @ObservationIgnored var isRecreatingWindows = false
@@ -280,6 +289,7 @@ final class AppState: NSObject, NSMenuDelegate {
             menuIconVisible: menuIconVisible,
             dockIconVisible: dockIconVisible,
             quitAppOnLastWindowClose: quitAppOnLastWindowClose,
+            showNearIcon: showNearIcon,
             enableDebugLog: enableDebugLog,
             debugSimulateUpdate: debugSimulateUpdate,
             displayShortcutSettings: displayShortcutSettings
@@ -583,6 +593,7 @@ final class AppState: NSObject, NSMenuDelegate {
         _ = updateLaunchAtLogin(enabled: settings.launchAtLoginEnabled, updateMessageOnFailure: true)
         setMenuIconVisible(settings.menuIconVisible)
         setDockIconVisible(settings.dockIconVisible)
+        showNearIcon = settings.showNearIcon
         quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
         enableDebugLog = settings.enableDebugLog
         debugSimulateUpdate = settings.debugSimulateUpdate
@@ -1308,6 +1319,13 @@ final class AppState: NSObject, NSMenuDelegate {
         if isShowingLayoutGrid {
             cancelLayoutGrid()
             return
+        }
+        if showNearIcon, let buttonWindow = statusItem?.button?.window {
+            let buttonFrame = buttonWindow.frame
+            triggerIconCenter = NSPoint(x: buttonFrame.midX, y: buttonFrame.minY)
+            triggerIconDisplayID = NSScreen.screens.first(where: {
+                $0.frame.contains(NSPoint(x: buttonFrame.midX, y: buttonFrame.midY))
+            })?.displayID
         }
         toggleOverlay()
     }

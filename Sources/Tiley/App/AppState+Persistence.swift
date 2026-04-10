@@ -17,6 +17,7 @@ enum UserDefaultsKey {
     static let enableDebugLog = "enableDebugLog"
     static let debugSimulateUpdate = "debugSimulateUpdate"
     static let displayShortcuts = "displayShortcuts"
+    static let showNearIcon = "showNearIcon"
 }
 
 extension AppState {
@@ -56,6 +57,9 @@ extension AppState {
             dockIconVisible = storedDockIconVisible
         } else {
             dockIconVisible = false
+        }
+        if let storedShowNearIcon = defaults.object(forKey: UserDefaultsKey.showNearIcon) as? Bool {
+            showNearIcon = storedShowNearIcon
         }
         if let storedQuitAppOnLastWindowClose = defaults.object(forKey: UserDefaultsKey.quitAppOnLastWindowClose) as? Bool {
             quitAppOnLastWindowClose = storedQuitAppOnLastWindowClose

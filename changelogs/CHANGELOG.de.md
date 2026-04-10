@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Option hinzugefügt, das Tiley-Fenster beim Klick neben dem Menüleisten- oder Dock-Symbol anzuzeigen (standardmäßig aktiviert)
+
 ## [4.3.5] - 2026-04-09
 
 ### Behoben

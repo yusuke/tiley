@@ -321,8 +321,58 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         guard !visibleFrame.equalTo(.zero) else { return }
         let screenFrame = currentScreenFrame(for: window, preferredScreen: preferredScreen)
         let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole)
-        let origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
-        window.setFrameOrigin(origin)
+
+        let screen = preferredScreen ?? window.screen ?? NSScreen.main
+        if let appState, appState.showNearIcon,
+           let iconCenter = appState.triggerIconCenter,
+           let iconDisplayID = appState.triggerIconDisplayID,
+           screen?.displayID == iconDisplayID {
+            let origin = iconAnchoredOrigin(for: targetSize, iconCenter: iconCenter, visibleFrame: visibleFrame, screenFrame: screenFrame)
+            window.setFrameOrigin(origin)
+            appState.triggerIconCenter = nil
+            appState.triggerIconDisplayID = nil
+        } else {
+            let origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
+            window.setFrameOrigin(origin)
+        }
+    }
+
+    /// Compute window origin anchored near a trigger icon (menu bar or Dock).
+    /// The icon position relative to the visible frame determines the edge:
+    /// - Above visibleFrame → menu bar icon → window hangs below icon
+    /// - Below visibleFrame → Dock at bottom → window sits above Dock
+    /// - Left/right of visibleFrame → Dock on side → window beside Dock
+    private func iconAnchoredOrigin(for size: NSSize, iconCenter: NSPoint, visibleFrame: CGRect, screenFrame: CGRect) -> NSPoint {
+        let margin: CGFloat = 4
+        var originX: CGFloat
+        var originY: CGFloat
+
+        if iconCenter.y >= visibleFrame.maxY {
+            // Menu bar icon (above visible frame) — window hangs below icon
+            originX = iconCenter.x - size.width / 2
+            originY = visibleFrame.maxY - size.height - margin
+        } else if iconCenter.y <= visibleFrame.minY {
+            // Dock at bottom — window sits just above Dock
+            originX = iconCenter.x - size.width / 2
+            originY = visibleFrame.minY + margin
+        } else if iconCenter.x >= visibleFrame.maxX {
+            // Dock on right — window to the left of Dock
+            originX = visibleFrame.maxX - size.width - margin
+            originY = iconCenter.y - size.height / 2
+        } else {
+            // Dock on left — window to the right of Dock
+            originX = visibleFrame.minX + margin
+            originY = iconCenter.y - size.height / 2
+        }
+
+        // Clamp to visible frame
+        let minX = visibleFrame.minX
+        let maxX = visibleFrame.maxX - size.width
+        let minY = visibleFrame.minY
+        let maxY = visibleFrame.maxY - size.height
+        originX = min(max(originX, minX), maxX)
+        originY = min(max(originY, minY), maxY)
+        return NSPoint(x: originX, y: originY)
     }
 
     private func currentVisibleFrame(for window: NSWindow, preferredScreen: NSScreen? = nil) -> CGRect {

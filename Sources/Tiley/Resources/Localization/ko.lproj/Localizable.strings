@@ -43,6 +43,7 @@
 "Launch at login" = "로그인 시 실행";
 "Show menu icon" = "메뉴 아이콘 표시";
 "Show Dock icon" = "Dock 아이콘 표시";
+"Show near icon when clicked" = "아이콘 클릭 시 아이콘 근처에 표시";
 "Write debug log to ~/tiley.log" = "디버그 로그를 ~/tiley.log에 기록";
 "Reset to Default" = "기본값으로 재설정";
 "Reset Grid to Default" = "그리드를 기본값으로 재설정";

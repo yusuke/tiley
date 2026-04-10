@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added option to show Tiley window near the menu bar or Dock icon when clicked (enabled by default)
+
 ## [4.3.5] - 2026-04-09
 
 ### Fixed

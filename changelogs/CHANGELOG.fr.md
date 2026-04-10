@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Ajout d'une option pour afficher la fenêtre Tiley près de l'icône de la barre de menus ou du Dock au clic (activée par défaut)
+
 ## [4.3.5] - 2026-04-09
 
 ### Corrigé
