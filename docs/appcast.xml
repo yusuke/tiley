@@ -3,6 +3,65 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.3.7</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>Значительно улучшена скорость открытия оверлейного окна. Тяжёлые операции (запросы Accessibility/CoreGraphics, построение предпросмотра макета) выполняются отложенно после отображения окна, а предварительно кэшированный список окон сохраняется между сессиями</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Melhoria significativa na velocidade de abertura da janela de sobreposição. Operações pesadas (consultas Accessibility/CoreGraphics, construção da pré-visualização de layout) são executadas de forma adiada após a exibição da janela, e a lista de janelas pré-armazenada em cache é mantida entre sessões</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Miglioramento significativo della velocità di apertura della finestra overlay. Le operazioni pesanti (query Accessibility/CoreGraphics, costruzione dell'anteprima layout) vengono eseguite in modo differito dopo la visualizzazione della finestra, e la lista finestre pre-memorizzata viene mantenuta tra le sessioni</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Amélioration significative de la vitesse d'ouverture de la fenêtre superposée. Les opérations lourdes (requêtes Accessibility/CoreGraphics, construction de l'aperçu de disposition) sont différées après l'affichage de la fenêtre, et la liste de fenêtres pré-mise en cache est conservée entre les sessions</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Mejora significativa en la velocidad de apertura de la ventana superpuesta. Las operaciones pesadas (consultas de Accessibility/CoreGraphics, construcción de vista previa de diseño) se ejecutan de forma diferida tras mostrar la ventana, y la lista de ventanas precacheada se mantiene entre sesiones</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Öffnungsgeschwindigkeit des Overlay-Fensters deutlich verbessert. Aufwendige Operationen (Accessibility-/CoreGraphics-Abfragen, Layout-Vorschau-Aufbau) werden nun erst nach dem Fensteraufbau ausgeführt, und die vorab zwischengespeicherte Fensterliste wird sitzungsübergreifend beibehalten</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>大幅提升疊加視窗的開啟速度。將耗時操作（Accessibility/CoreGraphics 查詢、佈局預覽建構）延遲到視窗顯示之後執行，並在工作階段間保留預快取的視窗列表</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>大幅提升叠加窗口的打开速度。将耗时操作（Accessibility/CoreGraphics 查询、布局预览构建）延迟到窗口显示之后执行，并在会话间保留预缓存的窗口列表</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>오버레이 창 표시 속도를 대폭 개선. 무거운 작업(Accessibility/CoreGraphics 쿼리, 레이아웃 미리보기 구성)을 창 표시 이후로 지연 실행하고, 사전 캐시된 창 목록을 세션 간에 유지하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>オーバーレイウインドウの表示速度を大幅に改善。重い処理（Accessibility/CoreGraphicsクエリ、レイアウトプレビュー構築）をウインドウ表示後に遅延実行し、事前キャッシュされたウインドウリストをセッション間で保持するように変更</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Significantly improved overlay window open speed by deferring heavy operations (Accessibility/CoreGraphics queries, layout preview construction) to after the window is visible, and keeping the pre-cached window list across sessions</li>
+</ul>]]></description>
+            <pubDate>Fri, 10 Apr 2026 13:25:08 +0900</pubDate>
+            <sparkle:version>437</sparkle:version>
+            <sparkle:shortVersionString>4.3.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley-4.3.7.zip" length="5769401" type="application/octet-stream" sparkle:edSignature="lfy7TTIUiY+SgLjFwaPQQRXKIYsDgu62lIHW8WDEk20NxHyX1g11KZLaMy+RQDbkTZjYlN+lHTXXOS+W1oIqAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-436.delta" sparkle:deltaFrom="436" length="246242" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="n1SeFH/txVcCnXbdulsNXmohILeUsr1NwH/0nWkPkKOtUl+bhK8OMjqjbQmXXAsZlRveObEBIqLek0yi0yWiCg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-435.delta" sparkle:deltaFrom="435" length="294326" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Vab0fM4fqWBZGvRdq1SiD32BxAC6DW4sjxO1FvDxcFwhOFx06ntbWnmth+cve+FiglsJJKLs5G6FpWrkDgsICA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-434.delta" sparkle:deltaFrom="434" length="305002" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PXEdJ7sp5gPrVONHrl56wWB5QAIllCSyL2OR1uN2gGmjx8Uz891zSty08CWsM35qVryszOid6C/YSLCneezPBg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-433.delta" sparkle:deltaFrom="433" length="324270" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0wucXC0DG8xh8KUhF/i+RkUEvkXyMFo+vH1ZF+6wb03jSVliKLjZp8n7ACsWDGT0mE2GsRIuZo1y7CihWp3iDg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-432.delta" sparkle:deltaFrom="432" length="357306" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ytLtQGpAwLJ4eebvdok/fNuW9IqrESTQtTZRIEiyb8jcbijphhsgQjb84rS6SBzEqgGh24U9mWx6eYQgdlpXDw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.3.6</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -48,11 +107,51 @@
 <ul>
 <li>Added option to show Tiley window near the menu bar or Dock icon when clicked (enabled by default)</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Adicionada opção para mostrar a janela do Tiley perto do ícone da barra de menus ou do Dock ao clicar (ativada por padrão)</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Aggiunta opzione per mostrare la finestra di Tiley vicino all'icona della barra dei menu o del Dock al clic (attiva per impostazione predefinita)</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Ajout d'une option pour afficher la fenêtre Tiley près de l'icône de la barre de menus ou du Dock au clic (activée par défaut)</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Añadida opción para mostrar la ventana de Tiley cerca del icono de la barra de menús o del Dock al hacer clic (activada por defecto)</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Option hinzugefügt, das Tiley-Fenster beim Klick neben dem Menüleisten- oder Dock-Symbol anzuzeigen (standardmäßig aktiviert)</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增點擊選單列或 Dock 圖示時在圖示附近顯示視窗的選項（預設啟用）</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增点击菜单栏或 Dock 图标时在图标附近显示窗口的选项（默认启用）</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>메뉴 바 또는 Dock 아이콘 클릭 시 아이콘 근처에 창을 표시하는 옵션 추가 (기본 활성화)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>メニューバーまたはDockアイコンをクリック時、アイコン付近にウインドウを表示するオプションを追加（デフォルトで有効）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Added option to show Tiley window near the menu bar or Dock icon when clicked (enabled by default)</li>
+</ul>]]></description>
             <pubDate>Fri, 10 Apr 2026 12:06:41 +0900</pubDate>
             <sparkle:version>436</sparkle:version>
             <sparkle:shortVersionString>4.3.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley-4.3.6.zip" length="5762485" type="application/octet-stream" sparkle:edSignature="+UjLUolb6bEG2bilnQHgdByOKbxLrQXRWafW4MmlidmeRFEXsqxpQwnLeXr6v/+ImohUxsVAAG6viKsE4sO6DA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley-4.3.6.zip" length="5762485" type="application/octet-stream" sparkle:edSignature="+UjLUolb6bEG2bilnQHgdByOKbxLrQXRWafW4MmlidmeRFEXsqxpQwnLeXr6v/+ImohUxsVAAG6viKsE4sO6DA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley436-435.delta" sparkle:deltaFrom="435" length="250526" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vChTUrzzR+a2jDjTxWg3Vipgvv+AzaAC0d/ms0ThQIw94RA/hndZPge19zDZliohgNNxWqW3Jf7/cavn3WVvCA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley436-434.delta" sparkle:deltaFrom="434" length="260538" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CAPeitCNz/JhUDG0ozBtFPifDlKltd1z2nQhJIzN+vM2K45XrIowfSp0J0n2w8DqbRpod/a+XV1rmq0bFczgDg=="/>
@@ -147,156 +246,57 @@
 <ul>
 <li>Fixed miniature window corner radius inconsistency on the mini-screen during hover and drag previews to match the static window preview</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigida a inconsistência do raio de canto da janela em miniatura na minitela durante as pré-visualizações de hover e arrasto para corresponder à janela selecionada</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretta l'incoerenza del raggio degli angoli della finestra in miniatura sullo schermo mini durante le anteprime al passaggio del mouse e durante il trascinamento per corrispondere alla finestra selezionata</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'incohérence du rayon d'angle de la fenêtre miniature sur le mini-écran lors des aperçus de survol et de glissement pour correspondre à la fenêtre sélectionnée</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregida la inconsistencia del radio de esquina de la ventana en miniatura en la mini pantalla durante las vistas previas de hover y arrastre para que coincida con la ventana seleccionada</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Inkonsistenter Eckenradius des Miniaturfensters auf dem Mini-Bildschirm bei Hover- und Drag-Vorschauen behoben, sodass er nun mit der statischen Fenstervorschau übereinstimmt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正迷你螢幕上懸停和拖曳預覽時微縮視窗的圓角半徑與已選視窗顯示不一致的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复迷你屏幕上悬停和拖动预览时微缩窗口的圆角半径与已选窗口显示不一致的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>미니 화면에서 호버 및 드래그 시 표시되는 미니어처 윈도우의 모서리 반경이 선택된 윈도우 표시와 다르던 문제를 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>ミニスクリーン上でホバー時・ドラッグ時に表示されるミニチュアウインドウの角丸半径が、選択中のウインドウ表示と異なっていた問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed miniature window corner radius inconsistency on the mini-screen during hover and drag previews to match the static window preview</li>
+</ul>]]></description>
             <pubDate>Thu, 09 Apr 2026 23:38:13 +0900</pubDate>
             <sparkle:version>435</sparkle:version>
             <sparkle:shortVersionString>4.3.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley-4.3.5.zip" length="5755820" type="application/octet-stream" sparkle:edSignature="GHTmjenE1gEsOcCSwuxinGk+4a3vYppEJ4sQUOvc6AYDywzCSHsMJFuLpo2IndXtimuy01RXpE+o6Q55qV9dDw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley-4.3.5.zip" length="5755820" type="application/octet-stream" sparkle:edSignature="GHTmjenE1gEsOcCSwuxinGk+4a3vYppEJ4sQUOvc6AYDywzCSHsMJFuLpo2IndXtimuy01RXpE+o6Q55qV9dDw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-434.delta" sparkle:deltaFrom="434" length="170730" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Gy0LJI2DyvxiVfS1ZOO6FK44lFbXDHJ/27XbPmZDcfWmF7lAIuvCVxhMJGj5597ISSr0BAVlIF2EzDLMP5iPCg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-433.delta" sparkle:deltaFrom="433" length="243646" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OgGvY591d9KiTn9107i2O56mdWVzp+SheIXEcx0Q0Qgg/ZkNz57muXqWFsiNLDBzrlHyBF+sdWjZTlpa3nm3Bw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-432.delta" sparkle:deltaFrom="432" length="291346" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Syah/6AnlwdIryWpzpgEWwCwwR4amzWqyu84NHNLZQZn6H4ETqMEqktywVJcJJyBNCuVMYhUXCV0hVWSfxuLDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-431.delta" sparkle:deltaFrom="431" length="299454" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zBiwuR9NpnVpteikr36RnFWdNZz5BItjOugbr0A0SL+RPDPXh5+POmFXK1MrajcwYj3HOV5UbRA8maHD6n82Cg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.5/Tiley435-430.delta" sparkle:deltaFrom="430" length="297378" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="sZz4pMKkteFai1arJgRrLoYElQapJWTs4G6dvXiJ8erGUYLpKJcHSGD55rtyvvoMafTURCrLmQzXQpfuuqabAw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.3.4</title>
-            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
-<ul>
-<li>Окно настроек закрывается перед проверкой обновлений Sparkle, чтобы предварительный просмотр сетки при наведении не выводил его на передний план и не закрывал диалоги Sparkle. Окно настроек восстанавливается после завершения цикла обновления</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>A janela de configurações é fechada antes da verificação de atualizações do Sparkle para evitar que a pré-visualização da grade ao passar o mouse a traga para frente e oculte os diálogos do Sparkle. A janela de configurações é restaurada após o término do ciclo de atualização</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>La finestra delle impostazioni viene chiusa prima del controllo aggiornamenti di Sparkle, impedendo che l'anteprima della griglia al passaggio del mouse la porti in primo piano e nasconda i dialoghi di Sparkle. La finestra delle impostazioni viene ripristinata al termine del ciclo di aggiornamento</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Fermeture de la fenêtre des réglages avant la vérification des mises à jour Sparkle afin que l'aperçu de la grille au survol ne la ramène pas au premier plan et ne masque pas les dialogues Sparkle. La fenêtre des réglages est restaurée à la fin du cycle de mise à jour</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Se cierra la ventana de ajustes antes de la comprobación de actualizaciones de Sparkle para evitar que la previsualización de la cuadrícula al pasar el cursor la traiga al frente y oculte los diálogos de Sparkle. La ventana de ajustes se restaura tras finalizar el ciclo de actualización</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Einstellungsfenster wird vor der Sparkle-Updateprüfung geschlossen, damit die Rastervorschau beim Hover das Fenster nicht in den Vordergrund bringt und Sparkle-Dialoge verdeckt. Das Einstellungsfenster wird nach Abschluss des Updatezyklus wiederhergestellt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正 Sparkle 更新檢查前未關閉設定視窗，導致格線預覽懸停將設定視窗帶到前台、遮擋 Sparkle 對話框的問題。更新週期結束後自動恢復設定視窗</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复 Sparkle 更新检查前未关闭设置窗口，导致网格预览悬停将设置窗口置于前台、遮挡 Sparkle 对话框的问题。更新周期结束后自动恢复设置窗口</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>Sparkle 업데이트 확인 전에 설정 창을 닫아, 그리드 미리보기 호버로 설정 창이 앞으로 나와 Sparkle 대화상자를 가리는 문제를 수정. 업데이트 사이클 종료 후 설정 창을 복원하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>Sparkle のアップデート確認前に設定ウインドウを閉じ、グリッドプレビューのホバーで設定ウインドウが前面に来て Sparkle のダイアログを隠す問題を修正。アップデートサイクル終了後に設定ウインドウを復元するようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Dismiss the settings window before Sparkle update checks so the grid preview hover cannot bring it to the front and block Sparkle dialogs; the settings window is restored after the update cycle finishes</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>A janela de configurações é fechada antes da verificação de atualizações do Sparkle para evitar que a pré-visualização da grade ao passar o mouse a traga para frente e oculte os diálogos do Sparkle. A janela de configurações é restaurada após o término do ciclo de atualização</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>La finestra delle impostazioni viene chiusa prima del controllo aggiornamenti di Sparkle, impedendo che l'anteprima della griglia al passaggio del mouse la porti in primo piano e nasconda i dialoghi di Sparkle. La finestra delle impostazioni viene ripristinata al termine del ciclo di aggiornamento</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Fermeture de la fenêtre des réglages avant la vérification des mises à jour Sparkle afin que l'aperçu de la grille au survol ne la ramène pas au premier plan et ne masque pas les dialogues Sparkle. La fenêtre des réglages est restaurée à la fin du cycle de mise à jour</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Se cierra la ventana de ajustes antes de la comprobación de actualizaciones de Sparkle para evitar que la previsualización de la cuadrícula al pasar el cursor la traiga al frente y oculte los diálogos de Sparkle. La ventana de ajustes se restaura tras finalizar el ciclo de actualización</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Einstellungsfenster wird vor der Sparkle-Updateprüfung geschlossen, damit die Rastervorschau beim Hover das Fenster nicht in den Vordergrund bringt und Sparkle-Dialoge verdeckt. Das Einstellungsfenster wird nach Abschluss des Updatezyklus wiederhergestellt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正 Sparkle 更新檢查前未關閉設定視窗，導致格線預覽懸停將設定視窗帶到前台、遮擋 Sparkle 對話框的問題。更新週期結束後自動恢復設定視窗</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复 Sparkle 更新检查前未关闭设置窗口，导致网格预览悬停将设置窗口置于前台、遮挡 Sparkle 对话框的问题。更新周期结束后自动恢复设置窗口</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>Sparkle 업데이트 확인 전에 설정 창을 닫아, 그리드 미리보기 호버로 설정 창이 앞으로 나와 Sparkle 대화상자를 가리는 문제를 수정. 업데이트 사이클 종료 후 설정 창을 복원하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>Sparkle のアップデート確認前に設定ウインドウを閉じ、グリッドプレビューのホバーで設定ウインドウが前面に来て Sparkle のダイアログを隠す問題を修正。アップデートサイクル終了後に設定ウインドウを復元するようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Dismiss the settings window before Sparkle update checks so the grid preview hover cannot bring it to the front and block Sparkle dialogs; the settings window is restored after the update cycle finishes</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
-<ul>
-<li>A janela de configurações é fechada antes da verificação de atualizações do Sparkle para evitar que a pré-visualização da grade ao passar o mouse a traga para frente e oculte os diálogos do Sparkle. A janela de configurações é restaurada após o término do ciclo de atualização</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
-<ul>
-<li>La finestra delle impostazioni viene chiusa prima del controllo aggiornamenti di Sparkle, impedendo che l'anteprima della griglia al passaggio del mouse la porti in primo piano e nasconda i dialoghi di Sparkle. La finestra delle impostazioni viene ripristinata al termine del ciclo di aggiornamento</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
-<ul>
-<li>Fermeture de la fenêtre des réglages avant la vérification des mises à jour Sparkle afin que l'aperçu de la grille au survol ne la ramène pas au premier plan et ne masque pas les dialogues Sparkle. La fenêtre des réglages est restaurée à la fin du cycle de mise à jour</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
-<ul>
-<li>Se cierra la ventana de ajustes antes de la comprobación de actualizaciones de Sparkle para evitar que la previsualización de la cuadrícula al pasar el cursor la traiga al frente y oculte los diálogos de Sparkle. La ventana de ajustes se restaura tras finalizar el ciclo de actualización</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
-<ul>
-<li>Einstellungsfenster wird vor der Sparkle-Updateprüfung geschlossen, damit die Rastervorschau beim Hover das Fenster nicht in den Vordergrund bringt und Sparkle-Dialoge verdeckt. Das Einstellungsfenster wird nach Abschluss des Updatezyklus wiederhergestellt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
-<ul>
-<li>修正 Sparkle 更新檢查前未關閉設定視窗，導致格線預覽懸停將設定視窗帶到前台、遮擋 Sparkle 對話框的問題。更新週期結束後自動恢復設定視窗</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
-<ul>
-<li>修复 Sparkle 更新检查前未关闭设置窗口，导致网格预览悬停将设置窗口置于前台、遮挡 Sparkle 对话框的问题。更新周期结束后自动恢复设置窗口</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
-<ul>
-<li>Sparkle 업데이트 확인 전에 설정 창을 닫아, 그리드 미리보기 호버로 설정 창이 앞으로 나와 Sparkle 대화상자를 가리는 문제를 수정. 업데이트 사이클 종료 후 설정 창을 복원하도록 변경</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
-<ul>
-<li>Sparkle のアップデート確認前に設定ウインドウを閉じ、グリッドプレビューのホバーで設定ウインドウが前面に来て Sparkle のダイアログを隠す問題を修正。アップデートサイクル終了後に設定ウインドウを復元するようにした</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
-<ul>
-<li>Dismiss the settings window before Sparkle update checks so the grid preview hover cannot bring it to the front and block Sparkle dialogs; the settings window is restored after the update cycle finishes</li>
-</ul>]]></description>
-            <pubDate>Thu, 09 Apr 2026 23:08:46 +0900</pubDate>
-            <sparkle:version>434</sparkle:version>
-            <sparkle:shortVersionString>4.3.4</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley-4.3.4.zip" length="5755361" type="application/octet-stream" sparkle:edSignature="dstcdfQ02AYXD9gU88Fu2jH0ggE2sKjzdR1UcZJr8LMTrHPteq5e7+eOh3nA+r/a2mbUjBgRpRW8DYFNRSs7Bw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley434-433.delta" sparkle:deltaFrom="433" length="222366" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="d0S1SRZNZAukoVt8YoLHM1ND4vc1wVI+Pm652LwgKS6gOWUm1rJPQSBxyVat81jdvXV5MS/BvgfNLXSJR1MOBg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley434-432.delta" sparkle:deltaFrom="432" length="282458" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="lAS2ng5ssVvIbrD/FvF2WecEN6856mkuA2qYeMMpJlC8scOCXJZ5IOvS/9iZR6ovGXFoL0BkYCJk/yOjBPLuDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley434-431.delta" sparkle:deltaFrom="431" length="289254" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="cI5JExBQpq05WlYNkaLDKXGQTh5nT79c4WkKLoiS0fWOLB9i1QtcYnz8t4nCc6UMKR7e0QXr9xZL0AETFmg5CA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley434-430.delta" sparkle:deltaFrom="430" length="287722" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NaYCqw13Kr+2RhEn+YKcy8+iBAaSqprZWI85JLzhYC7YwewmnssvbvwSp0N255Fwrv3aZJGdKfk/KttoPAL1CA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.4/Tiley434-423.delta" sparkle:deltaFrom="423" length="315822" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="i68ARrrMNXietDOoyRmZXMdXypcmHXCetiLSZ8tiT5OXKPjz66GjVK/eo7gd/sycJX9L0BJsTUvzF0oFMI9DCw=="/>
             </sparkle:deltas>
         </item>
     </channel>
