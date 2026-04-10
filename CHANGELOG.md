@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.6] - 2026-04-10
+
 ### Added
 
 - Added option to show Tiley window near the menu bar or Dock icon when clicked (enabled by default)
@@ -676,7 +678,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.5...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.6...HEAD
+[4.3.6]: https://github.com/yusuke/tiley/releases/tag/v4.3.6
 [4.3.5]: https://github.com/yusuke/tiley/releases/tag/v4.3.5
 [4.3.4]: https://github.com/yusuke/tiley/releases/tag/v4.3.4
 [4.3.3]: https://github.com/yusuke/tiley/releases/tag/v4.3.3
