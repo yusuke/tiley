@@ -6,7 +6,7 @@ extension AppState {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
 
         if originalFrontmostPID == nil {
-            refreshAvailableWindows()
+            refreshAvailableWindowsSync()
         }
         guard !availableWindowTargets.isEmpty else { return }
 
@@ -408,11 +408,34 @@ extension AppState {
         }
     }
 
+    /// Refreshes the available window list asynchronously.  The expensive
+    /// `captureAllWindows` call runs on a background thread so the main
+    /// thread stays responsive (e.g. dismiss-on-click is not blocked).
     func refreshAvailableWindows() {
-        let captured = windowManager?.captureAllWindows(includeOtherSpaces: true)
-        availableWindowTargets = captured?.targets ?? []
-        spaceList = captured?.spaceList ?? []
-        activeSpaceIDs = captured?.activeSpaceIDs ?? []
+        guard let wm = windowManager else { return }
+        Task.detached { [weak self] in
+            let captured = wm.captureAllWindows(includeOtherSpaces: true)
+            await MainActor.run { [weak self] in
+                guard let self, self.isShowingLayoutGrid else { return }
+                self.applyRefreshedWindowList(captured)
+            }
+        }
+    }
+
+    /// Synchronous variant used when the result must be applied immediately
+    /// (e.g. after committing a layout selection where stale data would
+    /// cause incorrect window targeting).
+    func refreshAvailableWindowsSync() {
+        guard let captured = windowManager?.captureAllWindows(includeOtherSpaces: true) else { return }
+        applyRefreshedWindowList(captured)
+    }
+
+    private func applyRefreshedWindowList(
+        _ captured: (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceIDs: Set<UInt64>)
+    ) {
+        availableWindowTargets = captured.targets
+        spaceList = captured.spaceList
+        activeSpaceIDs = captured.activeSpaceIDs
         windowTargetListVersion += 1
 
         var didConsumePendingClose = false
