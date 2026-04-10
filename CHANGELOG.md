@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.7] - 2026-04-10
+
 ### Changed
 
 - Significantly improved overlay window open speed by deferring heavy operations (Accessibility/CoreGraphics queries, layout preview construction) to after the window is visible, and keeping the pre-cached window list across sessions
@@ -682,7 +684,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.6...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.7...HEAD
+[4.3.7]: https://github.com/yusuke/tiley/releases/tag/v4.3.7
 [4.3.6]: https://github.com/yusuke/tiley/releases/tag/v4.3.6
 [4.3.5]: https://github.com/yusuke/tiley/releases/tag/v4.3.5
 [4.3.4]: https://github.com/yusuke/tiley/releases/tag/v4.3.4

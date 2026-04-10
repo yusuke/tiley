@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.7] - 2026-04-10
+
 ### Alterado
 
 - Melhoria significativa na velocidade de abertura da janela de sobreposição. Operações pesadas (consultas Accessibility/CoreGraphics, construção da pré-visualização de layout) são executadas de forma adiada após a exibição da janela, e a lista de janelas pré-armazenada em cache é mantida entre sessões

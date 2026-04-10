@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.7] - 2026-04-10
+
 ### Cambiado
 
 - Mejora significativa en la velocidad de apertura de la ventana superpuesta. Las operaciones pesadas (consultas de Accessibility/CoreGraphics, construcción de vista previa de diseño) se ejecutan de forma diferida tras mostrar la ventana, y la lista de ventanas precacheada se mantiene entre sesiones
