@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Animación suave de aparición/desaparición gradual al mostrar y ocultar la ventana superpuesta mediante Core Animation acelerada por GPU
+
+### Corregido
+
+- Los botones de la barra de herramientas estaban desactivados en el primer inicio hasta que se cambiaba la selección de ventana en la barra lateral
+
 ## [4.3.7] - 2026-04-10
 
 ### Cambiado

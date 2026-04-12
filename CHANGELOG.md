@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added smooth fade-in/fade-out animation when showing and hiding the overlay window using GPU-accelerated Core Animation
+
+### Fixed
+
+- Fixed toolbar buttons being disabled on first launch until the window selection was changed in the sidebar
+
 ## [4.3.7] - 2026-04-10
 
 ### Changed

@@ -1107,10 +1107,10 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func cancelLayoutGrid() {
         removeModifierReleaseMonitor()
-        hidePreviewOverlay()
-        isShowingLayoutGrid = false
-        activeLayoutTarget = nil
-        clearResizabilityCache()
+        // Don't clear isShowingLayoutGrid / activeLayoutTarget / preview overlay
+        // here — hide()'s fade-out completion calls handleMainWindowHidden()
+        // which handles all of that.  Clearing them now would cause a brief
+        // "No windows" flash during the fade-out animation.
 
         // Restore the original window to the foreground BEFORE hiding Tiley's
         // windows.  If we hide first, macOS may auto-activate the previously

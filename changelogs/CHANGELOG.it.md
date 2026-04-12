@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Animazione fluida di dissolvenza in entrata/uscita durante la visualizzazione e l'occultamento della finestra overlay tramite Core Animation accelerata dalla GPU
+
+### Corretto
+
+- I pulsanti della barra degli strumenti erano disabilitati al primo avvio fino a quando non si modificava la selezione della finestra nella barra laterale
+
 ## [4.3.7] - 2026-04-10
 
 ### Modificato

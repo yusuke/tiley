@@ -38,6 +38,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private static let footerHeight: CGFloat = 44
     private static let contentVerticalPadding: CGFloat = 102
     private static let layoutModeWindowAlpha: CGFloat = 0.99
+    private static let fadeDuration: CFTimeInterval = 0.18
 
     private weak var appState: AppState?
     private(set) var screenRole: ScreenRole
@@ -49,6 +50,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private let onKeyCommand: (NSEvent) -> Bool
     private var screenParameterTask: Task<Void, Never>?
     private var isHidingWindow = false
+    private static let fadeInKey = "tileyFadeIn"
+    private static let fadeOutKey = "tileyFadeOut"
+    private var fadeOutGeneration: UInt = 0
 
     init(appState: AppState, screenRole: ScreenRole = .target, targetScreen: NSScreen? = nil, onHide: @escaping () -> Void, onEscape: @escaping () -> Bool, onLocalShortcut: @escaping (HotKeyShortcut) -> Bool, onKeyCommand: @escaping (NSEvent) -> Bool) {
         let perfStart = CFAbsoluteTimeGetCurrent()
@@ -102,6 +106,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary, .transient]
         window.isReleasedWhenClosed = false
         window.autorecalculatesKeyViewLoop = false
+        hostingView.wantsLayer = true
         window.contentView = hostingView
         perfLog("contentView set")
         // Only use autosave for the target window to avoid position conflicts
@@ -138,21 +143,23 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         applyWindowMode(animated: false, preferredScreen: destinationScreen)
         positionWindow(preferredScreen: destinationScreen)
         window?.ignoresMouseEvents = false
+        window?.alphaValue = Self.layoutModeWindowAlpha
+        // Invalidate any in-progress fade-out so its completion won't reset state.
+        fadeOutGeneration &+= 1
+        isHidingWindow = false
         if window?.isVisible == true {
-            // Window is already on screen (kept alive with alphaValue=0).
-            // Just restore alpha and key status — no orderFront needed.
-            window?.alphaValue = Self.layoutModeWindowAlpha
             if asKey {
                 window?.makeKey()
             }
         } else {
-            window?.alphaValue = Self.layoutModeWindowAlpha
             if asKey {
                 window?.makeKeyAndOrderFront(nil)
             } else {
                 window?.orderFront(nil)
             }
         }
+        // GPU-accelerated fade-in via Core Animation on the content view layer.
+        startLayerFadeIn(duration: Self.fadeDuration)
         // Prevent the search field from auto-focusing when the window opens.
         window?.makeFirstResponder(window?.contentView)
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
@@ -162,16 +169,57 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     func hide() {
         guard !isHidingWindow else { return }
         isHidingWindow = true
-        appState?.hidePreviewOverlay()
-        // Keep the window on screen but fully transparent so it stays
-        // pre-rendered in the backing store for instant re-show.
-        window?.alphaValue = 0
         window?.ignoresMouseEvents = true
-        // Demote to normal level so the invisible window doesn't block
-        // other apps' floating panels.
-        window?.level = .normal
-        onHide()
-        isHidingWindow = false
+        // GPU-accelerated fade-out, then finalize state cleanup.
+        // All state changes (hidePreviewOverlay, onHide, level demotion)
+        // are deferred to the completion so the UI stays intact during fade.
+        fadeOutGeneration &+= 1
+        let gen = fadeOutGeneration
+        startLayerFadeOut(duration: Self.fadeDuration) { [weak self] in
+            guard let self, self.fadeOutGeneration == gen else { return }
+            self.appState?.hidePreviewOverlay()
+            self.window?.level = .normal
+            self.onHide()
+            self.isHidingWindow = false
+        }
+    }
+
+    // MARK: - Fade-in animation
+
+    private func startLayerFadeIn(duration: CFTimeInterval) {
+        guard let layer = window?.contentView?.layer else { return }
+        layer.removeAnimation(forKey: Self.fadeInKey)
+        layer.removeAnimation(forKey: Self.fadeOutKey)
+        let anim = CABasicAnimation(keyPath: "opacity")
+        anim.fromValue = Float(0)
+        anim.toValue = Float(1)
+        anim.duration = duration
+        anim.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        anim.fillMode = .forwards
+        anim.isRemovedOnCompletion = true
+        layer.opacity = 1
+        layer.add(anim, forKey: Self.fadeInKey)
+    }
+
+    private func startLayerFadeOut(duration: CFTimeInterval, completion: @escaping () -> Void) {
+        guard let layer = window?.contentView?.layer else {
+            completion()
+            return
+        }
+        layer.removeAnimation(forKey: Self.fadeInKey)
+        layer.removeAnimation(forKey: Self.fadeOutKey)
+        CATransaction.begin()
+        CATransaction.setCompletionBlock(completion)
+        let anim = CABasicAnimation(keyPath: "opacity")
+        anim.fromValue = layer.presentation()?.opacity ?? layer.opacity
+        anim.toValue = Float(0)
+        anim.duration = duration
+        anim.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        anim.fillMode = .forwards
+        anim.isRemovedOnCompletion = false
+        layer.opacity = 0
+        layer.add(anim, forKey: Self.fadeOutKey)
+        CATransaction.commit()
     }
 
     /// Update the controller's screen state for reuse without recreating the
@@ -194,9 +242,10 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
     /// Dismiss the window without firing the onHide callback.
     /// Used when recreating window controllers to avoid triggering state resets.
-    /// Keeps the window on screen (alphaValue=0) for instant re-show.
+    /// Keeps the window on screen (layer opacity=0) for instant re-show.
     func dismissSilently() {
-        window?.alphaValue = 0
+        window?.contentView?.layer?.removeAnimation(forKey: Self.fadeInKey)
+        window?.contentView?.layer?.opacity = 0
         window?.ignoresMouseEvents = true
         window?.level = .normal
     }
@@ -207,12 +256,12 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window?.orderOut(nil)
     }
 
-    /// Whether the window is logically visible to the user (alpha > 0).
+    /// Whether the window is logically visible to the user.
     /// Note: after hide()/dismissSilently() the window remains on screen
-    /// with alphaValue=0, so NSWindow.isVisible is still true.
+    /// with ignoresMouseEvents=true, so NSWindow.isVisible alone is unreliable.
     var isVisible: Bool {
         guard let window else { return false }
-        return window.isVisible && window.alphaValue > 0
+        return window.isVisible && !window.ignoresMouseEvents
     }
 
     var nsWindow: NSWindow? {
@@ -235,10 +284,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         // macOS deactivates the app and fires this callback. Don't hide
         // windows — they will be restored after the switch completes.
         guard appState?.isSwitchingActivationPolicy != true else { return }
-        appState?.hidePreviewOverlay()
         // Hide all Tiley windows when the app loses focus, not just this one.
-        // Secondary windows don't receive windowDidResignKey because they
-        // were never the key window.
+        // Don't call hidePreviewOverlay() here — hide() defers all state
+        // cleanup to its fade-out completion so the UI stays intact.
         appState?.hideMainWindow()
     }
 

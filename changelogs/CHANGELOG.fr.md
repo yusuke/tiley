@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Animation fluide de fondu en entrée/sortie lors de l'affichage et du masquage de la fenêtre superposée grâce à Core Animation accélérée par GPU
+
+### Corrigé
+
+- Les boutons de la barre d'outils étaient désactivés au premier lancement tant que la sélection de fenêtre n'était pas modifiée dans la barre latérale
+
 ## [4.3.7] - 2026-04-10
 
 ### Modifié

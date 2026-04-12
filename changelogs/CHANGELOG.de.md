@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Sanfte Ein-/Ausblendanimation beim Anzeigen und Ausblenden des Overlay-Fensters mittels GPU-beschleunigter Core Animation
+
+### Behoben
+
+- Symbolleisten-Schaltflächen waren beim ersten Start deaktiviert, bis die Fensterauswahl in der Seitenleiste geändert wurde
+
 ## [4.3.7] - 2026-04-10
 
 ### Geändert

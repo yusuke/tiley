@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Animação suave de aparecimento/desaparecimento gradual ao exibir e ocultar a janela de sobreposição usando Core Animation acelerada por GPU
+
+### Corrigido
+
+- Os botões da barra de ferramentas ficavam desativados na primeira execução até que a seleção de janela fosse alterada na barra lateral
+
 ## [4.3.7] - 2026-04-10
 
 ### Alterado
