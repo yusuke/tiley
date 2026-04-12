@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.8] - 2026-04-13
+
 ### Ajouté
 
 - Animation fluide de fondu en entrée/sortie lors de l'affichage et du masquage de la fenêtre superposée grâce à Core Animation accélérée par GPU

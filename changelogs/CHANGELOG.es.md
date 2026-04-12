@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.8] - 2026-04-13
+
 ### Añadido
 
 - Animación suave de aparición/desaparición gradual al mostrar y ocultar la ventana superpuesta mediante Core Animation acelerada por GPU

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.8] - 2026-04-13
+
 ### Added
 
 - Added smooth fade-in/fade-out animation when showing and hiding the overlay window using GPU-accelerated Core Animation
@@ -692,7 +694,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.7...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.8...HEAD
+[4.3.8]: https://github.com/yusuke/tiley/releases/tag/v4.3.8
 [4.3.7]: https://github.com/yusuke/tiley/releases/tag/v4.3.7
 [4.3.6]: https://github.com/yusuke/tiley/releases/tag/v4.3.6
 [4.3.5]: https://github.com/yusuke/tiley/releases/tag/v4.3.5

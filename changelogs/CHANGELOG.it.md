@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.8] - 2026-04-13
+
 ### Aggiunto
 
 - Animazione fluida di dissolvenza in entrata/uscita durante la visualizzazione e l'occultamento della finestra overlay tramite Core Animation accelerata dalla GPU

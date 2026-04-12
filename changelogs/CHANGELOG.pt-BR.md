@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.8] - 2026-04-13
+
 ### Adicionado
 
 - Animação suave de aparecimento/desaparecimento gradual ao exibir e ocultar a janela de sobreposição usando Core Animation acelerada por GPU

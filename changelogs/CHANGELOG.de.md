@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.8] - 2026-04-13
+
 ### Hinzugefügt
 
 - Sanfte Ein-/Ausblendanimation beim Anzeigen und Ausblenden des Overlay-Fensters mittels GPU-beschleunigter Core Animation
