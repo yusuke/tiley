@@ -1745,9 +1745,13 @@ struct MainWindowView: View {
         .padding(.vertical, 8)
         .frame(width: Self.sidebarWidth, height: height)
         .onAppear {
-            if screenRole.isTarget {
-                appState.refreshAvailableWindows()
-            }
+            // Note: we intentionally do NOT call `appState.refreshAvailableWindows()`
+            // here.  `toggleOverlay` / `reopenMainWindowFromDock` already kicks
+            // off the post-open refresh with `snapToFreshTop: true`; a second
+            // refresh from this view would race with that one, and its result
+            // (without snapToFreshTop) can land last and reshuffle the list a
+            // few hundred ms after the correct order is already on screen.
+
             // Sync sidebar selection with the initially active window so
             // action buttons are enabled from the start.
             if sidebarSelection == nil {

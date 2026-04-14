@@ -6,6 +6,10 @@
 
 - Adicionado um ponteiro triangular estilo balão de fala na borda da janela principal voltada para o ícone da barra de menus ou do Dock quando "Mostrar perto do ícone ao clicar" está ativado
 
+### Corrigido
+
+- Corrigido um problema em que, ao abrir o Tiley logo após alternar de app e antes que o cache em segundo plano da lista de janelas fosse atualizado, a barra lateral mostrava brevemente no topo o app anteriormente em primeiro plano ou, ocasionalmente, selecionava uma janela que não era a mais à frente
+
 ## [4.3.8] - 2026-04-13
 
 ### Adicionado

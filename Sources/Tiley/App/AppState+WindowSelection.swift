@@ -411,13 +411,19 @@ extension AppState {
     /// Refreshes the available window list asynchronously.  The expensive
     /// `captureAllWindows` call runs on a background thread so the main
     /// thread stays responsive (e.g. dismiss-on-click is not blocked).
-    func refreshAvailableWindows() {
+    ///
+    /// When `snapToFreshTop` is true, the refreshed list's top z-order entry
+    /// is treated as the authoritative active target, overriding any
+    /// `activeLayoutTarget` that Phase 1 chose from stale cache/frontmost
+    /// data.  Use this only on the initial post-open refresh — before the
+    /// user has had a chance to cycle or manually select a window.
+    func refreshAvailableWindows(snapToFreshTop: Bool = false) {
         guard let wm = windowManager else { return }
         Task.detached { [weak self] in
             let captured = wm.captureAllWindows(includeOtherSpaces: true)
             await MainActor.run { [weak self] in
                 guard let self, self.isShowingLayoutGrid else { return }
-                self.applyRefreshedWindowList(captured)
+                self.applyRefreshedWindowList(captured, snapToFreshTop: snapToFreshTop)
             }
         }
     }
@@ -427,16 +433,22 @@ extension AppState {
     /// cause incorrect window targeting).
     func refreshAvailableWindowsSync() {
         guard let captured = windowManager?.captureAllWindows(includeOtherSpaces: true) else { return }
-        applyRefreshedWindowList(captured)
+        applyRefreshedWindowList(captured, snapToFreshTop: false)
     }
 
     private func applyRefreshedWindowList(
-        _ captured: (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceIDs: Set<UInt64>)
+        _ captured: (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceIDs: Set<UInt64>),
+        snapToFreshTop: Bool
     ) {
         availableWindowTargets = captured.targets
         spaceList = captured.spaceList
         activeSpaceIDs = captured.activeSpaceIDs
         windowTargetListVersion += 1
+        // Authoritative data has landed — clear the loading flag so the
+        // sidebar transitions from spinner to the populated list in a single
+        // render.  Phase 2 intentionally leaves the flag set when the refresh
+        // is kicked off because `refreshAvailableWindows` runs asynchronously.
+        isLoadingWindowList = false
 
         var didConsumePendingClose = false
         if let pending = pendingTargetAfterClose {
@@ -452,6 +464,16 @@ extension AppState {
             } else {
                 activeTargetIndex = 0
             }
+        } else if snapToFreshTop, !availableWindowTargets.isEmpty {
+            // Initial post-open refresh: the captured list is in z-order with
+            // the true frontmost layer-0 window at index 0 (Tiley's floating
+            // windows are filtered out by layer).  Phase 1 may have latched
+            // onto a stale PID via `lastTargetPID` / `NSWorkspace.frontmostApplication`
+            // because both are updated through async notifications that can
+            // lag rapid app switches; override with the authoritative top.
+            activeTargetIndex = 0
+            activeLayoutTarget = availableWindowTargets[0]
+            lastTargetPID = availableWindowTargets[0].processIdentifier
         } else if let current = activeLayoutTarget {
             activeTargetIndex = availableWindowTargets.firstIndex(where: {
                 $0.processIdentifier == current.processIdentifier

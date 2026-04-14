@@ -6,6 +6,10 @@
 
 - Aggiunto un puntatore triangolare in stile fumetto sul bordo della finestra principale rivolto verso l'icona della barra dei menu o del Dock quando "Mostra vicino all'icona al clic" è abilitato
 
+### Corretto
+
+- Risolto un problema per cui, aprendo Tiley subito dopo aver cambiato app e prima che la cache dell'elenco finestre in background fosse aggiornata, la barra laterale mostrava brevemente in cima l'app precedentemente in primo piano o talvolta selezionava una finestra diversa da quella in primo piano
+
 ## [4.3.8] - 2026-04-13
 
 ### Aggiunto

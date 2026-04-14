@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Added a speech-bubble-style triangle pointer to the main window edge facing the menu bar or Dock icon when "Show near icon when clicked" is enabled
 
+### Fixed
+
+- Fixed the sidebar briefly showing the previously frontmost app at the top — and occasionally selecting a non-frontmost window — when Tiley was opened immediately after switching apps, before the background window-list cache had a chance to refresh
+
 ## [4.3.8] - 2026-04-13
 
 ### Added

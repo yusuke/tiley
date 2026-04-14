@@ -537,10 +537,30 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
         Task { @MainActor [weak self] in
+            guard let self else { return }
             if showMainWindowOnLaunch {
-                self?.openMainWindow()
+                self.openMainWindow()
+                // `start()` opens the main window directly and bypasses
+                // `toggleOverlay`, so its Phase 2 (which kicks off the
+                // sidebar's initial window-list refresh) never runs.
+                // Replicate the essential parts here: if a cache is already
+                // available we can populate the sidebar synchronously;
+                // otherwise show the spinner and let the refresh populate.
+                if self.hasWindowListCache {
+                    self.realignCacheWithLiveZOrder()
+                    self.availableWindowTargets = self.cachedWindowTargets
+                    self.spaceList = self.cachedSpaceList
+                    self.activeSpaceIDs = self.cachedActiveSpaceIDs
+                    self.windowTargetListVersion += 1
+                    self.isLoadingWindowList = false
+                } else {
+                    self.isLoadingWindowList = true
+                }
+                // Always kick off a fresh capture so the list is authoritative
+                // even if the cache happened to be populated early.
+                self.refreshAvailableWindows(snapToFreshTop: true)
             }
-            self?.promptLaunchAtLoginIfNeeded()
+            self.promptLaunchAtLoginIfNeeded()
         }
     }
 
@@ -571,6 +591,82 @@ final class AppState: NSObject, NSMenuDelegate {
             dismissPermissionsOnly()
         }
         updateStatusMenu()
+    }
+
+    /// Reorders `cachedWindowTargets` so that windows owned by `pid` appear
+    /// first, preserving the relative order within the frontmost group and the
+    /// rest of the list.  Cheap O(n) pass used to paper over the ~150 ms
+    /// window where `scheduleWindowListCacheRefresh` hasn't yet captured fresh
+    /// data after a frontmost app switch, so the sidebar doesn't visibly
+    /// reshuffle shortly after the grid appears.
+    func reorderCacheForFrontmost(pid: pid_t) {
+        guard hasWindowListCache else { return }
+        guard cachedWindowTargets.contains(where: { $0.processIdentifier == pid }) else { return }
+        guard cachedWindowTargets.first?.processIdentifier != pid else { return }
+        var frontWindows: [WindowTarget] = []
+        var otherWindows: [WindowTarget] = []
+        for target in cachedWindowTargets {
+            if target.processIdentifier == pid {
+                frontWindows.append(target)
+            } else {
+                otherWindows.append(target)
+            }
+        }
+        cachedWindowTargets = frontWindows + otherWindows
+    }
+
+    /// Realigns `cachedWindowTargets` against the authoritative CG z-order
+    /// returned by `AccessibilityService.currentZOrderedWindowIDs()` (a fast
+    /// CG-only query, typically 1–5 ms).  Unlike `reorderCacheForFrontmost`
+    /// (which only promotes a given PID's windows), this method orders
+    /// **every** cached window to match the current WindowServer z-order
+    /// per-window — so it also correctly tracks intra-app window raises
+    /// (which don't fire `didActivateApplicationNotification`).
+    ///
+    /// Windows not present in the live on-screen list (minimized, other
+    /// spaces, etc.) retain their previous relative order at the tail,
+    /// grouped behind on-screen windows via a stable sort.
+    func realignCacheWithLiveZOrder() {
+        guard hasWindowListCache, !cachedWindowTargets.isEmpty else { return }
+        let liveWindowIDs = AccessibilityService.currentZOrderedWindowIDs()
+        guard !liveWindowIDs.isEmpty else { return }
+
+        // Primary key: per-window rank (front-to-back).  Fallback key for
+        // off-screen entries: per-PID rank derived from the first occurrence
+        // of each PID in the on-screen list, so minimized windows of a
+        // frontmost app still sit behind that app's other on-screen windows
+        // but ahead of unrelated apps.
+        var rankByWID: [CGWindowID: Int] = [:]
+        var rankByPID: [pid_t: Int] = [:]
+        // We don't have PID here from the WID list, so fall back to
+        // re-querying `currentZOrderedPIDs` for the PID fallback map.
+        let livePIDs = AccessibilityService.currentZOrderedPIDs()
+        for (i, wid) in liveWindowIDs.enumerated() { rankByWID[wid] = i }
+        for (i, pid) in livePIDs.enumerated() { rankByPID[pid] = i }
+
+        // Decorate-sort-undecorate for a stable sort keyed on
+        // (windowRank ?? (pidRank * large), originalIndex).  PID-only rank
+        // is scaled so every on-screen window outranks any off-screen
+        // window whose app isn't on-screen.
+        let offscreenBase = liveWindowIDs.count
+        let decorated = cachedWindowTargets.enumerated().map { (originalIndex, target) in
+            let rank: Int
+            if target.cgWindowID != 0, let r = rankByWID[target.cgWindowID] {
+                rank = r
+            } else if let r = rankByPID[target.processIdentifier] {
+                // Off-screen window (or cgWindowID==0) of an on-screen app —
+                // rank behind all on-screen windows but grouped by app order.
+                rank = offscreenBase + r
+            } else {
+                rank = Int.max
+            }
+            return (rank: rank, originalIndex: originalIndex, target: target)
+        }
+        let sorted = decorated.sorted { lhs, rhs in
+            if lhs.rank != rhs.rank { return lhs.rank < rhs.rank }
+            return lhs.originalIndex < rhs.originalIndex
+        }
+        cachedWindowTargets = sorted.map(\.target)
     }
 
     /// Sets the main (grid/sidebar) windows to floating level.
@@ -726,9 +822,34 @@ final class AppState: NSObject, NSMenuDelegate {
         // If no cache, keep the previous activeLayoutTarget — the pre-rendered
         // window already shows the last-known state.  Phase 2 will resolve
         // the accurate target.
+        //
+        // IMPORTANT: Trust the AX system-wide focused application over both
+        // `lastTargetPID` and `NSWorkspace.shared.frontmostApplication`.
+        // `lastTargetPID` is updated asynchronously via
+        // `didActivateApplicationNotification`, and `frontmostApplication` is
+        // itself updated via AppKit notifications that can briefly lag the
+        // actual WindowServer state after a rapid app switch.  AX reflects
+        // the authoritative focus immediately, so reading it here prevents
+        // Phase 1 from latching onto the previously-frontmost app.
+        let liveFrontmostPID: pid_t? = {
+            if let pid = AccessibilityService.focusedApplicationPID(), pid != getpid() {
+                return pid
+            }
+            if let pid = NSWorkspace.shared.frontmostApplication?.processIdentifier,
+               pid != getpid() {
+                return pid
+            }
+            return nil
+        }()
+        if let liveFrontmostPID {
+            lastTargetPID = liveFrontmostPID
+        }
         if hasWindowListCache {
-            let preferredPID = lastTargetPID
-                ?? NSWorkspace.shared.frontmostApplication?.processIdentifier
+            // Realign the cache against the current CG z-order (fast, ~1–5 ms)
+            // so the sidebar renders the correct order immediately instead of
+            // visibly reshuffling once the deferred full refresh completes.
+            realignCacheWithLiveZOrder()
+            let preferredPID = liveFrontmostPID ?? lastTargetPID
             let cachedTarget = preferredPID.flatMap { pid in
                 cachedWindowTargets.first { $0.processIdentifier == pid }
             } ?? cachedWindowTargets.first
@@ -736,6 +857,36 @@ final class AppState: NSObject, NSMenuDelegate {
             if let cachedTarget {
                 lastTargetPID = cachedTarget.processIdentifier
             }
+            // Publish the cached list to the sidebar SYNCHRONOUSLY so the
+            // first SwiftUI render displays the correct order.  If we defer
+            // this to Phase 2 (DispatchQueue.main.async), the window's first
+            // render uses whatever `availableWindowTargets` held from the
+            // previous session and the user sees a brief reshuffle on the
+            // following frame.
+            availableWindowTargets = cachedWindowTargets
+            spaceList = cachedSpaceList
+            activeSpaceIDs = cachedActiveSpaceIDs
+            if let current = activeLayoutTarget {
+                activeTargetIndex = availableWindowTargets.firstIndex(where: {
+                    $0.processIdentifier == current.processIdentifier
+                    && $0.windowElement == current.windowElement
+                }) ?? availableWindowTargets.firstIndex(where: {
+                    $0.processIdentifier == current.processIdentifier
+                    && $0.windowTitle == current.windowTitle
+                }) ?? 0
+            } else {
+                activeTargetIndex = 0
+            }
+            selectedWindowIndices = [activeTargetIndex]
+            selectionOrder = [activeTargetIndex]
+            isLoadingWindowList = false
+            windowTargetListVersion += 1
+        } else {
+            // No cache yet (first launch before the initial capture has
+            // completed).  Show the spinner from the first rendered frame
+            // instead of an empty list — Phase 2 will populate the sidebar
+            // once the deferred capture finishes.
+            isLoadingWindowList = true
         }
         // else: keep activeLayoutTarget from the previous session (may be nil
         // on first launch, but the pre-rendered window handles that gracefully).
@@ -798,11 +949,15 @@ final class AppState: NSObject, NSMenuDelegate {
             }
 
             // Populate the sidebar window list from cache or mark as loading.
+            // Note: on the happy path (hadCache == true), the sidebar was
+            // already populated synchronously in Phase 1 so the first render
+            // shows the correct order without a visible reshuffle.  This
+            // branch only fires when Phase 1 saw no cache (first launch).
             // Do NOT clear hasWindowListCache here — the cache remains valid
             // and will be reused if the overlay is quickly reopened.  The
             // background refresh (scheduleWindowListCacheRefresh) already
             // guards against overwriting during overlay display.
-            if self.hasWindowListCache {
+            if !hadCache, self.hasWindowListCache {
                 self.availableWindowTargets = self.cachedWindowTargets
                 self.spaceList = self.cachedSpaceList
                 self.activeSpaceIDs = self.cachedActiveSpaceIDs
@@ -822,7 +977,7 @@ final class AppState: NSObject, NSMenuDelegate {
                 self.selectionOrder = [self.activeTargetIndex]
                 self.isLoadingWindowList = false
                 debugLog("Used cached window list: \(self.availableWindowTargets.count) windows")
-            } else {
+            } else if !self.hasWindowListCache {
                 self.isLoadingWindowList = true
             }
 
@@ -873,11 +1028,20 @@ final class AppState: NSObject, NSMenuDelegate {
             } else {
                 DispatchQueue.main.async { [weak self] in
                     guard let self, self.isShowingLayoutGrid else { return }
-                    self.refreshAvailableWindows()
+                    // snapToFreshTop: on the first post-open refresh, trust
+                    // the authoritative z-order from CGWindowList over any
+                    // stale target Phase 1 picked via async APIs.
+                    //
+                    // Note: `refreshAvailableWindows` is asynchronous; do NOT
+                    // clear `isLoadingWindowList` here — the flag must stay
+                    // true until `applyRefreshedWindowList` populates
+                    // `availableWindowTargets`, otherwise the spinner vanishes
+                    // before any data is available and the sidebar briefly
+                    // renders an empty list (only display headers).
+                    self.refreshAvailableWindows(snapToFreshTop: true)
                     self.selectedWindowIndices = [self.activeTargetIndex]
                     self.selectionOrder = [self.activeTargetIndex]
-                    self.isLoadingWindowList = false
-                    debugLog("refreshAvailableWindows done (deferred)")
+                    debugLog("refreshAvailableWindows scheduled (deferred)")
                     self.revalidateActiveTarget()
                 }
             }

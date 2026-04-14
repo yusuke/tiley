@@ -67,6 +67,9 @@ extension AppState {
 
         // Populate the sidebar window list — same pattern as toggleOverlay().
         if hasWindowListCache {
+            // Realign the cache against the current CG z-order so the sidebar
+            // renders the correct order immediately.  See `realignCacheWithLiveZOrder`.
+            realignCacheWithLiveZOrder()
             availableWindowTargets = cachedWindowTargets
             spaceList = cachedSpaceList
             activeSpaceIDs = cachedActiveSpaceIDs
@@ -90,8 +93,14 @@ extension AppState {
         }
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            self.refreshAvailableWindows()
-            self.isLoadingWindowList = false
+            // snapToFreshTop: trust the authoritative z-order from CGWindowList
+            // over any stale target Phase 1 may have picked via async APIs.
+            //
+            // Note: `refreshAvailableWindows` is asynchronous.  Clearing
+            // `isLoadingWindowList` is handled by `applyRefreshedWindowList`
+            // when the capture lands, so the spinner stays visible until
+            // real data is populated.
+            self.refreshAvailableWindows(snapToFreshTop: true)
             self.revalidateActiveTarget()
         }
         windowTargetListVersion += 1
@@ -153,8 +162,26 @@ extension AppState {
         guard accessibilityGranted else { return nil }
         let target: WindowTarget?
         if hasWindowListCache {
-            let preferredPID = lastTargetPID
-                ?? NSWorkspace.shared.frontmostApplication?.processIdentifier
+            // Prefer the AX system-wide focused application over both
+            // `lastTargetPID` and `NSWorkspace.frontmostApplication`.  See
+            // the equivalent block in `toggleOverlay` for the full rationale.
+            let liveFrontmostPID: pid_t? = {
+                if let pid = AccessibilityService.focusedApplicationPID(), pid != getpid() {
+                    return pid
+                }
+                if let pid = NSWorkspace.shared.frontmostApplication?.processIdentifier,
+                   pid != getpid() {
+                    return pid
+                }
+                return nil
+            }()
+            if let liveFrontmostPID {
+                lastTargetPID = liveFrontmostPID
+            }
+            // Realign the cache against the current CG z-order (fast, ~1–5 ms)
+            // so the sidebar renders the correct order immediately.
+            realignCacheWithLiveZOrder()
+            let preferredPID = liveFrontmostPID ?? lastTargetPID
             target = preferredPID.flatMap { pid in
                 cachedWindowTargets.first { $0.processIdentifier == pid }
             } ?? cachedWindowTargets.first

@@ -6,6 +6,10 @@
 
 - Añadido un puntero triangular tipo bocadillo en el borde de la ventana principal orientado hacia el icono de la barra de menús o del Dock cuando "Mostrar cerca del icono al hacer clic" está habilitado
 
+### Corregido
+
+- Corregido un problema por el que, al abrir Tiley inmediatamente después de cambiar de app y antes de que se refrescara la caché de la lista de ventanas, la barra lateral mostraba brevemente la app anteriormente en primer plano en la parte superior o, en ocasiones, seleccionaba una ventana que no era la más frontal
+
 ## [4.3.8] - 2026-04-13
 
 ### Añadido

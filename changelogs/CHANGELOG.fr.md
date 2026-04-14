@@ -6,6 +6,10 @@
 
 - Ajout d'un pointeur triangulaire façon bulle de dialogue sur le bord de la fenêtre principale orienté vers l'icône de la barre de menus ou du Dock lorsque « Afficher près de l'icône au clic » est activé
 
+### Corrigé
+
+- Correction d'un problème où, en ouvrant Tiley juste après avoir changé d'app et avant que le cache de la liste de fenêtres en arrière-plan soit rafraîchi, la barre latérale affichait brièvement l'app précédemment au premier plan en haut, ou sélectionnait parfois une fenêtre qui n'était pas au premier plan
+
 ## [4.3.8] - 2026-04-13
 
 ### Ajouté

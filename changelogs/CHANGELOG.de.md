@@ -6,6 +6,10 @@
 
 - Sprechblasen-Pfeilspitze an der zur Menüleiste bzw. zum Dock-Symbol zeigenden Kante des Hauptfensters hinzugefügt, wenn "Beim Klicken nahe dem Symbol anzeigen" aktiviert ist
 
+### Behoben
+
+- Problem behoben, bei dem unmittelbar nach einem App-Wechsel — bevor der Hintergrund-Fensterlisten-Cache aktualisiert wurde — beim Öffnen von Tiley kurz die zuvor vorderste App oben in der Seitenleiste erschien oder gelegentlich ein Fenster ausgewählt wurde, das nicht das vorderste war
+
 ## [4.3.8] - 2026-04-13
 
 ### Hinzugefügt

@@ -13,10 +13,16 @@ extension AppState {
                     continue
                 }
                 await MainActor.run { [weak self] in
-                    self?.lastTargetPID = app.processIdentifier
-                    self?.refreshAccessibilityState()
-                    self?.updateStatusMenu()
-                    self?.scheduleWindowListCacheRefresh()
+                    guard let self else { return }
+                    self.lastTargetPID = app.processIdentifier
+                    // Immediately realign the existing cache against the live
+                    // CG z-order so that, until the debounced background
+                    // refresh completes, the sidebar reflects the current
+                    // ordering across all apps (not just the newly-frontmost).
+                    self.realignCacheWithLiveZOrder()
+                    self.refreshAccessibilityState()
+                    self.updateStatusMenu()
+                    self.scheduleWindowListCacheRefresh()
                 }
             }
         }

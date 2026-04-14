@@ -119,6 +119,73 @@ final class AccessibilityService {
         return app.processIdentifier
     }
 
+    /// Returns the PID of the application currently focused according to
+    /// the Accessibility layer's system-wide element.  Prefer this over
+    /// `NSWorkspace.shared.frontmostApplication` when responding to a
+    /// synchronous event (e.g. a Carbon global hotkey): `NSWorkspace` is
+    /// updated via asynchronous AppKit notifications and can briefly lag
+    /// behind WindowServer, whereas AX reflects the WindowServer state
+    /// more promptly.  Returns nil if AX refuses the query.
+    static func focusedApplicationPID() -> pid_t? {
+        let systemWide = AXUIElementCreateSystemWide()
+        var value: CFTypeRef?
+        let result = AXUIElementCopyAttributeValue(
+            systemWide,
+            kAXFocusedApplicationAttribute as CFString,
+            &value
+        )
+        guard result == .success, let element = value else { return nil }
+        var pid: pid_t = 0
+        guard AXUIElementGetPid(element as! AXUIElement, &pid) == .success else { return nil }
+        return pid
+    }
+
+    /// Returns PIDs of layer-0 on-screen windows in their current CG z-order
+    /// (front-to-back), excluding Tiley's own PID.  This is a cheap CG-only
+    /// query (typically 1–5 ms) that reflects the authoritative z-order
+    /// maintained by WindowServer, with no Accessibility-layer round-trips.
+    /// Use this to cheaply realign a stale cached window list against the
+    /// current frontmost ordering before showing the UI.
+    static func currentZOrderedPIDs() -> [pid_t] {
+        let selfPID = getpid()
+        guard let list = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[CFString: Any]] else { return [] }
+        var seen = Set<pid_t>()
+        var ordered: [pid_t] = []
+        for info in list {
+            guard let layer = info[kCGWindowLayer] as? Int, layer == 0 else { continue }
+            guard let pid = info[kCGWindowOwnerPID] as? pid_t, pid != selfPID else { continue }
+            if seen.insert(pid).inserted {
+                ordered.append(pid)
+            }
+        }
+        return ordered
+    }
+
+    /// Returns CGWindowIDs of layer-0 on-screen windows in their current CG
+    /// z-order (front-to-back), excluding Tiley's own windows.  Unlike
+    /// `currentZOrderedPIDs`, this preserves intra-app z-order — necessary
+    /// when the user raises a non-top window within the same application
+    /// (no `didActivateApplicationNotification` fires, but CG z-order does
+    /// change).
+    static func currentZOrderedWindowIDs() -> [CGWindowID] {
+        let selfPID = getpid()
+        guard let list = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[CFString: Any]] else { return [] }
+        var ordered: [CGWindowID] = []
+        for info in list {
+            guard let layer = info[kCGWindowLayer] as? Int, layer == 0 else { continue }
+            guard let pid = info[kCGWindowOwnerPID] as? pid_t, pid != selfPID else { continue }
+            guard let wid = info[kCGWindowNumber] as? CGWindowID else { continue }
+            ordered.append(wid)
+        }
+        return ordered
+    }
+
     func focusedWindowTarget(preferredPID: pid_t? = nil) throws -> WindowTarget {
         let perfStart = CFAbsoluteTimeGetCurrent()
         guard checkAccess(prompt: false) else {
