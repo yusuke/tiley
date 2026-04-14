@@ -3,6 +3,109 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.3.9</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Добавлен треугольный указатель в виде речевого пузыря на краю главного окна, обращённом к значку в строке меню или Dock, когда включена опция «Показывать рядом со значком при клике»</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена проблема, из-за которой при открытии Tiley сразу после переключения приложений — до обновления фонового кэша списка окон — в верхней части боковой панели ненадолго отображалось ранее активное приложение, а иногда выделялось окно, которое не было самым верхним</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Adicionado um ponteiro triangular estilo balão de fala na borda da janela principal voltada para o ícone da barra de menus ou do Dock quando "Mostrar perto do ícone ao clicar" está ativado</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido um problema em que, ao abrir o Tiley logo após alternar de app e antes que o cache em segundo plano da lista de janelas fosse atualizado, a barra lateral mostrava brevemente no topo o app anteriormente em primeiro plano ou, ocasionalmente, selecionava uma janela que não era a mais à frente</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Aggiunto un puntatore triangolare in stile fumetto sul bordo della finestra principale rivolto verso l'icona della barra dei menu o del Dock quando "Mostra vicino all'icona al clic" è abilitato</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Risolto un problema per cui, aprendo Tiley subito dopo aver cambiato app e prima che la cache dell'elenco finestre in background fosse aggiornata, la barra laterale mostrava brevemente in cima l'app precedentemente in primo piano o talvolta selezionava una finestra diversa da quella in primo piano</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Ajout d'un pointeur triangulaire façon bulle de dialogue sur le bord de la fenêtre principale orienté vers l'icône de la barre de menus ou du Dock lorsque « Afficher près de l'icône au clic » est activé</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction d'un problème où, en ouvrant Tiley juste après avoir changé d'app et avant que le cache de la liste de fenêtres en arrière-plan soit rafraîchi, la barre latérale affichait brièvement l'app précédemment au premier plan en haut, ou sélectionnait parfois une fenêtre qui n'était pas au premier plan</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Añadido un puntero triangular tipo bocadillo en el borde de la ventana principal orientado hacia el icono de la barra de menús o del Dock cuando "Mostrar cerca del icono al hacer clic" está habilitado</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Corregido un problema por el que, al abrir Tiley inmediatamente después de cambiar de app y antes de que se refrescara la caché de la lista de ventanas, la barra lateral mostraba brevemente la app anteriormente en primer plano en la parte superior o, en ocasiones, seleccionaba una ventana que no era la más frontal</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Sprechblasen-Pfeilspitze an der zur Menüleiste bzw. zum Dock-Symbol zeigenden Kante des Hauptfensters hinzugefügt, wenn "Beim Klicken nahe dem Symbol anzeigen" aktiviert ist</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Problem behoben, bei dem unmittelbar nach einem App-Wechsel — bevor der Hintergrund-Fensterlisten-Cache aktualisiert wurde — beim Öffnen von Tiley kurz die zuvor vorderste App oben in der Seitenleiste erschien oder gelegentlich ein Fenster ausgewählt wurde, das nicht das vorderste war</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>啟用「點擊時在圖示附近顯示」選項時，在主視窗朝向選單列或 Dock 圖示的邊緣新增了對話框式三角形指示箭頭</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正切換應用程式後立即開啟 Tiley 時，在背景視窗列表快取更新之前，側邊欄頂端會短暫顯示先前最前面的應用程式，或可能選取非最前面視窗的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>启用"点击时在图标附近显示"选项时，在主窗口朝向菜单栏或 Dock 图标的边缘添加了气泡式三角形指示箭头</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复切换应用后立即打开 Tiley 时，在后台窗口列表缓存刷新之前，侧边栏顶部会短暂显示之前最前面的应用，或者可能选中非最前面窗口的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>"클릭 시 아이콘 근처에 표시" 옵션이 활성화된 경우, 메뉴 막대 또는 Dock 아이콘을 향하는 메인 창 가장자리에 말풍선 모양의 삼각형 포인터를 표시</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>앱을 전환한 직후 백그라운드 창 목록 캐시가 갱신되기 전에 Tiley를 열면 사이드바 상단에 이전에 맨 앞에 있던 앱이 잠시 표시되거나, 맨 앞이 아닌 창이 선택 상태가 되는 경우가 있던 문제 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>「アイコンクリック時にアイコン付近に表示」が有効な場合、メニューバーまたは Dock アイコン側の辺に吹き出し風の三角ポインタを表示するように変更</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>アプリを切り替えた直後にウインドウリストのキャッシュが更新される前に Tiley を表示すると、サイドバー先頭に直前まで最前面だったアプリが一瞬表示されたり、最前面ではないウインドウが選択状態になったりすることがある問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Added a speech-bubble-style triangle pointer to the main window edge facing the menu bar or Dock icon when "Show near icon when clicked" is enabled</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed the sidebar briefly showing the previously frontmost app at the top — and occasionally selecting a non-frontmost window — when Tiley was opened immediately after switching apps, before the background window-list cache had a chance to refresh</li>
+</ul>]]></description>
+            <pubDate>Tue, 14 Apr 2026 14:34:57 +0900</pubDate>
+            <sparkle:version>439</sparkle:version>
+            <sparkle:shortVersionString>4.3.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley-4.3.9.zip" length="5802446" type="application/octet-stream" sparkle:edSignature="33e6hA+N6egPxZ3Wpd/qd21yHbZxcqtM3novIj1aZ2sf49PTdAujFNAYNESd5AZGkwtBEaffQAEL2axOLuv0AQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley439-438.delta" sparkle:deltaFrom="438" length="332090" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="k2fv6M6PFL/8O0wHVw9LioZGUhdAsU4jvc0+DcN/+5/J0taWh6HoJ1l2wLrmEDQ8ajcsyoq75q6Sfthz6XpnAA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley439-437.delta" sparkle:deltaFrom="437" length="386066" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="f3lyeD07maYJdmsKzVw3KkGDuw0SR44Ee2DcMGCXu3XQgI/kxUcXKjKtwsTOwzgSp4gkR41HYzKCOQjDcAwZCw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley439-436.delta" sparkle:deltaFrom="436" length="398486" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zl5svZrkjBBr7GhdfKhDHStvO5Dwrxs2+NCRcanLin4/mYhtKgsI6aFMGj/fmUWO5pLemrMuyQ/Gbq01crqHBQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley439-435.delta" sparkle:deltaFrom="435" length="421986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="/1IrjyO42DNk/mu5JSY85xoxYJy+yWY/ORqMqmmoW//hYOyxT7WVjavIuHWTU38pNC6ehOtouqKBlaRfD8rTDA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley439-434.delta" sparkle:deltaFrom="434" length="431118" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NQRIUO5ToNe0g3K8YvEON5H6FXrbDOyoxXTzEA/tq7YOHfVi+opf93sE7ZZh8bUWkbZYPw1OXnERHS5+ogsxDA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.3.8</title>
             <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
 <ul>
@@ -92,11 +195,91 @@
 <ul>
 <li>Fixed toolbar buttons being disabled on first launch until the window selection was changed in the sidebar</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Animação suave de aparecimento/desaparecimento gradual ao exibir e ocultar a janela de sobreposição usando Core Animation acelerada por GPU</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Os botões da barra de ferramentas ficavam desativados na primeira execução até que a seleção de janela fosse alterada na barra lateral</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Animazione fluida di dissolvenza in entrata/uscita durante la visualizzazione e l'occultamento della finestra overlay tramite Core Animation accelerata dalla GPU</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>I pulsanti della barra degli strumenti erano disabilitati al primo avvio fino a quando non si modificava la selezione della finestra nella barra laterale</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Animation fluide de fondu en entrée/sortie lors de l'affichage et du masquage de la fenêtre superposée grâce à Core Animation accélérée par GPU</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Les boutons de la barre d'outils étaient désactivés au premier lancement tant que la sélection de fenêtre n'était pas modifiée dans la barre latérale</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Animación suave de aparición/desaparición gradual al mostrar y ocultar la ventana superpuesta mediante Core Animation acelerada por GPU</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Los botones de la barra de herramientas estaban desactivados en el primer inicio hasta que se cambiaba la selección de ventana en la barra lateral</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Sanfte Ein-/Ausblendanimation beim Anzeigen und Ausblenden des Overlay-Fensters mittels GPU-beschleunigter Core Animation</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Symbolleisten-Schaltflächen waren beim ersten Start deaktiviert, bis die Fensterauswahl in der Seitenleiste geändert wurde</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>疊加視窗顯示和隱藏時新增了基於 GPU 加速的平滑淡入/淡出動畫</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了首次啟動時在側邊欄更改視窗選擇之前工具列按鈕無法點擊的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>叠加窗口显示和隐藏时添加了基于 GPU 加速的平滑淡入/淡出动画</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了首次启动时在侧边栏更改窗口选择之前工具栏按钮无法点击的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>오버레이 창 표시 및 숨김 시 GPU 가속을 활용한 부드러운 페이드 인/아웃 애니메이션 추가</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>처음 실행 시 사이드바에서 창 선택을 변경하기 전까지 도구 모음 버튼을 누를 수 없던 문제 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>オーバーレイウインドウの表示・非表示時に GPU アクセラレーションによる滑らかなフェードイン・フェードアウトアニメーションを追加</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>起動直後にサイドバーでウインドウの選択を変更するまでツールバーのボタンが押せなかった問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Added smooth fade-in/fade-out animation when showing and hiding the overlay window using GPU-accelerated Core Animation</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed toolbar buttons being disabled on first launch until the window selection was changed in the sidebar</li>
+</ul>]]></description>
             <pubDate>Mon, 13 Apr 2026 00:14:30 +0900</pubDate>
             <sparkle:version>438</sparkle:version>
             <sparkle:shortVersionString>4.3.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.8/Tiley-4.3.8.zip" length="5781508" type="application/octet-stream" sparkle:edSignature="0Fn7yZmaK6SvHOogTt9+pzzKTaK10yGp6nhYmyvBz1s7a7jzDxmfpkz8NnVHsfl5KkQgK6e6YteoTqpuV7TKCQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley-4.3.8.zip" length="5781508" type="application/octet-stream" sparkle:edSignature="0Fn7yZmaK6SvHOogTt9+pzzKTaK10yGp6nhYmyvBz1s7a7jzDxmfpkz8NnVHsfl5KkQgK6e6YteoTqpuV7TKCQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.8/Tiley438-437.delta" sparkle:deltaFrom="437" length="308462" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="duGeUXyojxtmsuE4ANwAhr5OtDtaoij+pb9lCSd+YONiqav7vaFx3ThBa6qGgJSJq4SjvBgj2QmdbOE2Rhl7Ag=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.8/Tiley438-436.delta" sparkle:deltaFrom="436" length="331206" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nOdMTiimUioYNBWj7IRzSk1+TDBCGG783F0SR206WwIIiGqsIb+f1is0jSr6FOclCYO3IOQmjiTJwdJWOX3CDA=="/>
@@ -191,156 +374,57 @@
 <ul>
 <li>Significantly improved overlay window open speed by deferring heavy operations (Accessibility/CoreGraphics queries, layout preview construction) to after the window is visible, and keeping the pre-cached window list across sessions</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Melhoria significativa na velocidade de abertura da janela de sobreposição. Operações pesadas (consultas Accessibility/CoreGraphics, construção da pré-visualização de layout) são executadas de forma adiada após a exibição da janela, e a lista de janelas pré-armazenada em cache é mantida entre sessões</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Miglioramento significativo della velocità di apertura della finestra overlay. Le operazioni pesanti (query Accessibility/CoreGraphics, costruzione dell'anteprima layout) vengono eseguite in modo differito dopo la visualizzazione della finestra, e la lista finestre pre-memorizzata viene mantenuta tra le sessioni</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Amélioration significative de la vitesse d'ouverture de la fenêtre superposée. Les opérations lourdes (requêtes Accessibility/CoreGraphics, construction de l'aperçu de disposition) sont différées après l'affichage de la fenêtre, et la liste de fenêtres pré-mise en cache est conservée entre les sessions</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Mejora significativa en la velocidad de apertura de la ventana superpuesta. Las operaciones pesadas (consultas de Accessibility/CoreGraphics, construcción de vista previa de diseño) se ejecutan de forma diferida tras mostrar la ventana, y la lista de ventanas precacheada se mantiene entre sesiones</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Öffnungsgeschwindigkeit des Overlay-Fensters deutlich verbessert. Aufwendige Operationen (Accessibility-/CoreGraphics-Abfragen, Layout-Vorschau-Aufbau) werden nun erst nach dem Fensteraufbau ausgeführt, und die vorab zwischengespeicherte Fensterliste wird sitzungsübergreifend beibehalten</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>大幅提升疊加視窗的開啟速度。將耗時操作（Accessibility/CoreGraphics 查詢、佈局預覽建構）延遲到視窗顯示之後執行，並在工作階段間保留預快取的視窗列表</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>大幅提升叠加窗口的打开速度。将耗时操作（Accessibility/CoreGraphics 查询、布局预览构建）延迟到窗口显示之后执行，并在会话间保留预缓存的窗口列表</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>오버레이 창 표시 속도를 대폭 개선. 무거운 작업(Accessibility/CoreGraphics 쿼리, 레이아웃 미리보기 구성)을 창 표시 이후로 지연 실행하고, 사전 캐시된 창 목록을 세션 간에 유지하도록 변경</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>オーバーレイウインドウの表示速度を大幅に改善。重い処理（Accessibility/CoreGraphicsクエリ、レイアウトプレビュー構築）をウインドウ表示後に遅延実行し、事前キャッシュされたウインドウリストをセッション間で保持するように変更</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Significantly improved overlay window open speed by deferring heavy operations (Accessibility/CoreGraphics queries, layout preview construction) to after the window is visible, and keeping the pre-cached window list across sessions</li>
+</ul>]]></description>
             <pubDate>Fri, 10 Apr 2026 13:25:08 +0900</pubDate>
             <sparkle:version>437</sparkle:version>
             <sparkle:shortVersionString>4.3.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.8/Tiley-4.3.7.zip" length="5769401" type="application/octet-stream" sparkle:edSignature="lfy7TTIUiY+SgLjFwaPQQRXKIYsDgu62lIHW8WDEk20NxHyX1g11KZLaMy+RQDbkTZjYlN+lHTXXOS+W1oIqAw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.9/Tiley-4.3.7.zip" length="5769401" type="application/octet-stream" sparkle:edSignature="lfy7TTIUiY+SgLjFwaPQQRXKIYsDgu62lIHW8WDEk20NxHyX1g11KZLaMy+RQDbkTZjYlN+lHTXXOS+W1oIqAw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-436.delta" sparkle:deltaFrom="436" length="246242" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="n1SeFH/txVcCnXbdulsNXmohILeUsr1NwH/0nWkPkKOtUl+bhK8OMjqjbQmXXAsZlRveObEBIqLek0yi0yWiCg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-435.delta" sparkle:deltaFrom="435" length="294326" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Vab0fM4fqWBZGvRdq1SiD32BxAC6DW4sjxO1FvDxcFwhOFx06ntbWnmth+cve+FiglsJJKLs5G6FpWrkDgsICA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-434.delta" sparkle:deltaFrom="434" length="305002" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="PXEdJ7sp5gPrVONHrl56wWB5QAIllCSyL2OR1uN2gGmjx8Uz891zSty08CWsM35qVryszOid6C/YSLCneezPBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-433.delta" sparkle:deltaFrom="433" length="324270" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0wucXC0DG8xh8KUhF/i+RkUEvkXyMFo+vH1ZF+6wb03jSVliKLjZp8n7ACsWDGT0mE2GsRIuZo1y7CihWp3iDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.7/Tiley437-432.delta" sparkle:deltaFrom="432" length="357306" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ytLtQGpAwLJ4eebvdok/fNuW9IqrESTQtTZRIEiyb8jcbijphhsgQjb84rS6SBzEqgGh24U9mWx6eYQgdlpXDw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.3.6</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Добавлена опция отображения окна Tiley рядом с иконкой строки меню или Dock при нажатии (включено по умолчанию)</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Adicionada opção para mostrar a janela do Tiley perto do ícone da barra de menus ou do Dock ao clicar (ativada por padrão)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Aggiunta opzione per mostrare la finestra di Tiley vicino all'icona della barra dei menu o del Dock al clic (attiva per impostazione predefinita)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Ajout d'une option pour afficher la fenêtre Tiley près de l'icône de la barre de menus ou du Dock au clic (activée par défaut)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Añadida opción para mostrar la ventana de Tiley cerca del icono de la barra de menús o del Dock al hacer clic (activada por defecto)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Option hinzugefügt, das Tiley-Fenster beim Klick neben dem Menüleisten- oder Dock-Symbol anzuzeigen (standardmäßig aktiviert)</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增點擊選單列或 Dock 圖示時在圖示附近顯示視窗的選項（預設啟用）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增点击菜单栏或 Dock 图标时在图标附近显示窗口的选项（默认启用）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>메뉴 바 또는 Dock 아이콘 클릭 시 아이콘 근처에 창을 표시하는 옵션 추가 (기본 활성화)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>メニューバーまたはDockアイコンをクリック時、アイコン付近にウインドウを表示するオプションを追加（デフォルトで有効）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Added option to show Tiley window near the menu bar or Dock icon when clicked (enabled by default)</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Adicionada opção para mostrar a janela do Tiley perto do ícone da barra de menus ou do Dock ao clicar (ativada por padrão)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Aggiunta opzione per mostrare la finestra di Tiley vicino all'icona della barra dei menu o del Dock al clic (attiva per impostazione predefinita)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Ajout d'une option pour afficher la fenêtre Tiley près de l'icône de la barre de menus ou du Dock au clic (activée par défaut)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Añadida opción para mostrar la ventana de Tiley cerca del icono de la barra de menús o del Dock al hacer clic (activada por defecto)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Option hinzugefügt, das Tiley-Fenster beim Klick neben dem Menüleisten- oder Dock-Symbol anzuzeigen (standardmäßig aktiviert)</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增點擊選單列或 Dock 圖示時在圖示附近顯示視窗的選項（預設啟用）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增点击菜单栏或 Dock 图标时在图标附近显示窗口的选项（默认启用）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>메뉴 바 또는 Dock 아이콘 클릭 시 아이콘 근처에 창을 표시하는 옵션 추가 (기본 활성화)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>メニューバーまたはDockアイコンをクリック時、アイコン付近にウインドウを表示するオプションを追加（デフォルトで有効）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Added option to show Tiley window near the menu bar or Dock icon when clicked (enabled by default)</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Adicionada opção para mostrar a janela do Tiley perto do ícone da barra de menus ou do Dock ao clicar (ativada por padrão)</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Aggiunta opzione per mostrare la finestra di Tiley vicino all'icona della barra dei menu o del Dock al clic (attiva per impostazione predefinita)</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Ajout d'une option pour afficher la fenêtre Tiley près de l'icône de la barre de menus ou du Dock au clic (activée par défaut)</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Añadida opción para mostrar la ventana de Tiley cerca del icono de la barra de menús o del Dock al hacer clic (activada por defecto)</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Option hinzugefügt, das Tiley-Fenster beim Klick neben dem Menüleisten- oder Dock-Symbol anzuzeigen (standardmäßig aktiviert)</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增點擊選單列或 Dock 圖示時在圖示附近顯示視窗的選項（預設啟用）</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增点击菜单栏或 Dock 图标时在图标附近显示窗口的选项（默认启用）</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>메뉴 바 또는 Dock 아이콘 클릭 시 아이콘 근처에 창을 표시하는 옵션 추가 (기본 활성화)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>メニューバーまたはDockアイコンをクリック時、アイコン付近にウインドウを表示するオプションを追加（デフォルトで有効）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>Added option to show Tiley window near the menu bar or Dock icon when clicked (enabled by default)</li>
-</ul>]]></description>
-            <pubDate>Fri, 10 Apr 2026 12:06:41 +0900</pubDate>
-            <sparkle:version>436</sparkle:version>
-            <sparkle:shortVersionString>4.3.6</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.8/Tiley-4.3.6.zip" length="5762485" type="application/octet-stream" sparkle:edSignature="+UjLUolb6bEG2bilnQHgdByOKbxLrQXRWafW4MmlidmeRFEXsqxpQwnLeXr6v/+ImohUxsVAAG6viKsE4sO6DA=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley436-435.delta" sparkle:deltaFrom="435" length="250526" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vChTUrzzR+a2jDjTxWg3Vipgvv+AzaAC0d/ms0ThQIw94RA/hndZPge19zDZliohgNNxWqW3Jf7/cavn3WVvCA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley436-434.delta" sparkle:deltaFrom="434" length="260538" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CAPeitCNz/JhUDG0ozBtFPifDlKltd1z2nQhJIzN+vM2K45XrIowfSp0J0n2w8DqbRpod/a+XV1rmq0bFczgDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley436-433.delta" sparkle:deltaFrom="433" length="288622" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="q+W4K//sjBRMhvsPrPMurIH/MyK/n9qmqsHeMy613J4NwlIHsqeZSVV3PUM7nIsh1VsPH95vkH96aYhCJkvIAw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley436-432.delta" sparkle:deltaFrom="432" length="330634" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kKstG95zfPrbAQWKUI/Ixj2Je+GPbmyAoavu5SjGYDUmsYmJroyvBDqvEBXfrjIXSc8s15o75qiYiFCDa74sCA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.3.6/Tiley436-431.delta" sparkle:deltaFrom="431" length="335478" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vmww2dc1irO1muNEwh5EmtDRwuhisoTS83HfYkbnxjgXQyZliCV5jKXBJtlDJGRxBBvQwrgvjPjNnw9kaYvmCA=="/>
             </sparkle:deltas>
         </item>
     </channel>
