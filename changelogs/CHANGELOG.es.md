@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.9] - 2026-04-14
+
 ### Añadido
 
 - Añadido un puntero triangular tipo bocadillo en el borde de la ventana principal orientado hacia el icono de la barra de menús o del Dock cuando "Mostrar cerca del icono al hacer clic" está habilitado

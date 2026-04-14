@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.3.9] - 2026-04-14
+
 ### Added
 
 - Added a speech-bubble-style triangle pointer to the main window edge facing the menu bar or Dock icon when "Show near icon when clicked" is enabled
@@ -702,7 +704,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.8...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.9...HEAD
+[4.3.9]: https://github.com/yusuke/tiley/releases/tag/v4.3.9
 [4.3.8]: https://github.com/yusuke/tiley/releases/tag/v4.3.8
 [4.3.7]: https://github.com/yusuke/tiley/releases/tag/v4.3.7
 [4.3.6]: https://github.com/yusuke/tiley/releases/tag/v4.3.6

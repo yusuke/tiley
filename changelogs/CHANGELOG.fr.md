@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.3.9] - 2026-04-14
+
 ### Ajouté
 
 - Ajout d'un pointeur triangulaire façon bulle de dialogue sur le bord de la fenêtre principale orienté vers l'icône de la barre de menus ou du Dock lorsque « Afficher près de l'icône au clic » est activé
