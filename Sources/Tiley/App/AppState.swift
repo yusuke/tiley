@@ -6,6 +6,11 @@ import Sparkle
 import SwiftUI
 import TelemetryDeck
 
+/// Which edge of the window the speech-bubble arrow should point from.
+enum BubbleArrowEdge: Int {
+    case top, bottom, leading, trailing
+}
+
 /// Captured at module-load time, before Tiley becomes the frontmost app.
 /// Force-evaluated in AppDelegate init via `AppState.captureLaunchTimeFrontmostPID()`.
 private nonisolated(unsafe) var launchTimeFrontmostPID: pid_t?
@@ -159,6 +164,12 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var triggerIconCenter: NSPoint?
     /// The display ID of the screen where the icon trigger occurred.
     @ObservationIgnored var triggerIconDisplayID: CGDirectDisplayID?
+
+    /// Which edge of the main window the bubble arrow should appear on.
+    /// Set by MainWindowController when positioning near a trigger icon; nil when no arrow.
+    var bubbleArrowEdge: BubbleArrowEdge? = nil
+    /// Fraction (0–1) along the arrow edge where the arrow tip is positioned.
+    var bubbleArrowFraction: CGFloat = 0.5
     @ObservationIgnored var screenChangeTask: Task<Void, Never>?
     @ObservationIgnored var isSwitchingActivationPolicy = false
     @ObservationIgnored var isRecreatingWindows = false
@@ -1107,6 +1118,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func cancelLayoutGrid() {
         removeModifierReleaseMonitor()
+        bubbleArrowEdge = nil
         // Don't clear isShowingLayoutGrid / activeLayoutTarget / preview overlay
         // here — hide()'s fade-out completion calls handleMainWindowHidden()
         // which handles all of that.  Clearing them now would cause a brief

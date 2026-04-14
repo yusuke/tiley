@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Aggiunto un puntatore triangolare in stile fumetto sul bordo della finestra principale rivolto verso l'icona della barra dei menu o del Dock quando "Mostra vicino all'icona al clic" è abilitato
+
 ## [4.3.8] - 2026-04-13
 
 ### Aggiunto

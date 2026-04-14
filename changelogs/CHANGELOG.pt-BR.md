@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Adicionado um ponteiro triangular estilo balão de fala na borda da janela principal voltada para o ícone da barra de menus ou do Dock quando "Mostrar perto do ícone ao clicar" está ativado
+
 ## [4.3.8] - 2026-04-13
 
 ### Adicionado

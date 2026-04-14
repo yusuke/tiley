@@ -2,8 +2,97 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// A rounded rectangle with an optional triangular speech-bubble pointer on one edge.
+/// When used as a clip shape the arrow protrudes into the padding area of the window.
+private struct BubbleShape: Shape {
+    let cornerRadius: CGFloat
+    let arrowEdge: BubbleArrowEdge
+    /// 0–1 fraction along the arrow edge where the tip is located.
+    let arrowFraction: CGFloat
+    let arrowWidth: CGFloat
+    let arrowHeight: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        // The body rect is inset on the arrow edge so the arrow extends into that margin.
+        var body = rect
+        switch arrowEdge {
+        case .top:    body.origin.y += arrowHeight; body.size.height -= arrowHeight
+        case .bottom: body.size.height -= arrowHeight
+        case .leading:  body.origin.x += arrowHeight; body.size.width -= arrowHeight
+        case .trailing: body.size.width -= arrowHeight
+        }
+
+        let cr = min(cornerRadius, min(body.width, body.height) / 2)
+        let halfArrow = arrowWidth / 2
+
+        var path = Path()
+
+        // --- Top edge ---
+        path.move(to: CGPoint(x: body.minX + cr, y: body.minY))
+        if arrowEdge == .top {
+            let tipX = body.minX + body.width * arrowFraction
+            let leftX = max(tipX - halfArrow, body.minX + cr)
+            let rightX = min(tipX + halfArrow, body.maxX - cr)
+            path.addLine(to: CGPoint(x: leftX, y: body.minY))
+            path.addLine(to: CGPoint(x: tipX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rightX, y: body.minY))
+        }
+        path.addLine(to: CGPoint(x: body.maxX - cr, y: body.minY))
+        // Top-right corner
+        path.addArc(center: CGPoint(x: body.maxX - cr, y: body.minY + cr),
+                     radius: cr, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
+
+        // --- Right (trailing) edge ---
+        if arrowEdge == .trailing {
+            let tipY = body.minY + body.height * arrowFraction
+            let topY = max(tipY - halfArrow, body.minY + cr)
+            let bottomY = min(tipY + halfArrow, body.maxY - cr)
+            path.addLine(to: CGPoint(x: body.maxX, y: topY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: tipY))
+            path.addLine(to: CGPoint(x: body.maxX, y: bottomY))
+        }
+        path.addLine(to: CGPoint(x: body.maxX, y: body.maxY - cr))
+        // Bottom-right corner
+        path.addArc(center: CGPoint(x: body.maxX - cr, y: body.maxY - cr),
+                     radius: cr, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
+
+        // --- Bottom edge ---
+        if arrowEdge == .bottom {
+            let tipX = body.minX + body.width * arrowFraction
+            let rightX = min(tipX + halfArrow, body.maxX - cr)
+            let leftX = max(tipX - halfArrow, body.minX + cr)
+            path.addLine(to: CGPoint(x: rightX, y: body.maxY))
+            path.addLine(to: CGPoint(x: tipX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: leftX, y: body.maxY))
+        }
+        path.addLine(to: CGPoint(x: body.minX + cr, y: body.maxY))
+        // Bottom-left corner
+        path.addArc(center: CGPoint(x: body.minX + cr, y: body.maxY - cr),
+                     radius: cr, startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
+
+        // --- Left (leading) edge ---
+        if arrowEdge == .leading {
+            let tipY = body.minY + body.height * arrowFraction
+            let bottomY = min(tipY + halfArrow, body.maxY - cr)
+            let topY = max(tipY - halfArrow, body.minY + cr)
+            path.addLine(to: CGPoint(x: body.minX, y: bottomY))
+            path.addLine(to: CGPoint(x: rect.minX, y: tipY))
+            path.addLine(to: CGPoint(x: body.minX, y: topY))
+        }
+        path.addLine(to: CGPoint(x: body.minX, y: body.minY + cr))
+        // Top-left corner
+        path.addArc(center: CGPoint(x: body.minX + cr, y: body.minY + cr),
+                     radius: cr, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+
+        path.closeSubpath()
+        return path
+    }
+}
+
 struct MainWindowView: View {
     private static let windowCornerRadius: CGFloat = 20
+    private static let bubbleArrowHeight: CGFloat = 12
+    private static let bubbleArrowWidth: CGFloat = 24
     private static let layoutPanelHorizontalPadding: CGFloat = 8
     private static let layoutGridAspectHeightRatio: CGFloat = 0.75
     private static let footerBottomPadding: CGFloat = 8
@@ -599,18 +688,37 @@ struct MainWindowView: View {
         return medianLuminance > 0.7125 ? .black : .white
     }
 
+    /// Edge insets for the bubble arrow, applied as content padding so the arrow
+    /// area doesn't overlap interactive content.
+    private var bubbleArrowInsets: EdgeInsets {
+        guard let edge = appState.bubbleArrowEdge else { return EdgeInsets() }
+        let h = Self.bubbleArrowHeight
+        switch edge {
+        case .top:      return EdgeInsets(top: h, leading: 0, bottom: 0, trailing: 0)
+        case .bottom:   return EdgeInsets(top: 0, leading: 0, bottom: h, trailing: 0)
+        case .leading:  return EdgeInsets(top: 0, leading: h, bottom: 0, trailing: 0)
+        case .trailing: return EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: h)
+        }
+    }
+
     var body: some View {
         GeometryReader { geometry in
+            let insets = bubbleArrowInsets
+            let contentSize = CGSize(
+                width: geometry.size.width - insets.leading - insets.trailing,
+                height: geometry.size.height - insets.top - insets.bottom
+            )
             ZStack(alignment: .topLeading) {
                 // Window background — also acts as a drag handle for any area
                 // not covered by interactive controls (buttons, grid, list rows).
                 WindowDragArea()
                     .background(Color(nsColor: .windowBackgroundColor).opacity(0.86))
 
-                layoutGridPanel(size: geometry.size)
+                layoutGridPanel(size: contentSize)
+                    .padding(insets)
             }
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)
-            .clipShape(RoundedRectangle(cornerRadius: Self.windowCornerRadius, style: .continuous))
+            .clipShape(windowClipShape(size: geometry.size))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
@@ -1119,6 +1227,21 @@ struct MainWindowView: View {
         }
         .frame(width: compositeWidth, height: compositeHeight)
         .clipShape(compositeClipShape)
+    }
+
+    /// Returns the clip shape for the main window, optionally with a speech-bubble arrow.
+    private func windowClipShape(size: CGSize) -> AnyShape {
+        if let edge = appState.bubbleArrowEdge {
+            return AnyShape(BubbleShape(
+                cornerRadius: Self.windowCornerRadius,
+                arrowEdge: edge,
+                arrowFraction: appState.bubbleArrowFraction,
+                arrowWidth: Self.bubbleArrowWidth,
+                arrowHeight: Self.bubbleArrowHeight
+            ))
+        } else {
+            return AnyShape(RoundedRectangle(cornerRadius: Self.windowCornerRadius, style: .continuous))
+        }
     }
 
     /// Returns the clip shape for the screen composite view.

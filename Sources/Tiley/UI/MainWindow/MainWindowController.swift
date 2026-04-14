@@ -377,9 +377,15 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
            screen?.displayID == iconDisplayID {
             let origin = iconAnchoredOrigin(for: targetSize, iconCenter: iconCenter, visibleFrame: visibleFrame, screenFrame: screenFrame)
             window.setFrameOrigin(origin)
+            // Compute bubble arrow edge and fraction for the SwiftUI clip shape.
+            computeBubbleArrow(origin: origin, size: targetSize, iconCenter: iconCenter, visibleFrame: visibleFrame)
             appState.triggerIconCenter = nil
             appState.triggerIconDisplayID = nil
         } else {
+            // Do NOT clear appState.bubbleArrowEdge here — with multiple displays,
+            // another controller (the one on the icon's display) may have just
+            // set it. AppState.toggleOverlay() resets it at the start of each
+            // open cycle, so we only need to set it in the if-branch above.
             let origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
             window.setFrameOrigin(origin)
         }
@@ -421,6 +427,37 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         originX = min(max(originX, minX), maxX)
         originY = min(max(originY, minY), maxY)
         return NSPoint(x: originX, y: originY)
+    }
+
+    /// Determine which edge the bubble arrow should appear on and where along that edge,
+    /// based on the final window origin and the icon center in screen coordinates.
+    /// AppKit Y is bottom-up; SwiftUI Y is top-down, so vertical fractions are flipped.
+    private func computeBubbleArrow(origin: NSPoint, size: NSSize, iconCenter: NSPoint, visibleFrame: CGRect) {
+        guard let appState else { return }
+        let edge: BubbleArrowEdge
+        var fraction: CGFloat
+
+        if iconCenter.y >= visibleFrame.maxY {
+            // Menu bar — arrow on the top edge (SwiftUI top = AppKit maxY)
+            edge = .top
+            fraction = (iconCenter.x - origin.x) / size.width
+        } else if iconCenter.y <= visibleFrame.minY {
+            // Dock at bottom — arrow on the bottom edge
+            edge = .bottom
+            fraction = (iconCenter.x - origin.x) / size.width
+        } else if iconCenter.x >= visibleFrame.maxX {
+            // Dock on right — arrow on the trailing edge
+            edge = .trailing
+            // AppKit Y is bottom-up; SwiftUI fraction from top
+            fraction = 1.0 - (iconCenter.y - origin.y) / size.height
+        } else {
+            // Dock on left — arrow on the leading edge
+            edge = .leading
+            fraction = 1.0 - (iconCenter.y - origin.y) / size.height
+        }
+        fraction = min(max(fraction, 0.1), 0.9)
+        appState.bubbleArrowEdge = edge
+        appState.bubbleArrowFraction = fraction
     }
 
     private func currentVisibleFrame(for window: NSWindow, preferredScreen: NSScreen? = nil) -> CGRect {

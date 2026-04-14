@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added a speech-bubble-style triangle pointer to the main window edge facing the menu bar or Dock icon when "Show near icon when clicked" is enabled
+
 ## [4.3.8] - 2026-04-13
 
 ### Added

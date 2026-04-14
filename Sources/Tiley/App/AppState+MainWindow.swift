@@ -246,6 +246,13 @@ extension AppState {
 
     func openMainWindow() {
         debugLog("openMainWindow start (isShowingLayoutGrid=\(isShowingLayoutGrid ? 1 : 0))")
+        // Reset any stale bubble arrow state from a previous open cycle.
+        // If this open was triggered by an icon click, triggerIconCenter is set
+        // and MainWindowController.positionWindow() will set bubbleArrowEdge again.
+        // Otherwise (global shortcut, settings close, etc.), no arrow should appear.
+        if triggerIconCenter == nil {
+            bubbleArrowEdge = nil
+        }
         if isShowingLayoutGrid {
             NSApp.activate(ignoringOtherApps: true)
             openAllScreenWindows()

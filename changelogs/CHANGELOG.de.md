@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Sprechblasen-Pfeilspitze an der zur Menüleiste bzw. zum Dock-Symbol zeigenden Kante des Hauptfensters hinzugefügt, wenn "Beim Klicken nahe dem Symbol anzeigen" aktiviert ist
+
 ## [4.3.8] - 2026-04-13
 
 ### Hinzugefügt
