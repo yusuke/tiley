@@ -1282,7 +1282,9 @@ final class AppState: NSObject, NSMenuDelegate {
 
     func cancelLayoutGrid() {
         removeModifierReleaseMonitor()
-        bubbleArrowEdge = nil
+        // Don't clear bubbleArrowEdge here — let it stay visible during the
+        // fade-out animation.  handleMainWindowHidden() clears it after the
+        // fade completes.
         // Don't clear isShowingLayoutGrid / activeLayoutTarget / preview overlay
         // here — hide()'s fade-out completion calls handleMainWindowHidden()
         // which handles all of that.  Clearing them now would cause a brief

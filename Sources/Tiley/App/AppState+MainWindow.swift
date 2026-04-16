@@ -242,6 +242,7 @@ extension AppState {
         clearResizabilityCache()
         clearWindowCyclingState()
         registerAllHotKeys()
+        bubbleArrowEdge = nil
         if !NSApp.isActive {
             refocusLastTargetApp()
         }
