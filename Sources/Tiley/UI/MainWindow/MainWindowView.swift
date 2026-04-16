@@ -1738,7 +1738,7 @@ struct MainWindowView: View {
                             proxy.scrollTo("window-\(newIndex)", anchor: .center)
                         }
                     }
-                    .onChange(of: appState.windowTargetListVersion) { _, _ in
+                    .onChange(of: appState.windowTargetListVersion, initial: true) { _, _ in
                         // When the window list is populated (e.g. after Phase 2
                         // of toggleOverlay), sync sidebarSelection if it hasn't
                         // been set yet so toolbar buttons are enabled.
