@@ -1,11 +1,16 @@
 import SwiftUI
 
 struct MiniatureWindowView: View {
+    /// Corner radius as a fraction of `min(width, height)`.
+    static let cornerRadiusFraction: CGFloat = 0.028
+
     let titleBarHeight: CGFloat
     var appIcon: NSImage?
     var appName: String?
     var windowTitle: String?
     var cornerRadiusOverride: CGFloat?
+    /// Optional tint color applied to the window body, title bar, and border.
+    var tintColor: Color?
     @Environment(\.colorScheme) private var colorScheme
 
     private var titleBarText: String? {
@@ -25,7 +30,7 @@ struct MiniatureWindowView: View {
         GeometryReader { geometry in
             let w = geometry.size.width
             let h = geometry.size.height
-            let cornerRadius = cornerRadiusOverride ?? max(2, min(w, h) * 0.02)
+            let cornerRadius = cornerRadiusOverride ?? max(2, min(w, h) * Self.cornerRadiusFraction)
             let buttonDiameter = max(2, titleBarHeight * 0.38)
             let buttonSpacing = buttonDiameter * 0.55
             let buttonLeftPadding = buttonDiameter * 0.8
@@ -42,7 +47,8 @@ struct MiniatureWindowView: View {
                         // Title bar fill
                         ZStack {
                             Rectangle()
-                                .fill(titleBarFill)
+                                .fill(titleBarWhiteOverlay)
+                                .overlay { Rectangle().fill(titleBarFill) }
                             // Window title centered in title bar with app icon
                             if showButtons {
                                 HStack(spacing: titleBarFontSize * 0.4) {
@@ -100,25 +106,47 @@ struct MiniatureWindowView: View {
     }
 
     private var bodyFill: Color {
-        colorScheme == .dark
+        if let tint = tintColor {
+            return tint.opacity(colorScheme == .dark ? 0.35 : 0.30)
+        }
+        return colorScheme == .dark
             ? Color.white.opacity(0.08)
             : Color.white.opacity(0.45)
     }
 
+    /// When tinted, the title bar uses a white base with a light tint overlay
+    /// to keep it visually lighter than the body.
     private var titleBarFill: Color {
-        colorScheme == .dark
+        if let tint = tintColor {
+            return tint.opacity(colorScheme == .dark ? 0.15 : 0.10)
+        }
+        return colorScheme == .dark
             ? Color.white.opacity(0.14)
             : Color.white.opacity(0.65)
     }
 
+    /// Additional white overlay applied to the title bar when tinted.
+    private var titleBarWhiteOverlay: Color {
+        if tintColor != nil {
+            return Color.white.opacity(colorScheme == .dark ? 0.12 : 0.50)
+        }
+        return .clear
+    }
+
     private var dividerColor: Color {
-        colorScheme == .dark
+        if tintColor != nil {
+            return .clear
+        }
+        return colorScheme == .dark
             ? Color.white.opacity(0.12)
             : Color.black.opacity(0.10)
     }
 
     private var borderColor: Color {
-        colorScheme == .dark
+        if let tint = tintColor {
+            return tint.opacity(colorScheme == .dark ? 0.70 : 0.60)
+        }
+        return colorScheme == .dark
             ? Color.white.opacity(0.20)
             : Color.black.opacity(0.18)
     }

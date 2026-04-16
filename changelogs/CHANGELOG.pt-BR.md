@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Melhoria das visualizações de janelas em miniatura na grade: ao passar o mouse e arrastar, são exibidas janelas em miniatura coloridas em vez de retângulos de cor sólida, telas secundárias exibem o mesmo estilo de janela em miniatura da tela principal, e as células da grade permanecem visíveis durante o arrasto
+
 ### Corrigido
 
 - Corrigido o triângulo do balão de fala que desaparecia e a janela que se deslocava para cima antes da animação de esmaecimento ao fechar o Tiley clicando no ícone da barra de menus. O triângulo agora permanece visível durante o esmaecimento, igual ao comportamento ao clicar em outra janela

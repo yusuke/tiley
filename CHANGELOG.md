@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Refined miniature window previews on the grid: hover and drag selections now display tinted miniature windows instead of plain colored rectangles, secondary display grids show the same miniature window style as the primary display, and grid cells remain visible underneath during drag
+
 ### Fixed
 
 - Fixed the speech-bubble triangle pointer disappearing and the window shifting up before the fade-out animation when dismissing Tiley by clicking the menu bar icon; the triangle now stays visible during the fade-out, matching the behavior when clicking another window

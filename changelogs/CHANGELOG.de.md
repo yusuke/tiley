@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- Miniatur-Fenstervorschauen im Raster verbessert: Beim Hover und Ziehen werden nun getönte Miniaturfenster statt einfarbiger Rechtecke angezeigt, sekundäre Bildschirme zeigen den gleichen Miniaturfensterstil wie der primäre Bildschirm, und Rasterzellen bleiben beim Ziehen sichtbar
+
 ### Behoben
 
 - Das Sprechblasen-Dreieck verschwand und das Fenster verschob sich nach oben, bevor die Ausblend-Animation begann, wenn Tiley durch Klick auf das Menüleistensymbol geschlossen wurde. Das Dreieck bleibt nun während des Ausblendens sichtbar, wie beim Schließen durch Klick auf ein anderes Fenster

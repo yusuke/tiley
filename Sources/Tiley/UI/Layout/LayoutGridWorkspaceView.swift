@@ -14,6 +14,8 @@ struct LayoutGridWorkspaceView: View {
     /// composite view renders the wallpaper at a larger scale).
     var showDesktopPicture: Bool = true
     var windowFrameRelative: WindowFrameRelative?
+    /// When false, the static miniature window showing the current window position is hidden.
+    var showStaticWindowPreview: Bool = true
     /// Resize preview frame shown during resize menu hover.
     var resizePreviewRelativeFrame: WindowFrameRelative?
     /// Insets from grid edges that correspond to physical screen edges (not menu bar/Dock).
@@ -66,7 +68,8 @@ struct LayoutGridWorkspaceView: View {
 
                 // Miniature window showing current window position
                 // Hidden when highlight window info is shown or resize preview is active.
-                if !isDragDisabled, highlightWindowInfo.isEmpty, resizePreviewRelativeFrame == nil,
+                if showStaticWindowPreview,
+                   !isDragDisabled, highlightWindowInfo.isEmpty, resizePreviewRelativeFrame == nil,
                    let wf = windowFrameRelative, wf.width > 0, wf.height > 0 {
                     let winW = wf.width * geometry.size.width
                     let winH = wf.height * geometry.size.height
@@ -108,25 +111,28 @@ struct LayoutGridWorkspaceView: View {
                 ForEach(0..<rows, id: \.self) { row in
                     ForEach(0..<columns, id: \.self) { column in
                         let frame = rectForCell(row: row, column: column, width: cellWidth, height: cellHeight)
-                        let isInSelection = isSelected(row: row, column: column)
+                        // When a miniature window is overlaid, keep grid cells visible under the drag selection.
+                        let isInSelection = windowFrameRelative == nil && isSelected(row: row, column: column)
                         let isInHighlight = isHighlighted(row: row, column: column)
                         let isInCommitted = isInCommittedSelection(row: row, column: column)
                         let isInMultiHighlight = isInHighlightSelections(row: row, column: column)
                         if !isInSelection && !isInHighlight && !isInCommitted && !isInMultiHighlight {
                             let hovered = isHovered(row: row, column: column)
+                            // Suppress hover fill when a miniature window will be overlaid on this cell.
+                            let showHoverFill = hovered && windowFrameRelative == nil
                             let nextIndex = committedSelections.count
-                            let useIndexedHover = hovered && onDeleteSelection != nil
+                            let useIndexedHover = showHoverFill && onDeleteSelection != nil
                             RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
                                 .fill(useIndexedHover
                                       ? ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme).opacity(0.5)
-                                      : hovered
+                                      : showHoverFill
                                       ? ThemeColors.gridCellHoverFill(for: colorScheme)
                                       : ThemeColors.gridCellFill(for: colorScheme))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
                                         .stroke(useIndexedHover
                                                 ? ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme).opacity(0.5)
-                                                : hovered
+                                                : showHoverFill
                                                 ? ThemeColors.gridCellHoverBorder(for: colorScheme)
                                                 : ThemeColors.gridCellBorder(for: colorScheme), lineWidth: 1.5)
                                 )
@@ -147,18 +153,19 @@ struct LayoutGridWorkspaceView: View {
                    committedSelections.isEmpty,
                    let wf = windowFrameRelative {
                     let frame = rectForCell(row: hover.row, column: hover.column, width: cellWidth, height: cellHeight)
+                        .insetBy(dx: 1, dy: 1)
                     let menuBarFraction = wf.menuBarHeightFraction
                     let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
-                    // Match corner radius with the static window preview
                     let staticW = wf.width * geometry.size.width
                     let staticH = wf.height * geometry.size.height
-                    let matchedRadius = max(2, min(staticW, staticH) * 0.02)
+                    let matchedRadius = max(2, min(staticW, staticH) * MiniatureWindowView.cornerRadiusFraction)
                     MiniatureWindowView(
                         titleBarHeight: titleBarPx,
                         appIcon: wf.appIcon,
                         appName: wf.appName,
                         windowTitle: wf.windowTitle,
-                        cornerRadiusOverride: matchedRadius
+                        cornerRadiusOverride: matchedRadius,
+                        tintColor: ThemeColors.indexedSelectionFill(index: 0, for: colorScheme)
                     )
                     .frame(width: frame.width, height: frame.height)
                     .position(x: frame.midX, y: frame.midY)
@@ -184,7 +191,7 @@ struct LayoutGridWorkspaceView: View {
                     )
                 }
 
-                // Multiple highlight rectangles (preset hover with secondary selections)
+                // Multiple highlight selections (preset hover with secondary selections)
                 if !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty {
                     let showHighlightIndex = highlightSelections.count > 1
                     let multiInset: CGFloat = highlightSelections.count > 1 ? 1 : 0
@@ -192,20 +199,8 @@ struct LayoutGridWorkspaceView: View {
                         let norm = sel.normalized
                         let selRect = rectForSelection(norm, cellWidth: cellWidth, cellHeight: cellHeight)
                             .insetBy(dx: multiInset, dy: multiInset)
-                        let fill = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
-                        let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
-                        committedSelectionRectangle(
-                            index: index,
-                            sel: norm, selRect: selRect,
-                            cellWidth: cellWidth, cellHeight: cellHeight,
-                            cornerRadius: cellCornerRadius,
-                            fill: fill, border: border,
-                            divider: border.opacity(0.3),
-                            showIndex: showHighlightIndex,
-                            showDelete: false
-                        )
+                        let tint = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
 
-                        // Overlay miniature window with title bar on hover
                         if index < highlightWindowInfo.count {
                             let info = highlightWindowInfo[index]
                             let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
@@ -214,28 +209,45 @@ struct LayoutGridWorkspaceView: View {
                                 titleBarHeight: titleBarPx,
                                 appIcon: info.appIcon,
                                 appName: info.appName,
-                                windowTitle: info.windowTitle.isEmpty ? nil : info.windowTitle
+                                windowTitle: info.windowTitle.isEmpty ? nil : info.windowTitle,
+                                tintColor: tint
                             )
                             .frame(width: selRect.width, height: selRect.height)
                             .position(x: selRect.midX, y: selRect.midY)
                             .allowsHitTesting(false)
+                            .overlay {
+                                if showHighlightIndex {
+                                    Text("\(index + 1)")
+                                        .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
+                                        .frame(width: selRect.width, height: selRect.height)
+                                        .position(x: selRect.midX, y: selRect.midY)
+                                }
+                            }
+                        } else {
+                            // Fallback: no window info available, show colored rectangle
+                            let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
+                            committedSelectionRectangle(
+                                index: index,
+                                sel: norm, selRect: selRect,
+                                cellWidth: cellWidth, cellHeight: cellHeight,
+                                cornerRadius: cellCornerRadius,
+                                fill: tint, border: border,
+                                divider: border.opacity(0.3),
+                                showIndex: showHighlightIndex,
+                                showDelete: false
+                            )
                         }
                     }
                 }
 
-                // Unified highlight rectangle (from highlightSelection, single)
+                // Unified highlight (from highlightSelection, single)
                 if let hl = highlightSelection?.normalized, activeSelection == nil, committedSelections.isEmpty, highlightSelections.isEmpty {
                     let selRect = rectForSelection(hl, cellWidth: cellWidth, cellHeight: cellHeight)
-                    selectionRectangle(
-                        sel: hl, selRect: selRect,
-                        cellWidth: cellWidth, cellHeight: cellHeight,
-                        cornerRadius: cellCornerRadius,
-                        fill: ThemeColors.gridCellHighlightFill(for: colorScheme),
-                        border: ThemeColors.gridCellHighlightBorder(for: colorScheme),
-                        divider: ThemeColors.gridCellHighlightBorder(for: colorScheme).opacity(0.3)
-                    )
+                        .insetBy(dx: 1, dy: 1)
+                    let tint = ThemeColors.gridCellHighlightFill(for: colorScheme)
 
-                    // Overlay miniature window with title bar on hover
                     if let info = highlightWindowInfo.first {
                         let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
                         let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
@@ -243,11 +255,21 @@ struct LayoutGridWorkspaceView: View {
                             titleBarHeight: titleBarPx,
                             appIcon: info.appIcon,
                             appName: info.appName,
-                            windowTitle: info.windowTitle.isEmpty ? nil : info.windowTitle
+                            windowTitle: info.windowTitle.isEmpty ? nil : info.windowTitle,
+                            tintColor: tint
                         )
                         .frame(width: selRect.width, height: selRect.height)
                         .position(x: selRect.midX, y: selRect.midY)
                         .allowsHitTesting(false)
+                    } else {
+                        selectionRectangle(
+                            sel: hl, selRect: selRect,
+                            cellWidth: cellWidth, cellHeight: cellHeight,
+                            cornerRadius: cellCornerRadius,
+                            fill: tint,
+                            border: ThemeColors.gridCellHighlightBorder(for: colorScheme),
+                            divider: ThemeColors.gridCellHighlightBorder(for: colorScheme).opacity(0.3)
+                        )
                     }
                 }
 
@@ -264,32 +286,36 @@ struct LayoutGridWorkspaceView: View {
                     let borderColor = overlaps ? ThemeColors.invalidSelectionBorder(for: colorScheme)
                         : usesIndexedColor ? ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme)
                         : ThemeColors.gridCellSelectedBorder(for: colorScheme)
-                    selectionRectangle(
-                        sel: sel, selRect: selRect,
-                        cellWidth: cellWidth, cellHeight: cellHeight,
-                        cornerRadius: cellCornerRadius,
-                        fill: fillColor,
-                        border: borderColor,
-                        divider: borderColor.opacity(0.3)
-                    )
+                    // Hide the selection rectangle when a miniature window will be overlaid.
+                    if windowFrameRelative == nil {
+                        selectionRectangle(
+                            sel: sel, selRect: selRect,
+                            cellWidth: cellWidth, cellHeight: cellHeight,
+                            cornerRadius: cellCornerRadius,
+                            fill: fillColor,
+                            border: borderColor,
+                            divider: borderColor.opacity(0.3)
+                        )
+                    }
 
                     // Overlay miniature window on drag selection
                     if let wf = windowFrameRelative {
+                        let insetRect = selRect.insetBy(dx: 1, dy: 1)
                         let menuBarFraction = wf.menuBarHeightFraction
                         let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
-                        // Match corner radius with the static window preview
                         let staticW = wf.width * geometry.size.width
                         let staticH = wf.height * geometry.size.height
-                        let matchedRadius = max(2, min(staticW, staticH) * 0.02)
+                        let matchedRadius = max(2, min(staticW, staticH) * MiniatureWindowView.cornerRadiusFraction)
                         MiniatureWindowView(
                             titleBarHeight: titleBarPx,
                             appIcon: wf.appIcon,
                             appName: wf.appName,
                             windowTitle: wf.windowTitle,
-                            cornerRadiusOverride: matchedRadius
+                            cornerRadiusOverride: matchedRadius,
+                            tintColor: ThemeColors.indexedSelectionFill(index: 0, for: colorScheme)
                         )
-                        .frame(width: selRect.width, height: selRect.height)
-                        .position(x: selRect.midX, y: selRect.midY)
+                        .frame(width: insetRect.width, height: insetRect.height)
+                        .position(x: insetRect.midX, y: insetRect.midY)
                         .allowsHitTesting(false)
                     }
                 }

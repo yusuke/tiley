@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Mejora de las vistas previas de ventanas en miniatura en la cuadrícula: al pasar el ratón y arrastrar se muestran ventanas en miniatura con color en lugar de rectángulos de color sólido, las pantallas secundarias muestran el mismo estilo de ventana en miniatura que la pantalla principal, y las celdas de la cuadrícula permanecen visibles durante el arrastre
+
 ### Corregido
 
 - Corregido que el triángulo del globo de diálogo desaparecía y la ventana se desplazaba hacia arriba antes de la animación de desvanecimiento al cerrar Tiley haciendo clic en el icono de la barra de menús. Ahora el triángulo permanece visible durante el desvanecimiento, igual que al cerrar haciendo clic en otra ventana

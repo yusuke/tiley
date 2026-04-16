@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Amélioration des aperçus de fenêtres miniatures sur la grille : le survol et le glissement affichent désormais des fenêtres miniatures teintées au lieu de rectangles de couleur unie, les écrans secondaires affichent le même style de fenêtre miniature que l'écran principal, et les cellules de la grille restent visibles pendant le glissement
+
 ### Corrigé
 
 - Correction du triangle de bulle qui disparaissait et de la fenêtre qui se décalait vers le haut avant l'animation de fondu lors de la fermeture de Tiley en cliquant sur l'icône de la barre de menus. Le triangle reste désormais visible pendant le fondu, comme lors de la fermeture en cliquant sur une autre fenêtre

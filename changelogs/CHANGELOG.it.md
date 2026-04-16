@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Miglioramento delle anteprime delle finestre in miniatura sulla griglia: il passaggio del mouse e il trascinamento mostrano ora finestre in miniatura colorate invece di rettangoli a tinta unita, gli schermi secondari mostrano lo stesso stile di finestra in miniatura dello schermo principale e le celle della griglia rimangono visibili durante il trascinamento
+
 ### Corretto
 
 - Corretto il triangolo del fumetto che scompariva e la finestra che si spostava verso l'alto prima dell'animazione di dissolvenza quando si chiudeva Tiley cliccando sull'icona della barra dei menu. Il triangolo ora rimane visibile durante la dissolvenza, come quando si chiude cliccando su un'altra finestra
