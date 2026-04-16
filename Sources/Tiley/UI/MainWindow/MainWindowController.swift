@@ -458,6 +458,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         fraction = min(max(fraction, 0.1), 0.9)
         appState.bubbleArrowEdge = edge
         appState.bubbleArrowFraction = fraction
+        appState.bubbleArrowDisplayID = targetScreen.displayID
     }
 
     private func currentVisibleFrame(for window: NSWindow, preferredScreen: NSScreen? = nil) -> CGRect {

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Das Sprechblasen-Dreieck verschwand und das Fenster verschob sich nach oben, bevor die Ausblend-Animation begann, wenn Tiley durch Klick auf das Menüleistensymbol geschlossen wurde. Das Dreieck bleibt nun während des Ausblendens sichtbar, wie beim Schließen durch Klick auf ein anderes Fenster
+- Das Sprechblasen-Dreieck wurde fälschlicherweise auch auf Fenstern sekundärer Bildschirme angezeigt, wenn Tiley über das Menüleistensymbol geöffnet wurde
+
 ## [4.3.9] - 2026-04-14
 
 ### Hinzugefügt

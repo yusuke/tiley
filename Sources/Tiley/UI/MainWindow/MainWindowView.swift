@@ -691,7 +691,7 @@ struct MainWindowView: View {
     /// Edge insets for the bubble arrow, applied as content padding so the arrow
     /// area doesn't overlap interactive content.
     private var bubbleArrowInsets: EdgeInsets {
-        guard let edge = appState.bubbleArrowEdge else { return EdgeInsets() }
+        guard let edge = appState.bubbleArrowEdge, isBubbleArrowScreen else { return EdgeInsets() }
         let h = Self.bubbleArrowHeight
         switch edge {
         case .top:      return EdgeInsets(top: h, leading: 0, bottom: 0, trailing: 0)
@@ -1229,9 +1229,21 @@ struct MainWindowView: View {
         .clipShape(compositeClipShape)
     }
 
+    /// Whether this view's screen is the one that should display the bubble arrow.
+    private var isBubbleArrowScreen: Bool {
+        guard let arrowDisplayID = appState.bubbleArrowDisplayID else { return false }
+        switch screenRole {
+        case .secondary(let screen):
+            return screen.displayID == arrowDisplayID
+        case .target:
+            guard let screenContext else { return false }
+            return NSScreen.screen(containing: screenContext.screenFrame)?.displayID == arrowDisplayID
+        }
+    }
+
     /// Returns the clip shape for the main window, optionally with a speech-bubble arrow.
     private func windowClipShape(size: CGSize) -> AnyShape {
-        if let edge = appState.bubbleArrowEdge {
+        if let edge = appState.bubbleArrowEdge, isBubbleArrowScreen {
             return AnyShape(BubbleShape(
                 cornerRadius: Self.windowCornerRadius,
                 arrowEdge: edge,

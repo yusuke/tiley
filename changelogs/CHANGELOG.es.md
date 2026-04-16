@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Corregido que el triángulo del globo de diálogo desaparecía y la ventana se desplazaba hacia arriba antes de la animación de desvanecimiento al cerrar Tiley haciendo clic en el icono de la barra de menús. Ahora el triángulo permanece visible durante el desvanecimiento, igual que al cerrar haciendo clic en otra ventana
+- Corregido que el triángulo del globo de diálogo aparecía incorrectamente en las ventanas de pantallas secundarias al abrir Tiley desde el icono de la barra de menús
+
 ## [4.3.9] - 2026-04-14
 
 ### Añadido

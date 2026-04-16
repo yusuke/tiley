@@ -170,6 +170,9 @@ final class AppState: NSObject, NSMenuDelegate {
     var bubbleArrowEdge: BubbleArrowEdge? = nil
     /// Fraction (0–1) along the arrow edge where the arrow tip is positioned.
     var bubbleArrowFraction: CGFloat = 0.5
+    /// The display ID that should show the bubble arrow. Only the window on this
+    /// display renders the arrow; other displays use a plain rounded rectangle.
+    var bubbleArrowDisplayID: CGDirectDisplayID?
     @ObservationIgnored var screenChangeTask: Task<Void, Never>?
     @ObservationIgnored var isSwitchingActivationPolicy = false
     @ObservationIgnored var isRecreatingWindows = false

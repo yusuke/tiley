@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Corretto il triangolo del fumetto che scompariva e la finestra che si spostava verso l'alto prima dell'animazione di dissolvenza quando si chiudeva Tiley cliccando sull'icona della barra dei menu. Il triangolo ora rimane visibile durante la dissolvenza, come quando si chiude cliccando su un'altra finestra
+- Corretto il triangolo del fumetto che appariva erroneamente sulle finestre degli schermi secondari quando Tiley veniva aperto dall'icona della barra dei menu
+
 ## [4.3.9] - 2026-04-14
 
 ### Aggiunto

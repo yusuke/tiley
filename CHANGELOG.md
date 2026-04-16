@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed the speech-bubble triangle pointer disappearing and the window shifting up before the fade-out animation when dismissing Tiley by clicking the menu bar icon; the triangle now stays visible during the fade-out, matching the behavior when clicking another window
+- Fixed the speech-bubble triangle pointer incorrectly appearing on secondary display windows when Tiley was opened from the menu bar icon
+
 ## [4.3.9] - 2026-04-14
 
 ### Added

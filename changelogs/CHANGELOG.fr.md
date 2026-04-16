@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction du triangle de bulle qui disparaissait et de la fenêtre qui se décalait vers le haut avant l'animation de fondu lors de la fermeture de Tiley en cliquant sur l'icône de la barre de menus. Le triangle reste désormais visible pendant le fondu, comme lors de la fermeture en cliquant sur une autre fenêtre
+- Correction du triangle de bulle qui s'affichait incorrectement sur les fenêtres des écrans secondaires lors de l'ouverture de Tiley depuis l'icône de la barre de menus
+
 ## [4.3.9] - 2026-04-14
 
 ### Ajouté

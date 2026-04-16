@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Corrigido o triângulo do balão de fala que desaparecia e a janela que se deslocava para cima antes da animação de esmaecimento ao fechar o Tiley clicando no ícone da barra de menus. O triângulo agora permanece visível durante o esmaecimento, igual ao comportamento ao clicar em outra janela
+- Corrigido o triângulo do balão de fala que aparecia incorretamente nas janelas de telas secundárias ao abrir o Tiley pelo ícone da barra de menus
+
 ## [4.3.9] - 2026-04-14
 
 ### Adicionado

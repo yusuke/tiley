@@ -243,6 +243,7 @@ extension AppState {
         clearWindowCyclingState()
         registerAllHotKeys()
         bubbleArrowEdge = nil
+        bubbleArrowDisplayID = nil
         if !NSApp.isActive {
             refocusLastTargetApp()
         }
@@ -280,6 +281,7 @@ extension AppState {
         // Otherwise (global shortcut, settings close, etc.), no arrow should appear.
         if triggerIconCenter == nil {
             bubbleArrowEdge = nil
+            bubbleArrowDisplayID = nil
         }
         if isShowingLayoutGrid {
             NSApp.activate(ignoringOtherApps: true)
