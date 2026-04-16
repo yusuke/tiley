@@ -79,7 +79,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         perfLog("windowSize + screenContext")
         let view = MainWindowRootView(appState: appState, screenState: screenState)
         perfLog("MainWindowRootView created")
-        let hostingView = NSHostingView(rootView: view)
+        let hostingView = FirstMouseHostingView(rootView: view)
         hostingView.frame = NSRect(origin: .zero, size: initialSize)
         hostingView.autoresizingMask = [.width, .height]
         perfLog("NSHostingView created")
@@ -731,3 +731,9 @@ private final class MainAppWindow: NSWindow {
     }
 }
 
+/// NSHostingView subclass that accepts the first mouse click without requiring
+/// the window to be focused first. This allows grid drag interactions on
+/// secondary display windows to start immediately.
+private final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+}
