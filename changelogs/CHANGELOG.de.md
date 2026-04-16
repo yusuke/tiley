@@ -5,11 +5,14 @@
 ### Geändert
 
 - Miniatur-Fenstervorschauen im Raster verbessert: Beim Hover und Ziehen werden nun getönte Miniaturfenster statt einfarbiger Rechtecke angezeigt, sekundäre Bildschirme zeigen den gleichen Miniaturfensterstil wie der primäre Bildschirm, und Rasterzellen bleiben beim Ziehen sichtbar
+- Overlay auf Nicht-Ziel-Bildschirmen vereinfacht: Das Miniatur-Bildschirmanordnungssymbol wurde entfernt und nur ein großer zentrierter Richtungspfeil wird angezeigt
+- Rasterinteraktionen auf sekundären Bildschirmfenstern reagieren nun auf den ersten Klick, ohne dass ein zusätzlicher Klick zum Fokussieren erforderlich ist
 
 ### Behoben
 
 - Das Sprechblasen-Dreieck verschwand und das Fenster verschob sich nach oben, bevor die Ausblend-Animation begann, wenn Tiley durch Klick auf das Menüleistensymbol geschlossen wurde. Das Dreieck bleibt nun während des Ausblendens sichtbar, wie beim Schließen durch Klick auf ein anderes Fenster
 - Das Sprechblasen-Dreieck wurde fälschlicherweise auch auf Fenstern sekundärer Bildschirme angezeigt, wenn Tiley über das Menüleistensymbol geöffnet wurde
+- Werkzeugleistenschaltflächen waren beim Start deaktiviert, wenn die Fensterliste bereits vor dem Erscheinen der Seitenleistenansicht verfügbar war
 
 ## [4.3.9] - 2026-04-14
 

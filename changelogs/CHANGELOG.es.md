@@ -5,11 +5,14 @@
 ### Cambiado
 
 - Mejora de las vistas previas de ventanas en miniatura en la cuadrícula: al pasar el ratón y arrastrar se muestran ventanas en miniatura con color en lugar de rectángulos de color sólido, las pantallas secundarias muestran el mismo estilo de ventana en miniatura que la pantalla principal, y las celdas de la cuadrícula permanecen visibles durante el arrastre
+- Simplificación de la superposición en pantallas no objetivo: se eliminó el icono de disposición de pantallas en miniatura y solo se muestra una flecha direccional grande centrada
+- Las interacciones de cuadrícula en ventanas de pantallas secundarias ahora responden al primer clic sin requerir un clic adicional para enfocar la ventana
 
 ### Corregido
 
 - Corregido que el triángulo del globo de diálogo desaparecía y la ventana se desplazaba hacia arriba antes de la animación de desvanecimiento al cerrar Tiley haciendo clic en el icono de la barra de menús. Ahora el triángulo permanece visible durante el desvanecimiento, igual que al cerrar haciendo clic en otra ventana
 - Corregido que el triángulo del globo de diálogo aparecía incorrectamente en las ventanas de pantallas secundarias al abrir Tiley desde el icono de la barra de menús
+- Corregido que los botones de la barra de herramientas estaban deshabilitados al inicio cuando la lista de ventanas ya estaba disponible antes de que apareciera la vista de la barra lateral
 
 ## [4.3.9] - 2026-04-14
 

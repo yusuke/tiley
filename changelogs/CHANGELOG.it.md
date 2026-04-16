@@ -5,11 +5,14 @@
 ### Modificato
 
 - Miglioramento delle anteprime delle finestre in miniatura sulla griglia: il passaggio del mouse e il trascinamento mostrano ora finestre in miniatura colorate invece di rettangoli a tinta unita, gli schermi secondari mostrano lo stesso stile di finestra in miniatura dello schermo principale e le celle della griglia rimangono visibili durante il trascinamento
+- Semplificazione della sovrapposizione sugli schermi non di destinazione: rimossa l'icona di disposizione miniatura degli schermi, visualizzata solo una grande freccia direzionale centrata
+- Le interazioni della griglia sulle finestre degli schermi secondari ora rispondono al primo clic senza richiedere un clic aggiuntivo per ottenere il focus
 
 ### Corretto
 
 - Corretto il triangolo del fumetto che scompariva e la finestra che si spostava verso l'alto prima dell'animazione di dissolvenza quando si chiudeva Tiley cliccando sull'icona della barra dei menu. Il triangolo ora rimane visibile durante la dissolvenza, come quando si chiude cliccando su un'altra finestra
 - Corretto il triangolo del fumetto che appariva erroneamente sulle finestre degli schermi secondari quando Tiley veniva aperto dall'icona della barra dei menu
+- Corretto i pulsanti della barra degli strumenti disabilitati all'avvio quando l'elenco delle finestre era già disponibile prima della comparsa della vista della barra laterale
 
 ## [4.3.9] - 2026-04-14
 

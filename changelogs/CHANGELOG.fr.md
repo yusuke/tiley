@@ -5,11 +5,14 @@
 ### Modifié
 
 - Amélioration des aperçus de fenêtres miniatures sur la grille : le survol et le glissement affichent désormais des fenêtres miniatures teintées au lieu de rectangles de couleur unie, les écrans secondaires affichent le même style de fenêtre miniature que l'écran principal, et les cellules de la grille restent visibles pendant le glissement
+- Simplification de la superposition sur les écrans non ciblés : suppression de l'icône de disposition miniature des écrans, affichage d'une grande flèche directionnelle centrée uniquement
+- Les interactions de grille sur les fenêtres d'écrans secondaires répondent désormais au premier clic sans nécessiter un clic supplémentaire pour obtenir le focus
 
 ### Corrigé
 
 - Correction du triangle de bulle qui disparaissait et de la fenêtre qui se décalait vers le haut avant l'animation de fondu lors de la fermeture de Tiley en cliquant sur l'icône de la barre de menus. Le triangle reste désormais visible pendant le fondu, comme lors de la fermeture en cliquant sur une autre fenêtre
 - Correction du triangle de bulle qui s'affichait incorrectement sur les fenêtres des écrans secondaires lors de l'ouverture de Tiley depuis l'icône de la barre de menus
+- Correction des boutons de la barre d'outils désactivés au démarrage lorsque la liste des fenêtres était déjà disponible avant l'apparition de la barre latérale
 
 ## [4.3.9] - 2026-04-14
 

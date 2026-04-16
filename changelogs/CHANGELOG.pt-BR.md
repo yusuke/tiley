@@ -5,11 +5,14 @@
 ### Alterado
 
 - Melhoria das visualizações de janelas em miniatura na grade: ao passar o mouse e arrastar, são exibidas janelas em miniatura coloridas em vez de retângulos de cor sólida, telas secundárias exibem o mesmo estilo de janela em miniatura da tela principal, e as células da grade permanecem visíveis durante o arrasto
+- Simplificação da sobreposição em telas não alvo: removido o ícone de arranjo de telas em miniatura, exibindo apenas uma grande seta direcional centralizada
+- As interações de grade em janelas de telas secundárias agora respondem ao primeiro clique sem exigir um clique adicional para obter foco
 
 ### Corrigido
 
 - Corrigido o triângulo do balão de fala que desaparecia e a janela que se deslocava para cima antes da animação de esmaecimento ao fechar o Tiley clicando no ícone da barra de menus. O triângulo agora permanece visível durante o esmaecimento, igual ao comportamento ao clicar em outra janela
 - Corrigido o triângulo do balão de fala que aparecia incorretamente nas janelas de telas secundárias ao abrir o Tiley pelo ícone da barra de menus
+- Corrigido os botões da barra de ferramentas desabilitados na inicialização quando a lista de janelas já estava disponível antes da exibição da barra lateral
 
 ## [4.3.9] - 2026-04-14
 
