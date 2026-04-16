@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-17
+
 ### Alterado
 
 - Melhoria das visualizações de janelas em miniatura na grade: ao passar o mouse e arrastar, são exibidas janelas em miniatura coloridas em vez de retângulos de cor sólida, telas secundárias exibem o mesmo estilo de janela em miniatura da tela principal, e as células da grade permanecem visíveis durante o arrasto

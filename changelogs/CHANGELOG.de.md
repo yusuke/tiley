@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-17
+
 ### Geändert
 
 - Miniatur-Fenstervorschauen im Raster verbessert: Beim Hover und Ziehen werden nun getönte Miniaturfenster statt einfarbiger Rechtecke angezeigt, sekundäre Bildschirme zeigen den gleichen Miniaturfensterstil wie der primäre Bildschirm, und Rasterzellen bleiben beim Ziehen sichtbar

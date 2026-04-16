@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-17
+
 ### Changed
 
 - Refined miniature window previews on the grid: hover and drag selections now display tinted miniature windows instead of plain colored rectangles, secondary display grids show the same miniature window style as the primary display, and grid cells remain visible underneath during drag
@@ -716,7 +718,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.3.9...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/yusuke/tiley/releases/tag/v4.4.0
 [4.3.9]: https://github.com/yusuke/tiley/releases/tag/v4.3.9
 [4.3.8]: https://github.com/yusuke/tiley/releases/tag/v4.3.8
 [4.3.7]: https://github.com/yusuke/tiley/releases/tag/v4.3.7

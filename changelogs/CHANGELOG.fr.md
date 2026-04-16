@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-17
+
 ### Modifié
 
 - Amélioration des aperçus de fenêtres miniatures sur la grille : le survol et le glissement affichent désormais des fenêtres miniatures teintées au lieu de rectangles de couleur unie, les écrans secondaires affichent le même style de fenêtre miniature que l'écran principal, et les cellules de la grille restent visibles pendant le glissement

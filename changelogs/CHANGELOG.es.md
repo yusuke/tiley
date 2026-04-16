@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-17
+
 ### Cambiado
 
 - Mejora de las vistas previas de ventanas en miniatura en la cuadrícula: al pasar el ratón y arrastrar se muestran ventanas en miniatura con color en lugar de rectángulos de color sólido, las pantallas secundarias muestran el mismo estilo de ventana en miniatura que la pantalla principal, y las celdas de la cuadrícula permanecen visibles durante el arrastre
