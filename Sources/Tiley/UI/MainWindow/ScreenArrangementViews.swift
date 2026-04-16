@@ -57,65 +57,13 @@ struct EmptyDisplayOverlay: View {
     let thisScreen: NSScreen
     let windowDisplayID: CGDirectDisplayID
 
-    private let iconSize: CGFloat = 96
-    private let arrowFontSize: CGFloat = 40
-    private let arrowSpacing: CGFloat = 8
-
-    /// Direction components derived from the arrow symbol name.
-    private var direction: (horizontal: Int, vertical: Int) {
-        // horizontal: -1 = left, 0 = centre, 1 = right
-        // vertical:   -1 = up,   0 = centre, 1 = down
-        let name = directionArrowSymbol(from: thisScreen)
-        var h = 0, v = 0
-        if name.contains(".left")  { h = -1 }
-        if name.contains(".right") { h =  1 }
-        if name.contains(".up")    { v = -1 }
-        if name.contains(".down")  { v =  1 }
-        // Pure "arrow.left" / "arrow.right" etc.
-        if h == 0 && v == 0 {
-            if name == "arrow.left"  { h = -1 }
-            if name == "arrow.right" { h =  1 }
-            if name == "arrow.up"    { v = -1 }
-            if name == "arrow.down"  { v =  1 }
-        }
-        return (h, v)
-    }
+    private let arrowFontSize: CGFloat = 160
 
     var body: some View {
-        let arrowName = directionArrowSymbol(from: thisScreen)
-        let dir = direction
-
-        let arrowImage = Image(systemName: arrowName)
+        Image(systemName: directionArrowSymbol(from: thisScreen))
             .font(.system(size: arrowFontSize, weight: .bold))
-
-        let iconView = ScreenArrangementIcon(highlightDisplayID: windowDisplayID, size: iconSize, color: .primary)
-            .frame(width: iconSize, height: iconSize)
-
-        // Place the arrow relative to the icon based on direction.
-        // Cardinal directions: HStack/VStack centred on that edge.
-        // Diagonal directions: ZStack with offset so the arrow sits at the corner.
-        Group {
-            switch (dir.horizontal, dir.vertical) {
-            case (-1, 0):  // left
-                HStack(spacing: arrowSpacing) { arrowImage; iconView }
-            case (1, 0):   // right
-                HStack(spacing: arrowSpacing) { iconView; arrowImage }
-            case (0, -1):  // up
-                VStack(spacing: arrowSpacing) { arrowImage; iconView }
-            case (0, 1):   // down
-                VStack(spacing: arrowSpacing) { iconView; arrowImage }
-            default:       // diagonal
-                let offsetX = CGFloat(dir.horizontal) * (iconSize / 2 + arrowFontSize / 2 + arrowSpacing)
-                let offsetY = CGFloat(dir.vertical)   * (iconSize / 2 + arrowFontSize / 2 + arrowSpacing)
-                ZStack {
-                    iconView
-                    arrowImage
-                        .offset(x: offsetX, y: offsetY)
-                }
-            }
-        }
-        .foregroundStyle(.primary)
-        .allowsHitTesting(false)
+            .foregroundStyle(.primary)
+            .allowsHitTesting(false)
     }
 }
 
