@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Main window is now positioned so the miniature screen preview — not the whole window — is centered on the display when opened via shortcut, using the full screen frame (so the miniature stays centered even when the Dock is on the left or right)
+- When "Show near icon when clicked" is enabled, clicking the menu bar icon now aligns the miniature screen center (not the whole window) with the icon; the bubble-arrow triangle still points directly at the icon
+
 ## [4.4.0] - 2026-04-17
 
 ### Changed

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- Ao abrir pelo atalho, a visualização da tela em miniatura – e não a janela inteira – agora fica centralizada no monitor. A referência é o quadro completo da tela (incluindo barra de menus e Dock), de modo que a miniatura permanece centralizada mesmo com o Dock à esquerda ou à direita
+- Quando "Mostrar perto do ícone ao clicar" está ativado, clicar no ícone da barra de menus agora alinha o centro da visualização em miniatura (e não o da janela inteira) ao ícone; o triângulo do balão continua apontando diretamente para o ícone
+
 ## [4.4.0] - 2026-04-17
 
 ### Alterado

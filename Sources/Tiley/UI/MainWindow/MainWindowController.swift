@@ -349,7 +349,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
         var frame = window.frame
         frame.size = targetSize
-        frame.origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
+        frame.origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame, screenFrame: screenFrame)
 
         let sizeChanged = window.minSize != targetSize || window.maxSize != targetSize
         let frameChanged = !window.frame.equalTo(frame)
@@ -386,7 +386,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             // another controller (the one on the icon's display) may have just
             // set it. AppState.toggleOverlay() resets it at the start of each
             // open cycle, so we only need to set it in the if-branch above.
-            let origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame)
+            let origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame, screenFrame: screenFrame)
             window.setFrameOrigin(origin)
         }
     }
@@ -402,8 +402,13 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         var originY: CGFloat
 
         if iconCenter.y >= visibleFrame.maxY {
-            // Menu bar icon (above visible frame) — window hangs below icon
-            originX = iconCenter.x - size.width / 2
+            // Menu bar icon (above visible frame) — window hangs below icon.
+            // Shift left so the miniature screen (right panel) is centered
+            // on the icon, not the whole window. The bubble-arrow triangle
+            // still lands directly below the icon because computeBubbleArrow
+            // derives its fraction from (iconCenter.x - origin.x).
+            let contentOffset = (Self.sidebarWidth + 1) / 2
+            originX = iconCenter.x - size.width / 2 - contentOffset
             originY = visibleFrame.maxY - size.height - margin
         } else if iconCenter.y <= visibleFrame.minY {
             // Dock at bottom — window sits just above Dock
@@ -612,8 +617,15 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         return max(1, visibleFrame.height - visibleFrameInset)
     }
 
-    private func calculatedOrigin(for size: NSSize, visibleFrame: CGRect) -> NSPoint {
-        let originX = visibleFrame.midX - size.width / 2
+    private func calculatedOrigin(for size: NSSize, visibleFrame: CGRect, screenFrame: CGRect) -> NSPoint {
+        // Shift left so the miniature screen (right panel) center aligns with
+        // the display center, instead of the whole window center.
+        // Use screenFrame (not visibleFrame) as the reference so the miniature
+        // — which represents the full screen including menu bar/Dock chrome —
+        // is centered on the actual display, not on the Dock-excluded area.
+        let referenceFrame = screenFrame.equalTo(.zero) ? visibleFrame : screenFrame
+        let contentOffset = (Self.sidebarWidth + 1) / 2
+        let originX = referenceFrame.midX - size.width / 2 - contentOffset
         let originY = visibleFrame.midY - size.height / 2
         let minX = visibleFrame.minX
         let maxX = visibleFrame.maxX - size.width

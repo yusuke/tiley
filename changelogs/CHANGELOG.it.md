@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- All'apertura tramite scorciatoia, l'anteprima dello schermo in miniatura – e non l'intera finestra – è ora centrata sul display. Il riferimento è l'intero frame dello schermo (con barra dei menu e Dock), quindi la miniatura resta centrata anche quando il Dock è a sinistra o a destra
+- Quando "Mostra vicino all'icona al clic" è attivo, facendo clic sull'icona della barra dei menu il centro dell'anteprima in miniatura (e non quello dell'intera finestra) viene allineato all'icona; il triangolo del fumetto punta ancora direttamente all'icona
+
 ## [4.4.0] - 2026-04-17
 
 ### Modificato

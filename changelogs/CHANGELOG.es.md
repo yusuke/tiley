@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Al abrir la ventana principal con el atajo de teclado, ahora la vista previa de la pantalla en miniatura —y no toda la ventana— queda centrada en la pantalla. La referencia es el marco completo de la pantalla (con barra de menús y Dock), por lo que la miniatura permanece centrada aunque el Dock esté a la izquierda o a la derecha
+- Cuando "Mostrar cerca del icono al hacer clic" está activado, al hacer clic en el icono de la barra de menús se alinea el centro de la pantalla en miniatura (y no el de toda la ventana) con el icono; el triángulo del globo sigue apuntando directamente al icono
+
 ## [4.4.0] - 2026-04-17
 
 ### Cambiado

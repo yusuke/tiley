@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- Lors de l'ouverture par raccourci, l'aperçu de l'écran miniature – et non la fenêtre entière – est désormais centré sur l'écran. La référence est le cadre complet de l'écran (avec la barre de menus et le Dock), de sorte que la miniature reste centrée même lorsque le Dock est à gauche ou à droite
+- Lorsque « Afficher près de l'icône au clic » est activé, cliquer sur l'icône de la barre de menus aligne désormais le centre de l'aperçu miniature (et non celui de la fenêtre entière) sur l'icône ; le triangle de la bulle pointe toujours directement vers l'icône
+
 ## [4.4.0] - 2026-04-17
 
 ### Modifié
