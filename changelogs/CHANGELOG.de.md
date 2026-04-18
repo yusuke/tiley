@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.1] - 2026-04-18
+
 ### Geändert
 
 - Beim Öffnen per Tastenkürzel wird nun die Miniatur-Bildschirmvorschau – nicht das gesamte Fenster – auf dem Display zentriert. Als Referenz dient der gesamte Bildschirmrahmen (inkl. Menüleiste und Dock), sodass die Miniaturansicht auch bei seitlich platziertem Dock zentriert bleibt

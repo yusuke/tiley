@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.1] - 2026-04-18
+
 ### Alterado
 
 - Ao abrir pelo atalho, a visualização da tela em miniatura – e não a janela inteira – agora fica centralizada no monitor. A referência é o quadro completo da tela (incluindo barra de menus e Dock), de modo que a miniatura permanece centralizada mesmo com o Dock à esquerda ou à direita

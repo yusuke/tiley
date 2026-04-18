@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.1] - 2026-04-18
+
 ### Modificato
 
 - All'apertura tramite scorciatoia, l'anteprima dello schermo in miniatura – e non l'intera finestra – è ora centrata sul display. Il riferimento è l'intero frame dello schermo (con barra dei menu e Dock), quindi la miniatura resta centrata anche quando il Dock è a sinistra o a destra

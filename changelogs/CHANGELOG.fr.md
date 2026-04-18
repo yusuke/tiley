@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.1] - 2026-04-18
+
 ### Modifié
 
 - Lors de l'ouverture par raccourci, l'aperçu de l'écran miniature – et non la fenêtre entière – est désormais centré sur l'écran. La référence est le cadre complet de l'écran (avec la barre de menus et le Dock), de sorte que la miniature reste centrée même lorsque le Dock est à gauche ou à droite

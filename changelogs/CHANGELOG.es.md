@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.1] - 2026-04-18
+
 ### Cambiado
 
 - Al abrir la ventana principal con el atajo de teclado, ahora la vista previa de la pantalla en miniatura —y no toda la ventana— queda centrada en la pantalla. La referencia es el marco completo de la pantalla (con barra de menús y Dock), por lo que la miniatura permanece centrada aunque el Dock esté a la izquierda o a la derecha

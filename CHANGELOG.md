@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.4.1] - 2026-04-18
+
 ### Changed
 
 - Main window is now positioned so the miniature screen preview — not the whole window — is centered on the display when opened via shortcut, using the full screen frame (so the miniature stays centered even when the Dock is on the left or right)
@@ -723,7 +725,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.1...HEAD
+[4.4.1]: https://github.com/yusuke/tiley/releases/tag/v4.4.1
 [4.4.0]: https://github.com/yusuke/tiley/releases/tag/v4.4.0
 [4.3.9]: https://github.com/yusuke/tiley/releases/tag/v4.3.9
 [4.3.8]: https://github.com/yusuke/tiley/releases/tag/v4.3.8
