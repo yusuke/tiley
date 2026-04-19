@@ -169,7 +169,6 @@ struct LayoutGridWorkspaceView: View {
                         cornerRadius: cellCornerRadius,
                         fill: fill, border: border,
                         divider: border.opacity(0.3),
-                        showIndex: false,
                         showDelete: false
                     )
                 }
@@ -311,10 +310,9 @@ struct LayoutGridWorkspaceView: View {
 
                     if isEditMode {
                         // Edit mode: render a committed-style rectangle (no title bar,
-                        // no delete button, no index number — the number only appears
-                        // once the drag is committed). On overlap with an existing
-                        // committed selection, fall back to the invalid-selection
-                        // appearance.
+                        // no delete button) with the next-index number centered. On
+                        // overlap with an existing committed selection, fall back to the
+                        // invalid-selection appearance.
                         let inset: CGFloat = committedSelections.isEmpty ? 0 : 1
                         let dragRect = selRect.insetBy(dx: inset, dy: inset)
                         if overlaps {
@@ -336,7 +334,6 @@ struct LayoutGridWorkspaceView: View {
                                 cornerRadius: cellCornerRadius,
                                 fill: fill, border: border,
                                 divider: border.opacity(0.3),
-                                showIndex: false,
                                 showDelete: false
                             )
                         }

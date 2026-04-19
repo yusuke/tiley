@@ -5,7 +5,7 @@
 ### Modifié
 
 - Lors de la modification d'un préréglage de disposition, les aperçus au survol et lors du glissement sur la grille utilisent désormais le même style de rectangle que les sélections validées : teintés avec la couleur du prochain index et affichant en son centre le numéro d'index à attribuer, sans barre de titre ni bouton de suppression. De plus, le survol d'une cellule vide affiche un aperçu de rectangle d'une cellule même si d'autres dispositions sont déjà enregistrées
-- Les numéros d'index ne sont plus affichés lors du glissement sur la grille pour redimensionner pendant la modification d'un préréglage, ni sur le rectangle d'aperçu au survol (afin d'éviter que le prochain numéro d'index ne distraie pendant le geste). Les aperçus des préréglages de disposition (survol d'un préréglage dans la barre latérale, superposition d'aperçu plein écran lors de l'application de préréglages à sélections multiples) continuent d'afficher les numéros d'index
+- Lors de la modification d'un préréglage, le rectangle au survol et le rectangle de glissement affichent désormais au centre le numéro d'index qui sera attribué à la validation (avec la même apparence que le rectangle validé), y compris l'aperçu d'une seule cellule au survol. Les aperçus des préréglages de disposition (survol d'un préréglage dans la barre latérale, superposition d'aperçu plein écran lors de l'application de préréglages à sélections multiples) continuent également d'afficher les numéros d'index
 
 ### Corrigé
 

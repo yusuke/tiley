@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered
-- Index numbers are suppressed on the hover and drag rectangles while resizing a region during preset editing — the upcoming index label no longer distracts while the gesture is in progress. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers
+- During preset editing, the hover and drag rectangles now both show the upcoming index number centered (matching the committed selection they will become) — including the single-cell hover preview. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers
 
 ### Fixed
 

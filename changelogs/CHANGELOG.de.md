@@ -5,7 +5,7 @@
 ### Geändert
 
 - Beim Bearbeiten einer Layout-Voreinstellung verwenden Hover- und Zieh-Vorschauen auf dem Raster jetzt denselben Rechteck-Stil wie bestätigte Auswahlen: in der Farbe des nächsten Index und mit der zugehörigen Indexnummer mittig, ohne Titelleiste und ohne Löschen-Schaltfläche. Zusätzlich zeigt das Darüberfahren mit der Maus über eine leere Zelle ein ein Zellen großes Vorschaurechteck an, auch wenn bereits andere Layouts registriert sind
-- Indexnummern werden beim Ziehen zur Größenänderung auf dem Raster während der Bearbeitung einer Voreinstellung sowie auf dem Hover-Vorschaurechteck nicht mehr angezeigt (damit die nächste Indexnummer während der Geste nicht ablenkt). Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an
+- Beim Bearbeiten einer Voreinstellung zeigen nun sowohl das Hover- als auch das Zieh-Rechteck die nach dem Bestätigen zugewiesene Indexnummer mittig an (passend zum bestätigten Rechteck, in das sie übergehen) – einschließlich der ein Zellen großen Hover-Vorschau. Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an
 
 ### Behoben
 
