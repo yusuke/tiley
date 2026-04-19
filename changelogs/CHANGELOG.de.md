@@ -10,6 +10,7 @@
 ### Behoben
 
 - Das Hauptfenster sprang in die Bildschirmmitte, wenn bei aktivierter Option „Beim Klick neben dem Symbol anzeigen" ein Raster in einer Layout-Voreinstellung hinzugefügt oder bearbeitet wurde; das Fenster bleibt jetzt nahe am Menüleistensymbol verankert
+- Behoben, dass bestätigte Auswahlrechtecke gelegentlich ohne Füllung und Rahmen angezeigt wurden (nur Schließen-Schaltfläche und Indexnummer sichtbar), wenn eine Layout-Voreinstellung mehrere Auswahlen enthielt
 
 ## [4.4.2] - 2026-04-19
 

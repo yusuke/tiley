@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon
+- Fixed committed selection rectangles occasionally rendering with no fill (showing only the close button and index number) when a layout preset contained many selections
 
 ## [4.4.2] - 2026-04-19
 

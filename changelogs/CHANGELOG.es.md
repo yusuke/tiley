@@ -10,6 +10,7 @@
 ### Corregido
 
 - Se corrigió el salto de la ventana principal al centro de la pantalla al añadir o editar una cuadrícula en una configuración predefinida de diseño cuando "Mostrar cerca del icono al hacer clic" estaba activado; ahora la ventana permanece anclada cerca del icono de la barra de menús
+- Se corrigió que los rectángulos de selección confirmados se mostraran ocasionalmente sin relleno ni borde (con solo el botón de cerrar y la etiqueta de índice visibles) cuando una configuración predefinida de diseño contenía varias selecciones
 
 ## [4.4.2] - 2026-04-19
 

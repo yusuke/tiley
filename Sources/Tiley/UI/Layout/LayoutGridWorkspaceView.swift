@@ -608,58 +608,59 @@ struct LayoutGridWorkspaceView: View {
         let spanCols = sel.endColumn - sel.startColumn + 1
         let spanRows = sel.endRow - sel.startRow + 1
 
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(fill)
-                .overlay(
-                    Canvas { context, size in
-                        for i in 1..<spanCols {
-                            let x = CGFloat(i) * (cellWidth + gap) - gap / 2
-                            var path = Path()
-                            path.move(to: CGPoint(x: x, y: 0))
-                            path.addLine(to: CGPoint(x: x, y: size.height))
-                            context.stroke(path, with: .color(divider), lineWidth: 0.5)
-                        }
-                        for i in 1..<spanRows {
-                            let y = CGFloat(i) * (cellHeight + gap) - gap / 2
-                            var path = Path()
-                            path.move(to: CGPoint(x: 0, y: y))
-                            path.addLine(to: CGPoint(x: size.width, y: y))
-                            context.stroke(path, with: .color(divider), lineWidth: 0.5)
-                        }
+        // Anchor the fill to the rectangle (sized via .frame) and layer
+        // dividers, border, label and delete button as overlays. This avoids
+        // a ZStack-with-mixed-children sizing pitfall where the fill could
+        // collapse and the rectangle would render invisible.
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .fill(fill)
+            .overlay(
+                Canvas { context, size in
+                    for i in 1..<spanCols {
+                        let x = CGFloat(i) * (cellWidth + gap) - gap / 2
+                        var path = Path()
+                        path.move(to: CGPoint(x: x, y: 0))
+                        path.addLine(to: CGPoint(x: x, y: size.height))
+                        context.stroke(path, with: .color(divider), lineWidth: 0.5)
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .stroke(border, lineWidth: 1.5)
-                )
-
-            // Index label centered
-            if showIndex {
-                Text("\(index + 1)")
-                    .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-
-            // Delete button at top-left
-            if showDelete {
-                Button {
-                    onDeleteSelection?(index)
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: min(14, min(selRect.width, selRect.height) * 0.22)))
-                        .foregroundStyle(.white.opacity(0.85))
-                        .shadow(color: .black.opacity(0.4), radius: 1, y: 0.5)
+                    for i in 1..<spanRows {
+                        let y = CGFloat(i) * (cellHeight + gap) - gap / 2
+                        var path = Path()
+                        path.move(to: CGPoint(x: 0, y: y))
+                        path.addLine(to: CGPoint(x: size.width, y: y))
+                        context.stroke(path, with: .color(divider), lineWidth: 0.5)
+                    }
                 }
-                .buttonStyle(.plain)
-                .padding(4)
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(border, lineWidth: 1.5)
+            )
+            .overlay(alignment: .center) {
+                if showIndex {
+                    Text("\(index + 1)")
+                        .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
+                }
             }
-        }
-        .frame(width: selRect.width, height: selRect.height)
-        .position(x: selRect.midX, y: selRect.midY)
+            .overlay(alignment: .topLeading) {
+                if showDelete {
+                    Button {
+                        onDeleteSelection?(index)
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: min(14, min(selRect.width, selRect.height) * 0.22)))
+                            .foregroundStyle(.white.opacity(0.85))
+                            .shadow(color: .black.opacity(0.4), radius: 1, y: 0.5)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(4)
+                }
+            }
+            .frame(width: selRect.width, height: selRect.height)
+            .position(x: selRect.midX, y: selRect.midY)
     }
 
 }

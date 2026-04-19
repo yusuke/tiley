@@ -10,6 +10,7 @@
 ### Corrigé
 
 - Correction du saut de la fenêtre principale vers le centre de l'écran lors de l'ajout ou de la modification d'une grille dans un préréglage de disposition lorsque « Afficher près de l'icône au clic » était activé ; la fenêtre reste désormais ancrée près de l'icône de la barre de menus
+- Correction du fait que les rectangles de sélection validés s'affichaient parfois sans remplissage ni bordure (avec uniquement le bouton de fermeture et l'étiquette de numéro visibles) lorsqu'un préréglage de disposition contenait plusieurs sélections
 
 ## [4.4.2] - 2026-04-19
 

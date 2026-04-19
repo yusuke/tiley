@@ -10,6 +10,7 @@
 ### Corretto
 
 - Corretto lo spostamento della finestra principale al centro dello schermo quando si aggiungeva o modificava una griglia in un preset di layout con "Mostra vicino all'icona al clic" attivato; la finestra ora rimane ancorata vicino all'icona della barra dei menu
+- Corretto il problema per cui i rettangoli di selezione confermati venivano talvolta visualizzati senza riempimento e senza bordo (con solo il pulsante di chiusura e l'etichetta numerica visibili) quando un preset di layout conteneva più selezioni
 
 ## [4.4.2] - 2026-04-19
 

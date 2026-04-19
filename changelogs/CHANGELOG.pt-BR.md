@@ -10,6 +10,7 @@
 ### Corrigido
 
 - Corrigido o salto da janela principal para o centro da tela ao adicionar ou editar uma grade em uma predefinição de layout quando "Mostrar perto do ícone ao clicar" estava ativado; a janela agora permanece ancorada perto do ícone da barra de menus
+- Corrigido o problema em que retângulos de seleção confirmados eram exibidos ocasionalmente sem preenchimento e sem borda (apenas com o botão de fechar e o rótulo de índice visíveis) quando uma predefinição de layout continha várias seleções
 
 ## [4.4.2] - 2026-04-19
 
