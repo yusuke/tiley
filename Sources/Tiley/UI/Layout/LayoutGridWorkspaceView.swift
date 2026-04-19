@@ -118,21 +118,18 @@ struct LayoutGridWorkspaceView: View {
                         let isInMultiHighlight = isInHighlightSelections(row: row, column: column)
                         if !isInSelection && !isInHighlight && !isInCommitted && !isInMultiHighlight {
                             let hovered = isHovered(row: row, column: column)
-                            // Suppress hover fill when a miniature window will be overlaid on this cell.
-                            let showHoverFill = hovered && windowFrameRelative == nil
-                            let nextIndex = committedSelections.count
-                            let useIndexedHover = showHoverFill && onDeleteSelection != nil
+                            // In edit mode, the hover preview is rendered as a dedicated
+                            // committed-style rectangle overlay, so suppress the per-cell
+                            // hover fill here. Also suppressed when a miniature window is
+                            // overlaid.
+                            let showHoverFill = hovered && windowFrameRelative == nil && onDeleteSelection == nil
                             RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
-                                .fill(useIndexedHover
-                                      ? ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme).opacity(0.5)
-                                      : showHoverFill
+                                .fill(showHoverFill
                                       ? ThemeColors.gridCellHoverFill(for: colorScheme)
                                       : ThemeColors.gridCellFill(for: colorScheme))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
-                                        .stroke(useIndexedHover
-                                                ? ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme).opacity(0.5)
-                                                : showHoverFill
+                                        .stroke(showHoverFill
                                                 ? ThemeColors.gridCellHoverBorder(for: colorScheme)
                                                 : ThemeColors.gridCellBorder(for: colorScheme), lineWidth: 1.5)
                                 )
@@ -147,8 +144,40 @@ struct LayoutGridWorkspaceView: View {
                     }
                 }
 
-                // Miniature window overlay on single-cell hover
-                if let hover = hoverCell, !isDragging, activeSelection == nil,
+                // Single-cell hover preview during preset editing —
+                // rendered as a committed-style rectangle (no delete button, no title bar)
+                // tinted with the next index's color. Suppressed on cells that are already
+                // part of a committed selection.
+                if onDeleteSelection != nil,
+                   let hover = hoverCell, !isDragging, activeSelection == nil,
+                   highlightSelection == nil, highlightSelections.isEmpty,
+                   !isInCommittedSelection(row: hover.row, column: hover.column) {
+                    let nextIndex = committedSelections.count
+                    let hoverSel = GridSelection(
+                        startColumn: hover.column, startRow: hover.row,
+                        endColumn: hover.column, endRow: hover.row
+                    )
+                    let inset: CGFloat = committedSelections.isEmpty ? 0 : 1
+                    let hoverRect = rectForSelection(hoverSel, cellWidth: cellWidth, cellHeight: cellHeight)
+                        .insetBy(dx: inset, dy: inset)
+                    let fill = ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme)
+                    let border = ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme)
+                    committedSelectionRectangle(
+                        index: nextIndex,
+                        sel: hoverSel, selRect: hoverRect,
+                        cellWidth: cellWidth, cellHeight: cellHeight,
+                        cornerRadius: cellCornerRadius,
+                        fill: fill, border: border,
+                        divider: border.opacity(0.3),
+                        showIndex: false,
+                        showDelete: false
+                    )
+                }
+
+                // Miniature window overlay on single-cell hover (non-edit mode —
+                // previewing window placement before drag).
+                if onDeleteSelection == nil,
+                   let hover = hoverCell, !isDragging, activeSelection == nil,
                    highlightSelection == nil, highlightSelections.isEmpty,
                    committedSelections.isEmpty,
                    let wf = windowFrameRelative {
@@ -277,46 +306,85 @@ struct LayoutGridWorkspaceView: View {
                 if let sel = activeSelection?.normalized {
                     let selRect = rectForSelection(sel, cellWidth: cellWidth, cellHeight: cellHeight)
                     let overlaps = dragOverlapsCommitted
-                    // In edit mode, use the color of the next index this drag will become.
                     let nextIndex = committedSelections.count
-                    let usesIndexedColor = !committedSelections.isEmpty || onDeleteSelection != nil
-                    let fillColor = overlaps ? ThemeColors.invalidSelectionFill(for: colorScheme)
-                        : usesIndexedColor ? ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme)
-                        : ThemeColors.gridCellSelectedFill(for: colorScheme)
-                    let borderColor = overlaps ? ThemeColors.invalidSelectionBorder(for: colorScheme)
-                        : usesIndexedColor ? ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme)
-                        : ThemeColors.gridCellSelectedBorder(for: colorScheme)
-                    // Hide the selection rectangle when a miniature window will be overlaid.
-                    if windowFrameRelative == nil {
-                        selectionRectangle(
-                            sel: sel, selRect: selRect,
-                            cellWidth: cellWidth, cellHeight: cellHeight,
-                            cornerRadius: cellCornerRadius,
-                            fill: fillColor,
-                            border: borderColor,
-                            divider: borderColor.opacity(0.3)
-                        )
-                    }
+                    let isEditMode = onDeleteSelection != nil
 
-                    // Overlay miniature window on drag selection
-                    if let wf = windowFrameRelative {
-                        let insetRect = selRect.insetBy(dx: 1, dy: 1)
-                        let menuBarFraction = wf.menuBarHeightFraction
-                        let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
-                        let staticW = wf.width * geometry.size.width
-                        let staticH = wf.height * geometry.size.height
-                        let matchedRadius = max(2, min(staticW, staticH) * MiniatureWindowView.cornerRadiusFraction)
-                        MiniatureWindowView(
-                            titleBarHeight: titleBarPx,
-                            appIcon: wf.appIcon,
-                            appName: wf.appName,
-                            windowTitle: wf.windowTitle,
-                            cornerRadiusOverride: matchedRadius,
-                            tintColor: ThemeColors.indexedSelectionFill(index: 0, for: colorScheme)
-                        )
-                        .frame(width: insetRect.width, height: insetRect.height)
-                        .position(x: insetRect.midX, y: insetRect.midY)
-                        .allowsHitTesting(false)
+                    if isEditMode {
+                        // Edit mode: render a committed-style rectangle (no title bar,
+                        // no delete button, no index number — the number only appears
+                        // once the drag is committed). On overlap with an existing
+                        // committed selection, fall back to the invalid-selection
+                        // appearance.
+                        let inset: CGFloat = committedSelections.isEmpty ? 0 : 1
+                        let dragRect = selRect.insetBy(dx: inset, dy: inset)
+                        if overlaps {
+                            selectionRectangle(
+                                sel: sel, selRect: dragRect,
+                                cellWidth: cellWidth, cellHeight: cellHeight,
+                                cornerRadius: cellCornerRadius,
+                                fill: ThemeColors.invalidSelectionFill(for: colorScheme),
+                                border: ThemeColors.invalidSelectionBorder(for: colorScheme),
+                                divider: ThemeColors.invalidSelectionBorder(for: colorScheme).opacity(0.3)
+                            )
+                        } else {
+                            let fill = ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme)
+                            let border = ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme)
+                            committedSelectionRectangle(
+                                index: nextIndex,
+                                sel: sel, selRect: dragRect,
+                                cellWidth: cellWidth, cellHeight: cellHeight,
+                                cornerRadius: cellCornerRadius,
+                                fill: fill, border: border,
+                                divider: border.opacity(0.3),
+                                showIndex: false,
+                                showDelete: false
+                            )
+                        }
+                    } else {
+                        // Non-edit mode: preview where the target window will land, using
+                        // a miniature window overlay (or a plain rectangle when no window
+                        // frame is available).
+                        let usesIndexedColor = !committedSelections.isEmpty
+                        let fillColor = overlaps ? ThemeColors.invalidSelectionFill(for: colorScheme)
+                            : usesIndexedColor ? ThemeColors.indexedSelectionFill(index: nextIndex, for: colorScheme)
+                            : ThemeColors.gridCellSelectedFill(for: colorScheme)
+                        let borderColor = overlaps ? ThemeColors.invalidSelectionBorder(for: colorScheme)
+                            : usesIndexedColor ? ThemeColors.indexedSelectionBorder(index: nextIndex, for: colorScheme)
+                            : ThemeColors.gridCellSelectedBorder(for: colorScheme)
+                        if windowFrameRelative == nil {
+                            selectionRectangle(
+                                sel: sel, selRect: selRect,
+                                cellWidth: cellWidth, cellHeight: cellHeight,
+                                cornerRadius: cellCornerRadius,
+                                fill: fillColor,
+                                border: borderColor,
+                                divider: borderColor.opacity(0.3)
+                            )
+                        } else if let wf = windowFrameRelative {
+                            let insetRect = selRect.insetBy(dx: 1, dy: 1)
+                            let menuBarFraction = wf.menuBarHeightFraction
+                            let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                            let staticW = wf.width * geometry.size.width
+                            let staticH = wf.height * geometry.size.height
+                            let matchedRadius = max(2, min(staticW, staticH) * MiniatureWindowView.cornerRadiusFraction)
+                            let tint: Color = overlaps
+                                ? ThemeColors.invalidSelectionFill(for: colorScheme)
+                                : ThemeColors.indexedSelectionFill(
+                                    index: usesIndexedColor ? nextIndex : 0,
+                                    for: colorScheme
+                                )
+                            MiniatureWindowView(
+                                titleBarHeight: titleBarPx,
+                                appIcon: wf.appIcon,
+                                appName: wf.appName,
+                                windowTitle: wf.windowTitle,
+                                cornerRadiusOverride: matchedRadius,
+                                tintColor: tint
+                            )
+                            .frame(width: insetRect.width, height: insetRect.height)
+                            .position(x: insetRect.midX, y: insetRect.midY)
+                            .allowsHitTesting(false)
+                        }
                     }
                 }
             }

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- Durante la modifica di un preset di layout, le anteprime al passaggio del mouse e durante il trascinamento sulla griglia usano ora lo stesso stile di rettangolo delle selezioni confermate: colorate con la tinta del prossimo indice e con il numero di indice da assegnare mostrato al centro, senza barra del titolo e senza pulsante di eliminazione. Inoltre, passando il mouse su una cella vuota viene mostrata un'anteprima di una cella anche quando sono già registrati altri layout
+- I numeri di indice non vengono più mostrati durante il trascinamento della griglia per ridimensionare mentre si modifica un preset, né sul rettangolo di anteprima al passaggio del mouse (per evitare che il prossimo numero di indice distragga durante il gesto). Le anteprime dei preset di layout (passaggio del mouse su un preset nella barra laterale e la sovrapposizione di anteprima a schermo intero durante l'applicazione di preset a selezione multipla) continuano a mostrare i numeri di indice
+
 ## [4.4.2] - 2026-04-19
 
 ### Corretto
