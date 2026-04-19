@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered
 - Index numbers are suppressed on the hover and drag rectangles while resizing a region during preset editing — the upcoming index label no longer distracts while the gesture is in progress. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers
 
+### Fixed
+
+- Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon
+
 ## [4.4.2] - 2026-04-19
 
 ### Fixed

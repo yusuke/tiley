@@ -7,6 +7,10 @@
 - Al editar una configuración predefinida de diseño, las vistas previas de paso del cursor y de arrastre en la cuadrícula ahora usan el mismo estilo de rectángulo que las selecciones confirmadas: tintadas con el color del siguiente índice y mostrando centrado el número de índice que se asignará, sin barra de título ni botón de eliminación. Además, al pasar el cursor sobre una celda vacía se muestra una vista previa de rectángulo de una celda aunque ya haya otros diseños registrados
 - Los números de índice ya no se muestran al arrastrar la cuadrícula para redimensionar durante la edición de una configuración predefinida, ni en el rectángulo de vista previa al pasar el cursor (para evitar que el próximo número de índice distraiga durante el gesto). Las vistas previas de configuraciones predefinidas de diseño (paso del cursor sobre una configuración predefinida en la barra lateral y la superposición de vista previa a pantalla completa al aplicar configuraciones predefinidas de selección múltiple) siguen mostrando los números de índice
 
+### Corregido
+
+- Se corrigió el salto de la ventana principal al centro de la pantalla al añadir o editar una cuadrícula en una configuración predefinida de diseño cuando "Mostrar cerca del icono al hacer clic" estaba activado; ahora la ventana permanece anclada cerca del icono de la barra de menús
+
 ## [4.4.2] - 2026-04-19
 
 ### Corregido

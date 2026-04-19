@@ -349,7 +349,14 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
         var frame = window.frame
         frame.size = targetSize
-        frame.origin = calculatedOrigin(for: targetSize, visibleFrame: visibleFrame, screenFrame: screenFrame)
+        // Preserve the current origin so icon-anchored positioning isn't lost when
+        // the size changes (e.g. on layoutPresets edits). Callers that need fresh
+        // positioning invoke positionWindow() afterwards. Clamp to the visible frame
+        // so a size increase doesn't push the window off-screen.
+        let maxOriginX = max(visibleFrame.minX, visibleFrame.maxX - targetSize.width)
+        let maxOriginY = max(visibleFrame.minY, visibleFrame.maxY - targetSize.height)
+        frame.origin.x = min(max(frame.origin.x, visibleFrame.minX), maxOriginX)
+        frame.origin.y = min(max(frame.origin.y, visibleFrame.minY), maxOriginY)
 
         let sizeChanged = window.minSize != targetSize || window.maxSize != targetSize
         let frameChanged = !window.frame.equalTo(frame)

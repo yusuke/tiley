@@ -7,6 +7,10 @@
 - Ao editar uma predefinição de layout, as prévias de passagem do mouse e de arrasto na grade agora usam o mesmo estilo de retângulo das seleções confirmadas: tingidas com a cor do próximo índice e exibindo centralizado o número de índice que será atribuído, sem barra de título e sem botão de exclusão. Além disso, passar o mouse sobre uma célula vazia mostra uma prévia de retângulo do tamanho de uma célula mesmo quando outros layouts já estão registrados
 - Os números de índice não são mais exibidos ao arrastar a grade para redimensionar durante a edição de uma predefinição, nem no retângulo de prévia ao passar o mouse (para evitar que o próximo número de índice distraia durante o gesto). As prévias de predefinições de layout (passar o mouse sobre uma predefinição na barra lateral e a sobreposição de prévia em tela cheia ao aplicar predefinições de seleção múltipla) continuam exibindo os números de índice
 
+### Corrigido
+
+- Corrigido o salto da janela principal para o centro da tela ao adicionar ou editar uma grade em uma predefinição de layout quando "Mostrar perto do ícone ao clicar" estava ativado; a janela agora permanece ancorada perto do ícone da barra de menus
+
 ## [4.4.2] - 2026-04-19
 
 ### Corrigido

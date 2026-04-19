@@ -7,6 +7,10 @@
 - Beim Bearbeiten einer Layout-Voreinstellung verwenden Hover- und Zieh-Vorschauen auf dem Raster jetzt denselben Rechteck-Stil wie bestätigte Auswahlen: in der Farbe des nächsten Index und mit der zugehörigen Indexnummer mittig, ohne Titelleiste und ohne Löschen-Schaltfläche. Zusätzlich zeigt das Darüberfahren mit der Maus über eine leere Zelle ein ein Zellen großes Vorschaurechteck an, auch wenn bereits andere Layouts registriert sind
 - Indexnummern werden beim Ziehen zur Größenänderung auf dem Raster während der Bearbeitung einer Voreinstellung sowie auf dem Hover-Vorschaurechteck nicht mehr angezeigt (damit die nächste Indexnummer während der Geste nicht ablenkt). Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an
 
+### Behoben
+
+- Das Hauptfenster sprang in die Bildschirmmitte, wenn bei aktivierter Option „Beim Klick neben dem Symbol anzeigen" ein Raster in einer Layout-Voreinstellung hinzugefügt oder bearbeitet wurde; das Fenster bleibt jetzt nahe am Menüleistensymbol verankert
+
 ## [4.4.2] - 2026-04-19
 
 ### Behoben
