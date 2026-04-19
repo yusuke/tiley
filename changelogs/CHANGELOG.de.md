@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.2] - 2026-04-19
+
 ### Behoben
 
 - Beim Anwenden einer Anordnung auf mehrere ausgewählte Fenster war die Stapelreihenfolge umgekehrt; das zuerst ausgewählte (primäre) Fenster liegt nun wie erwartet ganz oben

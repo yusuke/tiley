@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.4.2] - 2026-04-19
+
 ### Fixed
 
 - Fixed the stacking order being reversed when applying a layout to multiple selected windows; the first-selected (primary) window is now brought to the front as expected
@@ -729,7 +731,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.2...HEAD
+[4.4.2]: https://github.com/yusuke/tiley/releases/tag/v4.4.2
 [4.4.1]: https://github.com/yusuke/tiley/releases/tag/v4.4.1
 [4.4.0]: https://github.com/yusuke/tiley/releases/tag/v4.4.0
 [4.3.9]: https://github.com/yusuke/tiley/releases/tag/v4.3.9

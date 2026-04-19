@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.2] - 2026-04-19
+
 ### Corregido
 
 - Se corrigió el orden de apilamiento invertido al aplicar un diseño a varias ventanas seleccionadas; la primera ventana seleccionada (principal) ahora queda al frente como se espera

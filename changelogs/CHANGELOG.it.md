@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.2] - 2026-04-19
+
 ### Corretto
 
 - Corretto l'ordine di sovrapposizione invertito quando si applica un layout a più finestre selezionate; la prima finestra selezionata (principale) ora passa in primo piano come previsto
