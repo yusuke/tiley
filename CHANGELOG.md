@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed the stacking order being reversed when applying a layout to multiple selected windows; the first-selected (primary) window is now brought to the front as expected
+
 ## [4.4.1] - 2026-04-18
 
 ### Changed

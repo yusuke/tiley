@@ -253,15 +253,26 @@ extension AppState {
             }
         }
 
-        // アプリ間: 最後に activate したアプリが前面に来る
-        //   → サイドバー下位のアプリを先に、上位のアプリを最後に処理
-        // アプリ内: 最後に AXRaise したウインドウがアプリ内最前面になる
-        //   → サイドバー下位のウインドウを先に、上位のウインドウを最後に AXRaise
+        raiseWindowsPreservingOrder(indices: sidebarOrder)
 
-        // サイドバー順で選択ウインドウをアプリ別にグループ化
+        clearWindowCyclingState(animateRestore: true)
+    }
+
+    /// Raises the given window indices so that `indices[0]` ends up topmost.
+    ///
+    /// 前提: `indices` は望む Z-order（indices[0] = 最前面）。
+    /// - アプリ間: 最後に `activate()` したアプリが前面に来る
+    ///   → `indices` 下位のアプリを先に、上位のアプリを最後に処理
+    /// - アプリ内: 最後に `AXRaise` したウインドウがアプリ内最前面になる
+    ///   → アプリ内も `indices` 下位のウインドウを先に、上位を最後に AXRaise
+    func raiseWindowsPreservingOrder(indices: [Int]) {
+        let valid = indices.filter { $0 < availableWindowTargets.count }
+        guard !valid.isEmpty else { return }
+
+        // Group by PID while preserving the requested order.
         var appOrder: [pid_t] = []
         var windowsByApp: [pid_t: [Int]] = [:]
-        for idx in sidebarOrder {
+        for idx in valid {
             let pid = availableWindowTargets[idx].processIdentifier
             if windowsByApp[pid] == nil {
                 appOrder.append(pid)
@@ -269,15 +280,12 @@ extension AppState {
             windowsByApp[pid, default: []].append(idx)
         }
 
-        // サイドバー下位のアプリから処理（最後に処理したアプリが最前面）
         for pid in appOrder.reversed() {
-            guard let indices = windowsByApp[pid] else { continue }
-            let app = NSRunningApplication(processIdentifier: pid)
-            app?.activate()
+            guard let indicesInApp = windowsByApp[pid] else { continue }
+            NSRunningApplication(processIdentifier: pid)?.activate()
             RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
 
-            // アプリ内: サイドバー下位から AXRaise（最後に raise = 最前面）
-            for idx in indices.reversed() {
+            for idx in indicesInApp.reversed() {
                 let target = availableWindowTargets[idx]
                 if let window = target.windowElement {
                     accessibilityService.raiseWindow(window)
@@ -285,8 +293,6 @@ extension AppState {
             }
             RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
         }
-
-        clearWindowCyclingState(animateRestore: true)
     }
 
     /// Closes all selected windows. If all windows of an app are selected, quits that app instead.

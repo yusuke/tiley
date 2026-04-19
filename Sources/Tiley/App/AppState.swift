@@ -1144,11 +1144,15 @@ final class AppState: NSObject, NSMenuDelegate {
                 } else {
                     _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
                 }
-                windowManager?.raiseWindow(target: target)
             } catch {
                 NSLog("[Tiley] applyToMultipleWindows error for index \(idx): %@", error.localizedDescription)
             }
         }
+
+        // Raise in the requested order so the primary (first-selected) ends
+        // up topmost. A per-iteration AXRaise would reverse this because the
+        // last-raised window wins within its app.
+        raiseWindowsPreservingOrder(indices: orderedIndices)
 
         // Restore displaced windows that are NOT layout targets — they were
         // pushed aside to reveal the selected window and need to return to
@@ -1253,11 +1257,13 @@ final class AppState: NSObject, NSMenuDelegate {
                 } else {
                     _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
                 }
-                windowManager?.raiseWindow(target: target)
             } catch {
                 NSLog("[Tiley] applyPresetToZOrderedWindows error for index \(idx): %@", error.localizedDescription)
             }
         }
+
+        // Raise in the requested order so the primary ends up topmost.
+        raiseWindowsPreservingOrder(indices: orderedIndices)
 
         // Restore displaced windows that are NOT layout targets.
         let movedWIDs2 = Set(orderedIndices.map { availableWindowTargets[$0].cgWindowID })

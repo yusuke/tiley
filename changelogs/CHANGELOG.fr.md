@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Correction de l'ordre de superposition inversé lors de l'application d'une disposition à plusieurs fenêtres sélectionnées ; la première fenêtre sélectionnée (principale) passe désormais au premier plan comme prévu
+
 ## [4.4.1] - 2026-04-18
 
 ### Modifié

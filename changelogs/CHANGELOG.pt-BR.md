@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Corrigida a ordem de empilhamento invertida ao aplicar um layout a várias janelas selecionadas; a primeira janela selecionada (principal) agora fica em primeiro plano como esperado
+
 ## [4.4.1] - 2026-04-18
 
 ### Alterado
