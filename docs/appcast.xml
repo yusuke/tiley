@@ -3,6 +3,131 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>4.4.3</title>
+            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
+<ul>
+<li>При редактировании пресета раскладки предпросмотры при наведении курсора и во время перетаскивания на сетке теперь используют тот же стиль прямоугольника, что и подтверждённые выделения: окрашены в цвет следующего индекса и показывают по центру номер присваиваемого индекса, без заголовка и без кнопки удаления. Кроме того, наведение курсора на пустую ячейку показывает предпросмотр прямоугольника размером в одну ячейку, даже если уже зарегистрированы другие раскладки</li>
+<li>При редактировании пресета как прямоугольник при наведении курсора, так и перетаскиваемый прямоугольник теперь отображают по центру номер индекса, который будет присвоен после подтверждения (с тем же видом, что и подтверждённый прямоугольник), включая предпросмотр размером в одну ячейку при наведении. Предпросмотры пресетов раскладки (наведение курсора на пресет в боковой панели и полноэкранное наложение предпросмотра при применении пресетов с несколькими выделениями) продолжают показывать номера индексов</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлен скачок главного окна в центр экрана при добавлении или редактировании сетки в пресете раскладки, когда был включён параметр «Показывать рядом с иконкой при нажатии»; окно теперь остаётся закреплённым рядом со значком в строке меню</li>
+<li>Исправлена ошибка, из-за которой подтверждённые прямоугольники выделения иногда отображались без заливки и рамки (видны были только кнопка закрытия и номер выделения), когда пресет раскладки содержал несколько выделений</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Ao editar uma predefinição de layout, as prévias de passagem do mouse e de arrasto na grade agora usam o mesmo estilo de retângulo das seleções confirmadas: tingidas com a cor do próximo índice e exibindo centralizado o número de índice que será atribuído, sem barra de título e sem botão de exclusão. Além disso, passar o mouse sobre uma célula vazia mostra uma prévia de retângulo do tamanho de uma célula mesmo quando outros layouts já estão registrados</li>
+<li>Durante a edição de uma predefinição, tanto o retângulo ao passar o mouse quanto o retângulo arrastado agora exibem centralizado o número de índice que será atribuído ao confirmar (com a mesma aparência do retângulo confirmado), incluindo a prévia de uma única célula ao passar o mouse. As prévias de predefinições de layout (passar o mouse sobre uma predefinição na barra lateral e a sobreposição de prévia em tela cheia ao aplicar predefinições de seleção múltipla) continuam exibindo os números de índice</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o salto da janela principal para o centro da tela ao adicionar ou editar uma grade em uma predefinição de layout quando "Mostrar perto do ícone ao clicar" estava ativado; a janela agora permanece ancorada perto do ícone da barra de menus</li>
+<li>Corrigido o problema em que retângulos de seleção confirmados eram exibidos ocasionalmente sem preenchimento e sem borda (apenas com o botão de fechar e o rótulo de índice visíveis) quando uma predefinição de layout continha várias seleções</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Durante la modifica di un preset di layout, le anteprime al passaggio del mouse e durante il trascinamento sulla griglia usano ora lo stesso stile di rettangolo delle selezioni confermate: colorate con la tinta del prossimo indice e con il numero di indice da assegnare mostrato al centro, senza barra del titolo e senza pulsante di eliminazione. Inoltre, passando il mouse su una cella vuota viene mostrata un'anteprima di una cella anche quando sono già registrati altri layout</li>
+<li>Durante la modifica di un preset, sia il rettangolo al passaggio del mouse sia il rettangolo di trascinamento mostrano ora al centro il numero di indice che verrà assegnato al momento della conferma (con lo stesso aspetto del rettangolo confermato), inclusa l'anteprima di una singola cella al passaggio del mouse. Le anteprime dei preset di layout (passaggio del mouse su un preset nella barra laterale e la sovrapposizione di anteprima a schermo intero durante l'applicazione di preset a selezione multipla) continuano a mostrare i numeri di indice</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto lo spostamento della finestra principale al centro dello schermo quando si aggiungeva o modificava una griglia in un preset di layout con "Mostra vicino all'icona al clic" attivato; la finestra ora rimane ancorata vicino all'icona della barra dei menu</li>
+<li>Corretto il problema per cui i rettangoli di selezione confermati venivano talvolta visualizzati senza riempimento e senza bordo (con solo il pulsante di chiusura e l'etichetta numerica visibili) quando un preset di layout conteneva più selezioni</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Lors de la modification d'un préréglage de disposition, les aperçus au survol et lors du glissement sur la grille utilisent désormais le même style de rectangle que les sélections validées : teintés avec la couleur du prochain index et affichant en son centre le numéro d'index à attribuer, sans barre de titre ni bouton de suppression. De plus, le survol d'une cellule vide affiche un aperçu de rectangle d'une cellule même si d'autres dispositions sont déjà enregistrées</li>
+<li>Lors de la modification d'un préréglage, le rectangle au survol et le rectangle de glissement affichent désormais au centre le numéro d'index qui sera attribué à la validation (avec la même apparence que le rectangle validé), y compris l'aperçu d'une seule cellule au survol. Les aperçus des préréglages de disposition (survol d'un préréglage dans la barre latérale, superposition d'aperçu plein écran lors de l'application de préréglages à sélections multiples) continuent également d'afficher les numéros d'index</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du saut de la fenêtre principale vers le centre de l'écran lors de l'ajout ou de la modification d'une grille dans un préréglage de disposition lorsque « Afficher près de l'icône au clic » était activé ; la fenêtre reste désormais ancrée près de l'icône de la barre de menus</li>
+<li>Correction du fait que les rectangles de sélection validés s'affichaient parfois sans remplissage ni bordure (avec uniquement le bouton de fermeture et l'étiquette de numéro visibles) lorsqu'un préréglage de disposition contenait plusieurs sélections</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Al editar una configuración predefinida de diseño, las vistas previas de paso del cursor y de arrastre en la cuadrícula ahora usan el mismo estilo de rectángulo que las selecciones confirmadas: tintadas con el color del siguiente índice y mostrando centrado el número de índice que se asignará, sin barra de título ni botón de eliminación. Además, al pasar el cursor sobre una celda vacía se muestra una vista previa de rectángulo de una celda aunque ya haya otros diseños registrados</li>
+<li>Durante la edición de una configuración predefinida, tanto el rectángulo al pasar el cursor como el rectángulo de arrastre muestran ahora centrado el número de índice que se asignará al confirmar (con el mismo aspecto que el rectángulo confirmado), incluida la vista previa de una sola celda al pasar el cursor. Las vistas previas de configuraciones predefinidas de diseño (paso del cursor sobre una configuración predefinida en la barra lateral y la superposición de vista previa a pantalla completa al aplicar configuraciones predefinidas de selección múltiple) también siguen mostrando los números de índice</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Se corrigió el salto de la ventana principal al centro de la pantalla al añadir o editar una cuadrícula en una configuración predefinida de diseño cuando "Mostrar cerca del icono al hacer clic" estaba activado; ahora la ventana permanece anclada cerca del icono de la barra de menús</li>
+<li>Se corrigió que los rectángulos de selección confirmados se mostraran ocasionalmente sin relleno ni borde (con solo el botón de cerrar y la etiqueta de índice visibles) cuando una configuración predefinida de diseño contenía varias selecciones</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Beim Bearbeiten einer Layout-Voreinstellung verwenden Hover- und Zieh-Vorschauen auf dem Raster jetzt denselben Rechteck-Stil wie bestätigte Auswahlen: in der Farbe des nächsten Index und mit der zugehörigen Indexnummer mittig, ohne Titelleiste und ohne Löschen-Schaltfläche. Zusätzlich zeigt das Darüberfahren mit der Maus über eine leere Zelle ein ein Zellen großes Vorschaurechteck an, auch wenn bereits andere Layouts registriert sind</li>
+<li>Beim Bearbeiten einer Voreinstellung zeigen nun sowohl das Hover- als auch das Zieh-Rechteck die nach dem Bestätigen zugewiesene Indexnummer mittig an (passend zum bestätigten Rechteck, in das sie übergehen) – einschließlich der ein Zellen großen Hover-Vorschau. Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Das Hauptfenster sprang in die Bildschirmmitte, wenn bei aktivierter Option „Beim Klick neben dem Symbol anzeigen" ein Raster in einer Layout-Voreinstellung hinzugefügt oder bearbeitet wurde; das Fenster bleibt jetzt nahe am Menüleistensymbol verankert</li>
+<li>Behoben, dass bestätigte Auswahlrechtecke gelegentlich ohne Füllung und Rahmen angezeigt wurden (nur Schließen-Schaltfläche und Indexnummer sichtbar), wenn eine Layout-Voreinstellung mehrere Auswahlen enthielt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>編輯版面配置預設時，滑鼠懸停和拖曳中的格線預覽統一為與放開拖曳後顯示相同的矩形樣式：不顯示標題列和刪除按鈕，以下一個索引的顏色顯示，並在中央顯示即將指派的索引編號。此外，即使已經登記其他配置，將滑鼠懸停在空格上也會顯示 1 格大小的預覽矩形</li>
+<li>編輯預設時，滑鼠懸停矩形和拖曳矩形都會在中央顯示提交後將取得的索引編號（與提交後的矩形外觀相同）。1 格大小的滑鼠懸停預覽也會顯示編號。版面配置預設預覽（側邊欄的預設懸停、套用多選預設時的全螢幕預覽覆蓋層）同樣繼續顯示索引編號</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正啟用「點擊圖示時在圖示附近顯示」後，在版面配置預設中新增或編輯格線時主視窗會跳到螢幕中央的問題；視窗現在會固定在選單列圖示附近</li>
+<li>修正版面配置預設中存在多個選取區域時，已確定的選取矩形偶爾不顯示填充和邊框（僅顯示 × 按鈕和編號標籤）的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>编辑布局预设时，鼠标悬停和拖动过程中的网格预览统一为与拖动释放后显示相同的矩形样式：不显示标题栏和删除按钮，以下一个索引的颜色显示，并在中央显示即将赋予的索引编号。此外，即使已经登记了其他布局，将鼠标悬停在空单元格上也会显示 1 格大小的预览矩形</li>
+<li>编辑预设时，鼠标悬停矩形和拖动矩形都会在中央显示提交后将获得的索引编号（与提交后的矩形外观相同）。1 格大小的鼠标悬停预览也会显示编号。预设布局预览（侧边栏的预设悬停、应用多选预设时的全屏预览叠加层）同样继续显示索引编号</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复启用"点击图标时在图标附近显示"后，在布局预设中添加或编辑网格时主窗口会跳到屏幕中央的问题；窗口现在会保持固定在菜单栏图标附近</li>
+<li>修复布局预设中存在多个选区时，已确定的选区矩形偶尔不显示填充和边框（仅显示×按钮和序号标签）的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>레이아웃 프리셋을 편집할 때, 마우스 호버 및 드래그 중 그리드 미리보기가 드래그를 놓은 후 표시되는 사각형과 동일한 스타일로 통일되었습니다. 타이틀바와 삭제 버튼은 표시되지 않으며, 다음 인덱스 색상과 부여될 인덱스 번호를 중앙에 표시합니다. 또한 다른 레이아웃이 이미 등록된 상태에서도 빈 셀에 마우스를 올리면 1셀 크기의 미리보기 사각형이 표시됩니다</li>
+<li>프리셋 편집 중 마우스 호버 사각형과 드래그 사각형 모두에 확정 후 부여될 인덱스 번호가 중앙에 표시됩니다(확정 후의 사각형과 동일한 모양). 1셀 크기의 마우스 호버 미리보기에도 번호가 표시됩니다. 프리셋 레이아웃 미리보기(사이드바의 프리셋 호버, 다중 선택 프리셋 적용 시의 전체 화면 미리보기 오버레이)에서도 계속해서 번호를 표시합니다</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>"아이콘 클릭 시 아이콘 근처에 표시"가 활성화된 상태에서 레이아웃 프리셋 편집 중 그리드를 추가하거나 편집할 때 메인 창이 화면 중앙으로 이동하던 문제 수정. 이제 창은 메뉴 막대 아이콘 근처에 계속 고정됩니다</li>
+<li>레이아웃 프리셋에 여러 선택 영역이 등록되어 있을 때, 확정된 선택 사각형이 드물게 채우기와 테두리 없이(× 버튼과 번호 라벨만) 표시되던 문제 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>レイアウトプリセットの編集中、マウスホバーおよびドラッグ中のグリッドプレビューを、ドラッグ確定後の矩形と同じスタイルに統一しました。タイトルバーや削除ボタンは非表示で、次のインデックスの色と付与予定のインデックス番号を中央に表示します。また、すでに他のレイアウトが登録されている状態でも、空セルにマウスホバーすると 1 セル分のプレビュー矩形が表示されます</li>
+<li>プリセット編集中のマウスホバー矩形・ドラッグ矩形の両方に、確定後に付与されるインデックス番号を中央に表示するようにしました（確定後の矩形と同じ見た目）。1 セル分のマウスホバープレビューでも番号を表示します。プリセットレイアウトのプレビュー（サイドバーでのプリセットホバーや、複数選択プリセット適用時の全画面プレビューオーバーレイ）でも引き続き番号を表示します</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>「アイコンクリック時にアイコン付近に表示」が有効なときに、レイアウトプリセット編集でグリッドを追加・編集するとメインウインドウが画面中央に飛んでしまう問題を修正。ウインドウはメニューバーアイコン付近に留まるようになりました</li>
+<li>レイアウトプリセットに複数の選択範囲が登録されているとき、確定済みの選択矩形が稀に塗りつぶしや枠線なし（×ボタンと番号ラベルのみ）で表示されてしまう問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered</li>
+<li>During preset editing, the hover and drag rectangles now both show the upcoming index number centered (matching the committed selection they will become) — including the single-cell hover preview. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon</li>
+<li>Fixed committed selection rectangles occasionally rendering with no fill (showing only the close button and index number) when a layout preset contained many selections</li>
+</ul>]]></description>
+            <pubDate>Mon, 20 Apr 2026 13:19:43 +0900</pubDate>
+            <sparkle:version>443</sparkle:version>
+            <sparkle:shortVersionString>4.4.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley-4.4.3.zip" length="5805126" type="application/octet-stream" sparkle:edSignature="0lfB0E9CYqBQ7CdJ9TWpEt+E+2qLTk4/jhh3W+FzpUJSGBHgCsyanhmFNQncGPc6Zhf7b1QR/NphuYr497yDBw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-442.delta" sparkle:deltaFrom="442" length="247018" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aSyDVV5quAxZEMgBpySjMtq1z7Xxv7FwltRy/ZEOo0IF47LU4yvcmk/1PXC2WkQHaz0z7vY06iEDY68OoNX3Ag=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-441.delta" sparkle:deltaFrom="441" length="264450" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Yc6CIk/7Mr0RvDEsb2X5oJmp0uTS+2GtbV79ix/7xTzV3wcbrglskmlFrGAmoRqpXRWkIHPGEVnW6bGb5nDvDA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-440.delta" sparkle:deltaFrom="440" length="347722" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="XaGEz5BmR6sZcB5G/CBuZuptIT2bUOgpud8NN3rM/4etknwu1CyJ3U1EV1ETIO9FcnK4yZXhoUZql0ELVRafAw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-439.delta" sparkle:deltaFrom="439" length="409294" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="W6Ji5JM8BGnDujLdu7t3at7kuloGYk/UUgbZM0OfNSHE0PTCr+7UiBXHB+DfZA5J7URp7BnWAJZ5KMynx54GDw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-438.delta" sparkle:deltaFrom="438" length="475114" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="8g3vT1L+5LaB70WL/q+DXy2CS2ZGMJuyvqTni1stNacelpiBWwH7Mrt//SFQsHsh3Dzi01uiFgFtuv4QRUGsDg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.4.2</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -48,11 +173,51 @@
 <ul>
 <li>Fixed the stacking order being reversed when applying a layout to multiple selected windows; the first-selected (primary) window is now brought to the front as expected</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigida a ordem de empilhamento invertida ao aplicar um layout a várias janelas selecionadas; a primeira janela selecionada (principal) agora fica em primeiro plano como esperado</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto l'ordine di sovrapposizione invertito quando si applica un layout a più finestre selezionate; la prima finestra selezionata (principale) ora passa in primo piano come previsto</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'ordre de superposition inversé lors de l'application d'une disposition à plusieurs fenêtres sélectionnées ; la première fenêtre sélectionnée (principale) passe désormais au premier plan comme prévu</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Se corrigió el orden de apilamiento invertido al aplicar un diseño a varias ventanas seleccionadas; la primera ventana seleccionada (principal) ahora queda al frente como se espera</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Beim Anwenden einer Anordnung auf mehrere ausgewählte Fenster war die Stapelreihenfolge umgekehrt; das zuerst ausgewählte (primäre) Fenster liegt nun wie erwartet ganz oben</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正對多選視窗套用版面配置時 Z 順序顛倒的問題；最先選取的視窗（主視窗）現在會如預期顯示在最前方</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复对多选窗口应用布局时 Z 顺序颠倒的问题；最先选中的窗口（主窗口）现在会按预期出现在最前面</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>여러 창을 선택한 상태에서 레이아웃을 적용할 때 Z-순서가 반대로 적용되던 문제 수정. 처음 선택한 창(기본 창)이 기대한 대로 맨 앞에 오도록 개선</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>複数選択したウインドウにレイアウトを適用した際に Z-order が逆転していた問題を修正。最初に選択したウインドウ（プライマリ）が期待どおり最前面に来るようになりました</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed the stacking order being reversed when applying a layout to multiple selected windows; the first-selected (primary) window is now brought to the front as expected</li>
+</ul>]]></description>
             <pubDate>Sun, 19 Apr 2026 11:18:55 +0900</pubDate>
             <sparkle:version>442</sparkle:version>
             <sparkle:shortVersionString>4.4.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley-4.4.2.zip" length="5801264" type="application/octet-stream" sparkle:edSignature="0mkpTXyRBXtFIMkbGUbAa0U7D3JnrAZYEVrFdnbni5pMN6uLF8vpy5wnPpIyafxp7c1zohnu1KBRJMUfHJtXDA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley-4.4.2.zip" length="5801264" type="application/octet-stream" sparkle:edSignature="0mkpTXyRBXtFIMkbGUbAa0U7D3JnrAZYEVrFdnbni5pMN6uLF8vpy5wnPpIyafxp7c1zohnu1KBRJMUfHJtXDA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley442-441.delta" sparkle:deltaFrom="441" length="167394" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GBjZvQ0J47+mNYm6lY6ACIqSrqNHFfJj7T55zZIl+dZkLIsGwd9uNWOmjYb/h6qHVs3gUecxFSlC0w6qFzjOBw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley442-440.delta" sparkle:deltaFrom="440" length="297746" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="iedzJMfYFX61/f78USccc/STiRzaOYFpAgOvd3YElqMjHYEkACAeFe1EdZNfnx79joKMKOlD60fB9BE2Tk0HDw=="/>
@@ -168,404 +333,67 @@
 <li>Main window is now positioned so the miniature screen preview — not the whole window — is centered on the display when opened via shortcut, using the full screen frame (so the miniature stays centered even when the Dock is on the left or right)</li>
 <li>When "Show near icon when clicked" is enabled, clicking the menu bar icon now aligns the miniature screen center (not the whole window) with the icon; the bubble-arrow triangle still points directly at the icon</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Ao abrir pelo atalho, a visualização da tela em miniatura – e não a janela inteira – agora fica centralizada no monitor. A referência é o quadro completo da tela (incluindo barra de menus e Dock), de modo que a miniatura permanece centralizada mesmo com o Dock à esquerda ou à direita</li>
+<li>Quando "Mostrar perto do ícone ao clicar" está ativado, clicar no ícone da barra de menus agora alinha o centro da visualização em miniatura (e não o da janela inteira) ao ícone; o triângulo do balão continua apontando diretamente para o ícone</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>All'apertura tramite scorciatoia, l'anteprima dello schermo in miniatura – e non l'intera finestra – è ora centrata sul display. Il riferimento è l'intero frame dello schermo (con barra dei menu e Dock), quindi la miniatura resta centrata anche quando il Dock è a sinistra o a destra</li>
+<li>Quando "Mostra vicino all'icona al clic" è attivo, facendo clic sull'icona della barra dei menu il centro dell'anteprima in miniatura (e non quello dell'intera finestra) viene allineato all'icona; il triangolo del fumetto punta ancora direttamente all'icona</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Lors de l'ouverture par raccourci, l'aperçu de l'écran miniature – et non la fenêtre entière – est désormais centré sur l'écran. La référence est le cadre complet de l'écran (avec la barre de menus et le Dock), de sorte que la miniature reste centrée même lorsque le Dock est à gauche ou à droite</li>
+<li>Lorsque « Afficher près de l'icône au clic » est activé, cliquer sur l'icône de la barre de menus aligne désormais le centre de l'aperçu miniature (et non celui de la fenêtre entière) sur l'icône ; le triangle de la bulle pointe toujours directement vers l'icône</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Al abrir la ventana principal con el atajo de teclado, ahora la vista previa de la pantalla en miniatura —y no toda la ventana— queda centrada en la pantalla. La referencia es el marco completo de la pantalla (con barra de menús y Dock), por lo que la miniatura permanece centrada aunque el Dock esté a la izquierda o a la derecha</li>
+<li>Cuando "Mostrar cerca del icono al hacer clic" está activado, al hacer clic en el icono de la barra de menús se alinea el centro de la pantalla en miniatura (y no el de toda la ventana) con el icono; el triángulo del globo sigue apuntando directamente al icono</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Beim Öffnen per Tastenkürzel wird nun die Miniatur-Bildschirmvorschau – nicht das gesamte Fenster – auf dem Display zentriert. Als Referenz dient der gesamte Bildschirmrahmen (inkl. Menüleiste und Dock), sodass die Miniaturansicht auch bei seitlich platziertem Dock zentriert bleibt</li>
+<li>Wenn „Bei Klick nahe dem Symbol anzeigen" aktiviert ist, wird beim Klicken auf das Menüleistensymbol nun die Mitte der Miniatur-Bildschirmvorschau (und nicht die des gesamten Fensters) am Symbol ausgerichtet; der Sprechblasen-Pfeil zeigt weiterhin direkt auf das Symbol</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>透過快捷鍵開啟主視窗時，微縮螢幕預覽（而非整個視窗）在顯示器中置中。基準改為整個螢幕（含選單列與 Dock），即使 Dock 位於左側或右側，微縮螢幕也能保持在顯示器中央</li>
+<li>啟用「點擊圖示時在圖示附近顯示」時，點擊選單列圖示會使微縮螢幕中心（而非整個視窗）與圖示中心對齊；對話框三角形仍直接指向圖示</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>通过快捷键打开主窗口时，微缩屏幕预览（而非整个窗口）在显示器中居中。基准改为整个屏幕（含菜单栏和 Dock），即使 Dock 位于左侧或右侧时，微缩屏幕也能保持在显示器中央</li>
+<li>启用"点击图标时在图标附近显示"时，点击菜单栏图标将使微缩屏幕中心（而非整个窗口）与图标中心对齐；气泡三角形仍然直接指向图标</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>단축키로 열 때 전체 창이 아닌 미니어처 화면 미리보기가 디스플레이 중앙에 오도록 배치. 기준을 전체 화면(메뉴 막대·Dock 포함)으로 변경하여 Dock이 좌우에 있어도 미니어처가 화면 중앙에 정렬되도록 수정</li>
+<li>"아이콘 클릭 시 아이콘 근처에 표시"가 켜져 있을 때 메뉴 막대 아이콘을 클릭하면 전체 창이 아닌 미니어처 화면 중앙이 아이콘 중앙에 정렬되도록 조정(말풍선 삼각형은 아이콘 바로 아래 유지)</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>ショートカットで表示する際、ウインドウ全体ではなくミニチュアスクリーンプレビューが画面中央に来るように配置。基準をスクリーン全体（メニューバー・Dock 含む）とすることで、Dock が左右にある場合でもミニチュアが画面中央に揃うように修正</li>
+<li>「アイコンクリック時にアイコン付近に表示」がオンの場合、メニューバーアイコンをクリックするとウインドウ全体ではなくミニチュアスクリーンの中央がアイコンの中央に揃うように調整（吹き出しの三角はアイコン直下のまま）</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>Main window is now positioned so the miniature screen preview — not the whole window — is centered on the display when opened via shortcut, using the full screen frame (so the miniature stays centered even when the Dock is on the left or right)</li>
+<li>When "Show near icon when clicked" is enabled, clicking the menu bar icon now aligns the miniature screen center (not the whole window) with the icon; the bubble-arrow triangle still points directly at the icon</li>
+</ul>]]></description>
             <pubDate>Sat, 18 Apr 2026 10:20:32 +0900</pubDate>
             <sparkle:version>441</sparkle:version>
             <sparkle:shortVersionString>4.4.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley-4.4.1.zip" length="5801554" type="application/octet-stream" sparkle:edSignature="nAFslutpz1PfsdAw0ngbTVafnxioFWCm6jJgDEAAGCcznmqTvu5vs93da6UgeiZCD1PrWPbeLVHKorFtVk35Dg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley-4.4.1.zip" length="5801554" type="application/octet-stream" sparkle:edSignature="nAFslutpz1PfsdAw0ngbTVafnxioFWCm6jJgDEAAGCcznmqTvu5vs93da6UgeiZCD1PrWPbeLVHKorFtVk35Dg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-440.delta" sparkle:deltaFrom="440" length="289534" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Gqorp1tUt9fKts36tKP7ezNKlrnokRZguVysyI0YYvUazWx2dunBD6Jw8V3aqPk9ZUaMpY0ZStupAGry6INNAg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-439.delta" sparkle:deltaFrom="439" length="383310" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="cBEaQUDolzAb8ri+2clXuKHVWuyUtieUbdGllIUDSjuQujJnK0fYM0D8PBi2xzi8qglhfdJdnciYYpEJoSvFBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-438.delta" sparkle:deltaFrom="438" length="448766" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="p6ELCDg2fYvwTZhoeLzfl0Jt+4Yb+B7DBGF19Av+/CHFPPG2g7X7Pgxkx7uL7Ee2+ZxpLFPGL5wQAKbm+g1iAA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-437.delta" sparkle:deltaFrom="437" length="488458" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9ApQnarnZjHzhdPxlq0WCwiKIxNhuQyjWxg+xPwKzvKEYmANLz+rDgneQDuKnVqDfKK8v0aNqmcHaQ357f/kDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-436.delta" sparkle:deltaFrom="436" length="501346" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2DEAkQKPzfbO/cdURKD7aHcJoCzel+gTR6u1rJFCnOFQheIb8flUh3uH8eC8XLFL68V3LM53PpG6tanfktccBw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.4.0</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>Улучшены миниатюрные превью окон на сетке: при наведении и перетаскивании теперь отображаются тонированные миниатюрные окна вместо цветных прямоугольников, вторичные дисплеи показывают тот же стиль миниатюрных окон, что и основной дисплей, а ячейки сетки остаются видимыми во время перетаскивания</li>
-<li>Упрощено наложение на нецелевых дисплеях: удалён значок миниатюрного расположения дисплеев, отображается только крупная центрированная стрелка направления</li>
-<li>Взаимодействие с сеткой на окнах вторичных дисплеев теперь реагирует на первый клик без необходимости дополнительного клика для получения фокуса</li>
-</ul>
-<h3>Исправлено</h3>
-<ul>
-<li>Исправлена проблема, при которой треугольник выноски исчезал и окно смещалось вверх перед анимацией затухания при закрытии Tiley нажатием на значок в строке меню. Теперь треугольник остаётся видимым во время затухания, как и при закрытии нажатием на другое окно</li>
-<li>Исправлена проблема, при которой треугольник выноски ошибочно отображался на окнах вторичных дисплеев при открытии Tiley через значок в строке меню</li>
-<li>Исправлена проблема, при которой кнопки панели инструментов были неактивны при запуске, когда список окон был уже доступен до появления боковой панели</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Melhoria das visualizações de janelas em miniatura na grade: ao passar o mouse e arrastar, são exibidas janelas em miniatura coloridas em vez de retângulos de cor sólida, telas secundárias exibem o mesmo estilo de janela em miniatura da tela principal, e as células da grade permanecem visíveis durante o arrasto</li>
-<li>Simplificação da sobreposição em telas não alvo: removido o ícone de arranjo de telas em miniatura, exibindo apenas uma grande seta direcional centralizada</li>
-<li>As interações de grade em janelas de telas secundárias agora respondem ao primeiro clique sem exigir um clique adicional para obter foco</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o triângulo do balão de fala que desaparecia e a janela que se deslocava para cima antes da animação de esmaecimento ao fechar o Tiley clicando no ícone da barra de menus. O triângulo agora permanece visível durante o esmaecimento, igual ao comportamento ao clicar em outra janela</li>
-<li>Corrigido o triângulo do balão de fala que aparecia incorretamente nas janelas de telas secundárias ao abrir o Tiley pelo ícone da barra de menus</li>
-<li>Corrigido os botões da barra de ferramentas desabilitados na inicialização quando a lista de janelas já estava disponível antes da exibição da barra lateral</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Miglioramento delle anteprime delle finestre in miniatura sulla griglia: il passaggio del mouse e il trascinamento mostrano ora finestre in miniatura colorate invece di rettangoli a tinta unita, gli schermi secondari mostrano lo stesso stile di finestra in miniatura dello schermo principale e le celle della griglia rimangono visibili durante il trascinamento</li>
-<li>Semplificazione della sovrapposizione sugli schermi non di destinazione: rimossa l'icona di disposizione miniatura degli schermi, visualizzata solo una grande freccia direzionale centrata</li>
-<li>Le interazioni della griglia sulle finestre degli schermi secondari ora rispondono al primo clic senza richiedere un clic aggiuntivo per ottenere il focus</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto il triangolo del fumetto che scompariva e la finestra che si spostava verso l'alto prima dell'animazione di dissolvenza quando si chiudeva Tiley cliccando sull'icona della barra dei menu. Il triangolo ora rimane visibile durante la dissolvenza, come quando si chiude cliccando su un'altra finestra</li>
-<li>Corretto il triangolo del fumetto che appariva erroneamente sulle finestre degli schermi secondari quando Tiley veniva aperto dall'icona della barra dei menu</li>
-<li>Corretto i pulsanti della barra degli strumenti disabilitati all'avvio quando l'elenco delle finestre era già disponibile prima della comparsa della vista della barra laterale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Amélioration des aperçus de fenêtres miniatures sur la grille : le survol et le glissement affichent désormais des fenêtres miniatures teintées au lieu de rectangles de couleur unie, les écrans secondaires affichent le même style de fenêtre miniature que l'écran principal, et les cellules de la grille restent visibles pendant le glissement</li>
-<li>Simplification de la superposition sur les écrans non ciblés : suppression de l'icône de disposition miniature des écrans, affichage d'une grande flèche directionnelle centrée uniquement</li>
-<li>Les interactions de grille sur les fenêtres d'écrans secondaires répondent désormais au premier clic sans nécessiter un clic supplémentaire pour obtenir le focus</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du triangle de bulle qui disparaissait et de la fenêtre qui se décalait vers le haut avant l'animation de fondu lors de la fermeture de Tiley en cliquant sur l'icône de la barre de menus. Le triangle reste désormais visible pendant le fondu, comme lors de la fermeture en cliquant sur une autre fenêtre</li>
-<li>Correction du triangle de bulle qui s'affichait incorrectement sur les fenêtres des écrans secondaires lors de l'ouverture de Tiley depuis l'icône de la barre de menus</li>
-<li>Correction des boutons de la barre d'outils désactivés au démarrage lorsque la liste des fenêtres était déjà disponible avant l'apparition de la barre latérale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Mejora de las vistas previas de ventanas en miniatura en la cuadrícula: al pasar el ratón y arrastrar se muestran ventanas en miniatura con color en lugar de rectángulos de color sólido, las pantallas secundarias muestran el mismo estilo de ventana en miniatura que la pantalla principal, y las celdas de la cuadrícula permanecen visibles durante el arrastre</li>
-<li>Simplificación de la superposición en pantallas no objetivo: se eliminó el icono de disposición de pantallas en miniatura y solo se muestra una flecha direccional grande centrada</li>
-<li>Las interacciones de cuadrícula en ventanas de pantallas secundarias ahora responden al primer clic sin requerir un clic adicional para enfocar la ventana</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Corregido que el triángulo del globo de diálogo desaparecía y la ventana se desplazaba hacia arriba antes de la animación de desvanecimiento al cerrar Tiley haciendo clic en el icono de la barra de menús. Ahora el triángulo permanece visible durante el desvanecimiento, igual que al cerrar haciendo clic en otra ventana</li>
-<li>Corregido que el triángulo del globo de diálogo aparecía incorrectamente en las ventanas de pantallas secundarias al abrir Tiley desde el icono de la barra de menús</li>
-<li>Corregido que los botones de la barra de herramientas estaban deshabilitados al inicio cuando la lista de ventanas ya estaba disponible antes de que apareciera la vista de la barra lateral</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Miniatur-Fenstervorschauen im Raster verbessert: Beim Hover und Ziehen werden nun getönte Miniaturfenster statt einfarbiger Rechtecke angezeigt, sekundäre Bildschirme zeigen den gleichen Miniaturfensterstil wie der primäre Bildschirm, und Rasterzellen bleiben beim Ziehen sichtbar</li>
-<li>Overlay auf Nicht-Ziel-Bildschirmen vereinfacht: Das Miniatur-Bildschirmanordnungssymbol wurde entfernt und nur ein großer zentrierter Richtungspfeil wird angezeigt</li>
-<li>Rasterinteraktionen auf sekundären Bildschirmfenstern reagieren nun auf den ersten Klick, ohne dass ein zusätzlicher Klick zum Fokussieren erforderlich ist</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Das Sprechblasen-Dreieck verschwand und das Fenster verschob sich nach oben, bevor die Ausblend-Animation begann, wenn Tiley durch Klick auf das Menüleistensymbol geschlossen wurde. Das Dreieck bleibt nun während des Ausblendens sichtbar, wie beim Schließen durch Klick auf ein anderes Fenster</li>
-<li>Das Sprechblasen-Dreieck wurde fälschlicherweise auch auf Fenstern sekundärer Bildschirme angezeigt, wenn Tiley über das Menüleistensymbol geöffnet wurde</li>
-<li>Werkzeugleistenschaltflächen waren beim Start deaktiviert, wenn die Fensterliste bereits vor dem Erscheinen der Seitenleistenansicht verfügbar war</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>優化格線上的微縮視窗預覽：懸停和拖曳時顯示帶色調的微縮視窗而非純色矩形，次要顯示器也顯示與主顯示器相同的微縮視窗樣式，拖曳過程中格線儲存格保持可見</li>
-<li>簡化非目標顯示器的覆蓋層，移除微縮顯示器排列圖示，僅顯示大尺寸置中方向箭頭</li>
-<li>次要顯示器視窗上的格線操作現在無需額外點擊取得焦點即可在首次點擊時回應</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了透過點擊選單列圖示關閉 Tiley 時，氣泡三角指標在淡出動畫前消失並導致視窗上移的問題。現在三角形會在淡出過程中保持顯示，與點擊其他視窗關閉時的行為一致</li>
-<li>修正了從選單列圖示開啟 Tiley 時，次要顯示器的視窗也顯示三角指標的問題</li>
-<li>修正了啟動時如果視窗列表在側邊欄檢視出現之前已準備就緒，工具列按鈕會被停用的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>优化网格上的微缩窗口预览：悬停和拖动时显示带色调的微缩窗口而非纯色矩形，副显示器也显示与主显示器相同的微缩窗口样式，拖动过程中网格单元格保持可见</li>
-<li>简化非目标显示器的覆盖层，移除微缩显示器排列图标，仅显示大尺寸居中方向箭头</li>
-<li>副显示器窗口上的网格操作现在无需额外点击获取焦点即可在首次点击时响应</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了通过点击菜单栏图标关闭 Tiley 时，气泡三角指针在淡出动画前消失并导致窗口上移的问题。现在三角形会在淡出过程中保持显示，与点击其他窗口关闭时的行为一致</li>
-<li>修复了从菜单栏图标打开 Tiley 时，副显示器的窗口也显示三角指针的问题</li>
-<li>修复了启动时如果窗口列表在侧边栏视图出现之前已准备就绪，工具栏按钮会被禁用的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>그리드의 미니어처 창 미리보기 개선: 호버 및 드래그 시 단색 사각형 대신 색상이 적용된 미니어처 창을 표시하도록 변경, 보조 디스플레이에서도 기본 디스플레이와 동일한 미니어처 창을 표시, 드래그 중에도 그리드 셀이 유지되도록 개선</li>
-<li>선택한 창이 다른 디스플레이에 있을 때 미니어처 디스플레이 배치 아이콘을 제거하고 큰 방향 화살표만 표시하도록 간소화</li>
-<li>보조 디스플레이 창에서 포커스를 위한 추가 클릭 없이 첫 번째 클릭으로 바로 그리드 조작 가능</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>메뉴 막대 아이콘을 클릭하여 Tiley를 닫을 때 말풍선 삼각형 포인터가 페이드아웃 애니메이션 전에 사라지고 창이 위로 이동하는 문제를 수정. 다른 창을 클릭하여 닫을 때와 동일하게 삼각형이 표시된 상태로 페이드아웃되도록 변경</li>
-<li>메뉴 막대 아이콘에서 Tiley를 열었을 때 보조 디스플레이의 창에도 삼각형 포인터가 표시되는 문제를 수정</li>
-<li>시작 시 사이드바 뷰가 나타나기 전에 창 목록이 이미 준비된 경우 도구 모음 버튼이 비활성화되는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>グリッド上のミニチュアウインドウプレビューを改善：ホバー・ドラッグ時に単色の矩形ではなく色付きミニチュアウインドウを表示するように変更、セカンダリディスプレイでもプライマリと同じミニチュアウインドウを表示、ドラッグ中もグリッドセルが透けないように改善</li>
-<li>選択中のウインドウが別のディスプレイにある場合の表示を、ミニチュアディスプレイ配置アイコンを廃止し大きな方向矢印のみに簡素化</li>
-<li>セカンダリディスプレイのウインドウでフォーカスのための余分なクリックなしに、最初のクリックからグリッド操作が可能に</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>メニューバーアイコンをクリックして Tiley を閉じるとき、フェードアウトアニメーションの前に吹き出しの三角ポインタが消えてウインドウが上にずれる問題を修正。他のウインドウをクリックして閉じるときと同様に、三角が表示されたままフェードアウトするように変更</li>
-<li>メニューバーアイコンから Tiley を表示したとき、セカンダリディスプレイのウインドウにも三角ポインタが表示されてしまう問題を修正</li>
-<li>起動直後にサイドバー表示前にウインドウリストが準備完了していた場合、ツールバーのボタンが無効化される問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Refined miniature window previews on the grid: hover and drag selections now display tinted miniature windows instead of plain colored rectangles, secondary display grids show the same miniature window style as the primary display, and grid cells remain visible underneath during drag</li>
-<li>Simplified the non-target display overlay to show only a large centered directional arrow instead of a miniature display arrangement icon</li>
-<li>Grid interactions on secondary display windows now respond to the first click without requiring an extra click to focus the window</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed the speech-bubble triangle pointer disappearing and the window shifting up before the fade-out animation when dismissing Tiley by clicking the menu bar icon; the triangle now stays visible during the fade-out, matching the behavior when clicking another window</li>
-<li>Fixed the speech-bubble triangle pointer incorrectly appearing on secondary display windows when Tiley was opened from the menu bar icon</li>
-<li>Fixed toolbar buttons being disabled on launch when the window list was already populated before the sidebar view appeared</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Melhoria das visualizações de janelas em miniatura na grade: ao passar o mouse e arrastar, são exibidas janelas em miniatura coloridas em vez de retângulos de cor sólida, telas secundárias exibem o mesmo estilo de janela em miniatura da tela principal, e as células da grade permanecem visíveis durante o arrasto</li>
-<li>Simplificação da sobreposição em telas não alvo: removido o ícone de arranjo de telas em miniatura, exibindo apenas uma grande seta direcional centralizada</li>
-<li>As interações de grade em janelas de telas secundárias agora respondem ao primeiro clique sem exigir um clique adicional para obter foco</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o triângulo do balão de fala que desaparecia e a janela que se deslocava para cima antes da animação de esmaecimento ao fechar o Tiley clicando no ícone da barra de menus. O triângulo agora permanece visível durante o esmaecimento, igual ao comportamento ao clicar em outra janela</li>
-<li>Corrigido o triângulo do balão de fala que aparecia incorretamente nas janelas de telas secundárias ao abrir o Tiley pelo ícone da barra de menus</li>
-<li>Corrigido os botões da barra de ferramentas desabilitados na inicialização quando a lista de janelas já estava disponível antes da exibição da barra lateral</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Miglioramento delle anteprime delle finestre in miniatura sulla griglia: il passaggio del mouse e il trascinamento mostrano ora finestre in miniatura colorate invece di rettangoli a tinta unita, gli schermi secondari mostrano lo stesso stile di finestra in miniatura dello schermo principale e le celle della griglia rimangono visibili durante il trascinamento</li>
-<li>Semplificazione della sovrapposizione sugli schermi non di destinazione: rimossa l'icona di disposizione miniatura degli schermi, visualizzata solo una grande freccia direzionale centrata</li>
-<li>Le interazioni della griglia sulle finestre degli schermi secondari ora rispondono al primo clic senza richiedere un clic aggiuntivo per ottenere il focus</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto il triangolo del fumetto che scompariva e la finestra che si spostava verso l'alto prima dell'animazione di dissolvenza quando si chiudeva Tiley cliccando sull'icona della barra dei menu. Il triangolo ora rimane visibile durante la dissolvenza, come quando si chiude cliccando su un'altra finestra</li>
-<li>Corretto il triangolo del fumetto che appariva erroneamente sulle finestre degli schermi secondari quando Tiley veniva aperto dall'icona della barra dei menu</li>
-<li>Corretto i pulsanti della barra degli strumenti disabilitati all'avvio quando l'elenco delle finestre era già disponibile prima della comparsa della vista della barra laterale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Amélioration des aperçus de fenêtres miniatures sur la grille : le survol et le glissement affichent désormais des fenêtres miniatures teintées au lieu de rectangles de couleur unie, les écrans secondaires affichent le même style de fenêtre miniature que l'écran principal, et les cellules de la grille restent visibles pendant le glissement</li>
-<li>Simplification de la superposition sur les écrans non ciblés : suppression de l'icône de disposition miniature des écrans, affichage d'une grande flèche directionnelle centrée uniquement</li>
-<li>Les interactions de grille sur les fenêtres d'écrans secondaires répondent désormais au premier clic sans nécessiter un clic supplémentaire pour obtenir le focus</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du triangle de bulle qui disparaissait et de la fenêtre qui se décalait vers le haut avant l'animation de fondu lors de la fermeture de Tiley en cliquant sur l'icône de la barre de menus. Le triangle reste désormais visible pendant le fondu, comme lors de la fermeture en cliquant sur une autre fenêtre</li>
-<li>Correction du triangle de bulle qui s'affichait incorrectement sur les fenêtres des écrans secondaires lors de l'ouverture de Tiley depuis l'icône de la barre de menus</li>
-<li>Correction des boutons de la barre d'outils désactivés au démarrage lorsque la liste des fenêtres était déjà disponible avant l'apparition de la barre latérale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Mejora de las vistas previas de ventanas en miniatura en la cuadrícula: al pasar el ratón y arrastrar se muestran ventanas en miniatura con color en lugar de rectángulos de color sólido, las pantallas secundarias muestran el mismo estilo de ventana en miniatura que la pantalla principal, y las celdas de la cuadrícula permanecen visibles durante el arrastre</li>
-<li>Simplificación de la superposición en pantallas no objetivo: se eliminó el icono de disposición de pantallas en miniatura y solo se muestra una flecha direccional grande centrada</li>
-<li>Las interacciones de cuadrícula en ventanas de pantallas secundarias ahora responden al primer clic sin requerir un clic adicional para enfocar la ventana</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Corregido que el triángulo del globo de diálogo desaparecía y la ventana se desplazaba hacia arriba antes de la animación de desvanecimiento al cerrar Tiley haciendo clic en el icono de la barra de menús. Ahora el triángulo permanece visible durante el desvanecimiento, igual que al cerrar haciendo clic en otra ventana</li>
-<li>Corregido que el triángulo del globo de diálogo aparecía incorrectamente en las ventanas de pantallas secundarias al abrir Tiley desde el icono de la barra de menús</li>
-<li>Corregido que los botones de la barra de herramientas estaban deshabilitados al inicio cuando la lista de ventanas ya estaba disponible antes de que apareciera la vista de la barra lateral</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Miniatur-Fenstervorschauen im Raster verbessert: Beim Hover und Ziehen werden nun getönte Miniaturfenster statt einfarbiger Rechtecke angezeigt, sekundäre Bildschirme zeigen den gleichen Miniaturfensterstil wie der primäre Bildschirm, und Rasterzellen bleiben beim Ziehen sichtbar</li>
-<li>Overlay auf Nicht-Ziel-Bildschirmen vereinfacht: Das Miniatur-Bildschirmanordnungssymbol wurde entfernt und nur ein großer zentrierter Richtungspfeil wird angezeigt</li>
-<li>Rasterinteraktionen auf sekundären Bildschirmfenstern reagieren nun auf den ersten Klick, ohne dass ein zusätzlicher Klick zum Fokussieren erforderlich ist</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Das Sprechblasen-Dreieck verschwand und das Fenster verschob sich nach oben, bevor die Ausblend-Animation begann, wenn Tiley durch Klick auf das Menüleistensymbol geschlossen wurde. Das Dreieck bleibt nun während des Ausblendens sichtbar, wie beim Schließen durch Klick auf ein anderes Fenster</li>
-<li>Das Sprechblasen-Dreieck wurde fälschlicherweise auch auf Fenstern sekundärer Bildschirme angezeigt, wenn Tiley über das Menüleistensymbol geöffnet wurde</li>
-<li>Werkzeugleistenschaltflächen waren beim Start deaktiviert, wenn die Fensterliste bereits vor dem Erscheinen der Seitenleistenansicht verfügbar war</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>優化格線上的微縮視窗預覽：懸停和拖曳時顯示帶色調的微縮視窗而非純色矩形，次要顯示器也顯示與主顯示器相同的微縮視窗樣式，拖曳過程中格線儲存格保持可見</li>
-<li>簡化非目標顯示器的覆蓋層，移除微縮顯示器排列圖示，僅顯示大尺寸置中方向箭頭</li>
-<li>次要顯示器視窗上的格線操作現在無需額外點擊取得焦點即可在首次點擊時回應</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了透過點擊選單列圖示關閉 Tiley 時，氣泡三角指標在淡出動畫前消失並導致視窗上移的問題。現在三角形會在淡出過程中保持顯示，與點擊其他視窗關閉時的行為一致</li>
-<li>修正了從選單列圖示開啟 Tiley 時，次要顯示器的視窗也顯示三角指標的問題</li>
-<li>修正了啟動時如果視窗列表在側邊欄檢視出現之前已準備就緒，工具列按鈕會被停用的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>优化网格上的微缩窗口预览：悬停和拖动时显示带色调的微缩窗口而非纯色矩形，副显示器也显示与主显示器相同的微缩窗口样式，拖动过程中网格单元格保持可见</li>
-<li>简化非目标显示器的覆盖层，移除微缩显示器排列图标，仅显示大尺寸居中方向箭头</li>
-<li>副显示器窗口上的网格操作现在无需额外点击获取焦点即可在首次点击时响应</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了通过点击菜单栏图标关闭 Tiley 时，气泡三角指针在淡出动画前消失并导致窗口上移的问题。现在三角形会在淡出过程中保持显示，与点击其他窗口关闭时的行为一致</li>
-<li>修复了从菜单栏图标打开 Tiley 时，副显示器的窗口也显示三角指针的问题</li>
-<li>修复了启动时如果窗口列表在侧边栏视图出现之前已准备就绪，工具栏按钮会被禁用的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>그리드의 미니어처 창 미리보기 개선: 호버 및 드래그 시 단색 사각형 대신 색상이 적용된 미니어처 창을 표시하도록 변경, 보조 디스플레이에서도 기본 디스플레이와 동일한 미니어처 창을 표시, 드래그 중에도 그리드 셀이 유지되도록 개선</li>
-<li>선택한 창이 다른 디스플레이에 있을 때 미니어처 디스플레이 배치 아이콘을 제거하고 큰 방향 화살표만 표시하도록 간소화</li>
-<li>보조 디스플레이 창에서 포커스를 위한 추가 클릭 없이 첫 번째 클릭으로 바로 그리드 조작 가능</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>메뉴 막대 아이콘을 클릭하여 Tiley를 닫을 때 말풍선 삼각형 포인터가 페이드아웃 애니메이션 전에 사라지고 창이 위로 이동하는 문제를 수정. 다른 창을 클릭하여 닫을 때와 동일하게 삼각형이 표시된 상태로 페이드아웃되도록 변경</li>
-<li>메뉴 막대 아이콘에서 Tiley를 열었을 때 보조 디스플레이의 창에도 삼각형 포인터가 표시되는 문제를 수정</li>
-<li>시작 시 사이드바 뷰가 나타나기 전에 창 목록이 이미 준비된 경우 도구 모음 버튼이 비활성화되는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>グリッド上のミニチュアウインドウプレビューを改善：ホバー・ドラッグ時に単色の矩形ではなく色付きミニチュアウインドウを表示するように変更、セカンダリディスプレイでもプライマリと同じミニチュアウインドウを表示、ドラッグ中もグリッドセルが透けないように改善</li>
-<li>選択中のウインドウが別のディスプレイにある場合の表示を、ミニチュアディスプレイ配置アイコンを廃止し大きな方向矢印のみに簡素化</li>
-<li>セカンダリディスプレイのウインドウでフォーカスのための余分なクリックなしに、最初のクリックからグリッド操作が可能に</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>メニューバーアイコンをクリックして Tiley を閉じるとき、フェードアウトアニメーションの前に吹き出しの三角ポインタが消えてウインドウが上にずれる問題を修正。他のウインドウをクリックして閉じるときと同様に、三角が表示されたままフェードアウトするように変更</li>
-<li>メニューバーアイコンから Tiley を表示したとき、セカンダリディスプレイのウインドウにも三角ポインタが表示されてしまう問題を修正</li>
-<li>起動直後にサイドバー表示前にウインドウリストが準備完了していた場合、ツールバーのボタンが無効化される問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Refined miniature window previews on the grid: hover and drag selections now display tinted miniature windows instead of plain colored rectangles, secondary display grids show the same miniature window style as the primary display, and grid cells remain visible underneath during drag</li>
-<li>Simplified the non-target display overlay to show only a large centered directional arrow instead of a miniature display arrangement icon</li>
-<li>Grid interactions on secondary display windows now respond to the first click without requiring an extra click to focus the window</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed the speech-bubble triangle pointer disappearing and the window shifting up before the fade-out animation when dismissing Tiley by clicking the menu bar icon; the triangle now stays visible during the fade-out, matching the behavior when clicking another window</li>
-<li>Fixed the speech-bubble triangle pointer incorrectly appearing on secondary display windows when Tiley was opened from the menu bar icon</li>
-<li>Fixed toolbar buttons being disabled on launch when the window list was already populated before the sidebar view appeared</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Melhoria das visualizações de janelas em miniatura na grade: ao passar o mouse e arrastar, são exibidas janelas em miniatura coloridas em vez de retângulos de cor sólida, telas secundárias exibem o mesmo estilo de janela em miniatura da tela principal, e as células da grade permanecem visíveis durante o arrasto</li>
-<li>Simplificação da sobreposição em telas não alvo: removido o ícone de arranjo de telas em miniatura, exibindo apenas uma grande seta direcional centralizada</li>
-<li>As interações de grade em janelas de telas secundárias agora respondem ao primeiro clique sem exigir um clique adicional para obter foco</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o triângulo do balão de fala que desaparecia e a janela que se deslocava para cima antes da animação de esmaecimento ao fechar o Tiley clicando no ícone da barra de menus. O triângulo agora permanece visível durante o esmaecimento, igual ao comportamento ao clicar em outra janela</li>
-<li>Corrigido o triângulo do balão de fala que aparecia incorretamente nas janelas de telas secundárias ao abrir o Tiley pelo ícone da barra de menus</li>
-<li>Corrigido os botões da barra de ferramentas desabilitados na inicialização quando a lista de janelas já estava disponível antes da exibição da barra lateral</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Miglioramento delle anteprime delle finestre in miniatura sulla griglia: il passaggio del mouse e il trascinamento mostrano ora finestre in miniatura colorate invece di rettangoli a tinta unita, gli schermi secondari mostrano lo stesso stile di finestra in miniatura dello schermo principale e le celle della griglia rimangono visibili durante il trascinamento</li>
-<li>Semplificazione della sovrapposizione sugli schermi non di destinazione: rimossa l'icona di disposizione miniatura degli schermi, visualizzata solo una grande freccia direzionale centrata</li>
-<li>Le interazioni della griglia sulle finestre degli schermi secondari ora rispondono al primo clic senza richiedere un clic aggiuntivo per ottenere il focus</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto il triangolo del fumetto che scompariva e la finestra che si spostava verso l'alto prima dell'animazione di dissolvenza quando si chiudeva Tiley cliccando sull'icona della barra dei menu. Il triangolo ora rimane visibile durante la dissolvenza, come quando si chiude cliccando su un'altra finestra</li>
-<li>Corretto il triangolo del fumetto che appariva erroneamente sulle finestre degli schermi secondari quando Tiley veniva aperto dall'icona della barra dei menu</li>
-<li>Corretto i pulsanti della barra degli strumenti disabilitati all'avvio quando l'elenco delle finestre era già disponibile prima della comparsa della vista della barra laterale</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Amélioration des aperçus de fenêtres miniatures sur la grille : le survol et le glissement affichent désormais des fenêtres miniatures teintées au lieu de rectangles de couleur unie, les écrans secondaires affichent le même style de fenêtre miniature que l'écran principal, et les cellules de la grille restent visibles pendant le glissement</li>
-<li>Simplification de la superposition sur les écrans non ciblés : suppression de l'icône de disposition miniature des écrans, affichage d'une grande flèche directionnelle centrée uniquement</li>
-<li>Les interactions de grille sur les fenêtres d'écrans secondaires répondent désormais au premier clic sans nécessiter un clic supplémentaire pour obtenir le focus</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du triangle de bulle qui disparaissait et de la fenêtre qui se décalait vers le haut avant l'animation de fondu lors de la fermeture de Tiley en cliquant sur l'icône de la barre de menus. Le triangle reste désormais visible pendant le fondu, comme lors de la fermeture en cliquant sur une autre fenêtre</li>
-<li>Correction du triangle de bulle qui s'affichait incorrectement sur les fenêtres des écrans secondaires lors de l'ouverture de Tiley depuis l'icône de la barre de menus</li>
-<li>Correction des boutons de la barre d'outils désactivés au démarrage lorsque la liste des fenêtres était déjà disponible avant l'apparition de la barre latérale</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Mejora de las vistas previas de ventanas en miniatura en la cuadrícula: al pasar el ratón y arrastrar se muestran ventanas en miniatura con color en lugar de rectángulos de color sólido, las pantallas secundarias muestran el mismo estilo de ventana en miniatura que la pantalla principal, y las celdas de la cuadrícula permanecen visibles durante el arrastre</li>
-<li>Simplificación de la superposición en pantallas no objetivo: se eliminó el icono de disposición de pantallas en miniatura y solo se muestra una flecha direccional grande centrada</li>
-<li>Las interacciones de cuadrícula en ventanas de pantallas secundarias ahora responden al primer clic sin requerir un clic adicional para enfocar la ventana</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Corregido que el triángulo del globo de diálogo desaparecía y la ventana se desplazaba hacia arriba antes de la animación de desvanecimiento al cerrar Tiley haciendo clic en el icono de la barra de menús. Ahora el triángulo permanece visible durante el desvanecimiento, igual que al cerrar haciendo clic en otra ventana</li>
-<li>Corregido que el triángulo del globo de diálogo aparecía incorrectamente en las ventanas de pantallas secundarias al abrir Tiley desde el icono de la barra de menús</li>
-<li>Corregido que los botones de la barra de herramientas estaban deshabilitados al inicio cuando la lista de ventanas ya estaba disponible antes de que apareciera la vista de la barra lateral</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Miniatur-Fenstervorschauen im Raster verbessert: Beim Hover und Ziehen werden nun getönte Miniaturfenster statt einfarbiger Rechtecke angezeigt, sekundäre Bildschirme zeigen den gleichen Miniaturfensterstil wie der primäre Bildschirm, und Rasterzellen bleiben beim Ziehen sichtbar</li>
-<li>Overlay auf Nicht-Ziel-Bildschirmen vereinfacht: Das Miniatur-Bildschirmanordnungssymbol wurde entfernt und nur ein großer zentrierter Richtungspfeil wird angezeigt</li>
-<li>Rasterinteraktionen auf sekundären Bildschirmfenstern reagieren nun auf den ersten Klick, ohne dass ein zusätzlicher Klick zum Fokussieren erforderlich ist</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Das Sprechblasen-Dreieck verschwand und das Fenster verschob sich nach oben, bevor die Ausblend-Animation begann, wenn Tiley durch Klick auf das Menüleistensymbol geschlossen wurde. Das Dreieck bleibt nun während des Ausblendens sichtbar, wie beim Schließen durch Klick auf ein anderes Fenster</li>
-<li>Das Sprechblasen-Dreieck wurde fälschlicherweise auch auf Fenstern sekundärer Bildschirme angezeigt, wenn Tiley über das Menüleistensymbol geöffnet wurde</li>
-<li>Werkzeugleistenschaltflächen waren beim Start deaktiviert, wenn die Fensterliste bereits vor dem Erscheinen der Seitenleistenansicht verfügbar war</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>優化格線上的微縮視窗預覽：懸停和拖曳時顯示帶色調的微縮視窗而非純色矩形，次要顯示器也顯示與主顯示器相同的微縮視窗樣式，拖曳過程中格線儲存格保持可見</li>
-<li>簡化非目標顯示器的覆蓋層，移除微縮顯示器排列圖示，僅顯示大尺寸置中方向箭頭</li>
-<li>次要顯示器視窗上的格線操作現在無需額外點擊取得焦點即可在首次點擊時回應</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了透過點擊選單列圖示關閉 Tiley 時，氣泡三角指標在淡出動畫前消失並導致視窗上移的問題。現在三角形會在淡出過程中保持顯示，與點擊其他視窗關閉時的行為一致</li>
-<li>修正了從選單列圖示開啟 Tiley 時，次要顯示器的視窗也顯示三角指標的問題</li>
-<li>修正了啟動時如果視窗列表在側邊欄檢視出現之前已準備就緒，工具列按鈕會被停用的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>优化网格上的微缩窗口预览：悬停和拖动时显示带色调的微缩窗口而非纯色矩形，副显示器也显示与主显示器相同的微缩窗口样式，拖动过程中网格单元格保持可见</li>
-<li>简化非目标显示器的覆盖层，移除微缩显示器排列图标，仅显示大尺寸居中方向箭头</li>
-<li>副显示器窗口上的网格操作现在无需额外点击获取焦点即可在首次点击时响应</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了通过点击菜单栏图标关闭 Tiley 时，气泡三角指针在淡出动画前消失并导致窗口上移的问题。现在三角形会在淡出过程中保持显示，与点击其他窗口关闭时的行为一致</li>
-<li>修复了从菜单栏图标打开 Tiley 时，副显示器的窗口也显示三角指针的问题</li>
-<li>修复了启动时如果窗口列表在侧边栏视图出现之前已准备就绪，工具栏按钮会被禁用的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>그리드의 미니어처 창 미리보기 개선: 호버 및 드래그 시 단색 사각형 대신 색상이 적용된 미니어처 창을 표시하도록 변경, 보조 디스플레이에서도 기본 디스플레이와 동일한 미니어처 창을 표시, 드래그 중에도 그리드 셀이 유지되도록 개선</li>
-<li>선택한 창이 다른 디스플레이에 있을 때 미니어처 디스플레이 배치 아이콘을 제거하고 큰 방향 화살표만 표시하도록 간소화</li>
-<li>보조 디스플레이 창에서 포커스를 위한 추가 클릭 없이 첫 번째 클릭으로 바로 그리드 조작 가능</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>메뉴 막대 아이콘을 클릭하여 Tiley를 닫을 때 말풍선 삼각형 포인터가 페이드아웃 애니메이션 전에 사라지고 창이 위로 이동하는 문제를 수정. 다른 창을 클릭하여 닫을 때와 동일하게 삼각형이 표시된 상태로 페이드아웃되도록 변경</li>
-<li>메뉴 막대 아이콘에서 Tiley를 열었을 때 보조 디스플레이의 창에도 삼각형 포인터가 표시되는 문제를 수정</li>
-<li>시작 시 사이드바 뷰가 나타나기 전에 창 목록이 이미 준비된 경우 도구 모음 버튼이 비활성화되는 문제를 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>グリッド上のミニチュアウインドウプレビューを改善：ホバー・ドラッグ時に単色の矩形ではなく色付きミニチュアウインドウを表示するように変更、セカンダリディスプレイでもプライマリと同じミニチュアウインドウを表示、ドラッグ中もグリッドセルが透けないように改善</li>
-<li>選択中のウインドウが別のディスプレイにある場合の表示を、ミニチュアディスプレイ配置アイコンを廃止し大きな方向矢印のみに簡素化</li>
-<li>セカンダリディスプレイのウインドウでフォーカスのための余分なクリックなしに、最初のクリックからグリッド操作が可能に</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>メニューバーアイコンをクリックして Tiley を閉じるとき、フェードアウトアニメーションの前に吹き出しの三角ポインタが消えてウインドウが上にずれる問題を修正。他のウインドウをクリックして閉じるときと同様に、三角が表示されたままフェードアウトするように変更</li>
-<li>メニューバーアイコンから Tiley を表示したとき、セカンダリディスプレイのウインドウにも三角ポインタが表示されてしまう問題を修正</li>
-<li>起動直後にサイドバー表示前にウインドウリストが準備完了していた場合、ツールバーのボタンが無効化される問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Refined miniature window previews on the grid: hover and drag selections now display tinted miniature windows instead of plain colored rectangles, secondary display grids show the same miniature window style as the primary display, and grid cells remain visible underneath during drag</li>
-<li>Simplified the non-target display overlay to show only a large centered directional arrow instead of a miniature display arrangement icon</li>
-<li>Grid interactions on secondary display windows now respond to the first click without requiring an extra click to focus the window</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed the speech-bubble triangle pointer disappearing and the window shifting up before the fade-out animation when dismissing Tiley by clicking the menu bar icon; the triangle now stays visible during the fade-out, matching the behavior when clicking another window</li>
-<li>Fixed the speech-bubble triangle pointer incorrectly appearing on secondary display windows when Tiley was opened from the menu bar icon</li>
-<li>Fixed toolbar buttons being disabled on launch when the window list was already populated before the sidebar view appeared</li>
-</ul>]]></description>
-            <pubDate>Fri, 17 Apr 2026 00:13:23 +0900</pubDate>
-            <sparkle:version>440</sparkle:version>
-            <sparkle:shortVersionString>4.4.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley-4.4.0.zip" length="5804094" type="application/octet-stream" sparkle:edSignature="79dGXBPNMDsNOf7JUM4au3TyqAiY5wJy151IT7C1B7vBwIRjpLCe3HcPkFurG7aJ8KPE8rc6rVzHQHHhVNdZCg=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.0/Tiley440-439.delta" sparkle:deltaFrom="439" length="304318" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Z8LO689bpD8yB61YcehWrD6jjO5dhK+dlEQkJlrgAtuCU9pATADX0hucxL9RDKvUFU2l1FDQG6f20lvumrEQAQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.0/Tiley440-438.delta" sparkle:deltaFrom="438" length="394302" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="VRrVJcjTq2ps4xpMhZ4WflHAdhY5g4TDjpr36VrV5KzKByiiqiqTqqItGHsWC6VJdo1fxTo/CkVicQ0upBy7Bg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.0/Tiley440-437.delta" sparkle:deltaFrom="437" length="440822" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ehVuTNa31sHu6EeWSMBH/qoSl0BDn8qBHt0SS5G/Qffo+aNJRCeHE8Cq52ekoH/w8dGd1HNOb1g0LOn+26cdAw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.0/Tiley440-436.delta" sparkle:deltaFrom="436" length="452846" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="cH2cUPHaUOT6lh9yyA7BBbielK924FQlzXd6HHIRJRv4505rDyr6K5nqLj6tVcY0FBB8qZ0t9VaEPBXKw4YBDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.0/Tiley440-435.delta" sparkle:deltaFrom="435" length="475262" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="kCXryKKUUybS43TxMRI0NgH/znzQTZS4Lby71zAqLtHpHIa0thg3jQVnr0e/t6PlG2+Ba9dM2HS5GX46/PQOBw=="/>
             </sparkle:deltas>
         </item>
     </channel>
