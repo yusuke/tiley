@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.3] - 2026-04-20
+
 ### Modifié
 
 - Lors de la modification d'un préréglage de disposition, les aperçus au survol et lors du glissement sur la grille utilisent désormais le même style de rectangle que les sélections validées : teintés avec la couleur du prochain index et affichant en son centre le numéro d'index à attribuer, sans barre de titre ni bouton de suppression. De plus, le survol d'une cellule vide affiche un aperçu de rectangle d'une cellule même si d'autres dispositions sont déjà enregistrées

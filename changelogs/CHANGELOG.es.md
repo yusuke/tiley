@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.4.3] - 2026-04-20
+
 ### Cambiado
 
 - Al editar una configuración predefinida de diseño, las vistas previas de paso del cursor y de arrastre en la cuadrícula ahora usan el mismo estilo de rectángulo que las selecciones confirmadas: tintadas con el color del siguiente índice y mostrando centrado el número de índice que se asignará, sin barra de título ni botón de eliminación. Además, al pasar el cursor sobre una celda vacía se muestra una vista previa de rectángulo de una celda aunque ya haya otros diseños registrados

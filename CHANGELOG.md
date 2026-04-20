@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.4.3] - 2026-04-20
+
 ### Changed
 
 - When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered
@@ -741,7 +743,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.2...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.3...HEAD
+[4.4.3]: https://github.com/yusuke/tiley/releases/tag/v4.4.3
 [4.4.2]: https://github.com/yusuke/tiley/releases/tag/v4.4.2
 [4.4.1]: https://github.com/yusuke/tiley/releases/tag/v4.4.1
 [4.4.0]: https://github.com/yusuke/tiley/releases/tag/v4.4.0
