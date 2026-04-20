@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Behoben, dass Hover- und Zieh-Vorschauen auf dem Hauptfenster-Raster auch bei der normalen Layout-Anwendung den Stil aus der Voreinstellungsbearbeitung verwendeten (eingefärbtes Rechteck, keine Titelleiste); außerhalb der Voreinstellungsbearbeitung wird nun korrekt das Miniaturfenster mit App-Symbol, App-Name und Fenstertitel angezeigt
+
 ## [4.4.3] - 2026-04-20
 
 ### Geändert

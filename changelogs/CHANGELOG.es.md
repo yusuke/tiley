@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Se corrigió que las vistas previas al pasar el cursor y al arrastrar en la cuadrícula de la ventana principal usaran el estilo de rectángulo de la edición de configuración predefinida (relleno tintado, sin barra de título) también durante la aplicación normal de un diseño; fuera de la edición de una configuración predefinida, ahora se muestra correctamente la ventana en miniatura con icono de la aplicación, nombre de la aplicación y título de la ventana
+
 ## [4.4.3] - 2026-04-20
 
 ### Cambiado

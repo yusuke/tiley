@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed hover and drag previews on the main window grid using the preset-editing rectangle style (tinted fill, no title bar) even during normal layout application; they now correctly show the miniature window with app icon, app name, and window title when not editing a preset
+
 ## [4.4.3] - 2026-04-20
 
 ### Changed

@@ -1066,7 +1066,12 @@ struct MainWindowView: View {
                         resizePreviewRelativeFrame: appState.resizePreviewRelativeFrame,
                         screenEdgeInsets: gridScreenEdgeInsets,
                         committedSelections: editingPresetCommittedSelections,
-                        onDeleteSelection: { index in
+                        // Only provide the delete callback while actively editing a preset —
+                        // the view uses this closure's presence as the edit-mode signal that
+                        // switches rendering between preset-editing (committed-style
+                        // rectangles, index numbers) and layout-application
+                        // (miniature windows with app icon/name/title).
+                        onDeleteSelection: editingPresetID == nil ? nil : { index in
                             guard let editingID = editingPresetID else { return }
                             appState.updateLayoutPreset(editingID) { preset in
                                 if index == 0 {
