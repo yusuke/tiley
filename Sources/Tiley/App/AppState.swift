@@ -1144,6 +1144,14 @@ final class AppState: NSObject, NSMenuDelegate {
         dismissOverlayImmediately()
         orderOutAllMainWindows()
 
+        // Cancel any in-flight displacement/restoration animation so its
+        // captured move list doesn't keep calling setPosition on windows
+        // we're about to place — which would override the layout frames.
+        displacementAnimationTimer?.cancel()
+        displacementAnimationTimer = nil
+        restorationAnimationTimer?.cancel()
+        restorationAnimationTimer = nil
+
         // Order selected window indices by selection order (first selected = primary).
         let orderedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
 
@@ -1184,20 +1192,28 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
-        // Raise in the requested order so the primary (first-selected) ends
-        // up topmost. A per-iteration AXRaise would reverse this because the
-        // last-raised window wins within its app.
-        raiseWindowsPreservingOrder(indices: orderedIndices)
-
         // Restore displaced windows that are NOT layout targets — they were
         // pushed aside to reveal the selected window and need to return to
         // their original positions.  Layout targets have already been moved
         // to their new frames, so we only clear their entries.
+        //
+        // This MUST run before raiseWindowsPreservingOrder: that function
+        // pumps the run loop via RunLoop.run(until:), which lets the
+        // deferred handleMainWindowHidden → clearWindowCyclingState →
+        // restoreDisplacedWindowsAnimated task fire.  If displacedWindowFrames
+        // still contains the layout targets at that point, the restoration
+        // animation will slowly drag them back to their pre-displacement
+        // origins, undoing the layout.
         let movedWIDs = Set(orderedIndices.map { availableWindowTargets[$0].cgWindowID })
         for (wid, entry) in displacedWindowFrames where !movedWIDs.contains(wid) {
             accessibilityService.setPosition(entry.origin, for: entry.window)
         }
         displacedWindowFrames.removeAll()
+
+        // Raise in the requested order so the primary (first-selected) ends
+        // up topmost. A per-iteration AXRaise would reverse this because the
+        // last-raised window wins within its app.
+        raiseWindowsPreservingOrder(indices: orderedIndices)
 
         // Activate the primary window (frontmost in sidebar order) so it
         // becomes the active window after layout application.
@@ -1263,6 +1279,14 @@ final class AppState: NSObject, NSMenuDelegate {
         dismissOverlayImmediately()
         orderOutAllMainWindows()
 
+        // Cancel any in-flight displacement/restoration animation so its
+        // captured move list doesn't keep calling setPosition on windows
+        // we're about to place — which would override the layout frames.
+        displacementAnimationTimer?.cancel()
+        displacementAnimationTimer = nil
+        restorationAnimationTimer?.cancel()
+        restorationAnimationTimer = nil
+
         // Selected windows first, then fill from z-order.
         let orderedIndices = buildZOrderedWindowIndices(count: selections.count)
 
@@ -1299,15 +1323,17 @@ final class AppState: NSObject, NSMenuDelegate {
             }
         }
 
-        // Raise in the requested order so the primary ends up topmost.
-        raiseWindowsPreservingOrder(indices: orderedIndices)
-
         // Restore displaced windows that are NOT layout targets.
+        // Must run before raiseWindowsPreservingOrder — see the comment in
+        // applyToMultipleWindows for details.
         let movedWIDs2 = Set(orderedIndices.map { availableWindowTargets[$0].cgWindowID })
         for (wid, entry) in displacedWindowFrames where !movedWIDs2.contains(wid) {
             accessibilityService.setPosition(entry.origin, for: entry.window)
         }
         displacedWindowFrames.removeAll()
+
+        // Raise in the requested order so the primary ends up topmost.
+        raiseWindowsPreservingOrder(indices: orderedIndices)
 
         let primaryWindowTarget: WindowTarget? = orderedIndices.first.map { availableWindowTargets[$0] }
         if let primary = primaryWindowTarget {

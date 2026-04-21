@@ -9,6 +9,8 @@
 ### Corretto
 
 - Corretto il problema per cui le anteprime al passaggio del mouse e durante il trascinamento sulla griglia della finestra principale usavano lo stile di rettangolo della modifica di un preset (riempimento colorato, senza barra del titolo) anche durante la normale applicazione di un layout; al di fuori della modifica di un preset viene ora mostrata correttamente la finestra in miniatura con icona dell'app, nome dell'app e titolo della finestra
+- Corretto il problema per cui, applicando un layout affiancato a una selezione multipla, una delle due finestre finiva occasionalmente nella posizione sbagliata. L'animazione che sposta temporaneamente in basso le finestre che coprono quella selezionata continuava a girare anche dopo l'applicazione del layout, sovrascrivendo le posizioni finali
+- Corretto il problema per cui, dopo aver applicato un layout affiancato, una finestra già posizionata poteva scivolare lentamente verso l'angolo in basso a destra. La pulizia differita eseguita dopo aver nascosto la finestra principale poteva avviare un'animazione di ripristino mentre la finestra appena collocata era ancora elencata fra le finestre spostate, trascinandola così verso la sua posizione precedente allo spostamento
 
 ## [4.4.3] - 2026-04-20
 

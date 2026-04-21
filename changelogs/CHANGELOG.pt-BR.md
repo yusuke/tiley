@@ -9,6 +9,8 @@
 ### Corrigido
 
 - Corrigido o problema em que as prévias ao passar o mouse e ao arrastar na grade da janela principal usavam o estilo de retângulo da edição de predefinição (preenchimento tingido, sem barra de título) também durante a aplicação normal de um layout; fora da edição de uma predefinição, a janela em miniatura com ícone do app, nome do app e título da janela agora é exibida corretamente
+- Corrigido o posicionamento incorreto ocasional de uma das duas janelas ao aplicar um layout lado a lado a uma seleção múltipla. A animação que deslocava temporariamente para baixo as janelas que ocultavam a janela selecionada continuava em execução depois da aplicação do layout e sobrescrevia as posições finais
+- Corrigido o problema em que, após aplicar um layout lado a lado, uma janela já posicionada podia deslizar lentamente para o canto inferior direito. A limpeza adiada que ocorre depois de ocultar a janela principal podia iniciar uma animação de restauração enquanto a janela recém-posicionada ainda constava na lista de janelas afastadas, arrastando-a de volta para sua posição anterior ao deslocamento
 
 ## [4.4.3] - 2026-04-20
 

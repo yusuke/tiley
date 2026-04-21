@@ -9,6 +9,8 @@
 ### Behoben
 
 - Behoben, dass Hover- und Zieh-Vorschauen auf dem Hauptfenster-Raster auch bei der normalen Layout-Anwendung den Stil aus der Voreinstellungsbearbeitung verwendeten (eingefärbtes Rechteck, keine Titelleiste); außerhalb der Voreinstellungsbearbeitung wird nun korrekt das Miniaturfenster mit App-Symbol, App-Name und Fenstertitel angezeigt
+- Behoben, dass eines von zwei Fenstern gelegentlich an der falschen Position landete, wenn ein Seite-an-Seite-Layout auf eine Mehrfachauswahl angewendet wurde: Die Animation, die verdeckende Fenster vorübergehend nach unten verschiebt, um das ausgewählte Fenster sichtbar zu machen, lief nach dem Anwenden des Layouts weiter und überschrieb so die neu gesetzten Positionen
+- Behoben, dass ein Fenster nach dem Anwenden eines Seite-an-Seite-Layouts langsam nach rechts unten driftete. Die verzögerte Aufräum-Routine nach dem Ausblenden des Hauptfensters konnte eine Wiederherstellungs-Animation starten, während das frisch platzierte Fenster noch in der Liste der beiseite geschobenen Fenster stand, und zog es dadurch langsam zurück zu seiner Ursprungsposition vor der Verdrängung
 
 ## [4.4.3] - 2026-04-20
 

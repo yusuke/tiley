@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Fixed hover and drag previews on the main window grid using the preset-editing rectangle style (tinted fill, no title bar) even during normal layout application; they now correctly show the miniature window with app icon, app name, and window title when not editing a preset
+- Fixed one of two windows occasionally landing in the wrong position when applying a side-by-side layout to a multi-selection; an in-flight displacement animation (used to temporarily push occluding windows aside) no longer continues after the layout is applied and overrides the new frames
+- Fixed a layout target gradually drifting toward the bottom-right after applying a side-by-side layout. The deferred post-hide cleanup could start a restore animation while the just-placed window was still listed in the displaced-windows table, dragging it back toward its pre-displacement origin
 
 ## [4.4.3] - 2026-04-20
 

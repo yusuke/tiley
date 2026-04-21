@@ -9,6 +9,8 @@
 ### Corregido
 
 - Se corrigió que las vistas previas al pasar el cursor y al arrastrar en la cuadrícula de la ventana principal usaran el estilo de rectángulo de la edición de configuración predefinida (relleno tintado, sin barra de título) también durante la aplicación normal de un diseño; fuera de la edición de una configuración predefinida, ahora se muestra correctamente la ventana en miniatura con icono de la aplicación, nombre de la aplicación y título de la ventana
+- Se corrigió que, al aplicar un diseño en paralelo a una selección múltiple, una de las dos ventanas aterrizara ocasionalmente en la posición incorrecta. La animación que aparta temporalmente las ventanas que ocultan la seleccionada seguía ejecutándose después de aplicar el diseño y sobrescribía las posiciones finales
+- Se corrigió que, tras aplicar un diseño en paralelo, una ventana colocada pudiera desplazarse lentamente hacia la esquina inferior derecha. La limpieza diferida posterior a ocultar la ventana principal podía iniciar una animación de restauración mientras la ventana recién colocada aún figuraba en la lista de ventanas apartadas, arrastrándola de vuelta hacia su posición previa al desplazamiento
 
 ## [4.4.3] - 2026-04-20
 

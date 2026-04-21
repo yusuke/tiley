@@ -9,6 +9,8 @@
 ### Corrigé
 
 - Correction des aperçus au survol et au glissement sur la grille de la fenêtre principale qui utilisaient le style de rectangle de la modification de préréglage (rempli teinté, sans barre de titre) également lors de l'application normale d'une disposition ; en dehors de la modification d'un préréglage, la fenêtre miniature avec icône de l'application, nom de l'application et titre de la fenêtre est désormais correctement affichée
+- Correction du positionnement incorrect occasionnel de l'une des deux fenêtres lors de l'application d'une disposition côte à côte à une sélection multiple. L'animation qui écartait temporairement les fenêtres masquant la fenêtre sélectionnée continuait de s'exécuter après l'application de la disposition et écrasait les positions finales
+- Correction d'une fenêtre pouvant dériver lentement vers le coin inférieur droit après l'application d'une disposition côte à côte. Le nettoyage différé qui suit le masquage de la fenêtre principale pouvait démarrer une animation de restauration alors que la fenêtre tout juste placée figurait encore dans la liste des fenêtres écartées, la ramenant progressivement vers sa position antérieure au déplacement
 
 ## [4.4.3] - 2026-04-20
 
