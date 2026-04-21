@@ -141,3 +141,5 @@
 "Primary" = "Основной";
 "Acknowledgements" = "Благодарности";
 "Resize" = "Изменить размер";
+"Link windows" = "Сгруппировать окна";
+"Unlink window group" = "Разгруппировать окна";

@@ -383,6 +383,21 @@ final class AccessibilityService {
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, value)
     }
 
+    /// 軽量な position+size セット。ドラッグ中の連続適用向け。
+    /// `setFrame` のような pre-nudge/bounce/位置補正は行わず、AX に直接書き込むだけ。
+    /// グループ連動でフォロワーを 60Hz で動かす際のチラつきを避けるために使う。
+    func setFrameLightweight(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) {
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
+        var origin = CGPoint(x: frame.minX, y: primaryMaxY - frame.maxY)
+        var size = frame.size
+        if let posValue = AXValueCreate(.cgPoint, &origin) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, posValue)
+        }
+        if let sizeValue = AXValueCreate(.cgSize, &size) {
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+        }
+    }
+
     /// Moves and resizes the given window synchronously, then returns.
     /// Call ``verifyAndCorrectFrame(_:for:)`` afterwards (on a background
     /// thread) to handle apps that asynchronously revert position or size.

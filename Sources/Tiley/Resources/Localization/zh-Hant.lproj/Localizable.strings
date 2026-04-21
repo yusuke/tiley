@@ -141,3 +141,5 @@
 "Primary" = "主";
 "Acknowledgements" = "致謝";
 "Resize" = "調整大小";
+"Link windows" = "視窗分組";
+"Unlink window group" = "解除視窗分組";

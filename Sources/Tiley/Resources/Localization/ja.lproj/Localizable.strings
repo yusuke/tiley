@@ -141,3 +141,5 @@
 "Primary" = "主";
 "Acknowledgements" = "謝辞";
 "Resize" = "リサイズ";
+"Link windows" = "ウインドウをグループ化";
+"Unlink window group" = "ウインドウグループを解除";

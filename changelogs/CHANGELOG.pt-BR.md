@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Agrupamento de janelas adicionado. Após aplicar uma predefinição de layout com várias janelas, um crachá de vínculo (`link.badge.plus`) aparece no ponto médio de qualquer borda em contato. Clicar no crachá agrupa as janelas: arrastar uma janela move todas as membros juntas, redimensionar a borda compartilhada redimensiona a janela adjacente em sentido oposto e trazer um membro para frente eleva os outros logo abaixo. Ao passar o mouse sobre o crachá aparece um ícone para dissolver o grupo; fechar uma janela do grupo também o dissolve automaticamente
+
 ### Corrigido
 
 - Corrigido o problema em que as prévias ao passar o mouse e ao arrastar na grade da janela principal usavam o estilo de retângulo da edição de predefinição (preenchimento tingido, sem barra de título) também durante a aplicação normal de um layout; fora da edição de uma predefinição, a janela em miniatura com ícone do app, nome do app e título da janela agora é exibida corretamente

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Fenstergruppierung hinzugefügt. Nach dem Anwenden einer Layout-Voreinstellung mit mehreren Fenstern erscheint an der Mitte jeder aneinandergrenzenden Kante ein Link-Abzeichen (`link.badge.plus`). Ein Klick auf das Abzeichen gruppiert die Fenster, sodass das Ziehen eines Fensters alle Mitglieder gemeinsam bewegt, das Größenändern der gemeinsamen Kante das gegenüberliegende Fenster entgegengesetzt skaliert und das Hervorheben eines Mitglieds die anderen direkt darunter anhebt. Beim Darüberfahren erscheint ein Auflösungssymbol; ein Klick darauf löst die Gruppe auf. Beim Schließen eines beteiligten Fensters wird die Gruppe automatisch aufgelöst
+
 ### Behoben
 
 - Behoben, dass Hover- und Zieh-Vorschauen auf dem Hauptfenster-Raster auch bei der normalen Layout-Anwendung den Stil aus der Voreinstellungsbearbeitung verwendeten (eingefärbtes Rechteck, keine Titelleiste); außerhalb der Voreinstellungsbearbeitung wird nun korrekt das Miniaturfenster mit App-Symbol, App-Name und Fenstertitel angezeigt

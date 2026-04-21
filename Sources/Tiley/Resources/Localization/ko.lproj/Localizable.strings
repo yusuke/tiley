@@ -141,3 +141,5 @@
 "Primary" = "기본";
 "Acknowledgements" = "라이선스";
 "Resize" = "크기 조절";
+"Link windows" = "창 그룹화";
+"Unlink window group" = "창 그룹 해제";

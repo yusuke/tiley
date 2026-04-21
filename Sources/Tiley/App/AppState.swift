@@ -243,6 +243,39 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var pendingTargetAfterClose: (pid: pid_t, windowElement: AXUIElement?, windowTitle: String?)?
     @ObservationIgnored var displayHighlightWindow: NSWindow?
 
+    // MARK: - Window Grouping
+    /// Active window groups, keyed by group UUID.
+    @ObservationIgnored var windowGroups: [UUID: WindowGroup] = [:]
+    /// Reverse index: CGWindowID → group UUID for fast lookup.
+    @ObservationIgnored var groupIndexByWindow: [CGWindowID: UUID] = [:]
+    /// Detected-but-not-yet-linked adjacencies. One badge per entry.
+    @ObservationIgnored var pendingGroupCandidates: [WindowAdjacency] = []
+    /// Timestamp when each pending candidate was first detected — used for 5s timeout.
+    @ObservationIgnored var pendingCandidateTimestamps: [AdjacencyKey: CFAbsoluteTime] = [:]
+    /// Work items that trigger refresh after pending candidate timeout.
+    @ObservationIgnored var pendingCandidateFadeItems: [AdjacencyKey: DispatchWorkItem] = [:]
+    /// Single controller that manages a set of per-badge NSWindows across all screens.
+    @ObservationIgnored var groupLinkBadgeController: GroupLinkBadgeController?
+    /// AX observation service for group members (move/resize/destroy/raise).
+    @ObservationIgnored var windowObservationService: WindowObservationService?
+    /// CGEventTap that detects mouse-down events to catch intra-app window switches
+    /// (which AX notifications don't reliably fire for).
+    @ObservationIgnored var groupClickEventTap: CFMachPort?
+    @ObservationIgnored var groupClickEventTapSource: CFRunLoopSource?
+    /// True while programmatically moving/resizing group followers — suppresses echo AX notifications.
+    @ObservationIgnored var isApplyingGroupTransform = false
+    /// True while programmatically raising group members — suppresses echo focus notifications.
+    @ObservationIgnored var isApplyingGroupRaise = false
+    /// Polling timer that tracks a group's source window at ~60Hz for smooth linkage.
+    /// Kicked off by the first AX move/resize event; auto-stops after idle.
+    @ObservationIgnored var groupPollingTimer: DispatchSourceTimer?
+    /// The window ID currently being tracked by polling (last-touched group member).
+    @ObservationIgnored var groupPollingSourceID: CGWindowID?
+    /// Absolute time of the last detected frame change during polling.
+    @ObservationIgnored var groupPollingLastChangeAt: CFAbsoluteTime = 0
+    /// Counts polling ticks; used to throttle expensive ops (e.g., AXRaise).
+    @ObservationIgnored var groupPollingTickCount: Int = 0
+
     // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
     /// True when the user opened the overlay and is still holding the toggle modifiers.
     var isModifierHeldMode = false
@@ -498,6 +531,7 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingLayoutGrid = false
         refreshAccessibilityState()
         installWorkspaceObserver()
+        installGroupObservation()
         applyStatusItemVisibility()
         applyDockIconVisibility(isInitialStartup: true)
         installHotKeyHandler()
@@ -586,6 +620,7 @@ final class AppState: NSObject, NSMenuDelegate {
         screenChangeTask?.cancel()
         windowListCacheTask?.cancel()
         appLaunchTerminationTask?.cancel()
+        uninstallGroupObservation()
     }
 
     func requestAccessibilityAccess() {
@@ -1179,6 +1214,8 @@ final class AppState: NSObject, NSMenuDelegate {
             "multiSelection": "\(selectedWindowIndices.count)",
             "selectionCount": "\(allSelections.count)",
         ])
+        let movedWindowIDs = orderedIndices.map { availableWindowTargets[$0].cgWindowID }
+        refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
     }
 
     /// Builds an ordered list of window indices for a multi-layout preset.
@@ -1287,6 +1324,8 @@ final class AppState: NSObject, NSMenuDelegate {
             "selectionCount": "\(selections.count)",
             "zOrderBased": "true",
         ])
+        let movedWindowIDs = orderedIndices.map { availableWindowTargets[$0].cgWindowID }
+        refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
     }
 
     func cancelLayoutGrid() {

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Ajout du regroupement de fenêtres. Après l'application d'un préréglage de disposition contenant plusieurs fenêtres, un badge de lien (`link.badge.plus`) apparaît au milieu de chaque bord en contact. Cliquer sur le badge regroupe les fenêtres : faire glisser une fenêtre déplace tous les membres ensemble, redimensionner le bord commun redimensionne la fenêtre voisine en sens inverse et mettre un membre au premier plan élève les autres juste en dessous. Un survol du badge révèle une icône permettant de dissoudre le groupe ; fermer l'une des fenêtres du groupe le dissout également automatiquement
+
 ### Corrigé
 
 - Correction des aperçus au survol et au glissement sur la grille de la fenêtre principale qui utilisaient le style de rectangle de la modification de préréglage (rempli teinté, sans barre de titre) également lors de l'application normale d'une disposition ; en dehors de la modification d'un préréglage, la fenêtre miniature avec icône de l'application, nom de l'application et titre de la fenêtre est désormais correctement affichée

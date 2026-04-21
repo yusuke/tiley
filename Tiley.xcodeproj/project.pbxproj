@@ -22,6 +22,10 @@
 		701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */; };
 		701526332F704490001E8095 /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 701526322F704490001E8095 /* TelemetryClient */; };
 		703BB10A2F742EE700CB3140 /* DisplayShortcutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703BB1092F742EE700CB3140 /* DisplayShortcutSettings.swift */; };
+		7079031C2F9606C80069F372 /* AppState+WindowGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7079031B2F9606C80069F372 /* AppState+WindowGrouping.swift */; };
+		7079031F2F9606F00069F372 /* GroupLinkBadgeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7079031D2F9606F00069F372 /* GroupLinkBadgeController.swift */; };
+		707903212F9607060069F372 /* WindowGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707903202F9607060069F372 /* WindowGroup.swift */; };
+		707903232F96072C0069F372 /* WindowObservationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707903222F96072C0069F372 /* WindowObservationService.swift */; };
 		70A1B2C42F80A000003EC442 /* MiniatureWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1B2C32F80A000003EC442 /* MiniatureWindowView.swift */; };
 		70A778692F6183C5002DA5F7 /* TileyIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 70A778682F6183C5002DA5F7 /* TileyIcon.icon */; };
 		70AABB022F900001001E8095 /* CGSPrivate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AABB012F900001001E8095 /* CGSPrivate.swift */; };
@@ -74,6 +78,14 @@
 		7015262C2F6EF356001E8095 /* GridModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridModels.swift; sourceTree = "<group>"; };
 		7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyShortcut.swift; sourceTree = "<group>"; };
 		703BB1092F742EE700CB3140 /* DisplayShortcutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayShortcutSettings.swift; sourceTree = "<group>"; };
+		7079031B2F9606C80069F372 /* AppState+WindowGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+WindowGrouping.swift"; sourceTree = "<group>"; };
+		7079031D2F9606F00069F372 /* GroupLinkBadgeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupLinkBadgeController.swift; sourceTree = "<group>"; };
+		707903202F9607060069F372 /* WindowGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGroup.swift; sourceTree = "<group>"; };
+		707903222F96072C0069F372 /* WindowObservationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowObservationService.swift; sourceTree = "<group>"; };
+		707903242F9607610069F372 /* GridModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridModelsTests.swift; sourceTree = "<group>"; };
+		707903252F9607610069F372 /* HotKeyShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyShortcutTests.swift; sourceTree = "<group>"; };
+		707903262F9607610069F372 /* LayoutPresetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutPresetTests.swift; sourceTree = "<group>"; };
+		707903272F9607610069F372 /* WindowGroupingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGroupingTests.swift; sourceTree = "<group>"; };
 		70A1B2C32F80A000003EC442 /* MiniatureWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniatureWindowView.swift; sourceTree = "<group>"; };
 		70A778682F6183C5002DA5F7 /* TileyIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = TileyIcon.icon; sourceTree = "<group>"; };
 		70AABB012F900001001E8095 /* CGSPrivate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSPrivate.swift; sourceTree = "<group>"; };
@@ -168,6 +180,7 @@
 		7012E05D2F65B653003EC442 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7079031E2F9606F00069F372 /* Overlay */,
 				70EE53822F7ADF520007968D /* Settings */,
 				7012E0582F65B653003EC442 /* Layout */,
 				7012E05C2F65B653003EC442 /* MainWindow */,
@@ -178,6 +191,7 @@
 		701526282F6EF349001E8095 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				707903222F96072C0069F372 /* WindowObservationService.swift */,
 				701526252F6EF349001E8095 /* AccessibilityService.swift */,
 				70AABB012F900001001E8095 /* CGSPrivate.swift */,
 				701526262F6EF349001E8095 /* DockReader.swift */,
@@ -189,6 +203,7 @@
 		7015262E2F6EF356001E8095 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				707903202F9607060069F372 /* WindowGroup.swift */,
 				703BB1092F742EE700CB3140 /* DisplayShortcutSettings.swift */,
 				7015262C2F6EF356001E8095 /* GridModels.swift */,
 				7015262D2F6EF356001E8095 /* HotKeyShortcut.swift */,
@@ -196,9 +211,37 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		7079031E2F9606F00069F372 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				7079031D2F9606F00069F372 /* GroupLinkBadgeController.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		707903282F9607610069F372 /* TileyTests */ = {
+			isa = PBXGroup;
+			children = (
+				707903242F9607610069F372 /* GridModelsTests.swift */,
+				707903252F9607610069F372 /* HotKeyShortcutTests.swift */,
+				707903262F9607610069F372 /* LayoutPresetTests.swift */,
+				707903272F9607610069F372 /* WindowGroupingTests.swift */,
+			);
+			path = TileyTests;
+			sourceTree = "<group>";
+		};
+		707903292F9607610069F372 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				707903282F9607610069F372 /* TileyTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		70B56A692F64347E005173A5 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				7079031B2F9606C80069F372 /* AppState+WindowGrouping.swift */,
 				70EE53422F7A7A0C0007968D /* AppState+DisplayMovement.swift */,
 				70EE53432F7A7A0C0007968D /* AppState+HotKeys.swift */,
 				70EE53442F7A7A0C0007968D /* AppState+LayoutPresets.swift */,
@@ -260,6 +303,7 @@
 		A00000000000000000000013 = {
 			isa = PBXGroup;
 			children = (
+				707903292F9607610069F372 /* Tests */,
 				A00000000000000000000017 /* Sources/Tiley */,
 				A00000000000000000000018,
 				A00000000000000000000014 /* Products */,
@@ -383,6 +427,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7079031C2F9606C80069F372 /* AppState+WindowGrouping.swift in Sources */,
 				70EE53832F7ADF520007968D /* PermissionsView.swift in Sources */,
 				70EE53842F7ADF520007968D /* SettingsView.swift in Sources */,
 				70EE53852F7ADF520007968D /* SettingsWindowController.swift in Sources */,
@@ -397,6 +442,7 @@
 				70EE534D2F7A7A0C0007968D /* AppState+WorkspaceObserver.swift in Sources */,
 				70EE534E2F7A7A0C0007968D /* AppState+WindowActions.swift in Sources */,
 				70EE534F2F7A7A0C0007968D /* AppState+DisplayMovement.swift in Sources */,
+				707903232F96072C0069F372 /* WindowObservationService.swift in Sources */,
 				70EE53502F7A7A0C0007968D /* AppState+WindowSelection.swift in Sources */,
 				70EE53512F7A7A0C0007968D /* AppState+MainWindow.swift in Sources */,
 				70EE53522F7A7A0C0007968D /* AppState+Overlay.swift in Sources */,
@@ -406,6 +452,7 @@
 				7015262F2F6EF356001E8095 /* GridModels.swift in Sources */,
 				701526302F6EF356001E8095 /* HotKeyShortcut.swift in Sources */,
 				70EE535C2F7A7A170007968D /* NotchViews.swift in Sources */,
+				7079031F2F9606F00069F372 /* GroupLinkBadgeController.swift in Sources */,
 				70EE535D2F7A7A170007968D /* PresetEditingViews.swift in Sources */,
 				70EE535E2F7A7A170007968D /* TahoeStyles.swift in Sources */,
 				70EE535F2F7A7A170007968D /* TooltipViews.swift in Sources */,
@@ -418,6 +465,7 @@
 				70B56A6D2F64347E005173A5 /* UpdaterSupport.swift in Sources */,
 				7012E0672F65B796003EC442 /* ThemeColors.swift in Sources */,
 				7012E05E2F65B653003EC442 /* LayoutPreviewOverlayController.swift in Sources */,
+				707903212F9607060069F372 /* WindowGroup.swift in Sources */,
 				7012E05F2F65B653003EC442 /* MainWindowController.swift in Sources */,
 				7012E0602F65B653003EC442 /* GridPreviewView.swift in Sources */,
 				7012E0612F65B653003EC442 /* ShortcutRecorderField.swift in Sources */,
@@ -563,7 +611,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 445;
+				CURRENT_PROJECT_VERSION = 500;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y76V82PYLD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -576,7 +624,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.4.5;
+				MARKETING_VERSION = 5.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -597,7 +645,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 445;
+				CURRENT_PROJECT_VERSION = 500;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y76V82PYLD;
@@ -611,7 +659,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.4.5;
+				MARKETING_VERSION = 5.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.cafebabe.tiley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

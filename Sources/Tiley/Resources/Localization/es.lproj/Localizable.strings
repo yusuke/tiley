@@ -141,3 +141,5 @@
 "Primary" = "Principal";
 "Acknowledgements" = "Reconocimientos";
 "Resize" = "Redimensionar";
+"Link windows" = "Agrupar ventanas";
+"Unlink window group" = "Desagrupar ventanas";

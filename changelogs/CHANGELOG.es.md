@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Se añadió el agrupamiento de ventanas. Al aplicar una configuración predefinida de diseño con varias ventanas, aparece una insignia de enlace (`link.badge.plus`) en el punto medio de cualquier borde en contacto. Al hacer clic en la insignia, las ventanas se agrupan: arrastrar una ventana mueve a todas las miembros a la vez, redimensionar el borde compartido redimensiona la ventana vecina en sentido opuesto, y llevar un miembro al frente eleva a los demás justo debajo. Al pasar el cursor sobre la insignia aparece un icono para disolver el grupo; al hacer clic sobre él se deshace la agrupación. Si se cierra una ventana del grupo, este también se disuelve automáticamente
+
 ### Corregido
 
 - Se corrigió que las vistas previas al pasar el cursor y al arrastrar en la cuadrícula de la ventana principal usaran el estilo de rectángulo de la edición de configuración predefinida (relleno tintado, sin barra de título) también durante la aplicación normal de un diseño; fuera de la edición de una configuración predefinida, ahora se muestra correctamente la ventana en miniatura con icono de la aplicación, nombre de la aplicación y título de la ventana

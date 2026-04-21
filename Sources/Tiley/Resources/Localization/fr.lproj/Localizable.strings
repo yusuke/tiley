@@ -141,3 +141,5 @@
 "Primary" = "Principal";
 "Acknowledgements" = "Remerciements";
 "Resize" = "Redimensionner";
+"Link windows" = "Grouper les fenêtres";
+"Unlink window group" = "Dissocier le groupe de fenêtres";

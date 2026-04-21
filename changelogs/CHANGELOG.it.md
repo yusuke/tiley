@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Aggiunto il raggruppamento delle finestre. Dopo aver applicato un preset di layout con più finestre, appare un badge di collegamento (`link.badge.plus`) al centro di ogni bordo a contatto. Facendo clic sul badge le finestre vengono raggruppate: trascinare una finestra sposta insieme tutte le membri, ridimensionare il bordo condiviso ridimensiona la finestra adiacente in senso opposto e portare in primo piano una membro eleva le altre immediatamente sotto. Passando il mouse sul badge appare un'icona per dissolvere il gruppo; chiudere una finestra del gruppo lo dissolve anche automaticamente
+
 ### Corretto
 
 - Corretto il problema per cui le anteprime al passaggio del mouse e durante il trascinamento sulla griglia della finestra principale usavano lo stile di rettangolo della modifica di un preset (riempimento colorato, senza barra del titolo) anche durante la normale applicazione di un layout; al di fuori della modifica di un preset viene ora mostrata correttamente la finestra in miniatura con icona dell'app, nome dell'app e titolo della finestra

@@ -23,6 +23,19 @@ extension AppState {
                     self.refreshAccessibilityState()
                     self.updateStatusMenu()
                     self.scheduleWindowListCacheRefresh()
+                    // AX から実際にフォーカスされたウインドウを問い合わせて、
+                    // それがグループメンバーの場合だけ連動を発動する。
+                    // availableWindowTargets の先頭を使うと、キャッシュが古い場合に
+                    // 間違ったウインドウ（例：別のグループメンバー）が検出される。
+                    if let focusedCGID = self.resolveFocusedWindowID(for: app.processIdentifier),
+                       self.groupIndexByWindow[focusedCGID] != nil {
+                        self.handleGroupMemberRaised(id: focusedCGID)
+                    }
+                    // 背面に行った/前面に来た場合のバッジ表示を更新する。
+                    // Z-order 変化は少し遅れて反映されるため 80ms 後に再評価。
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) { [weak self] in
+                        self?.refreshBadgeOverlays()
+                    }
                 }
             }
         }
