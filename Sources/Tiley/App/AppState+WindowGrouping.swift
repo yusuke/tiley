@@ -144,8 +144,11 @@ extension AppState {
             return
         }
 
-        debugLog("WindowGrouping: refreshGroupCandidatesAfterPresetApply scheduled (targets=\(targetWindowIDs))")
-        // 少し遅延させて AX 側の反映を待つ。
+        debugLog("WindowGrouping: refreshGroupCandidatesAfterPresetApply triggered (targets=\(targetWindowIDs))")
+        // **即座に**検出を実行してバッジを表示する。プリセット適用は同期的に完了している
+        // ので AX の live frame を読めば新しい位置が得られる。
+        recomputeGroupsAndCandidates(targetWindowIDs: targetWindowIDs)
+        // 念のため少し後にもう一度（一部のアプリで AX 反映が遅れる場合のフォールバック）。
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             self?.recomputeGroupsAndCandidates(targetWindowIDs: targetWindowIDs)
         }
@@ -659,19 +662,12 @@ extension AppState {
             resolveAdjacencyOverlapsOnRelease(lastSourceID: lastSourceID)
         }
 
-        // **重要**: ドラッグ中はフォロワーの `lastKnownFrames` に「理想値」（min-width
-        // クランプ前の負の幅など）を保存しているが、ドラッグ離した時点でそれを実際の
-        // フレームに同期しないと、次のドラッグ開始時の delta 計算が誤差（overshoot/gap）
-        // を含む。source は `resolveAdjacencyOverlapsOnRelease` で補正済みの値が
-        // 既にキャッシュに入っているので上書きしない（AX の反映遅延で live が古いため）。
-        for (gid, var group) in windowGroups {
-            for member in group.members where member != lastSourceID {
-                if let live = liveFrame(of: member) {
-                    group.lastKnownFrames[member] = live
-                }
-            }
-            windowGroups[gid] = group
-        }
+        // **重要**: follower の cache は「ideal 値」のままにしておく（live に同期しない）。
+        // アプリが size を reject した場合でも、cache が source の動きを追跡する
+        // ことで perpendicular linkage の share 判定が維持され、後続のドラッグで
+        // follower が正しく追従する。以前は live に同期していたが、それだと app の
+        // reject で follower の cache と source の cache が divergence → sharesTop/
+        // sharesBottom が false → 高さ連動が壊れる問題があった。
 
         // 対話終了後、各グループの adjacency 座標を最新フレームで再計算してから
         // 隠されていたリンク済バッジを再表示する（バッジ位置が新しい辺位置に追従する）。
@@ -1019,13 +1015,14 @@ extension AppState {
             }
             guard let target = availableWindowTargets.first(where: { $0.cgWindowID == otherID }),
                   let window = target.windowElement else { continue }
-            _ = accessibilityService.setFrameLightweightPreservingEdge(
+            let actualSize = accessibilityService.setFrameLightweightPreservingEdge(
                 desiredFrame,
                 preservingEdge: sourceEdge,
                 edgeValue: preservedEdgeValue,
                 on: target.screenFrame,
                 for: window
             )
+            debugLog("WindowGrouping:   apply follower=\(otherID) desired=\(desiredFrame.size) actual=\(actualSize) preservedEdge=\(sourceEdge.rawValue) edgeValue=\(preservedEdgeValue)")
             // AX エコー抑制用に最終的に適用した frame を記録。
             // setFrameLightweightPreservingEdge は size を先に setting し
             // actualSize を読み取って position を決めるので、最終 frame は

@@ -38,8 +38,8 @@ final class GroupLinkBadgeController {
     private let defaultFadeOutDuration: TimeInterval = 0.25
     /// ドラッグ/リサイズ開始時のフェードアウト時間。
     private let fastFadeOutDuration: TimeInterval = 0.15
-    /// 新規バッジ出現時のフェードイン時間。
-    private let fadeInDuration: TimeInterval = 0.15
+    /// 新規バッジ出現時のフェードイン時間（短く＝素早く表示）。
+    private let fadeInDuration: TimeInterval = 0.08
 
     /// バッジ一覧を更新する。既存のバッジは位置・状態が変わっていれば更新、
     /// 消えたバッジはフェードアウトしてから閉じる。
