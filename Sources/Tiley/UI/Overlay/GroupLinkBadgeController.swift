@@ -155,12 +155,24 @@ final class GroupLinkBadgeController {
                 isNew = true
             }
 
-            let hosting = NSHostingView(rootView: BadgeDot(
+            // Preserve the existing NSHostingView when we're updating an
+            // already-visible badge — updating `rootView` keeps BadgeDot's
+            // `@State` alive across updates. Creating a fresh host each time
+            // would reset `hoverActivated`, so refreshBadgeOverlays() calls
+            // that happen during a user's leave→return gesture would wipe it,
+            // and the `x` icon would fail to appear on hover.
+            let rootView = BadgeDot(
                 badge: badge,
                 onClick: { [weak self] in self?.onBadgeClick?(badge) }
-            ))
-            hosting.frame = CGRect(origin: .zero, size: frame.size)
-            window.contentView = hosting
+            )
+            if let existingHost = window.contentView as? NSHostingView<BadgeDot> {
+                existingHost.rootView = rootView
+                existingHost.frame = CGRect(origin: .zero, size: frame.size)
+            } else {
+                let hosting = NSHostingView(rootView: rootView)
+                hosting.frame = CGRect(origin: .zero, size: frame.size)
+                window.contentView = hosting
+            }
             window.orderFront(nil)
 
             if isNew {
@@ -201,16 +213,21 @@ private struct BadgeDot: View {
     let onClick: () -> Void
 
     @State private var isHovering = false
-    /// Tracks whether the mouse has left the badge at least once.
-    /// Suppresses the hover presentation immediately after a linked badge appears
-    /// (while the cursor is still on top of it) so the `x` icon does not flash
-    /// right after linking. **Unlinked badges are not gated** — they should react
-    /// on the very first hover.
-    @State private var hoverActivated = false
+    /// Gate for the linked-state hover presentation.
+    /// Defaults to `true` so the very first hover on a linked badge shows the
+    /// `x` icon — this matters when a badge appears as linked without the user
+    /// being over it (e.g. a newly merged group, or a group becoming visible
+    /// when its app comes to the front).
+    /// Briefly flipped to `false` only at the moment a badge transitions from
+    /// unlinked to linked **while the cursor is still on it** (i.e. right
+    /// after the user clicked to group). That suppresses the jarring `x` flash
+    /// immediately after a link action. Re-enabled as soon as the cursor
+    /// leaves the badge.
+    @State private var hoverActivated = true
 
     /// Whether hover effects should actually be shown.
     /// Unlinked: use `isHovering` directly (active from the first hover).
-    /// Linked:   `isHovering && hoverActivated` (disabled until the cursor leaves once).
+    /// Linked:   `isHovering && hoverActivated` (gated briefly right after linking).
     private var effectiveHover: Bool {
         switch badge.state {
         case .unlinked:
@@ -290,14 +307,21 @@ private struct BadgeDot: View {
         .contentShape(Circle().inset(by: BadgeStyle.hitAreaInset))
         .scaleEffect(effectiveHover ? BadgeStyle.Animation.hoverScale : 1.0)
         .animation(.easeOut(duration: BadgeStyle.Animation.hoverDuration), value: effectiveHover)
-        .onAppear {
-            // Suppress hover effects right after appearance (prevents the `x` from
-            // flashing immediately after the link is established).
-            hoverActivated = false
+        .onChange(of: badge.state) { _, newState in
+            // When a badge transitions unlinked → linked while the cursor is
+            // still over it (user just clicked to group), briefly suppress
+            // the `x` affordance until the cursor leaves. Prevents the jarring
+            // flash from "link" to "x" right after a link click.
+            // If the state changed to linked without the user hovering (e.g.
+            // via a merge or via the owning app coming to the front), leave
+            // `hoverActivated` alone so the first hover still shows `x`.
+            if newState == .linked && isHovering {
+                hoverActivated = false
+            }
         }
         .onHover { hovering in
             if !hovering {
-                // Allow hover effects once the cursor has left the badge.
+                // Any time the cursor leaves, re-arm hover effects.
                 hoverActivated = true
             }
             isHovering = hovering
