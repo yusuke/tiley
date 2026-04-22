@@ -28,6 +28,7 @@ extension AppState {
         groupPollingTimer?.cancel()
         groupPollingTimer = nil
         groupPollingSourceID = nil
+        groupPollingIntendedSourceID = nil
         windowObservationService?.stopAll()
         windowObservationService = nil
         uninstallGroupClickMonitor()
@@ -46,18 +47,26 @@ extension AppState {
     /// を直接監視して、クリック直後にフォーカス中ウインドウがグループメンバーかチェックする。
     private func installGroupClickMonitor() {
         guard groupClickEventTap == nil else { return }
-        let mask = (1 << CGEventType.leftMouseDown.rawValue) | (1 << CGEventType.rightMouseDown.rawValue)
+        let mask = (1 << CGEventType.leftMouseDown.rawValue)
+                 | (1 << CGEventType.rightMouseDown.rawValue)
+                 | (1 << CGEventType.leftMouseUp.rawValue)
+                 | (1 << CGEventType.rightMouseUp.rawValue)
         let refcon = Unmanaged.passUnretained(self).toOpaque()
         let tap = CGEvent.tapCreate(
             tap: .cgSessionEventTap,
             place: .headInsertEventTap,
             options: .listenOnly,
             eventsOfInterest: CGEventMask(mask),
-            callback: { _, _, event, refcon in
+            callback: { _, type, event, refcon in
                 guard let refcon = refcon else { return Unmanaged.passUnretained(event) }
                 let appState = Unmanaged<AppState>.fromOpaque(refcon).takeUnretainedValue()
+                let isMouseUp = (type == .leftMouseUp || type == .rightMouseUp)
                 DispatchQueue.main.async {
-                    appState.handleSystemMouseDown()
+                    if isMouseUp {
+                        appState.handleSystemMouseUp()
+                    } else {
+                        appState.handleSystemMouseDown()
+                    }
                 }
                 return Unmanaged.passUnretained(event)
             },
@@ -72,7 +81,7 @@ extension AppState {
         CGEvent.tapEnable(tap: tap, enable: true)
         groupClickEventTap = tap
         groupClickEventTapSource = source
-        debugLog("WindowGrouping: click monitor installed")
+        debugLog("WindowGrouping: click monitor installed (mouse down + up)")
     }
 
     private func uninstallGroupClickMonitor() {
@@ -94,6 +103,21 @@ extension AppState {
         // クリック処理が完了するのを待つ。50ms 程度で十分。
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
             self?.checkFrontmostForGroupRaise()
+        }
+    }
+
+    /// マウスアップ直後に呼ばれる。グループドラッグセッション中なら、
+    /// 200ms idle を待たず**即座に**ポーリングを停止して resolve を発動する。
+    /// これにより release 時のオーバーラップ補正が高速に走る。
+    func handleSystemMouseUp() {
+        guard groupPollingTimer != nil else { return }
+        // 50ms 後にポーリング停止 → resolve。最後の AX イベントが届く時間を確保。
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            guard let self else { return }
+            // まだ動作中なら停止（その間に新しい drag が始まっていなければ）
+            if self.groupPollingTimer != nil {
+                self.stopGroupPollingTimer()
+            }
         }
     }
 
@@ -560,10 +584,24 @@ extension AppState {
         switch event {
         case .moved(let id, _), .resized(let id, _):
             if isApplyingGroupTransform { return }
+            // AX エコー判定：直近で setFrame したウインドウの event で、かつ live frame が
+            // 我々が設定した frame と一致するなら、それはエコー。process しない。
+            // 一致しない場合（ユーザーが動かした）は通常通り処理。
+            if let entry = recentlySetFrames[id], CFAbsoluteTimeGetCurrent() - entry.time < 2.0 {
+                if let live = liveFrame(of: id), Self.framesMatch(live, entry.frame, tolerance: 2) {
+                    return  // echo
+                }
+                // 一致しない＝ユーザー入力で上書きされた。エントリを削除して以降通常処理。
+                recentlySetFrames.removeValue(forKey: id)
+            }
             let isGroupMember = groupIndexByWindow[id] != nil
             let isPendingCandidate = pendingGroupCandidates.contains { $0.windowA == id || $0.windowB == id }
 
             if isGroupMember {
+                // 新規セッション開始時、intended source を記録（mid-session で変わらない）。
+                if groupPollingTimer == nil {
+                    groupPollingIntendedSourceID = id
+                }
                 groupPollingSourceID = id
                 startOrResetGroupPollingTimer()
             } else if isPendingCandidate {
@@ -604,15 +642,210 @@ extension AppState {
     }
 
     private func stopGroupPollingTimer() {
+        // **真のドラッグ元** (intended source) を release 時の補正に使う。
+        // groupPollingSourceID は AX echo で mid-session に follower 等に切り替わる
+        // ことがあるが、intendedSourceID はセッション開始時の値で固定されるため、
+        // ユーザーが実際にドラッグした窓を確実に指す。
+        let lastSourceID = groupPollingIntendedSourceID ?? groupPollingSourceID
         groupPollingTimer?.cancel()
         groupPollingTimer = nil
         groupPollingSourceID = nil
+        groupPollingIntendedSourceID = nil
+
+        // ドラッグ中に source がフォロワーの最小幅/高さを超えて食い込んでいた場合
+        // （ウインドウが重なり合っている状態）、ドラッグ離したタイミングで
+        // source 側を縮めて接点まで戻す。
+        if let lastSourceID {
+            resolveAdjacencyOverlapsOnRelease(lastSourceID: lastSourceID)
+        }
+
+        // **重要**: ドラッグ中はフォロワーの `lastKnownFrames` に「理想値」（min-width
+        // クランプ前の負の幅など）を保存しているが、ドラッグ離した時点でそれを実際の
+        // フレームに同期しないと、次のドラッグ開始時の delta 計算が誤差（overshoot/gap）
+        // を含む。source は `resolveAdjacencyOverlapsOnRelease` で補正済みの値が
+        // 既にキャッシュに入っているので上書きしない（AX の反映遅延で live が古いため）。
+        for (gid, var group) in windowGroups {
+            for member in group.members where member != lastSourceID {
+                if let live = liveFrame(of: member) {
+                    group.lastKnownFrames[member] = live
+                }
+            }
+            windowGroups[gid] = group
+        }
+
         // 対話終了後、各グループの adjacency 座標を最新フレームで再計算してから
         // 隠されていたリンク済バッジを再表示する（バッジ位置が新しい辺位置に追従する）。
         for gid in windowGroups.keys {
             recomputeAdjacenciesForGroup(gid)
         }
         refreshBadgeOverlays()
+    }
+
+    /// ドラッグ離し時の 2 パターンの補正：
+    ///
+    /// **A. source が follower に食い込んで重なり**（follower が min 幅に達し、
+    ///    source がそれを超えて押し込んだ場合）→ source を接点まで戻す
+    ///
+    /// **B. source の拡大で follower が min 幅に達し、アプリがサイズ強制で follower の
+    ///    非接触辺（maxX/minX/maxY/minY）を元の位置から押し出した**（例：左を広げて
+    ///    右ウインドウが最小幅まで縮んだ後、右端が右にはみ出す）
+    ///    → follower を非接触辺が元位置に戻るようシフトし、source の接触辺を follower の
+    ///       新しい接触辺に合わせる
+    private func resolveAdjacencyOverlapsOnRelease(lastSourceID: CGWindowID) {
+        guard let gid = groupIndexByWindow[lastSourceID],
+              var group = windowGroups[gid] else { return }
+
+        var didFix = false
+        for adj in group.adjacencies {
+            guard adj.windowA == lastSourceID || adj.windowB == lastSourceID else { continue }
+            let otherID = (adj.windowA == lastSourceID) ? adj.windowB : adj.windowA
+            let sourceEdge: WindowAdjacency.Edge = (adj.windowA == lastSourceID) ? adj.edgeOfA : adj.edgeOfA.opposite
+
+            guard let sourceFrame = liveFrame(of: lastSourceID),
+                  let otherFrame = liveFrame(of: otherID),
+                  let otherCached = group.lastKnownFrames[otherID] else { continue }
+
+            // === パターン B: follower が非接触辺をオーバーシュート ===
+            // follower の「固定されているはず」の辺（source から遠い側）が、キャッシュの
+            // 元位置から外れていたら、follower をシフトして元位置に戻す。
+            var followerFixed = otherFrame
+            var followerShifted = false
+            switch sourceEdge {
+            case .right:
+                // follower は右側。maxX は固定されているべき。
+                // アプリの min width 強制で maxX が右へ押し出されると otherFrame.maxX > otherCached.maxX
+                if otherFrame.maxX > otherCached.maxX + 1 {
+                    followerFixed.origin.x = otherCached.maxX - otherFrame.width
+                    followerShifted = true
+                }
+            case .left:
+                // follower は左側。minX は固定されているべき。
+                if otherFrame.minX < otherCached.minX - 1 {
+                    followerFixed.origin.x = otherCached.minX
+                    // follower が左へ押し出された場合、origin を戻すだけで maxX も追随
+                    followerShifted = true
+                }
+            case .top:
+                // follower は上側。maxY は固定。
+                if otherFrame.maxY > otherCached.maxY + 1 {
+                    followerFixed.origin.y = otherCached.maxY - otherFrame.height
+                    followerShifted = true
+                }
+            case .bottom:
+                // follower は下側。minY は固定。
+                if otherFrame.minY < otherCached.minY - 1 {
+                    followerFixed.origin.y = otherCached.minY
+                    followerShifted = true
+                }
+            }
+
+            if followerShifted {
+                debugLog("WindowGrouping: follower overshoot — shifting \(otherID) to \(followerFixed)")
+                isApplyingGroupTransform = true
+                moveMemberWindow(cgWindowID: otherID, to: followerFixed)
+                group.lastKnownFrames[otherID] = followerFixed
+                didFix = true
+            }
+
+            // === パターン A + B の合流: 接触辺のミスマッチ補正 ===
+            // 2 つのケースを区別する：
+            //   - **オーバーラップ**: source の接触辺が follower 領域に食い込んでいる → source を縮める
+            //   - **ギャップ**: source と follower の間に隙間がある → follower を広げる（source を広げない）
+            let targetFollower = followerShifted ? followerFixed : otherFrame
+
+            // 接触辺の補正：最大 3 回リトライして、各回で live follower を再読み取り
+            // して contact を再計算（フォロワーがアプリの動的レイアウトで微動した
+            // 場合に対応）。
+            let tol: CGFloat = 0.5
+            for retry in 0..<3 {
+                guard let liveFollower = liveFrame(of: otherID),
+                      let liveSource = liveFrame(of: lastSourceID) else { break }
+                let liveTarget = followerShifted ? followerFixed : liveFollower
+
+                var srcCorr: CGRect? = nil
+                var followerCorr: CGRect? = nil
+
+                switch sourceEdge {
+                case .right:
+                    let sourceContact = liveSource.maxX
+                    let followerContact = liveTarget.minX
+                    if sourceContact > followerContact + tol {
+                        var c = liveSource
+                        c.size.width = max(50, followerContact - liveSource.minX)
+                        srcCorr = c
+                    } else if sourceContact < followerContact - tol {
+                        var c = liveTarget
+                        c.origin.x = sourceContact
+                        c.size.width = max(50, liveTarget.maxX - sourceContact)
+                        followerCorr = c
+                    }
+                case .left:
+                    let sourceContact = liveSource.minX
+                    let followerContact = liveTarget.maxX
+                    if sourceContact < followerContact - tol {
+                        var c = liveSource
+                        c.origin.x = followerContact
+                        c.size.width = max(50, liveSource.maxX - followerContact)
+                        srcCorr = c
+                    } else if sourceContact > followerContact + tol {
+                        var c = liveTarget
+                        c.size.width = max(50, sourceContact - liveTarget.minX)
+                        followerCorr = c
+                    }
+                case .top:
+                    let sourceContact = liveSource.maxY
+                    let followerContact = liveTarget.minY
+                    if sourceContact > followerContact + tol {
+                        var c = liveSource
+                        c.size.height = max(50, followerContact - liveSource.minY)
+                        srcCorr = c
+                    } else if sourceContact < followerContact - tol {
+                        var c = liveTarget
+                        c.origin.y = sourceContact
+                        c.size.height = max(50, liveTarget.maxY - sourceContact)
+                        followerCorr = c
+                    }
+                case .bottom:
+                    let sourceContact = liveSource.minY
+                    let followerContact = liveTarget.maxY
+                    if sourceContact < followerContact - tol {
+                        var c = liveSource
+                        c.origin.y = followerContact
+                        c.size.height = max(50, liveSource.maxY - followerContact)
+                        srcCorr = c
+                    } else if sourceContact > followerContact + tol {
+                        var c = liveTarget
+                        c.size.height = max(50, sourceContact - liveTarget.minY)
+                        followerCorr = c
+                    }
+                }
+
+                if srcCorr == nil && followerCorr == nil {
+                    debugLog("WindowGrouping: resolve stable after retry=\(retry)")
+                    break  // 既に整合
+                }
+                isApplyingGroupTransform = true
+                if let c = srcCorr {
+                    debugLog("WindowGrouping: resolve overlap (\(sourceEdge.rawValue)) retry=\(retry) source=\(lastSourceID) corrected=\(c)")
+                    robustMoveWindow(cgWindowID: lastSourceID, to: c)
+                    group.lastKnownFrames[lastSourceID] = c
+                }
+                if let c = followerCorr {
+                    debugLog("WindowGrouping: resolve gap (\(sourceEdge.rawValue)) retry=\(retry) follower=\(otherID) corrected=\(c)")
+                    robustMoveWindow(cgWindowID: otherID, to: c)
+                    group.lastKnownFrames[otherID] = c
+                }
+                didFix = true
+            }
+        }
+        windowGroups[gid] = group
+
+        // AX エコー吸収のため 300ms フラグを保持してから解除。
+        if didFix {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.isApplyingGroupTransform = false
+            }
+        }
     }
 
     /// 60Hz で呼ばれる。ソースウインドウのライブフレームを読み、
@@ -719,8 +952,6 @@ extension AppState {
         let parallelMatchTolerance: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
 
         // ソースに接する adjacency を先に処理。
-        // エッジ基準の計算：フォロワーの 4 辺（minX/maxX/minY/maxY）それぞれについて、
-        // 現在値 + delta を適用するか判定。サイズは 4 辺から再計算。
         for adj in group.adjacencies {
             let (otherID, sourceEdge): (CGWindowID, WindowAdjacency.Edge)
             if adj.windowA == sourceID {
@@ -742,45 +973,97 @@ extension AppState {
             // 1. 接する辺（adjacent edge）の連動
             switch sourceEdge {
             case .right:
-                // ソースの右辺 = フォロワーの左辺 → 左辺を追随
                 newMinX = otherOld.minX + dRight
             case .left:
-                // ソースの左辺 = フォロワーの右辺 → 右辺を追随
                 newMaxX = otherOld.maxX + dLeft
             case .top:
-                // ソースの上辺 = フォロワーの下辺 → 下辺を追随
                 newMinY = otherOld.minY + dTop
             case .bottom:
-                // ソースの下辺 = フォロワーの上辺 → 上辺を追随
                 newMaxY = otherOld.maxY + dBottom
             }
 
             // 2. 垂直方向の辺の連動（「接する辺と同じ長さ」の場合）
-            //    左右グループ化: 両者の上辺と下辺が揃っていれば、垂直方向のリサイズを連動
-            //    上下グループ化: 両者の左辺と右辺が揃っていれば、水平方向のリサイズを連動
             switch sourceEdge {
             case .right, .left:
-                // 水平隣接 → y 軸方向の対応辺をチェック
                 let sharesBottom = abs(sourceOld.minY - otherOld.minY) <= parallelMatchTolerance
                 let sharesTop = abs(sourceOld.maxY - otherOld.maxY) <= parallelMatchTolerance
                 if sharesBottom { newMinY = otherOld.minY + dBottom }
                 if sharesTop { newMaxY = otherOld.maxY + dTop }
             case .top, .bottom:
-                // 垂直隣接 → x 軸方向の対応辺をチェック
                 let sharesLeft = abs(sourceOld.minX - otherOld.minX) <= parallelMatchTolerance
                 let sharesRight = abs(sourceOld.maxX - otherOld.maxX) <= parallelMatchTolerance
                 if sharesLeft { newMinX = otherOld.minX + dLeft }
                 if sharesRight { newMaxX = otherOld.maxX + dRight }
             }
 
-            // 4 辺からフレームを再構築
-            let newWidth = max(50, newMaxX - newMinX)
-            let newHeight = max(50, newMaxY - newMinY)
-            let otherNew = CGRect(x: newMinX, y: newMinY, width: newWidth, height: newHeight)
+            // 4 辺からフレームを再構築。適用用は 50pt でクランプ、キャッシュは
+            // クランプ前の理想値を保存（戻しドラッグ時の誤差回避のため）。
+            let idealWidth = newMaxX - newMinX
+            let idealHeight = newMaxY - newMinY
+            let idealFrame = CGRect(x: newMinX, y: newMinY, width: idealWidth, height: idealHeight)
 
-            moveMemberWindow(cgWindowID: otherID, to: otherNew)
-            group.lastKnownFrames[otherID] = otherNew
+            let applyWidth = max(50, idealWidth)
+            let applyHeight = max(50, idealHeight)
+            let desiredFrame = CGRect(x: newMinX, y: newMinY, width: applyWidth, height: applyHeight)
+
+            // 「非接触辺を厳密に保つ」セッターを使う：
+            // size を先にセット → アプリが実際に採用した size を読み取り → そのサイズで
+            // 非接触辺が固定されるよう position を計算してセット。
+            // これでアプリが min サイズを強制してきても follower の固定辺がドリフトしない。
+            let preservedEdgeValue: CGFloat
+            switch sourceEdge {
+            case .right:  preservedEdgeValue = otherOld.maxX
+            case .left:   preservedEdgeValue = otherOld.minX
+            case .top:    preservedEdgeValue = otherOld.maxY
+            case .bottom: preservedEdgeValue = otherOld.minY
+            }
+            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == otherID }),
+                  let window = target.windowElement else { continue }
+            _ = accessibilityService.setFrameLightweightPreservingEdge(
+                desiredFrame,
+                preservingEdge: sourceEdge,
+                edgeValue: preservedEdgeValue,
+                on: target.screenFrame,
+                for: window
+            )
+            // AX エコー抑制用に最終的に適用した frame を記録。
+            // setFrameLightweightPreservingEdge は size を先に setting し
+            // actualSize を読み取って position を決めるので、最終 frame は
+            // (preservedEdge - actualSize) からは正確には分からない。
+            // 簡易的に desiredFrame を記録（許容誤差内で echo 判定可能）。
+            recentlySetFrames[otherID] = (desiredFrame, CFAbsoluteTimeGetCurrent())
+            group.lastKnownFrames[otherID] = idealFrame
+
+            // 検証＋補正パス：size-first 法でも一部のアプリでは AX 読み取りが
+            // 即時反映されないため、適用後に live を読んで非接触辺がずれていれば
+            // 強制的にシフトで戻す。最大 3 回リトライして安定させる。
+            for _ in 0..<3 {
+                guard let live = liveFrame(of: otherID) else { break }
+                let actualEdge: CGFloat
+                switch sourceEdge {
+                case .right:  actualEdge = live.maxX
+                case .left:   actualEdge = live.minX
+                case .top:    actualEdge = live.maxY
+                case .bottom: actualEdge = live.minY
+                }
+                if abs(actualEdge - preservedEdgeValue) <= 0.5 { break }  // 安定
+                var c = live
+                switch sourceEdge {
+                case .right:  c.origin.x = preservedEdgeValue - live.width
+                case .left:   c.origin.x = preservedEdgeValue
+                case .top:    c.origin.y = preservedEdgeValue - live.height
+                case .bottom: c.origin.y = preservedEdgeValue
+                }
+                accessibilityService.setFrameLightweight(c, on: target.screenFrame, for: window)
+            }
         }
+        // source オーバードラッグ（follower への食い込み）は per-tick では補正しない。
+        // ドラッグ離し時に `resolveAdjacencyOverlapsOnRelease` で一括補正する。
+        // per-tick で補正すると：
+        //   - source とアプリ（ユーザーの mouse）の間で fight が発生
+        //   - cache-source が overwrite されて source の delta が誤差を含む
+        //   - follower の補正にも悪影響を与える
+
         // 4 tick に 1 回だけ Z-order 補正と raise を行う（軽量化）。
         if groupPollingTickCount % 4 == 0 {
             for adj in group.adjacencies {
@@ -802,6 +1085,29 @@ extension AppState {
         AXUIElementPerformAction(window, kAXRaiseAction as CFString)
     }
 
+    /// ドラッグ離し時の補正など、**確実にアプリに適用させたい**セット用。
+    /// `setFrame`（pre-nudge + bounce + 位置補正などの dance）を使い、
+    /// 適用後に live を読み取って verify、ずれていればリトライする。
+    private func robustMoveWindow(cgWindowID: CGWindowID, to frame: CGRect) {
+        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
+              let window = target.windowElement else { return }
+        // 最大 3 回リトライしてアプリに確実に適用させる。
+        for attempt in 0..<3 {
+            do {
+                try accessibilityService.setFrame(frame, on: target.screenFrame, for: window)
+            } catch {
+                debugLog("robustMoveWindow attempt=\(attempt) error: \(error)")
+            }
+            // verify
+            if let live = liveFrame(of: cgWindowID) {
+                let match = Self.framesMatch(live, frame, tolerance: 2)
+                debugLog("robustMoveWindow attempt=\(attempt) target=\(frame) live=\(live) match=\(match)")
+                if match { break }
+            }
+        }
+        recentlySetFrames[cgWindowID] = (frame, CFAbsoluteTimeGetCurrent())
+    }
+
     private func moveMemberWindow(cgWindowID: CGWindowID, to frame: CGRect) {
         guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
               let window = target.windowElement else { return }
@@ -809,6 +1115,17 @@ extension AppState {
         // 通常の `setFrame` は pre-nudge/bounce など多くの AX 呼び出しを行うため、
         // 60Hz で繰り返すとフォロワーが視覚的にチラつく。
         accessibilityService.setFrameLightweight(frame, on: target.screenFrame, for: window)
+        // AX エコー抑制用に setFrame した内容を記録（handleGroupObservationEvent で
+        // フレーム比較によって echo を判定する）。
+        recentlySetFrames[cgWindowID] = (frame, CFAbsoluteTimeGetCurrent())
+    }
+
+    /// 2 つのフレームが許容誤差内で一致するか判定する。AX エコー検出用。
+    static func framesMatch(_ a: CGRect, _ b: CGRect, tolerance: CGFloat) -> Bool {
+        return abs(a.minX - b.minX) <= tolerance
+            && abs(a.minY - b.minY) <= tolerance
+            && abs(a.width - b.width) <= tolerance
+            && abs(a.height - b.height) <= tolerance
     }
 
     /// フォロワー移動後、ソースの直下に Z-order を置き直す。

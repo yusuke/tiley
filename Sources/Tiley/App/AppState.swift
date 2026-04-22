@@ -271,10 +271,19 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var groupPollingTimer: DispatchSourceTimer?
     /// The window ID currently being tracked by polling (last-touched group member).
     @ObservationIgnored var groupPollingSourceID: CGWindowID?
+    /// The "intended" source for the current polling session — the first member
+    /// detected when polling started. Doesn't change mid-session even if AX echoes
+    /// would otherwise switch sourceID. Used for release-time corrections.
+    @ObservationIgnored var groupPollingIntendedSourceID: CGWindowID?
     /// Absolute time of the last detected frame change during polling.
     @ObservationIgnored var groupPollingLastChangeAt: CFAbsoluteTime = 0
     /// Counts polling ticks; used to throttle expensive ops (e.g., AXRaise).
     @ObservationIgnored var groupPollingTickCount: Int = 0
+    /// Per-window record of the frame we last set (and when). AX events for these
+    /// windows within a short window AND whose live frame still matches the set
+    /// frame are treated as echoes and suppressed. This prevents echo events from
+    /// hijacking the polling source.
+    @ObservationIgnored var recentlySetFrames: [CGWindowID: (frame: CGRect, time: CFAbsoluteTime)] = [:]
 
     // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
     /// True when the user opened the overlay and is still holding the toggle modifiers.

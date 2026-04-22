@@ -398,6 +398,59 @@ final class AccessibilityService {
         }
     }
 
+    /// 「指定したエッジが固定されるように」フレームを設定する。
+    /// グループリサイズ連動で、follower の非接触辺（例: sourceEdge=.right なら follower.maxX）
+    /// を厳密に保つために使う。
+    /// 動作: size を先にセット → アプリが実際に適用した size を読み取り → そのサイズで
+    /// preservedEdgeValue が固定値になる位置を計算してから position をセット。
+    /// → アプリが size の最小値を強制してきても、preservedEdge が動かない。
+    /// 戻り値: アプリが採用した実際のサイズ (size strict が成功したか含めて呼び出し側が判定)。
+    @discardableResult
+    func setFrameLightweightPreservingEdge(
+        _ frame: CGRect,
+        preservingEdge edge: WindowAdjacency.Edge,
+        edgeValue preservedEdgeValue: CGFloat,
+        on screenFrame: CGRect,
+        for window: AXUIElement
+    ) -> CGSize {
+        // 1. サイズを先にセット
+        var size = frame.size
+        if let sizeValue = AXValueCreate(.cgSize, &size) {
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+        }
+        // 2. アプリが実際に採用したサイズを読み取る
+        var sizeRef: CFTypeRef?
+        AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeRef)
+        var actualSize = frame.size  // フォールバック
+        if let sv = sizeRef, CFGetTypeID(sv) == AXValueGetTypeID() {
+            AXValueGetValue(sv as! AXValue, .cgSize, &actualSize)
+        }
+        // 3. 位置を計算してセット
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
+        var appKitOrigin: CGPoint
+        switch edge {
+        case .right:
+            // preservedEdgeValue = 固定したい maxX。origin.x = maxX - actualWidth
+            appKitOrigin = CGPoint(x: preservedEdgeValue - actualSize.width, y: frame.minY)
+        case .left:
+            // preservedEdgeValue = 固定したい minX
+            appKitOrigin = CGPoint(x: preservedEdgeValue, y: frame.minY)
+        case .top:
+            // preservedEdgeValue = 固定したい maxY
+            // AppKit: minY = maxY - actualHeight
+            appKitOrigin = CGPoint(x: frame.minX, y: preservedEdgeValue - actualSize.height)
+        case .bottom:
+            // preservedEdgeValue = 固定したい minY
+            appKitOrigin = CGPoint(x: frame.minX, y: preservedEdgeValue)
+        }
+        // AppKit minY → AX y の変換
+        var axOrigin = CGPoint(x: appKitOrigin.x, y: primaryMaxY - (appKitOrigin.y + actualSize.height))
+        if let pv = AXValueCreate(.cgPoint, &axOrigin) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, pv)
+        }
+        return actualSize
+    }
+
     /// Moves and resizes the given window synchronously, then returns.
     /// Call ``verifyAndCorrectFrame(_:for:)`` afterwards (on a background
     /// thread) to handle apps that asynchronously revert position or size.
