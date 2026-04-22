@@ -645,6 +645,15 @@ extension AppState {
             let isPendingCandidate = pendingGroupCandidates.contains { $0.windowA == id || $0.windowB == id }
 
             if isGroupMember {
+                // If the member just entered native macOS fullscreen, dissolve
+                // the group — fullscreen windows live on their own Space and
+                // can no longer participate in a tiled layout.
+                if isMemberFullScreen(cgWindowID: id), let gid = groupIndexByWindow[id] {
+                    debugLog("WindowGrouping: member \(id) entered fullscreen — dissolving group \(gid)")
+                    stopGroupPollingTimer()
+                    dissolveGroup(gid)
+                    return
+                }
                 // At session start, pin the intended source (doesn't change mid-session).
                 if groupPollingTimer == nil {
                     groupPollingIntendedSourceID = id
@@ -960,6 +969,13 @@ extension AppState {
         // Badges are hidden during interaction, so skip coordinate recomputation
         // and badge refresh here (keeps the tick cheap). They are recomputed in
         // `stopGroupPollingTimer` when interaction ends.
+    }
+
+    /// Returns whether the given window is currently in native macOS fullscreen.
+    private func isMemberFullScreen(cgWindowID: CGWindowID) -> Bool {
+        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
+              let window = target.windowElement else { return false }
+        return accessibilityService.isFullScreen(window)
     }
 
     /// Returns the window's current frame (AppKit coordinates, read live from AX).
