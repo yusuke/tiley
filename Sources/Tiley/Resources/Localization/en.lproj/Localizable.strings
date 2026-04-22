@@ -143,3 +143,5 @@
 "Resize" = "Resize";
 "Link windows" = "Link windows";
 "Unlink window group" = "Unlink window group";
+"Group %@ with %@" = "Group %@ with %@";
+"Ungroup" = "Ungroup";

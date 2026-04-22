@@ -143,3 +143,5 @@
 "Resize" = "调整大小";
 "Link windows" = "窗口分组";
 "Unlink window group" = "解除窗口分组";
+"Group %@ with %@" = "将「%@」与「%@」分组";
+"Ungroup" = "解除分组";

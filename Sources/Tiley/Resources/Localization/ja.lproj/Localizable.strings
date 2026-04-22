@@ -143,3 +143,5 @@
 "Resize" = "リサイズ";
 "Link windows" = "ウインドウをグループ化";
 "Unlink window group" = "ウインドウグループを解除";
+"Group %@ with %@" = "「%@」と「%@」をグループ化";
+"Ungroup" = "グループ解除";

@@ -47,9 +47,12 @@ final class TooltipHoverView: NSView {
         if let existing = trackingArea {
             removeTrackingArea(existing)
         }
+        // `.activeAlways` — group-link badges live in a .nonactivatingPanel that
+        // is visible while *another* app is frontmost, so `.activeInActiveApp`
+        // would never fire the tooltip there.
         let area = NSTrackingArea(
             rect: bounds,
-            options: [.mouseEnteredAndExited, .activeInActiveApp, .inVisibleRect],
+            options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect],
             owner: self,
             userInfo: nil
         )
@@ -136,7 +139,7 @@ final class RichTooltipHoverView: NSView {
     override func updateTrackingAreas() {
         super.updateTrackingAreas()
         if let existing = trackingArea { removeTrackingArea(existing) }
-        let area = NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeInActiveApp, .inVisibleRect], owner: self)
+        let area = NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect], owner: self)
         addTrackingArea(area)
         trackingArea = area
     }

@@ -462,7 +462,12 @@ extension AppState {
             // Frontmost-app gating.
             guard isAdjacencyInFrontmostApp(adj, frontmostPID: frontmostPID) else { continue }
             badges.append(GroupLinkBadge(
-                id: adj.unorderedKey, state: .unlinked, center: adj.midpoint, adjacency: adj
+                id: adj.unorderedKey,
+                state: .unlinked,
+                center: adj.midpoint,
+                adjacency: adj,
+                titleA: badgeWindowTitle(for: adj.windowA),
+                titleB: badgeWindowTitle(for: adj.windowB)
             ))
         }
         // Drop expired / adjacency-lost candidates.
@@ -482,7 +487,12 @@ extension AppState {
                 guard groupIsActive else { continue }
                 for adj in group.adjacencies {
                     badges.append(GroupLinkBadge(
-                        id: adj.unorderedKey, state: .linked, center: adj.midpoint, adjacency: adj
+                        id: adj.unorderedKey,
+                        state: .linked,
+                        center: adj.midpoint,
+                        adjacency: adj,
+                        titleA: badgeWindowTitle(for: adj.windowA),
+                        titleB: badgeWindowTitle(for: adj.windowB)
                     ))
                 }
             }
@@ -497,6 +507,18 @@ extension AppState {
             groupLinkBadgeController = controller
         }
         groupLinkBadgeController?.update(badges: badges, fadeOutDuration: fastHide ? 0.15 : nil)
+    }
+
+    /// Returns a display-friendly title for the given window ID, used in badge tooltips.
+    /// Prefers the AX window title and falls back to the owning app name.
+    private func badgeWindowTitle(for cgWindowID: CGWindowID) -> String {
+        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }) else {
+            return ""
+        }
+        if let title = target.windowTitle, !title.isEmpty {
+            return title
+        }
+        return target.appName
     }
 
     private func isAdjacencyInFrontmostApp(_ adj: WindowAdjacency, frontmostPID: pid_t?) -> Bool {

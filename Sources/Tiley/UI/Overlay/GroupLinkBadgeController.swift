@@ -76,6 +76,10 @@ struct GroupLinkBadge: Identifiable {
     /// Badge center in AppKit screen coordinates (bottom-left origin).
     let center: CGPoint
     let adjacency: WindowAdjacency
+    /// Display name for `adjacency.windowA` (used in tooltip).
+    let titleA: String
+    /// Display name for `adjacency.windowB` (used in tooltip).
+    let titleB: String
 }
 
 /// Floating overlay that shows a `link.badge.plus` / `link` badge at the midpoint
@@ -328,6 +332,7 @@ private struct BadgeDot: View {
         }
         .onTapGesture { onClick() }
         .accessibilityLabel(accessibilityLabelText)
+        .instantTooltip(tooltipText)
     }
 
     private var accessibilityLabelText: String {
@@ -336,6 +341,19 @@ private struct BadgeDot: View {
             return NSLocalizedString("Link windows", comment: "Accessibility label for the link-windows badge")
         case .linked:
             return NSLocalizedString("Unlink window group", comment: "Accessibility label for the unlink-window-group badge")
+        }
+    }
+
+    private var tooltipText: String {
+        switch badge.state {
+        case .unlinked:
+            return String(
+                format: NSLocalizedString("Group %@ with %@", comment: "Tooltip for the link-windows badge; %@ are window names"),
+                badge.titleA,
+                badge.titleB
+            )
+        case .linked:
+            return NSLocalizedString("Ungroup", comment: "Tooltip for the unlink-window-group badge")
         }
     }
 }

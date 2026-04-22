@@ -143,3 +143,5 @@
 "Resize" = "크기 조절";
 "Link windows" = "창 그룹화";
 "Unlink window group" = "창 그룹 해제";
+"Group %@ with %@" = "%1$@와(과) %2$@ 그룹화";
+"Ungroup" = "그룹 해제";

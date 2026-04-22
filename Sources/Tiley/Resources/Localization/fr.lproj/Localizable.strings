@@ -143,3 +143,5 @@
 "Resize" = "Redimensionner";
 "Link windows" = "Grouper les fenêtres";
 "Unlink window group" = "Dissocier le groupe de fenêtres";
+"Group %@ with %@" = "Grouper « %@ » avec « %@ »";
+"Ungroup" = "Dissocier";
