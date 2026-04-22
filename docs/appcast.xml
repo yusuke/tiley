@@ -3,6 +3,142 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>5.0.0</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Добавлена группировка окон. После применения пресета раскладки с несколькими окнами в середине любых соприкасающихся граней появляется значок связывания (`link.badge.plus`). Щелчок по значку объединяет окна в группу: перетаскивание одного окна перемещает всех участников одновременно, изменение размера общей грани симметрично меняет размер соседнего окна, а вывод участника на передний план приподнимает остальных непосредственно под ним. При наведении на значок появляется иконка разъединения — по клику группа распадается. При закрытии окна из группы она также распадается автоматически</li>
+<li>Значок связи в боковой панели: в боковой панели основного окна между последовательными строками сгруппированных окон теперь отображается небольшой индикатор связи, чтобы с одного взгляда видеть, какие окна объединены. Если сгруппированное окно оказалось бы отделено от своей пары блоком заголовка приложения, оно извлекается из этого блока и размещается непосредственно под своей парой, сохраняя связь на виду</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Исправлена проблема, из-за которой предпросмотры при наведении курсора и во время перетаскивания на сетке главного окна использовали стиль прямоугольника из режима редактирования пресета (залитая заливка, без заголовка) также при обычном применении раскладки; вне режима редактирования пресета теперь корректно отображается миниатюрное окно со значком приложения, именем приложения и названием окна</li>
+<li>Исправлено, что при применении раскладки «бок о бок» к множественному выделению одно из двух окон изредка оказывалось не в той позиции. Анимация, временно сдвигающая вниз окна, перекрывающие выбранное, продолжала выполняться после применения раскладки и перезаписывала итоговые позиции</li>
+<li>Исправлено, что после применения раскладки «бок о бок» размещённое окно могло медленно сползать в правый нижний угол. Отложенная очистка после скрытия главного окна могла запустить анимацию восстановления, пока только что размещённое окно всё ещё числилось в списке отодвинутых окон, и тем самым постепенно утаскивала его обратно в исходную позицию до отодвигания</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Agrupamento de janelas adicionado. Após aplicar uma predefinição de layout com várias janelas, um crachá de vínculo (`link.badge.plus`) aparece no ponto médio de qualquer borda em contato. Clicar no crachá agrupa as janelas: arrastar uma janela move todas as membros juntas, redimensionar a borda compartilhada redimensiona a janela adjacente em sentido oposto e trazer um membro para frente eleva os outros logo abaixo. Ao passar o mouse sobre o crachá aparece um ícone para dissolver o grupo; fechar uma janela do grupo também o dissolve automaticamente</li>
+<li>Crachá de vínculo na barra lateral: na barra lateral da janela principal, agora aparece um pequeno indicador de vínculo entre linhas consecutivas de janelas agrupadas, permitindo identificar num relance quais janelas estão conectadas. Se uma janela agrupada fosse separada da sua parceira por um bloco de cabeçalho do app, ela é retirada desse bloco e posicionada logo abaixo da parceira para manter o vínculo visível</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o problema em que as prévias ao passar o mouse e ao arrastar na grade da janela principal usavam o estilo de retângulo da edição de predefinição (preenchimento tingido, sem barra de título) também durante a aplicação normal de um layout; fora da edição de uma predefinição, a janela em miniatura com ícone do app, nome do app e título da janela agora é exibida corretamente</li>
+<li>Corrigido o posicionamento incorreto ocasional de uma das duas janelas ao aplicar um layout lado a lado a uma seleção múltipla. A animação que deslocava temporariamente para baixo as janelas que ocultavam a janela selecionada continuava em execução depois da aplicação do layout e sobrescrevia as posições finais</li>
+<li>Corrigido o problema em que, após aplicar um layout lado a lado, uma janela já posicionada podia deslizar lentamente para o canto inferior direito. A limpeza adiada que ocorre depois de ocultar a janela principal podia iniciar uma animação de restauração enquanto a janela recém-posicionada ainda constava na lista de janelas afastadas, arrastando-a de volta para sua posição anterior ao deslocamento</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Aggiunto il raggruppamento delle finestre. Dopo aver applicato un preset di layout con più finestre, appare un badge di collegamento (`link.badge.plus`) al centro di ogni bordo a contatto. Facendo clic sul badge le finestre vengono raggruppate: trascinare una finestra sposta insieme tutte le membri, ridimensionare il bordo condiviso ridimensiona la finestra adiacente in senso opposto e portare in primo piano una membro eleva le altre immediatamente sotto. Passando il mouse sul badge appare un'icona per dissolvere il gruppo; chiudere una finestra del gruppo lo dissolve anche automaticamente</li>
+<li>Badge di collegamento nella barra laterale: nella barra laterale della finestra principale ora viene mostrato un piccolo indicatore di collegamento tra righe consecutive di finestre raggruppate, in modo da vedere a colpo d'occhio quali finestre sono associate. Se una finestra raggruppata rischierebbe di essere separata dalla sua compagna da un blocco di intestazione dell'app, viene estratta da quel blocco e posizionata direttamente sotto la compagna per mantenere visibile il collegamento</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto il problema per cui le anteprime al passaggio del mouse e durante il trascinamento sulla griglia della finestra principale usavano lo stile di rettangolo della modifica di un preset (riempimento colorato, senza barra del titolo) anche durante la normale applicazione di un layout; al di fuori della modifica di un preset viene ora mostrata correttamente la finestra in miniatura con icona dell'app, nome dell'app e titolo della finestra</li>
+<li>Corretto il problema per cui, applicando un layout affiancato a una selezione multipla, una delle due finestre finiva occasionalmente nella posizione sbagliata. L'animazione che sposta temporaneamente in basso le finestre che coprono quella selezionata continuava a girare anche dopo l'applicazione del layout, sovrascrivendo le posizioni finali</li>
+<li>Corretto il problema per cui, dopo aver applicato un layout affiancato, una finestra già posizionata poteva scivolare lentamente verso l'angolo in basso a destra. La pulizia differita eseguita dopo aver nascosto la finestra principale poteva avviare un'animazione di ripristino mentre la finestra appena collocata era ancora elencata fra le finestre spostate, trascinandola così verso la sua posizione precedente allo spostamento</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Ajout du regroupement de fenêtres. Après l'application d'un préréglage de disposition contenant plusieurs fenêtres, un badge de lien (`link.badge.plus`) apparaît au milieu de chaque bord en contact. Cliquer sur le badge regroupe les fenêtres : faire glisser une fenêtre déplace tous les membres ensemble, redimensionner le bord commun redimensionne la fenêtre voisine en sens inverse et mettre un membre au premier plan élève les autres juste en dessous. Un survol du badge révèle une icône permettant de dissoudre le groupe ; fermer l'une des fenêtres du groupe le dissout également automatiquement</li>
+<li>Badge de lien dans la barre latérale : dans la barre latérale de la fenêtre principale, un petit indicateur de lien apparaît désormais entre deux lignes consécutives de fenêtres groupées, permettant de voir d'un coup d'œil quelles fenêtres sont associées. Si une fenêtre groupée risquait d'être séparée de sa partenaire par un bloc d'en-tête d'application, elle est extraite de ce bloc et placée directement sous sa partenaire afin que le lien reste visible</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction des aperçus au survol et au glissement sur la grille de la fenêtre principale qui utilisaient le style de rectangle de la modification de préréglage (rempli teinté, sans barre de titre) également lors de l'application normale d'une disposition ; en dehors de la modification d'un préréglage, la fenêtre miniature avec icône de l'application, nom de l'application et titre de la fenêtre est désormais correctement affichée</li>
+<li>Correction du positionnement incorrect occasionnel de l'une des deux fenêtres lors de l'application d'une disposition côte à côte à une sélection multiple. L'animation qui écartait temporairement les fenêtres masquant la fenêtre sélectionnée continuait de s'exécuter après l'application de la disposition et écrasait les positions finales</li>
+<li>Correction d'une fenêtre pouvant dériver lentement vers le coin inférieur droit après l'application d'une disposition côte à côte. Le nettoyage différé qui suit le masquage de la fenêtre principale pouvait démarrer une animation de restauration alors que la fenêtre tout juste placée figurait encore dans la liste des fenêtres écartées, la ramenant progressivement vers sa position antérieure au déplacement</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Se añadió el agrupamiento de ventanas. Al aplicar una configuración predefinida de diseño con varias ventanas, aparece una insignia de enlace (`link.badge.plus`) en el punto medio de cualquier borde en contacto. Al hacer clic en la insignia, las ventanas se agrupan: arrastrar una ventana mueve a todas las miembros a la vez, redimensionar el borde compartido redimensiona la ventana vecina en sentido opuesto, y llevar un miembro al frente eleva a los demás justo debajo. Al pasar el cursor sobre la insignia aparece un icono para disolver el grupo; al hacer clic sobre él se deshace la agrupación. Si se cierra una ventana del grupo, este también se disuelve automáticamente</li>
+<li>Insignia de enlace en la barra lateral: en la barra lateral de la ventana principal ahora se muestra un pequeño indicador de enlace entre las filas consecutivas de ventanas agrupadas, para ver de un vistazo qué ventanas están vinculadas. Si una ventana agrupada quedaría separada de su compañera por el bloque de encabezado de una app, se extrae de ese bloque y se coloca justo debajo de su compañera para que el enlace siga siendo visible</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Se corrigió que las vistas previas al pasar el cursor y al arrastrar en la cuadrícula de la ventana principal usaran el estilo de rectángulo de la edición de configuración predefinida (relleno tintado, sin barra de título) también durante la aplicación normal de un diseño; fuera de la edición de una configuración predefinida, ahora se muestra correctamente la ventana en miniatura con icono de la aplicación, nombre de la aplicación y título de la ventana</li>
+<li>Se corrigió que, al aplicar un diseño en paralelo a una selección múltiple, una de las dos ventanas aterrizara ocasionalmente en la posición incorrecta. La animación que aparta temporalmente las ventanas que ocultan la seleccionada seguía ejecutándose después de aplicar el diseño y sobrescribía las posiciones finales</li>
+<li>Se corrigió que, tras aplicar un diseño en paralelo, una ventana colocada pudiera desplazarse lentamente hacia la esquina inferior derecha. La limpieza diferida posterior a ocultar la ventana principal podía iniciar una animación de restauración mientras la ventana recién colocada aún figuraba en la lista de ventanas apartadas, arrastrándola de vuelta hacia su posición previa al desplazamiento</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Fenstergruppierung hinzugefügt. Nach dem Anwenden einer Layout-Voreinstellung mit mehreren Fenstern erscheint an der Mitte jeder aneinandergrenzenden Kante ein Link-Abzeichen (`link.badge.plus`). Ein Klick auf das Abzeichen gruppiert die Fenster, sodass das Ziehen eines Fensters alle Mitglieder gemeinsam bewegt, das Größenändern der gemeinsamen Kante das gegenüberliegende Fenster entgegengesetzt skaliert und das Hervorheben eines Mitglieds die anderen direkt darunter anhebt. Beim Darüberfahren erscheint ein Auflösungssymbol; ein Klick darauf löst die Gruppe auf. Beim Schließen eines beteiligten Fensters wird die Gruppe automatisch aufgelöst</li>
+<li>Link-Abzeichen in der Seitenleiste: In der Seitenleiste des Hauptfensters wird nun zwischen aneinandergrenzenden gruppierten Fenstereinträgen ein kleines Link-Symbol angezeigt, sodass auf einen Blick erkennbar ist, welche Fenster verknüpft sind. Würde ein gruppiertes Fenster sonst durch einen App-Kopfzeilenblock von seinem Partner getrennt werden, wird es aus diesem Block herausgelöst und direkt unter seinen Partner platziert, damit die Verbindung sichtbar bleibt</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Behoben, dass Hover- und Zieh-Vorschauen auf dem Hauptfenster-Raster auch bei der normalen Layout-Anwendung den Stil aus der Voreinstellungsbearbeitung verwendeten (eingefärbtes Rechteck, keine Titelleiste); außerhalb der Voreinstellungsbearbeitung wird nun korrekt das Miniaturfenster mit App-Symbol, App-Name und Fenstertitel angezeigt</li>
+<li>Behoben, dass eines von zwei Fenstern gelegentlich an der falschen Position landete, wenn ein Seite-an-Seite-Layout auf eine Mehrfachauswahl angewendet wurde: Die Animation, die verdeckende Fenster vorübergehend nach unten verschiebt, um das ausgewählte Fenster sichtbar zu machen, lief nach dem Anwenden des Layouts weiter und überschrieb so die neu gesetzten Positionen</li>
+<li>Behoben, dass ein Fenster nach dem Anwenden eines Seite-an-Seite-Layouts langsam nach rechts unten driftete. Die verzögerte Aufräum-Routine nach dem Ausblenden des Hauptfensters konnte eine Wiederherstellungs-Animation starten, während das frisch platzierte Fenster noch in der Liste der beiseite geschobenen Fenster stand, und zog es dadurch langsam zurück zu seiner Ursprungsposition vor der Verdrängung</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增視窗分組功能。套用包含多個視窗的版面預設後，若有邊緣相鄰的視窗對，會在相鄰邊的中央顯示連結徽章（`link.badge.plus`）。點擊徽章即可將視窗分組，此後拖曳其中一個視窗時其他成員會一同移動，調整相鄰邊的大小時對側視窗會反向縮放以保持緊貼。將群組內的視窗置於前端時，其他成員也會隨即提升到緊接其下的層級。將滑鼠懸停在徽章上會顯示解除圖示，點擊即可解除分組。成員視窗關閉時也會自動解除</li>
+<li>側邊欄連結徽章：在主視窗側邊欄中，相鄰的同群組視窗之間會顯示小型連結圖示，讓使用者一眼就能看出哪些視窗已連動。若同群組視窗原本會被應用程式標題區塊隔開，該視窗會被從所屬應用程式群組中抽出，直接排在群組夥伴的下方以保持連結可見</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了一般版面配置指定時，在主視窗格線上懸停和拖曳也以預設編輯時的樣式（純色矩形、無標題列）顯示的問題。非編輯預設時，現在會正確顯示帶有應用程式圖示、應用程式名稱和視窗標題的迷你視窗</li>
+<li>修正了多選視窗並套用左右並排版面時，偶爾會有一個視窗位置不正確的問題。將所選視窗置於前端時會暫時把遮擋的視窗向下移開的動畫，在版面套用之後仍繼續執行並覆寫了最終位置，因此導致該問題</li>
+<li>修正了套用左右並排版面後，已放置的視窗會慢慢往右下方漂移的問題。主視窗隱藏後的延遲清理會在剛放置的視窗仍留在「已避讓視窗」清單中的情況下啟動還原動畫，結果把該視窗慢慢拉回避讓前的原始位置</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增窗口分组功能。应用包含多个窗口的布局预设后，若存在边相邻的窗口对，会在相邻边的中央显示链接徽章（`link.badge.plus`）。点击徽章即可将窗口分组，此后拖动其中一个窗口时其他成员会一同移动，调整相邻边的大小时对侧窗口会反向缩放以保持贴合。将组内某个窗口置于前端时，其他成员也会紧随其后提升到上层。将鼠标悬停在徽章上会显示解除图标，点击即可解除分组。成员窗口关闭时也会自动解除</li>
+<li>侧边栏链接徽章：在主窗口侧边栏中，相邻的同组窗口之间会显示一个小型链接图标，使已分组的窗口一目了然。若同组窗口原本会被应用标题块隔开，该窗口会被移出所属应用分组，直接排在组伙伴的下方以保持链接可见</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了常规布局指定时，在主窗口网格上悬停和拖动也以预设编辑时的样式（纯色矩形、无标题栏）显示的问题。非编辑预设时，现在会正确显示带有应用图标、应用名称和窗口标题的微缩窗口</li>
+<li>修复了多选窗口并应用左右并排布局时，偶尔会有一个窗口位置不正确的问题。将所选窗口置于前端时会临时把遮挡的窗口向下移开的动画，在布局应用之后仍继续运行并覆盖了最终位置，因此导致了该问题</li>
+<li>修复了应用左右并排布局之后，已放置的窗口会慢慢向右下方漂移的问题。主窗口隐藏之后的延迟清理会在刚放置的窗口仍然留在“已避让窗口”列表中的情况下启动恢复动画，从而把该窗口慢慢拉回到避让前的原始位置</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>창 그룹화 기능 추가. 여러 창을 포함하는 레이아웃 프리셋을 적용한 후 변이 맞닿는 창 쌍이 있으면 맞닿는 변의 중앙에 링크 배지(`link.badge.plus`)가 표시됩니다. 배지를 클릭하면 창이 그룹화되어 한쪽을 드래그로 이동하면 다른 멤버도 동일하게 이동하고, 맞닿는 변을 리사이즈하면 상대 창이 반대 방향으로 축소/확장되어 따라옵니다. 그룹 내 창을 전면으로 가져오면 다른 멤버도 바로 아래 레이어로 올라옵니다. 배지에 호버하면 해제 아이콘이 표시되며 클릭하면 그룹이 해제됩니다. 멤버 창이 닫히면 자동으로 해제됩니다</li>
+<li>사이드바 링크 배지: 메인 창의 사이드바에서 그룹화된 창 사이에 작은 링크 표시가 나타나 어떤 창들이 함께 묶여 있는지 쉽게 알 수 있습니다. 앱 헤더 블록 때문에 짝꿍 창과 떨어지게 되는 경우, 그 창을 앱 그룹에서 꺼내 짝꿍 창 바로 아래에 배치해 링크가 끊기지 않도록 했습니다</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>일반 레이아웃 지정 시 메인 창의 그리드에서 마우스 호버·드래그 시 프리셋 편집 중과 동일한 스타일(채우기 사각형·타이틀바 없음)로 표시되던 문제 수정. 프리셋 편집 중이 아닌 경우에는 앱 아이콘·앱 이름·윈도우 타이틀이 포함된 미니어처 윈도우가 표시됩니다</li>
+<li>여러 창을 선택하고 좌우 배치 레이아웃을 적용할 때 한쪽 창이 의도하지 않은 위치에 놓이는 문제를 수정했습니다. 선택한 창을 전면으로 올리기 위해 다른 창을 일시적으로 아래로 치워두는 애니메이션이 레이아웃 적용 후에도 계속 실행되면서 최종 위치를 덮어쓰고 있던 것이 원인입니다</li>
+<li>좌우 배치 레이아웃을 적용한 뒤 배치된 창이 서서히 오른쪽 아래로 밀려나는 문제를 수정했습니다. 메인 창을 숨긴 뒤의 지연 정리 처리에서, 방금 배치한 창이 아직 대피 목록에 남아 있는 상태로 복귀 애니메이션이 시작되어 그 창을 대피 전 원래 위치로 끌고 가고 있었던 것이 원인입니다</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>ウインドウのグループ化機能を追加しました。複数のウインドウを含むレイアウトプリセットを適用したとき、辺が接するウインドウペアがあると接する辺の中央にリンクバッジ（`link.badge.plus`）が表示されます。バッジをクリックするとウインドウがグループ化され、片方をドラッグ移動すると他メンバーも同じだけ移動し、接する辺をリサイズするともう一方が追随して逆向きに縮んだり広がったりします。また、グループ内のウインドウを前面化すると他メンバーも直後のレイヤーに上がります。バッジにホバーすると解除アイコンが表示され、クリックするとグループが解除されます。メンバーのウインドウが閉じられた場合も自動解除されます</li>
+<li>サイドバーでグループ化されたウインドウ同士の行間に小さなリンクバッジを表示するようにしました。一目でどのウインドウがグループになっているかが分かります。グループの相方がアプリヘッダに隠れて隣接できない場合、その相方ウインドウをアプリグループから独立させて、グループ元のウインドウの直下に並べて表示します</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>通常のレイアウト指定時にメインウインドウのグリッドでマウスホバー・ドラッグすると、プリセット編集時と同じスタイル（塗りつぶし矩形・タイトルバーなし）で表示されてしまう問題を修正。プリセット編集中でない場合は、アプリアイコン・アプリ名・ウインドウタイトル付きのミニチュアウインドウが表示されるようになりました</li>
+<li>複数選択して左右配置レイアウトを適用した際、片方のウインドウが意図しない位置に配置されることがある問題を修正しました。選択したウインドウを前面化するために一時的に他ウインドウを下方へ待避させるアニメーションが、レイアウト適用後も動き続けて最終位置を上書きしていたのが原因です</li>
+<li>左右配置レイアウト適用後、配置されたウインドウがズリズリと右下へずれていくことがある問題を修正しました。メインウインドウ非表示後の遅延クリーンアップが、配置済みウインドウを待避中リストに残したまま復帰アニメーションを開始してしまい、そのウインドウを待避前の元位置へ引き戻していたのが原因です</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Window grouping: after applying a layout preset that places two or more windows side by side, a link badge (`link.badge.plus`) now appears at the midpoint of any touching edges. Clicking the badge groups the windows so that dragging one window moves all members in lockstep, resizing the shared edge resizes the partner inversely, and raising one member raises the others just beneath it. Hover the badge to reveal a dismiss affordance that dissolves the group; closing a window in the group also dissolves it automatically</li>
+<li>Sidebar link badge: grouped windows in the main window sidebar now show a small link indicator in the gap between consecutive grouped rows, making it easy to see which windows are tied together. When a grouped window would otherwise be separated from its partner by an app-header block, it is pulled out of that block and placed directly below its partner so the link stays visible</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed hover and drag previews on the main window grid using the preset-editing rectangle style (tinted fill, no title bar) even during normal layout application; they now correctly show the miniature window with app icon, app name, and window title when not editing a preset</li>
+<li>Fixed one of two windows occasionally landing in the wrong position when applying a side-by-side layout to a multi-selection; an in-flight displacement animation (used to temporarily push occluding windows aside) no longer continues after the layout is applied and overrides the new frames</li>
+<li>Fixed a layout target gradually drifting toward the bottom-right after applying a side-by-side layout. The deferred post-hide cleanup could start a restore animation while the just-placed window was still listed in the displaced-windows table, dragging it back toward its pre-displacement origin</li>
+</ul>]]></description>
+            <pubDate>Wed, 22 Apr 2026 23:10:16 +0900</pubDate>
+            <sparkle:version>500</sparkle:version>
+            <sparkle:shortVersionString>5.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley-5.0.0.zip" length="5991339" type="application/octet-stream" sparkle:edSignature="4kryZ4EfD8SAVy5cmrEbonD8OqcKU5Tispf5p4RAE5RMH65M1dqZfUBBaEjA+5oEuEryRQZf1APppbprPsdpBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-443.delta" sparkle:deltaFrom="443" length="575678" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="YvQezPe1IdCxUCSGDege+I0LdpjYfsK3wLKpWWmRAZtK4SnlVgD+OcyHty5madYIBkJr1SbB+yLBhBV7+Y5FAg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-442.delta" sparkle:deltaFrom="442" length="607382" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CXb2S/cveVpkv3PZ9/01g5mJDESHJtCb+gesyNV7nKeZh+7wxGDqLuUH0ZfGe8ihN5al/gj7UslfhqNhwVnpCw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-441.delta" sparkle:deltaFrom="441" length="613586" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OVOZTjEJ5qa8C116uFF1F3zPq39ZAhF4WTnQB6XBOvrfAcGvlyH22W3wPeKrK5WwNd1xNBCY3+fCRM6+Qt+YAw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-440.delta" sparkle:deltaFrom="440" length="673598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="QxxRL2AbkleagAQnOshRlkd4c6MwNpiT229PZ6F/jSlOuWYTIcMEeBlSui96nKymiQT9yUM8NVim/yAH+oGMBA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-439.delta" sparkle:deltaFrom="439" length="699030" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ixfTMn3tG0+OaLVeFY2IV7jKYqiMtC8miSEJScCEZH2IKKBxNugMw+7tfzYjskMaK5UpnJsCA6FdxciD2XcQDg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>4.4.3</title>
             <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
 <ul>
@@ -114,11 +250,111 @@
 <li>Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon</li>
 <li>Fixed committed selection rectangles occasionally rendering with no fill (showing only the close button and index number) when a layout preset contained many selections</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
+<ul>
+<li>Ao editar uma predefinição de layout, as prévias de passagem do mouse e de arrasto na grade agora usam o mesmo estilo de retângulo das seleções confirmadas: tingidas com a cor do próximo índice e exibindo centralizado o número de índice que será atribuído, sem barra de título e sem botão de exclusão. Além disso, passar o mouse sobre uma célula vazia mostra uma prévia de retângulo do tamanho de uma célula mesmo quando outros layouts já estão registrados</li>
+<li>Durante a edição de uma predefinição, tanto o retângulo ao passar o mouse quanto o retângulo arrastado agora exibem centralizado o número de índice que será atribuído ao confirmar (com a mesma aparência do retângulo confirmado), incluindo a prévia de uma única célula ao passar o mouse. As prévias de predefinições de layout (passar o mouse sobre uma predefinição na barra lateral e a sobreposição de prévia em tela cheia ao aplicar predefinições de seleção múltipla) continuam exibindo os números de índice</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o salto da janela principal para o centro da tela ao adicionar ou editar uma grade em uma predefinição de layout quando "Mostrar perto do ícone ao clicar" estava ativado; a janela agora permanece ancorada perto do ícone da barra de menus</li>
+<li>Corrigido o problema em que retângulos de seleção confirmados eram exibidos ocasionalmente sem preenchimento e sem borda (apenas com o botão de fechar e o rótulo de índice visíveis) quando uma predefinição de layout continha várias seleções</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
+<ul>
+<li>Durante la modifica di un preset di layout, le anteprime al passaggio del mouse e durante il trascinamento sulla griglia usano ora lo stesso stile di rettangolo delle selezioni confermate: colorate con la tinta del prossimo indice e con il numero di indice da assegnare mostrato al centro, senza barra del titolo e senza pulsante di eliminazione. Inoltre, passando il mouse su una cella vuota viene mostrata un'anteprima di una cella anche quando sono già registrati altri layout</li>
+<li>Durante la modifica di un preset, sia il rettangolo al passaggio del mouse sia il rettangolo di trascinamento mostrano ora al centro il numero di indice che verrà assegnato al momento della conferma (con lo stesso aspetto del rettangolo confermato), inclusa l'anteprima di una singola cella al passaggio del mouse. Le anteprime dei preset di layout (passaggio del mouse su un preset nella barra laterale e la sovrapposizione di anteprima a schermo intero durante l'applicazione di preset a selezione multipla) continuano a mostrare i numeri di indice</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto lo spostamento della finestra principale al centro dello schermo quando si aggiungeva o modificava una griglia in un preset di layout con "Mostra vicino all'icona al clic" attivato; la finestra ora rimane ancorata vicino all'icona della barra dei menu</li>
+<li>Corretto il problema per cui i rettangoli di selezione confermati venivano talvolta visualizzati senza riempimento e senza bordo (con solo il pulsante di chiusura e l'etichetta numerica visibili) quando un preset di layout conteneva più selezioni</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
+<ul>
+<li>Lors de la modification d'un préréglage de disposition, les aperçus au survol et lors du glissement sur la grille utilisent désormais le même style de rectangle que les sélections validées : teintés avec la couleur du prochain index et affichant en son centre le numéro d'index à attribuer, sans barre de titre ni bouton de suppression. De plus, le survol d'une cellule vide affiche un aperçu de rectangle d'une cellule même si d'autres dispositions sont déjà enregistrées</li>
+<li>Lors de la modification d'un préréglage, le rectangle au survol et le rectangle de glissement affichent désormais au centre le numéro d'index qui sera attribué à la validation (avec la même apparence que le rectangle validé), y compris l'aperçu d'une seule cellule au survol. Les aperçus des préréglages de disposition (survol d'un préréglage dans la barre latérale, superposition d'aperçu plein écran lors de l'application de préréglages à sélections multiples) continuent également d'afficher les numéros d'index</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction du saut de la fenêtre principale vers le centre de l'écran lors de l'ajout ou de la modification d'une grille dans un préréglage de disposition lorsque « Afficher près de l'icône au clic » était activé ; la fenêtre reste désormais ancrée près de l'icône de la barre de menus</li>
+<li>Correction du fait que les rectangles de sélection validés s'affichaient parfois sans remplissage ni bordure (avec uniquement le bouton de fermeture et l'étiquette de numéro visibles) lorsqu'un préréglage de disposition contenait plusieurs sélections</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
+<ul>
+<li>Al editar una configuración predefinida de diseño, las vistas previas de paso del cursor y de arrastre en la cuadrícula ahora usan el mismo estilo de rectángulo que las selecciones confirmadas: tintadas con el color del siguiente índice y mostrando centrado el número de índice que se asignará, sin barra de título ni botón de eliminación. Además, al pasar el cursor sobre una celda vacía se muestra una vista previa de rectángulo de una celda aunque ya haya otros diseños registrados</li>
+<li>Durante la edición de una configuración predefinida, tanto el rectángulo al pasar el cursor como el rectángulo de arrastre muestran ahora centrado el número de índice que se asignará al confirmar (con el mismo aspecto que el rectángulo confirmado), incluida la vista previa de una sola celda al pasar el cursor. Las vistas previas de configuraciones predefinidas de diseño (paso del cursor sobre una configuración predefinida en la barra lateral y la superposición de vista previa a pantalla completa al aplicar configuraciones predefinidas de selección múltiple) también siguen mostrando los números de índice</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Se corrigió el salto de la ventana principal al centro de la pantalla al añadir o editar una cuadrícula en una configuración predefinida de diseño cuando "Mostrar cerca del icono al hacer clic" estaba activado; ahora la ventana permanece anclada cerca del icono de la barra de menús</li>
+<li>Se corrigió que los rectángulos de selección confirmados se mostraran ocasionalmente sin relleno ni borde (con solo el botón de cerrar y la etiqueta de índice visibles) cuando una configuración predefinida de diseño contenía varias selecciones</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
+<ul>
+<li>Beim Bearbeiten einer Layout-Voreinstellung verwenden Hover- und Zieh-Vorschauen auf dem Raster jetzt denselben Rechteck-Stil wie bestätigte Auswahlen: in der Farbe des nächsten Index und mit der zugehörigen Indexnummer mittig, ohne Titelleiste und ohne Löschen-Schaltfläche. Zusätzlich zeigt das Darüberfahren mit der Maus über eine leere Zelle ein ein Zellen großes Vorschaurechteck an, auch wenn bereits andere Layouts registriert sind</li>
+<li>Beim Bearbeiten einer Voreinstellung zeigen nun sowohl das Hover- als auch das Zieh-Rechteck die nach dem Bestätigen zugewiesene Indexnummer mittig an (passend zum bestätigten Rechteck, in das sie übergehen) – einschließlich der ein Zellen großen Hover-Vorschau. Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Das Hauptfenster sprang in die Bildschirmmitte, wenn bei aktivierter Option „Beim Klick neben dem Symbol anzeigen" ein Raster in einer Layout-Voreinstellung hinzugefügt oder bearbeitet wurde; das Fenster bleibt jetzt nahe am Menüleistensymbol verankert</li>
+<li>Behoben, dass bestätigte Auswahlrechtecke gelegentlich ohne Füllung und Rahmen angezeigt wurden (nur Schließen-Schaltfläche und Indexnummer sichtbar), wenn eine Layout-Voreinstellung mehrere Auswahlen enthielt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
+<ul>
+<li>編輯版面配置預設時，滑鼠懸停和拖曳中的格線預覽統一為與放開拖曳後顯示相同的矩形樣式：不顯示標題列和刪除按鈕，以下一個索引的顏色顯示，並在中央顯示即將指派的索引編號。此外，即使已經登記其他配置，將滑鼠懸停在空格上也會顯示 1 格大小的預覽矩形</li>
+<li>編輯預設時，滑鼠懸停矩形和拖曳矩形都會在中央顯示提交後將取得的索引編號（與提交後的矩形外觀相同）。1 格大小的滑鼠懸停預覽也會顯示編號。版面配置預設預覽（側邊欄的預設懸停、套用多選預設時的全螢幕預覽覆蓋層）同樣繼續顯示索引編號</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正啟用「點擊圖示時在圖示附近顯示」後，在版面配置預設中新增或編輯格線時主視窗會跳到螢幕中央的問題；視窗現在會固定在選單列圖示附近</li>
+<li>修正版面配置預設中存在多個選取區域時，已確定的選取矩形偶爾不顯示填充和邊框（僅顯示 × 按鈕和編號標籤）的問題</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
+<ul>
+<li>编辑布局预设时，鼠标悬停和拖动过程中的网格预览统一为与拖动释放后显示相同的矩形样式：不显示标题栏和删除按钮，以下一个索引的颜色显示，并在中央显示即将赋予的索引编号。此外，即使已经登记了其他布局，将鼠标悬停在空单元格上也会显示 1 格大小的预览矩形</li>
+<li>编辑预设时，鼠标悬停矩形和拖动矩形都会在中央显示提交后将获得的索引编号（与提交后的矩形外观相同）。1 格大小的鼠标悬停预览也会显示编号。预设布局预览（侧边栏的预设悬停、应用多选预设时的全屏预览叠加层）同样继续显示索引编号</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复启用"点击图标时在图标附近显示"后，在布局预设中添加或编辑网格时主窗口会跳到屏幕中央的问题；窗口现在会保持固定在菜单栏图标附近</li>
+<li>修复布局预设中存在多个选区时，已确定的选区矩形偶尔不显示填充和边框（仅显示×按钮和序号标签）的问题</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
+<ul>
+<li>레이아웃 프리셋을 편집할 때, 마우스 호버 및 드래그 중 그리드 미리보기가 드래그를 놓은 후 표시되는 사각형과 동일한 스타일로 통일되었습니다. 타이틀바와 삭제 버튼은 표시되지 않으며, 다음 인덱스 색상과 부여될 인덱스 번호를 중앙에 표시합니다. 또한 다른 레이아웃이 이미 등록된 상태에서도 빈 셀에 마우스를 올리면 1셀 크기의 미리보기 사각형이 표시됩니다</li>
+<li>프리셋 편집 중 마우스 호버 사각형과 드래그 사각형 모두에 확정 후 부여될 인덱스 번호가 중앙에 표시됩니다(확정 후의 사각형과 동일한 모양). 1셀 크기의 마우스 호버 미리보기에도 번호가 표시됩니다. 프리셋 레이아웃 미리보기(사이드바의 프리셋 호버, 다중 선택 프리셋 적용 시의 전체 화면 미리보기 오버레이)에서도 계속해서 번호를 표시합니다</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>"아이콘 클릭 시 아이콘 근처에 표시"가 활성화된 상태에서 레이아웃 프리셋 편집 중 그리드를 추가하거나 편집할 때 메인 창이 화면 중앙으로 이동하던 문제 수정. 이제 창은 메뉴 막대 아이콘 근처에 계속 고정됩니다</li>
+<li>레이아웃 프리셋에 여러 선택 영역이 등록되어 있을 때, 확정된 선택 사각형이 드물게 채우기와 테두리 없이(× 버튼과 번호 라벨만) 표시되던 문제 수정</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
+<ul>
+<li>レイアウトプリセットの編集中、マウスホバーおよびドラッグ中のグリッドプレビューを、ドラッグ確定後の矩形と同じスタイルに統一しました。タイトルバーや削除ボタンは非表示で、次のインデックスの色と付与予定のインデックス番号を中央に表示します。また、すでに他のレイアウトが登録されている状態でも、空セルにマウスホバーすると 1 セル分のプレビュー矩形が表示されます</li>
+<li>プリセット編集中のマウスホバー矩形・ドラッグ矩形の両方に、確定後に付与されるインデックス番号を中央に表示するようにしました（確定後の矩形と同じ見た目）。1 セル分のマウスホバープレビューでも番号を表示します。プリセットレイアウトのプレビュー（サイドバーでのプリセットホバーや、複数選択プリセット適用時の全画面プレビューオーバーレイ）でも引き続き番号を表示します</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>「アイコンクリック時にアイコン付近に表示」が有効なときに、レイアウトプリセット編集でグリッドを追加・編集するとメインウインドウが画面中央に飛んでしまう問題を修正。ウインドウはメニューバーアイコン付近に留まるようになりました</li>
+<li>レイアウトプリセットに複数の選択範囲が登録されているとき、確定済みの選択矩形が稀に塗りつぶしや枠線なし（×ボタンと番号ラベルのみ）で表示されてしまう問題を修正</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
+<ul>
+<li>When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered</li>
+<li>During preset editing, the hover and drag rectangles now both show the upcoming index number centered (matching the committed selection they will become) — including the single-cell hover preview. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon</li>
+<li>Fixed committed selection rectangles occasionally rendering with no fill (showing only the close button and index number) when a layout preset contained many selections</li>
+</ul>]]></description>
             <pubDate>Mon, 20 Apr 2026 13:19:43 +0900</pubDate>
             <sparkle:version>443</sparkle:version>
             <sparkle:shortVersionString>4.4.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley-4.4.3.zip" length="5805126" type="application/octet-stream" sparkle:edSignature="0lfB0E9CYqBQ7CdJ9TWpEt+E+2qLTk4/jhh3W+FzpUJSGBHgCsyanhmFNQncGPc6Zhf7b1QR/NphuYr497yDBw=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley-4.4.3.zip" length="5805126" type="application/octet-stream" sparkle:edSignature="0lfB0E9CYqBQ7CdJ9TWpEt+E+2qLTk4/jhh3W+FzpUJSGBHgCsyanhmFNQncGPc6Zhf7b1QR/NphuYr497yDBw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-442.delta" sparkle:deltaFrom="442" length="247018" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aSyDVV5quAxZEMgBpySjMtq1z7Xxv7FwltRy/ZEOo0IF47LU4yvcmk/1PXC2WkQHaz0z7vY06iEDY68OoNX3Ag=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-441.delta" sparkle:deltaFrom="441" length="264450" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Yc6CIk/7Mr0RvDEsb2X5oJmp0uTS+2GtbV79ix/7xTzV3wcbrglskmlFrGAmoRqpXRWkIHPGEVnW6bGb5nDvDA=="/>
@@ -213,187 +449,57 @@
 <ul>
 <li>Fixed the stacking order being reversed when applying a layout to multiple selected windows; the first-selected (primary) window is now brought to the front as expected</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigida a ordem de empilhamento invertida ao aplicar um layout a várias janelas selecionadas; a primeira janela selecionada (principal) agora fica em primeiro plano como esperado</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto l'ordine di sovrapposizione invertito quando si applica un layout a più finestre selezionate; la prima finestra selezionata (principale) ora passa in primo piano come previsto</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Correction de l'ordre de superposition inversé lors de l'application d'une disposition à plusieurs fenêtres sélectionnées ; la première fenêtre sélectionnée (principale) passe désormais au premier plan comme prévu</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Se corrigió el orden de apilamiento invertido al aplicar un diseño a varias ventanas seleccionadas; la primera ventana seleccionada (principal) ahora queda al frente como se espera</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Beim Anwenden einer Anordnung auf mehrere ausgewählte Fenster war die Stapelreihenfolge umgekehrt; das zuerst ausgewählte (primäre) Fenster liegt nun wie erwartet ganz oben</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正對多選視窗套用版面配置時 Z 順序顛倒的問題；最先選取的視窗（主視窗）現在會如預期顯示在最前方</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复对多选窗口应用布局时 Z 顺序颠倒的问题；最先选中的窗口（主窗口）现在会按预期出现在最前面</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>여러 창을 선택한 상태에서 레이아웃을 적용할 때 Z-순서가 반대로 적용되던 문제 수정. 처음 선택한 창(기본 창)이 기대한 대로 맨 앞에 오도록 개선</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>複数選択したウインドウにレイアウトを適用した際に Z-order が逆転していた問題を修正。最初に選択したウインドウ（プライマリ）が期待どおり最前面に来るようになりました</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed the stacking order being reversed when applying a layout to multiple selected windows; the first-selected (primary) window is now brought to the front as expected</li>
+</ul>]]></description>
             <pubDate>Sun, 19 Apr 2026 11:18:55 +0900</pubDate>
             <sparkle:version>442</sparkle:version>
             <sparkle:shortVersionString>4.4.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley-4.4.2.zip" length="5801264" type="application/octet-stream" sparkle:edSignature="0mkpTXyRBXtFIMkbGUbAa0U7D3JnrAZYEVrFdnbni5pMN6uLF8vpy5wnPpIyafxp7c1zohnu1KBRJMUfHJtXDA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley-4.4.2.zip" length="5801264" type="application/octet-stream" sparkle:edSignature="0mkpTXyRBXtFIMkbGUbAa0U7D3JnrAZYEVrFdnbni5pMN6uLF8vpy5wnPpIyafxp7c1zohnu1KBRJMUfHJtXDA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley442-441.delta" sparkle:deltaFrom="441" length="167394" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GBjZvQ0J47+mNYm6lY6ACIqSrqNHFfJj7T55zZIl+dZkLIsGwd9uNWOmjYb/h6qHVs3gUecxFSlC0w6qFzjOBw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley442-440.delta" sparkle:deltaFrom="440" length="297746" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="iedzJMfYFX61/f78USccc/STiRzaOYFpAgOvd3YElqMjHYEkACAeFe1EdZNfnx79joKMKOlD60fB9BE2Tk0HDw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley442-439.delta" sparkle:deltaFrom="439" length="392962" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zK7CKSA6hFAdyVOa9KtIj25xE6pg/6fwJYqnuNnijgNNkNNJ0EARh6h5kWYZLTlxouUBmFKmmslHelgCref4Bg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley442-438.delta" sparkle:deltaFrom="438" length="456718" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="G8qMHmvUh3fwFB8KOtosd8e1869vfp5PLXkzRW+SGpcDAAHxkixd8ieKao9SuOf7ge/8Xiw6ls4ZGr//qFRXBg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.2/Tiley442-437.delta" sparkle:deltaFrom="437" length="491558" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ceQvyOI2BA8xrSzUNNlvjahW63SQVH6zYpIa++wWd5a0vLhZv3IK3ukZnkiubquY4+rRCh/LUB0qZNu5RdFEDg=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.4.1</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>При открытии по сочетанию клавиш миниатюрный предпросмотр экрана — а не всё окно — теперь центрируется на дисплее. В качестве ориентира используется полный экранный прямоугольник (с учётом строки меню и Dock), поэтому миниатюра остаётся по центру даже когда Dock расположен слева или справа</li>
-<li>Когда включена опция «Показывать рядом со значком при клике», клик по значку в строке меню теперь выравнивает центр миниатюрного предпросмотра (а не всего окна) со значком; треугольник пузырька по-прежнему указывает прямо на значок</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Ao abrir pelo atalho, a visualização da tela em miniatura – e não a janela inteira – agora fica centralizada no monitor. A referência é o quadro completo da tela (incluindo barra de menus e Dock), de modo que a miniatura permanece centralizada mesmo com o Dock à esquerda ou à direita</li>
-<li>Quando "Mostrar perto do ícone ao clicar" está ativado, clicar no ícone da barra de menus agora alinha o centro da visualização em miniatura (e não o da janela inteira) ao ícone; o triângulo do balão continua apontando diretamente para o ícone</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>All'apertura tramite scorciatoia, l'anteprima dello schermo in miniatura – e non l'intera finestra – è ora centrata sul display. Il riferimento è l'intero frame dello schermo (con barra dei menu e Dock), quindi la miniatura resta centrata anche quando il Dock è a sinistra o a destra</li>
-<li>Quando "Mostra vicino all'icona al clic" è attivo, facendo clic sull'icona della barra dei menu il centro dell'anteprima in miniatura (e non quello dell'intera finestra) viene allineato all'icona; il triangolo del fumetto punta ancora direttamente all'icona</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Lors de l'ouverture par raccourci, l'aperçu de l'écran miniature – et non la fenêtre entière – est désormais centré sur l'écran. La référence est le cadre complet de l'écran (avec la barre de menus et le Dock), de sorte que la miniature reste centrée même lorsque le Dock est à gauche ou à droite</li>
-<li>Lorsque « Afficher près de l'icône au clic » est activé, cliquer sur l'icône de la barre de menus aligne désormais le centre de l'aperçu miniature (et non celui de la fenêtre entière) sur l'icône ; le triangle de la bulle pointe toujours directement vers l'icône</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Al abrir la ventana principal con el atajo de teclado, ahora la vista previa de la pantalla en miniatura —y no toda la ventana— queda centrada en la pantalla. La referencia es el marco completo de la pantalla (con barra de menús y Dock), por lo que la miniatura permanece centrada aunque el Dock esté a la izquierda o a la derecha</li>
-<li>Cuando "Mostrar cerca del icono al hacer clic" está activado, al hacer clic en el icono de la barra de menús se alinea el centro de la pantalla en miniatura (y no el de toda la ventana) con el icono; el triángulo del globo sigue apuntando directamente al icono</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Beim Öffnen per Tastenkürzel wird nun die Miniatur-Bildschirmvorschau – nicht das gesamte Fenster – auf dem Display zentriert. Als Referenz dient der gesamte Bildschirmrahmen (inkl. Menüleiste und Dock), sodass die Miniaturansicht auch bei seitlich platziertem Dock zentriert bleibt</li>
-<li>Wenn „Bei Klick nahe dem Symbol anzeigen" aktiviert ist, wird beim Klicken auf das Menüleistensymbol nun die Mitte der Miniatur-Bildschirmvorschau (und nicht die des gesamten Fensters) am Symbol ausgerichtet; der Sprechblasen-Pfeil zeigt weiterhin direkt auf das Symbol</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>透過快捷鍵開啟主視窗時，微縮螢幕預覽（而非整個視窗）在顯示器中置中。基準改為整個螢幕（含選單列與 Dock），即使 Dock 位於左側或右側，微縮螢幕也能保持在顯示器中央</li>
-<li>啟用「點擊圖示時在圖示附近顯示」時，點擊選單列圖示會使微縮螢幕中心（而非整個視窗）與圖示中心對齊；對話框三角形仍直接指向圖示</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>通过快捷键打开主窗口时，微缩屏幕预览（而非整个窗口）在显示器中居中。基准改为整个屏幕（含菜单栏和 Dock），即使 Dock 位于左侧或右侧时，微缩屏幕也能保持在显示器中央</li>
-<li>启用"点击图标时在图标附近显示"时，点击菜单栏图标将使微缩屏幕中心（而非整个窗口）与图标中心对齐；气泡三角形仍然直接指向图标</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>단축키로 열 때 전체 창이 아닌 미니어처 화면 미리보기가 디스플레이 중앙에 오도록 배치. 기준을 전체 화면(메뉴 막대·Dock 포함)으로 변경하여 Dock이 좌우에 있어도 미니어처가 화면 중앙에 정렬되도록 수정</li>
-<li>"아이콘 클릭 시 아이콘 근처에 표시"가 켜져 있을 때 메뉴 막대 아이콘을 클릭하면 전체 창이 아닌 미니어처 화면 중앙이 아이콘 중앙에 정렬되도록 조정(말풍선 삼각형은 아이콘 바로 아래 유지)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ショートカットで表示する際、ウインドウ全体ではなくミニチュアスクリーンプレビューが画面中央に来るように配置。基準をスクリーン全体（メニューバー・Dock 含む）とすることで、Dock が左右にある場合でもミニチュアが画面中央に揃うように修正</li>
-<li>「アイコンクリック時にアイコン付近に表示」がオンの場合、メニューバーアイコンをクリックするとウインドウ全体ではなくミニチュアスクリーンの中央がアイコンの中央に揃うように調整（吹き出しの三角はアイコン直下のまま）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Main window is now positioned so the miniature screen preview — not the whole window — is centered on the display when opened via shortcut, using the full screen frame (so the miniature stays centered even when the Dock is on the left or right)</li>
-<li>When "Show near icon when clicked" is enabled, clicking the menu bar icon now aligns the miniature screen center (not the whole window) with the icon; the bubble-arrow triangle still points directly at the icon</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Ao abrir pelo atalho, a visualização da tela em miniatura – e não a janela inteira – agora fica centralizada no monitor. A referência é o quadro completo da tela (incluindo barra de menus e Dock), de modo que a miniatura permanece centralizada mesmo com o Dock à esquerda ou à direita</li>
-<li>Quando "Mostrar perto do ícone ao clicar" está ativado, clicar no ícone da barra de menus agora alinha o centro da visualização em miniatura (e não o da janela inteira) ao ícone; o triângulo do balão continua apontando diretamente para o ícone</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>All'apertura tramite scorciatoia, l'anteprima dello schermo in miniatura – e non l'intera finestra – è ora centrata sul display. Il riferimento è l'intero frame dello schermo (con barra dei menu e Dock), quindi la miniatura resta centrata anche quando il Dock è a sinistra o a destra</li>
-<li>Quando "Mostra vicino all'icona al clic" è attivo, facendo clic sull'icona della barra dei menu il centro dell'anteprima in miniatura (e non quello dell'intera finestra) viene allineato all'icona; il triangolo del fumetto punta ancora direttamente all'icona</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Lors de l'ouverture par raccourci, l'aperçu de l'écran miniature – et non la fenêtre entière – est désormais centré sur l'écran. La référence est le cadre complet de l'écran (avec la barre de menus et le Dock), de sorte que la miniature reste centrée même lorsque le Dock est à gauche ou à droite</li>
-<li>Lorsque « Afficher près de l'icône au clic » est activé, cliquer sur l'icône de la barre de menus aligne désormais le centre de l'aperçu miniature (et non celui de la fenêtre entière) sur l'icône ; le triangle de la bulle pointe toujours directement vers l'icône</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Al abrir la ventana principal con el atajo de teclado, ahora la vista previa de la pantalla en miniatura —y no toda la ventana— queda centrada en la pantalla. La referencia es el marco completo de la pantalla (con barra de menús y Dock), por lo que la miniatura permanece centrada aunque el Dock esté a la izquierda o a la derecha</li>
-<li>Cuando "Mostrar cerca del icono al hacer clic" está activado, al hacer clic en el icono de la barra de menús se alinea el centro de la pantalla en miniatura (y no el de toda la ventana) con el icono; el triángulo del globo sigue apuntando directamente al icono</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Beim Öffnen per Tastenkürzel wird nun die Miniatur-Bildschirmvorschau – nicht das gesamte Fenster – auf dem Display zentriert. Als Referenz dient der gesamte Bildschirmrahmen (inkl. Menüleiste und Dock), sodass die Miniaturansicht auch bei seitlich platziertem Dock zentriert bleibt</li>
-<li>Wenn „Bei Klick nahe dem Symbol anzeigen" aktiviert ist, wird beim Klicken auf das Menüleistensymbol nun die Mitte der Miniatur-Bildschirmvorschau (und nicht die des gesamten Fensters) am Symbol ausgerichtet; der Sprechblasen-Pfeil zeigt weiterhin direkt auf das Symbol</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>透過快捷鍵開啟主視窗時，微縮螢幕預覽（而非整個視窗）在顯示器中置中。基準改為整個螢幕（含選單列與 Dock），即使 Dock 位於左側或右側，微縮螢幕也能保持在顯示器中央</li>
-<li>啟用「點擊圖示時在圖示附近顯示」時，點擊選單列圖示會使微縮螢幕中心（而非整個視窗）與圖示中心對齊；對話框三角形仍直接指向圖示</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>通过快捷键打开主窗口时，微缩屏幕预览（而非整个窗口）在显示器中居中。基准改为整个屏幕（含菜单栏和 Dock），即使 Dock 位于左侧或右侧时，微缩屏幕也能保持在显示器中央</li>
-<li>启用"点击图标时在图标附近显示"时，点击菜单栏图标将使微缩屏幕中心（而非整个窗口）与图标中心对齐；气泡三角形仍然直接指向图标</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>단축키로 열 때 전체 창이 아닌 미니어처 화면 미리보기가 디스플레이 중앙에 오도록 배치. 기준을 전체 화면(메뉴 막대·Dock 포함)으로 변경하여 Dock이 좌우에 있어도 미니어처가 화면 중앙에 정렬되도록 수정</li>
-<li>"아이콘 클릭 시 아이콘 근처에 표시"가 켜져 있을 때 메뉴 막대 아이콘을 클릭하면 전체 창이 아닌 미니어처 화면 중앙이 아이콘 중앙에 정렬되도록 조정(말풍선 삼각형은 아이콘 바로 아래 유지)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ショートカットで表示する際、ウインドウ全体ではなくミニチュアスクリーンプレビューが画面中央に来るように配置。基準をスクリーン全体（メニューバー・Dock 含む）とすることで、Dock が左右にある場合でもミニチュアが画面中央に揃うように修正</li>
-<li>「アイコンクリック時にアイコン付近に表示」がオンの場合、メニューバーアイコンをクリックするとウインドウ全体ではなくミニチュアスクリーンの中央がアイコンの中央に揃うように調整（吹き出しの三角はアイコン直下のまま）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Main window is now positioned so the miniature screen preview — not the whole window — is centered on the display when opened via shortcut, using the full screen frame (so the miniature stays centered even when the Dock is on the left or right)</li>
-<li>When "Show near icon when clicked" is enabled, clicking the menu bar icon now aligns the miniature screen center (not the whole window) with the icon; the bubble-arrow triangle still points directly at the icon</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Ao abrir pelo atalho, a visualização da tela em miniatura – e não a janela inteira – agora fica centralizada no monitor. A referência é o quadro completo da tela (incluindo barra de menus e Dock), de modo que a miniatura permanece centralizada mesmo com o Dock à esquerda ou à direita</li>
-<li>Quando "Mostrar perto do ícone ao clicar" está ativado, clicar no ícone da barra de menus agora alinha o centro da visualização em miniatura (e não o da janela inteira) ao ícone; o triângulo do balão continua apontando diretamente para o ícone</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>All'apertura tramite scorciatoia, l'anteprima dello schermo in miniatura – e non l'intera finestra – è ora centrata sul display. Il riferimento è l'intero frame dello schermo (con barra dei menu e Dock), quindi la miniatura resta centrata anche quando il Dock è a sinistra o a destra</li>
-<li>Quando "Mostra vicino all'icona al clic" è attivo, facendo clic sull'icona della barra dei menu il centro dell'anteprima in miniatura (e non quello dell'intera finestra) viene allineato all'icona; il triangolo del fumetto punta ancora direttamente all'icona</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Lors de l'ouverture par raccourci, l'aperçu de l'écran miniature – et non la fenêtre entière – est désormais centré sur l'écran. La référence est le cadre complet de l'écran (avec la barre de menus et le Dock), de sorte que la miniature reste centrée même lorsque le Dock est à gauche ou à droite</li>
-<li>Lorsque « Afficher près de l'icône au clic » est activé, cliquer sur l'icône de la barre de menus aligne désormais le centre de l'aperçu miniature (et non celui de la fenêtre entière) sur l'icône ; le triangle de la bulle pointe toujours directement vers l'icône</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Al abrir la ventana principal con el atajo de teclado, ahora la vista previa de la pantalla en miniatura —y no toda la ventana— queda centrada en la pantalla. La referencia es el marco completo de la pantalla (con barra de menús y Dock), por lo que la miniatura permanece centrada aunque el Dock esté a la izquierda o a la derecha</li>
-<li>Cuando "Mostrar cerca del icono al hacer clic" está activado, al hacer clic en el icono de la barra de menús se alinea el centro de la pantalla en miniatura (y no el de toda la ventana) con el icono; el triángulo del globo sigue apuntando directamente al icono</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Beim Öffnen per Tastenkürzel wird nun die Miniatur-Bildschirmvorschau – nicht das gesamte Fenster – auf dem Display zentriert. Als Referenz dient der gesamte Bildschirmrahmen (inkl. Menüleiste und Dock), sodass die Miniaturansicht auch bei seitlich platziertem Dock zentriert bleibt</li>
-<li>Wenn „Bei Klick nahe dem Symbol anzeigen" aktiviert ist, wird beim Klicken auf das Menüleistensymbol nun die Mitte der Miniatur-Bildschirmvorschau (und nicht die des gesamten Fensters) am Symbol ausgerichtet; der Sprechblasen-Pfeil zeigt weiterhin direkt auf das Symbol</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>透過快捷鍵開啟主視窗時，微縮螢幕預覽（而非整個視窗）在顯示器中置中。基準改為整個螢幕（含選單列與 Dock），即使 Dock 位於左側或右側，微縮螢幕也能保持在顯示器中央</li>
-<li>啟用「點擊圖示時在圖示附近顯示」時，點擊選單列圖示會使微縮螢幕中心（而非整個視窗）與圖示中心對齊；對話框三角形仍直接指向圖示</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>通过快捷键打开主窗口时，微缩屏幕预览（而非整个窗口）在显示器中居中。基准改为整个屏幕（含菜单栏和 Dock），即使 Dock 位于左侧或右侧时，微缩屏幕也能保持在显示器中央</li>
-<li>启用"点击图标时在图标附近显示"时，点击菜单栏图标将使微缩屏幕中心（而非整个窗口）与图标中心对齐；气泡三角形仍然直接指向图标</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>단축키로 열 때 전체 창이 아닌 미니어처 화면 미리보기가 디스플레이 중앙에 오도록 배치. 기준을 전체 화면(메뉴 막대·Dock 포함)으로 변경하여 Dock이 좌우에 있어도 미니어처가 화면 중앙에 정렬되도록 수정</li>
-<li>"아이콘 클릭 시 아이콘 근처에 표시"가 켜져 있을 때 메뉴 막대 아이콘을 클릭하면 전체 창이 아닌 미니어처 화면 중앙이 아이콘 중앙에 정렬되도록 조정(말풍선 삼각형은 아이콘 바로 아래 유지)</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>ショートカットで表示する際、ウインドウ全体ではなくミニチュアスクリーンプレビューが画面中央に来るように配置。基準をスクリーン全体（メニューバー・Dock 含む）とすることで、Dock が左右にある場合でもミニチュアが画面中央に揃うように修正</li>
-<li>「アイコンクリック時にアイコン付近に表示」がオンの場合、メニューバーアイコンをクリックするとウインドウ全体ではなくミニチュアスクリーンの中央がアイコンの中央に揃うように調整（吹き出しの三角はアイコン直下のまま）</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>Main window is now positioned so the miniature screen preview — not the whole window — is centered on the display when opened via shortcut, using the full screen frame (so the miniature stays centered even when the Dock is on the left or right)</li>
-<li>When "Show near icon when clicked" is enabled, clicking the menu bar icon now aligns the miniature screen center (not the whole window) with the icon; the bubble-arrow triangle still points directly at the icon</li>
-</ul>]]></description>
-            <pubDate>Sat, 18 Apr 2026 10:20:32 +0900</pubDate>
-            <sparkle:version>441</sparkle:version>
-            <sparkle:shortVersionString>4.4.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley-4.4.1.zip" length="5801554" type="application/octet-stream" sparkle:edSignature="nAFslutpz1PfsdAw0ngbTVafnxioFWCm6jJgDEAAGCcznmqTvu5vs93da6UgeiZCD1PrWPbeLVHKorFtVk35Dg=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-440.delta" sparkle:deltaFrom="440" length="289534" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Gqorp1tUt9fKts36tKP7ezNKlrnokRZguVysyI0YYvUazWx2dunBD6Jw8V3aqPk9ZUaMpY0ZStupAGry6INNAg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-439.delta" sparkle:deltaFrom="439" length="383310" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="cBEaQUDolzAb8ri+2clXuKHVWuyUtieUbdGllIUDSjuQujJnK0fYM0D8PBi2xzi8qglhfdJdnciYYpEJoSvFBg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-438.delta" sparkle:deltaFrom="438" length="448766" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="p6ELCDg2fYvwTZhoeLzfl0Jt+4Yb+B7DBGF19Av+/CHFPPG2g7X7Pgxkx7uL7Ee2+ZxpLFPGL5wQAKbm+g1iAA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-437.delta" sparkle:deltaFrom="437" length="488458" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9ApQnarnZjHzhdPxlq0WCwiKIxNhuQyjWxg+xPwKzvKEYmANLz+rDgneQDuKnVqDfKK8v0aNqmcHaQ357f/kDg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.1/Tiley441-436.delta" sparkle:deltaFrom="436" length="501346" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="2DEAkQKPzfbO/cdURKD7aHcJoCzel+gTR6u1rJFCnOFQheIb8flUh3uH8eC8XLFL68V3LM53PpG6tanfktccBw=="/>
             </sparkle:deltas>
         </item>
     </channel>
