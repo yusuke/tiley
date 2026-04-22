@@ -145,3 +145,4 @@
 "Unlink window group" = "Dissocier le groupe de fenêtres";
 "Group %@ with %@" = "Grouper « %@ » avec « %@ »";
 "Ungroup" = "Dissocier";
+"Linked with the window above" = "Groupée avec la fenêtre ci-dessus";

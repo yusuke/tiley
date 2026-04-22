@@ -145,3 +145,4 @@
 "Unlink window group" = "Разгруппировать окна";
 "Group %@ with %@" = "Сгруппировать «%@» с «%@»";
 "Ungroup" = "Разгруппировать";
+"Linked with the window above" = "Сгруппировано с окном выше";

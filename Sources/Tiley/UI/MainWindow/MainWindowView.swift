@@ -89,6 +89,45 @@ private struct BubbleShape: Shape {
     }
 }
 
+/// Small "link" indicator shown between two consecutive sidebar rows that
+/// belong to the same window group. Matches the subdued idle look of the
+/// on-screen `GroupLinkBadge` (linked state): dimmed black fill, muted white
+/// icon and stroke. On hover the badge turns red with an `x` icon; clicking
+/// invokes `onClick` (dissolves the group).
+private struct SidebarLinkBadge: View {
+    let onClick: () -> Void
+
+    @State private var isHovering = false
+
+    var body: some View {
+        Button(action: onClick) {
+            ZStack {
+                Circle()
+                    .fill(isHovering
+                          ? Color.red.opacity(0.85)
+                          : Color.black.opacity(0.25))
+                    .overlay(
+                        Circle().stroke(
+                            Color.white.opacity(isHovering ? 0.8 : 0.35),
+                            lineWidth: 0.5
+                        )
+                    )
+                Image(systemName: isHovering ? "xmark" : "link")
+                    .font(.system(size: 8, weight: .semibold))
+                    .foregroundStyle(Color.white.opacity(isHovering ? 1.0 : 0.6))
+            }
+            .frame(width: 14, height: 14)
+            .shadow(color: .black.opacity(isHovering ? 0.4 : 0.15), radius: 1, x: 0, y: 0.5)
+            .scaleEffect(isHovering ? 1.12 : 1.0)
+            .animation(.easeOut(duration: 0.12), value: isHovering)
+            .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .onHover { isHovering = $0 }
+        .accessibilityLabel(Text(NSLocalizedString("Linked with the window above", comment: "Accessibility label for the link badge shown between grouped sidebar rows")))
+    }
+}
+
 struct MainWindowView: View {
     private static let windowCornerRadius: CGFloat = 20
     private static let bubbleArrowHeight: CGFloat = 12
@@ -1482,6 +1521,13 @@ struct MainWindowView: View {
         }
 
         // Helper: group items by app (PID), emitting app headers for multi-window apps.
+        func groupID(for item: WindowListItem) -> UUID? {
+            guard item.id >= 0, item.id < targets.count else { return nil }
+            let cgID = targets[item.id].cgWindowID
+            guard cgID != 0 else { return nil }
+            return appState.groupIndexByWindow[cgID]
+        }
+
         func appGroupedRows(from groupItems: [WindowListItem]) -> [SidebarRow] {
             // Preserve original order: group consecutive items with same PID,
             // but also merge non-consecutive items of the same app.
@@ -1495,18 +1541,48 @@ struct MainWindowView: View {
             }
 
             var rows: [SidebarRow] = []
+            // Group UUID of the most recently emitted window row. Used to pull
+            // leading members of the next app-cluster out of the header block so
+            // that grouped members stay adjacent (with a link badge between).
+            var lastWindowGroupID: UUID? = nil
+
             for pid in appOrder {
                 guard let windows = appItems[pid] else { continue }
-                if windows.count == 1 {
+
+                // Split cluster into "promoted" (grouped with the previous
+                // window row via chaining) and "remaining" (normal header block).
+                var promoted: [WindowListItem] = []
+                var remaining: [WindowListItem] = []
+                var chaining = lastWindowGroupID != nil
+                for win in windows {
+                    if chaining, let lg = lastWindowGroupID, groupID(for: win) == lg {
+                        promoted.append(win)
+                    } else {
+                        remaining.append(win)
+                        chaining = false
+                    }
+                }
+
+                for var item in promoted {
+                    item.isUnderAppHeader = false
+                    rows.append(.window(item))
+                }
+                if let last = promoted.last {
+                    lastWindowGroupID = groupID(for: last)
+                }
+
+                if remaining.count == 1 {
                     // Single window: show as a normal row (icon + app name + title).
-                    rows.append(.window(windows[0]))
-                } else {
+                    rows.append(.window(remaining[0]))
+                    lastWindowGroupID = groupID(for: remaining[0])
+                } else if remaining.count > 1 {
                     // Multiple windows: app header + window-only rows.
-                    rows.append(.appHeader(pid: pid, appName: windows[0].appName))
-                    for var item in windows {
+                    rows.append(.appHeader(pid: pid, appName: remaining[0].appName))
+                    for var item in remaining {
                         item.isUnderAppHeader = true
                         rows.append(.window(item))
                     }
+                    lastWindowGroupID = groupID(for: remaining.last!)
                 }
             }
             return rows
@@ -1628,6 +1704,34 @@ struct MainWindowView: View {
         return true
     }
 
+    /// Returns the set of window-item IDs that should display a "link" badge
+    /// above them in the sidebar — i.e. windows that belong to the same group
+    /// as the immediately preceding window row. A non-window row (header,
+    /// screen divider, etc.) breaks the chain.
+    private func sidebarLinkBadgeTargets(in rows: [SidebarRow]) -> Set<Int> {
+        var result: Set<Int> = []
+        let targets = appState.windowTargetList
+        var previousGroupID: UUID? = nil
+        for row in rows {
+            switch row {
+            case .window(let item):
+                let gid: UUID? = {
+                    guard item.id >= 0, item.id < targets.count else { return nil }
+                    let cgID = targets[item.id].cgWindowID
+                    guard cgID != 0 else { return nil }
+                    return appState.groupIndexByWindow[cgID]
+                }()
+                if let pg = previousGroupID, let cg = gid, pg == cg {
+                    result.insert(item.id)
+                }
+                previousGroupID = gid
+            case .appHeader, .screenHeader, .emptyScreen, .spaceHeader:
+                previousGroupID = nil
+            }
+        }
+        return result
+    }
+
     private func windowListSidebar(height: CGFloat) -> some View {
         VStack(spacing: 0) {
             // Action bar (always visible)
@@ -1715,6 +1819,7 @@ struct MainWindowView: View {
                 ScrollViewReader { proxy in
                     let rows = filteredSidebarRows
                     let _ = updateSidebarWindowOrder(rows)
+                    let badgeLinks = sidebarLinkBadgeTargets(in: rows)
                     ScrollView {
                         LazyVStack(spacing: 2) {
                             ForEach(rows) { row in
@@ -1728,7 +1833,7 @@ struct MainWindowView: View {
                                 case .appHeader(let pid, let appName):
                                     appHeaderRow(pid: pid, appName: appName)
                                 case .window(let item):
-                                    windowListRow(item: item)
+                                    windowListRow(item: item, hasLinkBadgeAbove: badgeLinks.contains(item.id))
                                 }
                             }
                         }
@@ -2350,7 +2455,7 @@ struct MainWindowView: View {
         return NSScreen.screens.filter { $0.displayID != currentDisplayID }
     }
 
-    private func windowListRow(item: WindowListItem) -> some View {
+    private func windowListRow(item: WindowListItem, hasLinkBadgeAbove: Bool = false) -> some View {
         let isPrimary = item.id == appState.currentWindowTargetIndex
         let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
         let isSelected = isPrimary || isInSelection
@@ -2562,7 +2667,31 @@ struct MainWindowView: View {
                 }
             }
         }
+        .overlay(alignment: .top) {
+            if hasLinkBadgeAbove {
+                // Float the badge over the 2pt gap between this row and the
+                // previous one. Centering the 14pt circle on the midline of
+                // that gap means the badge overlaps each neighbour by ~6pt,
+                // which reads clearly without reserving its own row slot.
+                SidebarLinkBadge {
+                    dissolveGroupForWindow(at: item.id)
+                }
+                .offset(y: -(Self.sidebarLinkBadgeDiameter / 2) - (Self.sidebarRowSpacing / 2))
+                .instantTooltip(NSLocalizedString("Unlink window group", comment: "Tooltip for the sidebar link badge — clicking it dissolves the window group"))
+            }
+        }
     }
+
+    private func dissolveGroupForWindow(at itemID: Int) {
+        let targets = appState.windowTargetList
+        guard itemID >= 0, itemID < targets.count else { return }
+        let cgID = targets[itemID].cgWindowID
+        guard cgID != 0, let groupID = appState.groupIndexByWindow[cgID] else { return }
+        appState.dissolveGroup(groupID)
+    }
+
+    private static let sidebarLinkBadgeDiameter: CGFloat = 14
+    private static let sidebarRowSpacing: CGFloat = 2
 
     // MARK: - Target Info (secondary screens)
 

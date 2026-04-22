@@ -5,6 +5,7 @@
 ### Añadido
 
 - Se añadió el agrupamiento de ventanas. Al aplicar una configuración predefinida de diseño con varias ventanas, aparece una insignia de enlace (`link.badge.plus`) en el punto medio de cualquier borde en contacto. Al hacer clic en la insignia, las ventanas se agrupan: arrastrar una ventana mueve a todas las miembros a la vez, redimensionar el borde compartido redimensiona la ventana vecina en sentido opuesto, y llevar un miembro al frente eleva a los demás justo debajo. Al pasar el cursor sobre la insignia aparece un icono para disolver el grupo; al hacer clic sobre él se deshace la agrupación. Si se cierra una ventana del grupo, este también se disuelve automáticamente
+- Insignia de enlace en la barra lateral: en la barra lateral de la ventana principal ahora se muestra un pequeño indicador de enlace entre las filas consecutivas de ventanas agrupadas, para ver de un vistazo qué ventanas están vinculadas. Si una ventana agrupada quedaría separada de su compañera por el bloque de encabezado de una app, se extrae de ese bloque y se coloca justo debajo de su compañera para que el enlace siga siendo visible
 
 ### Corregido
 

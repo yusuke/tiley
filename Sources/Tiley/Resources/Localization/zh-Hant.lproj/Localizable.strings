@@ -145,3 +145,4 @@
 "Unlink window group" = "解除視窗分組";
 "Group %@ with %@" = "將「%@」與「%@」分組";
 "Ungroup" = "解除分組";
+"Linked with the window above" = "與上方視窗已分組";

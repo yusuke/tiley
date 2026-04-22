@@ -145,3 +145,4 @@
 "Unlink window group" = "창 그룹 해제";
 "Group %@ with %@" = "%1$@와(과) %2$@ 그룹화";
 "Ungroup" = "그룹 해제";
+"Linked with the window above" = "위 창과 그룹화됨";

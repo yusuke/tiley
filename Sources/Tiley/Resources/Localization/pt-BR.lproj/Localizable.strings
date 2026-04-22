@@ -145,3 +145,4 @@
 "Unlink window group" = "Desagrupar janelas";
 "Group %@ with %@" = "Agrupar «%@» com «%@»";
 "Ungroup" = "Desagrupar";
+"Linked with the window above" = "Agrupada com a janela acima";

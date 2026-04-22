@@ -145,3 +145,4 @@
 "Unlink window group" = "ウインドウグループを解除";
 "Group %@ with %@" = "「%@」と「%@」をグループ化";
 "Ungroup" = "グループ解除";
+"Linked with the window above" = "上のウインドウとグループ化されています";

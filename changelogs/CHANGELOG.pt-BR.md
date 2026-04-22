@@ -5,6 +5,7 @@
 ### Adicionado
 
 - Agrupamento de janelas adicionado. Após aplicar uma predefinição de layout com várias janelas, um crachá de vínculo (`link.badge.plus`) aparece no ponto médio de qualquer borda em contato. Clicar no crachá agrupa as janelas: arrastar uma janela move todas as membros juntas, redimensionar a borda compartilhada redimensiona a janela adjacente em sentido oposto e trazer um membro para frente eleva os outros logo abaixo. Ao passar o mouse sobre o crachá aparece um ícone para dissolver o grupo; fechar uma janela do grupo também o dissolve automaticamente
+- Crachá de vínculo na barra lateral: na barra lateral da janela principal, agora aparece um pequeno indicador de vínculo entre linhas consecutivas de janelas agrupadas, permitindo identificar num relance quais janelas estão conectadas. Se uma janela agrupada fosse separada da sua parceira por um bloco de cabeçalho do app, ela é retirada desse bloco e posicionada logo abaixo da parceira para manter o vínculo visível
 
 ### Corrigido
 

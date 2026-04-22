@@ -5,6 +5,7 @@
 ### Hinzugefügt
 
 - Fenstergruppierung hinzugefügt. Nach dem Anwenden einer Layout-Voreinstellung mit mehreren Fenstern erscheint an der Mitte jeder aneinandergrenzenden Kante ein Link-Abzeichen (`link.badge.plus`). Ein Klick auf das Abzeichen gruppiert die Fenster, sodass das Ziehen eines Fensters alle Mitglieder gemeinsam bewegt, das Größenändern der gemeinsamen Kante das gegenüberliegende Fenster entgegengesetzt skaliert und das Hervorheben eines Mitglieds die anderen direkt darunter anhebt. Beim Darüberfahren erscheint ein Auflösungssymbol; ein Klick darauf löst die Gruppe auf. Beim Schließen eines beteiligten Fensters wird die Gruppe automatisch aufgelöst
+- Link-Abzeichen in der Seitenleiste: In der Seitenleiste des Hauptfensters wird nun zwischen aneinandergrenzenden gruppierten Fenstereinträgen ein kleines Link-Symbol angezeigt, sodass auf einen Blick erkennbar ist, welche Fenster verknüpft sind. Würde ein gruppiertes Fenster sonst durch einen App-Kopfzeilenblock von seinem Partner getrennt werden, wird es aus diesem Block herausgelöst und direkt unter seinen Partner platziert, damit die Verbindung sichtbar bleibt
 
 ### Behoben
 

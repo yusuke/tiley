@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Window grouping: after applying a layout preset that places two or more windows side by side, a link badge (`link.badge.plus`) now appears at the midpoint of any touching edges. Clicking the badge groups the windows so that dragging one window moves all members in lockstep, resizing the shared edge resizes the partner inversely, and raising one member raises the others just beneath it. Hover the badge to reveal a dismiss affordance that dissolves the group; closing a window in the group also dissolves it automatically
+- Sidebar link badge: grouped windows in the main window sidebar now show a small link indicator in the gap between consecutive grouped rows, making it easy to see which windows are tied together. When a grouped window would otherwise be separated from its partner by an app-header block, it is pulled out of that block and placed directly below its partner so the link stays visible
 
 ### Fixed
 
