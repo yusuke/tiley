@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-22
+
 ### Adicionado
 
 - Agrupamento de janelas adicionado. Após aplicar uma predefinição de layout com várias janelas, um crachá de vínculo (`link.badge.plus`) aparece no ponto médio de qualquer borda em contato. Clicar no crachá agrupa as janelas: arrastar uma janela move todas as membros juntas, redimensionar a borda compartilhada redimensiona a janela adjacente em sentido oposto e trazer um membro para frente eleva os outros logo abaixo. Ao passar o mouse sobre o crachá aparece um ícone para dissolver o grupo; fechar uma janela do grupo também o dissolve automaticamente

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-22
+
 ### Hinzugefügt
 
 - Fenstergruppierung hinzugefügt. Nach dem Anwenden einer Layout-Voreinstellung mit mehreren Fenstern erscheint an der Mitte jeder aneinandergrenzenden Kante ein Link-Abzeichen (`link.badge.plus`). Ein Klick auf das Abzeichen gruppiert die Fenster, sodass das Ziehen eines Fensters alle Mitglieder gemeinsam bewegt, das Größenändern der gemeinsamen Kante das gegenüberliegende Fenster entgegengesetzt skaliert und das Hervorheben eines Mitglieds die anderen direkt darunter anhebt. Beim Darüberfahren erscheint ein Auflösungssymbol; ein Klick darauf löst die Gruppe auf. Beim Schließen eines beteiligten Fensters wird die Gruppe automatisch aufgelöst

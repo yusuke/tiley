@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-22
+
 ### Added
 
 - Window grouping: after applying a layout preset that places two or more windows side by side, a link badge (`link.badge.plus`) now appears at the midpoint of any touching edges. Clicking the badge groups the windows so that dragging one window moves all members in lockstep, resizing the shared edge resizes the partner inversely, and raising one member raises the others just beneath it. Hover the badge to reveal a dismiss affordance that dissolves the group; closing a window in the group also dissolves it automatically
@@ -754,7 +756,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v4.4.3...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/yusuke/tiley/releases/tag/v5.0.0
 [4.4.3]: https://github.com/yusuke/tiley/releases/tag/v4.4.3
 [4.4.2]: https://github.com/yusuke/tiley/releases/tag/v4.4.2
 [4.4.1]: https://github.com/yusuke/tiley/releases/tag/v4.4.1

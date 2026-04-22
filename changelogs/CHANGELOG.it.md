@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-22
+
 ### Aggiunto
 
 - Aggiunto il raggruppamento delle finestre. Dopo aver applicato un preset di layout con più finestre, appare un badge di collegamento (`link.badge.plus`) al centro di ogni bordo a contatto. Facendo clic sul badge le finestre vengono raggruppate: trascinare una finestra sposta insieme tutte le membri, ridimensionare il bordo condiviso ridimensiona la finestra adiacente in senso opposto e portare in primo piano una membro eleva le altre immediatamente sotto. Passando il mouse sul badge appare un'icona per dissolvere il gruppo; chiudere una finestra del gruppo lo dissolve anche automaticamente

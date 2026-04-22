@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-22
+
 ### Ajouté
 
 - Ajout du regroupement de fenêtres. Après l'application d'un préréglage de disposition contenant plusieurs fenêtres, un badge de lien (`link.badge.plus`) apparaît au milieu de chaque bord en contact. Cliquer sur le badge regroupe les fenêtres : faire glisser une fenêtre déplace tous les membres ensemble, redimensionner le bord commun redimensionne la fenêtre voisine en sens inverse et mettre un membre au premier plan élève les autres juste en dessous. Un survol du badge révèle une icône permettant de dissoudre le groupe ; fermer l'une des fenêtres du groupe le dissout également automatiquement
