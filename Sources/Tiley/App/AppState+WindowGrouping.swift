@@ -219,6 +219,12 @@ extension AppState {
             debugLog("WindowGrouping:   window \(wid) frame=\(f)")
         }
 
+        // Tiley-driven moves that touched only part of a group dissolve that
+        // group — even if the untouched members still happen to be adjacent.
+        // A Tiley resize on one member without its partner is, by the user's
+        // intent, a "break the link" gesture.
+        let tileyMovedSet: Set<CGWindowID> = Set(targetWindowIDs ?? [])
+
         // Revalidate each existing group's adjacencies against current frames
         // and drop pairs that no longer touch.
         for (gid, var group) in windowGroups {
@@ -227,6 +233,14 @@ extension AppState {
             if group.members.count < 2 {
                 dissolveGroup(gid)
                 continue
+            }
+            if !tileyMovedSet.isEmpty {
+                let moved = group.members.intersection(tileyMovedSet)
+                if !moved.isEmpty && moved.count < group.members.count {
+                    debugLog("WindowGrouping: partial Tiley resize on group \(gid) (moved=\(moved.count)/\(group.members.count)) — dissolving")
+                    dissolveGroup(gid)
+                    continue
+                }
             }
             // Recompute intra-group adjacencies.
             var retained: [WindowAdjacency] = []

@@ -1438,6 +1438,9 @@ final class AppState: NSObject, NSMenuDelegate {
                 "columns": "\(norm.endColumn - norm.startColumn + 1)",
                 "rows": "\(norm.endRow - norm.startRow + 1)",
             ])
+            if target.cgWindowID != 0 {
+                refreshGroupCandidatesAfterPresetApply(targetWindowIDs: [target.cgWindowID])
+            }
         } catch {
             NSLog("[Tiley] apply(selection:to:) error: %@", error.localizedDescription)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: false)
@@ -1509,6 +1512,9 @@ final class AppState: NSObject, NSMenuDelegate {
             }
             windowManager?.raiseWindow(target: target)
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
+            if target.cgWindowID != 0 {
+                refreshGroupCandidatesAfterPresetApply(targetWindowIDs: [target.cgWindowID])
+            }
         } catch {
             recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: false)
             launchMessage = error.localizedDescription
