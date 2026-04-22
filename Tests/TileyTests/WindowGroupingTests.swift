@@ -9,7 +9,7 @@ struct WindowAdjacencyDetectorTests {
 
     @Test("left-right split detects horizontal adjacency")
     func horizontalSplitDetected() {
-        // A: 左半分, B: 右半分
+        // A: left half, B: right half.
         let frames: [CGWindowID: CGRect] = [
             1: CGRect(x: 0, y: 0, width: 500, height: 400),
             2: CGRect(x: 500, y: 0, width: 500, height: 400),
@@ -59,10 +59,10 @@ struct WindowAdjacencyDetectorTests {
 
     @Test("top-bottom split detects vertical adjacency")
     func verticalSplitDetected() {
-        // AppKit 座標系は bottom-left 原点。B (上) の下辺 = A (下) の上辺
+        // AppKit uses a bottom-left origin. B (upper) bottom edge = A (lower) top edge.
         let frames: [CGWindowID: CGRect] = [
-            1: CGRect(x: 0, y: 0, width: 1000, height: 200),      // 下
-            2: CGRect(x: 0, y: 200, width: 1000, height: 200),    // 上
+            1: CGRect(x: 0, y: 0, width: 1000, height: 200),      // lower
+            2: CGRect(x: 0, y: 200, width: 1000, height: 200),    // upper
         ]
         let result = WindowAdjacencyDetector.detect(frames: frames)
         #expect(result.count == 1)
@@ -75,14 +75,14 @@ struct WindowAdjacencyDetectorTests {
 
     @Test("three-window L-shape detects two adjacencies")
     func threeWindowLayout() {
-        // 左 (全高) + 右上 + 右下
+        // Left (full height) + upper-right + lower-right.
         let frames: [CGWindowID: CGRect] = [
-            1: CGRect(x: 0, y: 0, width: 500, height: 800),        // 左
-            2: CGRect(x: 500, y: 400, width: 500, height: 400),    // 右上
-            3: CGRect(x: 500, y: 0, width: 500, height: 400),      // 右下
+            1: CGRect(x: 0, y: 0, width: 500, height: 800),        // left
+            2: CGRect(x: 500, y: 400, width: 500, height: 400),    // upper-right
+            3: CGRect(x: 500, y: 0, width: 500, height: 400),      // lower-right
         ]
         let result = WindowAdjacencyDetector.detect(frames: frames)
-        // 期待: 1-2, 1-3, 2-3 の3ペア
+        // Expect 3 pairs: 1-2, 1-3, 2-3.
         #expect(result.count == 3)
         let pairs = Set(result.map { Set([$0.windowA, $0.windowB]) })
         #expect(pairs.contains(Set([1, 2])))
@@ -106,7 +106,7 @@ struct WindowAdjacencyDetectorTests {
     func overlappingNoAdjacency() {
         let frames: [CGWindowID: CGRect] = [
             1: CGRect(x: 0, y: 0, width: 500, height: 400),
-            2: CGRect(x: 400, y: 0, width: 500, height: 400),  // 100pt 重なり
+            2: CGRect(x: 400, y: 0, width: 500, height: 400),  // 100 pt overlap
         ]
         let result = WindowAdjacencyDetector.detect(frames: frames)
         #expect(result.isEmpty)

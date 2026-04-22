@@ -1,14 +1,15 @@
 import AppKit
 import ApplicationServices
 
-/// 2つのウインドウが隣接する辺を表現する。
-/// `edgeOfA` は `windowA` のどの辺が `windowB` と接しているかを示す。
-/// 反対辺は一意に決まるので保持しない（`edgeOfA == .right` なら `edgeOfB == .left`）。
+/// Represents a touching edge between two windows.
+/// `edgeOfA` indicates which side of `windowA` is in contact with `windowB`.
+/// The opposite edge is uniquely determined, so it is not stored
+/// (if `edgeOfA == .right`, then `edgeOfB == .left`).
 struct WindowAdjacency: Hashable {
     enum Edge: String {
         case left, right, top, bottom
 
-        /// 反対辺。
+        /// The opposite edge.
         var opposite: Edge {
             switch self {
             case .left: return .right
@@ -18,7 +19,7 @@ struct WindowAdjacency: Hashable {
             }
         }
 
-        /// 水平方向（left/right）か垂直方向（top/bottom）か。
+        /// Whether the edge is horizontal (left/right) or vertical (top/bottom).
         var isHorizontal: Bool {
             switch self {
             case .left, .right: return true
@@ -30,33 +31,35 @@ struct WindowAdjacency: Hashable {
     let windowA: CGWindowID
     let windowB: CGWindowID
     let edgeOfA: Edge
-    /// 接している区間の AppKit 座標（overlap の中点を含む）。
-    /// 水平接触 (edgeOfA が left/right) の場合は y 区間、垂直接触の場合は x 区間。
+    /// The touching interval in AppKit coordinates (contains the midpoint of the overlap).
+    /// For horizontal contact (edgeOfA is left/right) this is a y interval;
+    /// for vertical contact this is an x interval.
     let overlapStart: CGFloat
     let overlapEnd: CGFloat
 
-    /// 接する辺の中央点（AppKit 座標）。バッジ位置計算に使用。
+    /// The midpoint of the touching edge (AppKit coordinates). Used for badge placement.
     var midpoint: CGPoint {
         let mid = (overlapStart + overlapEnd) / 2
         switch edgeOfA {
         case .left, .right:
-            // 水平接触：接する x は edgeOfA から取れないので別途保持
+            // Horizontal contact: the shared x is not derivable from edgeOfA,
+            // so it is stored separately.
             return CGPoint(x: contactCoordinate, y: mid)
         case .top, .bottom:
             return CGPoint(x: mid, y: contactCoordinate)
         }
     }
 
-    /// 接する辺の座標（水平接触なら共通 x、垂直接触なら共通 y）。
+    /// Coordinate of the touching edge (shared x for horizontal contact, shared y for vertical).
     let contactCoordinate: CGFloat
 
-    /// ペアを順序無依存にハッシュ化するためのキー。
+    /// Key that identifies a pair regardless of ordering.
     var unorderedKey: AdjacencyKey {
         AdjacencyKey(windowA: min(windowA, windowB), windowB: max(windowA, windowB))
     }
 }
 
-/// `WindowAdjacency` をペア単位で一意に識別するキー。
+/// Key that uniquely identifies a `WindowAdjacency` per pair.
 struct AdjacencyKey: Hashable {
     let windowA: CGWindowID
     let windowB: CGWindowID
@@ -72,7 +75,7 @@ struct WindowGroup: Identifiable {
     var members: Set<CGWindowID>
     var adjacencies: [WindowAdjacency]
     var memberMeta: [CGWindowID: WindowGroupMember]
-    /// 変位検出用。連動処理後に必ず更新する。
+    /// Used for displacement detection. Must be updated after every linkage operation.
     var lastKnownFrames: [CGWindowID: CGRect]
 
     init(
@@ -90,18 +93,19 @@ struct WindowGroup: Identifiable {
     }
 }
 
-/// 複数ウインドウのフレームから接する辺のペアを検出する純粋関数群。
+/// Pure helpers that detect touching edges across multiple window frames.
 enum WindowAdjacencyDetector {
-    /// デフォルトの許容誤差（ポイント単位）。これ以内の差は「一致」とみなす。
-    /// ユーザーが gap を設定している場合は `detect(frames:edgeEpsilon:)` に
-    /// `gap + 2` 程度を渡して許容幅を広げる。
+    /// Default tolerance in points. Differences within this range are considered a match.
+    /// When the user configures a gap, callers should pass roughly `gap + 2` to
+    /// `detect(frames:edgeEpsilon:)` to widen the allowance.
     static let defaultEdgeEpsilon: CGFloat = 2.0
-    /// 重なり区間の最小長。これ未満の接触はバッジ描画が困難なので無視。
+    /// Minimum overlap length. Contacts shorter than this are ignored because
+    /// a badge cannot be drawn cleanly over them.
     static let minOverlap: CGFloat = 16.0
 
-    /// 指定された複数ウインドウのフレーム（AppKit 座標、bottom-left 原点）から、
-    /// 辺が接する（もしくは指定した epsilon 以内に並ぶ）ペアを列挙する。
-    /// 各ペアは `WindowAdjacency` としてただ1つ返る（A→B と B→A の重複は返さない）。
+    /// From the given window frames (AppKit coordinates, bottom-left origin),
+    /// enumerate all pairs whose edges touch (or line up within the given epsilon).
+    /// Each pair is returned only once as a `WindowAdjacency` (no duplicate A→B / B→A).
     static func detect(frames: [CGWindowID: CGRect], edgeEpsilon: CGFloat = defaultEdgeEpsilon) -> [WindowAdjacency] {
         let ids = frames.keys.sorted()
         var result: [WindowAdjacency] = []
@@ -119,9 +123,10 @@ enum WindowAdjacencyDetector {
         return result
     }
 
-    /// 2つのウインドウが接しているかを判定し、接していれば `WindowAdjacency` を返す。
+    /// Check whether two windows touch; if so, return the corresponding `WindowAdjacency`.
     static func adjacency(a: CGWindowID, frameA: CGRect, b: CGWindowID, frameB: CGRect, edgeEpsilon: CGFloat = defaultEdgeEpsilon) -> WindowAdjacency? {
-        // 水平接触：A の右辺 = B の左辺（A の left edge = B の right edge は対称）
+        // Horizontal contact: right edge of A meets left edge of B
+        // (the symmetric case — A's left vs B's right — is handled below).
         if abs(frameA.maxX - frameB.minX) <= edgeEpsilon {
             let overlapStart = max(frameA.minY, frameB.minY)
             let overlapEnd = min(frameA.maxY, frameB.maxY)
@@ -144,7 +149,7 @@ enum WindowAdjacencyDetector {
                 )
             }
         }
-        // 垂直接触：A の上辺 = B の下辺
+        // Vertical contact: top edge of A meets bottom edge of B.
         if abs(frameA.maxY - frameB.minY) <= edgeEpsilon {
             let overlapStart = max(frameA.minX, frameB.minX)
             let overlapEnd = min(frameA.maxX, frameB.maxX)

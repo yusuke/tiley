@@ -1,66 +1,122 @@
 import AppKit
 import SwiftUI
 
-/// バッジの視覚状態。
-enum GroupLinkBadgeState {
-    case unlinked      // 未グループ化：`link.badge.plus`
-    case linked        // グループ化済：`link`
+// MARK: - Style constants
+
+/// Visual-style constants for the group-link badge. All magic numbers live here.
+private enum BadgeStyle {
+    // MARK: Size / shape
+    /// Outer NSPanel size. Includes padding around the circular badge for the shadow.
+    static let windowSize: CGFloat = 40
+    /// Diameter of the visible circle.
+    static let visibleDiameter: CGFloat = 22
+    /// Inset for the click area (the visible-diameter circle is centered inside windowSize).
+    static let hitAreaInset: CGFloat = (windowSize - visibleDiameter) / 2
+    /// Stroke width of the circle outline.
+    static let strokeWidth: CGFloat = 1
+    /// Font size for the SF Symbol (`link`, `link.badge.plus`, `xmark`).
+    static let symbolFontSize: CGFloat = 11
+    /// Shadow blur radius.
+    static let shadowRadius: CGFloat = 3
+    /// Shadow y-offset (downward).
+    static let shadowYOffset: CGFloat = 1
+
+    // MARK: Color / opacity
+    enum Opacity {
+        // Unlinked state (`link.badge.plus`)
+        /// Background (accent color) when unlinked and idle.
+        static let unlinkedBgIdle: Double = 0.85
+        /// Background (accent color) when unlinked and hovered.
+        static let unlinkedBgHover: Double = 0.95
+
+        // Linked state (`link` / `xmark`)
+        /// Background (black, subtle) when linked and idle.
+        static let linkedBgIdle: Double = 0.25
+        /// Icon (white) when linked and idle.
+        static let linkedForegroundIdle: Double = 0.6
+        /// Stroke (white) when linked and idle.
+        static let linkedStrokeIdle: Double = 0.35
+        /// Shadow (black) when linked and idle.
+        static let linkedShadowIdle: Double = 0.15
+        /// Background (red — unlink warning color) when linked and hovered.
+        static let linkedBgHover: Double = 0.85
+
+        // Shared "active" opacities (unlinked idle / hover, linked hover)
+        /// Stroke opacity (white) when active.
+        static let activeStroke: Double = 0.8
+        /// Shadow opacity (black) when active.
+        static let activeShadow: Double = 0.4
+    }
+
+    // MARK: Animation
+    enum Animation {
+        /// Scale factor applied on hover.
+        static let hoverScale: CGFloat = 1.12
+        /// Duration of the hover scale animation.
+        static let hoverDuration: TimeInterval = 0.12
+        /// Fade-in duration when a badge first appears (short, so it pops quickly).
+        static let fadeIn: TimeInterval = 0.08
+        /// Fade-out duration on the 5-second timeout or when adjacency is lost.
+        static let defaultFadeOut: TimeInterval = 0.25
+        /// Fade-out duration at the start of a drag / resize.
+        static let fastFadeOut: TimeInterval = 0.15
+    }
 }
 
-/// 1つのバッジを表す。
+/// Visual state of a badge.
+enum GroupLinkBadgeState {
+    case unlinked      // Not yet grouped: `link.badge.plus`.
+    case linked        // Grouped: `link`.
+}
+
+/// Represents a single badge.
 struct GroupLinkBadge: Identifiable {
     let id: AdjacencyKey
     let state: GroupLinkBadgeState
-    /// AppKit 画面座標（bottom-left 原点）でのバッジ中心。
+    /// Badge center in AppKit screen coordinates (bottom-left origin).
     let center: CGPoint
     let adjacency: WindowAdjacency
 }
 
-/// 接するウインドウペアの中央に `link.badge.plus` / `link` バッジを表示する
-/// フローティングオーバーレイ。
+/// Floating overlay that shows a `link.badge.plus` / `link` badge at the midpoint
+/// of each touching pair of windows.
 ///
-/// **設計**: バッジごとに独立した小さな NSWindow を使う。
-/// フルスクリーンの透過ウインドウ方式では、透過部分もマウスクリックを吸収してしまい、
-/// 下のウインドウ操作ができなくなる問題があったため、個別の小ウインドウ方式とした。
+/// **Design**: one small independent NSWindow per badge. A full-screen transparent
+/// overlay window would swallow clicks even on its transparent pixels and block
+/// interaction with the windows beneath, so we use small per-badge panels instead.
 @MainActor
 final class GroupLinkBadgeController {
-    /// バッジがクリックされたときに呼ばれる。
+    /// Invoked when a badge is clicked.
     var onBadgeClick: ((GroupLinkBadge) -> Void)?
 
-    /// 各バッジの NSWindow。adjacency key でキー付け。
+    /// One NSWindow per badge, keyed by adjacency key.
     private var windowsByBadge: [AdjacencyKey: NSWindow] = [:]
-
-    private let badgeSize: CGFloat = 40
 
     init() {}
 
-    /// デフォルトのフェードアウト時間（5 秒タイムアウト・隣接喪失時）。
-    private let defaultFadeOutDuration: TimeInterval = 0.25
-    /// ドラッグ/リサイズ開始時のフェードアウト時間。
-    private let fastFadeOutDuration: TimeInterval = 0.15
-    /// 新規バッジ出現時のフェードイン時間（短く＝素早く表示）。
-    private let fadeInDuration: TimeInterval = 0.08
-
-    /// バッジ一覧を更新する。既存のバッジは位置・状態が変わっていれば更新、
-    /// 消えたバッジはフェードアウトしてから閉じる。
-    /// `fadeOutDuration` を nil 以外にするとフェード時間を上書きできる。
+    /// Update the badge list. Existing badges whose position or state changed are
+    /// updated in place; badges that disappeared are faded out before being closed.
+    /// Pass a non-nil `fadeOutDuration` to override the fade duration.
     func update(badges: [GroupLinkBadge], fadeOutDuration: TimeInterval? = nil) {
         let newIDs = Set(badges.map { $0.id })
-        let duration = fadeOutDuration ?? defaultFadeOutDuration
+        let duration = fadeOutDuration ?? BadgeStyle.Animation.defaultFadeOut
 
-        // 消えたバッジを**フェードアウト**して閉じる。
+        // Fade out and close badges that no longer exist.
         for (id, window) in windowsByBadge where !newIDs.contains(id) {
             windowsByBadge.removeValue(forKey: id)
             fadeOutAndClose(window, duration: duration)
         }
 
-        // 新規・更新。
+        // New or updated badges.
         for badge in badges {
             let origin = CGPoint(
-                x: badge.center.x - badgeSize / 2,
-                y: badge.center.y - badgeSize / 2
+                x: badge.center.x - BadgeStyle.windowSize / 2,
+                y: badge.center.y - BadgeStyle.windowSize / 2
             )
-            let frame = CGRect(origin: origin, size: CGSize(width: badgeSize, height: badgeSize))
+            let frame = CGRect(
+                origin: origin,
+                size: CGSize(width: BadgeStyle.windowSize, height: BadgeStyle.windowSize)
+            )
 
             let isNew: Bool
             let window: NSWindow
@@ -69,10 +125,10 @@ final class GroupLinkBadgeController {
                 window.setFrame(frame, display: false)
                 isNew = false
             } else {
-                // NSPanel with `.nonactivatingPanel` は、ユーザーがクリックしても
-                // Tiley 自身が frontmost にならない。これにより「バッジをクリック
-                // した瞬間、Tiley がアクティブ化してグループメンバーのアプリから
-                // フォーカスが離れ、badges が非表示になる」問題を回避する。
+                // An NSPanel with `.nonactivatingPanel` keeps Tiley from becoming the
+                // frontmost app when the user clicks the badge. This avoids the
+                // "clicking the badge activates Tiley → focus leaves the grouped
+                // apps → badges disappear" failure mode.
                 let panel = NSPanel(
                     contentRect: frame,
                     styleMask: [.borderless, .nonactivatingPanel],
@@ -89,10 +145,10 @@ final class GroupLinkBadgeController {
                 panel.hidesOnDeactivate = false
                 panel.isFloatingPanel = true
                 panel.worksWhenModal = true
-                // 表示/非表示時のシステムデフォルトのフェードアニメーションを無効化。
-                // （フェードイン・フェードアウトは自前で制御。）
+                // Disable the system's default fade-in/fade-out on show/hide:
+                // we drive fades ourselves.
                 panel.animationBehavior = .none
-                // 新規作成時は alpha=0 から開始してフェードインさせる。
+                // Start at alpha=0 so the fade-in can ramp it up.
                 panel.alphaValue = 0
                 window = panel
                 windowsByBadge[badge.id] = panel
@@ -108,13 +164,13 @@ final class GroupLinkBadgeController {
             window.orderFront(nil)
 
             if isNew {
-                // フェードイン。
+                // Fade in.
                 NSAnimationContext.runAnimationGroup { context in
-                    context.duration = fadeInDuration
+                    context.duration = BadgeStyle.Animation.fadeIn
                     window.animator().alphaValue = 1
                 }
             } else {
-                // 既存バッジ（状態遷移のみ）は即座に不透明に戻す。
+                // Existing badge (state transition only): snap back to fully opaque.
                 window.alphaValue = 1
             }
         }
@@ -124,7 +180,7 @@ final class GroupLinkBadgeController {
         let snapshot = windowsByBadge
         windowsByBadge.removeAll()
         for window in snapshot.values {
-            fadeOutAndClose(window, duration: defaultFadeOutDuration)
+            fadeOutAndClose(window, duration: BadgeStyle.Animation.defaultFadeOut)
         }
     }
 
@@ -145,13 +201,24 @@ private struct BadgeDot: View {
     let onClick: () -> Void
 
     @State private var isHovering = false
-    /// 「少なくとも一度マウスがバッジの外に出た」ことを示す。
-    /// バッジ出現直後の（ユーザーのマウスがまだバッジ上にある状態での）ホバー表示を抑制し、
-    /// リンク直後に `x` アイコンが即座に現れてしまう問題を防ぐ。
+    /// Tracks whether the mouse has left the badge at least once.
+    /// Suppresses the hover presentation immediately after a linked badge appears
+    /// (while the cursor is still on top of it) so the `x` icon does not flash
+    /// right after linking. **Unlinked badges are not gated** — they should react
+    /// on the very first hover.
     @State private var hoverActivated = false
 
-    /// 実際にホバー効果を表示すべきか。
-    private var effectiveHover: Bool { isHovering && hoverActivated }
+    /// Whether hover effects should actually be shown.
+    /// Unlinked: use `isHovering` directly (active from the first hover).
+    /// Linked:   `isHovering && hoverActivated` (disabled until the cursor leaves once).
+    private var effectiveHover: Bool {
+        switch badge.state {
+        case .unlinked:
+            return isHovering
+        case .linked:
+            return isHovering && hoverActivated
+        }
+    }
 
     private var symbolName: String {
         switch badge.state {
@@ -165,41 +232,72 @@ private struct BadgeDot: View {
     private var backgroundColor: Color {
         switch badge.state {
         case .unlinked:
-            return effectiveHover ? Color.accentColor.opacity(0.95) : Color.accentColor.opacity(0.85)
+            return effectiveHover
+                ? Color.accentColor.opacity(BadgeStyle.Opacity.unlinkedBgHover)
+                : Color.accentColor.opacity(BadgeStyle.Opacity.unlinkedBgIdle)
         case .linked:
             if effectiveHover {
-                return Color.red.opacity(0.85)
+                return Color.red.opacity(BadgeStyle.Opacity.linkedBgHover)
             }
-            return Color.black.opacity(0.55)
+            // Idle linked badge is intentionally subdued so it doesn't distract.
+            return Color.black.opacity(BadgeStyle.Opacity.linkedBgIdle)
         }
     }
 
-    private var foregroundColor: Color { .white }
+    private var foregroundColor: Color {
+        // Idle linked icon is also slightly toned down.
+        if case .linked = badge.state, !effectiveHover {
+            return Color.white.opacity(BadgeStyle.Opacity.linkedForegroundIdle)
+        }
+        return .white
+    }
+
+    /// Stroke color. Subdued when linked and idle.
+    private var strokeColor: Color {
+        if case .linked = badge.state, !effectiveHover {
+            return Color.white.opacity(BadgeStyle.Opacity.linkedStrokeIdle)
+        }
+        return Color.white.opacity(BadgeStyle.Opacity.activeStroke)
+    }
+
+    /// Shadow darkness. Subdued when linked and idle.
+    private var shadowOpacity: Double {
+        if case .linked = badge.state, !effectiveHover {
+            return BadgeStyle.Opacity.linkedShadowIdle
+        }
+        return BadgeStyle.Opacity.activeShadow
+    }
 
     var body: some View {
-        // ZStack で Circle + Image を組み合わせ、外側の 40×40 フレーム内でシャドウが
-        // 見切れないようにする（NSHostingView の clip 境界に当たらないよう余裕を持たせる）。
+        // Compose the Circle + Image inside a ZStack so the shadow has room to
+        // render without being clipped by the NSHostingView bounds.
         ZStack {
             Circle()
                 .fill(backgroundColor)
-                .overlay(Circle().stroke(Color.white.opacity(0.8), lineWidth: 1))
-                .frame(width: 22, height: 22)
-                .shadow(color: .black.opacity(0.4), radius: 3, x: 0, y: 1)
+                .overlay(Circle().stroke(strokeColor, lineWidth: BadgeStyle.strokeWidth))
+                .frame(width: BadgeStyle.visibleDiameter, height: BadgeStyle.visibleDiameter)
+                .shadow(
+                    color: .black.opacity(shadowOpacity),
+                    radius: BadgeStyle.shadowRadius,
+                    x: 0,
+                    y: BadgeStyle.shadowYOffset
+                )
             Image(systemName: symbolName)
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(size: BadgeStyle.symbolFontSize, weight: .semibold))
                 .foregroundStyle(foregroundColor)
         }
-        .frame(width: 40, height: 40)
-        .contentShape(Circle().inset(by: 9))  // 円形の中央 22pt のみをクリック領域に
-        .scaleEffect(effectiveHover ? 1.12 : 1.0)
-        .animation(.easeOut(duration: 0.12), value: effectiveHover)
+        .frame(width: BadgeStyle.windowSize, height: BadgeStyle.windowSize)
+        .contentShape(Circle().inset(by: BadgeStyle.hitAreaInset))
+        .scaleEffect(effectiveHover ? BadgeStyle.Animation.hoverScale : 1.0)
+        .animation(.easeOut(duration: BadgeStyle.Animation.hoverDuration), value: effectiveHover)
         .onAppear {
-            // 出現直後はホバー効果を抑制する（リンク直後の即 x 表示を防ぐ）。
+            // Suppress hover effects right after appearance (prevents the `x` from
+            // flashing immediately after the link is established).
             hoverActivated = false
         }
         .onHover { hovering in
             if !hovering {
-                // マウスが一度外に出たらホバー効果を解禁する。
+                // Allow hover effects once the cursor has left the badge.
                 hoverActivated = true
             }
             isHovering = hovering

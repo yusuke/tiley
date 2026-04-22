@@ -383,9 +383,10 @@ final class AccessibilityService {
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, value)
     }
 
-    /// 軽量な position+size セット。ドラッグ中の連続適用向け。
-    /// `setFrame` のような pre-nudge/bounce/位置補正は行わず、AX に直接書き込むだけ。
-    /// グループ連動でフォロワーを 60Hz で動かす際のチラつきを避けるために使う。
+    /// Lightweight position+size setter for the drag-time linkage loop.
+    /// Unlike `setFrame` it skips the pre-nudge / bounce / position fixup dance
+    /// and writes directly to AX. Used so that the group follower doesn't
+    /// flicker when driven at 60 Hz or higher.
     func setFrameLightweight(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) {
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
         var origin = CGPoint(x: frame.minX, y: primaryMaxY - frame.maxY)
@@ -398,13 +399,15 @@ final class AccessibilityService {
         }
     }
 
-    /// 「指定したエッジが固定されるように」フレームを設定する。
-    /// グループリサイズ連動で、follower の非接触辺（例: sourceEdge=.right なら follower.maxX）
-    /// を厳密に保つために使う。
-    /// 動作: size を先にセット → アプリが実際に適用した size を読み取り → そのサイズで
-    /// preservedEdgeValue が固定値になる位置を計算してから position をセット。
-    /// → アプリが size の最小値を強制してきても、preservedEdge が動かない。
-    /// 戻り値: アプリが採用した実際のサイズ (size strict が成功したか含めて呼び出し側が判定)。
+    /// Sets the window's frame while keeping a specified edge pinned.
+    /// Used by the group resize linkage to strictly preserve the follower's
+    /// non-contact edge (e.g. follower.maxX when sourceEdge == .right).
+    /// Flow: set size first → read the size the app actually accepted → derive
+    /// the position that leaves `preservedEdgeValue` fixed at that size → set
+    /// position. This means the preserved edge does not drift even when the
+    /// app enforces a minimum size.
+    /// Return value: the size the app actually applied. The caller can use it
+    /// to determine whether the strict-size request was honored.
     @discardableResult
     func setFrameLightweightPreservingEdge(
         _ frame: CGRect,
@@ -413,37 +416,37 @@ final class AccessibilityService {
         on screenFrame: CGRect,
         for window: AXUIElement
     ) -> CGSize {
-        // 1. サイズを先にセット
+        // 1. Set the size first.
         var size = frame.size
         if let sizeValue = AXValueCreate(.cgSize, &size) {
             AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         }
-        // 2. アプリが実際に採用したサイズを読み取る
+        // 2. Read back the size the app actually accepted.
         var sizeRef: CFTypeRef?
         AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeRef)
-        var actualSize = frame.size  // フォールバック
+        var actualSize = frame.size  // fallback
         if let sv = sizeRef, CFGetTypeID(sv) == AXValueGetTypeID() {
             AXValueGetValue(sv as! AXValue, .cgSize, &actualSize)
         }
-        // 3. 位置を計算してセット
+        // 3. Compute and set the position.
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
         var appKitOrigin: CGPoint
         switch edge {
         case .right:
-            // preservedEdgeValue = 固定したい maxX。origin.x = maxX - actualWidth
+            // preservedEdgeValue is the maxX we want to keep fixed → origin.x = maxX - actualWidth.
             appKitOrigin = CGPoint(x: preservedEdgeValue - actualSize.width, y: frame.minY)
         case .left:
-            // preservedEdgeValue = 固定したい minX
+            // preservedEdgeValue is the minX we want to keep fixed.
             appKitOrigin = CGPoint(x: preservedEdgeValue, y: frame.minY)
         case .top:
-            // preservedEdgeValue = 固定したい maxY
-            // AppKit: minY = maxY - actualHeight
+            // preservedEdgeValue is the maxY we want to keep fixed.
+            // AppKit: minY = maxY - actualHeight.
             appKitOrigin = CGPoint(x: frame.minX, y: preservedEdgeValue - actualSize.height)
         case .bottom:
-            // preservedEdgeValue = 固定したい minY
+            // preservedEdgeValue is the minY we want to keep fixed.
             appKitOrigin = CGPoint(x: frame.minX, y: preservedEdgeValue)
         }
-        // AppKit minY → AX y の変換
+        // AppKit minY → AX y conversion.
         var axOrigin = CGPoint(x: appKitOrigin.x, y: primaryMaxY - (appKitOrigin.y + actualSize.height))
         if let pv = AXValueCreate(.cgPoint, &axOrigin) {
             AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, pv)

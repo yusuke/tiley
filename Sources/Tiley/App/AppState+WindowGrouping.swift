@@ -3,16 +3,17 @@ import ApplicationServices
 
 // MARK: - Window Grouping
 //
-// ウインドウグループの状態管理・連動処理を担当する AppState 拡張。
-// stored property は AppState.swift 本体に置かれている（`windowGroups`,
+// AppState extension that owns window-group state and linkage logic.
+// Stored properties live on AppState itself (`windowGroups`,
 // `groupIndexByWindow`, `pendingGroupCandidates`, `groupLinkBadgeController`,
-// `windowObservationService`, `isApplyingGroupTransform`, `isApplyingGroupRaise`）。
+// `windowObservationService`, `isApplyingGroupTransform`, `isApplyingGroupRaise`).
 
 extension AppState {
 
     // MARK: - Installation
 
-    /// `start()` から呼ばれる。AX 観察サービスの生成と AppState への接続。
+    /// Called from `start()`. Creates the AX observation service and wires it
+    /// into AppState.
     func installGroupObservation() {
         guard windowObservationService == nil else { return }
         let service = WindowObservationService()
@@ -23,7 +24,7 @@ extension AppState {
         installGroupClickMonitor()
     }
 
-    /// `stop()` から呼ばれる。全観察の解除。
+    /// Called from `stop()`. Tears down all observations.
     func uninstallGroupObservation() {
         groupPollingTimer?.cancel()
         groupPollingTimer = nil
@@ -41,10 +42,11 @@ extension AppState {
 
     // MARK: - Click monitor (catches intra-app window switches)
 
-    /// CGEventTap でマウスダウンイベントを監視する。
-    /// AX 通知（kAXFocusedWindowChangedNotification / kAXMainWindowChangedNotification）は
-    /// 一部のシナリオ（特に同一アプリ内のウインドウ切替）で発火しないため、マウスクリック
-    /// を直接監視して、クリック直後にフォーカス中ウインドウがグループメンバーかチェックする。
+    /// Watches mouse-down events via a CGEventTap.
+    /// AX notifications (kAXFocusedWindowChangedNotification / kAXMainWindowChangedNotification)
+    /// do not fire in some scenarios (notably intra-app window switches), so we
+    /// watch mouse clicks directly and then check — right after the click — whether
+    /// the focused window belongs to a group member.
     private func installGroupClickMonitor() {
         guard groupClickEventTap == nil else { return }
         let mask = (1 << CGEventType.leftMouseDown.rawValue)
@@ -95,37 +97,39 @@ extension AppState {
         groupClickEventTapSource = nil
     }
 
-    /// マウスダウン直後に呼ばれる。少し遅延してフォーカス中ウインドウを確認し、
-    /// グループメンバーなら raise 連動を発動する。
+    /// Invoked right after a mouse-down. Waits briefly for the focused window to
+    /// settle, then triggers the raise linkage if that window is a group member.
     func handleSystemMouseDown() {
-        // グループが無ければ何もしない（CPU 節約）。
+        // No groups → nothing to do (save CPU).
         guard !windowGroups.isEmpty else { return }
-        // クリック処理が完了するのを待つ。50ms 程度で十分。
+        // Give the system a moment to finish the click handoff. ~50ms is enough.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
             self?.checkFrontmostForGroupRaise()
         }
     }
 
-    /// マウスアップ直後に呼ばれる。グループドラッグセッション中なら、
-    /// 200ms idle を待たず**即座に**ポーリングを停止して resolve を発動する。
-    /// これにより release 時のオーバーラップ補正が高速に走る。
+    /// Invoked right after a mouse-up. If a group drag/resize session is in
+    /// progress, stop polling **immediately** (without waiting the 200 ms idle
+    /// timeout) so the on-release resolve pass can run quickly.
     func handleSystemMouseUp() {
         guard groupPollingTimer != nil else { return }
-        // 50ms 後にポーリング停止 → resolve。最後の AX イベントが届く時間を確保。
+        // Stop polling ~50 ms later → resolve. The small delay lets any final
+        // in-flight AX event arrive first.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
             guard let self else { return }
-            // まだ動作中なら停止（その間に新しい drag が始まっていなければ）
+            // Stop only if still running (and a new drag hasn't started).
             if self.groupPollingTimer != nil {
                 self.stopGroupPollingTimer()
             }
         }
     }
 
-    /// 現在のフォーカス中ウインドウを取得し、グループメンバーであれば raise 連動を発動。
+    /// Look up the currently-focused window; if it is a group member, trigger
+    /// the raise linkage.
     private func checkFrontmostForGroupRaise() {
         guard let frontmostApp = NSWorkspace.shared.frontmostApplication else { return }
         let pid = frontmostApp.processIdentifier
-        if pid == getpid() { return }  // Tiley 自身のクリックはスキップ
+        if pid == getpid() { return }  // Ignore clicks on Tiley itself.
         guard let cgID = resolveFocusedWindowID(for: pid) else { return }
         guard groupIndexByWindow[cgID] != nil else { return }
         handleGroupMemberRaised(id: cgID)
@@ -133,11 +137,13 @@ extension AppState {
 
     // MARK: - Preset apply hook
 
-    /// プリセット適用完了後に呼ばれる。接する辺を検出して候補バッジを提示する。
-    /// 既存グループの adjacency は現状のフレームで再計算し、接していないペアは削除する。
+    /// Called after a preset has been applied. Detects newly touching edges and
+    /// surfaces candidate badges. Adjacencies of existing groups are recomputed
+    /// from the current frames; pairs that no longer touch are dropped.
     ///
-    /// `targetWindowIDs`: プリセットで実際に移動・配置されたウインドウの CGWindowID。
-    /// これを指定して、背景にある他の無関係なウインドウ同士の「偶然の接触」を候補から除外する。
+    /// `targetWindowIDs`: CGWindowIDs of the windows that the preset actually
+    /// moved/arranged. Passing these scopes candidate detection and excludes
+    /// accidental contacts between unrelated background windows.
     func refreshGroupCandidatesAfterPresetApply(targetWindowIDs: [CGWindowID]) {
         guard accessibilityGranted else {
             debugLog("WindowGrouping: skipping candidate refresh — AX permission not granted")
@@ -145,17 +151,19 @@ extension AppState {
         }
 
         debugLog("WindowGrouping: refreshGroupCandidatesAfterPresetApply triggered (targets=\(targetWindowIDs))")
-        // **即座に**検出を実行してバッジを表示する。プリセット適用は同期的に完了している
-        // ので AX の live frame を読めば新しい位置が得られる。
+        // Run detection **immediately** so badges appear without delay. Preset
+        // apply is synchronous, so the live AX frames reflect the new positions.
         recomputeGroupsAndCandidates(targetWindowIDs: targetWindowIDs)
-        // 念のため少し後にもう一度（一部のアプリで AX 反映が遅れる場合のフォールバック）。
+        // Re-run after a short delay as a fallback for apps where AX state
+        // propagation is slow.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             self?.recomputeGroupsAndCandidates(targetWindowIDs: targetWindowIDs)
         }
     }
 
-    /// 現在のウインドウフレーム（AppKit 座標）を CGWindowID キーで取得する。
-    /// **ライブ** AX 値を読む。`target.frame` はキャッシュ値で古いことがあるので使わない。
+    /// Current window frames (AppKit coordinates) keyed by CGWindowID.
+    /// Reads the **live** AX values. `target.frame` is a cached value and may
+    /// be stale, so it is intentionally not used here.
     private func frameSnapshot(for ids: Set<CGWindowID>) -> [CGWindowID: CGRect] {
         let all = allAvailableFrames()
         var result: [CGWindowID: CGRect] = [:]
@@ -165,9 +173,9 @@ extension AppState {
         return result
     }
 
-    /// 全 `availableWindowTargets` の**ライブ**フレーム（AX から現在値を読む）を
-    /// CGWindowID キーで取得する。`target.frame` はキャッシュ値であり、
-    /// レイアウトプリセット適用直後は古い値のままの可能性があるので必ずライブ値を使う。
+    /// **Live** frames (read from AX) for every `availableWindowTargets`, keyed
+    /// by CGWindowID. `target.frame` is a cache that can lag behind — especially
+    /// right after a preset is applied — so we always re-read from AX here.
     private func allAvailableFrames() -> [CGWindowID: CGRect] {
         var result: [CGWindowID: CGRect] = [:]
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
@@ -192,12 +200,14 @@ extension AppState {
         return result
     }
 
-    /// 既存グループの adjacency を更新、新たな候補バッジを算出してオーバーレイを更新する。
+    /// Refreshes adjacencies of existing groups, recomputes candidate badges,
+    /// and updates the overlay.
     ///
-    /// `targetWindowIDs` が nil の場合は既存グループの再検証のみ行う（候補追加はしない）。
-    /// nil でない場合、候補検出はそれらのウインドウ + 既存グループメンバーの範囲に限定する。
+    /// If `targetWindowIDs` is nil, only existing groups are revalidated (no
+    /// new candidates are generated). Otherwise candidate detection is limited
+    /// to those windows plus existing group members.
     private func recomputeGroupsAndCandidates(targetWindowIDs: [CGWindowID]? = nil) {
-        // 対象の絞り込み: プリセットで動かしたウインドウ + 既存グループメンバー
+        // Scope: windows the preset moved + existing group members.
         var candidateScope: Set<CGWindowID> = Set(targetWindowIDs ?? [])
         for group in windowGroups.values {
             candidateScope.formUnion(group.members)
@@ -209,15 +219,16 @@ extension AppState {
             debugLog("WindowGrouping:   window \(wid) frame=\(f)")
         }
 
-        // 既存グループの adjacency を現在のフレームで再検証し、接さなくなったものを削除。
+        // Revalidate each existing group's adjacencies against current frames
+        // and drop pairs that no longer touch.
         for (gid, var group) in windowGroups {
-            // 存在しない member を除去。
+            // Drop members that no longer exist.
             group.members = group.members.filter { frames[$0] != nil }
             if group.members.count < 2 {
                 dissolveGroup(gid)
                 continue
             }
-            // 内部接触を再計算。
+            // Recompute intra-group adjacencies.
             var retained: [WindowAdjacency] = []
             for adj in group.adjacencies {
                 guard let fA = frames[adj.windowA], let fB = frames[adj.windowB] else { continue }
@@ -226,7 +237,7 @@ extension AppState {
                 }
             }
             group.adjacencies = retained
-            // 接触が 1 つも残らない場合はグループ解体。
+            // No adjacencies left → dissolve the group.
             if retained.isEmpty {
                 dissolveGroup(gid)
                 continue
@@ -235,11 +246,13 @@ extension AppState {
             windowGroups[gid] = group
         }
 
-        // 候補検出: 対象ウインドウに限定した frame 部分集合を使う。
-        // gap 設定があるウインドウ配置でも検出できるよう、許容誤差を gap+4pt に広げる。
+        // Candidate detection: use only the subset of frames within scope.
+        // Widen the tolerance to `gap + 4pt` so layouts that use a gap still
+        // register as "touching" for badge purposes.
         let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
 
-        // targetWindowIDs が nil（空集合）なら候補は検出しない（既存グループの再検証のみ）。
+        // If targetWindowIDs is nil, skip candidate detection entirely —
+        // only existing groups are revalidated.
         if targetWindowIDs != nil {
             let scopedFrames = frames.filter { candidateScope.contains($0.key) }
             let detected = WindowAdjacencyDetector.detect(frames: scopedFrames, edgeEpsilon: epsilon)
@@ -247,8 +260,8 @@ extension AppState {
             for adj in detected {
                 debugLog("WindowGrouping:   adj windowA=\(adj.windowA) windowB=\(adj.windowB) edgeOfA=\(adj.edgeOfA.rawValue) mid=\(adj.midpoint)")
             }
-            // マージ: 既存の pending に新たに検出されたものを追加し、
-            // 既存グループ内の adjacency は除外する。
+            // Merge: keep existing pending candidates, add newly detected ones,
+            // and exclude adjacencies that are already inside an existing group.
             var merged: [AdjacencyKey: WindowAdjacency] = [:]
             for adj in pendingGroupCandidates {
                 merged[adj.unorderedKey] = adj
@@ -260,8 +273,9 @@ extension AppState {
                 merged[adj.unorderedKey] = adj
             }
             pendingGroupCandidates = Array(merged.values)
-            // 新規候補ごとに検出タイムスタンプを記録し、5秒後のフェードアウトを予約する。
-            // また、候補ウインドウの AX を観察開始（移動/リサイズ検知で隣接喪失を即座に反映）。
+            // Record a detection timestamp for each new candidate and schedule
+            // a 5-second fade-out. Also start AX-observing the candidate windows
+            // so that adjacency loss (move/resize) is reflected immediately.
             let now = CFAbsoluteTimeGetCurrent()
             for adj in pendingGroupCandidates {
                 let key = adj.unorderedKey
@@ -282,7 +296,7 @@ extension AppState {
         refreshBadgeOverlays()
     }
 
-    /// タイムアウトまたは隣接喪失により、指定された候補を削除する。
+    /// Removes the given candidate, e.g. on timeout or when adjacency is lost.
     func expirePendingCandidate(key: AdjacencyKey) {
         let before = pendingGroupCandidates.count
         pendingGroupCandidates.removeAll { $0.unorderedKey == key }
@@ -295,8 +309,8 @@ extension AppState {
 
     // MARK: - Link / Unlink
 
-    /// ユーザーが未リンクバッジをタップしたときに呼ぶ。
-    /// 既存グループとトランジティブにマージする（merge-on-link）。
+    /// Called when the user taps an unlinked badge.
+    /// Transitively merges with existing groups (merge-on-link).
     func linkAdjacency(_ adj: WindowAdjacency) {
         let existingA = groupIndexByWindow[adj.windowA]
         let existingB = groupIndexByWindow[adj.windowB]
@@ -308,7 +322,7 @@ extension AppState {
 
         switch (existingA, existingB) {
         case (nil, nil):
-            // 新規グループを作る。
+            // Create a brand-new group.
             let group = WindowGroup(
                 members: [adj.windowA, adj.windowB],
                 adjacencies: [adj],
@@ -343,10 +357,10 @@ extension AppState {
 
         case (let gidA?, let gidB?):
             if gidA == gidB {
-                // 既に同一グループ。adjacency だけ追加。
+                // Already in the same group — just record the extra adjacency.
                 windowGroups[gidA]?.adjacencies.append(adj)
             } else {
-                // 2 つのグループをマージ。
+                // Merge the two groups.
                 mergeGroups(into: gidA, from: gidB, bridgingAdjacency: adj)
             }
         }
@@ -357,14 +371,15 @@ extension AppState {
         refreshBadgeOverlays()
     }
 
-    /// バッジの x を押したとき、もしくはウインドウが閉じられたときに呼ぶ。
+    /// Called when the user taps the `x` on a badge, or when a window is closed.
     func dissolveGroup(_ groupID: UUID) {
         guard let group = windowGroups.removeValue(forKey: groupID) else { return }
         for id in group.members {
             groupIndexByWindow.removeValue(forKey: id)
             windowObservationService?.stopObserving(cgWindowID: id)
         }
-        // 解体後、残るウインドウ同士の接触は再度候補として提示する。
+        // After dissolving, any remaining windows that still touch become
+        // candidates again.
         recomputeGroupsAndCandidates()
     }
 
@@ -389,8 +404,9 @@ extension AppState {
         }
     }
 
-    /// 未リンク候補のウインドウを監視対象に加える。
-    /// 移動/リサイズで隣接喪失を検知してバッジを即座にフェードアウトするため。
+    /// Start observing a window that is a pending (unlinked) candidate.
+    /// Lets us detect adjacency loss on move/resize and fade the badge out
+    /// immediately.
     private func observeWindowForCandidate(cgWindowID: CGWindowID) {
         guard let service = windowObservationService else { return }
         guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }) else { return }
@@ -404,58 +420,60 @@ extension AppState {
 
     // MARK: - Badge overlays
 
-    /// バッジ位置を算出し、オーバーレイを更新する。
-    /// バッジごとに個別の小 NSWindow を使うためフルスクリーン透過ウインドウではない。
+    /// Computes the set of badges to show and updates the overlay.
+    /// Each badge has its own small NSWindow — no fullscreen transparent overlay.
     ///
-    /// フロントモストアプリがグループ/候補の**いずれかのメンバーのアプリ**でない場合、
-    /// そのグループ/候補のバッジは隠す。つまり「関連ウインドウが背面に隠れたとき」
-    /// バッジも消える。
-    /// また、未リンク候補は 5 秒経過すると自動で消える／隣接でなくなると即座に消える。
-    /// リンク済バッジはドラッグ/リサイズ中は非表示にする。
-    /// `fastHide` が true の場合、バッジが消える際のフェードアウト時間を短縮する
-    /// （ドラッグ/リサイズ開始時のように即座に消したいケース用）。
+    /// A group's / candidate's badges are hidden unless the frontmost app owns
+    /// at least one of the involved windows. In other words, when the related
+    /// windows are buried behind other windows the badges vanish with them.
+    /// Unlinked candidates also auto-expire after 5 seconds and disappear
+    /// immediately when the pair no longer touches. Linked badges are hidden
+    /// while a drag/resize is in progress.
+    /// `fastHide = true` shortens the fade-out duration (used at the moment a
+    /// drag/resize starts so badges disappear quickly).
     func refreshBadgeOverlays(fastHide: Bool = false) {
         let frontmostPID = NSWorkspace.shared.frontmostApplication?.processIdentifier
         let now = CFAbsoluteTimeGetCurrent()
         var badges: [GroupLinkBadge] = []
 
-        // リンク済バッジを非表示にすべきか？ → ドラッグ/リサイズ中（ポーリングが動作中）は隠す。
+        // Hide linked badges while a drag/resize is in progress
+        // (i.e. while the polling timer is running).
         let isInteracting = groupPollingTimer != nil
 
-        // 隣接判定用にライブフレームを取得。
+        // Fetch live frames for adjacency checks.
         let liveFrames = allAvailableFrames()
         let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
 
-        // 候補（未リンク）
+        // Unlinked candidates.
         var expiredKeys: [AdjacencyKey] = []
         for adj in pendingGroupCandidates {
-            // タイムアウト判定。
+            // Timeout check.
             if let ts = pendingCandidateTimestamps[adj.unorderedKey], now - ts > 5.0 {
                 expiredKeys.append(adj.unorderedKey)
                 continue
             }
-            // 隣接性の再検証: 現在もまだ辺が接しているか。
+            // Revalidate adjacency: are the edges still touching?
             if let fA = liveFrames[adj.windowA], let fB = liveFrames[adj.windowB] {
                 if WindowAdjacencyDetector.adjacency(a: adj.windowA, frameA: fA, b: adj.windowB, frameB: fB, edgeEpsilon: epsilon) == nil {
                     expiredKeys.append(adj.unorderedKey)
                     continue
                 }
             }
-            // 前面アプリ判定。
+            // Frontmost-app gating.
             guard isAdjacencyInFrontmostApp(adj, frontmostPID: frontmostPID) else { continue }
             badges.append(GroupLinkBadge(
                 id: adj.unorderedKey, state: .unlinked, center: adj.midpoint, adjacency: adj
             ))
         }
-        // 期限切れ/隣接喪失の候補を削除。
+        // Drop expired / adjacency-lost candidates.
         for key in expiredKeys {
             pendingGroupCandidates.removeAll { $0.unorderedKey == key }
             pendingCandidateTimestamps.removeValue(forKey: key)
             pendingCandidateFadeItems.removeValue(forKey: key)?.cancel()
         }
 
-        // グループ内（リンク済）: いずれかのメンバーの PID が frontmost なら表示。
-        // ただしドラッグ/リサイズ中は隠す。
+        // Linked badges (members of an existing group): shown when any member
+        // belongs to the frontmost PID. Hidden while a drag/resize is active.
         if !isInteracting {
             for group in windowGroups.values {
                 let groupIsActive = group.members.contains { cgWindowID in
@@ -497,24 +515,25 @@ extension AppState {
         }
     }
 
-    /// 指定された adjacency のみをグループから削除する。
-    /// 削除後にグループが非連結になった場合は、連結成分ごとに分離する。
-    /// 連結成分のメンバーが 1 つしかない場合は（= 孤立した）グループから除外する。
+    /// Removes only the given adjacency from its group.
+    /// If the group becomes disconnected as a result, split it along its
+    /// connected components. Components with a single member (i.e. isolated
+    /// windows) are detached from any group entirely.
     func unlinkAdjacency(_ adj: WindowAdjacency) {
         guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB] else { return }
         guard var group = windowGroups[gid] else { return }
 
-        // 該当 adjacency を削除。
+        // Drop the matching adjacency.
         group.adjacencies.removeAll { $0.unorderedKey == adj.unorderedKey }
 
-        // 残りの adjacency で連結成分を求める。
+        // Recompute connected components over the remaining adjacencies.
         let components = connectedComponents(members: group.members, adjacencies: group.adjacencies)
 
         if components.count == 1 {
-            // 依然として完全に連結 → そのまま更新。
+            // Still fully connected → keep the group as-is.
             windowGroups[gid] = group
         } else {
-            // 複数の連結成分に分裂 → グループを分離して再構築。
+            // Split into multiple components → rebuild the group(s).
             windowGroups.removeValue(forKey: gid)
             for id in group.members {
                 groupIndexByWindow.removeValue(forKey: id)
@@ -524,7 +543,7 @@ extension AppState {
                     component.contains($0.windowA) && component.contains($0.windowB)
                 }
                 if component.count >= 2 && !componentAdjacencies.isEmpty {
-                    // 新しいグループとして再構築。
+                    // Build a new group for this component.
                     let newGroup = WindowGroup(
                         id: UUID(),
                         members: component,
@@ -537,7 +556,7 @@ extension AppState {
                         groupIndexByWindow[id] = newGroup.id
                     }
                 } else {
-                    // 孤立メンバー → グループ所属を解除、監視停止。
+                    // Isolated member → detach and stop observing.
                     for id in component {
                         windowObservationService?.stopObserving(cgWindowID: id)
                     }
@@ -547,7 +566,8 @@ extension AppState {
         refreshBadgeOverlays()
     }
 
-    /// メンバー集合と adjacency のリストから、各連結成分（互いに隣接関係で繋がる部分集合）を返す。
+    /// Given a set of members and a list of adjacencies, returns each connected
+    /// component (the subsets that are mutually linked through adjacencies).
     private func connectedComponents(members: Set<CGWindowID>, adjacencies: [WindowAdjacency]) -> [Set<CGWindowID>] {
         var visited: Set<CGWindowID> = []
         var components: [Set<CGWindowID>] = []
@@ -574,45 +594,48 @@ extension AppState {
 
     // MARK: - AX Event handling
 
-    /// `WindowObservationService` からのイベントをルーティングする。
+    /// Routes events from `WindowObservationService`.
     ///
-    /// 移動・リサイズ系イベントは**ポーリングのトリガーとして使うだけ**で、
-    /// 実際の連動処理は `pollGroupSource()` が 60Hz で走査する。
-    /// AX 通知は粗い間隔（100～400ms）で届き、ドラッグ中の連続追従には不十分なため。
+    /// Move/resize events are used **only as a trigger for polling**; the real
+    /// linkage work happens in `pollGroupSource()` at ~120 Hz. AX notifications
+    /// arrive at coarse intervals (100–400 ms) which is not enough for smooth
+    /// follow-along during drags.
     ///
-    /// 未リンク候補（pendingGroupCandidates）のウインドウが動いた場合は
-    /// `refreshBadgeOverlays()` を呼んで隣接性を再評価し、接していなければ
-    /// 候補から削除する（= バッジがフェードアウト）。
+    /// If an unlinked candidate window (pendingGroupCandidates) moves, we call
+    /// `refreshBadgeOverlays()` to re-check adjacency and drop the candidate
+    /// (fading the badge) if it no longer applies.
     func handleGroupObservationEvent(_ event: WindowObservationService.Event) {
         switch event {
         case .moved(let id, _), .resized(let id, _):
             if isApplyingGroupTransform { return }
-            // AX エコー判定：直近で setFrame したウインドウの event で、かつ live frame が
-            // 我々が設定した frame と一致するなら、それはエコー。process しない。
-            // 一致しない場合（ユーザーが動かした）は通常通り処理。
+            // AX-echo detection: if an event fires for a window we recently set
+            // via setFrame, and the live frame matches what we set, it's our
+            // echo — skip it. If it doesn't match (user moved it afterwards),
+            // drop the entry and process normally.
             if let entry = recentlySetFrames[id], CFAbsoluteTimeGetCurrent() - entry.time < 2.0 {
                 if let live = liveFrame(of: id), Self.framesMatch(live, entry.frame, tolerance: 2) {
                     return  // echo
                 }
-                // 一致しない＝ユーザー入力で上書きされた。エントリを削除して以降通常処理。
+                // Mismatch means the user overwrote our position. Clear and fall through.
                 recentlySetFrames.removeValue(forKey: id)
             }
             let isGroupMember = groupIndexByWindow[id] != nil
             let isPendingCandidate = pendingGroupCandidates.contains { $0.windowA == id || $0.windowB == id }
 
             if isGroupMember {
-                // 新規セッション開始時、intended source を記録（mid-session で変わらない）。
+                // At session start, pin the intended source (doesn't change mid-session).
                 if groupPollingTimer == nil {
                     groupPollingIntendedSourceID = id
                 }
                 groupPollingSourceID = id
                 startOrResetGroupPollingTimer()
             } else if isPendingCandidate {
-                // 候補の片方が動いた → 隣接性の再評価（非隣接なら候補から除外）。
+                // One side of a candidate moved — revalidate adjacency, drop
+                // the candidate if it is no longer adjacent.
                 refreshBadgeOverlays()
             }
         case .destroyed(let id):
-            // グループメンバーと候補のどちらで参照されていても整理する。
+            // Cleanup: the destroyed window could be a member or a candidate.
             if groupIndexByWindow[id] != nil {
                 handleMemberDestroyed(id: id)
             }
@@ -633,60 +656,66 @@ extension AppState {
         if groupPollingTimer != nil { return }
         groupPollingTickCount = 0
         let timer = DispatchSource.makeTimerSource(queue: .main)
-        // 8ms ≒ 120Hz でポーリング。tick あたりの作業はバッジ更新を省略して軽くする。
+        // Poll at ~120 Hz (8 ms). Keep per-tick work minimal by skipping badge updates.
         timer.schedule(deadline: .now(), repeating: .milliseconds(8), leeway: .milliseconds(1))
         timer.setEventHandler { [weak self] in
             self?.pollGroupSource()
         }
         timer.resume()
         groupPollingTimer = timer
-        // 対話開始時、リンク済バッジを**高速に**隠す。
+        // When interaction starts, hide linked badges with a **fast** fade.
         refreshBadgeOverlays(fastHide: true)
     }
 
     private func stopGroupPollingTimer() {
-        // **真のドラッグ元** (intended source) を release 時の補正に使う。
-        // groupPollingSourceID は AX echo で mid-session に follower 等に切り替わる
-        // ことがあるが、intendedSourceID はセッション開始時の値で固定されるため、
-        // ユーザーが実際にドラッグした窓を確実に指す。
+        // Use the **true drag source** (the intended source) for the release
+        // correction. groupPollingSourceID can flip to a follower mid-session
+        // via AX echo, but intendedSourceID is locked in at session start and
+        // reliably points to the window the user is actually dragging.
         let lastSourceID = groupPollingIntendedSourceID ?? groupPollingSourceID
         groupPollingTimer?.cancel()
         groupPollingTimer = nil
         groupPollingSourceID = nil
         groupPollingIntendedSourceID = nil
 
-        // ドラッグ中に source がフォロワーの最小幅/高さを超えて食い込んでいた場合
-        // （ウインドウが重なり合っている状態）、ドラッグ離したタイミングで
-        // source 側を縮めて接点まで戻す。
+        // If, during the drag, the source pushed past a follower's min width/
+        // height and the two visually overlap, shrink the source back to the
+        // contact point on release.
         if let lastSourceID {
             resolveAdjacencyOverlapsOnRelease(lastSourceID: lastSourceID)
         }
 
-        // **重要**: follower の cache は「ideal 値」のままにしておく（live に同期しない）。
-        // アプリが size を reject した場合でも、cache が source の動きを追跡する
-        // ことで perpendicular linkage の share 判定が維持され、後続のドラッグで
-        // follower が正しく追従する。以前は live に同期していたが、それだと app の
-        // reject で follower の cache と source の cache が divergence → sharesTop/
-        // sharesBottom が false → 高さ連動が壊れる問題があった。
+        // **Important**: leave the follower caches at their "ideal" values
+        // (don't sync to live). Even if the app rejected a size, having the
+        // cache track the source's movement keeps the perpendicular-linkage
+        // "shares top/bottom" checks correct on the next drag. Previously we
+        // synced to live, which caused the follower cache and source cache to
+        // diverge after an app reject → sharesTop/sharesBottom flipped to
+        // false → the height linkage broke.
 
-        // 対話終了後、各グループの adjacency 座標を最新フレームで再計算してから
-        // 隠されていたリンク済バッジを再表示する（バッジ位置が新しい辺位置に追従する）。
+        // After interaction, recompute each group's adjacency coordinates from
+        // the current frames before re-showing the linked badges, so the badge
+        // positions track the new edge locations.
         for gid in windowGroups.keys {
             recomputeAdjacenciesForGroup(gid)
         }
         refreshBadgeOverlays()
     }
 
-    /// ドラッグ離し時の 2 パターンの補正：
+    /// Two patterns of correction applied on drag release:
     ///
-    /// **A. source が follower に食い込んで重なり**（follower が min 幅に達し、
-    ///    source がそれを超えて押し込んだ場合）→ source を接点まで戻す
+    /// **A. Source pushed into follower (overlap)** — follower hit its min size
+    ///    and the source was pushed further through the contact edge.
+    ///    → Pull the source back to the contact point.
     ///
-    /// **B. source の拡大で follower が min 幅に達し、アプリがサイズ強制で follower の
-    ///    非接触辺（maxX/minX/maxY/minY）を元の位置から押し出した**（例：左を広げて
-    ///    右ウインドウが最小幅まで縮んだ後、右端が右にはみ出す）
-    ///    → follower を非接触辺が元位置に戻るようシフトし、source の接触辺を follower の
-    ///       新しい接触辺に合わせる
+    /// **B. Expanding source forced follower to its min size, and the app
+    ///    shifted the follower's non-contact edge** (maxX/minX/maxY/minY) off
+    ///    its original position. Example: growing the left window's right edge
+    ///    shrinks the right window to its min width, then the app enforces the
+    ///    min width by pushing the right edge outward.
+    ///    → Shift the follower so its non-contact edge returns to its cached
+    ///       position, and align the source's contact edge with the follower's
+    ///       new contact edge.
     private func resolveAdjacencyOverlapsOnRelease(lastSourceID: CGWindowID) {
         guard let gid = groupIndexByWindow[lastSourceID],
               var group = windowGroups[gid] else { return }
@@ -701,34 +730,37 @@ extension AppState {
                   let otherFrame = liveFrame(of: otherID),
                   let otherCached = group.lastKnownFrames[otherID] else { continue }
 
-            // === パターン B: follower が非接触辺をオーバーシュート ===
-            // follower の「固定されているはず」の辺（source から遠い側）が、キャッシュの
-            // 元位置から外れていたら、follower をシフトして元位置に戻す。
+            // === Pattern B: follower overshot its non-contact edge ===
+            // If the follower's "supposed-to-be-fixed" edge (the side away from
+            // the source) has drifted off the cached position, shift the
+            // follower back so that edge returns to where it was.
             var followerFixed = otherFrame
             var followerShifted = false
             switch sourceEdge {
             case .right:
-                // follower は右側。maxX は固定されているべき。
-                // アプリの min width 強制で maxX が右へ押し出されると otherFrame.maxX > otherCached.maxX
+                // Follower is on the right — its maxX should stay fixed.
+                // An app's min-width enforcement can push maxX outward, giving
+                // otherFrame.maxX > otherCached.maxX.
                 if otherFrame.maxX > otherCached.maxX + 1 {
                     followerFixed.origin.x = otherCached.maxX - otherFrame.width
                     followerShifted = true
                 }
             case .left:
-                // follower は左側。minX は固定されているべき。
+                // Follower is on the left — its minX should stay fixed.
                 if otherFrame.minX < otherCached.minX - 1 {
                     followerFixed.origin.x = otherCached.minX
-                    // follower が左へ押し出された場合、origin を戻すだけで maxX も追随
+                    // If the follower was pushed left, restoring origin also
+                    // pulls maxX back into place.
                     followerShifted = true
                 }
             case .top:
-                // follower は上側。maxY は固定。
+                // Follower is above — its maxY should stay fixed.
                 if otherFrame.maxY > otherCached.maxY + 1 {
                     followerFixed.origin.y = otherCached.maxY - otherFrame.height
                     followerShifted = true
                 }
             case .bottom:
-                // follower は下側。minY は固定。
+                // Follower is below — its minY should stay fixed.
                 if otherFrame.minY < otherCached.minY - 1 {
                     followerFixed.origin.y = otherCached.minY
                     followerShifted = true
@@ -743,15 +775,17 @@ extension AppState {
                 didFix = true
             }
 
-            // === パターン A + B の合流: 接触辺のミスマッチ補正 ===
-            // 2 つのケースを区別する：
-            //   - **オーバーラップ**: source の接触辺が follower 領域に食い込んでいる → source を縮める
-            //   - **ギャップ**: source と follower の間に隙間がある → follower を広げる（source を広げない）
+            // === Merge point of A + B: fix contact-edge mismatch ===
+            // Two cases to distinguish:
+            //   - **Overlap**: source's contact edge is inside the follower's
+            //     territory → shrink the source.
+            //   - **Gap**: there is a gap between source and follower → grow
+            //     the follower (do *not* grow the source).
             let targetFollower = followerShifted ? followerFixed : otherFrame
 
-            // 接触辺の補正：最大 3 回リトライして、各回で live follower を再読み取り
-            // して contact を再計算（フォロワーがアプリの動的レイアウトで微動した
-            // 場合に対応）。
+            // Contact-edge correction: retry up to 3 times, re-reading the
+            // follower live each pass to recompute the contact (handles apps
+            // that continue to nudge their layout dynamically).
             let tol: CGFloat = 0.5
             for retry in 0..<3 {
                 guard let liveFollower = liveFrame(of: otherID),
@@ -818,7 +852,7 @@ extension AppState {
 
                 if srcCorr == nil && followerCorr == nil {
                     debugLog("WindowGrouping: resolve stable after retry=\(retry)")
-                    break  // 既に整合
+                    break  // already consistent
                 }
                 isApplyingGroupTransform = true
                 if let c = srcCorr {
@@ -836,7 +870,7 @@ extension AppState {
         }
         windowGroups[gid] = group
 
-        // AX エコー吸収のため 300ms フラグを保持してから解除。
+        // Keep the "applying" flag up for 300 ms so we absorb the AX echo.
         if didFix {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
                 self?.isApplyingGroupTransform = false
@@ -844,8 +878,8 @@ extension AppState {
         }
     }
 
-    /// 60Hz で呼ばれる。ソースウインドウのライブフレームを読み、
-    /// 前回からの差分があればフォロワーに連動反映する。
+    /// Called at ~60 Hz. Reads the source window's live frame and, if it has
+    /// moved since the last tick, propagates the change to the followers.
     private func pollGroupSource() {
         guard let sourceID = groupPollingSourceID else {
             stopGroupPollingTimer()
@@ -870,7 +904,7 @@ extension AppState {
             || abs(oldFrame.size.height - newFrame.size.height) > 0.5
 
         if !originChanged && !sizeChanged {
-            // アイドル。最後の変化から 200ms 経過したら停止。
+            // Idle. Stop once we've been idle for > 200 ms.
             if CFAbsoluteTimeGetCurrent() - groupPollingLastChangeAt > 0.2 {
                 stopGroupPollingTimer()
             }
@@ -896,15 +930,17 @@ extension AppState {
             applyGroupTranslation(&group, sourceID: sourceID, delta: delta)
         }
 
-        // ソースのフレームは live 値で更新（ユーザー操作の直接結果）。
+        // Update the source's cached frame with the live value (it's a direct
+        // result of user input).
         group.lastKnownFrames[sourceID] = newFrame
         windowGroups[gid] = group
 
-        // バッジは対話中は隠れているので、座標再計算とバッジ更新は省略する
-        // （tick 軽量化）。対話終了時の `stopGroupPollingTimer` で再計算する。
+        // Badges are hidden during interaction, so skip coordinate recomputation
+        // and badge refresh here (keeps the tick cheap). They are recomputed in
+        // `stopGroupPollingTimer` when interaction ends.
     }
 
-    /// 指定ウインドウの現フレーム（AppKit 座標、ライブ AX 値）を返す。
+    /// Returns the window's current frame (AppKit coordinates, read live from AX).
     private func liveFrame(of cgWindowID: CGWindowID) -> CGRect? {
         guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
               let window = target.windowElement else { return nil }
@@ -924,11 +960,12 @@ extension AppState {
             guard let oldFrame = group.lastKnownFrames[member] else { continue }
             let newFrame = oldFrame.offsetBy(dx: delta.width, dy: delta.height)
             moveMemberWindow(cgWindowID: member, to: newFrame)
-            // プログラム的に適用したフレームを即座にキャッシュへ反映。
-            // AX の反映遅延でライブ値を読むと古い値が返って累積誤差となるため。
+            // Immediately write the applied frame back into our cache. Reading
+            // live AX values is slightly delayed, so relying on them would
+            // accumulate errors.
             group.lastKnownFrames[member] = newFrame
         }
-        // 4 tick に 1 回だけ Z-order の補正を入れて軽量化（4 × 8ms = 32ms ≒ 30Hz）。
+        // Run the Z-order touch-up once every 4 ticks to stay cheap (4 × 8 ms = 32 ms ≈ 30 Hz).
         if groupPollingTickCount % 4 == 0 {
             for member in group.members where member != sourceID {
                 orderFollowerBelowSource(followerID: member, sourceID: sourceID)
@@ -944,10 +981,10 @@ extension AppState {
         let dBottom = sourceNew.minY - sourceOld.minY
         debugLog("WindowGrouping:   resize deltas dLeft=\(dLeft) dRight=\(dRight) dTop=\(dTop) dBottom=\(dBottom)")
 
-        // 「接する辺と同じ長さ」を判定する許容誤差。
+        // Tolerance for deciding whether two parallel edges "match length".
         let parallelMatchTolerance: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
 
-        // ソースに接する adjacency を先に処理。
+        // Handle adjacencies that touch the source first.
         for adj in group.adjacencies {
             let (otherID, sourceEdge): (CGWindowID, WindowAdjacency.Edge)
             if adj.windowA == sourceID {
@@ -966,7 +1003,7 @@ extension AppState {
             var newMinY = otherOld.minY
             var newMaxY = otherOld.maxY
 
-            // 1. 接する辺（adjacent edge）の連動
+            // 1. Contact-edge linkage.
             switch sourceEdge {
             case .right:
                 newMinX = otherOld.minX + dRight
@@ -978,7 +1015,7 @@ extension AppState {
                 newMaxY = otherOld.maxY + dBottom
             }
 
-            // 2. 垂直方向の辺の連動（「接する辺と同じ長さ」の場合）
+            // 2. Perpendicular-edge linkage (when both edges "match length").
             switch sourceEdge {
             case .right, .left:
                 let sharesBottom = abs(sourceOld.minY - otherOld.minY) <= parallelMatchTolerance
@@ -992,8 +1029,9 @@ extension AppState {
                 if sharesRight { newMaxX = otherOld.maxX + dRight }
             }
 
-            // 4 辺からフレームを再構築。適用用は 50pt でクランプ、キャッシュは
-            // クランプ前の理想値を保存（戻しドラッグ時の誤差回避のため）。
+            // Rebuild the frame from the four edges. Clamp the applied value to
+            // 50 pt minimum but cache the pre-clamp ideal (avoids accumulated
+            // error when the user reverses the drag).
             let idealWidth = newMaxX - newMinX
             let idealHeight = newMaxY - newMinY
             let idealFrame = CGRect(x: newMinX, y: newMinY, width: idealWidth, height: idealHeight)
@@ -1002,10 +1040,11 @@ extension AppState {
             let applyHeight = max(50, idealHeight)
             let desiredFrame = CGRect(x: newMinX, y: newMinY, width: applyWidth, height: applyHeight)
 
-            // 「非接触辺を厳密に保つ」セッターを使う：
-            // size を先にセット → アプリが実際に採用した size を読み取り → そのサイズで
-            // 非接触辺が固定されるよう position を計算してセット。
-            // これでアプリが min サイズを強制してきても follower の固定辺がドリフトしない。
+            // Use the "preserve non-contact edge" setter:
+            // set size first → read the size the app actually accepted → compute
+            // position so the non-contact edge stays fixed at that size.
+            // This keeps the follower's fixed edge from drifting even when the
+            // app enforces a min size.
             let preservedEdgeValue: CGFloat
             switch sourceEdge {
             case .right:  preservedEdgeValue = otherOld.maxX
@@ -1023,17 +1062,18 @@ extension AppState {
                 for: window
             )
             debugLog("WindowGrouping:   apply follower=\(otherID) desired=\(desiredFrame.size) actual=\(actualSize) preservedEdge=\(sourceEdge.rawValue) edgeValue=\(preservedEdgeValue)")
-            // AX エコー抑制用に最終的に適用した frame を記録。
-            // setFrameLightweightPreservingEdge は size を先に setting し
-            // actualSize を読み取って position を決めるので、最終 frame は
-            // (preservedEdge - actualSize) からは正確には分からない。
-            // 簡易的に desiredFrame を記録（許容誤差内で echo 判定可能）。
+            // Record the frame we last applied for AX-echo suppression.
+            // Since setFrameLightweightPreservingEdge sets the size first then
+            // derives position from the actual size, the final frame can't be
+            // recovered exactly from (preservedEdge - actualSize). Recording
+            // desiredFrame is good enough — the echo check tolerates a few pts.
             recentlySetFrames[otherID] = (desiredFrame, CFAbsoluteTimeGetCurrent())
             group.lastKnownFrames[otherID] = idealFrame
 
-            // 検証＋補正パス：size-first 法でも一部のアプリでは AX 読み取りが
-            // 即時反映されないため、適用後に live を読んで非接触辺がずれていれば
-            // 強制的にシフトで戻す。最大 3 回リトライして安定させる。
+            // Verify & correct pass: even with the size-first approach, some
+            // apps don't propagate the new AX values immediately. Read live
+            // afterwards and, if the non-contact edge has drifted, force it
+            // back with a shift. Retry up to 3 times to settle.
             for _ in 0..<3 {
                 guard let live = liveFrame(of: otherID) else { break }
                 let actualEdge: CGFloat
@@ -1043,7 +1083,7 @@ extension AppState {
                 case .top:    actualEdge = live.maxY
                 case .bottom: actualEdge = live.minY
                 }
-                if abs(actualEdge - preservedEdgeValue) <= 0.5 { break }  // 安定
+                if abs(actualEdge - preservedEdgeValue) <= 0.5 { break }  // stable
                 var c = live
                 switch sourceEdge {
                 case .right:  c.origin.x = preservedEdgeValue - live.width
@@ -1054,14 +1094,15 @@ extension AppState {
                 accessibilityService.setFrameLightweight(c, on: target.screenFrame, for: window)
             }
         }
-        // source オーバードラッグ（follower への食い込み）は per-tick では補正しない。
-        // ドラッグ離し時に `resolveAdjacencyOverlapsOnRelease` で一括補正する。
-        // per-tick で補正すると：
-        //   - source とアプリ（ユーザーの mouse）の間で fight が発生
-        //   - cache-source が overwrite されて source の delta が誤差を含む
-        //   - follower の補正にも悪影響を与える
+        // Source over-drag (cutting into follower territory) is NOT corrected
+        // per-tick. It is resolved in one pass on drag release via
+        // `resolveAdjacencyOverlapsOnRelease`.
+        // Per-tick correction would cause:
+        //   - a fight between the source and the user's mouse input,
+        //   - cache-source to be overwritten so the source's delta carries error,
+        //   - and downstream errors in the follower correction.
 
-        // 4 tick に 1 回だけ Z-order 補正と raise を行う（軽量化）。
+        // Z-order touch-up + raise once every 4 ticks (keeps the tick cheap).
         if groupPollingTickCount % 4 == 0 {
             for adj in group.adjacencies {
                 let otherID = (adj.windowA == sourceID) ? adj.windowB : adj.windowA
@@ -1073,22 +1114,23 @@ extension AppState {
         }
     }
 
-    /// ソースウインドウを AXRaise で最前面に保つ。
-    /// ポーリング中の move/resize で呼ばれる。ソースのアプリは既にアクティブなので
-    /// クロスアプリの切替は起こらず、ちらつきもない。
+    /// Keeps the source window in front via AXRaise.
+    /// Called during move/resize polling. The source's app is already active,
+    /// so no cross-app switching occurs and no flicker is introduced.
     private func raiseSourceWindow(sourceID: CGWindowID) {
         guard let target = availableWindowTargets.first(where: { $0.cgWindowID == sourceID }) else { return }
         guard let window = target.windowElement else { return }
         AXUIElementPerformAction(window, kAXRaiseAction as CFString)
     }
 
-    /// ドラッグ離し時の補正など、**確実にアプリに適用させたい**セット用。
-    /// `setFrame`（pre-nudge + bounce + 位置補正などの dance）を使い、
-    /// 適用後に live を読み取って verify、ずれていればリトライする。
+    /// Setter used when we **really need** the app to accept the frame — e.g.
+    /// the drag-release correction. Uses the full `setFrame` dance (pre-nudge
+    /// + bounce + position fixup), then verifies against the live frame and
+    /// retries on mismatch.
     private func robustMoveWindow(cgWindowID: CGWindowID, to frame: CGRect) {
         guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
               let window = target.windowElement else { return }
-        // 最大 3 回リトライしてアプリに確実に適用させる。
+        // Retry up to 3 times so the app actually accepts the frame.
         for attempt in 0..<3 {
             do {
                 try accessibilityService.setFrame(frame, on: target.screenFrame, for: window)
@@ -1108,16 +1150,17 @@ extension AppState {
     private func moveMemberWindow(cgWindowID: CGWindowID, to frame: CGRect) {
         guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
               let window = target.windowElement else { return }
-        // ドラッグ中の連続適用向けに軽量セットを使う。
-        // 通常の `setFrame` は pre-nudge/bounce など多くの AX 呼び出しを行うため、
-        // 60Hz で繰り返すとフォロワーが視覚的にチラつく。
+        // Use the lightweight setter for the high-frequency drag loop.
+        // The full `setFrame` does a lot of AX calls (pre-nudge, bounce, etc.)
+        // which causes visible follower flicker if repeated at 60 Hz+.
         accessibilityService.setFrameLightweight(frame, on: target.screenFrame, for: window)
-        // AX エコー抑制用に setFrame した内容を記録（handleGroupObservationEvent で
-        // フレーム比較によって echo を判定する）。
+        // Record what we set so handleGroupObservationEvent can detect the
+        // AX echo via frame comparison.
         recentlySetFrames[cgWindowID] = (frame, CFAbsoluteTimeGetCurrent())
     }
 
-    /// 2 つのフレームが許容誤差内で一致するか判定する。AX エコー検出用。
+    /// Returns true iff the two frames match within the given tolerance.
+    /// Used for AX-echo detection.
     static func framesMatch(_ a: CGRect, _ b: CGRect, tolerance: CGFloat) -> Bool {
         return abs(a.minX - b.minX) <= tolerance
             && abs(a.minY - b.minY) <= tolerance
@@ -1125,9 +1168,9 @@ extension AppState {
             && abs(a.height - b.height) <= tolerance
     }
 
-    /// フォロワー移動後、ソースの直下に Z-order を置き直す。
-    /// AX 経由の移動で一部アプリがウインドウを自動的に前面化することがあり、
-    /// これを即座に是正することでユーザーのドラッグ対象がちらつかず前面を保てる。
+    /// After moving a follower, re-seat its Z-order just below the source.
+    /// Some apps auto-raise a window when it is moved via AX; correcting this
+    /// immediately keeps the user's drag target visually in front without flicker.
     private func orderFollowerBelowSource(followerID: CGWindowID, sourceID: CGWindowID) {
         guard CGSPrivate.isOrderWindowAvailable else { return }
         CGSPrivate.orderWindow(followerID, mode: CGSPrivate.kCGSOrderBelow, relativeTo: sourceID)
@@ -1137,11 +1180,13 @@ extension AppState {
         guard var group = windowGroups[groupID] else { return }
         let frames = frameSnapshot(for: group.members)
         var updated: [WindowAdjacency] = []
-        // 既存 adjacency は**ドロップしない**。リサイズ中はフォロワーの AX 反映が遅れて
-        // 一時的に辺が離れて見えるが、我々のリンク関係は維持したい。
-        // 各 adjacency の contactCoordinate / overlap は現在のフレームから再計算する
-        // （バッジ位置追従用）。検出ロジックが接触と認めない場合でも、
-        // エッジ関係 (edgeOfA) は保持したまま座標だけ近似的に更新する。
+        // Existing adjacencies are **not dropped**. During a resize the
+        // follower's AX propagation can lag, so the edges may temporarily look
+        // detached — but we want to preserve the link relationship.
+        // Recompute each adjacency's contactCoordinate / overlap from the
+        // current frames so the badges follow along. Even if the detector
+        // would no longer consider the pair "touching", we keep the edge
+        // relationship (edgeOfA) and only approximate the coordinates.
         for adj in group.adjacencies {
             guard let fA = frames[adj.windowA], let fB = frames[adj.windowB] else {
                 updated.append(adj)
@@ -1153,9 +1198,9 @@ extension AppState {
         windowGroups[groupID] = group
     }
 
-    /// 与えた adjacency のエッジ関係 (edgeOfA) を保持しつつ、
-    /// 現在のフレームから `contactCoordinate` と `overlapStart/End` を更新した
-    /// 新しい `WindowAdjacency` を返す。
+    /// Returns a new `WindowAdjacency` that preserves the existing edge
+    /// relationship (edgeOfA) and updates `contactCoordinate` and
+    /// `overlapStart/End` from the given frames.
     private func recomputedCoordinate(for adj: WindowAdjacency, frameA: CGRect, frameB: CGRect) -> WindowAdjacency {
         let contact: CGFloat
         let overlapStart: CGFloat
@@ -1201,7 +1246,7 @@ extension AppState {
         windowObservationService?.stopObserving(cgWindowID: id)
 
         if group.members.count < 2 {
-            // メンバー 1 つに減ったら解体。
+            // Dissolve once the group has fewer than 2 members.
             for remaining in group.members {
                 groupIndexByWindow.removeValue(forKey: remaining)
                 windowObservationService?.stopObserving(cgWindowID: remaining)
@@ -1213,8 +1258,9 @@ extension AppState {
         refreshBadgeOverlays()
     }
 
-    /// 指定 PID のアプリで現在フォーカスされているウインドウの CGWindowID を返す。
-    /// AX に直接問い合わせて availableWindowTargets のキャッシュ順に依存しない。
+    /// Returns the CGWindowID of the currently-focused window for the given PID.
+    /// Reads directly from AX instead of relying on the cache order of
+    /// availableWindowTargets.
     func resolveFocusedWindowID(for pid: pid_t) -> CGWindowID? {
         let appElement = AXUIElementCreateApplication(pid)
         var focused: CFTypeRef?
@@ -1225,7 +1271,7 @@ extension AppState {
             return nil
         }
         let focusedWindow = focusedCF as! AXUIElement
-        // availableWindowTargets 内で AXUIElement が一致するエントリを探す。
+        // Find the availableWindowTargets entry whose AXUIElement matches.
         for target in availableWindowTargets where target.processIdentifier == pid {
             if let te = target.windowElement, CFEqual(te, focusedWindow) {
                 return target.cgWindowID
@@ -1236,16 +1282,17 @@ extension AppState {
 
     // MARK: - Z-order linkage
 
-    /// グループメンバーが前面化したとき、他メンバーも直下のレイヤーに上げる。
-    /// CLAUDE.md の「Window Z-Order 制御の知見」に厳密準拠:
-    ///   activate → AXRaise を全メンバーに → raised のアプリを activate → CGSOrderWindow
+    /// When a group member is raised, also raise the other members to the
+    /// layer right below it.
+    /// Strictly follows the Z-order knowledge in CLAUDE.md:
+    ///   activate → AXRaise every member → activate raised app → CGSOrderWindow.
     func handleGroupMemberRaised(id: CGWindowID) {
         if isApplyingGroupRaise {
             debugLog("WindowGrouping: raise short-circuit (isApplyingGroupRaise=true) id=\(id)")
             return
         }
-        // ドラッグ/リサイズ中は Z-order 連動をトリガーしない。
-        // 我々のフォロワー移動が didActivate を起こして再帰カスケードするのを防ぐため。
+        // Do not trigger the Z-order linkage during a drag/resize:
+        // our follower moves can fire didActivate and cascade recursively.
         if isApplyingGroupTransform {
             debugLog("WindowGrouping: raise short-circuit (isApplyingGroupTransform=true) id=\(id)")
             return
@@ -1262,8 +1309,8 @@ extension AppState {
             debugLog("WindowGrouping: raise group has < 2 members")
             return
         }
-        // 他メンバーが既に視覚的に見えている（他ウインドウに隠されていない）場合は
-        // raise 不要 → スキップしてフォーカスのちらつきを防ぐ。
+        // If every other member is already visible (not occluded by any other
+        // window), there is nothing to raise — skip to avoid focus flicker.
         if areAllOtherMembersVisible(group: group, sourceID: id) {
             debugLog("WindowGrouping: raise skipped — all other members already visible")
             return
@@ -1271,28 +1318,32 @@ extension AppState {
         debugLog("WindowGrouping: raise triggered for id=\(id), group members=\(group.members.count)")
 
         isApplyingGroupRaise = true
-        // 長めにフラグを保持。activate() 呼び出しは非同期で didActivate を複数起こすため、
-        // 短いと再帰カスケードに陥る。
+        // Keep the flag up long enough. activate() is async and can fire
+        // multiple didActivate events; a shorter hold lets us cascade recursively.
         defer {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 self?.isApplyingGroupRaise = false
             }
         }
 
-        // ハイブリッド方式：
-        //   - **同一アプリ**のメンバー：既に raised のアプリがアクティブなので AXRaise が
-        //     ちらつかない。異アプリ interloper による app ブロック分断を解消するため必要。
-        //   - **異なるアプリ**のメンバー：フォーカスを必ず奪うので AXRaise + フォーカス書き戻し。
+        // Hybrid approach:
+        //   - **Same-app** members: the raised app is already active, so
+        //     AXRaise doesn't flicker. Needed to break up any interleaved
+        //     non-member windows that split the app's block.
+        //   - **Different-app** members: this always takes focus, so AXRaise
+        //     is followed by a focus write-back.
         //
-        // 構造：
-        //   1) 全ての他メンバー（同アプリ＋異アプリ）に AXRaise
-        //   2) raised に AXRaise（last-raised wins で最前面へ）
-        //   3) 異アプリ分のフォーカス書き戻し
-        //   4) **最後にまとめて** CGSOrderWindow で他メンバーを raised の直下に配置
+        // Sequence:
+        //   1) AXRaise every other member (same- or different-app).
+        //   2) AXRaise the raised window itself (last-raised wins → frontmost).
+        //   3) Write focus back for different-app members.
+        //   4) **Finally**, in one batch, use CGSOrderWindow to seat all other
+        //      members directly below the raised window.
         //
-        // CGSOrderWindow を**最後に一括適用**することで、途中の AXRaise/activate で
-        // 乱れた Z-order を確定的に補正する。3+ メンバーで「最後に AXRaise された他メンバーが
-        // 最前面に残る」現象を防ぐ。
+        // Applying CGSOrderWindow in one final pass deterministically fixes
+        // whatever non-deterministic ordering AXRaise/activate left behind.
+        // This prevents the "the last-AXRaised member ends up on top" failure
+        // when there are 3+ members.
         let raisedTarget = availableWindowTargets.first(where: { $0.cgWindowID == id })
         let raisedPID = raisedTarget?.processIdentifier
         let raisedWindow = raisedTarget?.windowElement
@@ -1312,17 +1363,18 @@ extension AppState {
         }
         debugLog("WindowGrouping:   sameApp=\(sameAppMembers.count) diffApp=\(diffAppMembers.count)")
 
-        // 1. 同一アプリの他メンバーを AXRaise（前面レイヤーに引き上げ、app ブロック再構築）。
+        // 1. AXRaise the same-app other members (pulls them to the frontmost
+        //    layer and repairs the app's window block).
         for member in sameAppMembers {
             guard let target = availableWindowTargets.first(where: { $0.cgWindowID == member }),
                   let window = target.windowElement else { continue }
             let axResult = AXUIElementPerformAction(window, kAXRaiseAction as CFString)
             debugLog("WindowGrouping:   [sameApp] AXRaise(\(member)) → \(axResult.rawValue)")
         }
-        // 2. 異なるアプリの他メンバーを activate + AXRaise。
-        //    activate なしでは AXRaise が返り値成功でも実際には前面化されない
-        //    （対象アプリが非アクティブだとウインドウサーバが前面レイヤーに引き上げない）。
-        //    cross-app のフォーカスちらつきは回避不可能。
+        // 2. For different-app other members, activate + AXRaise.
+        //    Without activate(), AXRaise reports success but the window server
+        //    does not actually bring the window forward when its app is inactive.
+        //    Cross-app focus flicker is unavoidable here.
         for entry in diffAppMembers {
             if let app = NSRunningApplication(processIdentifier: entry.target.processIdentifier) {
                 let result = app.activate(options: [])
@@ -1332,43 +1384,48 @@ extension AppState {
             let axResult = AXUIElementPerformAction(window, kAXRaiseAction as CFString)
             debugLog("WindowGrouping:   [diffApp] AXRaise(\(entry.cgID)) → \(axResult.rawValue)")
         }
-        // 3. raised を AXRaise で最前面に（他メンバーの AXRaise が乱した順序を補正）。
+        // 3. AXRaise the raised window itself to the top (fixes ordering
+        //    that the other AXRaises may have disturbed).
         if let rw = raisedWindow {
             AXUIElementPerformAction(rw, kAXRaiseAction as CFString)
         }
-        // 4. 異アプリメンバーがあった場合、フォーカス復帰を念押し。
+        // 4. If any different-app members were involved, reassert focus on
+        //    the raised window.
         if !diffAppMembers.isEmpty, let rw = raisedWindow {
             AXUIElementSetAttributeValue(rw, kAXMainAttribute as CFString, kCFBooleanTrue)
             AXUIElementSetAttributeValue(rw, kAXFocusedAttribute as CFString, kCFBooleanTrue)
         }
-        // 5. 最後にまとめて CGSOrderWindow で他メンバーを raised の直下に配置。
-        //    AXRaise の非決定的な順序影響を確定的に上書きする。
+        // 5. Finally, in one batch, use CGSOrderWindow to seat all other
+        //    members just below the raised window.
+        //    This deterministically overrides the non-deterministic ordering
+        //    effects of the AXRaises above.
         if CGSPrivate.isOrderWindowAvailable {
             let allOthers = sameAppMembers + diffAppMembers.map { $0.cgID }
             for member in allOthers {
                 let ok = CGSPrivate.orderWindow(member, mode: CGSPrivate.kCGSOrderBelow, relativeTo: id)
                 debugLog("WindowGrouping:   CGSOrderWindow(\(member), below, \(id)) → \(ok)")
             }
-            // 6. メンバーと同じアプリの**非メンバー**ウインドウが、グループメンバー間に
-            //    挟まっているとそのメンバーが視覚的に隠されてしまう（例: App A の
-            //    winA1 と winA2、App B の winB1 がある状態で、winA1-winB1 グループ化後、
-            //    winA2 が winB1 を隠す問題）。
-            //    対策：非メンバーウインドウで「ある member より前」にいるものを、
-            //    最深 member の下に押し下げる。
+            // 6. A **non-member** window from the same app as a member can be
+            //    sandwiched between group members, visually hiding one of them.
+            //    Example: App A has winA1 and winA2; App B has winB1. After
+            //    grouping winA1 + winB1, winA2 can sit in front of winB1 and
+            //    hide it.
+            //    Fix: any non-member window that sits ahead of at least one
+            //    member is pushed below the deepest member.
             pushNonMemberSameAppWindowsBelowDeepestMember(group: group)
         }
     }
 
-    /// `sourceID` 以外のグループメンバーが全て視覚的に「見えている」（他のウインドウに
-    /// よって隠されていない）かを判定する。
-    /// 真の場合は raise 連動を発動する必要がない。
+    /// Returns true iff every group member other than `sourceID` is currently
+    /// fully visible (not occluded by any other window).
+    /// When true, there's nothing to raise — the linkage can be skipped.
     private func areAllOtherMembersVisible(group: WindowGroup, sourceID: CGWindowID) -> Bool {
         guard let infoList = CGWindowListCopyWindowInfo(
             [.optionOnScreenOnly, .excludeDesktopElements],
             kCGNullWindowID
         ) as? [[String: Any]] else { return false }
 
-        // (cgWindowID, frame) のリストを Z-order で構築（layer=0 のみ）。
+        // Build a Z-order-sorted list of (cgWindowID, frame) for layer-0 windows.
         var entries: [(CGWindowID, CGRect)] = []
         for info in infoList {
             guard let wid = info[kCGWindowNumber as String] as? CGWindowID else { continue }
@@ -1378,25 +1435,27 @@ extension AppState {
             entries.append((wid, rect))
         }
 
-        // 各非ソースメンバーについて、それより上に重なるウインドウがないか確認。
+        // For every non-source member, check whether anything above it in
+        // Z-order intersects its frame.
         for member in group.members where member != sourceID {
             guard let memberIdx = entries.firstIndex(where: { $0.0 == member }) else {
-                // メンバーが entries にない（オフスクリーン等） → 隠れているとみなす
+                // Member not in entries (off-screen, etc.) → treat as hidden.
                 return false
             }
             let memberRect = entries[memberIdx].1
             for i in 0..<memberIdx {
                 let aboveRect = entries[i].1
                 if aboveRect.intersects(memberRect) {
-                    return false  // 上に重なっているウインドウがある → 隠れている
+                    return false  // something above overlaps → occluded
                 }
             }
         }
         return true
     }
 
-    /// グループメンバーと同じ PID を持つ非メンバーウインドウで、グループメンバーの
-    /// 間に割り込んでいるものを、最深メンバーの下に押し下げる。
+    /// Any non-member window belonging to the same PID as a group member that
+    /// is currently sandwiched between members gets pushed below the deepest
+    /// member.
     private func pushNonMemberSameAppWindowsBelowDeepestMember(group: WindowGroup) {
         guard CGSPrivate.isOrderWindowAvailable else { return }
         guard let infoList = CGWindowListCopyWindowInfo(
@@ -1404,7 +1463,7 @@ extension AppState {
             kCGNullWindowID
         ) as? [[String: Any]] else { return }
 
-        // 各ウインドウの位置（Z-order indexed）と所有 PID を取得。
+        // Collect each window's Z-order index and owning PID.
         var positions: [CGWindowID: Int] = [:]
         var owners: [CGWindowID: pid_t] = [:]
         for (idx, info) in infoList.enumerated() {
@@ -1415,7 +1474,7 @@ extension AppState {
             owners[wid] = pid_t(pid)
         }
 
-        // グループメンバーの PID 一覧と Z-order 上の位置。
+        // Collect the PIDs of group members and their Z-order positions.
         var memberPIDs: Set<pid_t> = []
         var memberPositions: [Int] = []
         for memberID in group.members {
@@ -1425,11 +1484,12 @@ extension AppState {
         guard let shallowestMemberPos = memberPositions.min(),
               let deepestMemberPos = memberPositions.max() else { return }
 
-        // 最深メンバーの CGWindowID を特定（CGSOrderWindow の基準点に使う）。
+        // Find the CGWindowID of the deepest member — used as the reference
+        // for the CGSOrderWindow call.
         guard let deepestMemberID = group.members.first(where: { positions[$0] == deepestMemberPos }) else { return }
 
         debugLog("WindowGrouping:   push-down scan: shallow=\(shallowestMemberPos) deep=\(deepestMemberPos) deepestMemberID=\(deepestMemberID) memberPIDs=\(memberPIDs)")
-        // 詳細：上位 20 ウインドウの (位置, ID, PID) を出力
+        // Debug detail: emit (position, ID, PID) for the top 20 windows.
         for (idx, info) in infoList.prefix(20).enumerated() {
             let wid = info[kCGWindowNumber as String] as? CGWindowID ?? 0
             let pid = info[kCGWindowOwnerPID as String] as? Int32 ?? 0
@@ -1439,17 +1499,18 @@ extension AppState {
             debugLog("WindowGrouping:     z[\(idx)] wid=\(wid) pid=\(pid) layer=\(layer) name=\(name)\(isMember)")
         }
 
-        // 非メンバーウインドウを走査し、メンバーと同じ PID かつメンバー間に挟まって
-        // いるものを最深メンバーの下へ。
+        // Walk non-member windows; push any that are owned by a member's PID
+        // and sit between two members down below the deepest member.
         for (wid, pos) in positions {
-            if group.members.contains(wid) { continue }  // メンバーはスキップ
-            guard let pid = owners[wid], memberPIDs.contains(pid) else { continue }  // 同じアプリのみ
-            // shallowestMember より深く、deepestMember より浅い位置 → メンバー間に挟まっている
+            if group.members.contains(wid) { continue }  // skip members
+            guard let pid = owners[wid], memberPIDs.contains(pid) else { continue }  // same app only
+            // Deeper than shallowestMember, shallower than deepestMember → sandwiched.
             guard pos > shallowestMemberPos && pos < deepestMemberPos else { continue }
-            // まず最深メンバーの下に送る
+            // First, push below the deepest member.
             let ok1 = CGSPrivate.orderWindow(wid, mode: CGSPrivate.kCGSOrderBelow, relativeTo: deepestMemberID)
             debugLog("WindowGrouping:   push non-member \(wid) (pid=\(pid), pos=\(pos)) below deepest member \(deepestMemberID) → \(ok1)")
-            // 念のため最背面にも送る（cross-app CGSOrderWindow の相対指定が効かない場合のフォールバック）
+            // Belt-and-suspenders: also send to the very back, in case the
+            // relative-to form of CGSOrderWindow is ignored across apps.
             let ok2 = CGSPrivate.orderWindow(wid, mode: CGSPrivate.kCGSOrderBelow, relativeTo: 0)
             debugLog("WindowGrouping:   push non-member \(wid) to very back → \(ok2)")
         }

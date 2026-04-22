@@ -1,14 +1,14 @@
 import AppKit
 import ApplicationServices
 
-/// AXObserver をラップして、特定ウインドウの移動・リサイズ・破棄・フォーカス変更を
-/// 検知し、closure 形式でイベントを配信するサービス。
+/// Wraps `AXObserver` to detect window move / resize / destroy / focus-change events
+/// for specific windows and deliver them via a closure.
 ///
-/// 観察対象は `observe(target:)` で指定されたウインドウのみ。
-/// `stopObserving(cgWindowID:)` または `stopAll()` で解除できる。
+/// Only windows passed to `observe(target:)` are observed. They can be released
+/// via `stopObserving(cgWindowID:)` or `stopAll()`.
 ///
-/// `onEvent` コールバックは常にメインスレッドで呼ばれる（AXObserver の runloop は
-/// main runloop に追加されているため）。
+/// The `onEvent` callback is always invoked on the main thread, because the
+/// AXObserver's run-loop source is attached to the main runloop.
 @MainActor
 final class WindowObservationService {
     enum Event {
@@ -27,16 +27,17 @@ final class WindowObservationService {
         let windowElement: AXUIElement
     }
 
-    /// PID ごとに 1 つの AXObserver を共有する（同一アプリの複数ウインドウは同じ observer）。
+    /// One AXObserver is shared per PID (all windows of the same app share an observer).
     private var observersByPID: [pid_t: AXObserver] = [:]
-    /// PID ごとの観察対象ウインドウ数（0 になったら observer を破棄）。
+    /// Number of observed windows per PID. When it drops to 0 the observer is torn down.
     private var observerRefCount: [pid_t: Int] = [:]
-    /// CGWindowID → 観察エントリの逆引き。
+    /// Reverse lookup: CGWindowID → observed entry.
     private var entriesByWindowID: [CGWindowID: ObservedEntry] = [:]
-    /// AXUIElement → CGWindowID の逆引き（コールバック内で CGWindowID を特定するため）。
+    /// Reverse lookup: AXUIElement → CGWindowID (used inside the C callback to
+    /// identify which window fired the event).
     private var windowIDByAXElement: [AXUIElementBox: CGWindowID] = [:]
 
-    /// AXUIElement を Hashable なキーとして扱うためのラッパ。
+    /// Wrapper that lets an AXUIElement be used as a Hashable dictionary key.
     private struct AXUIElementBox: Hashable {
         let element: AXUIElement
         func hash(into hasher: inout Hasher) {
@@ -54,7 +55,7 @@ final class WindowObservationService {
         let pid = target.processIdentifier
         let cgID = target.cgWindowID
 
-        if entriesByWindowID[cgID] != nil { return }  // 既に観察中
+        if entriesByWindowID[cgID] != nil { return }  // already observing
 
         // Create or reuse observer for this PID.
         let observer: AXObserver
@@ -179,7 +180,7 @@ final class WindowObservationService {
         }
     }
 
-    /// AppKit 座標（bottom-left 原点）でウインドウの現フレームを返す。
+    /// Returns the current frame of the window in AppKit coordinates (bottom-left origin).
     private func currentFrame(of window: AXUIElement) -> CGRect {
         var posRef: CFTypeRef?
         var sizeRef: CFTypeRef?
