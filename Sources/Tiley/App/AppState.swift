@@ -279,6 +279,11 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var groupPollingLastChangeAt: CFAbsoluteTime = 0
     /// Counts polling ticks; used to throttle expensive ops (e.g., AXRaise).
     @ObservationIgnored var groupPollingTickCount: Int = 0
+    /// Periodic (~1 Hz) timer that checks whether any group's members have
+    /// ended up on different Spaces (see `dissolveGroupsWithSplitSpaces`).
+    /// AX and workspace notifications don't cover every path for moving a
+    /// window across Spaces, so a low-rate poll is the reliable fallback.
+    @ObservationIgnored var groupSpaceMonitorTimer: DispatchSourceTimer?
     /// Per-window record of the frame we last set (and when). AX events for these
     /// windows within a short window AND whose live frame still matches the set
     /// frame are treated as echoes and suppressed. This prevents echo events from

@@ -30,6 +30,7 @@ extension AppState {
         groupPollingTimer = nil
         groupPollingSourceID = nil
         groupPollingIntendedSourceID = nil
+        stopGroupSpaceMonitorTimer()
         windowObservationService?.stopAll()
         windowObservationService = nil
         uninstallGroupClickMonitor()
@@ -348,6 +349,7 @@ extension AppState {
             groupIndexByWindow[adj.windowA] = group.id
             groupIndexByWindow[adj.windowB] = group.id
             observeGroupMembers(group)
+            debugLog("WindowGrouping: group formed id=\(group.id) edge=\(adj.edgeOfA.rawValue) members=\(describeMembers(group.members))")
 
         case (let gid?, nil):
             windowGroups[gid]?.members.insert(adj.windowB)
@@ -357,7 +359,10 @@ extension AppState {
                 windowGroups[gid]?.lastKnownFrames[adj.windowB] = frame
             }
             groupIndexByWindow[adj.windowB] = gid
-            if let group = windowGroups[gid] { observeGroupMembers(group) }
+            if let group = windowGroups[gid] {
+                observeGroupMembers(group)
+                debugLog("WindowGrouping: group \(gid) gained member — added=\(describeMember(adj.windowB)) members=\(describeMembers(group.members))")
+            }
 
         case (nil, let gid?):
             windowGroups[gid]?.members.insert(adj.windowA)
@@ -367,7 +372,10 @@ extension AppState {
                 windowGroups[gid]?.lastKnownFrames[adj.windowA] = frame
             }
             groupIndexByWindow[adj.windowA] = gid
-            if let group = windowGroups[gid] { observeGroupMembers(group) }
+            if let group = windowGroups[gid] {
+                observeGroupMembers(group)
+                debugLog("WindowGrouping: group \(gid) gained member — added=\(describeMember(adj.windowA)) members=\(describeMembers(group.members))")
+            }
 
         case (let gidA?, let gidB?):
             if gidA == gidB {
@@ -382,12 +390,91 @@ extension AppState {
         pendingGroupCandidates.removeAll {
             $0.unorderedKey == adj.unorderedKey
         }
+        startGroupSpaceMonitorTimer()
         refreshBadgeOverlays()
+    }
+
+    /// Renders a single CGWindowID as `id [App: Title]` for log lines, falling
+    /// back to just the numeric id when no live target is known.
+    private func describeMember(_ id: CGWindowID) -> String {
+        if let t = availableWindowTargets.first(where: { $0.cgWindowID == id }) {
+            let raw = t.windowTitle ?? ""
+            let title = raw.isEmpty ? "-" : raw
+            return "\(id) [\(t.appName): \(title)]"
+        }
+        return "\(id)"
+    }
+
+    /// Compact, ordered rendering of a member set for log lines.
+    private func describeMembers(_ ids: Set<CGWindowID>) -> String {
+        let parts = ids.sorted().map { describeMember($0) }
+        return "[\(parts.joined(separator: ", "))]"
+    }
+
+    /// Dissolves any group whose members are no longer all on the same macOS
+    /// Space. Fires when the user sends only one member to another Space via
+    /// Mission Control, a keyboard shortcut, a drag, etc. — the partner can't
+    /// cross Spaces via AX, so the two end up on different desktops and the
+    /// link no longer makes sense.
+    ///
+    /// Queries CGS directly for fresh Space IDs so the result does not depend
+    /// on the window-list cache, which can lag (or skip refreshes during
+    /// Mission Control).
+    func dissolveGroupsWithSplitSpaces() {
+        guard !windowGroups.isEmpty else { return }
+
+        let allMemberIDs = Array(Set(windowGroups.values.flatMap { $0.members }))
+        guard !allMemberIDs.isEmpty else { return }
+        let spaceByWID = AccessibilityService.buildWindowSpaceMap(windowIDs: allMemberIDs)
+
+        for (gid, group) in windowGroups {
+            let known = group.members.compactMap { spaceByWID[$0] }
+            // Skip if any member has no reported Space; a closed window or
+            // transient CGS state shouldn't trigger a false dissolve.
+            guard known.count == group.members.count else { continue }
+            let distinct = Set(known)
+            if distinct.count > 1 {
+                debugLog("WindowGrouping: group \(gid) members spread across spaces \(distinct) — dissolving")
+                dissolveGroup(gid)
+            }
+        }
+    }
+
+    // MARK: - Periodic Space monitoring
+    //
+    // macOS does not fire an AX event when a window is sent to another Space
+    // via keyboard shortcut or Mission Control drag, and the active-Space
+    // notification fires only when the *viewer's* Space changes. A lightweight
+    // periodic check is the most reliable way to catch "member moved to
+    // another Space while the other stayed behind".
+
+    /// Starts a ~1 s interval timer that runs `dissolveGroupsWithSplitSpaces`.
+    /// Idempotent — safe to call whenever a group is created/linked.
+    func startGroupSpaceMonitorTimer() {
+        guard groupSpaceMonitorTimer == nil else { return }
+        let timer = DispatchSource.makeTimerSource(queue: .main)
+        timer.schedule(deadline: .now() + 1.0, repeating: 1.0, leeway: .milliseconds(200))
+        timer.setEventHandler { [weak self] in
+            guard let self else { return }
+            if self.windowGroups.isEmpty {
+                self.stopGroupSpaceMonitorTimer()
+                return
+            }
+            self.dissolveGroupsWithSplitSpaces()
+        }
+        timer.resume()
+        groupSpaceMonitorTimer = timer
+    }
+
+    func stopGroupSpaceMonitorTimer() {
+        groupSpaceMonitorTimer?.cancel()
+        groupSpaceMonitorTimer = nil
     }
 
     /// Called when the user taps the `x` on a badge, or when a window is closed.
     func dissolveGroup(_ groupID: UUID) {
         guard let group = windowGroups.removeValue(forKey: groupID) else { return }
+        debugLog("WindowGrouping: group dissolved id=\(groupID) members=\(describeMembers(group.members))")
         for id in group.members {
             groupIndexByWindow.removeValue(forKey: id)
             windowObservationService?.stopObserving(cgWindowID: id)
@@ -407,6 +494,7 @@ extension AppState {
         windowGroups[keepID] = keep
         windowGroups.removeValue(forKey: removeID)
         for id in remove.members { groupIndexByWindow[id] = keepID }
+        debugLog("WindowGrouping: groups merged \(removeID) into \(keepID) members=\(describeMembers(keep.members))")
     }
 
     private func observeGroupMembers(_ group: WindowGroup) {

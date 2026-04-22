@@ -444,6 +444,7 @@ extension AppState {
         spaceList = captured.spaceList
         activeSpaceIDs = captured.activeSpaceIDs
         windowTargetListVersion += 1
+        dissolveGroupsWithSplitSpaces()
         // Authoritative data has landed — clear the loading flag so the
         // sidebar transitions from spinner to the populated list in a single
         // render.  Phase 2 intentionally leaves the flag set when the refresh

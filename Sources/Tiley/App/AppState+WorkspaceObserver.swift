@@ -92,6 +92,22 @@ extension AppState {
             }
         }
 
+        // On Space changes, directly query live Space IDs and dissolve any
+        // group that now spans multiple Spaces. Doesn't wait for the window
+        // list cache refresh, which can skip during Mission Control.
+        Task { [weak self] in
+            let notifications = NSWorkspace.shared.notificationCenter.notifications(
+                named: NSWorkspace.activeSpaceDidChangeNotification
+            )
+            for await _ in notifications {
+                guard !Task.isCancelled else { break }
+                await MainActor.run { [weak self] in
+                    self?.dissolveGroupsWithSplitSpaces()
+                    self?.scheduleWindowListCacheRefresh()
+                }
+            }
+        }
+
         // Listen for app launches and terminations to pre-cache the window list.
         appLaunchTerminationTask = Task { [weak self] in
             await withTaskGroup(of: Void.self) { group in
@@ -180,6 +196,7 @@ extension AppState {
                 self.cachedActiveSpaceIDs = captured.activeSpaceIDs
                 self.hasWindowListCache = true
                 debugLog("Window list cache updated: \(captured.targets.count) windows")
+                self.dissolveGroupsWithSplitSpaces()
             }
         }
     }
