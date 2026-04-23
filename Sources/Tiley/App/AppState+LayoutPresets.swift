@@ -13,13 +13,31 @@ extension AppState {
     }
 
     func updateLayoutPreset(_ id: UUID, mutate: (inout LayoutPreset) -> Void) {
-        let persistedID = ensurePersistedLayoutPreset(id: id)
-        guard let index = layoutPresets.firstIndex(where: { $0.id == persistedID }) else { return }
+        guard let index = layoutPresets.firstIndex(where: { $0.id == id }) else { return }
         mutate(&layoutPresets[index])
         sanitizeShortcutGlobalFlags(for: &layoutPresets[index])
-        selectedLayoutPresetID = persistedID
+        selectedLayoutPresetID = id
         saveLayoutPresets()
         registerPresetHotKeys()
+    }
+
+    /// Creates a new blank layout preset, appends it to `layoutPresets`, and returns its ID.
+    /// The caller is responsible for entering edit mode on the returned preset.
+    @discardableResult
+    func createNewLayoutPreset() -> UUID {
+        let preset = LayoutPreset(
+            id: UUID(),
+            name: NSLocalizedString("New Layout Preset", comment: "Default name for a newly created layout preset"),
+            selection: LayoutPreset.emptySelection,
+            baseRows: rows,
+            baseColumns: columns,
+            shortcuts: []
+        )
+        layoutPresets.append(preset)
+        selectedLayoutPresetID = preset.id
+        saveLayoutPresets()
+        registerPresetHotKeys()
+        return preset.id
     }
 
     func moveLayoutPreset(from sourceID: UUID?, to targetID: UUID) {
@@ -58,10 +76,6 @@ extension AppState {
     }
 
     // MARK: - Query / Select / Apply
-
-    func isPersistedLayoutPreset(_ id: UUID) -> Bool {
-        layoutPresets.contains(where: { $0.id == id })
-    }
 
     func selectLayoutPreset(_ id: UUID) {
         selectedLayoutPresetID = id
@@ -139,84 +153,18 @@ extension AppState {
     // MARK: - Remove
 
     func removeLayoutPreset(id: UUID) {
-        if let index = layoutPresets.firstIndex(where: { $0.id == id }) {
-            layoutPresets.remove(at: index)
-            if selectedLayoutPresetID == id {
-                selectedLayoutPresetID = layoutPresets.first?.id
-            }
-            saveLayoutPresets()
-            registerPresetHotKeys()
-            return
-        }
-
-        guard transientLayoutPreset?.id == id else { return }
-        dismissedTransientLayoutPresetSignature = transientLayoutPresetSignature
+        guard let index = layoutPresets.firstIndex(where: { $0.id == id }) else { return }
+        layoutPresets.remove(at: index)
         if selectedLayoutPresetID == id {
             selectedLayoutPresetID = layoutPresets.first?.id
         }
+        saveLayoutPresets()
+        registerPresetHotKeys()
     }
 
-    // MARK: - Transient Preset / Lookup / Persistence
-
-    var transientLayoutPreset: LayoutPreset? {
-        guard let lastSelection,
-              let lastSelectionRows,
-              let lastSelectionColumns else {
-            return nil
-        }
-
-        guard dismissedTransientLayoutPresetSignature != transientLayoutPresetSignature else {
-            return nil
-        }
-
-        let candidate = LayoutPreset(
-            id: transientLayoutPresetID,
-            name: NSLocalizedString("Last Selection", comment: "Transient preset name"),
-            selection: lastSelection.normalized,
-            baseRows: lastSelectionRows,
-            baseColumns: lastSelectionColumns,
-            shortcuts: []
-        )
-
-        let candidateSelection = candidate.scaledSelection(toRows: rows, columns: columns)
-        guard !layoutPresets.contains(where: {
-            $0.scaledSelection(toRows: rows, columns: columns) == candidateSelection
-            && $0.secondarySelections.isEmpty
-        }) else {
-            return nil
-        }
-
-        return candidate
-    }
-
-    var transientLayoutPresetSignature: String? {
-        guard let lastSelection,
-              let lastSelectionRows,
-              let lastSelectionColumns else {
-            return nil
-        }
-        return "\(lastSelectionRows)x\(lastSelectionColumns):\(lastSelection.normalized.description)"
-    }
+    // MARK: - Lookup
 
     func layoutPreset(for id: UUID) -> LayoutPreset? {
-        if let preset = layoutPresets.first(where: { $0.id == id }) {
-            return preset
-        }
-        guard let transientLayoutPreset, transientLayoutPreset.id == id else { return nil }
-        return transientLayoutPreset
-    }
-
-    func ensurePersistedLayoutPreset(id: UUID) -> UUID {
-        if layoutPresets.contains(where: { $0.id == id }) {
-            return id
-        }
-
-        guard let transientLayoutPreset, transientLayoutPreset.id == id else {
-            return id
-        }
-
-        layoutPresets.append(transientLayoutPreset)
-        dismissedTransientLayoutPresetSignature = transientLayoutPresetSignature
-        return transientLayoutPreset.id
+        layoutPresets.first(where: { $0.id == id })
     }
 }

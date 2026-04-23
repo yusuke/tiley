@@ -167,6 +167,7 @@ struct MainWindowView: View {
     @State private var recordingDisplayShortcutIsGlobal = false
     @State private var nameFieldFocusTrigger: Int = 0
     @State private var hoveredPresetID: UUID?
+    @State private var isAddPresetRowHovered: Bool = false
     @State private var draggingPresetID: UUID?
     @State private var didReorderDuringDrag = false
     @State private var isPerformingDrop = false
@@ -900,10 +901,12 @@ struct MainWindowView: View {
             notchWidthRatio = 0
         }
 
-        // Calculate the maximum composite height that still shows at least 4 preset rows.
-        let minPresetCount: CGFloat = min(CGFloat(appState.displayedLayoutPresets.count), 4)
+        // Calculate the maximum composite height that still shows at least 4 preset rows
+        // (including the trailing "+" add-preset row).
+        let minPresetCount: CGFloat = min(CGFloat(appState.layoutPresets.count + 1), 4)
         let minPresetsHeight = minPresetCount * Self.presetRowHeight
             + max(0, minPresetCount - 1) * Self.presetRowSpacing
+            + Self.presetRowSpacing // trailing breathing room under the "+" row
         let nonCompositeHeight = Self.layoutGridTopPadding
             + Self.layoutPresetsTopPadding
             + Self.presetsPanelChromeHeight
@@ -1409,11 +1412,12 @@ struct MainWindowView: View {
 
             ScrollView {
                 VStack(spacing: Self.presetRowSpacing) {
-                    ForEach(appState.displayedLayoutPresets) { preset in
+                    ForEach(appState.layoutPresets) { preset in
                         layoutPresetRow(preset)
                     }
+                    addPresetRow
                 }
-                .padding(.bottom, Self.presetRowHeight)
+                .padding(.bottom, Self.presetRowSpacing)
                 .contentShape(Rectangle())
                 .onDrop(of: [UTType.text, UTType.plainText], delegate: PresetListDropDelegate(
                     appState: appState,
@@ -1433,10 +1437,12 @@ struct MainWindowView: View {
     }
 
     private var presetsListHeight: CGFloat {
-        let rowCount = CGFloat(appState.displayedLayoutPresets.count)
+        // +1 for the trailing "+" add-preset row.
+        let rowCount = CGFloat(appState.layoutPresets.count + 1)
         let rowsHeight = rowCount * Self.presetRowHeight
         let spacingHeight = max(0, rowCount - 1) * Self.presetRowSpacing
-        return rowsHeight + spacingHeight
+        // Trailing breathing room below the "+" row, matching row-spacing.
+        return rowsHeight + spacingHeight + Self.presetRowSpacing
     }
 
     // MARK: - Window List Sidebar
@@ -2749,7 +2755,6 @@ struct MainWindowView: View {
             }
         }
         .onDrag {
-            guard appState.isPersistedLayoutPreset(preset.id) else { return NSItemProvider() }
             startDraggingPreset(preset.id)
             let provider = NSItemProvider(object: preset.id.uuidString as NSString)
             provider.suggestedName = preset.id.uuidString
@@ -2757,6 +2762,45 @@ struct MainWindowView: View {
         } preview: {
             Color.clear.frame(width: 1, height: 1)
         }
+    }
+
+    private var addPresetRow: some View {
+        Button {
+            handleAddPresetTap()
+        } label: {
+            HStack {
+                Spacer()
+                Image(systemName: "plus")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .contentShape(Rectangle())
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .frame(height: Self.presetRowHeight)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(ThemeColors.presetRowBackground(selected: isAddPresetRowHovered, for: colorScheme))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(ThemeColors.presetRowBorder(selected: isAddPresetRowHovered, for: colorScheme),
+                            style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+            )
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering in
+            isAddPresetRowHovered = hovering
+        }
+        .instantTooltip(NSLocalizedString("Add Layout", comment: "Tooltip for add layout preset button"))
+    }
+
+    private func handleAddPresetTap() {
+        dismissEditingPresetIfNeeded()
+        let newID = appState.createNewLayoutPreset()
+        guard let preset = appState.layoutPresets.first(where: { $0.id == newID }) else { return }
+        beginEditingPreset(preset)
     }
 
     @ViewBuilder
@@ -2998,7 +3042,7 @@ struct MainWindowView: View {
     private func finishEditingPreset(_ id: UUID) {
         // Rollback to snapshot if all selections were deleted.
         if let snapshot = editingPresetSelectionSnapshot,
-           let preset = appState.displayedLayoutPresets.first(where: { $0.id == id }),
+           let preset = appState.layoutPresets.first(where: { $0.id == id }),
            preset.allSelections.isEmpty {
             appState.updateLayoutPreset(id) { preset in
                 preset.selection = snapshot.selection
@@ -3009,12 +3053,10 @@ struct MainWindowView: View {
 
         if editingPresetNameID == id {
             let trimmed = editingPresetNameDraft.trimmingCharacters(in: .whitespacesAndNewlines)
-            let currentName = appState.displayedLayoutPresets.first(where: { $0.id == id })?.name ?? ""
+            let currentName = appState.layoutPresets.first(where: { $0.id == id })?.name ?? ""
             let committedName = trimmed.isEmpty ? currentName : trimmed
-            if appState.isPersistedLayoutPreset(id) || committedName != currentName {
-                appState.updateLayoutPreset(id) { preset in
-                    preset.name = committedName
-                }
+            appState.updateLayoutPreset(id) { preset in
+                preset.name = committedName
             }
             editingPresetNameID = nil
             editingPresetNameDraft = ""
@@ -3045,17 +3087,9 @@ struct MainWindowView: View {
 
     private func commitPresetNameEdit(for id: UUID) {
         let trimmed = editingPresetNameDraft.trimmingCharacters(in: .whitespacesAndNewlines)
-        let currentName = appState.displayedLayoutPresets.first(where: { $0.id == id })?.name ?? ""
+        let currentName = appState.layoutPresets.first(where: { $0.id == id })?.name ?? ""
         let committedName = trimmed.isEmpty ? currentName : trimmed
         let inEditMode = editingPresetID == id
-        if !appState.isPersistedLayoutPreset(id), committedName == currentName {
-            if inEditMode {
-                // In unified edit mode, keep name field active even if name unchanged
-                return
-            }
-            cancelPresetNameEdit()
-            return
-        }
         appState.updateLayoutPreset(id) { preset in
             preset.name = committedName
         }
@@ -3123,7 +3157,7 @@ struct MainWindowView: View {
     /// Committed selections for the grid workspace when editing a preset.
     private var editingPresetCommittedSelections: [GridSelection] {
         guard let editingID = editingPresetID,
-              let preset = appState.displayedLayoutPresets.first(where: { $0.id == editingID }) else {
+              let preset = appState.layoutPresets.first(where: { $0.id == editingID }) else {
             return []
         }
         return preset.allScaledSelections(toRows: appState.rows, columns: appState.columns)
@@ -3133,15 +3167,15 @@ struct MainWindowView: View {
     private var highlightPreset: LayoutPreset? {
         // When editing a preset, committed selections handle the display.
         if let editingID = editingPresetID,
-           appState.displayedLayoutPresets.contains(where: { $0.id == editingID }) {
+           appState.layoutPresets.contains(where: { $0.id == editingID }) {
             return nil
         }
         if let hoveredID = hoveredPresetID,
-           let preset = appState.displayedLayoutPresets.first(where: { $0.id == hoveredID }) {
+           let preset = appState.layoutPresets.first(where: { $0.id == hoveredID }) {
             return preset
         }
         if let selectedID = appState.selectedLayoutPresetID, isMouseOnThisScreen,
-           let preset = appState.displayedLayoutPresets.first(where: { $0.id == selectedID }) {
+           let preset = appState.layoutPresets.first(where: { $0.id == selectedID }) {
             return preset
         }
         return nil
@@ -3167,7 +3201,7 @@ struct MainWindowView: View {
         guard draggingPresetID == nil else { return }
         guard activeLayoutSelection == nil else { return }
         guard let id,
-              let preset = appState.displayedLayoutPresets.first(where: { $0.id == id }) else {
+              let preset = appState.layoutPresets.first(where: { $0.id == id }) else {
             appState.updateLayoutPreview(nil)
             appState.presetHoverHighlights = [:]
             appState.presetHoverWindowInfo = []
@@ -3285,8 +3319,7 @@ struct MainWindowView: View {
         let setIsPerformingDrop: (Bool) -> Void
 
         func validateDrop(info: DropInfo) -> Bool {
-            guard let sourceID = sourcePresetID() else { return false }
-            return appState.isPersistedLayoutPreset(sourceID)
+            sourcePresetID() != nil
         }
 
         func dropUpdated(info: DropInfo) -> DropProposal? {

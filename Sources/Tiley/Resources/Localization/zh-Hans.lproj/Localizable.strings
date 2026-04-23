@@ -11,7 +11,8 @@
 "Moved %@ to %@." = "已将 %@ 移动到 %@。";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "已将 %@ 移动到 %@（因窗口限制，大小已调整）。";
 "Quit Tiley" = "退出 Tiley";
-"Last Selection" = "上次选择";
+"New Layout Preset" = "新建布局预设";
+"Add Layout" = "添加布局";
 "Could not update login item: %@" = "无法更新登录项：%@";
 "Launch Tiley at login?" = "登录时启动 Tiley？";
 "Tiley can start automatically when you log in." = "登录时可自动启动 Tiley。";

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Nueva fila "+" al final de la lista de preajustes de diseño. Al hacer clic se crea un preajuste llamado "Nuevo preajuste de diseño" y se entra inmediatamente en modo de edición
+
 ### Cambiado
 
 - Se marcó `debugLog` con `@autoclosure` para que, cuando el registro de depuración esté desactivado, no se incurra en ningún coste de interpolación de cadenas de los mensajes de registro
@@ -9,6 +13,10 @@
 ### Corregido
 
 - Las insignias de enlace para agrupar ventanas ya no aparecen sobre ventanas que están totalmente ocultas detrás de otra ventana. Tras aplicar un diseño a muchas ventanas, las insignias solo se muestran entre las ventanas visibles (frontales); las ventanas ocluidas quedan excluidas de los candidatos a agrupación hasta que se traen al frente
+
+### Eliminado
+
+- Se eliminó el preajuste temporal "Última selección" que se añadía automáticamente después de aplicar un diseño. Los nuevos preajustes ahora se crean de forma explícita mediante la fila "+"
 
 ## [5.0.1] - 2026-04-23
 

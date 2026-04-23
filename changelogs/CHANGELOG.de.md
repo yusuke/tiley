@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Neue "+"-Zeile am Ende der Layout-Voreinstellungsliste. Ein Klick erstellt eine neue Voreinstellung namens "Neue Layout-Voreinstellung" und wechselt sofort in den Bearbeitungsmodus
+
 ### Geändert
 
 - `debugLog` wurde mit `@autoclosure` versehen, sodass bei deaktivierter Debug-Protokollierung keinerlei Kosten für die String-Interpolation der Log-Nachrichten anfallen
@@ -9,6 +13,10 @@
 ### Behoben
 
 - Verknüpfungs-Badges für Fenstergruppen erscheinen nicht mehr auf Fenstern, die vollständig hinter einem anderen Fenster verborgen sind. Nach dem Anwenden eines Layouts auf viele Fenster werden Badges nur noch zwischen sichtbaren (vorderen) Fenstern angezeigt; verdeckte Fenster werden aus den Gruppierungskandidaten ausgeschlossen, bis sie in den Vordergrund gebracht werden
+
+### Entfernt
+
+- Die nach dem Anwenden eines Layouts automatisch hinzugefügte temporäre Voreinstellung "Letzte Auswahl" wurde entfernt. Neue Voreinstellungen werden jetzt explizit über die "+"-Zeile erstellt
 
 ## [5.0.1] - 2026-04-23
 

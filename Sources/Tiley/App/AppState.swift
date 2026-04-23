@@ -185,11 +185,6 @@ final class AppState: NSObject, NSMenuDelegate {
     var isEditingLayoutPresets = false
     @ObservationIgnored var hotKeyHandler: EventHandlerRef?
     @ObservationIgnored var hotKeysYieldedToDebug = false
-    @ObservationIgnored var lastSelection: GridSelection?
-    @ObservationIgnored var lastSelectionRows: Int?
-    @ObservationIgnored var lastSelectionColumns: Int?
-    @ObservationIgnored var transientLayoutPresetID = UUID()
-    @ObservationIgnored var dismissedTransientLayoutPresetSignature: String?
     @ObservationIgnored var lastTargetPID: pid_t?
     @ObservationIgnored var workspaceObserverTask: Task<Void, Never>?
     @ObservationIgnored var appActivationTask: Task<Void, Never>?
@@ -484,13 +479,6 @@ final class AppState: NSObject, NSMenuDelegate {
     /// The display ID of the screen currently hosting the layout target.
     var currentTargetScreenDisplayID: CGDirectDisplayID? {
         targetScreenDisplayID
-    }
-
-    var displayedLayoutPresets: [LayoutPreset] {
-        if let transientLayoutPreset {
-            return layoutPresets + [transientLayoutPreset]
-        }
-        return layoutPresets
     }
 
     var preferredMainWindowScreenFrame: CGRect? {
@@ -1550,14 +1538,6 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     private func recordSelectionAndHide(selection: GridSelection, appName: String, wasConstrained: Bool = false) {
-        lastSelection = selection
-        lastSelectionRows = rows
-        lastSelectionColumns = columns
-        let newSignature = transientLayoutPresetSignature
-        if dismissedTransientLayoutPresetSignature != newSignature {
-            dismissedTransientLayoutPresetSignature = nil
-        }
-        transientLayoutPresetID = UUID()
         // hidePreviewOverlay / isShowingLayoutGrid / hideAllMainWindows are
         // already called by the caller before the resize for faster feedback.
         activeLayoutTarget = nil

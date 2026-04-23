@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- Nouvelle ligne « + » à la fin de la liste des préréglages de disposition. Cliquer dessus crée un préréglage nommé « Nouveau préréglage de disposition » et passe immédiatement en mode édition
+
 ### Modifié
 
 - `debugLog` utilise désormais `@autoclosure` : lorsque la journalisation de débogage est désactivée, l'interpolation des chaînes des messages de journal n'entraîne plus aucun coût
@@ -9,6 +13,10 @@
 ### Corrigé
 
 - Les badges de lien de groupement de fenêtres n'apparaissent plus sur les fenêtres entièrement masquées derrière une autre fenêtre. Après l'application d'une disposition à de nombreuses fenêtres, les badges ne s'affichent qu'entre les fenêtres visibles (au premier plan) ; les fenêtres occultées sont exclues des candidats au groupement jusqu'à ce qu'elles soient ramenées au premier plan
+
+### Supprimé
+
+- Suppression du préréglage temporaire « Dernière sélection » qui était automatiquement ajouté après l'application d'une disposition. Les nouveaux préréglages se créent désormais explicitement via la ligne « + »
 
 ## [5.0.1] - 2026-04-23
 

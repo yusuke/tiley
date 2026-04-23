@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Nova linha "+" no final da lista de presets de layout. Clicar nela cria um preset chamado "Novo preset de layout" e entra imediatamente no modo de edição
+
 ### Alterado
 
 - `debugLog` agora usa `@autoclosure`, de modo que, quando o log de depuração está desativado, não há qualquer custo de interpolação de string das mensagens de log
@@ -9,6 +13,10 @@
 ### Corrigido
 
 - Os selos de vínculo para agrupamento de janelas não aparecem mais sobre janelas que estão totalmente escondidas atrás de outra janela. Após aplicar um layout a muitas janelas, os selos são exibidos apenas entre as janelas visíveis (à frente); as janelas ocultas ficam excluídas dos candidatos ao agrupamento até serem trazidas à frente
+
+### Removido
+
+- Removido o preset temporário "Última seleção" que era adicionado automaticamente após aplicar um layout. Novos presets agora são criados explicitamente pela linha "+"
 
 ## [5.0.1] - 2026-04-23
 

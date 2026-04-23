@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- New "+" row at the end of the layout preset list — click it to create a new preset named "New Layout Preset" and immediately enter edit mode
+
 ### Changed
 
 - Made `debugLog` zero-cost when debug logging is disabled by using `@autoclosure`, so string interpolation of log messages is skipped entirely in the common case
@@ -14,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Window grouping link badges no longer appear on top of windows that are completely hidden behind another window. After applying a layout to many windows, only the visible (front) windows show grouping badges; their occluded counterparts are excluded from grouping candidates until they're brought to the front
+
+### Removed
+
+- Removed the "Last Selection" transient preset that was automatically added after applying a layout. New presets are now created explicitly via the "+" row instead
 
 ## [5.0.1] - 2026-04-23
 

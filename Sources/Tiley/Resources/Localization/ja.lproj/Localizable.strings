@@ -11,7 +11,8 @@
 "Moved %@ to %@." = "%@ を %@ に移動しました。";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ を %@ に移動しました（ウインドウの制約によりサイズが調整されました）。";
 "Quit Tiley" = "Tileyを終了";
-"Last Selection" = "最後の選択";
+"New Layout Preset" = "新規レイアウトプリセット";
+"Add Layout" = "レイアウトを追加";
 "Could not update login item: %@" = "ログイン項目を更新できませんでした: %@";
 "Launch Tiley at login?" = "ログイン時に Tiley を起動しますか？";
 "Tiley can start automatically when you log in." = "ログイン時に Tiley を自動起動できます。";

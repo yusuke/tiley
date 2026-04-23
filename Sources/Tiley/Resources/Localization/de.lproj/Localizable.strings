@@ -11,7 +11,8 @@
 "Moved %@ to %@." = "%@ nach %@ verschoben.";
 "Moved %@ to %@ (size adjusted due to window constraints)." = "%@ nach %@ verschoben (Größe aufgrund von Fensterbeschränkungen angepasst).";
 "Quit Tiley" = "Tiley beenden";
-"Last Selection" = "Letzte Auswahl";
+"New Layout Preset" = "Neue Layout-Voreinstellung";
+"Add Layout" = "Layout hinzufügen";
 "Could not update login item: %@" = "Anmeldeobjekt konnte nicht aktualisiert werden: %@";
 "Launch Tiley at login?" = "Tiley bei der Anmeldung starten?";
 "Tiley can start automatically when you log in." = "Tiley kann beim Anmelden automatisch gestartet werden.";

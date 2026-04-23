@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Nuova riga "+" in fondo all'elenco dei preset di layout. Facendo clic viene creato un preset chiamato "Nuovo preset di layout" e si entra immediatamente in modalità di modifica
+
 ### Modificato
 
 - `debugLog` ora usa `@autoclosure`, così quando il log di debug è disattivato non viene sostenuto alcun costo per l'interpolazione delle stringhe dei messaggi di log
@@ -9,6 +13,10 @@
 ### Corretto
 
 - I badge di collegamento per il raggruppamento delle finestre non compaiono più sulle finestre completamente nascoste dietro un'altra finestra. Dopo aver applicato un layout a molte finestre, i badge vengono mostrati solo tra le finestre visibili (in primo piano); le finestre coperte vengono escluse dai candidati al raggruppamento finché non vengono portate in primo piano
+
+### Rimosso
+
+- Rimosso il preset temporaneo "Ultima selezione" che veniva aggiunto automaticamente dopo l'applicazione di un layout. I nuovi preset ora si creano esplicitamente tramite la riga "+"
 
 ## [5.0.1] - 2026-04-23
 

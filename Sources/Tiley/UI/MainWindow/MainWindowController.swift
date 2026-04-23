@@ -27,16 +27,20 @@ private struct MainWindowRootView: View {
 final class MainWindowController: NSWindowController, NSWindowDelegate {
     static let windowWidth: CGFloat = 570
     static let sidebarWidth: CGFloat = 220
-    private static let minimumWindowHeight: CGFloat = 780
-    private static let extraWindowHeight: CGFloat = 55
     private static let visibleFrameInset: CGFloat = 16
-    private static let layoutPanelHorizontalPadding: CGFloat = 28
     private static let layoutGridAspectHeightRatio: CGFloat = 0.75
+    // These must match the corresponding constants in MainWindowView so that
+    // the window is sized exactly to the content it will host.
+    private static let layoutPanelHorizontalPadding: CGFloat = 8
+    private static let layoutGridTopPadding: CGFloat = 8
+    private static let layoutPresetsTopPadding: CGFloat = 0
+    private static let footerBottomPadding: CGFloat = 8
     private static let layoutPresetsHeaderHeight: CGFloat = 42
     private static let layoutPresetRowHeight: CGFloat = 44
     private static let layoutPresetRowSpacing: CGFloat = 8
-    private static let footerHeight: CGFloat = 44
-    private static let contentVerticalPadding: CGFloat = 102
+    /// How far the bubble-arrow triangle protrudes outside the window body.
+    /// Must match `MainWindowView.bubbleArrowHeight`.
+    private static let bubbleArrowHeight: CGFloat = 12
     private static let layoutModeWindowAlpha: CGFloat = 0.99
     private static let fadeDuration: CFTimeInterval = 0.18
 
@@ -69,7 +73,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         self.onKeyCommand = onKeyCommand
         let initialVisibleFrame = self.targetScreen.visibleFrame
         let initialScreenFrame = self.targetScreen.frame
-        let initialSize = Self.windowSize(for: appState, visibleFrame: initialVisibleFrame, screenFrame: initialScreenFrame, screenRole: screenRole)
+        let initialSize = Self.windowSize(for: appState, visibleFrame: initialVisibleFrame, screenFrame: initialScreenFrame, screenRole: screenRole, displayID: self.targetScreen.displayID)
         let screenContext = ScreenContext(
             visibleFrame: self.targetScreen.visibleFrame,
             screenFrame: self.targetScreen.frame,
@@ -124,8 +128,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         super.init(window: window)
         window.delegate = self
         perfLog("super.init done")
-        bindWindowMode(to: appState)
-        perfLog("bindWindowMode done")
         bindScreenParameterChanges()
         perfLog("bindScreenParameterChanges done")
         applyWindowMode(animated: false)
@@ -295,23 +297,6 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         positionWindow()
     }
 
-    private func bindWindowMode(to appState: AppState) {
-        observeWindowModeChanges(appState)
-    }
-
-    private func observeWindowModeChanges(_ appState: AppState) {
-        withObservationTracking {
-            _ = appState.layoutPresets
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                self?.applyWindowMode(animated: true)
-                if let appState = self?.appState {
-                    self?.observeWindowModeChanges(appState)
-                }
-            }
-        }
-    }
-
     private func bindScreenParameterChanges() {
         screenParameterTask = Task { [weak self] in
             let notifications = NotificationCenter.default.notifications(
@@ -345,7 +330,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         guard let window else { return }
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
         let screenFrame = currentScreenFrame(for: window, preferredScreen: preferredScreen)
-        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole)
+        let displayID = (preferredScreen ?? window.screen ?? targetScreen).displayID
+        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole, displayID: displayID)
 
         var frame = window.frame
         frame.size = targetSize
@@ -375,7 +361,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         let visibleFrame = currentVisibleFrame(for: window, preferredScreen: preferredScreen)
         guard !visibleFrame.equalTo(.zero) else { return }
         let screenFrame = currentScreenFrame(for: window, preferredScreen: preferredScreen)
-        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole)
+        let displayID = (preferredScreen ?? window.screen ?? targetScreen).displayID
+        let targetSize = Self.windowSize(for: appState, visibleFrame: visibleFrame, screenFrame: screenFrame, screenRole: screenRole, displayID: displayID)
 
         let screen = preferredScreen ?? window.screen ?? NSScreen.main
         if let appState, appState.showNearIcon,
@@ -571,9 +558,18 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         return NSScreen.screens.first(where: { $0.frame.contains(center) })
     }
 
-    private static func windowSize(for appState: AppState?, visibleFrame: CGRect?, screenFrame: CGRect? = nil, screenRole: ScreenRole = .target) -> NSSize {
-        let totalWidth = windowWidth + sidebarWidth + 1
-        let presetCount = CGFloat(appState?.displayedLayoutPresets.count ?? 0)
+    private static func windowSize(for appState: AppState?, visibleFrame: CGRect?, screenFrame: CGRect? = nil, screenRole: ScreenRole = .target, displayID: CGDirectDisplayID? = nil) -> NSSize {
+        // When anchored to a menu-bar / Dock icon, the view paints a bubble-arrow
+        // triangle that protrudes into the content padding on one edge. The window
+        // frame must include that protrusion so the arrow-edge inset doesn't clip
+        // content (e.g. the trailing "+" add-preset row).
+        let arrowEdge = prospectiveBubbleArrowEdge(appState: appState, visibleFrame: visibleFrame, displayID: displayID)
+        let arrowExtraWidth: CGFloat = (arrowEdge == .leading || arrowEdge == .trailing) ? bubbleArrowHeight : 0
+        let arrowExtraHeight: CGFloat = (arrowEdge == .top || arrowEdge == .bottom) ? bubbleArrowHeight : 0
+
+        let totalWidth = windowWidth + sidebarWidth + 1 + arrowExtraWidth
+        // +1 for the trailing "+" add-preset row.
+        let presetCount = CGFloat((appState?.layoutPresets.count ?? 0) + 1)
         let maxHeight = maxAllowedHeight(in: visibleFrame)
 
         // Use the full screen frame aspect ratio so the composite area (menu bar + grid + Dock)
@@ -587,30 +583,63 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             aspectRatio = layoutGridAspectHeightRatio
         }
 
-        // Minimum height needed to show at least 4 preset rows plus all chrome.
-        let minPresetCount: CGFloat = min(presetCount, 4)
-        let minPresetsHeight = minPresetCount * layoutPresetRowHeight
-            + max(0, minPresetCount - 1) * layoutPresetRowSpacing
-        let minNonGridHeight = contentVerticalPadding + footerHeight + layoutPresetsHeaderHeight + minPresetsHeight
-
-        // Maximum grid height that still leaves room for 4 presets within maxHeight.
-        let maxGridHeight = maxHeight - extraWindowHeight - minNonGridHeight
-        let fullGridWidth = windowWidth - (layoutPanelHorizontalPadding * 2)
-        let fullGridHeight = fullGridWidth * aspectRatio
-        // If grid would be too tall, shrink width to fit (keeping aspect ratio).
-        let gridHeight = min(fullGridHeight, max(0, maxGridHeight))
-
         let layoutRowsHeight = presetCount * layoutPresetRowHeight
         let layoutSpacingHeight = max(0, presetCount - 1) * layoutPresetRowSpacing
-        let layoutHeight = contentVerticalPadding
-            + gridHeight
-            + footerHeight
-            + layoutPresetsHeaderHeight
-            + layoutRowsHeight
-            + layoutSpacingHeight
-        let idealHeight = max(minimumWindowHeight, layoutHeight) + extraWindowHeight
+        // Trailing breathing room below the "+" row — mirrors MainWindowView.
+        let presetsListBottomPadding = layoutPresetRowSpacing
+        let presetsPanelHeight = layoutPresetsHeaderHeight + layoutRowsHeight + layoutSpacingHeight + presetsListBottomPadding
+
+        // Non-composite vertical space consumed by paddings and the preset panel.
+        // Must stay in sync with the view's VStack layout in layoutPresetsPanel(availableHeight:).
+        let nonCompositeHeight = layoutGridTopPadding
+            + layoutPresetsTopPadding
+            + presetsPanelHeight
+            + footerBottomPadding
+
+        // Minimum non-composite height pinned to 4 preset rows so the grid can
+        // shrink when the screen is short rather than hiding the preset list.
+        let minPresetCount: CGFloat = min(presetCount, 4)
+        let minPresetsPanelHeight = layoutPresetsHeaderHeight
+            + minPresetCount * layoutPresetRowHeight
+            + max(0, minPresetCount - 1) * layoutPresetRowSpacing
+            + presetsListBottomPadding
+        let minNonCompositeHeight = layoutGridTopPadding
+            + layoutPresetsTopPadding
+            + minPresetsPanelHeight
+            + footerBottomPadding
+
+        // Composite (grid) height = full natural size, capped by screen space.
+        let fullCompositeWidth = windowWidth - (layoutPanelHorizontalPadding * 2)
+        let fullCompositeHeight = fullCompositeWidth * aspectRatio
+        let maxCompositeHeight = max(0, maxHeight - minNonCompositeHeight)
+        let compositeHeight = min(fullCompositeHeight, maxCompositeHeight)
+
+        let idealHeight = compositeHeight + nonCompositeHeight + arrowExtraHeight
         let height = min(idealHeight, maxHeight)
         return NSSize(width: totalWidth, height: height)
+    }
+
+    /// Returns the bubble-arrow edge for the window on `displayID`, if any.
+    /// Uses the already-resolved `bubbleArrowEdge` when available (e.g. on a
+    /// resize after the arrow is set) and otherwise predicts from the icon
+    /// position — same logic as `computeBubbleArrow`.
+    private static func prospectiveBubbleArrowEdge(appState: AppState?, visibleFrame: CGRect?, displayID: CGDirectDisplayID?) -> BubbleArrowEdge? {
+        guard let appState else { return nil }
+        if let edge = appState.bubbleArrowEdge,
+           let arrowDisplayID = appState.bubbleArrowDisplayID,
+           displayID == nil || arrowDisplayID == displayID {
+            return edge
+        }
+        guard appState.showNearIcon,
+              let iconCenter = appState.triggerIconCenter,
+              let iconDisplayID = appState.triggerIconDisplayID,
+              displayID == nil || iconDisplayID == displayID,
+              let visibleFrame, !visibleFrame.equalTo(.zero) else { return nil }
+        if iconCenter.y >= visibleFrame.maxY { return .top }
+        if iconCenter.y <= visibleFrame.minY { return .bottom }
+        if iconCenter.x >= visibleFrame.maxX { return .trailing }
+        if iconCenter.x <= visibleFrame.minX { return .leading }
+        return nil
     }
 
     /// Returns the size that the main (grid) window would use for the given frames.
@@ -619,8 +648,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     private static func maxAllowedHeight(in visibleFrame: CGRect?) -> CGFloat {
-        guard let visibleFrame else { return minimumWindowHeight + extraWindowHeight }
-        guard !visibleFrame.equalTo(.zero) else { return minimumWindowHeight + extraWindowHeight }
+        guard let visibleFrame, !visibleFrame.equalTo(.zero) else { return .greatestFiniteMagnitude }
         return max(1, visibleFrame.height - visibleFrameInset)
     }
 
