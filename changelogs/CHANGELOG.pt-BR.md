@@ -5,6 +5,7 @@
 ### Adicionado
 
 - Nova linha "+" no final da lista de presets de layout. Clicar nela cria um preset chamado "Novo preset de layout" e entra imediatamente no modo de edição
+- Agora é possível definir agrupamento diretamente ao editar um preset de layout: um selo `link.badge.plus` aparece em cada borda compartilhada entre regiões do preset; clique para marcar o par como agrupado (o selo muda para o estado vinculado; ao passar o mouse, ele alterna para o ícone de remoção). Ao passar o mouse sobre um preset na barra lateral, os selos vinculados também aparecem sobre a pré-visualização, deixando claro de relance quais regiões serão agrupadas. Ao aplicar o preset, as janelas correspondentes já começam agrupadas, sem cliques adicionais
 
 ### Alterado
 

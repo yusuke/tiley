@@ -50,6 +50,20 @@ struct GridSelection: Equatable, Codable {
     }
 }
 
+/// A pair of indices into `LayoutPreset.allSelections` marking two regions
+/// that should be grouped together automatically when the preset is applied.
+/// Indices are stored normalized (`indexA < indexB`) so `==` / `Hashable`
+/// treat `(a,b)` and `(b,a)` as identical.
+struct PresetGroupPair: Hashable, Codable {
+    let indexA: Int
+    let indexB: Int
+
+    init(_ a: Int, _ b: Int) {
+        self.indexA = min(a, b)
+        self.indexB = max(a, b)
+    }
+}
+
 struct LayoutPreset: Identifiable, Equatable, Codable {
     let id: UUID
     var name: String
@@ -58,6 +72,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
     var baseRows: Int
     var baseColumns: Int
     var shortcuts: [HotKeyShortcut]
+    /// Pairs of selection indices (0 = primary, 1+ = secondary[i-1]) that
+    /// should be grouped together automatically when the preset is applied.
+    var groupedPairs: [PresetGroupPair]
 
     /// A sentinel selection used when all selections have been deleted in the editor.
     static let emptySelection = GridSelection(startColumn: -1, startRow: -1, endColumn: -1, endRow: -1)
@@ -91,6 +108,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         case isGlobalShortcut
         case localShortcut
         case globalShortcut
+        case groupedPairs
     }
 
     init(
@@ -100,7 +118,8 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         secondarySelections: [GridSelection] = [],
         baseRows: Int,
         baseColumns: Int,
-        shortcuts: [HotKeyShortcut]
+        shortcuts: [HotKeyShortcut],
+        groupedPairs: [PresetGroupPair] = []
     ) {
         self.id = id
         self.name = name
@@ -109,6 +128,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         self.baseRows = baseRows
         self.baseColumns = baseColumns
         self.shortcuts = shortcuts
+        self.groupedPairs = groupedPairs
     }
 
     init(from decoder: any Decoder) throws {
@@ -119,6 +139,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         secondarySelections = try container.decodeIfPresent([GridSelection].self, forKey: .secondarySelections) ?? []
         baseRows = try container.decode(Int.self, forKey: .baseRows)
         baseColumns = try container.decode(Int.self, forKey: .baseColumns)
+        groupedPairs = try container.decodeIfPresent([PresetGroupPair].self, forKey: .groupedPairs) ?? []
 
         // Decode new array format first, fall back to legacy formats
         if let shortcuts = try container.decodeIfPresent([HotKeyShortcut].self, forKey: .shortcuts) {
@@ -153,6 +174,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         try container.encode(shortcuts, forKey: .shortcuts)
         if !secondarySelections.isEmpty {
             try container.encode(secondarySelections, forKey: .secondarySelections)
+        }
+        if !groupedPairs.isEmpty {
+            try container.encode(groupedPairs, forKey: .groupedPairs)
         }
     }
 
@@ -288,6 +312,82 @@ enum GridCalculator {
         let y = yTop - height
 
         return CGRect(x: x.rounded(), y: y.rounded(), width: width.rounded(), height: height.rounded())
+    }
+}
+
+// MARK: - Selection Adjacency (for preset editor grouping badges)
+
+/// Edge-adjacency between two `GridSelection`s within a preset's grid.
+/// Two selections are adjacent when their bounding boxes share a full grid
+/// edge (one cell offset between them on one axis) and their ranges on the
+/// other axis overlap by at least one cell.
+struct SelectionAdjacency: Hashable {
+    enum Edge: Hashable {
+        case left, right, top, bottom
+    }
+
+    /// Index of selection A into the `selections` array passed to `detect`.
+    let indexA: Int
+    /// Index of selection B into the same array.
+    let indexB: Int
+    /// Which edge of A is in contact with B.
+    let edgeOfA: Edge
+    /// Shared overlap interval in cell coordinates on the axis orthogonal to
+    /// `edgeOfA` (row range for left/right, column range for top/bottom).
+    let overlapStart: Int
+    let overlapEnd: Int
+}
+
+enum SelectionAdjacencyDetector {
+    /// Enumerates all edge-adjacent pairs among the given selections.
+    /// Each pair is returned once with `indexA < indexB`.
+    static func detect(selections: [GridSelection]) -> [SelectionAdjacency] {
+        var result: [SelectionAdjacency] = []
+        guard selections.count >= 2 else { return result }
+        for i in 0..<selections.count {
+            for j in (i + 1)..<selections.count {
+                let a = selections[i].normalized
+                let b = selections[j].normalized
+
+                // Right of A meets left of B (columns adjacent, rows overlap).
+                if a.endColumn + 1 == b.startColumn {
+                    let overlapStart = max(a.startRow, b.startRow)
+                    let overlapEnd = min(a.endRow, b.endRow)
+                    if overlapStart <= overlapEnd {
+                        result.append(SelectionAdjacency(indexA: i, indexB: j, edgeOfA: .right, overlapStart: overlapStart, overlapEnd: overlapEnd))
+                        continue
+                    }
+                }
+                // Left of A meets right of B.
+                if b.endColumn + 1 == a.startColumn {
+                    let overlapStart = max(a.startRow, b.startRow)
+                    let overlapEnd = min(a.endRow, b.endRow)
+                    if overlapStart <= overlapEnd {
+                        result.append(SelectionAdjacency(indexA: i, indexB: j, edgeOfA: .left, overlapStart: overlapStart, overlapEnd: overlapEnd))
+                        continue
+                    }
+                }
+                // Bottom of A meets top of B (row-wise, AppKit-style top-origin grid).
+                if a.endRow + 1 == b.startRow {
+                    let overlapStart = max(a.startColumn, b.startColumn)
+                    let overlapEnd = min(a.endColumn, b.endColumn)
+                    if overlapStart <= overlapEnd {
+                        result.append(SelectionAdjacency(indexA: i, indexB: j, edgeOfA: .bottom, overlapStart: overlapStart, overlapEnd: overlapEnd))
+                        continue
+                    }
+                }
+                // Top of A meets bottom of B.
+                if b.endRow + 1 == a.startRow {
+                    let overlapStart = max(a.startColumn, b.startColumn)
+                    let overlapEnd = min(a.endColumn, b.endColumn)
+                    if overlapStart <= overlapEnd {
+                        result.append(SelectionAdjacency(indexA: i, indexB: j, edgeOfA: .top, overlapStart: overlapStart, overlapEnd: overlapEnd))
+                        continue
+                    }
+                }
+            }
+        }
+        return result
     }
 }
 

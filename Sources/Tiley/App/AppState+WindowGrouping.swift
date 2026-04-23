@@ -138,6 +138,50 @@ extension AppState {
 
     // MARK: - Preset apply hook
 
+    /// Called after a preset has been applied. For any `groupedPairs` marked
+    /// in the preset, directly link the corresponding window pair (no badge
+    /// click required). Uses the post-apply target frames computed from the
+    /// grid rather than AX-reported frames so the link is deterministic and
+    /// doesn't have to wait for AX state propagation.
+    ///
+    /// `windowIDBySelectionIndex` maps each selection index (0 = primary,
+    /// 1+ = secondaries) to the CGWindowID that actually landed on it. Pairs
+    /// referencing unmapped indices are skipped.
+    func autoLinkPresetGroups(
+        groupedPairs: [PresetGroupPair],
+        selections: [GridSelection],
+        windowIDBySelectionIndex: [Int: CGWindowID],
+        visibleFrame: CGRect
+    ) {
+        guard !groupedPairs.isEmpty else { return }
+        guard accessibilityGranted else { return }
+
+        let targetFrames: [Int: CGRect] = Dictionary(
+            uniqueKeysWithValues: selections.enumerated().map { idx, sel in
+                (idx, GridCalculator.frame(for: sel, in: visibleFrame, rows: rows, columns: columns, gap: gap))
+            }
+        )
+        let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+        for pair in groupedPairs {
+            guard let widA = windowIDBySelectionIndex[pair.indexA],
+                  let widB = windowIDBySelectionIndex[pair.indexB] else { continue }
+            if widA == widB { continue }
+            // Skip if already in the same group.
+            if let gidA = groupIndexByWindow[widA], let gidB = groupIndexByWindow[widB], gidA == gidB {
+                continue
+            }
+            guard let frameA = targetFrames[pair.indexA], let frameB = targetFrames[pair.indexB] else { continue }
+            guard let adj = WindowAdjacencyDetector.adjacency(
+                a: widA, frameA: frameA, b: widB, frameB: frameB, edgeEpsilon: epsilon
+            ) else {
+                debugLog("WindowGrouping: autoLinkPresetGroups skipped pair (\(pair.indexA),\(pair.indexB)) — target frames not adjacent within epsilon \(epsilon)")
+                continue
+            }
+            debugLog("WindowGrouping: autoLinkPresetGroups linking pair (\(pair.indexA),\(pair.indexB)) windows=\(widA),\(widB)")
+            linkAdjacency(adj)
+        }
+    }
+
     /// Called after a preset has been applied. Detects newly touching edges and
     /// surfaces candidate badges. Adjacencies of existing groups are recomputed
     /// from the current frames; pairs that no longer touch are dropped.

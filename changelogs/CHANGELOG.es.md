@@ -5,6 +5,7 @@
 ### Añadido
 
 - Nueva fila "+" al final de la lista de preajustes de diseño. Al hacer clic se crea un preajuste llamado "Nuevo preajuste de diseño" y se entra inmediatamente en modo de edición
+- Ahora se puede definir el agrupamiento directamente al editar un preajuste de diseño: aparece una insignia `link.badge.plus` en cada borde compartido entre regiones del preajuste; haz clic para marcar el par como agrupado (la insignia pasa al estado enlazado; al pasar el puntero por encima muestra la opción de eliminar). Al pasar el puntero sobre un preajuste en la barra lateral, la vista previa también muestra las insignias enlazadas para que se vea de un vistazo qué regiones quedarán agrupadas. Al aplicar el preajuste, las ventanas correspondientes quedan agrupadas desde el principio, sin clics adicionales
 
 ### Cambiado
 

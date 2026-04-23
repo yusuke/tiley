@@ -7,6 +7,10 @@ struct LayoutGridWorkspaceView: View {
     var highlightSelection: GridSelection?
     /// Multiple highlight selections for preset hover/keyboard preview (no index labels, no delete buttons).
     var highlightSelections: [GridSelection] = []
+    /// Pairs of highlight-selection indices that are marked as grouped in the
+    /// preset currently being hovered/previewed. Rendered as read-only link
+    /// badges so the user can see which regions will be grouped on apply.
+    var highlightGroupedPairs: Set<PresetGroupPair> = []
     /// Window info to display as title bars on highlight selections during preset hover.
     var highlightWindowInfo: [AppState.PresetHoverWindowInfo] = []
     var desktopPictureInfo: MainWindowView.DesktopPictureInfo?
@@ -24,6 +28,12 @@ struct LayoutGridWorkspaceView: View {
     var committedSelections: [GridSelection] = []
     /// Called when the user clicks the "x" button on a committed selection.
     var onDeleteSelection: ((Int) -> Void)?
+    /// Pairs of committed-selection indices that are marked as grouped in the
+    /// preset being edited. Only used in edit mode.
+    var groupedPairs: Set<PresetGroupPair> = []
+    /// Called when the user toggles grouping between two committed selections
+    /// (by clicking a `link.badge.plus` or `xmark` badge between them).
+    var onToggleGrouping: ((Int, Int) -> Void)?
     /// When true, drag interactions are disabled and a "No windows" message is shown.
     var isDragDisabled: Bool = false
     let onSelectionChange: (GridSelection?) -> Void
@@ -219,6 +229,20 @@ struct LayoutGridWorkspaceView: View {
                     )
                 }
 
+                // Grouping badges at edges shared between committed selections
+                // (preset edit mode only, requires ≥2 selections and a toggle handler).
+                if onDeleteSelection != nil, onToggleGrouping != nil, committedSelections.count >= 2 {
+                    let adjacencies = SelectionAdjacencyDetector.detect(selections: committedSelections)
+                    ForEach(adjacencies, id: \.self) { adj in
+                        let center = badgeCenter(for: adj, inSelections: committedSelections, cellWidth: cellWidth, cellHeight: cellHeight)
+                        let isLinked = groupedPairs.contains(PresetGroupPair(adj.indexA, adj.indexB))
+                        PresetGroupingBadgeView(isLinked: isLinked) {
+                            onToggleGrouping?(adj.indexA, adj.indexB)
+                        }
+                        .position(x: center.x, y: center.y)
+                    }
+                }
+
                 // Multiple highlight selections (preset hover with secondary selections)
                 if !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty {
                     let showHighlightIndex = highlightSelections.count > 1
@@ -266,6 +290,20 @@ struct LayoutGridWorkspaceView: View {
                                 showIndex: showHighlightIndex,
                                 showDelete: false
                             )
+                        }
+                    }
+
+                    // Read-only grouping indicators on preset hover.
+                    if !highlightGroupedPairs.isEmpty, highlightSelections.count >= 2 {
+                        let adjacencies = SelectionAdjacencyDetector.detect(selections: highlightSelections)
+                        ForEach(adjacencies, id: \.self) { adj in
+                            let pair = PresetGroupPair(adj.indexA, adj.indexB)
+                            if highlightGroupedPairs.contains(pair) {
+                                let center = badgeCenter(for: adj, inSelections: highlightSelections, cellWidth: cellWidth, cellHeight: cellHeight)
+                                PresetGroupingBadgeView(isLinked: true, isReadOnly: true) {}
+                                    .position(x: center.x, y: center.y)
+                                    .allowsHitTesting(false)
+                            }
                         }
                     }
                 }
@@ -663,5 +701,126 @@ struct LayoutGridWorkspaceView: View {
             .position(x: selRect.midX, y: selRect.midY)
     }
 
+    /// Pixel center of the shared edge between two committed selections.
+    /// Returned in the grid view's local coordinate space.
+    private func badgeCenter(for adj: SelectionAdjacency, inSelections selections: [GridSelection], cellWidth: CGFloat, cellHeight: CGFloat) -> CGPoint {
+        let a = selections[adj.indexA].normalized
+        switch adj.edgeOfA {
+        case .right:
+            let x = CGFloat(a.endColumn + 1) * (cellWidth + gap) - gap / 2
+            let overlapMid = (CGFloat(adj.overlapStart) + CGFloat(adj.overlapEnd + 1)) / 2
+            let y = overlapMid * (cellHeight + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        case .left:
+            let x = CGFloat(a.startColumn) * (cellWidth + gap) - gap / 2
+            let overlapMid = (CGFloat(adj.overlapStart) + CGFloat(adj.overlapEnd + 1)) / 2
+            let y = overlapMid * (cellHeight + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        case .bottom:
+            let y = CGFloat(a.endRow + 1) * (cellHeight + gap) - gap / 2
+            let overlapMid = (CGFloat(adj.overlapStart) + CGFloat(adj.overlapEnd + 1)) / 2
+            let x = overlapMid * (cellWidth + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        case .top:
+            let y = CGFloat(a.startRow) * (cellHeight + gap) - gap / 2
+            let overlapMid = (CGFloat(adj.overlapStart) + CGFloat(adj.overlapEnd + 1)) / 2
+            let x = overlapMid * (cellWidth + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        }
+    }
+}
+
+/// Small circular badge rendered at the shared edge between two preset
+/// regions. Unlinked: `link.badge.plus` (accent colour). Linked: subdued
+/// `link` glyph that flips to `xmark` on hover (red) to preview unlinking.
+private struct PresetGroupingBadgeView: View {
+    let isLinked: Bool
+    /// When true, the badge is a static indicator (no hover → `xmark`, no tap,
+    /// no tooltip). Used on preset hover/preview to show which regions will be
+    /// grouped on apply without offering a toggle.
+    var isReadOnly: Bool = false
+    let onTap: () -> Void
+
+    @State private var isHovering = false
+
+    private var showHoverAffordance: Bool {
+        isHovering && !isReadOnly
+    }
+
+    private var symbolName: String {
+        if isLinked {
+            return showHoverAffordance ? "xmark" : "link"
+        }
+        return "link.badge.plus"
+    }
+
+    private var backgroundColor: Color {
+        if isLinked {
+            if showHoverAffordance {
+                return Color.red.opacity(0.85)
+            }
+            return Color.black.opacity(0.25)
+        }
+        return isHovering ? Color.accentColor.opacity(0.95) : Color.accentColor.opacity(0.85)
+    }
+
+    private var foregroundColor: Color {
+        if isLinked && !showHoverAffordance {
+            return Color.white.opacity(0.6)
+        }
+        return .white
+    }
+
+    private var strokeColor: Color {
+        if isLinked && !showHoverAffordance {
+            return Color.white.opacity(0.35)
+        }
+        return Color.white.opacity(0.8)
+    }
+
+    private var tooltip: String {
+        if isLinked {
+            return NSLocalizedString("Remove grouping", comment: "Tooltip for removing grouping between two preset regions")
+        }
+        return NSLocalizedString("Group these regions", comment: "Tooltip for grouping two preset regions")
+    }
+
+    var body: some View {
+        Group {
+            if isReadOnly {
+                badgeContent
+            } else {
+                Button(action: onTap) {
+                    badgeContent
+                }
+                .buttonStyle(.plain)
+                .onHover { hovering in
+                    isHovering = hovering
+                }
+                .instantTooltip(tooltip)
+            }
+        }
+    }
+
+    private var badgeContent: some View {
+        ZStack {
+            Circle()
+                .fill(backgroundColor)
+                .overlay(Circle().stroke(strokeColor, lineWidth: 1))
+                .frame(width: 20, height: 20)
+                .shadow(color: .black.opacity(0.3), radius: 2, y: 1)
+            Image(systemName: symbolName)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(foregroundColor)
+        }
+        .frame(width: 28, height: 28)
+        .contentShape(Circle())
+        .scaleEffect(showHoverAffordance ? 1.12 : 1.0)
+        .animation(.easeOut(duration: 0.12), value: showHoverAffordance)
+        // Keep the badge a bit translucent so the grid preview underneath
+        // remains legible. Hover and interactive states still pop through the
+        // scale/colour change.
+        .opacity(showHoverAffordance ? 0.85 : 0.65)
+    }
 }
 

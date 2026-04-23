@@ -1117,7 +1117,7 @@ final class AppState: NSObject, NSMenuDelegate {
     ///   - secondarySelections: Additional selections for 2nd, 3rd, ... windows (by sidebar/Z-order).
     ///   - visibleFrame: If provided, use this screen's visible frame (e.g. from mouse pointer's screen).
     ///   - screenFrame: If provided, use this screen frame for coordinate conversion.
-    func applyToMultipleWindows(selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil) {
+    func applyToMultipleWindows(selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil, groupedPairs: [PresetGroupPair] = []) {
         guard let primaryTarget = activeLayoutTarget else { return }
 
         // Determine the target screen: use the provided screen (mouse pointer's screen)
@@ -1234,6 +1234,26 @@ final class AppState: NSObject, NSMenuDelegate {
         ])
         let movedWindowIDs = orderedIndices.map { availableWindowTargets[$0].cgWindowID }
         refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
+
+        // Auto-group any preset-marked pairs. Uses the first window that landed
+        // on each selection index; extra windows piled on the last selection
+        // do not claim any other slot.
+        if !groupedPairs.isEmpty {
+            var windowIDBySelectionIndex: [Int: CGWindowID] = [:]
+            for (windowPosition, idx) in orderedIndices.enumerated() {
+                let selectionIndex = min(windowPosition, allSelections.count - 1)
+                let wid = availableWindowTargets[idx].cgWindowID
+                if windowIDBySelectionIndex[selectionIndex] == nil, wid != 0 {
+                    windowIDBySelectionIndex[selectionIndex] = wid
+                }
+            }
+            autoLinkPresetGroups(
+                groupedPairs: groupedPairs,
+                selections: allSelections,
+                windowIDBySelectionIndex: windowIDBySelectionIndex,
+                visibleFrame: currentVisibleFrame
+            )
+        }
     }
 
     /// Builds an ordered list of window indices for a multi-layout preset.
@@ -1257,7 +1277,7 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Applies a multi-layout preset. Selected windows are placed first
     /// (as primary, secondary, …), then remaining layout slots are filled
     /// with unselected windows picked by actual z-order (frontmost first).
-    func applyPresetToZOrderedWindows(selections: [GridSelection], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil) {
+    func applyPresetToZOrderedWindows(selections: [GridSelection], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil, groupedPairs: [PresetGroupPair] = []) {
         guard let primaryTarget = activeLayoutTarget else { return }
 
         let currentVisibleFrame: CGRect
@@ -1354,6 +1374,24 @@ final class AppState: NSObject, NSMenuDelegate {
         ])
         let movedWindowIDs = orderedIndices.map { availableWindowTargets[$0].cgWindowID }
         refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
+
+        // Auto-group any preset-marked pairs using the position→window mapping.
+        if !groupedPairs.isEmpty {
+            var windowIDBySelectionIndex: [Int: CGWindowID] = [:]
+            for (position, idx) in orderedIndices.enumerated() {
+                guard position < selections.count else { break }
+                let wid = availableWindowTargets[idx].cgWindowID
+                if wid != 0 {
+                    windowIDBySelectionIndex[position] = wid
+                }
+            }
+            autoLinkPresetGroups(
+                groupedPairs: groupedPairs,
+                selections: selections,
+                windowIDBySelectionIndex: windowIDBySelectionIndex,
+                visibleFrame: currentVisibleFrame
+            )
+        }
     }
 
     func cancelLayoutGrid() {
@@ -1442,7 +1480,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     /// Commits a layout selection on a specific screen (used by multi-screen grid/preset interactions).
-    func commitLayoutSelectionOnScreen(_ selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect, screenFrame: CGRect) {
+    func commitLayoutSelectionOnScreen(_ selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect, screenFrame: CGRect, groupedPairs: [PresetGroupPair] = []) {
         if activeLayoutTarget == nil, lastTargetPID != nil {
             activeLayoutTarget = resolveWindowTarget()
         }
@@ -1458,15 +1496,15 @@ final class AppState: NSObject, NSMenuDelegate {
         let allSelections = [selection] + secondarySelections
         if selectedWindowIndices.count > 1 {
             if selectedWindowIndices.count >= allSelections.count {
-                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
+                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs)
             } else {
-                applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
+                applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs)
             }
             return
         }
         if allSelections.count > 1 {
             // Single window but multi-layout preset — fill from z-order.
-            applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
+            applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs)
             return
         }
 
@@ -1534,7 +1572,7 @@ final class AppState: NSObject, NSMenuDelegate {
         lastTargetPID = target.processIdentifier
         let selection = preset.scaledSelection(toRows: rows, columns: columns)
         let secondarySelections = preset.scaledSecondarySelections(toRows: rows, columns: columns)
-        commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame)
+        commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: preset.groupedPairs)
     }
 
     private func recordSelectionAndHide(selection: GridSelection, appName: String, wasConstrained: Bool = false) {

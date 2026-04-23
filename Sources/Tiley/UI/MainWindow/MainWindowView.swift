@@ -1100,6 +1100,7 @@ struct MainWindowView: View {
                         gap: appState.gap,
                         highlightSelection: editingPresetHighlightSelection,
                         highlightSelections: editingPresetHighlightSelections,
+                        highlightGroupedPairs: editingPresetHighlightGroupedPairs,
                         highlightWindowInfo: appState.presetHoverWindowInfo,
                         desktopPictureInfo: desktopPictureInfo,
                         showDesktopPicture: false,
@@ -1130,8 +1131,28 @@ struct MainWindowView: View {
                                         preset.secondarySelections.remove(at: secondaryIndex)
                                     }
                                 }
+                                // Drop any grouped pairs referencing the removed index
+                                // and shift higher indices down by one.
+                                preset.groupedPairs = preset.groupedPairs.compactMap { pair in
+                                    if pair.indexA == index || pair.indexB == index { return nil }
+                                    let newA = pair.indexA > index ? pair.indexA - 1 : pair.indexA
+                                    let newB = pair.indexB > index ? pair.indexB - 1 : pair.indexB
+                                    return PresetGroupPair(newA, newB)
+                                }
                             }
                             appState.updateLayoutPreview(nil)
+                        },
+                        groupedPairs: editingPresetGroupedPairs,
+                        onToggleGrouping: editingPresetID == nil ? nil : { a, b in
+                            guard let editingID = editingPresetID else { return }
+                            appState.updateLayoutPreset(editingID) { preset in
+                                let pair = PresetGroupPair(a, b)
+                                if let idx = preset.groupedPairs.firstIndex(of: pair) {
+                                    preset.groupedPairs.remove(at: idx)
+                                } else {
+                                    preset.groupedPairs.append(pair)
+                                }
+                            }
                         },
                         isDragDisabled: appState.activeLayoutTarget == nil,
                         onSelectionChange: { selection in
@@ -3163,6 +3184,16 @@ struct MainWindowView: View {
         return preset.allScaledSelections(toRows: appState.rows, columns: appState.columns)
     }
 
+    /// Grouped pairs of the preset currently being edited, keyed into
+    /// `editingPresetCommittedSelections` indices. Empty when not editing.
+    private var editingPresetGroupedPairs: Set<PresetGroupPair> {
+        guard let editingID = editingPresetID,
+              let preset = appState.layoutPresets.first(where: { $0.id == editingID }) else {
+            return []
+        }
+        return Set(preset.groupedPairs)
+    }
+
     /// Returns the preset to highlight (hovered or keyboard-selected), if any.
     private var highlightPreset: LayoutPreset? {
         // When editing a preset, committed selections handle the display.
@@ -3193,6 +3224,14 @@ struct MainWindowView: View {
         guard let preset = highlightPreset else { return [] }
         guard !preset.secondarySelections.isEmpty else { return [] }
         return preset.allScaledSelections(toRows: appState.rows, columns: appState.columns)
+    }
+
+    /// Grouped pairs for the preset currently being hovered/previewed. Keyed
+    /// into `editingPresetHighlightSelections`. Empty when there's no preview.
+    private var editingPresetHighlightGroupedPairs: Set<PresetGroupPair> {
+        guard let preset = highlightPreset else { return [] }
+        guard !preset.secondarySelections.isEmpty else { return [] }
+        return Set(preset.groupedPairs)
     }
 
     private func updatePresetSelectionPreview(for id: UUID?) {

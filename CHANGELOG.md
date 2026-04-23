@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - New "+" row at the end of the layout preset list — click it to create a new preset named "New Layout Preset" and immediately enter edit mode
+- Grouping can now be defined directly in layout preset editing: a `link.badge.plus` badge appears at every shared edge between regions of the preset; click to mark the pair as grouped (badge flips to a linked state, hover to reveal the remove affordance). Hovering a preset in the sidebar also shows the grouped edges on the preview so you can see at a glance which regions are linked. When the preset is applied, the corresponding windows start out already grouped — no extra click required
 
 ### Changed
 

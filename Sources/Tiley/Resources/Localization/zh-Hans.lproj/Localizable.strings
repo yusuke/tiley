@@ -147,3 +147,5 @@
 "Group %@ with %@" = "将「%@」与「%@」分组";
 "Ungroup" = "解除分组";
 "Linked with the window above" = "与上方窗口已分组";
+"Group these regions" = "将这些区域分组";
+"Remove grouping" = "取消分组";

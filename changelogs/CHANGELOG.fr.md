@@ -5,6 +5,7 @@
 ### Ajouté
 
 - Nouvelle ligne « + » à la fin de la liste des préréglages de disposition. Cliquer dessus crée un préréglage nommé « Nouveau préréglage de disposition » et passe immédiatement en mode édition
+- Le regroupement peut désormais être défini directement lors de l'édition d'un préréglage : un badge `link.badge.plus` apparaît à chaque bord partagé entre deux zones du préréglage ; cliquez pour marquer la paire comme groupée (le badge passe en état lié ; le survol fait apparaître l'icône de suppression). Lorsque le pointeur survole un préréglage dans la barre latérale, les badges liés s'affichent également sur l'aperçu afin de voir d'un coup d'œil quelles zones seront groupées. À l'application du préréglage, les fenêtres correspondantes sont regroupées dès le départ, sans clic supplémentaire
 
 ### Modifié
 

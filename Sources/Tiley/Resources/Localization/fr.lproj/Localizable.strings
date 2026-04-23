@@ -147,3 +147,5 @@
 "Group %@ with %@" = "Grouper « %@ » avec « %@ »";
 "Ungroup" = "Dissocier";
 "Linked with the window above" = "Groupée avec la fenêtre ci-dessus";
+"Group these regions" = "Grouper ces régions";
+"Remove grouping" = "Supprimer le groupe";

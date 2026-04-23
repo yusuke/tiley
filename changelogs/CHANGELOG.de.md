@@ -5,6 +5,7 @@
 ### Hinzugefügt
 
 - Neue "+"-Zeile am Ende der Layout-Voreinstellungsliste. Ein Klick erstellt eine neue Voreinstellung namens "Neue Layout-Voreinstellung" und wechselt sofort in den Bearbeitungsmodus
+- Gruppierungen lassen sich jetzt direkt beim Bearbeiten einer Layout-Voreinstellung festlegen: An jeder gemeinsamen Kante zwischen zwei Bereichen erscheint ein `link.badge.plus`-Abzeichen. Ein Klick markiert das Paar als Gruppe (das Abzeichen wechselt in den verbundenen Zustand; beim Darüberfahren erscheint ein Aufhebungs-Symbol). Auch beim Überfahren einer Voreinstellung in der Seitenleiste werden die verbundenen Kanten als Abzeichen auf der Vorschau angezeigt, damit auf einen Blick erkennbar ist, welche Bereiche gruppiert werden. Beim Anwenden der Voreinstellung sind die entsprechenden Fenster von Anfang an gruppiert — kein zusätzlicher Klick nötig
 
 ### Geändert
 

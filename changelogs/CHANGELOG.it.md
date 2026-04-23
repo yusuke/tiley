@@ -5,6 +5,7 @@
 ### Aggiunto
 
 - Nuova riga "+" in fondo all'elenco dei preset di layout. Facendo clic viene creato un preset chiamato "Nuovo preset di layout" e si entra immediatamente in modalità di modifica
+- Ora è possibile definire il raggruppamento direttamente durante la modifica di un preset di layout: in corrispondenza di ogni bordo condiviso tra le regioni del preset compare un badge `link.badge.plus`; fai clic per contrassegnare la coppia come raggruppata (il badge passa allo stato collegato; al passaggio del mouse mostra l'icona di rimozione). Passando il mouse su un preset nella barra laterale, anche nell'anteprima vengono mostrati i badge collegati, così si capisce a colpo d'occhio quali regioni verranno raggruppate. Applicando il preset, le finestre corrispondenti risultano già raggruppate fin da subito, senza ulteriori clic
 
 ### Modificato
 

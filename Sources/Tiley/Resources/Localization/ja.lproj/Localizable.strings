@@ -147,3 +147,5 @@
 "Group %@ with %@" = "「%@」と「%@」をグループ化";
 "Ungroup" = "グループ解除";
 "Linked with the window above" = "上のウインドウとグループ化されています";
+"Group these regions" = "これらの領域をグループ化";
+"Remove grouping" = "グループ化を解除";

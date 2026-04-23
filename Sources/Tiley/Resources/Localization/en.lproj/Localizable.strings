@@ -147,3 +147,5 @@
 "Group %@ with %@" = "Group %@ with %@";
 "Ungroup" = "Ungroup";
 "Linked with the window above" = "Linked with the window above";
+"Group these regions" = "Group these regions";
+"Remove grouping" = "Remove grouping";

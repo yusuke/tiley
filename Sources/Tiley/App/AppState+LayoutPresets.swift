@@ -103,14 +103,14 @@ extension AppState {
                 // Enough selected windows — use explicit selection order.
                 let selection = allSelections[0]
                 let secondarySelections = Array(allSelections.dropFirst())
-                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections)
+                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, groupedPairs: preset.groupedPairs)
             } else {
                 // Not enough selected windows — selected first, fill from z-order.
-                applyPresetToZOrderedWindows(selections: allSelections)
+                applyPresetToZOrderedWindows(selections: allSelections, groupedPairs: preset.groupedPairs)
             }
         } else if allSelections.count > 1 {
             // Single window but multi-layout preset — fill from z-order.
-            applyPresetToZOrderedWindows(selections: allSelections)
+            applyPresetToZOrderedWindows(selections: allSelections, groupedPairs: preset.groupedPairs)
         } else {
             apply(selection: allSelections.first ?? preset.scaledSelection(toRows: rows, columns: columns), to: target)
         }

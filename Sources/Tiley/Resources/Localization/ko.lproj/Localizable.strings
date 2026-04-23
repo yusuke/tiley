@@ -147,3 +147,5 @@
 "Group %@ with %@" = "%1$@와(과) %2$@ 그룹화";
 "Ungroup" = "그룹 해제";
 "Linked with the window above" = "위 창과 그룹화됨";
+"Group these regions" = "이 영역들을 그룹화";
+"Remove grouping" = "그룹 해제";

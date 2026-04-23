@@ -147,3 +147,5 @@
 "Group %@ with %@" = "Сгруппировать «%@» с «%@»";
 "Ungroup" = "Разгруппировать";
 "Linked with the window above" = "Сгруппировано с окном выше";
+"Group these regions" = "Сгруппировать эти области";
+"Remove grouping" = "Убрать группировку";
