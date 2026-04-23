@@ -6,6 +6,10 @@
 
 - `debugLog` wurde mit `@autoclosure` versehen, sodass bei deaktivierter Debug-Protokollierung keinerlei Kosten für die String-Interpolation der Log-Nachrichten anfallen
 
+### Behoben
+
+- Verknüpfungs-Badges für Fenstergruppen erscheinen nicht mehr auf Fenstern, die vollständig hinter einem anderen Fenster verborgen sind. Nach dem Anwenden eines Layouts auf viele Fenster werden Badges nur noch zwischen sichtbaren (vorderen) Fenstern angezeigt; verdeckte Fenster werden aus den Gruppierungskandidaten ausgeschlossen, bis sie in den Vordergrund gebracht werden
+
 ## [5.0.1] - 2026-04-23
 
 ### Behoben

@@ -6,6 +6,10 @@
 
 - `debugLog` utilise désormais `@autoclosure` : lorsque la journalisation de débogage est désactivée, l'interpolation des chaînes des messages de journal n'entraîne plus aucun coût
 
+### Corrigé
+
+- Les badges de lien de groupement de fenêtres n'apparaissent plus sur les fenêtres entièrement masquées derrière une autre fenêtre. Après l'application d'une disposition à de nombreuses fenêtres, les badges ne s'affichent qu'entre les fenêtres visibles (au premier plan) ; les fenêtres occultées sont exclues des candidats au groupement jusqu'à ce qu'elles soient ramenées au premier plan
+
 ## [5.0.1] - 2026-04-23
 
 ### Corrigé

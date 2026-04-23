@@ -6,6 +6,10 @@
 
 - `debugLog` agora usa `@autoclosure`, de modo que, quando o log de depuração está desativado, não há qualquer custo de interpolação de string das mensagens de log
 
+### Corrigido
+
+- Os selos de vínculo para agrupamento de janelas não aparecem mais sobre janelas que estão totalmente escondidas atrás de outra janela. Após aplicar um layout a muitas janelas, os selos são exibidos apenas entre as janelas visíveis (à frente); as janelas ocultas ficam excluídas dos candidatos ao agrupamento até serem trazidas à frente
+
 ## [5.0.1] - 2026-04-23
 
 ### Corrigido

@@ -545,6 +545,10 @@ extension AppState {
         // Fetch live frames for adjacency checks.
         let liveFrames = allAvailableFrames()
         let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+        // Hidden windows (fully covered by another window above them in
+        // Z-order) shouldn't surface grouping badges — the user can't see
+        // them, so they aren't candidates for grouping.
+        let occludedIDs = occludedWindowIDsForBadges()
 
         // Unlinked candidates.
         var expiredKeys: [AdjacencyKey] = []
@@ -563,6 +567,9 @@ extension AppState {
             }
             // Frontmost-app gating.
             guard isAdjacencyInFrontmostApp(adj, frontmostPID: frontmostPID) else { continue }
+            // Suppress badges for pairs where either side is hidden behind
+            // another window.
+            if occludedIDs.contains(adj.windowA) || occludedIDs.contains(adj.windowB) { continue }
             badges.append(GroupLinkBadge(
                 id: adj.unorderedKey,
                 state: .unlinked,
@@ -588,6 +595,7 @@ extension AppState {
                 }
                 guard groupIsActive else { continue }
                 for adj in group.adjacencies {
+                    if occludedIDs.contains(adj.windowA) || occludedIDs.contains(adj.windowB) { continue }
                     badges.append(GroupLinkBadge(
                         id: adj.unorderedKey,
                         state: .linked,
@@ -609,6 +617,43 @@ extension AppState {
             groupLinkBadgeController = controller
         }
         groupLinkBadgeController?.update(badges: badges, fadeOutDuration: fastHide ? 0.15 : nil)
+    }
+
+    /// Returns the set of CGWindowIDs whose entire frame is covered by some
+    /// other window above them in Z-order — i.e. windows the user can't see.
+    /// Used to suppress group link badges for hidden windows.
+    ///
+    /// On query failure or when a window isn't in the on-screen list, the
+    /// window is treated as visible (returned set excludes it) so we err on
+    /// the side of showing badges.
+    private func occludedWindowIDsForBadges() -> Set<CGWindowID> {
+        guard let infoList = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[String: Any]] else { return [] }
+
+        // Z-order-sorted (front → back) list of normal-layer windows.
+        var entries: [(CGWindowID, CGRect)] = []
+        for info in infoList {
+            guard let wid = info[kCGWindowNumber as String] as? CGWindowID else { continue }
+            guard let layer = info[kCGWindowLayer as String] as? Int, layer == 0 else { continue }
+            guard let boundsDict = info[kCGWindowBounds as String] as? [String: Any] else { continue }
+            guard let rect = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) else { continue }
+            entries.append((wid, rect))
+        }
+
+        var occluded: Set<CGWindowID> = []
+        for idx in 0..<entries.count {
+            let (wid, rect) = entries[idx]
+            if rect.isEmpty { continue }
+            for i in 0..<idx {
+                if entries[i].1.contains(rect) {
+                    occluded.insert(wid)
+                    break
+                }
+            }
+        }
+        return occluded
     }
 
     /// Returns a display-friendly title for the given window ID, used in badge tooltips.

@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Made `debugLog` zero-cost when debug logging is disabled by using `@autoclosure`, so string interpolation of log messages is skipped entirely in the common case
 
+### Fixed
+
+- Window grouping link badges no longer appear on top of windows that are completely hidden behind another window. After applying a layout to many windows, only the visible (front) windows show grouping badges; their occluded counterparts are excluded from grouping candidates until they're brought to the front
+
 ## [5.0.1] - 2026-04-23
 
 ### Fixed

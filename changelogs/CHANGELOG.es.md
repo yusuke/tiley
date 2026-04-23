@@ -6,6 +6,10 @@
 
 - Se marcó `debugLog` con `@autoclosure` para que, cuando el registro de depuración esté desactivado, no se incurra en ningún coste de interpolación de cadenas de los mensajes de registro
 
+### Corregido
+
+- Las insignias de enlace para agrupar ventanas ya no aparecen sobre ventanas que están totalmente ocultas detrás de otra ventana. Tras aplicar un diseño a muchas ventanas, las insignias solo se muestran entre las ventanas visibles (frontales); las ventanas ocluidas quedan excluidas de los candidatos a agrupación hasta que se traen al frente
+
 ## [5.0.1] - 2026-04-23
 
 ### Corregido
