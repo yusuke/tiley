@@ -1575,21 +1575,28 @@ extension AppState {
             entries.append((wid, rect))
         }
 
-        // For every non-source member, check whether anything above it in
-        // Z-order intersects its frame.
+        // For every non-source member, check whether any **non-member** window
+        // above it in Z-order intersects its frame. Other group members don't
+        // count as occluders — they're the windows we'd be raising, so pixel-
+        // level overlap between members (e.g. from rounding on tiled edges)
+        // must not flip this check to false.
+        let memberSet = Set(group.members)
         for member in group.members where member != sourceID {
             guard let memberIdx = entries.firstIndex(where: { $0.0 == member }) else {
-                // Member not in entries (off-screen, etc.) → treat as hidden.
+                debugLog("WindowGrouping: areAllOtherMembersVisible → false (member \(member) not in entries)")
                 return false
             }
             let memberRect = entries[memberIdx].1
             for i in 0..<memberIdx {
-                let aboveRect = entries[i].1
+                let (aboveID, aboveRect) = entries[i]
+                if memberSet.contains(aboveID) { continue }
                 if aboveRect.intersects(memberRect) {
-                    return false  // something above overlaps → occluded
+                    debugLog("WindowGrouping: areAllOtherMembersVisible → false (non-member \(aboveID) rect=\(aboveRect) occludes member \(member) rect=\(memberRect))")
+                    return false
                 }
             }
         }
+        debugLog("WindowGrouping: areAllOtherMembersVisible → true")
         return true
     }
 

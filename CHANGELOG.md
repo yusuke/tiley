@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-04-23
+
+### Fixed
+
+- Fixed grouped windows flickering when switching back to their app via Cmd+Tab. The Z-order linkage could fire before macOS finished raising the app's windows, briefly bringing a non-focused group member in front of the focused one
+
 ## [5.0.0] - 2026-04-22
 
 ### Added
@@ -756,7 +762,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.0.1...HEAD
+[5.0.1]: https://github.com/yusuke/tiley/releases/tag/v5.0.1
 [5.0.0]: https://github.com/yusuke/tiley/releases/tag/v5.0.0
 [4.4.3]: https://github.com/yusuke/tiley/releases/tag/v4.4.3
 [4.4.2]: https://github.com/yusuke/tiley/releases/tag/v4.4.2

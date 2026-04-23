@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-04-23
+
+### Corretto
+
+- Corretto lo sfarfallio delle finestre raggruppate al ritorno alla loro app tramite Cmd+Tab. Il collegamento Z-order poteva attivarsi prima che macOS avesse terminato di portare in primo piano le finestre dell'app, facendo apparire brevemente un membro del gruppo non focalizzato davanti a quello con il focus
+
 ## [5.0.0] - 2026-04-22
 
 ### Aggiunto

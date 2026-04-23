@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-04-23
+
+### Behoben
+
+- Behoben: Beim Zurückwechseln zu einer App mit Cmd+Tab flackerte ein gruppiertes Fenster kurz in den Vordergrund. Die Z-Order-Verknüpfung wurde ausgelöst, bevor macOS das Anheben der App-Fenster abgeschlossen hatte, wodurch ein nicht fokussiertes Gruppenmitglied kurz vor dem fokussierten erschien
+
 ## [5.0.0] - 2026-04-22
 
 ### Hinzugefügt

@@ -28,8 +28,29 @@ extension AppState {
                     // Using the first entry of availableWindowTargets can pick
                     // the wrong window (e.g. a different group member) when
                     // the cache is stale.
-                    if let focusedCGID = self.resolveFocusedWindowID(for: app.processIdentifier),
-                       self.groupIndexByWindow[focusedCGID] != nil {
+                    //
+                    // The raise check is **deferred** by ~200 ms because the
+                    // WindowServer's Z-order update lags behind the
+                    // `didActivateApplicationNotification` delivery. On
+                    // Cmd+Tab back to an app whose other group members were
+                    // behind another app's window, macOS raises those members
+                    // to the front over the next few frames. Querying
+                    // immediately can see a stale order where a non-member
+                    // still occludes a member, triggering an unnecessary
+                    // AXRaise dance and visible flicker. Re-evaluating after
+                    // a short delay lets the OS-level reorder settle so the
+                    // `areAllOtherMembersVisible` short-circuit fires when it
+                    // should.
+                    let targetPID = app.processIdentifier
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                        guard let self else { return }
+                        guard let focusedCGID = self.resolveFocusedWindowID(for: targetPID),
+                              self.groupIndexByWindow[focusedCGID] != nil else { return }
+                        // Re-confirm the app is still frontmost — user may
+                        // have switched away during the delay.
+                        guard NSWorkspace.shared.frontmostApplication?.processIdentifier == targetPID else {
+                            return
+                        }
                         self.handleGroupMemberRaised(id: focusedCGID)
                     }
                     // Refresh badge visibility on front/back transitions.

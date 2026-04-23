@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-04-23
+
+### Corrigido
+
+- Corrigido o tremor de janelas agrupadas ao voltar para o app via Cmd+Tab. A vinculação de ordem Z podia disparar antes do macOS terminar de trazer as janelas do app para frente, fazendo um membro do grupo sem foco aparecer brevemente à frente do membro com foco
+
 ## [5.0.0] - 2026-04-22
 
 ### Adicionado

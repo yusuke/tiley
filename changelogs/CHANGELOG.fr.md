@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-04-23
+
+### Corrigé
+
+- Corrigé un scintillement des fenêtres groupées lors du retour à leur app via Cmd+Tab. La liaison d'ordre Z pouvait se déclencher avant que macOS ait fini de remonter les fenêtres de l'app, faisant apparaître brièvement un membre du groupe non focalisé devant celui qui avait le focus
+
 ## [5.0.0] - 2026-04-22
 
 ### Ajouté

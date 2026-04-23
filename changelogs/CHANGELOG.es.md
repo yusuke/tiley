@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-04-23
+
+### Corregido
+
+- Corregido el parpadeo de ventanas agrupadas al volver a su app con Cmd+Tab. El enlace de orden Z podía activarse antes de que macOS terminara de elevar las ventanas de la app, haciendo que un miembro del grupo sin foco apareciera brevemente delante del que tenía el foco
+
 ## [5.0.0] - 2026-04-22
 
 ### Añadido
