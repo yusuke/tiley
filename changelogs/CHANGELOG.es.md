@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Cambiado
+
+- Se marcó `debugLog` con `@autoclosure` para que, cuando el registro de depuración esté desactivado, no se incurra en ningún coste de interpolación de cadenas de los mensajes de registro
+
 ## [5.0.1] - 2026-04-23
 
 ### Corregido

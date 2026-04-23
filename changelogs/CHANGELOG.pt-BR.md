@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Alterado
+
+- `debugLog` agora usa `@autoclosure`, de modo que, quando o log de depuração está desativado, não há qualquer custo de interpolação de string das mensagens de log
+
 ## [5.0.1] - 2026-04-23
 
 ### Corrigido

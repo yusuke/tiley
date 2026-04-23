@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Geändert
+
+- `debugLog` wurde mit `@autoclosure` versehen, sodass bei deaktivierter Debug-Protokollierung keinerlei Kosten für die String-Interpolation der Log-Nachrichten anfallen
+
 ## [5.0.1] - 2026-04-23
 
 ### Behoben

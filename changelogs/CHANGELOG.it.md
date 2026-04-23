@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modificato
+
+- `debugLog` ora usa `@autoclosure`, così quando il log di debug è disattivato non viene sostenuto alcun costo per l'interpolazione delle stringhe dei messaggi di log
+
 ## [5.0.1] - 2026-04-23
 
 ### Corretto

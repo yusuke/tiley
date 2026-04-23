@@ -35,12 +35,13 @@ func rotateDebugLogIfNeeded(maxFiles: Int = 5) {
 /// Appends a timestamped line to ~/tiley.log when the debug-log setting is on.
 /// Replaces the `NSLog("[Tiley:perf] …")` calls so that performance traces are
 /// only emitted when the user has explicitly opted in.
-func debugLog(_ message: String) {
+func debugLog(_ message: @autoclosure () -> String) {
     guard UserDefaults.standard.bool(forKey: "enableDebugLog") else { return }
+    let msg = message()
     let logURL = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent("tiley.log")
     let timestamp = ISO8601DateFormatter.shared.string(from: Date())
-    let line = "[\(timestamp)] [Tiley:perf] \(message)\n"
+    let line = "[\(timestamp)] [Tiley:perf] \(msg)\n"
     guard let data = line.data(using: .utf8) else { return }
     if FileManager.default.fileExists(atPath: logURL.path) {
         if let handle = try? FileHandle(forWritingTo: logURL) {

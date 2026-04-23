@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Modifié
+
+- `debugLog` utilise désormais `@autoclosure` : lorsque la journalisation de débogage est désactivée, l'interpolation des chaînes des messages de journal n'entraîne plus aucun coût
+
 ## [5.0.1] - 2026-04-23
 
 ### Corrigé

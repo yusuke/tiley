@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Made `debugLog` zero-cost when debug logging is disabled by using `@autoclosure`, so string interpolation of log messages is skipped entirely in the common case
+
 ## [5.0.1] - 2026-04-23
 
 ### Fixed
