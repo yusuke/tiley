@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-25
+
 ### Aggiunto
 
 - Il menu di hover sul badge di collegamento di un gruppo di finestre ora include un terzo pulsante accanto a quello di scambio: **Uniforma l'altezza delle finestre** (per le coppie sinistra/destra, icona con frecce su/giù) oppure **Uniforma la larghezza delle finestre** (per le coppie alto/basso, icona con frecce sinistra/destra). Allinea i due lati del badge (tutti i membri del gruppo, ripartiti rispetto alla linea di contatto) sull'asse perpendicolare. "Entrambi i lati" non si riferisce solo alle due finestre direttamente collegate dal badge, ma a **tutti i membri del gruppo che stanno dallo stesso lato della linea di contatto** — comprese le finestre "sorelle" che non sono collegate direttamente tra loro ma condividono un bordo padre (esempio: in alto `[A]`, in basso `[B]` e `[C]` che toccano entrambe il bordo inferiore di A senza essere collegate tra loro → cliccando "Uniforma larghezza" sul badge A↔B si tratta `{B, C}` come un unico lato e B+C insieme assumono la stessa larghezza di A). Su ciascun lato le finestre vengono ordinate e ridisposte bordo a bordo: i bordi più esterni vengono ancorati all'inviluppo esterno e le finestre adiacenti si incontrano nel punto medio dei loro bordi originali, quindi i bordi condivisi già allineati restano fermi mentre un eventuale spazio vuoto o sovrapposizione viene chiuso ripartendolo equamente tra le due. Il pulsante è nascosto quando entrambi i lati sono già allineati e non c'è alcuno spazio o sovrapposizione interna da sistemare

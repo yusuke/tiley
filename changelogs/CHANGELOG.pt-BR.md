@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-25
+
 ### Adicionado
 
 - O menu ao passar o cursor sobre a insígnia de vínculo de um grupo de janelas agora tem um terceiro botão ao lado do de troca: **Igualar altura das janelas** (para pares esquerda/direita, ícone de setas para cima/baixo) ou **Igualar largura das janelas** (para pares superior/inferior, ícone de setas para esquerda/direita). Alinha os dois lados da insígnia (todos os membros do grupo, classificados pela linha de contato) no eixo perpendicular. "Ambos os lados" não se refere apenas às duas janelas diretamente conectadas pela insígnia, mas sim a **todos os membros do grupo do mesmo lado da linha de contato** — incluindo "irmãs" que não estão diretamente vinculadas entre si mas compartilham uma borda pai (exemplo: em cima `[A]`, embaixo `[B]` e `[C]` ambas tocando a borda inferior de A sem estarem conectadas entre si → clicar em "Igualar largura" na insígnia A↔B trata `{B, C}` como um único lado e B+C juntas passam a ter a mesma largura que A). Em cada lado as janelas são ordenadas e reorganizadas borda a borda: as bordas mais externas se ancoram à envoltória externa e janelas adjacentes se encontram no ponto médio das bordas originais, portanto bordas compartilhadas já alinhadas permanecem onde estão, enquanto um vão ou sobreposição é distribuído igualmente entre as duas. O botão fica oculto quando ambos os lados já estão alinhados e não há vão ou sobreposição interna a corrigir

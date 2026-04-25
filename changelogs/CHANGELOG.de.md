@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-25
+
 ### Hinzugefügt
 
 - Im Hover-Menü des Verknüpfungs-Badges einer Fenstergruppe gibt es jetzt eine dritte Schaltfläche neben der Tausch-Schaltfläche: **Fensterhöhe angleichen** (für links/rechts angeordnete Paare, Symbol: Auf-/Abwärtspfeile) bzw. **Fensterbreite angleichen** (für oben/unten angeordnete Paare, Symbol: Links-/Rechtspfeile). Damit werden die beiden Seiten des Badges (alle Gruppenmitglieder, jeweils anhand der Kontaktlinie zugeordnet) auf der senkrechten Achse aneinander angeglichen. Mit „beide Seiten" sind nicht nur die zwei direkt vom Badge verbundenen Fenster gemeint, sondern **alle Gruppenmitglieder auf derselben Seite der Kontaktlinie** — auch „Geschwister", die zwar nicht direkt miteinander verknüpft sind, aber an derselben Elternkante hängen (Beispiel: oben `[A]`, unten `[B]` `[C]`, beide an A's Unterkante – nicht jedoch direkt miteinander verknüpft → ein Klick auf „Breite angleichen" am A↔B-Badge behandelt `{B, C}` als eine Seite und macht B+C zusammen genauso breit wie A). Innerhalb jeder Seite werden die Fenster sortiert und kantenbündig neu angeordnet: die äußersten Kanten verankern an der äußeren Hülle, benachbarte Fenster treffen sich am Mittelpunkt ihrer ursprünglichen Kanten — saubere gemeinsame Kanten bleiben unverändert, eine Lücke oder Überlappung wird gleichmäßig auf beide Seiten verteilt geschlossen. Die Schaltfläche wird ausgeblendet, wenn beide Seiten bereits ausgerichtet sind und es auch innen keine Lücke / Überlappung gibt

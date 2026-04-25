@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-25
+
 ### Añadido
 
 - El menú al pasar el cursor sobre la insignia de un grupo de ventanas tiene ahora un tercer botón junto al de intercambio: **Igualar altura de las ventanas** (para pares izquierda/derecha, icono con flechas arriba/abajo) o **Igualar ancho de las ventanas** (para pares superior/inferior, icono con flechas izquierda/derecha). Iguala los dos lados de la insignia (todos los miembros del grupo según la línea de contacto) en el eje perpendicular. "Ambos lados" no se refiere solo a las dos ventanas que la insignia conecta directamente, sino a **todos los miembros del grupo del mismo lado de la línea de contacto** — incluidos los "hermanos" que no están enlazados entre sí pero comparten un borde padre (ejemplo: arriba `[A]`, abajo `[B]` y `[C]` ambos tocando el borde inferior de A pero no entre sí → al pulsar "Igualar ancho" en la insignia A↔B se trata `{B, C}` como un solo lado y B+C juntos pasan a tener el mismo ancho que A). Dentro de cada lado las ventanas se ordenan y se redistribuyen borde con borde: los bordes más exteriores se anclan a la envolvente exterior y las ventanas adyacentes se encuentran en el punto medio de sus bordes originales, así que los bordes compartidos limpios se mantienen y un hueco o solape se reparte por igual entre las dos. El botón se oculta cuando ambos lados ya están alineados y no hay hueco ni solape interno que limpiar

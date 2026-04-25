@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-25
+
 ### Added
 
 - The hover menu on a linked window-group badge now has a third button next to the swap button: **Match window heights** (for left/right pairs, icon: up/down arrows) or **Match window widths** (for top/bottom pairs, icon: left/right arrows). Each side of the badge is the *whole set of group members on that side of the contact line*, not just the badge's two windows — including siblings that share a parent edge but aren't directly linked to each other (e.g. with `[A]` on top and `[B] [C]` both touching A's bottom, "Match widths" on A↔B treats `{B, C}` as one side and stretches B+C combined to A's width). On each side the windows are then re-laid-out edge-to-edge along the perpendicular axis: outer edges anchor to the outer envelope, and any gap or overlap between two neighbouring windows is closed by meeting at the midpoint of their original edges (clean shared edges stay put). The button is hidden when both sides already line up and have no internal gap or overlap to clean up
@@ -802,7 +804,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.0...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.1...HEAD
+[5.1.1]: https://github.com/yusuke/tiley/releases/tag/v5.1.1
 [5.1.0]: https://github.com/yusuke/tiley/releases/tag/v5.1.0
 [5.0.1]: https://github.com/yusuke/tiley/releases/tag/v5.0.1
 [5.0.0]: https://github.com/yusuke/tiley/releases/tag/v5.0.0

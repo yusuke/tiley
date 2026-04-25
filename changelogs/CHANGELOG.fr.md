@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-25
+
 ### Ajouté
 
 - Le menu au survol du badge de lien d'un groupe de fenêtres comporte désormais un troisième bouton à côté de celui de permutation : **Aligner la hauteur des fenêtres** (pour les paires gauche/droite, icône flèches haut/bas) ou **Aligner la largeur des fenêtres** (pour les paires haut/bas, icône flèches gauche/droite). Il aligne les deux côtés du badge (tous les membres du groupe, classés par la ligne de contact) sur l'axe perpendiculaire. « Les deux côtés » désigne non seulement les deux fenêtres directement reliées par le badge, mais aussi **tous les membres du groupe situés du même côté de la ligne de contact** — y compris les « sœurs » qui ne sont pas directement reliées entre elles mais partagent un bord parent (exemple : `[A]` en haut, `[B]` et `[C]` touchant chacune le bord inférieur de A sans être reliées entre elles → cliquer sur « Aligner la largeur » sur le badge A↔B traite `{B, C}` comme un seul côté et B+C réunies prennent la même largeur que A). À l'intérieur de chaque côté, les fenêtres sont triées et reposées bord à bord : les bords extrêmes sont ancrés à l'enveloppe extérieure et les fenêtres adjacentes se rejoignent au milieu de leurs bords d'origine, donc les bords communs déjà alignés restent en place tandis qu'un écart ou un chevauchement est réparti à parts égales entre les deux fenêtres. Le bouton est masqué quand les deux côtés sont déjà alignés et qu'il n'y a aucun écart ou chevauchement interne à corriger
