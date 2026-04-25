@@ -773,9 +773,12 @@ struct MainWindowView: View {
         }
         .onChange(of: appState.isEditingLayoutPresets) { _, isEditing in
             if !isEditing {
-                dismissShortcutEditingIfNeeded()
-                dismissPresetNameEditingIfNeeded()
-                editingPresetID = nil
+                if let id = editingPresetID {
+                    finishEditingPreset(id)
+                } else {
+                    dismissShortcutEditingIfNeeded()
+                    dismissPresetNameEditingIfNeeded()
+                }
             }
         }
         .onChange(of: appState.windowTargetMenuRequestVersion) { _, _ in

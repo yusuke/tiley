@@ -424,6 +424,10 @@ extension AppState {
     }
 
     func hideAllMainWindows() {
+        // Commit any in-progress preset layout edits before the window disappears.
+        if isEditingLayoutPresets {
+            isEditingLayoutPresets = false
+        }
         for controller in mainWindowControllers.values {
             controller.hide()
         }
