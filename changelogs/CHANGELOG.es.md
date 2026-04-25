@@ -4,6 +4,7 @@
 
 ### Corregido
 
+- Al aplicar un preset de diseño con varios rectángulos, si una ventana no puede reducirse hasta su rectángulo objetivo debido al tamaño mínimo de la app, ahora se ajusta automáticamente el ancho o alto de la ventana adyacente para que el borde compartido permanezca alineado (manteniendo el espacio del preset). Antes se producían superposiciones o huecos desalineados
 - El indicador de agrupación de la barra lateral ahora muestra también los enlaces satélite de las ranuras de aplicación que no forman parte del grupo espacial actualmente activo. Cuando se aplica un preset con rectángulos asignados a aplicaciones y pares agrupados, la ventana del lado sin asignar queda registrada como satélite del bundle ID de la aplicación asignada. Si se vuelve a aplicar el preset (o cualquier otro con la misma aplicación ancla) usando una ventana distinta, el par anterior deja de pertenecer al `WindowGroup` espacial, pero su enlace satélite (el comportamiento de elevación al hacer clic) se conserva. Hasta ahora estos enlaces "en segundo plano pero todavía activos" no aparecían en la barra lateral; ahora se muestran junto a los partners espaciales activos como iconos de aplicación compañera, y cada uno puede desvincularse de forma individual con la misma interacción de hover → clic. Esto incluye los casos en que una sola ventana es satélite de varias aplicaciones ancla, o en que un mismo bundle de ventana ancla tiene varios satélites registrados
 
 ### Cambiado

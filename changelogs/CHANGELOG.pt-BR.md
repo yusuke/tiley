@@ -4,6 +4,7 @@
 
 ### Corrigido
 
+- Ao aplicar um preset de layout com múltiplos retângulos, se uma janela não puder encolher até seu retângulo alvo por causa do tamanho mínimo do app, a largura ou altura da janela vizinha agora é ajustada automaticamente para que a borda compartilhada permaneça alinhada (preservando o espaçamento do preset). Antes ocorriam sobreposições ou vãos desalinhados
 - O indicador de agrupamento da barra lateral agora também exibe os vínculos satélites de slot de aplicativo que não fazem parte do grupo espacial atualmente ativo. Quando um preset com retângulos atribuídos a aplicativos e pares agrupados é aplicado, a janela do lado não atribuído é registrada como satélite usando o bundle ID do aplicativo atribuído. Se o preset (ou outro com o mesmo aplicativo âncora) for reaplicado usando uma janela diferente, o par anterior sai do `WindowGroup` espacial, mas seu vínculo satélite (a ligação de trazer ao primeiro plano ao clicar) é preservado. Até agora esses vínculos "em segundo plano, porém ainda ativos" não apareciam na barra lateral; agora são exibidos junto aos parceiros espaciais ativos como ícones de aplicativo parceiro, e cada um pode ser desvinculado individualmente com a mesma interação hover → clique. Isso vale também quando uma única janela é satélite de vários aplicativos âncora, ou quando o mesmo bundle de uma janela âncora tem vários satélites registrados
 
 ### Alterado

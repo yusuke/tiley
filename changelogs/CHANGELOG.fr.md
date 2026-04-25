@@ -4,6 +4,7 @@
 
 ### Corrigé
 
+- Lors de l'application d'un preset de mise en page multi-rectangles, si une fenêtre ne peut pas se réduire à son rectangle cible en raison de la taille minimale imposée par l'application, la largeur ou la hauteur de la fenêtre voisine est désormais ajustée automatiquement afin que le bord partagé reste aligné (l'écart du preset est préservé). Auparavant, cela provoquait des chevauchements ou des écarts mal alignés
 - L'indicateur de regroupement de la barre latérale affiche désormais aussi les liens satellites de slot d'application qui ne font pas partie du groupe spatial actuellement actif. Quand un preset contenant des rectangles assignés à des applications et des paires regroupées est appliqué, la fenêtre du côté non assigné est enregistrée comme satellite du bundle ID de l'application assignée. Si l'on réapplique le preset (ou un autre preset avec la même application d'ancrage) en utilisant une autre fenêtre, la paire précédente sort du `WindowGroup` spatial, mais son lien satellite (la liaison de mise au premier plan au clic) est conservé. Jusqu'à présent, ces liens « en arrière-plan mais toujours actifs » n'apparaissaient pas dans la barre latérale ; ils sont désormais affichés à côté des partenaires spatiaux actifs sous forme d'icônes d'application partenaire, et chacun peut être délié individuellement via la même interaction survol → clic. Cela vaut aussi quand une même fenêtre est satellite de plusieurs applications d'ancrage, ou quand un même bundle de fenêtre d'ancrage a plusieurs satellites enregistrés
 
 ### Modifié

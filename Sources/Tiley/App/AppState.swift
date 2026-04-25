@@ -1175,6 +1175,7 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         let allSelections = [selection] + secondarySelections
+        var placements: [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)] = []
 
         dismissOverlayImmediately()
         orderOutAllMainWindows()
@@ -1222,10 +1223,13 @@ final class AppState: NSObject, NSMenuDelegate {
                 } else {
                     _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
                 }
+                placements.append((selectionIndex: selectionIndex, target: target, targetFrame: frame))
             } catch {
                 NSLog("[Tiley] applyToMultipleWindows error for index \(idx): %@", error.localizedDescription)
             }
         }
+
+        alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
 
         // Restore displaced windows that are NOT layout targets — they were
         // pushed aside to reveal the selected window and need to return to
@@ -1344,6 +1348,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
         // Selected windows first, then fill from z-order.
         let orderedIndices = buildZOrderedWindowIndices(count: selections.count)
+        var placements: [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)] = []
 
         for (position, idx) in orderedIndices.enumerated() {
             var target = availableWindowTargets[idx]
@@ -1373,10 +1378,13 @@ final class AppState: NSObject, NSMenuDelegate {
                 } else {
                     _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
                 }
+                placements.append((selectionIndex: position, target: target, targetFrame: frame))
             } catch {
                 NSLog("[Tiley] applyPresetToZOrderedWindows error for index \(idx): %@", error.localizedDescription)
             }
         }
+
+        alignAdjacentEdgesAfterPreset(placements: placements, selections: selections, screenFrame: currentScreenFrame)
 
         // Restore displaced windows that are NOT layout targets.
         // Must run before raiseWindowsPreservingOrder — see the comment in

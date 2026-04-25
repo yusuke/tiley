@@ -184,4 +184,135 @@ extension AppState {
     func layoutPreset(for id: UUID) -> LayoutPreset? {
         layoutPresets.first(where: { $0.id == id })
     }
+
+    // MARK: - Edge alignment after multi-rectangle preset application
+
+    /// After a multi-rectangle preset has been applied, walk the grid-level
+    /// adjacencies and — when one window of an adjacent pair was forced
+    /// larger than its target by its app's minimum-size constraint — adjust
+    /// the *other* window's width/height so the shared edge stays aligned
+    /// (preserving the preset gap). Best-effort: if both windows are
+    /// constrained on the relevant axis the pair is left as-is.
+    ///
+    /// `placements` is in apply order; only the first placement per
+    /// `selectionIndex` participates (extras piled on the last selection are
+    /// ignored).
+    func alignAdjacentEdgesAfterPreset(
+        placements: [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)],
+        selections: [GridSelection],
+        screenFrame: CGRect
+    ) {
+        guard placements.count >= 2, selections.count >= 2 else { return }
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
+
+        var windowBySel: [Int: AXUIElement] = [:]
+        var targetFrameBySel: [Int: CGRect] = [:]
+        var actualFrameBySel: [Int: CGRect] = [:]
+        for placement in placements {
+            let sel = placement.selectionIndex
+            guard windowBySel[sel] == nil else { continue }
+            guard let window = placement.target.windowElement else { continue }
+            let (pos, size) = accessibilityService.readPositionAndSize(of: window)
+            guard size.width > 0, size.height > 0 else { continue }
+            let appkitMinY = primaryMaxY - (pos.y + size.height)
+            windowBySel[sel] = window
+            targetFrameBySel[sel] = placement.targetFrame
+            actualFrameBySel[sel] = CGRect(x: pos.x, y: appkitMinY, width: size.width, height: size.height)
+        }
+
+        let adjacencies = SelectionAdjacencyDetector.detect(selections: selections)
+        let epsilon: CGFloat = 2
+        let minDim: CGFloat = 40
+
+        for adj in adjacencies {
+            guard let winA = windowBySel[adj.indexA],
+                  let winB = windowBySel[adj.indexB],
+                  winA != winB,
+                  let actualA = actualFrameBySel[adj.indexA],
+                  let actualB = actualFrameBySel[adj.indexB],
+                  let targetA = targetFrameBySel[adj.indexA],
+                  let targetB = targetFrameBySel[adj.indexB] else { continue }
+
+            let horizontal = (adj.edgeOfA == .left || adj.edgeOfA == .right)
+            let dimA = horizontal ? actualA.width : actualA.height
+            let dimB = horizontal ? actualB.width : actualB.height
+            let tDimA = horizontal ? targetA.width : targetA.height
+            let tDimB = horizontal ? targetB.width : targetB.height
+            let aOversized = dimA > tDimA + epsilon
+            let bOversized = dimB > tDimB + epsilon
+            if !aOversized && !bOversized { continue }
+            if aOversized && bOversized { continue }
+
+            // The oversized window is the anchor; its actual edge sets the
+            // alignment target. The other window is reshaped to match.
+            let anchorIsA = aOversized
+            let anchorActual = anchorIsA ? actualA : actualB
+            let anchorTarget = anchorIsA ? targetA : targetB
+            let adjustableTarget = anchorIsA ? targetB : targetA
+            let adjustableWindow: AXUIElement = anchorIsA ? winB : winA
+
+            // The adjustable window's edge that faces the anchor.
+            let nearEdge: WindowAdjacency.Edge
+            switch adj.edgeOfA {
+            case .right: nearEdge = anchorIsA ? .left  : .right
+            case .left:  nearEdge = anchorIsA ? .right : .left
+            case .bottom: nearEdge = anchorIsA ? .top    : .bottom
+            case .top:    nearEdge = anchorIsA ? .bottom : .top
+            }
+
+            var newFrame = adjustableTarget
+            let farEdge: WindowAdjacency.Edge
+            let farValue: CGFloat
+            switch nearEdge {
+            case .left:
+                // Adjustable is right of anchor.
+                let gapValue = adjustableTarget.minX - anchorTarget.maxX
+                let newMinX = anchorActual.maxX + gapValue
+                farEdge = .right
+                farValue = adjustableTarget.maxX
+                newFrame.origin.x = newMinX
+                newFrame.size.width = farValue - newMinX
+            case .right:
+                // Adjustable is left of anchor.
+                let gapValue = anchorTarget.minX - adjustableTarget.maxX
+                let newMaxX = anchorActual.minX - gapValue
+                farEdge = .left
+                farValue = adjustableTarget.minX
+                newFrame.origin.x = farValue
+                newFrame.size.width = newMaxX - farValue
+            case .bottom:
+                // Adjustable sits below anchor in screen layout (anchor.minY > adjustable.maxY).
+                let gapValue = anchorTarget.minY - adjustableTarget.maxY
+                let newMaxY = anchorActual.minY - gapValue
+                farEdge = .bottom
+                farValue = adjustableTarget.minY
+                newFrame.origin.y = farValue
+                newFrame.size.height = newMaxY - farValue
+            case .top:
+                // Adjustable sits above anchor.
+                let gapValue = adjustableTarget.minY - anchorTarget.maxY
+                let newMinY = anchorActual.maxY + gapValue
+                farEdge = .top
+                farValue = adjustableTarget.maxY
+                newFrame.origin.y = newMinY
+                newFrame.size.height = farValue - newMinY
+            }
+
+            if newFrame.width < minDim || newFrame.height < minDim { continue }
+            if abs(newFrame.minX - adjustableTarget.minX) < epsilon &&
+               abs(newFrame.minY - adjustableTarget.minY) < epsilon &&
+               abs(newFrame.width - adjustableTarget.width) < epsilon &&
+               abs(newFrame.height - adjustableTarget.height) < epsilon {
+                continue
+            }
+
+            _ = accessibilityService.setFrameLightweightPreservingEdge(
+                newFrame,
+                preservingEdge: farEdge,
+                edgeValue: farValue,
+                on: screenFrame,
+                for: adjustableWindow
+            )
+        }
+    }
 }

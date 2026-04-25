@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- When applying a multi-rectangle layout preset, if a window cannot shrink to its target rectangle because of its app's minimum-size constraint, the neighbouring window's width or height is now adjusted so the shared edge stays aligned (with the preset gap preserved) instead of overlapping or leaving a misaligned gap
 - Sidebar group indicator now shows app-slot satellite links that aren't part of the currently active spatial group. When a preset with app-assigned rectangles and grouped pairs is applied, each unassigned slot's window becomes a satellite of the assigned app's bundle. Re-applying the preset (or another one with the same anchor app) makes the previous spatial group neighbour drop out of the active `WindowGroup`, but its satellite link is preserved so the raise linkage still works. These background-but-still-active satellite links are now rendered as partner icons in the sidebar (alongside the active spatial partners), and each can be unlinked individually with the same hover-and-click affordance — including the case where one window is satellite-linked to multiple anchor apps, or one anchor window has multiple satellites registered to its bundle
 
 ### Changed

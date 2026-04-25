@@ -4,6 +4,7 @@
 
 ### Behoben
 
+- Beim Anwenden eines Mehr-Rechteck-Layout-Presets wird die Breite oder Höhe des Nachbarfensters jetzt automatisch angepasst, wenn ein Fenster aufgrund der Mindestgröße der App nicht auf sein Ziel-Rechteck verkleinert werden kann, sodass die gemeinsame Kante ausgerichtet bleibt (Preset-Abstand wird beibehalten). Bisher kam es zu Überlappungen oder versetzten Lücken
 - Die Gruppierungsanzeige in der Seitenleiste zeigt jetzt auch App-Slot-Satellitenverknüpfungen an, die nicht Teil der aktuell aktiven räumlichen Gruppe sind. Wird ein Preset mit App-zugewiesenen Rechtecken und gruppierten Paaren angewendet, wird das Fenster auf der nicht zugewiesenen Seite über die Bundle-ID der zugewiesenen App als Satellit registriert. Wendet man dasselbe Preset (oder ein anderes mit derselben Anker-App) erneut mit einem anderen Fenster an, fällt das vorherige Paar aus der räumlichen `WindowGroup` heraus, die Satelliten-Verknüpfung (Mitführung beim Klick) bleibt jedoch erhalten. Bisher waren solche „im Hintergrund weiter aktiven" Verknüpfungen in der Seitenleiste nicht sichtbar — jetzt werden sie zusammen mit den aktiven räumlichen Partnern als Partner-App-Symbole angezeigt und lassen sich per Hover → Klick einzeln lösen. Dies gilt auch dann, wenn ein Fenster Satellit mehrerer Anker-Apps ist oder wenn der Bundle-ID eines Anker-Fensters mehrere Satelliten zugeordnet sind
 
 ### Geändert

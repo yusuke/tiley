@@ -317,6 +317,8 @@ extension AppState {
         restorationAnimationTimer?.cancel()
         restorationAnimationTimer = nil
 
+        var placements: [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)] = []
+
         for entry in entries {
             var target = entry.target
             target = unhideAppIfNeeded(target)
@@ -342,10 +344,13 @@ extension AppState {
                 } else {
                     _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
                 }
+                placements.append((selectionIndex: entry.slotIndex, target: target, targetFrame: frame))
             } catch {
                 NSLog("[Tiley] applyPresetWithAppAssignments error for slot \(entry.slotIndex): %@", error.localizedDescription)
             }
         }
+
+        alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
 
         // 5. Restore displaced non-target windows.
         let movedWIDs = Set(entries.map { $0.target.cgWindowID })

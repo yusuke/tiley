@@ -4,6 +4,7 @@
 
 ### Corretto
 
+- Quando si applica un preset di layout a più rettangoli, se una finestra non può ridursi al rettangolo di destinazione a causa della dimensione minima imposta dall'app, ora la larghezza o l'altezza della finestra adiacente viene adattata automaticamente in modo che il bordo condiviso resti allineato (mantenendo lo spazio del preset). In precedenza si verificavano sovrapposizioni o spazi disallineati
 - L'indicatore di raggruppamento nella barra laterale ora mostra anche i collegamenti satellite degli slot app che non fanno parte del gruppo spaziale attualmente attivo. Quando viene applicato un preset con rettangoli assegnati ad applicazioni e coppie raggruppate, la finestra sul lato non assegnato viene registrata come satellite del bundle ID dell'app assegnata. Se si riapplica il preset (o un altro preset con la stessa app di ancoraggio) usando una finestra diversa, la coppia precedente esce dal `WindowGroup` spaziale, ma il suo collegamento satellite (il portare in primo piano al clic) viene mantenuto. Finora questi collegamenti "in background ma ancora attivi" non erano visibili nella barra laterale; ora vengono mostrati accanto ai partner spaziali attivi come icone delle app partner, e ciascuno può essere scollegato singolarmente con la stessa interazione hover → clic. Questo vale anche quando una singola finestra è satellite di più app di ancoraggio, o quando lo stesso bundle di una finestra di ancoraggio ha più satelliti registrati
 
 ### Modificato
