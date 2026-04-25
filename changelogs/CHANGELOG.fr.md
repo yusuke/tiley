@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-25
+
 ### Ajouté
 
 - Nouveau préréglage de disposition par défaut « Centre » : une grille 4×4 avec la zone centrale 2×2 sélectionnée, associé au raccourci `C`

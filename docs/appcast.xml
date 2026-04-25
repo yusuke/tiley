@@ -3,6 +3,230 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>5.1.0</title>
+            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
+<ul>
+<li>Добавлена стандартная предустановка макета «Центр»: сетка 4×4 с выделенной центральной областью 2×2, привязанная к сочетанию `C`</li>
+<li>В конце списка предустановок макета добавлена строка «+». Щелчок по ней создаёт предустановку с именем «Новая предустановка макета» и сразу переводит её в режим редактирования</li>
+<li>Группировку теперь можно задавать прямо при редактировании предустановки макета: на каждом общем ребре между областями появляется бейдж `link.badge.plus`; щелчок помечает пару как сгруппированную (бейдж переходит в «связанное» состояние, при наведении показывается значок разрыва). При наведении на предустановку в боковой панели на предпросмотре тоже показываются связанные бейджи, так что сразу видно, какие области будут сгруппированы. При применении такой предустановки соответствующие окна сразу оказываются сгруппированными — никаких дополнительных кликов</li>
+<li>Прямоугольники предустановки макета теперь можно привязывать к конкретному приложению. В редакторе предустановок у каждого прямоугольника есть бейдж `macwindow.badge.plus` — щёлкните, чтобы выбрать запущенное приложение (или через «Другое приложение…» найти его в файловой системе). Назначенный прямоугольник отображается как миниатюра окна с иконкой приложения вместо номера индекса; при наведении появляется ×, щелчок по которому снимает назначение. При применении предустановки в назначенный прямоугольник всегда попадает самое верхнее окно привязанного приложения (при необходимости приложение запускается и Tiley ждёт появления окна до 30 секунд). Если приложение запущено, но окон нет, отправляется системное уведомление. Если в паре сгруппированных областей назначена только одна сторона, окно, которое попало в ненаначенную сторону, связывается с окном назначенного приложения как «спутник» на время сеанса: щелчок по любому из двух также выводит партнёра на передний план</li>
+</ul>
+<h3>Изменено</h3>
+<ul>
+<li>Функция `debugLog` теперь использует `@autoclosure`: при выключенном журнале отладки интерполяция строк сообщений журнала полностью пропускается и не создаёт накладных расходов</li>
+</ul>
+<h3>Исправлено</h3>
+<ul>
+<li>Значки связи для группировки окон больше не появляются над окнами, полностью скрытыми за другим окном. После применения раскладки к большому числу окон значки показываются только между видимыми (передними) окнами; перекрытые окна исключаются из кандидатов на группировку, пока не будут выведены на передний план</li>
+</ul>
+<h3>Удалено</h3>
+<ul>
+<li>Удалена временная предустановка «Последний выбор», которая автоматически добавлялась после применения макета. Теперь новые предустановки создаются явно через строку «+»</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Novo preset de layout padrão "Centro": uma grade 4×4 com a região central 2×2 selecionada, vinculado ao atalho `C`</li>
+<li>Nova linha "+" no final da lista de presets de layout. Clicar nela cria um preset chamado "Novo preset de layout" e entra imediatamente no modo de edição</li>
+<li>Agora é possível definir agrupamento diretamente ao editar um preset de layout: um selo `link.badge.plus` aparece em cada borda compartilhada entre regiões do preset; clique para marcar o par como agrupado (o selo muda para o estado vinculado; ao passar o mouse, ele alterna para o ícone de remoção). Ao passar o mouse sobre um preset na barra lateral, os selos vinculados também aparecem sobre a pré-visualização, deixando claro de relance quais regiões serão agrupadas. Ao aplicar o preset, as janelas correspondentes já começam agrupadas, sem cliques adicionais</li>
+<li>Agora os retângulos de um preset de layout podem ser vinculados a um aplicativo específico. No editor de presets, cada retângulo exibe um selo `macwindow.badge.plus` — clique para escolher um aplicativo em execução (ou navegue pelo sistema de arquivos via "Outro aplicativo…"). Retângulos atribuídos são exibidos como uma janela em miniatura com o ícone do aplicativo em vez do número de índice; passe o mouse e clique no ícone para remover a atribuição. Ao aplicar o preset, um retângulo atribuído sempre recebe a janela mais à frente do aplicativo vinculado (iniciando-o e aguardando até 30 s se necessário). Se o aplicativo estiver em execução mas sem janelas, uma notificação do sistema é exibida. Quando um par agrupado tem exatamente um lado atribuído, a janela que cai no lado não atribuído é vinculada à janela do aplicativo atribuído como "satélite" durante a sessão: clicar em uma traz a outra para a frente também</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>`debugLog` agora usa `@autoclosure`, de modo que, quando o log de depuração está desativado, não há qualquer custo de interpolação de string das mensagens de log</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Os selos de vínculo para agrupamento de janelas não aparecem mais sobre janelas que estão totalmente escondidas atrás de outra janela. Após aplicar um layout a muitas janelas, os selos são exibidos apenas entre as janelas visíveis (à frente); as janelas ocultas ficam excluídas dos candidatos ao agrupamento até serem trazidas à frente</li>
+</ul>
+<h3>Removido</h3>
+<ul>
+<li>Removido o preset temporário "Última seleção" que era adicionado automaticamente após aplicar um layout. Novos presets agora são criados explicitamente pela linha "+"</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Nuovo preset di layout predefinito "Centro": una griglia 4×4 con la regione centrale 2×2 selezionata, associato alla scorciatoia `C`</li>
+<li>Nuova riga "+" in fondo all'elenco dei preset di layout. Facendo clic viene creato un preset chiamato "Nuovo preset di layout" e si entra immediatamente in modalità di modifica</li>
+<li>Ora è possibile definire il raggruppamento direttamente durante la modifica di un preset di layout: in corrispondenza di ogni bordo condiviso tra le regioni del preset compare un badge `link.badge.plus`; fai clic per contrassegnare la coppia come raggruppata (il badge passa allo stato collegato; al passaggio del mouse mostra l'icona di rimozione). Passando il mouse su un preset nella barra laterale, anche nell'anteprima vengono mostrati i badge collegati, così si capisce a colpo d'occhio quali regioni verranno raggruppate. Applicando il preset, le finestre corrispondenti risultano già raggruppate fin da subito, senza ulteriori clic</li>
+<li>I rettangoli di un preset di layout ora possono essere associati a un'applicazione specifica. Nell'editor dei preset, ogni rettangolo mostra un badge `macwindow.badge.plus` — fai clic per scegliere un'applicazione in esecuzione (oppure sfoglia il filesystem tramite "Altra applicazione…"). I rettangoli assegnati vengono visualizzati come una finestra in miniatura con l'icona dell'app al posto del numero di indice; passa con il mouse e fai clic sull'icona per rimuovere l'assegnazione. All'applicazione del preset, un rettangolo assegnato riceve sempre la finestra in primo piano dell'app associata (avviando l'app e attendendo fino a 30 s se necessario). Se l'app è in esecuzione ma non ha finestre, viene mostrata una notifica di sistema. Quando una coppia raggruppata ha esattamente un lato assegnato, la finestra che finisce nel lato non assegnato viene collegata come "satellite" alla finestra dell'app assegnata per l'intera sessione: fare clic su una delle due porta in primo piano anche l'altra</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>`debugLog` ora usa `@autoclosure`, così quando il log di debug è disattivato non viene sostenuto alcun costo per l'interpolazione delle stringhe dei messaggi di log</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>I badge di collegamento per il raggruppamento delle finestre non compaiono più sulle finestre completamente nascoste dietro un'altra finestra. Dopo aver applicato un layout a molte finestre, i badge vengono mostrati solo tra le finestre visibili (in primo piano); le finestre coperte vengono escluse dai candidati al raggruppamento finché non vengono portate in primo piano</li>
+</ul>
+<h3>Rimosso</h3>
+<ul>
+<li>Rimosso il preset temporaneo "Ultima selezione" che veniva aggiunto automaticamente dopo l'applicazione di un layout. I nuovi preset ora si creano esplicitamente tramite la riga "+"</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Nouveau préréglage de disposition par défaut « Centre » : une grille 4×4 avec la zone centrale 2×2 sélectionnée, associé au raccourci `C`</li>
+<li>Nouvelle ligne « + » à la fin de la liste des préréglages de disposition. Cliquer dessus crée un préréglage nommé « Nouveau préréglage de disposition » et passe immédiatement en mode édition</li>
+<li>Le regroupement peut désormais être défini directement lors de l'édition d'un préréglage : un badge `link.badge.plus` apparaît à chaque bord partagé entre deux zones du préréglage ; cliquez pour marquer la paire comme groupée (le badge passe en état lié ; le survol fait apparaître l'icône de suppression). Lorsque le pointeur survole un préréglage dans la barre latérale, les badges liés s'affichent également sur l'aperçu afin de voir d'un coup d'œil quelles zones seront groupées. À l'application du préréglage, les fenêtres correspondantes sont regroupées dès le départ, sans clic supplémentaire</li>
+<li>Les rectangles d'un préréglage de disposition peuvent désormais être liés à une application spécifique. Dans l'éditeur de préréglages, chaque rectangle affiche un badge `macwindow.badge.plus` : cliquez pour choisir une application en cours d'exécution (ou parcourez le système de fichiers via « Autre application… »). Les rectangles attribués s'affichent comme une fenêtre miniature avec l'icône de l'application au lieu d'un numéro ; survolez l'icône et cliquez dessus pour retirer l'attribution. À l'application du préréglage, un rectangle attribué reçoit toujours la fenêtre au premier plan de l'application liée (avec lancement automatique et attente jusqu'à 30 s si besoin). Si l'application est lancée mais n'a aucune fenêtre, une notification système est affichée. Lorsqu'une paire groupée a exactement un côté attribué, la fenêtre qui atterrit côté non attribué est liée à la fenêtre de l'application comme « satellite » pour la durée de la session : un clic sur l'une fait aussi passer l'autre au premier plan</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>`debugLog` utilise désormais `@autoclosure` : lorsque la journalisation de débogage est désactivée, l'interpolation des chaînes des messages de journal n'entraîne plus aucun coût</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Les badges de lien de groupement de fenêtres n'apparaissent plus sur les fenêtres entièrement masquées derrière une autre fenêtre. Après l'application d'une disposition à de nombreuses fenêtres, les badges ne s'affichent qu'entre les fenêtres visibles (au premier plan) ; les fenêtres occultées sont exclues des candidats au groupement jusqu'à ce qu'elles soient ramenées au premier plan</li>
+</ul>
+<h3>Supprimé</h3>
+<ul>
+<li>Suppression du préréglage temporaire « Dernière sélection » qui était automatiquement ajouté après l'application d'une disposition. Les nouveaux préréglages se créent désormais explicitement via la ligne « + »</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Nuevo preajuste de diseño predeterminado "Centro": una cuadrícula 4×4 con la región central 2×2 seleccionada, asignado al atajo `C`</li>
+<li>Nueva fila "+" al final de la lista de preajustes de diseño. Al hacer clic se crea un preajuste llamado "Nuevo preajuste de diseño" y se entra inmediatamente en modo de edición</li>
+<li>Ahora se puede definir el agrupamiento directamente al editar un preajuste de diseño: aparece una insignia `link.badge.plus` en cada borde compartido entre regiones del preajuste; haz clic para marcar el par como agrupado (la insignia pasa al estado enlazado; al pasar el puntero por encima muestra la opción de eliminar). Al pasar el puntero sobre un preajuste en la barra lateral, la vista previa también muestra las insignias enlazadas para que se vea de un vistazo qué regiones quedarán agrupadas. Al aplicar el preajuste, las ventanas correspondientes quedan agrupadas desde el principio, sin clics adicionales</li>
+<li>Ahora cada rectángulo de un preajuste de diseño puede vincularse a una aplicación específica. En el editor de preajustes, cada rectángulo muestra una insignia `macwindow.badge.plus`: haz clic para elegir una aplicación en ejecución (o explora el sistema de archivos con "Otra aplicación…"). Los rectángulos asignados se muestran como una ventana en miniatura con el icono de la aplicación en lugar de un número; pasa el puntero y haz clic en el icono para desasignarla. Al aplicar el preajuste, el rectángulo asignado siempre recibe la ventana más al frente de la aplicación vinculada (lanzándola y esperando hasta 30 s si es necesario). Si la aplicación está en ejecución pero no tiene ventanas, se muestra una notificación del sistema. Cuando un par agrupado tiene exactamente un lado asignado, la ventana que aterriza en el lado no asignado se enlaza como "satélite" con la ventana de la aplicación asignada durante la sesión: hacer clic en cualquiera de las dos también trae la otra al frente</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Se marcó `debugLog` con `@autoclosure` para que, cuando el registro de depuración esté desactivado, no se incurra en ningún coste de interpolación de cadenas de los mensajes de registro</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Las insignias de enlace para agrupar ventanas ya no aparecen sobre ventanas que están totalmente ocultas detrás de otra ventana. Tras aplicar un diseño a muchas ventanas, las insignias solo se muestran entre las ventanas visibles (frontales); las ventanas ocluidas quedan excluidas de los candidatos a agrupación hasta que se traen al frente</li>
+</ul>
+<h3>Eliminado</h3>
+<ul>
+<li>Se eliminó el preajuste temporal "Última selección" que se añadía automáticamente después de aplicar un diseño. Los nuevos preajustes ahora se crean de forma explícita mediante la fila "+"</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Neue Standard-Layout-Voreinstellung „Mitte": ein 4×4-Raster mit der mittleren 2×2-Region ausgewählt, gebunden an die Tastenkombination `C`</li>
+<li>Neue "+"-Zeile am Ende der Layout-Voreinstellungsliste. Ein Klick erstellt eine neue Voreinstellung namens "Neue Layout-Voreinstellung" und wechselt sofort in den Bearbeitungsmodus</li>
+<li>Gruppierungen lassen sich jetzt direkt beim Bearbeiten einer Layout-Voreinstellung festlegen: An jeder gemeinsamen Kante zwischen zwei Bereichen erscheint ein `link.badge.plus`-Abzeichen. Ein Klick markiert das Paar als Gruppe (das Abzeichen wechselt in den verbundenen Zustand; beim Darüberfahren erscheint ein Aufhebungs-Symbol). Auch beim Überfahren einer Voreinstellung in der Seitenleiste werden die verbundenen Kanten als Abzeichen auf der Vorschau angezeigt, damit auf einen Blick erkennbar ist, welche Bereiche gruppiert werden. Beim Anwenden der Voreinstellung sind die entsprechenden Fenster von Anfang an gruppiert — kein zusätzlicher Klick nötig</li>
+<li>Rechtecke einer Layout-Voreinstellung können jetzt an eine bestimmte Anwendung gebunden werden. Im Voreinstellungseditor zeigt jedes Rechteck ein `macwindow.badge.plus`-Abzeichen — ein Klick öffnet eine Liste laufender Anwendungen (oder über "Andere Anwendung…" den Dateisystem-Browser). Zugewiesene Rechtecke werden als Miniaturfenster mit dem App-Symbol statt mit einer Indexnummer dargestellt; ein Klick auf das beim Überfahren eingeblendete × hebt die Zuweisung auf. Beim Anwenden der Voreinstellung landet im zugewiesenen Rechteck stets das vorderste Fenster der gebundenen App (die App wird bei Bedarf gestartet und bis zu 30 Sekunden lang auf ein Fenster gewartet). Läuft die App, hat aber keine Fenster, wird eine Systembenachrichtigung gepostet. Wenn bei einem gruppierten Paar genau eine Seite zugewiesen ist, wird das Fenster, das in der nicht zugewiesenen Seite landet, sitzungsweit als "Satellit" mit dem Fenster der zugewiesenen App verknüpft: ein Klick auf eines bringt auch das andere nach vorne</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>`debugLog` wurde mit `@autoclosure` versehen, sodass bei deaktivierter Debug-Protokollierung keinerlei Kosten für die String-Interpolation der Log-Nachrichten anfallen</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Verknüpfungs-Badges für Fenstergruppen erscheinen nicht mehr auf Fenstern, die vollständig hinter einem anderen Fenster verborgen sind. Nach dem Anwenden eines Layouts auf viele Fenster werden Badges nur noch zwischen sichtbaren (vorderen) Fenstern angezeigt; verdeckte Fenster werden aus den Gruppierungskandidaten ausgeschlossen, bis sie in den Vordergrund gebracht werden</li>
+</ul>
+<h3>Entfernt</h3>
+<ul>
+<li>Die nach dem Anwenden eines Layouts automatisch hinzugefügte temporäre Voreinstellung "Letzte Auswahl" wurde entfernt. Neue Voreinstellungen werden jetzt explizit über die "+"-Zeile erstellt</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增預設版面預設「置中」：一個 4×4 網格中央 2×2 區域被選取的預設，綁定到 `C` 快捷鍵</li>
+<li>在版面預設列表末尾新增了一個「+」按鈕列。點擊後會建立一個名為「新增版面預設」的預設並立即進入編輯模式</li>
+<li>在編輯版面預設時，可以直接為彼此相鄰的區域設定分組：相鄰邊的中點會出現 `link.badge.plus` 徽章，點擊即可將該組區域標記為分組（徽章會切換為已連接狀態，滑鼠懸停時會切換為移除圖示）。在側欄將滑鼠移到預設上時，預覽上也會顯示已連接的徽章，一眼就能看出哪些區域會被分組。套用該預設時，對應的視窗一開始就會處於分組狀態，不需要再額外點擊</li>
+<li>現在可以為版面預設的每個矩形綁定特定的應用程式。在預設編輯器中，每個矩形都會顯示一個 `macwindow.badge.plus` 徽章——點擊即可選擇執行中的應用程式（或透過「其他應用程式…」瀏覽檔案系統）。已指派的矩形會以包含應用程式圖示的迷你視窗形式顯示，而不是索引數字；懸停並點擊該圖示即可取消指派。套用預設時，已指派的矩形一定會放置該應用程式的最前面視窗（若未執行則會自動啟動並最多等待 30 秒）。若應用程式在執行中但沒有視窗，則會發出系統通知。當分組的兩個區域只有一側被指派應用程式時，落在未指派槽位的視窗會與已指派應用程式的視窗作為僅限本工作階段的「衛星」互相連結：點擊其中任一個都會將另一個也帶到最前面</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>將 `debugLog` 改為使用 `@autoclosure`，在停用偵錯記錄時完全跳過記錄訊息的字串插值開銷</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了對多個視窗套用配置後，被其他視窗完全遮蔽的視窗仍會顯示群組連結徽章的問題。現在只會在前景可見的視窗之間顯示徽章；被遮蔽的視窗在被帶到前景之前會從群組候選中排除</li>
+</ul>
+<h3>移除</h3>
+<ul>
+<li>移除了套用版面後自動新增的「上次選擇」暫存預設。現在需要透過列表末尾的「+」列明確建立新預設</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增默认布局预设"居中"：一个 4×4 网格中央 2×2 区域被选中的预设，绑定到 `C` 快捷键</li>
+<li>在布局预设列表末尾新增了一个"+"按钮行。点击后会创建一个名为"新建布局预设"的预设并立即进入编辑模式</li>
+<li>在编辑布局预设时，可以直接为彼此相邻的区域设置分组：相邻边的中点会出现 `link.badge.plus` 徽章，点击即可将这对区域标记为分组（徽章会切换为已连接状态，将鼠标悬停在上面会切换为移除图标）。在侧边栏中将鼠标悬停在预设上时，预览中也会显示已连接的徽章，方便一眼看出哪些区域会被分组。应用该预设时，对应的窗口会一开始就处于分组状态，无需再次点击</li>
+<li>现在可以为布局预设的每个矩形绑定一个特定的应用程序。在预设编辑器中，每个矩形都会显示一个 `macwindow.badge.plus` 徽章——点击即可选择正在运行的应用程序（或通过"其他应用程序…"浏览文件系统）。已分配的矩形会以包含应用图标的迷你窗口形式显示，而不是索引数字；悬停并点击该图标即可取消分配。应用该预设时，已分配的矩形始终会放置绑定应用的最前端窗口（如有必要会启动应用并最多等待 30 秒）。若应用正在运行但没有窗口，则会发出系统通知。当分组中的一对恰好只有一侧被分配时，落在未分配槽位中的窗口会与已分配应用的窗口作为会话级"卫星"相互链接：点击其中任一个都会将另一个也带到前端</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>将 `debugLog` 改为使用 `@autoclosure`，在禁用调试日志时完全跳过日志消息的字符串插值开销</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了对多个窗口应用布局后，被其他窗口完全遮挡的窗口仍然显示分组链接徽章的问题。现在仅在前台可见的窗口之间显示徽章；被遮挡的窗口在被带到前台之前会从分组候选中排除</li>
+</ul>
+<h3>移除</h3>
+<ul>
+<li>移除了在应用布局后自动添加的"上次选择"临时预设。现在需要通过列表末尾的"+"行显式创建新预设</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>기본 레이아웃 프리셋 "중앙"을 추가했습니다. 4×4 그리드의 가운데 2×2 영역을 선택한 상태이며, `C` 키가 단축키로 지정되어 있습니다</li>
+<li>레이아웃 프리셋 목록 맨 아래에 "+" 버튼 행을 추가했습니다. 클릭하면 "새 레이아웃 프리셋"이라는 이름의 프리셋이 생성되고 바로 편집 모드로 들어갑니다</li>
+<li>레이아웃 프리셋 편집 중에 서로 맞닿은 영역들을 바로 그룹으로 지정할 수 있게 되었습니다. 인접한 변 가운데에 `link.badge.plus` 배지가 표시되며, 클릭하면 해당 쌍이 그룹으로 표시됩니다(배지가 연결된 모양으로 바뀌고, 마우스를 올리면 해제 아이콘으로 전환됩니다). 사이드바에서 프리셋에 마우스를 올리면 미리보기 위에도 연결된 배지가 표시되어 어떤 영역이 그룹으로 연결되는지 한눈에 확인할 수 있습니다. 프리셋을 적용하면 해당 창들이 처음부터 그룹화된 상태로 배치됩니다</li>
+<li>레이아웃 프리셋의 각 사각형에 특정 애플리케이션을 할당할 수 있게 되었습니다. 프리셋 편집 화면에서 각 사각형에 표시되는 `macwindow.badge.plus` 배지를 클릭하면 실행 중인 애플리케이션 목록(맨 아래의 "기타 애플리케이션…"을 통해 파일 선택도 가능)이 나타납니다. 할당된 사각형은 인덱스 번호 대신 앱 아이콘이 포함된 미니어처 창으로 표시되며, 마우스를 올렸을 때 나오는 ×를 클릭하면 할당을 해제할 수 있습니다. 프리셋을 적용하면 할당된 사각형에는 해당 앱의 가장 앞에 있는 창이 항상 배치됩니다(실행 중이 아니면 자동으로 실행하고 최대 30초간 기다립니다). 앱은 실행 중이지만 창이 없을 때는 시스템 알림이 표시됩니다. 또한 그룹화된 쌍 중 한쪽만 앱에 할당되어 있는 경우, 할당되지 않은 쪽에 들어간 창이 할당된 앱 창과 세션 한정 "위성"으로 연결되어, 한쪽을 클릭하면 다른 쪽도 함께 앞으로 올라옵니다</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>`debugLog`을 `@autoclosure`로 변경하여 디버그 로그가 비활성화된 상태에서는 로그 메시지의 문자열 보간 비용이 전혀 발생하지 않도록 했습니다</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>여러 윈도우에 레이아웃을 적용한 뒤, 다른 윈도우에 완전히 가려진 윈도우에도 그룹화 링크 배지가 표시되던 문제를 수정했습니다. 이제 앞쪽에 보이는 윈도우들 사이에서만 배지가 표시되며, 뒤에 가려진 윈도우는 앞으로 나오기 전까지 그룹화 후보에서 제외됩니다</li>
+</ul>
+<h3>삭제</h3>
+<ul>
+<li>레이아웃 적용 후 자동으로 추가되던 "마지막 선택" 임시 프리셋을 제거했습니다. 이제 새 프리셋은 목록 끝의 "+" 행을 통해 명시적으로 생성합니다</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>デフォルトレイアウトプリセット「中央」を追加しました。4×4 グリッドの中央 2×2 領域を選択した状態で、`C` キーがショートカットとして割り当てられています</li>
+<li>レイアウトプリセット一覧の末尾に「+」ボタンの行を追加しました。クリックすると「新規レイアウトプリセット」という名前のプリセットが作成され、そのまま編集モードに入ります</li>
+<li>レイアウトプリセットの編集中に、プリセット内で辺が接している領域同士のグループ化をその場で設定できるようになりました。隣接する辺の中央に `link.badge.plus` バッジが表示され、クリックするとそのペアをグループとしてマークします（バッジはリンク済みの見た目に変わり、ホバーで解除アイコンに切り替わります）。サイドバーでプリセットにホバーしているときも、プレビュー上にリンク済みのバッジが表示されるため、どの領域が連結されるかが一目で分かります。プリセットを適用したときは、対応するウインドウが最初からグループ化された状態になります</li>
+<li>レイアウトプリセットの各矩形に特定のアプリケーションを割り当てられるようになりました。プリセット編集中に各矩形に表示される `macwindow.badge.plus` バッジをクリックすると、起動中のアプリケーション一覧（末尾には「その他のアプリケーション…」でファイル選択も可能）が開きます。割り当て済みの矩形はインデックス番号の代わりにアプリアイコン付きのミニチュアウインドウとして表示され、ホバー時に現れる × をクリックすると割り当てを解除できます。プリセット適用時は、割り当てられたアプリの最前面ウインドウが必ずその矩形に配置されます（未起動の場合は自動的に起動し、最大 30 秒待ちます）。アプリが起動中でもウインドウが無い場合はシステム通知を表示します。さらに、グルーピングされたペアのうち片側だけがアプリ割り当てになっている場合、未割り当て側に入ったウインドウが割り当てアプリのウインドウと「サテライト」としてリンクされ、どちらをクリックしてもペアの相手も前面に出るようになります（セッション内のみ有効）</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>`debugLog` を `@autoclosure` 化し、デバッグログが無効な状態ではログメッセージの文字列補間コストが一切発生しないようにしました</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>多数のウインドウにレイアウトを適用したあと、他のウインドウに完全に隠れているウインドウにもグループ化用のリンクバッジが出てしまう問題を修正しました。前面に見えているウインドウ同士にだけバッジが表示されるようになり、背景に隠れているウインドウは前面に出てくるまでグループ化候補から除外されます</li>
+</ul>
+<h3>削除</h3>
+<ul>
+<li>レイアウト適用後に自動追加されていた「最後の選択」一時プリセットを廃止しました。新しいプリセットは末尾の「+」行から明示的に作成するようになりました</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>New default layout preset "Center" — a 4×4 grid with the center 2×2 region selected, bound to the `C` shortcut</li>
+<li>New "+" row at the end of the layout preset list — click it to create a new preset named "New Layout Preset" and immediately enter edit mode</li>
+<li>Grouping can now be defined directly in layout preset editing: a `link.badge.plus` badge appears at every shared edge between regions of the preset; click to mark the pair as grouped (badge flips to a linked state, hover to reveal the remove affordance). Hovering a preset in the sidebar also shows the grouped edges on the preview so you can see at a glance which regions are linked. When the preset is applied, the corresponding windows start out already grouped — no extra click required</li>
+<li>Layout preset rectangles can now be bound to a specific application. In the preset editor each rectangle shows a `macwindow.badge.plus` badge — click it to pick a running application (or browse the filesystem via "Other Application…"). Assigned rectangles render as a miniature window with the app's icon instead of an index number; hover and click the icon to unassign. When the preset is applied, assigned rectangles always receive the frontmost window of the bound app (launching the app and waiting up to 30 s if needed). If the app is running with no windows, a system notification is posted. When a grouped pair has exactly one side assigned, the window that lands in the unassigned slot is linked to the assigned app's window as a session-only "satellite": clicking either brings its partner forward too</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Made `debugLog` zero-cost when debug logging is disabled by using `@autoclosure`, so string interpolation of log messages is skipped entirely in the common case</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Window grouping link badges no longer appear on top of windows that are completely hidden behind another window. After applying a layout to many windows, only the visible (front) windows show grouping badges; their occluded counterparts are excluded from grouping candidates until they're brought to the front</li>
+</ul>
+<h3>Removed</h3>
+<ul>
+<li>Removed the "Last Selection" transient preset that was automatically added after applying a layout. New presets are now created explicitly via the "+" row instead</li>
+</ul>]]></description>
+            <pubDate>Sat, 25 Apr 2026 13:12:36 +0900</pubDate>
+            <sparkle:version>510</sparkle:version>
+            <sparkle:shortVersionString>5.1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley-5.1.0.zip" length="6321895" type="application/octet-stream" sparkle:edSignature="wn2Cwf/V4Uywb4hXOdAv6vXiWbKJ91s7vHaUVmI0oFVSUYU0S7prJLKSW+HP/xFnsTD5NaYFrAXOwJgh+Q26Dg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-501.delta" sparkle:deltaFrom="501" length="930866" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GgGNXPzrV6huU5SNgcE6k4LJDyz8Qx0VPbTo4wnh7MpDxDFb0MomWkhBPUOjMGbDqxvoEpgjQEzqwlLV5uRPBg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-500.delta" sparkle:deltaFrom="500" length="931166" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="AVcHho0k/YMADd1QBe7s3lkEMsphoLkl6O5kWBHvQGSmUCxmTznNjoi3izLZOIOE+ShUIc+9ZvnO8QqPzo8JDQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-443.delta" sparkle:deltaFrom="443" length="1070806" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="EufW/ZA2xTzmK0Nt+zivI9tvbMPH8iF6cc7dwTh9ihSKWQ+755Ssda2W79W7sWvOEcWIQ6BmXNFalS9vvRfVDw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-442.delta" sparkle:deltaFrom="442" length="1077026" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="SsSPpm/mE55gC0Yz0xmFerehTHZGI5EmbrP21LpPR+2ghhawGXYcczRn0NJzoBPh/SHW8CBkeTvX+AliuhceCA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-441.delta" sparkle:deltaFrom="441" length="1079902" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zeher+c6IN4r3SmIsxdhhkEaNwBi3pmz5T4XEOSpNGT9LxQA3v3hQug2Tf3lG0K+ldrWVx72q9AQdsYBB3VZAQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>5.0.1</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -48,11 +272,51 @@
 <ul>
 <li>Fixed grouped windows flickering when switching back to their app via Cmd+Tab. The Z-order linkage could fire before macOS finished raising the app's windows, briefly bringing a non-focused group member in front of the focused one</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o tremor de janelas agrupadas ao voltar para o app via Cmd+Tab. A vinculação de ordem Z podia disparar antes do macOS terminar de trazer as janelas do app para frente, fazendo um membro do grupo sem foco aparecer brevemente à frente do membro com foco</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Corretto lo sfarfallio delle finestre raggruppate al ritorno alla loro app tramite Cmd+Tab. Il collegamento Z-order poteva attivarsi prima che macOS avesse terminato di portare in primo piano le finestre dell'app, facendo apparire brevemente un membro del gruppo non focalizzato davanti a quello con il focus</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Corrigé un scintillement des fenêtres groupées lors du retour à leur app via Cmd+Tab. La liaison d'ordre Z pouvait se déclencher avant que macOS ait fini de remonter les fenêtres de l'app, faisant apparaître brièvement un membre du groupe non focalisé devant celui qui avait le focus</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Corregido el parpadeo de ventanas agrupadas al volver a su app con Cmd+Tab. El enlace de orden Z podía activarse antes de que macOS terminara de elevar las ventanas de la app, haciendo que un miembro del grupo sin foco apareciera brevemente delante del que tenía el foco</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Behoben: Beim Zurückwechseln zu einer App mit Cmd+Tab flackerte ein gruppiertes Fenster kurz in den Vordergrund. Die Z-Order-Verknüpfung wurde ausgelöst, bevor macOS das Anheben der App-Fenster abgeschlossen hatte, wodurch ein nicht fokussiertes Gruppenmitglied kurz vor dem fokussierten erschien</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>修正了使用 Cmd+Tab 切回同一個應用程式時，群組視窗中的另一個視窗會瞬間閃現至最前再恢復的問題。原因是在 macOS 完成 Z-order 更新之前，Tiley 的連動處理就已執行</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>修复了使用 Cmd+Tab 切回同一应用时，分组窗口中的另一个窗口会瞬间闪到最前再恢复的问题。原因是在 macOS 完成 Z-order 更新之前，Tiley 的联动处理就已运行</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>Cmd+Tab으로 같은 앱으로 복귀했을 때 그룹화된 창의 다른 한쪽이 잠깐 최전면에 깜빡였다가 돌아오는 문제를 수정했습니다. macOS의 Z-order 업데이트가 완료되기 전에 Tiley의 연동 처리가 실행되는 것이 원인이었습니다</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>Cmd+Tab で同じアプリに切り戻した際、グループ化されたウインドウのもう一方が一瞬最前面にちらついてから元に戻る問題を修正しました。macOS の Z-order 更新が完了する前に Tiley の連動処理が走ってしまうことが原因でした</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>Fixed grouped windows flickering when switching back to their app via Cmd+Tab. The Z-order linkage could fire before macOS finished raising the app's windows, briefly bringing a non-focused group member in front of the focused one</li>
+</ul>]]></description>
             <pubDate>Thu, 23 Apr 2026 08:33:05 +0900</pubDate>
             <sparkle:version>501</sparkle:version>
             <sparkle:shortVersionString>5.0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.1/Tiley-5.0.1.zip" length="5994053" type="application/octet-stream" sparkle:edSignature="xo+KwcZEb81FrAMDQAdssW9HlGyxuT2yXN+9bgZq2KmS1jPlvLroazIBIBP7iNkJm6P8sUuYiRq66xuZcNlsCQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley-5.0.1.zip" length="5994053" type="application/octet-stream" sparkle:edSignature="xo+KwcZEb81FrAMDQAdssW9HlGyxuT2yXN+9bgZq2KmS1jPlvLroazIBIBP7iNkJm6P8sUuYiRq66xuZcNlsCQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.1/Tiley501-500.delta" sparkle:deltaFrom="500" length="186574" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="+UcZQ7Aka/ZXmXWchKSE9dzUyuuNlCnF9Jb/Ae08U0rpGPvHwkkLZEHLzzMVGyp6KXQH/YfgC1obULbSMn8SDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.1/Tiley501-443.delta" sparkle:deltaFrom="443" length="574866" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="i6n0QUgmUZ+opWrBCz3vc5dOkZoKQCICl3tM/OcG+C/FkHOChwJk6AGRNGEQud3J2Fy5ZTf3pO49iAybULBnCw=="/>
@@ -294,342 +558,127 @@
 <li>Fixed one of two windows occasionally landing in the wrong position when applying a side-by-side layout to a multi-selection; an in-flight displacement animation (used to temporarily push occluding windows aside) no longer continues after the layout is applied and overrides the new frames</li>
 <li>Fixed a layout target gradually drifting toward the bottom-right after applying a side-by-side layout. The deferred post-hide cleanup could start a restore animation while the just-placed window was still listed in the displaced-windows table, dragging it back toward its pre-displacement origin</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>Agrupamento de janelas adicionado. Após aplicar uma predefinição de layout com várias janelas, um crachá de vínculo (`link.badge.plus`) aparece no ponto médio de qualquer borda em contato. Clicar no crachá agrupa as janelas: arrastar uma janela move todas as membros juntas, redimensionar a borda compartilhada redimensiona a janela adjacente em sentido oposto e trazer um membro para frente eleva os outros logo abaixo. Ao passar o mouse sobre o crachá aparece um ícone para dissolver o grupo; fechar uma janela do grupo também o dissolve automaticamente</li>
+<li>Crachá de vínculo na barra lateral: na barra lateral da janela principal, agora aparece um pequeno indicador de vínculo entre linhas consecutivas de janelas agrupadas, permitindo identificar num relance quais janelas estão conectadas. Se uma janela agrupada fosse separada da sua parceira por um bloco de cabeçalho do app, ela é retirada desse bloco e posicionada logo abaixo da parceira para manter o vínculo visível</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Corrigido o problema em que as prévias ao passar o mouse e ao arrastar na grade da janela principal usavam o estilo de retângulo da edição de predefinição (preenchimento tingido, sem barra de título) também durante a aplicação normal de um layout; fora da edição de uma predefinição, a janela em miniatura com ícone do app, nome do app e título da janela agora é exibida corretamente</li>
+<li>Corrigido o posicionamento incorreto ocasional de uma das duas janelas ao aplicar um layout lado a lado a uma seleção múltipla. A animação que deslocava temporariamente para baixo as janelas que ocultavam a janela selecionada continuava em execução depois da aplicação do layout e sobrescrevia as posições finais</li>
+<li>Corrigido o problema em que, após aplicar um layout lado a lado, uma janela já posicionada podia deslizar lentamente para o canto inferior direito. A limpeza adiada que ocorre depois de ocultar a janela principal podia iniciar uma animação de restauração enquanto a janela recém-posicionada ainda constava na lista de janelas afastadas, arrastando-a de volta para sua posição anterior ao deslocamento</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Aggiunto il raggruppamento delle finestre. Dopo aver applicato un preset di layout con più finestre, appare un badge di collegamento (`link.badge.plus`) al centro di ogni bordo a contatto. Facendo clic sul badge le finestre vengono raggruppate: trascinare una finestra sposta insieme tutte le membri, ridimensionare il bordo condiviso ridimensiona la finestra adiacente in senso opposto e portare in primo piano una membro eleva le altre immediatamente sotto. Passando il mouse sul badge appare un'icona per dissolvere il gruppo; chiudere una finestra del gruppo lo dissolve anche automaticamente</li>
+<li>Badge di collegamento nella barra laterale: nella barra laterale della finestra principale ora viene mostrato un piccolo indicatore di collegamento tra righe consecutive di finestre raggruppate, in modo da vedere a colpo d'occhio quali finestre sono associate. Se una finestra raggruppata rischierebbe di essere separata dalla sua compagna da un blocco di intestazione dell'app, viene estratta da quel blocco e posizionata direttamente sotto la compagna per mantenere visibile il collegamento</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Corretto il problema per cui le anteprime al passaggio del mouse e durante il trascinamento sulla griglia della finestra principale usavano lo stile di rettangolo della modifica di un preset (riempimento colorato, senza barra del titolo) anche durante la normale applicazione di un layout; al di fuori della modifica di un preset viene ora mostrata correttamente la finestra in miniatura con icona dell'app, nome dell'app e titolo della finestra</li>
+<li>Corretto il problema per cui, applicando un layout affiancato a una selezione multipla, una delle due finestre finiva occasionalmente nella posizione sbagliata. L'animazione che sposta temporaneamente in basso le finestre che coprono quella selezionata continuava a girare anche dopo l'applicazione del layout, sovrascrivendo le posizioni finali</li>
+<li>Corretto il problema per cui, dopo aver applicato un layout affiancato, una finestra già posizionata poteva scivolare lentamente verso l'angolo in basso a destra. La pulizia differita eseguita dopo aver nascosto la finestra principale poteva avviare un'animazione di ripristino mentre la finestra appena collocata era ancora elencata fra le finestre spostate, trascinandola così verso la sua posizione precedente allo spostamento</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Ajout du regroupement de fenêtres. Après l'application d'un préréglage de disposition contenant plusieurs fenêtres, un badge de lien (`link.badge.plus`) apparaît au milieu de chaque bord en contact. Cliquer sur le badge regroupe les fenêtres : faire glisser une fenêtre déplace tous les membres ensemble, redimensionner le bord commun redimensionne la fenêtre voisine en sens inverse et mettre un membre au premier plan élève les autres juste en dessous. Un survol du badge révèle une icône permettant de dissoudre le groupe ; fermer l'une des fenêtres du groupe le dissout également automatiquement</li>
+<li>Badge de lien dans la barre latérale : dans la barre latérale de la fenêtre principale, un petit indicateur de lien apparaît désormais entre deux lignes consécutives de fenêtres groupées, permettant de voir d'un coup d'œil quelles fenêtres sont associées. Si une fenêtre groupée risquait d'être séparée de sa partenaire par un bloc d'en-tête d'application, elle est extraite de ce bloc et placée directement sous sa partenaire afin que le lien reste visible</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Correction des aperçus au survol et au glissement sur la grille de la fenêtre principale qui utilisaient le style de rectangle de la modification de préréglage (rempli teinté, sans barre de titre) également lors de l'application normale d'une disposition ; en dehors de la modification d'un préréglage, la fenêtre miniature avec icône de l'application, nom de l'application et titre de la fenêtre est désormais correctement affichée</li>
+<li>Correction du positionnement incorrect occasionnel de l'une des deux fenêtres lors de l'application d'une disposition côte à côte à une sélection multiple. L'animation qui écartait temporairement les fenêtres masquant la fenêtre sélectionnée continuait de s'exécuter après l'application de la disposition et écrasait les positions finales</li>
+<li>Correction d'une fenêtre pouvant dériver lentement vers le coin inférieur droit après l'application d'une disposition côte à côte. Le nettoyage différé qui suit le masquage de la fenêtre principale pouvait démarrer une animation de restauration alors que la fenêtre tout juste placée figurait encore dans la liste des fenêtres écartées, la ramenant progressivement vers sa position antérieure au déplacement</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>Se añadió el agrupamiento de ventanas. Al aplicar una configuración predefinida de diseño con varias ventanas, aparece una insignia de enlace (`link.badge.plus`) en el punto medio de cualquier borde en contacto. Al hacer clic en la insignia, las ventanas se agrupan: arrastrar una ventana mueve a todas las miembros a la vez, redimensionar el borde compartido redimensiona la ventana vecina en sentido opuesto, y llevar un miembro al frente eleva a los demás justo debajo. Al pasar el cursor sobre la insignia aparece un icono para disolver el grupo; al hacer clic sobre él se deshace la agrupación. Si se cierra una ventana del grupo, este también se disuelve automáticamente</li>
+<li>Insignia de enlace en la barra lateral: en la barra lateral de la ventana principal ahora se muestra un pequeño indicador de enlace entre las filas consecutivas de ventanas agrupadas, para ver de un vistazo qué ventanas están vinculadas. Si una ventana agrupada quedaría separada de su compañera por el bloque de encabezado de una app, se extrae de ese bloque y se coloca justo debajo de su compañera para que el enlace siga siendo visible</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Se corrigió que las vistas previas al pasar el cursor y al arrastrar en la cuadrícula de la ventana principal usaran el estilo de rectángulo de la edición de configuración predefinida (relleno tintado, sin barra de título) también durante la aplicación normal de un diseño; fuera de la edición de una configuración predefinida, ahora se muestra correctamente la ventana en miniatura con icono de la aplicación, nombre de la aplicación y título de la ventana</li>
+<li>Se corrigió que, al aplicar un diseño en paralelo a una selección múltiple, una de las dos ventanas aterrizara ocasionalmente en la posición incorrecta. La animación que aparta temporalmente las ventanas que ocultan la seleccionada seguía ejecutándose después de aplicar el diseño y sobrescribía las posiciones finales</li>
+<li>Se corrigió que, tras aplicar un diseño en paralelo, una ventana colocada pudiera desplazarse lentamente hacia la esquina inferior derecha. La limpieza diferida posterior a ocultar la ventana principal podía iniciar una animación de restauración mientras la ventana recién colocada aún figuraba en la lista de ventanas apartadas, arrastrándola de vuelta hacia su posición previa al desplazamiento</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Fenstergruppierung hinzugefügt. Nach dem Anwenden einer Layout-Voreinstellung mit mehreren Fenstern erscheint an der Mitte jeder aneinandergrenzenden Kante ein Link-Abzeichen (`link.badge.plus`). Ein Klick auf das Abzeichen gruppiert die Fenster, sodass das Ziehen eines Fensters alle Mitglieder gemeinsam bewegt, das Größenändern der gemeinsamen Kante das gegenüberliegende Fenster entgegengesetzt skaliert und das Hervorheben eines Mitglieds die anderen direkt darunter anhebt. Beim Darüberfahren erscheint ein Auflösungssymbol; ein Klick darauf löst die Gruppe auf. Beim Schließen eines beteiligten Fensters wird die Gruppe automatisch aufgelöst</li>
+<li>Link-Abzeichen in der Seitenleiste: In der Seitenleiste des Hauptfensters wird nun zwischen aneinandergrenzenden gruppierten Fenstereinträgen ein kleines Link-Symbol angezeigt, sodass auf einen Blick erkennbar ist, welche Fenster verknüpft sind. Würde ein gruppiertes Fenster sonst durch einen App-Kopfzeilenblock von seinem Partner getrennt werden, wird es aus diesem Block herausgelöst und direkt unter seinen Partner platziert, damit die Verbindung sichtbar bleibt</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Behoben, dass Hover- und Zieh-Vorschauen auf dem Hauptfenster-Raster auch bei der normalen Layout-Anwendung den Stil aus der Voreinstellungsbearbeitung verwendeten (eingefärbtes Rechteck, keine Titelleiste); außerhalb der Voreinstellungsbearbeitung wird nun korrekt das Miniaturfenster mit App-Symbol, App-Name und Fenstertitel angezeigt</li>
+<li>Behoben, dass eines von zwei Fenstern gelegentlich an der falschen Position landete, wenn ein Seite-an-Seite-Layout auf eine Mehrfachauswahl angewendet wurde: Die Animation, die verdeckende Fenster vorübergehend nach unten verschiebt, um das ausgewählte Fenster sichtbar zu machen, lief nach dem Anwenden des Layouts weiter und überschrieb so die neu gesetzten Positionen</li>
+<li>Behoben, dass ein Fenster nach dem Anwenden eines Seite-an-Seite-Layouts langsam nach rechts unten driftete. Die verzögerte Aufräum-Routine nach dem Ausblenden des Hauptfensters konnte eine Wiederherstellungs-Animation starten, während das frisch platzierte Fenster noch in der Liste der beiseite geschobenen Fenster stand, und zog es dadurch langsam zurück zu seiner Ursprungsposition vor der Verdrängung</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增視窗分組功能。套用包含多個視窗的版面預設後，若有邊緣相鄰的視窗對，會在相鄰邊的中央顯示連結徽章（`link.badge.plus`）。點擊徽章即可將視窗分組，此後拖曳其中一個視窗時其他成員會一同移動，調整相鄰邊的大小時對側視窗會反向縮放以保持緊貼。將群組內的視窗置於前端時，其他成員也會隨即提升到緊接其下的層級。將滑鼠懸停在徽章上會顯示解除圖示，點擊即可解除分組。成員視窗關閉時也會自動解除</li>
+<li>側邊欄連結徽章：在主視窗側邊欄中，相鄰的同群組視窗之間會顯示小型連結圖示，讓使用者一眼就能看出哪些視窗已連動。若同群組視窗原本會被應用程式標題區塊隔開，該視窗會被從所屬應用程式群組中抽出，直接排在群組夥伴的下方以保持連結可見</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>修正了一般版面配置指定時，在主視窗格線上懸停和拖曳也以預設編輯時的樣式（純色矩形、無標題列）顯示的問題。非編輯預設時，現在會正確顯示帶有應用程式圖示、應用程式名稱和視窗標題的迷你視窗</li>
+<li>修正了多選視窗並套用左右並排版面時，偶爾會有一個視窗位置不正確的問題。將所選視窗置於前端時會暫時把遮擋的視窗向下移開的動畫，在版面套用之後仍繼續執行並覆寫了最終位置，因此導致該問題</li>
+<li>修正了套用左右並排版面後，已放置的視窗會慢慢往右下方漂移的問題。主視窗隱藏後的延遲清理會在剛放置的視窗仍留在「已避讓視窗」清單中的情況下啟動還原動畫，結果把該視窗慢慢拉回避讓前的原始位置</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>新增窗口分组功能。应用包含多个窗口的布局预设后，若存在边相邻的窗口对，会在相邻边的中央显示链接徽章（`link.badge.plus`）。点击徽章即可将窗口分组，此后拖动其中一个窗口时其他成员会一同移动，调整相邻边的大小时对侧窗口会反向缩放以保持贴合。将组内某个窗口置于前端时，其他成员也会紧随其后提升到上层。将鼠标悬停在徽章上会显示解除图标，点击即可解除分组。成员窗口关闭时也会自动解除</li>
+<li>侧边栏链接徽章：在主窗口侧边栏中，相邻的同组窗口之间会显示一个小型链接图标，使已分组的窗口一目了然。若同组窗口原本会被应用标题块隔开，该窗口会被移出所属应用分组，直接排在组伙伴的下方以保持链接可见</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>修复了常规布局指定时，在主窗口网格上悬停和拖动也以预设编辑时的样式（纯色矩形、无标题栏）显示的问题。非编辑预设时，现在会正确显示带有应用图标、应用名称和窗口标题的微缩窗口</li>
+<li>修复了多选窗口并应用左右并排布局时，偶尔会有一个窗口位置不正确的问题。将所选窗口置于前端时会临时把遮挡的窗口向下移开的动画，在布局应用之后仍继续运行并覆盖了最终位置，因此导致了该问题</li>
+<li>修复了应用左右并排布局之后，已放置的窗口会慢慢向右下方漂移的问题。主窗口隐藏之后的延迟清理会在刚放置的窗口仍然留在“已避让窗口”列表中的情况下启动恢复动画，从而把该窗口慢慢拉回到避让前的原始位置</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>창 그룹화 기능 추가. 여러 창을 포함하는 레이아웃 프리셋을 적용한 후 변이 맞닿는 창 쌍이 있으면 맞닿는 변의 중앙에 링크 배지(`link.badge.plus`)가 표시됩니다. 배지를 클릭하면 창이 그룹화되어 한쪽을 드래그로 이동하면 다른 멤버도 동일하게 이동하고, 맞닿는 변을 리사이즈하면 상대 창이 반대 방향으로 축소/확장되어 따라옵니다. 그룹 내 창을 전면으로 가져오면 다른 멤버도 바로 아래 레이어로 올라옵니다. 배지에 호버하면 해제 아이콘이 표시되며 클릭하면 그룹이 해제됩니다. 멤버 창이 닫히면 자동으로 해제됩니다</li>
+<li>사이드바 링크 배지: 메인 창의 사이드바에서 그룹화된 창 사이에 작은 링크 표시가 나타나 어떤 창들이 함께 묶여 있는지 쉽게 알 수 있습니다. 앱 헤더 블록 때문에 짝꿍 창과 떨어지게 되는 경우, 그 창을 앱 그룹에서 꺼내 짝꿍 창 바로 아래에 배치해 링크가 끊기지 않도록 했습니다</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>일반 레이아웃 지정 시 메인 창의 그리드에서 마우스 호버·드래그 시 프리셋 편집 중과 동일한 스타일(채우기 사각형·타이틀바 없음)로 표시되던 문제 수정. 프리셋 편집 중이 아닌 경우에는 앱 아이콘·앱 이름·윈도우 타이틀이 포함된 미니어처 윈도우가 표시됩니다</li>
+<li>여러 창을 선택하고 좌우 배치 레이아웃을 적용할 때 한쪽 창이 의도하지 않은 위치에 놓이는 문제를 수정했습니다. 선택한 창을 전면으로 올리기 위해 다른 창을 일시적으로 아래로 치워두는 애니메이션이 레이아웃 적용 후에도 계속 실행되면서 최종 위치를 덮어쓰고 있던 것이 원인입니다</li>
+<li>좌우 배치 레이아웃을 적용한 뒤 배치된 창이 서서히 오른쪽 아래로 밀려나는 문제를 수정했습니다. 메인 창을 숨긴 뒤의 지연 정리 처리에서, 방금 배치한 창이 아직 대피 목록에 남아 있는 상태로 복귀 애니메이션이 시작되어 그 창을 대피 전 원래 위치로 끌고 가고 있었던 것이 원인입니다</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>ウインドウのグループ化機能を追加しました。複数のウインドウを含むレイアウトプリセットを適用したとき、辺が接するウインドウペアがあると接する辺の中央にリンクバッジ（`link.badge.plus`）が表示されます。バッジをクリックするとウインドウがグループ化され、片方をドラッグ移動すると他メンバーも同じだけ移動し、接する辺をリサイズするともう一方が追随して逆向きに縮んだり広がったりします。また、グループ内のウインドウを前面化すると他メンバーも直後のレイヤーに上がります。バッジにホバーすると解除アイコンが表示され、クリックするとグループが解除されます。メンバーのウインドウが閉じられた場合も自動解除されます</li>
+<li>サイドバーでグループ化されたウインドウ同士の行間に小さなリンクバッジを表示するようにしました。一目でどのウインドウがグループになっているかが分かります。グループの相方がアプリヘッダに隠れて隣接できない場合、その相方ウインドウをアプリグループから独立させて、グループ元のウインドウの直下に並べて表示します</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>通常のレイアウト指定時にメインウインドウのグリッドでマウスホバー・ドラッグすると、プリセット編集時と同じスタイル（塗りつぶし矩形・タイトルバーなし）で表示されてしまう問題を修正。プリセット編集中でない場合は、アプリアイコン・アプリ名・ウインドウタイトル付きのミニチュアウインドウが表示されるようになりました</li>
+<li>複数選択して左右配置レイアウトを適用した際、片方のウインドウが意図しない位置に配置されることがある問題を修正しました。選択したウインドウを前面化するために一時的に他ウインドウを下方へ待避させるアニメーションが、レイアウト適用後も動き続けて最終位置を上書きしていたのが原因です</li>
+<li>左右配置レイアウト適用後、配置されたウインドウがズリズリと右下へずれていくことがある問題を修正しました。メインウインドウ非表示後の遅延クリーンアップが、配置済みウインドウを待避中リストに残したまま復帰アニメーションを開始してしまい、そのウインドウを待避前の元位置へ引き戻していたのが原因です</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>Window grouping: after applying a layout preset that places two or more windows side by side, a link badge (`link.badge.plus`) now appears at the midpoint of any touching edges. Clicking the badge groups the windows so that dragging one window moves all members in lockstep, resizing the shared edge resizes the partner inversely, and raising one member raises the others just beneath it. Hover the badge to reveal a dismiss affordance that dissolves the group; closing a window in the group also dissolves it automatically</li>
+<li>Sidebar link badge: grouped windows in the main window sidebar now show a small link indicator in the gap between consecutive grouped rows, making it easy to see which windows are tied together. When a grouped window would otherwise be separated from its partner by an app-header block, it is pulled out of that block and placed directly below its partner so the link stays visible</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Fixed hover and drag previews on the main window grid using the preset-editing rectangle style (tinted fill, no title bar) even during normal layout application; they now correctly show the miniature window with app icon, app name, and window title when not editing a preset</li>
+<li>Fixed one of two windows occasionally landing in the wrong position when applying a side-by-side layout to a multi-selection; an in-flight displacement animation (used to temporarily push occluding windows aside) no longer continues after the layout is applied and overrides the new frames</li>
+<li>Fixed a layout target gradually drifting toward the bottom-right after applying a side-by-side layout. The deferred post-hide cleanup could start a restore animation while the just-placed window was still listed in the displaced-windows table, dragging it back toward its pre-displacement origin</li>
+</ul>]]></description>
             <pubDate>Wed, 22 Apr 2026 23:10:16 +0900</pubDate>
             <sparkle:version>500</sparkle:version>
             <sparkle:shortVersionString>5.0.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.1/Tiley-5.0.0.zip" length="5991339" type="application/octet-stream" sparkle:edSignature="4kryZ4EfD8SAVy5cmrEbonD8OqcKU5Tispf5p4RAE5RMH65M1dqZfUBBaEjA+5oEuEryRQZf1APppbprPsdpBA=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley-5.0.0.zip" length="5991339" type="application/octet-stream" sparkle:edSignature="4kryZ4EfD8SAVy5cmrEbonD8OqcKU5Tispf5p4RAE5RMH65M1dqZfUBBaEjA+5oEuEryRQZf1APppbprPsdpBA=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-443.delta" sparkle:deltaFrom="443" length="575678" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="YvQezPe1IdCxUCSGDege+I0LdpjYfsK3wLKpWWmRAZtK4SnlVgD+OcyHty5madYIBkJr1SbB+yLBhBV7+Y5FAg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-442.delta" sparkle:deltaFrom="442" length="607382" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="CXb2S/cveVpkv3PZ9/01g5mJDESHJtCb+gesyNV7nKeZh+7wxGDqLuUH0ZfGe8ihN5al/gj7UslfhqNhwVnpCw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-441.delta" sparkle:deltaFrom="441" length="613586" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="OVOZTjEJ5qa8C116uFF1F3zPq39ZAhF4WTnQB6XBOvrfAcGvlyH22W3wPeKrK5WwNd1xNBCY3+fCRM6+Qt+YAw=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-440.delta" sparkle:deltaFrom="440" length="673598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="QxxRL2AbkleagAQnOshRlkd4c6MwNpiT229PZ6F/jSlOuWYTIcMEeBlSui96nKymiQT9yUM8NVim/yAH+oGMBA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.0/Tiley500-439.delta" sparkle:deltaFrom="439" length="699030" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ixfTMn3tG0+OaLVeFY2IV7jKYqiMtC8miSEJScCEZH2IKKBxNugMw+7tfzYjskMaK5UpnJsCA6FdxciD2XcQDg=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>4.4.3</title>
-            <description xml:lang="ru"><![CDATA[<h3>Изменено</h3>
-<ul>
-<li>При редактировании пресета раскладки предпросмотры при наведении курсора и во время перетаскивания на сетке теперь используют тот же стиль прямоугольника, что и подтверждённые выделения: окрашены в цвет следующего индекса и показывают по центру номер присваиваемого индекса, без заголовка и без кнопки удаления. Кроме того, наведение курсора на пустую ячейку показывает предпросмотр прямоугольника размером в одну ячейку, даже если уже зарегистрированы другие раскладки</li>
-<li>При редактировании пресета как прямоугольник при наведении курсора, так и перетаскиваемый прямоугольник теперь отображают по центру номер индекса, который будет присвоен после подтверждения (с тем же видом, что и подтверждённый прямоугольник), включая предпросмотр размером в одну ячейку при наведении. Предпросмотры пресетов раскладки (наведение курсора на пресет в боковой панели и полноэкранное наложение предпросмотра при применении пресетов с несколькими выделениями) продолжают показывать номера индексов</li>
-</ul>
-<h3>Исправлено</h3>
-<ul>
-<li>Исправлен скачок главного окна в центр экрана при добавлении или редактировании сетки в пресете раскладки, когда был включён параметр «Показывать рядом с иконкой при нажатии»; окно теперь остаётся закреплённым рядом со значком в строке меню</li>
-<li>Исправлена ошибка, из-за которой подтверждённые прямоугольники выделения иногда отображались без заливки и рамки (видны были только кнопка закрытия и номер выделения), когда пресет раскладки содержал несколько выделений</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Ao editar uma predefinição de layout, as prévias de passagem do mouse e de arrasto na grade agora usam o mesmo estilo de retângulo das seleções confirmadas: tingidas com a cor do próximo índice e exibindo centralizado o número de índice que será atribuído, sem barra de título e sem botão de exclusão. Além disso, passar o mouse sobre uma célula vazia mostra uma prévia de retângulo do tamanho de uma célula mesmo quando outros layouts já estão registrados</li>
-<li>Durante a edição de uma predefinição, tanto o retângulo ao passar o mouse quanto o retângulo arrastado agora exibem centralizado o número de índice que será atribuído ao confirmar (com a mesma aparência do retângulo confirmado), incluindo a prévia de uma única célula ao passar o mouse. As prévias de predefinições de layout (passar o mouse sobre uma predefinição na barra lateral e a sobreposição de prévia em tela cheia ao aplicar predefinições de seleção múltipla) continuam exibindo os números de índice</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o salto da janela principal para o centro da tela ao adicionar ou editar uma grade em uma predefinição de layout quando "Mostrar perto do ícone ao clicar" estava ativado; a janela agora permanece ancorada perto do ícone da barra de menus</li>
-<li>Corrigido o problema em que retângulos de seleção confirmados eram exibidos ocasionalmente sem preenchimento e sem borda (apenas com o botão de fechar e o rótulo de índice visíveis) quando uma predefinição de layout continha várias seleções</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Durante la modifica di un preset di layout, le anteprime al passaggio del mouse e durante il trascinamento sulla griglia usano ora lo stesso stile di rettangolo delle selezioni confermate: colorate con la tinta del prossimo indice e con il numero di indice da assegnare mostrato al centro, senza barra del titolo e senza pulsante di eliminazione. Inoltre, passando il mouse su una cella vuota viene mostrata un'anteprima di una cella anche quando sono già registrati altri layout</li>
-<li>Durante la modifica di un preset, sia il rettangolo al passaggio del mouse sia il rettangolo di trascinamento mostrano ora al centro il numero di indice che verrà assegnato al momento della conferma (con lo stesso aspetto del rettangolo confermato), inclusa l'anteprima di una singola cella al passaggio del mouse. Le anteprime dei preset di layout (passaggio del mouse su un preset nella barra laterale e la sovrapposizione di anteprima a schermo intero durante l'applicazione di preset a selezione multipla) continuano a mostrare i numeri di indice</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto lo spostamento della finestra principale al centro dello schermo quando si aggiungeva o modificava una griglia in un preset di layout con "Mostra vicino all'icona al clic" attivato; la finestra ora rimane ancorata vicino all'icona della barra dei menu</li>
-<li>Corretto il problema per cui i rettangoli di selezione confermati venivano talvolta visualizzati senza riempimento e senza bordo (con solo il pulsante di chiusura e l'etichetta numerica visibili) quando un preset di layout conteneva più selezioni</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Lors de la modification d'un préréglage de disposition, les aperçus au survol et lors du glissement sur la grille utilisent désormais le même style de rectangle que les sélections validées : teintés avec la couleur du prochain index et affichant en son centre le numéro d'index à attribuer, sans barre de titre ni bouton de suppression. De plus, le survol d'une cellule vide affiche un aperçu de rectangle d'une cellule même si d'autres dispositions sont déjà enregistrées</li>
-<li>Lors de la modification d'un préréglage, le rectangle au survol et le rectangle de glissement affichent désormais au centre le numéro d'index qui sera attribué à la validation (avec la même apparence que le rectangle validé), y compris l'aperçu d'une seule cellule au survol. Les aperçus des préréglages de disposition (survol d'un préréglage dans la barre latérale, superposition d'aperçu plein écran lors de l'application de préréglages à sélections multiples) continuent également d'afficher les numéros d'index</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du saut de la fenêtre principale vers le centre de l'écran lors de l'ajout ou de la modification d'une grille dans un préréglage de disposition lorsque « Afficher près de l'icône au clic » était activé ; la fenêtre reste désormais ancrée près de l'icône de la barre de menus</li>
-<li>Correction du fait que les rectangles de sélection validés s'affichaient parfois sans remplissage ni bordure (avec uniquement le bouton de fermeture et l'étiquette de numéro visibles) lorsqu'un préréglage de disposition contenait plusieurs sélections</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Al editar una configuración predefinida de diseño, las vistas previas de paso del cursor y de arrastre en la cuadrícula ahora usan el mismo estilo de rectángulo que las selecciones confirmadas: tintadas con el color del siguiente índice y mostrando centrado el número de índice que se asignará, sin barra de título ni botón de eliminación. Además, al pasar el cursor sobre una celda vacía se muestra una vista previa de rectángulo de una celda aunque ya haya otros diseños registrados</li>
-<li>Durante la edición de una configuración predefinida, tanto el rectángulo al pasar el cursor como el rectángulo de arrastre muestran ahora centrado el número de índice que se asignará al confirmar (con el mismo aspecto que el rectángulo confirmado), incluida la vista previa de una sola celda al pasar el cursor. Las vistas previas de configuraciones predefinidas de diseño (paso del cursor sobre una configuración predefinida en la barra lateral y la superposición de vista previa a pantalla completa al aplicar configuraciones predefinidas de selección múltiple) también siguen mostrando los números de índice</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió el salto de la ventana principal al centro de la pantalla al añadir o editar una cuadrícula en una configuración predefinida de diseño cuando "Mostrar cerca del icono al hacer clic" estaba activado; ahora la ventana permanece anclada cerca del icono de la barra de menús</li>
-<li>Se corrigió que los rectángulos de selección confirmados se mostraran ocasionalmente sin relleno ni borde (con solo el botón de cerrar y la etiqueta de índice visibles) cuando una configuración predefinida de diseño contenía varias selecciones</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Beim Bearbeiten einer Layout-Voreinstellung verwenden Hover- und Zieh-Vorschauen auf dem Raster jetzt denselben Rechteck-Stil wie bestätigte Auswahlen: in der Farbe des nächsten Index und mit der zugehörigen Indexnummer mittig, ohne Titelleiste und ohne Löschen-Schaltfläche. Zusätzlich zeigt das Darüberfahren mit der Maus über eine leere Zelle ein ein Zellen großes Vorschaurechteck an, auch wenn bereits andere Layouts registriert sind</li>
-<li>Beim Bearbeiten einer Voreinstellung zeigen nun sowohl das Hover- als auch das Zieh-Rechteck die nach dem Bestätigen zugewiesene Indexnummer mittig an (passend zum bestätigten Rechteck, in das sie übergehen) – einschließlich der ein Zellen großen Hover-Vorschau. Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Das Hauptfenster sprang in die Bildschirmmitte, wenn bei aktivierter Option „Beim Klick neben dem Symbol anzeigen" ein Raster in einer Layout-Voreinstellung hinzugefügt oder bearbeitet wurde; das Fenster bleibt jetzt nahe am Menüleistensymbol verankert</li>
-<li>Behoben, dass bestätigte Auswahlrechtecke gelegentlich ohne Füllung und Rahmen angezeigt wurden (nur Schließen-Schaltfläche und Indexnummer sichtbar), wenn eine Layout-Voreinstellung mehrere Auswahlen enthielt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>編輯版面配置預設時，滑鼠懸停和拖曳中的格線預覽統一為與放開拖曳後顯示相同的矩形樣式：不顯示標題列和刪除按鈕，以下一個索引的顏色顯示，並在中央顯示即將指派的索引編號。此外，即使已經登記其他配置，將滑鼠懸停在空格上也會顯示 1 格大小的預覽矩形</li>
-<li>編輯預設時，滑鼠懸停矩形和拖曳矩形都會在中央顯示提交後將取得的索引編號（與提交後的矩形外觀相同）。1 格大小的滑鼠懸停預覽也會顯示編號。版面配置預設預覽（側邊欄的預設懸停、套用多選預設時的全螢幕預覽覆蓋層）同樣繼續顯示索引編號</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正啟用「點擊圖示時在圖示附近顯示」後，在版面配置預設中新增或編輯格線時主視窗會跳到螢幕中央的問題；視窗現在會固定在選單列圖示附近</li>
-<li>修正版面配置預設中存在多個選取區域時，已確定的選取矩形偶爾不顯示填充和邊框（僅顯示 × 按鈕和編號標籤）的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>编辑布局预设时，鼠标悬停和拖动过程中的网格预览统一为与拖动释放后显示相同的矩形样式：不显示标题栏和删除按钮，以下一个索引的颜色显示，并在中央显示即将赋予的索引编号。此外，即使已经登记了其他布局，将鼠标悬停在空单元格上也会显示 1 格大小的预览矩形</li>
-<li>编辑预设时，鼠标悬停矩形和拖动矩形都会在中央显示提交后将获得的索引编号（与提交后的矩形外观相同）。1 格大小的鼠标悬停预览也会显示编号。预设布局预览（侧边栏的预设悬停、应用多选预设时的全屏预览叠加层）同样继续显示索引编号</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复启用"点击图标时在图标附近显示"后，在布局预设中添加或编辑网格时主窗口会跳到屏幕中央的问题；窗口现在会保持固定在菜单栏图标附近</li>
-<li>修复布局预设中存在多个选区时，已确定的选区矩形偶尔不显示填充和边框（仅显示×按钮和序号标签）的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>레이아웃 프리셋을 편집할 때, 마우스 호버 및 드래그 중 그리드 미리보기가 드래그를 놓은 후 표시되는 사각형과 동일한 스타일로 통일되었습니다. 타이틀바와 삭제 버튼은 표시되지 않으며, 다음 인덱스 색상과 부여될 인덱스 번호를 중앙에 표시합니다. 또한 다른 레이아웃이 이미 등록된 상태에서도 빈 셀에 마우스를 올리면 1셀 크기의 미리보기 사각형이 표시됩니다</li>
-<li>프리셋 편집 중 마우스 호버 사각형과 드래그 사각형 모두에 확정 후 부여될 인덱스 번호가 중앙에 표시됩니다(확정 후의 사각형과 동일한 모양). 1셀 크기의 마우스 호버 미리보기에도 번호가 표시됩니다. 프리셋 레이아웃 미리보기(사이드바의 프리셋 호버, 다중 선택 프리셋 적용 시의 전체 화면 미리보기 오버레이)에서도 계속해서 번호를 표시합니다</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>"아이콘 클릭 시 아이콘 근처에 표시"가 활성화된 상태에서 레이아웃 프리셋 편집 중 그리드를 추가하거나 편집할 때 메인 창이 화면 중앙으로 이동하던 문제 수정. 이제 창은 메뉴 막대 아이콘 근처에 계속 고정됩니다</li>
-<li>레이아웃 프리셋에 여러 선택 영역이 등록되어 있을 때, 확정된 선택 사각형이 드물게 채우기와 테두리 없이(× 버튼과 번호 라벨만) 표시되던 문제 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>レイアウトプリセットの編集中、マウスホバーおよびドラッグ中のグリッドプレビューを、ドラッグ確定後の矩形と同じスタイルに統一しました。タイトルバーや削除ボタンは非表示で、次のインデックスの色と付与予定のインデックス番号を中央に表示します。また、すでに他のレイアウトが登録されている状態でも、空セルにマウスホバーすると 1 セル分のプレビュー矩形が表示されます</li>
-<li>プリセット編集中のマウスホバー矩形・ドラッグ矩形の両方に、確定後に付与されるインデックス番号を中央に表示するようにしました（確定後の矩形と同じ見た目）。1 セル分のマウスホバープレビューでも番号を表示します。プリセットレイアウトのプレビュー（サイドバーでのプリセットホバーや、複数選択プリセット適用時の全画面プレビューオーバーレイ）でも引き続き番号を表示します</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>「アイコンクリック時にアイコン付近に表示」が有効なときに、レイアウトプリセット編集でグリッドを追加・編集するとメインウインドウが画面中央に飛んでしまう問題を修正。ウインドウはメニューバーアイコン付近に留まるようになりました</li>
-<li>レイアウトプリセットに複数の選択範囲が登録されているとき、確定済みの選択矩形が稀に塗りつぶしや枠線なし（×ボタンと番号ラベルのみ）で表示されてしまう問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered</li>
-<li>During preset editing, the hover and drag rectangles now both show the upcoming index number centered (matching the committed selection they will become) — including the single-cell hover preview. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon</li>
-<li>Fixed committed selection rectangles occasionally rendering with no fill (showing only the close button and index number) when a layout preset contained many selections</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Ao editar uma predefinição de layout, as prévias de passagem do mouse e de arrasto na grade agora usam o mesmo estilo de retângulo das seleções confirmadas: tingidas com a cor do próximo índice e exibindo centralizado o número de índice que será atribuído, sem barra de título e sem botão de exclusão. Além disso, passar o mouse sobre uma célula vazia mostra uma prévia de retângulo do tamanho de uma célula mesmo quando outros layouts já estão registrados</li>
-<li>Durante a edição de uma predefinição, tanto o retângulo ao passar o mouse quanto o retângulo arrastado agora exibem centralizado o número de índice que será atribuído ao confirmar (com a mesma aparência do retângulo confirmado), incluindo a prévia de uma única célula ao passar o mouse. As prévias de predefinições de layout (passar o mouse sobre uma predefinição na barra lateral e a sobreposição de prévia em tela cheia ao aplicar predefinições de seleção múltipla) continuam exibindo os números de índice</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o salto da janela principal para o centro da tela ao adicionar ou editar uma grade em uma predefinição de layout quando "Mostrar perto do ícone ao clicar" estava ativado; a janela agora permanece ancorada perto do ícone da barra de menus</li>
-<li>Corrigido o problema em que retângulos de seleção confirmados eram exibidos ocasionalmente sem preenchimento e sem borda (apenas com o botão de fechar e o rótulo de índice visíveis) quando uma predefinição de layout continha várias seleções</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Durante la modifica di un preset di layout, le anteprime al passaggio del mouse e durante il trascinamento sulla griglia usano ora lo stesso stile di rettangolo delle selezioni confermate: colorate con la tinta del prossimo indice e con il numero di indice da assegnare mostrato al centro, senza barra del titolo e senza pulsante di eliminazione. Inoltre, passando il mouse su una cella vuota viene mostrata un'anteprima di una cella anche quando sono già registrati altri layout</li>
-<li>Durante la modifica di un preset, sia il rettangolo al passaggio del mouse sia il rettangolo di trascinamento mostrano ora al centro il numero di indice che verrà assegnato al momento della conferma (con lo stesso aspetto del rettangolo confermato), inclusa l'anteprima di una singola cella al passaggio del mouse. Le anteprime dei preset di layout (passaggio del mouse su un preset nella barra laterale e la sovrapposizione di anteprima a schermo intero durante l'applicazione di preset a selezione multipla) continuano a mostrare i numeri di indice</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto lo spostamento della finestra principale al centro dello schermo quando si aggiungeva o modificava una griglia in un preset di layout con "Mostra vicino all'icona al clic" attivato; la finestra ora rimane ancorata vicino all'icona della barra dei menu</li>
-<li>Corretto il problema per cui i rettangoli di selezione confermati venivano talvolta visualizzati senza riempimento e senza bordo (con solo il pulsante di chiusura e l'etichetta numerica visibili) quando un preset di layout conteneva più selezioni</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Lors de la modification d'un préréglage de disposition, les aperçus au survol et lors du glissement sur la grille utilisent désormais le même style de rectangle que les sélections validées : teintés avec la couleur du prochain index et affichant en son centre le numéro d'index à attribuer, sans barre de titre ni bouton de suppression. De plus, le survol d'une cellule vide affiche un aperçu de rectangle d'une cellule même si d'autres dispositions sont déjà enregistrées</li>
-<li>Lors de la modification d'un préréglage, le rectangle au survol et le rectangle de glissement affichent désormais au centre le numéro d'index qui sera attribué à la validation (avec la même apparence que le rectangle validé), y compris l'aperçu d'une seule cellule au survol. Les aperçus des préréglages de disposition (survol d'un préréglage dans la barre latérale, superposition d'aperçu plein écran lors de l'application de préréglages à sélections multiples) continuent également d'afficher les numéros d'index</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du saut de la fenêtre principale vers le centre de l'écran lors de l'ajout ou de la modification d'une grille dans un préréglage de disposition lorsque « Afficher près de l'icône au clic » était activé ; la fenêtre reste désormais ancrée près de l'icône de la barre de menus</li>
-<li>Correction du fait que les rectangles de sélection validés s'affichaient parfois sans remplissage ni bordure (avec uniquement le bouton de fermeture et l'étiquette de numéro visibles) lorsqu'un préréglage de disposition contenait plusieurs sélections</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Al editar una configuración predefinida de diseño, las vistas previas de paso del cursor y de arrastre en la cuadrícula ahora usan el mismo estilo de rectángulo que las selecciones confirmadas: tintadas con el color del siguiente índice y mostrando centrado el número de índice que se asignará, sin barra de título ni botón de eliminación. Además, al pasar el cursor sobre una celda vacía se muestra una vista previa de rectángulo de una celda aunque ya haya otros diseños registrados</li>
-<li>Durante la edición de una configuración predefinida, tanto el rectángulo al pasar el cursor como el rectángulo de arrastre muestran ahora centrado el número de índice que se asignará al confirmar (con el mismo aspecto que el rectángulo confirmado), incluida la vista previa de una sola celda al pasar el cursor. Las vistas previas de configuraciones predefinidas de diseño (paso del cursor sobre una configuración predefinida en la barra lateral y la superposición de vista previa a pantalla completa al aplicar configuraciones predefinidas de selección múltiple) también siguen mostrando los números de índice</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió el salto de la ventana principal al centro de la pantalla al añadir o editar una cuadrícula en una configuración predefinida de diseño cuando "Mostrar cerca del icono al hacer clic" estaba activado; ahora la ventana permanece anclada cerca del icono de la barra de menús</li>
-<li>Se corrigió que los rectángulos de selección confirmados se mostraran ocasionalmente sin relleno ni borde (con solo el botón de cerrar y la etiqueta de índice visibles) cuando una configuración predefinida de diseño contenía varias selecciones</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Beim Bearbeiten einer Layout-Voreinstellung verwenden Hover- und Zieh-Vorschauen auf dem Raster jetzt denselben Rechteck-Stil wie bestätigte Auswahlen: in der Farbe des nächsten Index und mit der zugehörigen Indexnummer mittig, ohne Titelleiste und ohne Löschen-Schaltfläche. Zusätzlich zeigt das Darüberfahren mit der Maus über eine leere Zelle ein ein Zellen großes Vorschaurechteck an, auch wenn bereits andere Layouts registriert sind</li>
-<li>Beim Bearbeiten einer Voreinstellung zeigen nun sowohl das Hover- als auch das Zieh-Rechteck die nach dem Bestätigen zugewiesene Indexnummer mittig an (passend zum bestätigten Rechteck, in das sie übergehen) – einschließlich der ein Zellen großen Hover-Vorschau. Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Das Hauptfenster sprang in die Bildschirmmitte, wenn bei aktivierter Option „Beim Klick neben dem Symbol anzeigen" ein Raster in einer Layout-Voreinstellung hinzugefügt oder bearbeitet wurde; das Fenster bleibt jetzt nahe am Menüleistensymbol verankert</li>
-<li>Behoben, dass bestätigte Auswahlrechtecke gelegentlich ohne Füllung und Rahmen angezeigt wurden (nur Schließen-Schaltfläche und Indexnummer sichtbar), wenn eine Layout-Voreinstellung mehrere Auswahlen enthielt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>編輯版面配置預設時，滑鼠懸停和拖曳中的格線預覽統一為與放開拖曳後顯示相同的矩形樣式：不顯示標題列和刪除按鈕，以下一個索引的顏色顯示，並在中央顯示即將指派的索引編號。此外，即使已經登記其他配置，將滑鼠懸停在空格上也會顯示 1 格大小的預覽矩形</li>
-<li>編輯預設時，滑鼠懸停矩形和拖曳矩形都會在中央顯示提交後將取得的索引編號（與提交後的矩形外觀相同）。1 格大小的滑鼠懸停預覽也會顯示編號。版面配置預設預覽（側邊欄的預設懸停、套用多選預設時的全螢幕預覽覆蓋層）同樣繼續顯示索引編號</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正啟用「點擊圖示時在圖示附近顯示」後，在版面配置預設中新增或編輯格線時主視窗會跳到螢幕中央的問題；視窗現在會固定在選單列圖示附近</li>
-<li>修正版面配置預設中存在多個選取區域時，已確定的選取矩形偶爾不顯示填充和邊框（僅顯示 × 按鈕和編號標籤）的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>编辑布局预设时，鼠标悬停和拖动过程中的网格预览统一为与拖动释放后显示相同的矩形样式：不显示标题栏和删除按钮，以下一个索引的颜色显示，并在中央显示即将赋予的索引编号。此外，即使已经登记了其他布局，将鼠标悬停在空单元格上也会显示 1 格大小的预览矩形</li>
-<li>编辑预设时，鼠标悬停矩形和拖动矩形都会在中央显示提交后将获得的索引编号（与提交后的矩形外观相同）。1 格大小的鼠标悬停预览也会显示编号。预设布局预览（侧边栏的预设悬停、应用多选预设时的全屏预览叠加层）同样继续显示索引编号</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复启用"点击图标时在图标附近显示"后，在布局预设中添加或编辑网格时主窗口会跳到屏幕中央的问题；窗口现在会保持固定在菜单栏图标附近</li>
-<li>修复布局预设中存在多个选区时，已确定的选区矩形偶尔不显示填充和边框（仅显示×按钮和序号标签）的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>레이아웃 프리셋을 편집할 때, 마우스 호버 및 드래그 중 그리드 미리보기가 드래그를 놓은 후 표시되는 사각형과 동일한 스타일로 통일되었습니다. 타이틀바와 삭제 버튼은 표시되지 않으며, 다음 인덱스 색상과 부여될 인덱스 번호를 중앙에 표시합니다. 또한 다른 레이아웃이 이미 등록된 상태에서도 빈 셀에 마우스를 올리면 1셀 크기의 미리보기 사각형이 표시됩니다</li>
-<li>프리셋 편집 중 마우스 호버 사각형과 드래그 사각형 모두에 확정 후 부여될 인덱스 번호가 중앙에 표시됩니다(확정 후의 사각형과 동일한 모양). 1셀 크기의 마우스 호버 미리보기에도 번호가 표시됩니다. 프리셋 레이아웃 미리보기(사이드바의 프리셋 호버, 다중 선택 프리셋 적용 시의 전체 화면 미리보기 오버레이)에서도 계속해서 번호를 표시합니다</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>"아이콘 클릭 시 아이콘 근처에 표시"가 활성화된 상태에서 레이아웃 프리셋 편집 중 그리드를 추가하거나 편집할 때 메인 창이 화면 중앙으로 이동하던 문제 수정. 이제 창은 메뉴 막대 아이콘 근처에 계속 고정됩니다</li>
-<li>레이아웃 프리셋에 여러 선택 영역이 등록되어 있을 때, 확정된 선택 사각형이 드물게 채우기와 테두리 없이(× 버튼과 번호 라벨만) 표시되던 문제 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>レイアウトプリセットの編集中、マウスホバーおよびドラッグ中のグリッドプレビューを、ドラッグ確定後の矩形と同じスタイルに統一しました。タイトルバーや削除ボタンは非表示で、次のインデックスの色と付与予定のインデックス番号を中央に表示します。また、すでに他のレイアウトが登録されている状態でも、空セルにマウスホバーすると 1 セル分のプレビュー矩形が表示されます</li>
-<li>プリセット編集中のマウスホバー矩形・ドラッグ矩形の両方に、確定後に付与されるインデックス番号を中央に表示するようにしました（確定後の矩形と同じ見た目）。1 セル分のマウスホバープレビューでも番号を表示します。プリセットレイアウトのプレビュー（サイドバーでのプリセットホバーや、複数選択プリセット適用時の全画面プレビューオーバーレイ）でも引き続き番号を表示します</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>「アイコンクリック時にアイコン付近に表示」が有効なときに、レイアウトプリセット編集でグリッドを追加・編集するとメインウインドウが画面中央に飛んでしまう問題を修正。ウインドウはメニューバーアイコン付近に留まるようになりました</li>
-<li>レイアウトプリセットに複数の選択範囲が登録されているとき、確定済みの選択矩形が稀に塗りつぶしや枠線なし（×ボタンと番号ラベルのみ）で表示されてしまう問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered</li>
-<li>During preset editing, the hover and drag rectangles now both show the upcoming index number centered (matching the committed selection they will become) — including the single-cell hover preview. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon</li>
-<li>Fixed committed selection rectangles occasionally rendering with no fill (showing only the close button and index number) when a layout preset contained many selections</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Alterado</h3>
-<ul>
-<li>Ao editar uma predefinição de layout, as prévias de passagem do mouse e de arrasto na grade agora usam o mesmo estilo de retângulo das seleções confirmadas: tingidas com a cor do próximo índice e exibindo centralizado o número de índice que será atribuído, sem barra de título e sem botão de exclusão. Além disso, passar o mouse sobre uma célula vazia mostra uma prévia de retângulo do tamanho de uma célula mesmo quando outros layouts já estão registrados</li>
-<li>Durante a edição de uma predefinição, tanto o retângulo ao passar o mouse quanto o retângulo arrastado agora exibem centralizado o número de índice que será atribuído ao confirmar (com a mesma aparência do retângulo confirmado), incluindo a prévia de uma única célula ao passar o mouse. As prévias de predefinições de layout (passar o mouse sobre uma predefinição na barra lateral e a sobreposição de prévia em tela cheia ao aplicar predefinições de seleção múltipla) continuam exibindo os números de índice</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Corrigido o salto da janela principal para o centro da tela ao adicionar ou editar uma grade em uma predefinição de layout quando "Mostrar perto do ícone ao clicar" estava ativado; a janela agora permanece ancorada perto do ícone da barra de menus</li>
-<li>Corrigido o problema em que retângulos de seleção confirmados eram exibidos ocasionalmente sem preenchimento e sem borda (apenas com o botão de fechar e o rótulo de índice visíveis) quando uma predefinição de layout continha várias seleções</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Modificato</h3>
-<ul>
-<li>Durante la modifica di un preset di layout, le anteprime al passaggio del mouse e durante il trascinamento sulla griglia usano ora lo stesso stile di rettangolo delle selezioni confermate: colorate con la tinta del prossimo indice e con il numero di indice da assegnare mostrato al centro, senza barra del titolo e senza pulsante di eliminazione. Inoltre, passando il mouse su una cella vuota viene mostrata un'anteprima di una cella anche quando sono già registrati altri layout</li>
-<li>Durante la modifica di un preset, sia il rettangolo al passaggio del mouse sia il rettangolo di trascinamento mostrano ora al centro il numero di indice che verrà assegnato al momento della conferma (con lo stesso aspetto del rettangolo confermato), inclusa l'anteprima di una singola cella al passaggio del mouse. Le anteprime dei preset di layout (passaggio del mouse su un preset nella barra laterale e la sovrapposizione di anteprima a schermo intero durante l'applicazione di preset a selezione multipla) continuano a mostrare i numeri di indice</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>Corretto lo spostamento della finestra principale al centro dello schermo quando si aggiungeva o modificava una griglia in un preset di layout con "Mostra vicino all'icona al clic" attivato; la finestra ora rimane ancorata vicino all'icona della barra dei menu</li>
-<li>Corretto il problema per cui i rettangoli di selezione confermati venivano talvolta visualizzati senza riempimento e senza bordo (con solo il pulsante di chiusura e l'etichetta numerica visibili) quando un preset di layout conteneva più selezioni</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Modifié</h3>
-<ul>
-<li>Lors de la modification d'un préréglage de disposition, les aperçus au survol et lors du glissement sur la grille utilisent désormais le même style de rectangle que les sélections validées : teintés avec la couleur du prochain index et affichant en son centre le numéro d'index à attribuer, sans barre de titre ni bouton de suppression. De plus, le survol d'une cellule vide affiche un aperçu de rectangle d'une cellule même si d'autres dispositions sont déjà enregistrées</li>
-<li>Lors de la modification d'un préréglage, le rectangle au survol et le rectangle de glissement affichent désormais au centre le numéro d'index qui sera attribué à la validation (avec la même apparence que le rectangle validé), y compris l'aperçu d'une seule cellule au survol. Les aperçus des préréglages de disposition (survol d'un préréglage dans la barre latérale, superposition d'aperçu plein écran lors de l'application de préréglages à sélections multiples) continuent également d'afficher les numéros d'index</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Correction du saut de la fenêtre principale vers le centre de l'écran lors de l'ajout ou de la modification d'une grille dans un préréglage de disposition lorsque « Afficher près de l'icône au clic » était activé ; la fenêtre reste désormais ancrée près de l'icône de la barre de menus</li>
-<li>Correction du fait que les rectangles de sélection validés s'affichaient parfois sans remplissage ni bordure (avec uniquement le bouton de fermeture et l'étiquette de numéro visibles) lorsqu'un préréglage de disposition contenait plusieurs sélections</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Cambiado</h3>
-<ul>
-<li>Al editar una configuración predefinida de diseño, las vistas previas de paso del cursor y de arrastre en la cuadrícula ahora usan el mismo estilo de rectángulo que las selecciones confirmadas: tintadas con el color del siguiente índice y mostrando centrado el número de índice que se asignará, sin barra de título ni botón de eliminación. Además, al pasar el cursor sobre una celda vacía se muestra una vista previa de rectángulo de una celda aunque ya haya otros diseños registrados</li>
-<li>Durante la edición de una configuración predefinida, tanto el rectángulo al pasar el cursor como el rectángulo de arrastre muestran ahora centrado el número de índice que se asignará al confirmar (con el mismo aspecto que el rectángulo confirmado), incluida la vista previa de una sola celda al pasar el cursor. Las vistas previas de configuraciones predefinidas de diseño (paso del cursor sobre una configuración predefinida en la barra lateral y la superposición de vista previa a pantalla completa al aplicar configuraciones predefinidas de selección múltiple) también siguen mostrando los números de índice</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Se corrigió el salto de la ventana principal al centro de la pantalla al añadir o editar una cuadrícula en una configuración predefinida de diseño cuando "Mostrar cerca del icono al hacer clic" estaba activado; ahora la ventana permanece anclada cerca del icono de la barra de menús</li>
-<li>Se corrigió que los rectángulos de selección confirmados se mostraran ocasionalmente sin relleno ni borde (con solo el botón de cerrar y la etiqueta de índice visibles) cuando una configuración predefinida de diseño contenía varias selecciones</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Geändert</h3>
-<ul>
-<li>Beim Bearbeiten einer Layout-Voreinstellung verwenden Hover- und Zieh-Vorschauen auf dem Raster jetzt denselben Rechteck-Stil wie bestätigte Auswahlen: in der Farbe des nächsten Index und mit der zugehörigen Indexnummer mittig, ohne Titelleiste und ohne Löschen-Schaltfläche. Zusätzlich zeigt das Darüberfahren mit der Maus über eine leere Zelle ein ein Zellen großes Vorschaurechteck an, auch wenn bereits andere Layouts registriert sind</li>
-<li>Beim Bearbeiten einer Voreinstellung zeigen nun sowohl das Hover- als auch das Zieh-Rechteck die nach dem Bestätigen zugewiesene Indexnummer mittig an (passend zum bestätigten Rechteck, in das sie übergehen) – einschließlich der ein Zellen großen Hover-Vorschau. Vorschauen von Layout-Voreinstellungen (Darüberfahren mit der Maus über eine Voreinstellung in der Seitenleiste, Vollbild-Vorschau-Overlay beim Anwenden von Mehrfachauswahl-Voreinstellungen) zeigen weiterhin Indexnummern an</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Das Hauptfenster sprang in die Bildschirmmitte, wenn bei aktivierter Option „Beim Klick neben dem Symbol anzeigen" ein Raster in einer Layout-Voreinstellung hinzugefügt oder bearbeitet wurde; das Fenster bleibt jetzt nahe am Menüleistensymbol verankert</li>
-<li>Behoben, dass bestätigte Auswahlrechtecke gelegentlich ohne Füllung und Rahmen angezeigt wurden (nur Schließen-Schaltfläche und Indexnummer sichtbar), wenn eine Layout-Voreinstellung mehrere Auswahlen enthielt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>變更</h3>
-<ul>
-<li>編輯版面配置預設時，滑鼠懸停和拖曳中的格線預覽統一為與放開拖曳後顯示相同的矩形樣式：不顯示標題列和刪除按鈕，以下一個索引的顏色顯示，並在中央顯示即將指派的索引編號。此外，即使已經登記其他配置，將滑鼠懸停在空格上也會顯示 1 格大小的預覽矩形</li>
-<li>編輯預設時，滑鼠懸停矩形和拖曳矩形都會在中央顯示提交後將取得的索引編號（與提交後的矩形外觀相同）。1 格大小的滑鼠懸停預覽也會顯示編號。版面配置預設預覽（側邊欄的預設懸停、套用多選預設時的全螢幕預覽覆蓋層）同樣繼續顯示索引編號</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正啟用「點擊圖示時在圖示附近顯示」後，在版面配置預設中新增或編輯格線時主視窗會跳到螢幕中央的問題；視窗現在會固定在選單列圖示附近</li>
-<li>修正版面配置預設中存在多個選取區域時，已確定的選取矩形偶爾不顯示填充和邊框（僅顯示 × 按鈕和編號標籤）的問題</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>变更</h3>
-<ul>
-<li>编辑布局预设时，鼠标悬停和拖动过程中的网格预览统一为与拖动释放后显示相同的矩形样式：不显示标题栏和删除按钮，以下一个索引的颜色显示，并在中央显示即将赋予的索引编号。此外，即使已经登记了其他布局，将鼠标悬停在空单元格上也会显示 1 格大小的预览矩形</li>
-<li>编辑预设时，鼠标悬停矩形和拖动矩形都会在中央显示提交后将获得的索引编号（与提交后的矩形外观相同）。1 格大小的鼠标悬停预览也会显示编号。预设布局预览（侧边栏的预设悬停、应用多选预设时的全屏预览叠加层）同样继续显示索引编号</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复启用"点击图标时在图标附近显示"后，在布局预设中添加或编辑网格时主窗口会跳到屏幕中央的问题；窗口现在会保持固定在菜单栏图标附近</li>
-<li>修复布局预设中存在多个选区时，已确定的选区矩形偶尔不显示填充和边框（仅显示×按钮和序号标签）的问题</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>변경</h3>
-<ul>
-<li>레이아웃 프리셋을 편집할 때, 마우스 호버 및 드래그 중 그리드 미리보기가 드래그를 놓은 후 표시되는 사각형과 동일한 스타일로 통일되었습니다. 타이틀바와 삭제 버튼은 표시되지 않으며, 다음 인덱스 색상과 부여될 인덱스 번호를 중앙에 표시합니다. 또한 다른 레이아웃이 이미 등록된 상태에서도 빈 셀에 마우스를 올리면 1셀 크기의 미리보기 사각형이 표시됩니다</li>
-<li>프리셋 편집 중 마우스 호버 사각형과 드래그 사각형 모두에 확정 후 부여될 인덱스 번호가 중앙에 표시됩니다(확정 후의 사각형과 동일한 모양). 1셀 크기의 마우스 호버 미리보기에도 번호가 표시됩니다. 프리셋 레이아웃 미리보기(사이드바의 프리셋 호버, 다중 선택 프리셋 적용 시의 전체 화면 미리보기 오버레이)에서도 계속해서 번호를 표시합니다</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>"아이콘 클릭 시 아이콘 근처에 표시"가 활성화된 상태에서 레이아웃 프리셋 편집 중 그리드를 추가하거나 편집할 때 메인 창이 화면 중앙으로 이동하던 문제 수정. 이제 창은 메뉴 막대 아이콘 근처에 계속 고정됩니다</li>
-<li>레이아웃 프리셋에 여러 선택 영역이 등록되어 있을 때, 확정된 선택 사각형이 드물게 채우기와 테두리 없이(× 버튼과 번호 라벨만) 표시되던 문제 수정</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>変更</h3>
-<ul>
-<li>レイアウトプリセットの編集中、マウスホバーおよびドラッグ中のグリッドプレビューを、ドラッグ確定後の矩形と同じスタイルに統一しました。タイトルバーや削除ボタンは非表示で、次のインデックスの色と付与予定のインデックス番号を中央に表示します。また、すでに他のレイアウトが登録されている状態でも、空セルにマウスホバーすると 1 セル分のプレビュー矩形が表示されます</li>
-<li>プリセット編集中のマウスホバー矩形・ドラッグ矩形の両方に、確定後に付与されるインデックス番号を中央に表示するようにしました（確定後の矩形と同じ見た目）。1 セル分のマウスホバープレビューでも番号を表示します。プリセットレイアウトのプレビュー（サイドバーでのプリセットホバーや、複数選択プリセット適用時の全画面プレビューオーバーレイ）でも引き続き番号を表示します</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>「アイコンクリック時にアイコン付近に表示」が有効なときに、レイアウトプリセット編集でグリッドを追加・編集するとメインウインドウが画面中央に飛んでしまう問題を修正。ウインドウはメニューバーアイコン付近に留まるようになりました</li>
-<li>レイアウトプリセットに複数の選択範囲が登録されているとき、確定済みの選択矩形が稀に塗りつぶしや枠線なし（×ボタンと番号ラベルのみ）で表示されてしまう問題を修正</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Changed</h3>
-<ul>
-<li>When editing a layout preset, hover and drag previews on the grid now use the same rectangle style as committed selections — tinted with the next index's color and showing the upcoming index number centered, with no title bar and no delete button. Hovering over an empty cell previews a single-cell rectangle even when other layouts are already registered</li>
-<li>During preset editing, the hover and drag rectangles now both show the upcoming index number centered (matching the committed selection they will become) — including the single-cell hover preview. Preset layout previews (hovering a preset in the sidebar, and the full-screen preview overlay for multi-selection presets) continue to show index numbers</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Fixed the main window jumping to the center of the screen when adding or editing a grid in a layout preset while "Show near icon when clicked" was enabled; the window now stays anchored near the menu bar icon</li>
-<li>Fixed committed selection rectangles occasionally rendering with no fill (showing only the close button and index number) when a layout preset contained many selections</li>
-</ul>]]></description>
-            <pubDate>Mon, 20 Apr 2026 13:19:43 +0900</pubDate>
-            <sparkle:version>443</sparkle:version>
-            <sparkle:shortVersionString>4.4.3</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.0.1/Tiley-4.4.3.zip" length="5805126" type="application/octet-stream" sparkle:edSignature="0lfB0E9CYqBQ7CdJ9TWpEt+E+2qLTk4/jhh3W+FzpUJSGBHgCsyanhmFNQncGPc6Zhf7b1QR/NphuYr497yDBw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-442.delta" sparkle:deltaFrom="442" length="247018" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="aSyDVV5quAxZEMgBpySjMtq1z7Xxv7FwltRy/ZEOo0IF47LU4yvcmk/1PXC2WkQHaz0z7vY06iEDY68OoNX3Ag=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-441.delta" sparkle:deltaFrom="441" length="264450" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Yc6CIk/7Mr0RvDEsb2X5oJmp0uTS+2GtbV79ix/7xTzV3wcbrglskmlFrGAmoRqpXRWkIHPGEVnW6bGb5nDvDA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-440.delta" sparkle:deltaFrom="440" length="347722" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="XaGEz5BmR6sZcB5G/CBuZuptIT2bUOgpud8NN3rM/4etknwu1CyJ3U1EV1ETIO9FcnK4yZXhoUZql0ELVRafAw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-439.delta" sparkle:deltaFrom="439" length="409294" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="W6Ji5JM8BGnDujLdu7t3at7kuloGYk/UUgbZM0OfNSHE0PTCr+7UiBXHB+DfZA5J7URp7BnWAJZ5KMynx54GDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v4.4.3/Tiley443-438.delta" sparkle:deltaFrom="438" length="475114" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="8g3vT1L+5LaB70WL/q+DXy2CS2ZGMJuyvqTni1stNacelpiBWwH7Mrt//SFQsHsh3Dzi01uiFgFtuv4QRUGsDg=="/>
             </sparkle:deltas>
         </item>
     </channel>

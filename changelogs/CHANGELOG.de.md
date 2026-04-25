@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-25
+
 ### Hinzugefügt
 
 - Neue Standard-Layout-Voreinstellung „Mitte": ein 4×4-Raster mit der mittleren 2×2-Region ausgewählt, gebunden an die Tastenkombination `C`

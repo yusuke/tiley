@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-25
+
 ### Aggiunto
 
 - Nuovo preset di layout predefinito "Centro": una griglia 4×4 con la regione centrale 2×2 selezionata, associato alla scorciatoia `C`

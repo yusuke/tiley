@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-25
+
 ### Adicionado
 
 - Novo preset de layout padrão "Centro": uma grade 4×4 com a região central 2×2 selecionada, vinculado ao atalho `C`

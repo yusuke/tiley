@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-25
+
 ### Añadido
 
 - Nuevo preajuste de diseño predeterminado "Centro": una cuadrícula 4×4 con la región central 2×2 seleccionada, asignado al atajo `C`

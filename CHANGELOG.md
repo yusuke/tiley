@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-25
+
 ### Added
 
 - New default layout preset "Center" — a 4×4 grid with the center 2×2 region selected, bound to the `C` shortcut
@@ -781,7 +783,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v5.0.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/yusuke/tiley/releases/tag/v5.1.0
 [5.0.1]: https://github.com/yusuke/tiley/releases/tag/v5.0.1
 [5.0.0]: https://github.com/yusuke/tiley/releases/tag/v5.0.0
 [4.4.3]: https://github.com/yusuke/tiley/releases/tag/v4.4.3
