@@ -428,13 +428,29 @@ struct PresetGridPreviewView: View {
                             let n = sel.normalized
                             return n.startRow...n.endRow ~= row && n.startColumn...n.endColumn ~= column
                         }
-                        let isAssigned = matchIndex != nil && paddedApps[matchIndex!] != nil
+                        let assignedBundleID: String? = {
+                            guard let mi = matchIndex else { return nil }
+                            return paddedApps[mi]
+                        }()
+                        let fillColor: Color = {
+                            guard matchIndex != nil else {
+                                return ThemeColors.presetGridUnselectedFill(for: colorScheme)
+                            }
+                            if let bid = assignedBundleID,
+                               let nsColor = AppIconLookup.averageColor(forBundleID: bid) {
+                                return Color(nsColor)
+                            }
+                            if assignedBundleID != nil {
+                                // Fallback when icon isn't available yet.
+                                return ThemeColors.presetGridUnselectedFill(for: colorScheme)
+                            }
+                            return ThemeColors.indexedPresetGridFill(
+                                index: unassignedColorIndex[matchIndex!] ?? matchIndex!,
+                                for: colorScheme
+                            )
+                        }()
                         RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(matchIndex == nil
-                                  ? ThemeColors.presetGridUnselectedFill(for: colorScheme)
-                                  : (isAssigned
-                                     ? ThemeColors.presetGridUnselectedFill(for: colorScheme)
-                                     : ThemeColors.indexedPresetGridFill(index: unassignedColorIndex[matchIndex!] ?? matchIndex!, for: colorScheme)))
+                            .fill(fillColor)
                             .frame(width: cellWidth, height: cellHeight)
                             .position(
                                 x: CGFloat(column) * (cellWidth + gap) + (cellWidth / 2),
