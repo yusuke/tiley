@@ -786,21 +786,44 @@ extension AppState {
         groupLinkBadgeController?.update(badges: badges, fadeOutDuration: fastHide ? 0.15 : nil)
     }
 
-    /// True when the two windows of `adj` differ on the axis perpendicular to
-    /// their shared edge — i.e. the "match window heights/widths" action would
-    /// actually grow at least one window. Returns false (button hidden) when
-    /// the outer envelope already lines up on both sides, or when live frames
-    /// can't be read.
+    /// True when the two sides of `adj` (partitioned by the badge's contact
+    /// line — see `partitionGroupByContact`) differ on the perpendicular axis,
+    /// i.e. the "match window heights/widths" action would actually move at
+    /// least one window. Returns false (button hidden) when both sides
+    /// already span the same outer envelope **and** no side has an internal
+    /// gap or overlap to clean up.
     private func canMatchExtents(adj: WindowAdjacency, frames: [CGWindowID: CGRect]) -> Bool {
-        guard let fA = frames[adj.windowA], let fB = frames[adj.windowB] else { return false }
+        guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB],
+              let group = windowGroups[gid] else { return false }
+        guard let (sideA, sideB) = partitionGroupByContact(
+            adj: adj, group: group, frames: frames
+        ), !sideA.isEmpty, !sideB.isEmpty else { return false }
+
+        let isHorizontal = adj.edgeOfA.isHorizontal
+        let allFrames = sideA.map(\.1) + sideB.map(\.1)
+        let envelopeMin: CGFloat = isHorizontal
+            ? (allFrames.map(\.minY).min() ?? 0)
+            : (allFrames.map(\.minX).min() ?? 0)
+        let envelopeMax: CGFloat = isHorizontal
+            ? (allFrames.map(\.maxY).max() ?? 0)
+            : (allFrames.map(\.maxX).max() ?? 0)
+
         let tol: CGFloat = 1
-        if adj.edgeOfA.isHorizontal {
-            // Side-by-side pair → check vertical extent.
-            return abs(fA.minY - fB.minY) > tol || abs(fA.maxY - fB.maxY) > tol
-        } else {
-            // Stacked pair → check horizontal extent.
-            return abs(fA.minX - fB.minX) > tol || abs(fA.maxX - fB.maxX) > tol
+        let proposedA = redistributeSide(
+            sideA, toEnvelope: (envelopeMin, envelopeMax),
+            perpendicularIsVertical: isHorizontal
+        )
+        let proposedB = redistributeSide(
+            sideB, toEnvelope: (envelopeMin, envelopeMax),
+            perpendicularIsVertical: isHorizontal
+        )
+        for (id, newRect) in proposedA + proposedB {
+            guard let oldRect = frames[id] else { continue }
+            if !Self.framesMatch(oldRect, newRect, tolerance: tol) {
+                return true
+            }
         }
+        return false
     }
 
     /// Returns `(canFillWidth, canFillHeight)` for the group containing `adj`,
@@ -1008,83 +1031,105 @@ extension AppState {
         return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
 
-    /// Equalises the perpendicular extent of the two windows that share `adj`.
+    /// Equalises the perpendicular extent of the two "sides" attached to
+    /// `adj`. Each side is the set of *all* group members whose centre lies
+    /// on that side of the badge's contact line — so it includes not just
+    /// the badge's two windows, but every other window in the group on that
+    /// side, whether or not they are directly linked to the badge windows.
     ///
-    /// For a horizontal-edge pair (windows arranged left/right) both windows'
-    /// vertical span is set to the union: top = max(maxY of A, maxY of B),
-    /// bottom = min(minY of A, minY of B). The shorter window grows to match
-    /// the outer top and outer bottom edges — if one side already extends
-    /// further on that axis, the other side stretches out to it.
+    /// For example, with `[ A ]` on top and `[B] [C]` both linked to A's
+    /// bottom edge (B and C are siblings through A, not directly linked to
+    /// each other), clicking "Match window widths" on the A↔B badge treats
+    /// `{B, C}` as one side and stretches it so B+C combined span the same
+    /// width as A. If B and C had a gap or overlap on that axis, it is
+    /// closed by meeting at the midpoint.
     ///
-    /// For a vertical-edge pair (windows arranged top/bottom) the same is done
-    /// along the horizontal axis (minX / maxX).
-    ///
-    /// The contact edge between the two windows is preserved; only the
-    /// perpendicular dimension changes.
+    /// Within each side the windows are sorted along the perpendicular axis
+    /// and then re-laid-out edge-to-edge: each interior edge becomes the
+    /// midpoint of the original neighbouring edges (so a clean contact
+    /// stays put, and a gap or overlap is split evenly), and the leftmost /
+    /// rightmost edges anchor to the outer envelope.
     func matchExtentsAdjacency(_ adj: WindowAdjacency) {
-        let idA = adj.windowA
-        let idB = adj.windowB
-
-        guard let frameA = liveFrame(of: idA), let frameB = liveFrame(of: idB) else {
-            debugLog("WindowGrouping: matchExtentsAdjacency aborted — could not read live frames for A=\(idA) B=\(idB)")
+        guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB],
+              var group = windowGroups[gid] else {
+            debugLog("WindowGrouping: matchExtentsAdjacency aborted — no group for adjacency")
             return
         }
 
-        let newFrameA: CGRect
-        let newFrameB: CGRect
-        if adj.edgeOfA.isHorizontal {
-            // Side-by-side pair → unify vertical extent.
-            let outerMinY = min(frameA.minY, frameB.minY)
-            let outerMaxY = max(frameA.maxY, frameB.maxY)
-            let height = outerMaxY - outerMinY
-            newFrameA = CGRect(x: frameA.minX, y: outerMinY, width: frameA.width, height: height)
-            newFrameB = CGRect(x: frameB.minX, y: outerMinY, width: frameB.width, height: height)
+        let liveFrames = allAvailableFrames()
+        let originalIsHorizontal = adj.edgeOfA.isHorizontal
+
+        guard let (sideA, sideB) = partitionGroupByContact(
+            adj: adj, group: group, frames: liveFrames
+        ), !sideA.isEmpty, !sideB.isEmpty else {
+            debugLog("WindowGrouping: matchExtentsAdjacency aborted — could not partition group by contact")
+            return
+        }
+
+        let allFrames = sideA.map(\.1) + sideB.map(\.1)
+
+        // Outer envelope (perpendicular axis) across both sides combined.
+        let envelopeMin: CGFloat
+        let envelopeMax: CGFloat
+        if originalIsHorizontal {
+            envelopeMin = allFrames.map(\.minY).min() ?? 0
+            envelopeMax = allFrames.map(\.maxY).max() ?? 0
         } else {
-            // Stacked pair → unify horizontal extent.
-            let outerMinX = min(frameA.minX, frameB.minX)
-            let outerMaxX = max(frameA.maxX, frameB.maxX)
-            let width = outerMaxX - outerMinX
-            newFrameA = CGRect(x: outerMinX, y: frameA.minY, width: width, height: frameA.height)
-            newFrameB = CGRect(x: outerMinX, y: frameB.minY, width: width, height: frameB.height)
+            envelopeMin = allFrames.map(\.minX).min() ?? 0
+            envelopeMax = allFrames.map(\.maxX).max() ?? 0
         }
 
-        // No-op fast path: nothing to grow.
-        if Self.framesMatch(newFrameA, frameA, tolerance: 1) &&
-           Self.framesMatch(newFrameB, frameB, tolerance: 1) {
-            debugLog("WindowGrouping: matchExtentsAdjacency no-op — both windows already span the outer envelope")
+        let proposedA = redistributeSide(
+            sideA, toEnvelope: (envelopeMin, envelopeMax),
+            perpendicularIsVertical: originalIsHorizontal
+        )
+        let proposedB = redistributeSide(
+            sideB, toEnvelope: (envelopeMin, envelopeMax),
+            perpendicularIsVertical: originalIsHorizontal
+        )
+
+        // Filter out windows whose frame didn't actually change.
+        var changes: [(CGWindowID, CGRect)] = []
+        for (id, newRect) in proposedA + proposedB {
+            guard let oldRect = liveFrames[id] else { continue }
+            if !Self.framesMatch(oldRect, newRect, tolerance: 1) {
+                changes.append((id, newRect))
+            }
+        }
+        if changes.isEmpty {
+            debugLog("WindowGrouping: matchExtentsAdjacency no-op — both columns already span the outer envelope")
             return
         }
 
-        // Suppress group transform reactions while both windows are being
-        // resized; we are explicitly choreographing both moves.
+        // Suppress group transform reactions while we choreograph the resize.
         isApplyingGroupTransform = true
-
-        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idA }),
-           let window = target.windowElement {
-            _ = try? accessibilityService.setFrame(newFrameA, on: target.screenFrame, for: window)
-            recentlySetFrames[idA] = (newFrameA, CFAbsoluteTimeGetCurrent())
-        }
-        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idB }),
-           let window = target.windowElement {
-            _ = try? accessibilityService.setFrame(newFrameB, on: target.screenFrame, for: window)
-            recentlySetFrames[idB] = (newFrameB, CFAbsoluteTimeGetCurrent())
+        for (id, newRect) in changes {
+            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == id }),
+                  let window = target.windowElement else { continue }
+            _ = try? accessibilityService.setFrame(newRect, on: target.screenFrame, for: window)
+            recentlySetFrames[id] = (newRect, CFAbsoluteTimeGetCurrent())
+            group.lastKnownFrames[id] = newRect
         }
 
-        // Update cached state and recompute the adjacency from the new frames
-        // so the badge's position reflects the new shared-edge midpoint right
-        // away (same pattern as `swapAdjacency`).
-        if let gid = groupIndexByWindow[idA] ?? groupIndexByWindow[idB],
-           var group = windowGroups[gid] {
-            group.lastKnownFrames[idA] = newFrameA
-            group.lastKnownFrames[idB] = newFrameB
-            if let idx = group.adjacencies.firstIndex(where: { $0.unorderedKey == adj.unorderedKey }),
-               let recomputed = WindowAdjacencyDetector.adjacency(
-                a: idA, frameA: newFrameA, b: idB, frameB: newFrameB
-               ) {
-                group.adjacencies[idx] = recomputed
+        // Recompute every adjacency in the group from the new frames so badge
+        // midpoints jump to the new shared edges right away.
+        var rebuilt: [WindowAdjacency] = []
+        for old in group.adjacencies {
+            guard let fA = group.lastKnownFrames[old.windowA] ?? liveFrames[old.windowA],
+                  let fB = group.lastKnownFrames[old.windowB] ?? liveFrames[old.windowB] else {
+                rebuilt.append(old)
+                continue
             }
-            windowGroups[gid] = group
+            if let updated = WindowAdjacencyDetector.adjacency(
+                a: old.windowA, frameA: fA, b: old.windowB, frameB: fB
+            ) {
+                rebuilt.append(updated)
+            } else {
+                rebuilt.append(old)
+            }
         }
+        group.adjacencies = rebuilt
+        windowGroups[gid] = group
 
         refreshBadgeOverlays()
 
@@ -1093,6 +1138,103 @@ extension AppState {
             self.isApplyingGroupTransform = false
             self.refreshBadgeOverlays()
         }
+    }
+
+    /// Splits every member of `group` into the two sides of the badge's
+    /// contact line, classifying by the centre of each window's frame on the
+    /// contact axis. The same side as `adj.windowA` becomes `sideA`; the
+    /// opposite side becomes `sideB`. Windows whose live frame is unavailable
+    /// are skipped. Returns nil if `windowA`'s position relative to the
+    /// contact line can't be determined.
+    ///
+    /// Using the contact line (rather than walking adjacencies) is what lets
+    /// "siblings" — windows that share a parent edge but aren't directly
+    /// linked to each other — be treated as one side. For a T/B badge between
+    /// A (top) and B (bottom), every member with `centre.y < contactY` joins
+    /// B's side, including any other window touching A's bottom from below.
+    private func partitionGroupByContact(
+        adj: WindowAdjacency,
+        group: WindowGroup,
+        frames: [CGWindowID: CGRect]
+    ) -> (sideA: [(CGWindowID, CGRect)], sideB: [(CGWindowID, CGRect)])? {
+        let contact = adj.contactCoordinate
+        let isHorizontalSplit = adj.edgeOfA.isHorizontal  // true → split by X (L/R adj)
+        guard let frameOfA = frames[adj.windowA] else { return nil }
+        let centreA = isHorizontalSplit ? frameOfA.midX : frameOfA.midY
+        let aIsLowSide = centreA < contact
+        var sideA: [(CGWindowID, CGRect)] = []
+        var sideB: [(CGWindowID, CGRect)] = []
+        for id in group.members {
+            guard let f = frames[id] else { continue }
+            let centre = isHorizontalSplit ? f.midX : f.midY
+            let isLowSide = centre < contact
+            if isLowSide == aIsLowSide {
+                sideA.append((id, f))
+            } else {
+                sideB.append((id, f))
+            }
+        }
+        return (sideA, sideB)
+    }
+
+    /// Re-lays-out one side of a matchExtents operation along the perpendicular
+    /// axis, anchoring the outer edges to `envelope` and meeting interior
+    /// neighbours at the midpoint of their original contact edges. This means:
+    ///
+    /// - A single-window side stretches to fill the envelope on both edges.
+    /// - A multi-window side has its windows sorted along the perpendicular
+    ///   axis, then made edge-to-edge contiguous: the leftmost (or bottom-most)
+    ///   window's outer edge anchors to `envelope.min`, the rightmost (or
+    ///   top-most) anchors to `envelope.max`, and each pair of neighbouring
+    ///   windows meets at the midpoint of their previous edges. So a clean
+    ///   shared edge stays put, while a gap or overlap between two siblings
+    ///   is split evenly into both windows.
+    private func redistributeSide(
+        _ side: [(CGWindowID, CGRect)],
+        toEnvelope envelope: (min: CGFloat, max: CGFloat),
+        perpendicularIsVertical: Bool
+    ) -> [(CGWindowID, CGRect)] {
+        guard !side.isEmpty else { return [] }
+        if side.count == 1 {
+            let (id, f) = side[0]
+            let newRect: CGRect
+            if perpendicularIsVertical {
+                newRect = CGRect(x: f.minX, y: envelope.min,
+                                 width: f.width, height: envelope.max - envelope.min)
+            } else {
+                newRect = CGRect(x: envelope.min, y: f.minY,
+                                 width: envelope.max - envelope.min, height: f.height)
+            }
+            return [(id, newRect)]
+        }
+        let sorted = side.sorted { lhs, rhs in
+            perpendicularIsVertical ? (lhs.1.minY < rhs.1.minY) : (lhs.1.minX < rhs.1.minX)
+        }
+        // n+1 boundary positions for n windows. Outer two anchor to envelope;
+        // interior boundaries are midpoints of the original neighbouring edges.
+        var boundaries: [CGFloat] = [envelope.min]
+        for i in 0..<sorted.count - 1 {
+            let curr = sorted[i].1
+            let next = sorted[i + 1].1
+            let currMax = perpendicularIsVertical ? curr.maxY : curr.maxX
+            let nextMin = perpendicularIsVertical ? next.minY : next.minX
+            boundaries.append((currMax + nextMin) / 2)
+        }
+        boundaries.append(envelope.max)
+
+        var result: [(CGWindowID, CGRect)] = []
+        for (i, (id, f)) in sorted.enumerated() {
+            let lo = boundaries[i]
+            let hi = boundaries[i + 1]
+            let newRect: CGRect
+            if perpendicularIsVertical {
+                newRect = CGRect(x: f.minX, y: lo, width: f.width, height: hi - lo)
+            } else {
+                newRect = CGRect(x: lo, y: f.minY, width: hi - lo, height: f.height)
+            }
+            result.append((id, newRect))
+        }
+        return result
     }
 
     /// Swaps the positions of the two windows that share `adj`. Each window
