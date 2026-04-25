@@ -149,3 +149,12 @@
 "Linked with the window above" = "与上方窗口已分组";
 "Group these regions" = "将这些区域分组";
 "Remove grouping" = "取消分组";
+"Assign Application" = "分配应用程序";
+"Assign Application to Region" = "为区域分配应用程序";
+"Unassign Application" = "取消分配应用程序";
+"Other Application…" = "其他应用程序…";
+"No running applications" = "没有正在运行的应用程序";
+"Assign" = "分配";
+"Choose an application to assign to this region." = "选择要分配给此区域的应用程序。";
+"%@ has no windows to place." = "%@ 没有可放置的窗口。";
+"Couldn't find a window for %@ after launching." = "启动后未能找到 %@ 的窗口。";

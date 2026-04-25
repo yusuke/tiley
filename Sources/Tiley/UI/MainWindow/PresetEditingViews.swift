@@ -389,6 +389,10 @@ struct PresetGridPreviewView: View {
     let columns: Int
     let selection: GridSelection
     var secondarySelections: [GridSelection] = []
+    /// Parallel to `[selection] + secondarySelections`. Assigned slots render
+    /// with a neutral fill and an app-icon overlay instead of the indexed
+    /// color.
+    var rectangleApps: [String?] = []
 
     var body: some View {
         GeometryReader { geometry in
@@ -397,6 +401,26 @@ struct PresetGridPreviewView: View {
             let cellHeight = max(2, (geometry.size.height - gap * CGFloat(max(0, rows - 1))) / CGFloat(max(rows, 1)))
             let allSelections = [selection] + secondarySelections
 
+            let paddedApps: [String?] = {
+                if rectangleApps.count >= allSelections.count {
+                    return Array(rectangleApps.prefix(allSelections.count))
+                }
+                return rectangleApps + Array(repeating: nil, count: allSelections.count - rectangleApps.count)
+            }()
+
+            // Color index for unassigned slots: 1-based position among
+            // unassigned-only entries, so the cycle (blue/green/orange/purple)
+            // is not shifted by preceding assigned slots.
+            let unassignedColorIndex: [Int: Int] = {
+                var result: [Int: Int] = [:]
+                var cursor = 0
+                for (idx, app) in paddedApps.enumerated() where app == nil {
+                    result[idx] = cursor
+                    cursor += 1
+                }
+                return result
+            }()
+
             ZStack(alignment: .topLeading) {
                 ForEach(0..<rows, id: \.self) { row in
                     ForEach(0..<columns, id: \.self) { column in
@@ -404,15 +428,42 @@ struct PresetGridPreviewView: View {
                             let n = sel.normalized
                             return n.startRow...n.endRow ~= row && n.startColumn...n.endColumn ~= column
                         }
+                        let isAssigned = matchIndex != nil && paddedApps[matchIndex!] != nil
                         RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(matchIndex != nil
-                                  ? ThemeColors.indexedPresetGridFill(index: matchIndex!, for: colorScheme)
-                                  : ThemeColors.presetGridUnselectedFill(for: colorScheme))
+                            .fill(matchIndex == nil
+                                  ? ThemeColors.presetGridUnselectedFill(for: colorScheme)
+                                  : (isAssigned
+                                     ? ThemeColors.presetGridUnselectedFill(for: colorScheme)
+                                     : ThemeColors.indexedPresetGridFill(index: unassignedColorIndex[matchIndex!] ?? matchIndex!, for: colorScheme)))
                             .frame(width: cellWidth, height: cellHeight)
                             .position(
                                 x: CGFloat(column) * (cellWidth + gap) + (cellWidth / 2),
                                 y: CGFloat(row) * (cellHeight + gap) + (cellHeight / 2)
                             )
+                    }
+                }
+
+                // App icon overlays, once per assigned selection, centered on
+                // the selection's bounding box. Rendered after the per-cell
+                // fills so they appear on top.
+                ForEach(Array(allSelections.enumerated()), id: \.offset) { idx, sel in
+                    if let bid = paddedApps[idx],
+                       let icon = AppIconLookup.icon(forBundleID: bid) {
+                        let n = sel.normalized
+                        let width = CGFloat(n.endColumn - n.startColumn + 1) * cellWidth
+                            + CGFloat(n.endColumn - n.startColumn) * gap
+                        let height = CGFloat(n.endRow - n.startRow + 1) * cellHeight
+                            + CGFloat(n.endRow - n.startRow) * gap
+                        let centerX = CGFloat(n.startColumn) * (cellWidth + gap) + width / 2
+                        let centerY = CGFloat(n.startRow) * (cellHeight + gap) + height / 2
+                        let iconSide = min(width, height) * 0.6
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: iconSide, height: iconSide)
+                            .position(x: centerX, y: centerY)
+                            .allowsHitTesting(false)
                     }
                 }
             }

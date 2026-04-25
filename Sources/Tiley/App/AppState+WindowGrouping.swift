@@ -99,10 +99,11 @@ extension AppState {
     }
 
     /// Invoked right after a mouse-down. Waits briefly for the focused window to
-    /// settle, then triggers the raise linkage if that window is a group member.
+    /// settle, then triggers the raise linkage if that window is a group member
+    /// or an app-anchored satellite.
     func handleSystemMouseDown() {
-        // No groups → nothing to do (save CPU).
-        guard !windowGroups.isEmpty else { return }
+        // No groups or app-anchored satellites → nothing to do (save CPU).
+        guard !windowGroups.isEmpty || !appSlotSatellites.isEmpty else { return }
         // Give the system a moment to finish the click handoff. ~50ms is enough.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
             self?.checkFrontmostForGroupRaise()
@@ -132,8 +133,13 @@ extension AppState {
         let pid = frontmostApp.processIdentifier
         if pid == getpid() { return }  // Ignore clicks on Tiley itself.
         guard let cgID = resolveFocusedWindowID(for: pid) else { return }
-        guard groupIndexByWindow[cgID] != nil else { return }
-        handleGroupMemberRaised(id: cgID)
+        if groupIndexByWindow[cgID] != nil {
+            handleGroupMemberRaised(id: cgID)
+        }
+        // Regardless of group membership, also evaluate the app-anchored
+        // satellite linkage: clicking a satellite raises the assigned app
+        // window, and clicking the anchor raises the frontmost satellite.
+        handleAppSlotSatelliteRaise(focusedID: cgID)
     }
 
     // MARK: - Preset apply hook
@@ -732,7 +738,16 @@ extension AppState {
     /// If the group becomes disconnected as a result, split it along its
     /// connected components. Components with a single member (i.e. isolated
     /// windows) are detached from any group entirely.
+    ///
+    /// This is the user's explicit "ungroup" action (from the unlink
+    /// badge), so we also clear the app-slot satellite link for this pair
+    /// — otherwise the raise linkage would keep firing even after the user
+    /// explicitly decoupled the two windows.
     func unlinkAdjacency(_ adj: WindowAdjacency) {
+        // Explicit unlink → drop the satellite + frame memory for whichever
+        // direction of the pair is an app-anchor/satellite binding.
+        unlinkAppSlotSatellitePair(windowA: adj.windowA, windowB: adj.windowB)
+
         guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB] else { return }
         guard var group = windowGroups[gid] else { return }
 
@@ -821,6 +836,17 @@ extension AppState {
         switch event {
         case .moved(let id, _), .resized(let id, _):
             if isApplyingGroupTransform { return }
+            // While the Tiley overlay is showing, suppress all group-linkage
+            // side-effects of move/resize events. Tiley displaces the
+            // frontmost window temporarily to reveal a back window the user
+            // clicked in the sidebar — that internal shuffling must not
+            // cascade into group followers being dragged along.
+            if isShowingLayoutGrid {
+                if groupPollingTimer != nil {
+                    stopGroupPollingTimer()
+                }
+                return
+            }
             // AX-echo detection: if an event fires for a window we recently set
             // via setFrame, and the live frame matches what we set, it's our
             // echo — skip it. If it doesn't match (user moved it afterwards),
@@ -832,6 +858,10 @@ extension AppState {
                 // Mismatch means the user overwrote our position. Clear and fall through.
                 recentlySetFrames.removeValue(forKey: id)
             }
+            // Keep the saved-pair-frames memory fresh so that switching back
+            // to this pair later restores its last-known position.
+            updateSavedFramesIfActivePair(movedWID: id)
+
             let isGroupMember = groupIndexByWindow[id] != nil
             let isPendingCandidate = pendingGroupCandidates.contains { $0.windowA == id || $0.windowB == id }
 
@@ -866,8 +896,15 @@ extension AppState {
                 pendingGroupCandidates.removeAll { $0.windowA == id || $0.windowB == id }
                 refreshBadgeOverlays()
             }
+            // Also drop any app-slot satellite references to this window.
+            removeDestroyedWindowFromSatellites(id)
+            removeFrameMemory(for: id)
         case .raised(let id):
             handleGroupMemberRaised(id: id)
+            // Also route through the satellite linkage so Cmd+Tab /
+            // application switcher activations (which don't fire a mouse
+            // event) can trigger the anchor-or-satellite raise.
+            handleAppSlotSatelliteRaise(focusedID: id)
         }
     }
 
@@ -1113,6 +1150,12 @@ extension AppState {
             return
         }
         if isApplyingGroupTransform { return }
+        // Stop polling if the Tiley overlay came up mid-session — its
+        // internal displacement moves must not drag group followers along.
+        if isShowingLayoutGrid {
+            stopGroupPollingTimer()
+            return
+        }
         guard let newFrame = liveFrame(of: sourceID) else { return }
         guard let oldFrame = group.lastKnownFrames[sourceID] else {
             group.lastKnownFrames[sourceID] = newFrame
@@ -1170,7 +1213,7 @@ extension AppState {
     }
 
     /// Returns the window's current frame (AppKit coordinates, read live from AX).
-    private func liveFrame(of cgWindowID: CGWindowID) -> CGRect? {
+    func liveFrame(of cgWindowID: CGWindowID) -> CGRect? {
         guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
               let window = target.windowElement else { return nil }
         let (axPos, size) = accessibilityService.readPositionAndSize(of: window)
@@ -1524,6 +1567,13 @@ extension AppState {
         // our follower moves can fire didActivate and cascade recursively.
         if isApplyingGroupTransform {
             debugLog("WindowGrouping: raise short-circuit (isApplyingGroupTransform=true) id=\(id)")
+            return
+        }
+        // While the Tiley overlay is showing, the user is browsing/selecting
+        // grid cells — suppress group raise so hovering presets or clicking
+        // Tiley's UI doesn't cascade into background window activations.
+        if isShowingLayoutGrid {
+            debugLog("WindowGrouping: raise short-circuit (isShowingLayoutGrid=true) id=\(id)")
             return
         }
         guard let gid = groupIndexByWindow[id] else {

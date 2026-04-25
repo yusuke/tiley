@@ -120,23 +120,101 @@ extension AppState {
         let parentWindow = windowControllerForScreen(frame: previewScreenFrame)?.nsWindow
             ?? targetWindowController?.nsWindow
 
-        // Selected windows first, then fill remaining from z-order.
-        let orderedIndices = buildZOrderedWindowIndices(count: allSelections.count)
+        // App assignments parallel to `allSelections`.
+        let rectangleApps = preset.normalizedRectangleApps
 
-        // Build preview items: only show as many windows as selections defined.
+        // Pre-compute display index (1-based, position among unassigned slots
+        // only) and unassigned-color cycle index for each slot.
+        var unassignedDisplayIndex: [Int: Int] = [:]
+        var unassignedCursor = 0
+        for (idx, app) in rectangleApps.enumerated() where app == nil {
+            unassignedCursor += 1
+            unassignedDisplayIndex[idx] = unassignedCursor
+        }
+
+        // Claim the frontmost window of every assigned bundle ID so the
+        // unassigned-slot pool doesn't pick the same window as its filler.
+        // Matches the real apply behavior: assigned slots consume the app's
+        // frontmost window.
+        var claimedWIDs: Set<CGWindowID> = []
+        let assignedBundleIDs: Set<String> = Set(rectangleApps.compactMap { $0 })
+        if !assignedBundleIDs.isEmpty {
+            var seenBundles: Set<String> = []
+            for target in availableWindowTargets {
+                guard let bid = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier,
+                      assignedBundleIDs.contains(bid), !seenBundles.contains(bid) else { continue }
+                seenBundles.insert(bid)
+                if target.cgWindowID != 0 {
+                    claimedWIDs.insert(target.cgWindowID)
+                }
+            }
+        }
+
+        // Pick windows for unassigned slots from user selection + z-order,
+        // excluding windows already claimed by assigned slots.
+        let unassignedSlotIndices: [Int] = rectangleApps.enumerated().compactMap { idx, app in
+            app == nil && idx < allSelections.count ? idx : nil
+        }
+        let orderedIndices = buildZOrderedWindowIndices(count: availableWindowTargets.count)
+            .filter { idx in
+                guard idx < availableWindowTargets.count else { return false }
+                return !claimedWIDs.contains(availableWindowTargets[idx].cgWindowID)
+            }
+        var windowBySlot: [Int: WindowTarget] = [:]
+        for (i, slotIdx) in unassignedSlotIndices.enumerated() {
+            guard i < orderedIndices.count else { break }
+            let target = availableWindowTargets[orderedIndices[i]]
+            windowBySlot[slotIdx] = target
+        }
+
+        // Build preview items in slot order so rectangles render in their
+        // intended positions. Assigned slots render with the bound app's
+        // icon/name and the `isAssigned` flag; unassigned slots render with
+        // the selected/z-order window info and the display-among-unassigned
+        // color/label.
         var items: [SelectionPreviewItem] = []
-        for (windowPosition, idx) in orderedIndices.prefix(allSelections.count).enumerated() {
-            let sel = allSelections[windowPosition]
-            let target = availableWindowTargets[idx]
-            let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
-            items.append(SelectionPreviewItem(
-                selection: sel,
-                resizability: windowPosition == 0 ? resizabilityForActiveTarget() : .both,
-                windowSize: target.frame.size,
-                appIcon: appIcon,
-                windowTitle: target.windowTitle,
-                appName: target.appName
-            ))
+        for (slotIdx, sel) in allSelections.enumerated() {
+            if let bid = rectangleApps[safe: slotIdx], let bid {
+                let appIcon = AppIconLookup.icon(forBundleID: bid)
+                let appName = AppIconLookup.localizedName(forBundleID: bid)
+                items.append(SelectionPreviewItem(
+                    selection: sel,
+                    resizability: .both,
+                    windowSize: nil,
+                    appIcon: appIcon,
+                    windowTitle: nil,
+                    appName: appName,
+                    isAssigned: true
+                ))
+            } else {
+                let colorIdx = (unassignedDisplayIndex[slotIdx] ?? (slotIdx + 1)) - 1
+                if let target = windowBySlot[slotIdx] {
+                    let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+                    items.append(SelectionPreviewItem(
+                        selection: sel,
+                        resizability: slotIdx == 0 ? resizabilityForActiveTarget() : .both,
+                        windowSize: target.frame.size,
+                        appIcon: appIcon,
+                        windowTitle: target.windowTitle,
+                        appName: target.appName,
+                        isAssigned: false,
+                        unassignedColorIndex: colorIdx,
+                        displayLabel: unassignedDisplayIndex[slotIdx]
+                    ))
+                } else {
+                    items.append(SelectionPreviewItem(
+                        selection: sel,
+                        resizability: .both,
+                        windowSize: nil,
+                        appIcon: nil,
+                        windowTitle: nil,
+                        appName: nil,
+                        isAssigned: false,
+                        unassignedColorIndex: colorIdx,
+                        displayLabel: unassignedDisplayIndex[slotIdx]
+                    ))
+                }
+            }
         }
 
         layoutPreviewController?.showMultipleSelections(
@@ -152,14 +230,23 @@ extension AppState {
     /// Computes sidebar highlight mapping and window info for a preset hover.
     /// Selected windows come first, remaining slots filled by z-order.
     /// Returns (highlights, windowInfo) — highlights maps window indices to color indices,
-    /// windowInfo provides app/window names per layout selection index.
+    /// windowInfo is parallel to `allSelections` (index i = slot i's preview
+    /// info: the assigned app for assigned slots, the picked
+    /// selected/z-ordered window for unassigned slots).
     func computePresetHoverInfo(for preset: LayoutPreset) -> (highlights: [Int: Int], windowInfo: [PresetHoverWindowInfo]) {
         let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
 
         if allSelections.count <= 1 {
-            // Single-layout preset: return window info for the active target only.
+            // Single-layout preset. If the sole slot is app-assigned, preview
+            // the assigned app. Otherwise, preview the active target.
             var windowInfo: [PresetHoverWindowInfo] = []
-            if let target = activeLayoutTarget {
+            if let bid = preset.appAssignment(atSelectionIndex: 0) {
+                windowInfo.append(PresetHoverWindowInfo(
+                    appIcon: AppIconLookup.icon(forBundleID: bid),
+                    appName: AppIconLookup.localizedName(forBundleID: bid) ?? bid,
+                    windowTitle: ""
+                ))
+            } else if let target = activeLayoutTarget {
                 let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
                 windowInfo.append(PresetHoverWindowInfo(
                     appIcon: appIcon,
@@ -170,25 +257,88 @@ extension AppState {
             return ([:], windowInfo)
         }
 
-        let orderedIndices = buildZOrderedWindowIndices(count: allSelections.count)
-        var highlights: [Int: Int] = [:]
-        var windowInfo: [PresetHoverWindowInfo] = []
-        for (colorIndex, idx) in orderedIndices.enumerated() {
-            highlights[idx] = colorIndex
-            let target = availableWindowTargets[idx]
-            let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
-            windowInfo.append(PresetHoverWindowInfo(
-                appIcon: appIcon,
-                appName: target.appName,
-                windowTitle: target.windowTitle ?? ""
-            ))
+        let rectangleApps = preset.normalizedRectangleApps
+
+        // Claim the frontmost window of each assigned bundle ID so the
+        // unassigned-slot filler doesn't pick them.
+        var claimedWIDs: Set<CGWindowID> = []
+        let assignedBundleIDs: Set<String> = Set(rectangleApps.compactMap { $0 })
+        if !assignedBundleIDs.isEmpty {
+            var seenBundles: Set<String> = []
+            for target in availableWindowTargets {
+                guard let bid = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier,
+                      assignedBundleIDs.contains(bid), !seenBundles.contains(bid) else { continue }
+                seenBundles.insert(bid)
+                if target.cgWindowID != 0 {
+                    claimedWIDs.insert(target.cgWindowID)
+                }
+            }
         }
-        // Selected windows beyond the preset layout count are clamped to the last layout
-        // during apply, so highlight them with the last layout's color.
-        let lastColorIndex = allSelections.count - 1
-        let assignedSet = Set(orderedIndices)
+
+        // Unassigned slot fillers, in selection + z-order, skipping claimed.
+        let unassignedSlotIndices: [Int] = rectangleApps.enumerated().compactMap { idx, app in
+            app == nil && idx < allSelections.count ? idx : nil
+        }
+        let candidateIndices = buildZOrderedWindowIndices(count: availableWindowTargets.count)
+            .filter { idx in
+                guard idx < availableWindowTargets.count else { return false }
+                return !claimedWIDs.contains(availableWindowTargets[idx].cgWindowID)
+            }
+
+        var slotToWindowIndex: [Int: Int] = [:]
+        for (i, slotIdx) in unassignedSlotIndices.enumerated() where i < candidateIndices.count {
+            slotToWindowIndex[slotIdx] = candidateIndices[i]
+        }
+
+        // Build windowInfo parallel to allSelections.
+        var windowInfo: [PresetHoverWindowInfo] = []
+        for (slotIdx, _) in allSelections.enumerated() {
+            if let bid = rectangleApps[safe: slotIdx], let bid {
+                windowInfo.append(PresetHoverWindowInfo(
+                    appIcon: AppIconLookup.icon(forBundleID: bid),
+                    appName: AppIconLookup.localizedName(forBundleID: bid) ?? bid,
+                    windowTitle: ""
+                ))
+            } else if let windowIdx = slotToWindowIndex[slotIdx] {
+                let target = availableWindowTargets[windowIdx]
+                let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+                windowInfo.append(PresetHoverWindowInfo(
+                    appIcon: appIcon,
+                    appName: target.appName,
+                    windowTitle: target.windowTitle ?? ""
+                ))
+            } else {
+                windowInfo.append(PresetHoverWindowInfo(
+                    appIcon: nil,
+                    appName: "",
+                    windowTitle: ""
+                ))
+            }
+        }
+
+        // highlights: map each window index to the color/index it will display
+        // in the sidebar. Colors cycle by **unassigned** position (blue/green/
+        // orange/purple) so the first unassigned slot's window is always blue
+        // regardless of how many assigned slots precede it.
+        var unassignedDisplayIndex: [Int: Int] = [:]
+        var cursor = 0
+        for (idx, app) in rectangleApps.enumerated() where app == nil {
+            unassignedDisplayIndex[idx] = cursor
+            cursor += 1
+        }
+
+        var highlights: [Int: Int] = [:]
+        for (slotIdx, windowIdx) in slotToWindowIndex {
+            highlights[windowIdx] = unassignedDisplayIndex[slotIdx] ?? slotIdx
+        }
+        // Selected windows beyond the preset layout count are clamped to the
+        // last layout during apply, so highlight them with the last unassigned
+        // slot's color. If there are no unassigned slots, fall back to 0.
+        let lastColorIndex = max(0, cursor - 1)
+        let assignedWindowIndices = Set(slotToWindowIndex.values)
         for idx in selectionOrder where idx < availableWindowTargets.count {
-            if !assignedSet.contains(idx) {
+            if !assignedWindowIndices.contains(idx),
+               !claimedWIDs.contains(availableWindowTargets[idx].cgWindowID) {
                 highlights[idx] = lastColorIndex
             }
         }

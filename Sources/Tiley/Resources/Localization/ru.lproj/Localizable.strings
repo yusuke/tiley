@@ -149,3 +149,12 @@
 "Linked with the window above" = "Сгруппировано с окном выше";
 "Group these regions" = "Сгруппировать эти области";
 "Remove grouping" = "Убрать группировку";
+"Assign Application" = "Назначить приложение";
+"Assign Application to Region" = "Назначить приложение области";
+"Unassign Application" = "Снять назначение приложения";
+"Other Application…" = "Другое приложение…";
+"No running applications" = "Нет запущенных приложений";
+"Assign" = "Назначить";
+"Choose an application to assign to this region." = "Выберите приложение для назначения этой области.";
+"%@ has no windows to place." = "У %@ нет окон для размещения.";
+"Couldn't find a window for %@ after launching." = "Не удалось найти окно для %@ после запуска.";

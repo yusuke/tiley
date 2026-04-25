@@ -149,3 +149,12 @@
 "Linked with the window above" = "Linked with the window above";
 "Group these regions" = "Group these regions";
 "Remove grouping" = "Remove grouping";
+"Assign Application" = "Assign Application";
+"Assign Application to Region" = "Assign Application to Region";
+"Unassign Application" = "Unassign Application";
+"Other Application…" = "Other Application…";
+"No running applications" = "No running applications";
+"Assign" = "Assign";
+"Choose an application to assign to this region." = "Choose an application to assign to this region.";
+"%@ has no windows to place." = "%@ has no windows to place.";
+"Couldn't find a window for %@ after launching." = "Couldn't find a window for %@ after launching.";

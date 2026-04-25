@@ -13,6 +13,11 @@ struct LayoutGridWorkspaceView: View {
     var highlightGroupedPairs: Set<PresetGroupPair> = []
     /// Window info to display as title bars on highlight selections during preset hover.
     var highlightWindowInfo: [AppState.PresetHoverWindowInfo] = []
+    /// App assignments parallel to `highlightSelections`. Assigned slots show
+    /// the bound app's icon/name during hover and have no index label; the
+    /// remaining unassigned slots are color-cycled by their display-only
+    /// (unassigned-among-unassigned) position.
+    var highlightAppAssignments: [String?] = []
     var desktopPictureInfo: MainWindowView.DesktopPictureInfo?
     /// When false, wallpaper background is not rendered (used when the parent
     /// composite view renders the wallpaper at a larger scale).
@@ -34,6 +39,20 @@ struct LayoutGridWorkspaceView: View {
     /// Called when the user toggles grouping between two committed selections
     /// (by clicking a `link.badge.plus` or `xmark` badge between them).
     var onToggleGrouping: ((Int, Int) -> Void)?
+    /// Parallel to `committedSelections`. Each entry is a bound bundle
+    /// identifier or `nil` for an unassigned rectangle. Only used in edit mode.
+    var committedAppAssignments: [String?] = []
+    /// 1-based display number to show inside unassigned rectangles. Parallel
+    /// to `committedSelections`. `nil` for assigned rectangles (they show an
+    /// app icon instead). When empty the view falls back to `index + 1`.
+    var committedDisplayIndices: [Int?] = []
+    /// Called when the user clicks the `macwindow.badge.plus` badge. The
+    /// receiver is expected to pop up the app-picker `NSMenu` anchored to the
+    /// provided view + point (in the view's coordinate space).
+    var onRequestAppPicker: ((_ selectionIndex: Int, _ sourceView: NSView, _ atPoint: NSPoint) -> Void)?
+    /// Called when the user clicks the unassign "x" that appears over an
+    /// assigned slot on hover.
+    var onUnassignApp: ((_ selectionIndex: Int) -> Void)?
     /// When true, drag interactions are disabled and a "No windows" message is shown.
     var isDragDisabled: Bool = false
     let onSelectionChange: (GridSelection?) -> Void
@@ -216,17 +235,44 @@ struct LayoutGridWorkspaceView: View {
                     let selRect = rectForSelection(norm, cellWidth: cellWidth, cellHeight: cellHeight)
                         .insetBy(dx: committedSelections.count > 1 ? 1 : 0,
                                  dy: committedSelections.count > 1 ? 1 : 0)
-                    let fill = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
-                    let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
-                    committedSelectionRectangle(
-                        index: index,
-                        sel: norm, selRect: selRect,
-                        cellWidth: cellWidth, cellHeight: cellHeight,
-                        cornerRadius: cellCornerRadius,
-                        fill: fill, border: border,
-                        divider: border.opacity(0.3),
-                        showDelete: onDeleteSelection != nil
-                    )
+                    let bundleID: String? = index < committedAppAssignments.count
+                        ? committedAppAssignments[index]
+                        : nil
+                    let displayIndex: Int? = {
+                        if index < committedDisplayIndices.count {
+                            return committedDisplayIndices[index]
+                        }
+                        return bundleID == nil ? index + 1 : nil
+                    }()
+                    // Color tracks the displayed number (1-based) so unassigned
+                    // slots cycle through blue/green/orange/purple independent
+                    // of how many assigned slots sit in the array before them.
+                    let colorIndex = (displayIndex ?? (index + 1)) - 1
+                    let fill = ThemeColors.indexedSelectionFill(index: colorIndex, for: colorScheme)
+                    let border = ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme)
+                    if let bundleID {
+                        assignedCommittedRectangle(
+                            index: index,
+                            bundleID: bundleID,
+                            sel: norm,
+                            selRect: selRect,
+                            cornerRadius: cellCornerRadius,
+                            totalHeight: geometry.size.height,
+                            showDelete: onDeleteSelection != nil
+                        )
+                    } else {
+                        committedSelectionRectangle(
+                            index: index,
+                            displayIndex: displayIndex,
+                            sel: norm, selRect: selRect,
+                            cellWidth: cellWidth, cellHeight: cellHeight,
+                            cornerRadius: cellCornerRadius,
+                            fill: fill, border: border,
+                            divider: border.opacity(0.3),
+                            showDelete: onDeleteSelection != nil,
+                            showAssignBadge: onRequestAppPicker != nil
+                        )
+                    }
                 }
 
                 // Grouping badges at edges shared between committed selections
@@ -247,13 +293,52 @@ struct LayoutGridWorkspaceView: View {
                 if !highlightSelections.isEmpty, activeSelection == nil, committedSelections.isEmpty {
                     let showHighlightIndex = highlightSelections.count > 1
                     let multiInset: CGFloat = highlightSelections.count > 1 ? 1 : 0
+
+                    // Color index for unassigned slots — 0-based position
+                    // among *unassigned* entries only, so the first remaining
+                    // slot is blue regardless of how many assigned slots
+                    // precede it in the array.
+                    let paddedApps: [String?] = {
+                        if highlightAppAssignments.count >= highlightSelections.count {
+                            return Array(highlightAppAssignments.prefix(highlightSelections.count))
+                        }
+                        return highlightAppAssignments
+                            + Array(repeating: nil, count: highlightSelections.count - highlightAppAssignments.count)
+                    }()
+                    let unassignedColorIndex: [Int: Int] = {
+                        var result: [Int: Int] = [:]
+                        var cursor = 0
+                        for (idx, app) in paddedApps.enumerated() where app == nil {
+                            result[idx] = cursor
+                            cursor += 1
+                        }
+                        return result
+                    }()
+
                     ForEach(Array(highlightSelections.enumerated()), id: \.offset) { index, sel in
                         let norm = sel.normalized
                         let selRect = rectForSelection(norm, cellWidth: cellWidth, cellHeight: cellHeight)
                             .insetBy(dx: multiInset, dy: multiInset)
-                        let tint = ThemeColors.indexedSelectionFill(index: index, for: colorScheme)
+                        let bundleID = index < paddedApps.count ? paddedApps[index] : nil
+                        let colorIndex = unassignedColorIndex[index] ?? index
+                        let tint = ThemeColors.indexedSelectionFill(index: colorIndex, for: colorScheme)
 
-                        if index < highlightWindowInfo.count {
+                        if let bid = bundleID {
+                            let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
+                            let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                            let appIcon = AppIconLookup.icon(forBundleID: bid)
+                            let appName = AppIconLookup.localizedName(forBundleID: bid) ?? bid
+                            MiniatureWindowView(
+                                titleBarHeight: titleBarPx,
+                                appIcon: appIcon,
+                                appName: appName,
+                                windowTitle: nil,
+                                cornerRadiusOverride: cellCornerRadius
+                            )
+                            .frame(width: selRect.width, height: selRect.height)
+                            .position(x: selRect.midX, y: selRect.midY)
+                            .allowsHitTesting(false)
+                        } else if index < highlightWindowInfo.count {
                             let info = highlightWindowInfo[index]
                             let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
                             let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
@@ -269,7 +354,7 @@ struct LayoutGridWorkspaceView: View {
                             .allowsHitTesting(false)
                             .overlay {
                                 if showHighlightIndex {
-                                    Text("\(index + 1)")
+                                    Text("\(colorIndex + 1)")
                                         .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
                                         .foregroundStyle(.white)
                                         .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
@@ -278,10 +363,11 @@ struct LayoutGridWorkspaceView: View {
                                 }
                             }
                         } else {
-                            // Fallback: no window info available, show colored rectangle
-                            let border = ThemeColors.indexedSelectionBorder(index: index, for: colorScheme)
+                            // Fallback: no window info available, show colored rectangle.
+                            let border = ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme)
                             committedSelectionRectangle(
                                 index: index,
+                                displayIndex: colorIndex + 1,
                                 sel: norm, selRect: selRect,
                                 cellWidth: cellWidth, cellHeight: cellHeight,
                                 cornerRadius: cellCornerRadius,
@@ -313,8 +399,24 @@ struct LayoutGridWorkspaceView: View {
                     let selRect = rectForSelection(hl, cellWidth: cellWidth, cellHeight: cellHeight)
                         .insetBy(dx: 1, dy: 1)
                     let tint = ThemeColors.gridCellHighlightFill(for: colorScheme)
+                    let singleBundleID = highlightAppAssignments.first.flatMap { $0 }
 
-                    if let info = highlightWindowInfo.first {
+                    if let bid = singleBundleID {
+                        let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
+                        let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
+                        let appIcon = AppIconLookup.icon(forBundleID: bid)
+                        let appName = AppIconLookup.localizedName(forBundleID: bid) ?? bid
+                        MiniatureWindowView(
+                            titleBarHeight: titleBarPx,
+                            appIcon: appIcon,
+                            appName: appName,
+                            windowTitle: nil,
+                            cornerRadiusOverride: cellCornerRadius
+                        )
+                        .frame(width: selRect.width, height: selRect.height)
+                        .position(x: selRect.midX, y: selRect.midY)
+                        .allowsHitTesting(false)
+                    } else if let info = highlightWindowInfo.first {
                         let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
                         let titleBarPx = max(4, menuBarFraction * geometry.size.height * 1.5)
                         MiniatureWindowView(
@@ -632,6 +734,7 @@ struct LayoutGridWorkspaceView: View {
     @ViewBuilder
     private func committedSelectionRectangle(
         index: Int,
+        displayIndex: Int? = nil,
         sel: GridSelection,
         selRect: CGRect,
         cellWidth: CGFloat,
@@ -641,10 +744,12 @@ struct LayoutGridWorkspaceView: View {
         border: Color,
         divider: Color,
         showIndex: Bool = true,
-        showDelete: Bool
+        showDelete: Bool,
+        showAssignBadge: Bool = false
     ) -> some View {
         let spanCols = sel.endColumn - sel.startColumn + 1
         let spanRows = sel.endRow - sel.startRow + 1
+        let labelNumber = displayIndex ?? (index + 1)
 
         // Anchor the fill to the rectangle (sized via .frame) and layer
         // dividers, border, label and delete button as overlays. This avoids
@@ -677,7 +782,7 @@ struct LayoutGridWorkspaceView: View {
             )
             .overlay(alignment: .center) {
                 if showIndex {
-                    Text("\(index + 1)")
+                    Text("\(labelNumber)")
                         .font(.system(size: min(selRect.width, selRect.height) * 0.35, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
                         .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
@@ -697,8 +802,59 @@ struct LayoutGridWorkspaceView: View {
                     .padding(4)
                 }
             }
+            .overlay(alignment: .bottomTrailing) {
+                if showAssignBadge {
+                    assignAppBadge(selectionIndex: index, diameter: min(22, min(selRect.width, selRect.height) * 0.24))
+                        .padding(4)
+                }
+            }
             .frame(width: selRect.width, height: selRect.height)
             .position(x: selRect.midX, y: selRect.midY)
+    }
+
+    /// Draws an assigned committed rectangle — a miniature window with the
+    /// app's icon and localized name. Hovering shows an "unassign" overlay.
+    @ViewBuilder
+    private func assignedCommittedRectangle(
+        index: Int,
+        bundleID: String,
+        sel: GridSelection,
+        selRect: CGRect,
+        cornerRadius: CGFloat,
+        totalHeight: CGFloat,
+        showDelete: Bool
+    ) -> some View {
+        let menuBarFraction = windowFrameRelative?.menuBarHeightFraction ?? 0.03
+        let titleBarPx = max(4, menuBarFraction * totalHeight * 1.5)
+        let appIcon = AppIconLookup.icon(forBundleID: bundleID)
+        let appName = AppIconLookup.localizedName(forBundleID: bundleID) ?? bundleID
+
+        AssignedRectangleView(
+            selectionIndex: index,
+            appIcon: appIcon,
+            appName: appName,
+            titleBarHeight: titleBarPx,
+            cornerRadiusOverride: cornerRadius,
+            showDelete: showDelete,
+            selRect: selRect,
+            onDelete: { onDeleteSelection?(index) },
+            onUnassign: { onUnassignApp?(index) }
+        )
+        .frame(width: selRect.width, height: selRect.height)
+        .position(x: selRect.midX, y: selRect.midY)
+    }
+
+    /// Clickable `macwindow.badge.plus` badge that requests the app-picker
+    /// `NSMenu` for the given committed-selection index. The badge is an
+    /// NSViewRepresentable-backed `NSButton` so the menu can pop up anchored
+    /// to the real view.
+    @ViewBuilder
+    private func assignAppBadge(selectionIndex: Int, diameter: CGFloat) -> some View {
+        AssignAppBadgeButton(diameter: diameter) { sourceView, point in
+            onRequestAppPicker?(selectionIndex, sourceView, point)
+        }
+        .frame(width: diameter, height: diameter)
+        .help(NSLocalizedString("Assign Application to Region", comment: "Tooltip for the macwindow.badge.plus button inside a preset rectangle"))
     }
 
     /// Pixel center of the shared edge between two committed selections.
@@ -824,3 +980,136 @@ private struct PresetGroupingBadgeView: View {
     }
 }
 
+/// `NSButton`-backed `macwindow.badge.plus` badge. Calls `onClick` with the
+/// underlying `NSView` and a point centered on its bounds so the caller can
+/// pop up an `NSMenu` anchored to the real AppKit view.
+private struct AssignAppBadgeButton: NSViewRepresentable {
+    let diameter: CGFloat
+    let onClick: (_ sourceView: NSView, _ atPoint: NSPoint) -> Void
+
+    func makeNSView(context: Context) -> NSButton {
+        let button = NSButton()
+        button.isBordered = false
+        button.bezelStyle = .regularSquare
+        button.wantsLayer = true
+        button.layer?.cornerRadius = diameter / 2
+        button.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.35).cgColor
+        button.target = context.coordinator
+        button.action = #selector(Coordinator.pressed(_:))
+        button.imagePosition = .imageOnly
+        button.imageScaling = .scaleProportionallyUpOrDown
+
+        let config = NSImage.SymbolConfiguration(pointSize: diameter * 0.58, weight: .semibold)
+        if let image = NSImage(systemSymbolName: "macwindow.badge.plus",
+                               accessibilityDescription: "Assign Application")?
+            .withSymbolConfiguration(config) {
+            image.isTemplate = true
+            button.image = image
+            button.contentTintColor = NSColor.white.withAlphaComponent(0.95)
+        }
+
+        context.coordinator.onClick = onClick
+        return button
+    }
+
+    func updateNSView(_ nsView: NSButton, context: Context) {
+        nsView.layer?.cornerRadius = diameter / 2
+        let config = NSImage.SymbolConfiguration(pointSize: diameter * 0.58, weight: .semibold)
+        nsView.image = nsView.image?.withSymbolConfiguration(config)
+        context.coordinator.onClick = onClick
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    final class Coordinator: NSObject {
+        var onClick: ((NSView, NSPoint) -> Void)?
+
+        @objc func pressed(_ sender: NSButton) {
+            let center = NSPoint(x: sender.bounds.midX, y: sender.bounds.maxY)
+            onClick?(sender, center)
+        }
+    }
+}
+
+/// Renders an assigned committed rectangle: a regular miniature window with
+/// the app's icon and localized name. Hovering the rectangle reveals an
+/// "unassign" button centered over the content.
+private struct AssignedRectangleView: View {
+    let selectionIndex: Int
+    let appIcon: NSImage?
+    let appName: String
+    let titleBarHeight: CGFloat
+    let cornerRadiusOverride: CGFloat
+    let showDelete: Bool
+    let selRect: CGRect
+    let onDelete: () -> Void
+    let onUnassign: () -> Void
+
+    @State private var isHovering = false
+
+    var body: some View {
+        ZStack {
+            MiniatureWindowView(
+                titleBarHeight: titleBarHeight,
+                appIcon: appIcon,
+                appName: appName,
+                windowTitle: nil,
+                cornerRadiusOverride: cornerRadiusOverride
+            )
+
+            if let icon = appIcon {
+                Image(nsImage: icon)
+                    .resizable()
+                    .interpolation(.high)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(
+                        width: max(16, min(selRect.width, selRect.height) * 0.45),
+                        height: max(16, min(selRect.width, selRect.height) * 0.45)
+                    )
+                    .allowsHitTesting(false)
+            }
+
+            if isHovering {
+                Button(action: onUnassign) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.black.opacity(0.6))
+                            .frame(
+                                width: max(22, min(selRect.width, selRect.height) * 0.28),
+                                height: max(22, min(selRect.width, selRect.height) * 0.28)
+                            )
+                        Image(systemName: "xmark")
+                            .font(.system(
+                                size: max(11, min(selRect.width, selRect.height) * 0.14),
+                                weight: .bold
+                            ))
+                            .foregroundStyle(.white)
+                    }
+                    .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
+                }
+                .buttonStyle(.plain)
+                .help(NSLocalizedString("Unassign Application", comment: "Tooltip shown when hovering the unassign button on an assigned preset rectangle"))
+                .transition(.opacity)
+            }
+        }
+        .overlay(alignment: .topLeading) {
+            if showDelete {
+                Button(action: onDelete) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: min(14, min(selRect.width, selRect.height) * 0.22)))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .shadow(color: .black.opacity(0.4), radius: 1, y: 0.5)
+                }
+                .buttonStyle(.plain)
+                .padding(4)
+            }
+        }
+        .onHover { hovering in
+            withAnimation(.easeOut(duration: 0.12)) {
+                isHovering = hovering
+            }
+        }
+    }
+}

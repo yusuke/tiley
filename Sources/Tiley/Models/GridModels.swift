@@ -75,6 +75,10 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
     /// Pairs of selection indices (0 = primary, 1+ = secondary[i-1]) that
     /// should be grouped together automatically when the preset is applied.
     var groupedPairs: [PresetGroupPair]
+    /// Parallel to `allSelections`. Each entry is the assigned app's bundle
+    /// identifier, or `nil` for an unassigned slot. Helpers pad/truncate on
+    /// access so the effective length always equals `allSelections.count`.
+    var rectangleApps: [String?]
 
     /// A sentinel selection used when all selections have been deleted in the editor.
     static let emptySelection = GridSelection(startColumn: -1, startRow: -1, endColumn: -1, endRow: -1)
@@ -90,6 +94,56 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         allSelections.map {
             $0.scaled(fromRows: baseRows, columns: baseColumns, toRows: rows, columns: columns)
         }
+    }
+
+    /// Returns a copy of `rectangleApps` padded/truncated to match `allSelections.count`.
+    var normalizedRectangleApps: [String?] {
+        let target = allSelections.count
+        if rectangleApps.count == target { return rectangleApps }
+        var result = rectangleApps
+        if result.count > target {
+            result = Array(result.prefix(target))
+        } else {
+            result.append(contentsOf: Array(repeating: nil, count: target - result.count))
+        }
+        return result
+    }
+
+    /// Bundle identifier assigned to the selection at `idx`, or `nil` if unassigned or out of range.
+    func appAssignment(atSelectionIndex idx: Int) -> String? {
+        let apps = normalizedRectangleApps
+        guard idx >= 0, idx < apps.count else { return nil }
+        return apps[idx]
+    }
+
+    func isAssigned(atSelectionIndex idx: Int) -> Bool {
+        appAssignment(atSelectionIndex: idx) != nil
+    }
+
+    /// 1-based index shown in the editor for unassigned slots. `nil` for
+    /// assigned slots (they show an app icon instead). Unassigned slots are
+    /// numbered in the order they appear in `allSelections` — since
+    /// `unassignApp` moves a freshly-unassigned slot to the end, its display
+    /// index becomes the largest unassigned number.
+    func displayIndex(forSelectionIndex idx: Int) -> Int? {
+        let apps = normalizedRectangleApps
+        guard idx >= 0, idx < apps.count else { return nil }
+        guard apps[idx] == nil else { return nil }
+        var position = 0
+        for i in 0...idx {
+            if apps[i] == nil {
+                position += 1
+            }
+        }
+        return position
+    }
+
+    var assignedSelectionIndices: [Int] {
+        normalizedRectangleApps.enumerated().compactMap { $0.element == nil ? nil : $0.offset }
+    }
+
+    var unassignedSelectionIndices: [Int] {
+        normalizedRectangleApps.enumerated().compactMap { $0.element == nil ? $0.offset : nil }
     }
 
     var hasAnyGlobalShortcut: Bool { shortcuts.contains { $0.isGlobal } }
@@ -109,6 +163,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         case localShortcut
         case globalShortcut
         case groupedPairs
+        case rectangleApps
     }
 
     init(
@@ -119,7 +174,8 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         baseRows: Int,
         baseColumns: Int,
         shortcuts: [HotKeyShortcut],
-        groupedPairs: [PresetGroupPair] = []
+        groupedPairs: [PresetGroupPair] = [],
+        rectangleApps: [String?] = []
     ) {
         self.id = id
         self.name = name
@@ -129,6 +185,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         self.baseColumns = baseColumns
         self.shortcuts = shortcuts
         self.groupedPairs = groupedPairs
+        self.rectangleApps = rectangleApps
     }
 
     init(from decoder: any Decoder) throws {
@@ -140,6 +197,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         baseRows = try container.decode(Int.self, forKey: .baseRows)
         baseColumns = try container.decode(Int.self, forKey: .baseColumns)
         groupedPairs = try container.decodeIfPresent([PresetGroupPair].self, forKey: .groupedPairs) ?? []
+        rectangleApps = try container.decodeIfPresent([String?].self, forKey: .rectangleApps) ?? []
 
         // Decode new array format first, fall back to legacy formats
         if let shortcuts = try container.decodeIfPresent([HotKeyShortcut].self, forKey: .shortcuts) {
@@ -177,6 +235,10 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         }
         if !groupedPairs.isEmpty {
             try container.encode(groupedPairs, forKey: .groupedPairs)
+        }
+        let normalizedApps = normalizedRectangleApps
+        if normalizedApps.contains(where: { $0 != nil }) {
+            try container.encode(normalizedApps, forKey: .rectangleApps)
         }
     }
 

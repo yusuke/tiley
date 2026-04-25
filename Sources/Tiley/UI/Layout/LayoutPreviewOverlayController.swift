@@ -9,6 +9,16 @@ struct SelectionPreviewItem {
     let appIcon: NSImage?
     let windowTitle: String?
     let appName: String?
+    /// True when this slot has an app assigned in the preset. Assigned slots
+    /// render as a neutral miniature window (no indexed color, no index label).
+    var isAssigned: Bool = false
+    /// Color index to use when the slot is unassigned. Ignored when
+    /// `isAssigned == true`. Defaults to `nil` → the caller falls back to the
+    /// item's position in the array.
+    var unassignedColorIndex: Int? = nil
+    /// 1-based label to render inside an unassigned rectangle. Ignored when
+    /// `isAssigned == true`. `nil` suppresses the label.
+    var displayLabel: Int? = nil
 }
 
 /// Resolved frame + window info for rendering.
@@ -19,6 +29,9 @@ private struct SelectionPreviewEntry {
     let appIcon: NSImage?
     let windowTitle: String?
     let appName: String?
+    let isAssigned: Bool
+    let colorIndex: Int
+    let displayLabel: Int?
 }
 
 final class LayoutPreviewOverlayController: NSWindowController {
@@ -70,14 +83,17 @@ final class LayoutPreviewOverlayController: NSWindowController {
 
     /// Show preview rectangles for multiple selections (multi-selection preset).
     func showMultipleSelections(_ items: [SelectionPreviewItem], rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, showIndexLabels: Bool = false) {
-        let frames = items.map { item in
+        let frames = items.enumerated().map { index, item in
             SelectionPreviewEntry(
                 frame: GridCalculator.frame(for: item.selection, in: visibleFrame, rows: rows, columns: columns, gap: gap),
                 resizability: item.resizability,
                 windowSize: item.windowSize,
                 appIcon: item.appIcon,
                 windowTitle: item.windowTitle,
-                appName: item.appName
+                appName: item.appName,
+                isAssigned: item.isAssigned,
+                colorIndex: item.unassignedColorIndex ?? index,
+                displayLabel: item.displayLabel
             )
         }
         let rootView = MultiSelectionPreviewOverlayView(entries: frames, screenFrame: screenFrame, showIndexLabels: showIndexLabels)
@@ -165,6 +181,9 @@ private struct SelectionPreviewOverlayView: View {
     var colorIndex: Int = 0
     /// 1-based selection index label to show on the preview (nil = hidden).
     var selectionLabel: Int?
+    /// When true, the slot is bound to a specific app in the preset — render
+    /// with a neutral miniature-window fill (no indexed tint, no index label).
+    var isAssigned: Bool = false
 
     var body: some View {
         // Full requested frame in screen-local coordinates (top-left origin).
@@ -267,10 +286,17 @@ private struct SelectionPreviewOverlayView: View {
         ).height
         let showTitleBar = height > titleBarHeight * 2 && width > 60
 
+        let baseFill: Color = isAssigned
+            ? (colorScheme == .dark ? Color.white.opacity(0.08) : Color.white.opacity(0.45))
+            : ThemeColors.indexedSelectionFill(index: colorIndex, for: colorScheme)
+        let borderStroke: Color = isAssigned
+            ? (colorScheme == .dark ? Color.white.opacity(0.20) : Color.black.opacity(0.18))
+            : ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme)
+
         ZStack(alignment: .top) {
             // Base fill + border
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(ThemeColors.indexedSelectionFill(index: colorIndex, for: colorScheme))
+                .fill(baseFill)
 
             if showTitleBar {
                 // Title bar background
@@ -294,10 +320,10 @@ private struct SelectionPreviewOverlayView: View {
 
             // Border stroke on top of everything
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme), lineWidth: 2)
+                .stroke(borderStroke, lineWidth: 2)
 
             // Selection index label centered in content area
-            if let label = selectionLabel {
+            if let label = selectionLabel, !isAssigned {
                 Text("\(label)")
                     .font(.system(size: min(width, height) * 0.25, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
@@ -444,6 +470,11 @@ private struct MultiSelectionPreviewOverlayView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             ForEach(Array(entries.enumerated()), id: \.offset) { index, entry in
+                let label: Int? = {
+                    if entry.isAssigned { return nil }
+                    if let supplied = entry.displayLabel { return supplied }
+                    return showIndexLabels ? index + 1 : nil
+                }()
                 SelectionPreviewOverlayView(
                     frame: entry.frame,
                     resizability: entry.resizability,
@@ -452,8 +483,9 @@ private struct MultiSelectionPreviewOverlayView: View {
                     appIcon: entry.appIcon,
                     windowTitle: entry.windowTitle,
                     appName: entry.appName,
-                    colorIndex: index,
-                    selectionLabel: showIndexLabels ? index + 1 : nil
+                    colorIndex: entry.colorIndex,
+                    selectionLabel: label,
+                    isAssigned: entry.isAssigned
                 )
             }
         }

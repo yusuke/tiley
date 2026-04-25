@@ -149,3 +149,12 @@
 "Linked with the window above" = "與上方視窗已分組";
 "Group these regions" = "將這些區域分組";
 "Remove grouping" = "取消分組";
+"Assign Application" = "指派應用程式";
+"Assign Application to Region" = "為區域指派應用程式";
+"Unassign Application" = "取消指派應用程式";
+"Other Application…" = "其他應用程式…";
+"No running applications" = "沒有執行中的應用程式";
+"Assign" = "指派";
+"Choose an application to assign to this region." = "選擇要指派到此區域的應用程式。";
+"%@ has no windows to place." = "%@ 沒有可放置的視窗。";
+"Couldn't find a window for %@ after launching." = "啟動後找不到 %@ 的視窗。";

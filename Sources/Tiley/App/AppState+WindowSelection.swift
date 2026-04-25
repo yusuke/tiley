@@ -445,6 +445,12 @@ extension AppState {
         activeSpaceIDs = captured.activeSpaceIDs
         windowTargetListVersion += 1
         dissolveGroupsWithSplitSpaces()
+        pruneStaleAppSlotSatellites()
+        // Re-attach AX observation on all registered satellites. Window-list
+        // refreshes and group dissolves can drop observation; this ensures
+        // Cmd+Tab / focus-change events keep flowing for as long as the
+        // satellite stays registered.
+        ensureAllSatellitesObserved()
         // Authoritative data has landed — clear the loading flag so the
         // sidebar transitions from spinner to the populated list in a single
         // render.  Phase 2 intentionally leaves the flag set when the refresh

@@ -94,8 +94,15 @@ enum CGSPrivate {
     /// window to the very front (kCGSOrderAbove) or very back (kCGSOrderBelow).
     @discardableResult
     static func orderWindow(_ windowID: CGWindowID, mode: Int32, relativeTo relativeToWindowID: CGWindowID = 0) -> Bool {
-        guard let fn = _orderWindow, let cid = _mainConnectionID?() else { return false }
-        return fn(cid, windowID, mode, relativeToWindowID) == .success
+        guard let fn = _orderWindow, let cid = _mainConnectionID?() else {
+            debugLog("CGSOrderWindow: unresolved symbol (fn=\(_orderWindow != nil) cid=\(_mainConnectionID != nil))")
+            return false
+        }
+        let err = fn(cid, windowID, mode, relativeToWindowID)
+        if err != .success {
+            debugLog("CGSOrderWindow: error=\(err.rawValue) wid=\(windowID) mode=\(mode) relativeTo=\(relativeToWindowID) cid=\(cid)")
+        }
+        return err == .success
     }
 
     // MARK: - Show Desktop dismissal

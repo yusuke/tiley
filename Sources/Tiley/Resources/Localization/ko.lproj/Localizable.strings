@@ -149,3 +149,12 @@
 "Linked with the window above" = "위 창과 그룹화됨";
 "Group these regions" = "이 영역들을 그룹화";
 "Remove grouping" = "그룹 해제";
+"Assign Application" = "애플리케이션 할당";
+"Assign Application to Region" = "영역에 애플리케이션 할당";
+"Unassign Application" = "애플리케이션 할당 해제";
+"Other Application…" = "기타 애플리케이션…";
+"No running applications" = "실행 중인 애플리케이션이 없습니다";
+"Assign" = "할당";
+"Choose an application to assign to this region." = "이 영역에 할당할 애플리케이션을 선택하세요.";
+"%@ has no windows to place." = "%@에 배치할 수 있는 윈도우가 없습니다.";
+"Couldn't find a window for %@ after launching." = "%@을(를) 실행했지만 윈도우를 찾지 못했습니다.";

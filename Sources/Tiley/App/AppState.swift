@@ -243,6 +243,39 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var windowGroups: [UUID: WindowGroup] = [:]
     /// Reverse index: CGWindowID → group UUID for fast lookup.
     @ObservationIgnored var groupIndexByWindow: [CGWindowID: UUID] = [:]
+    /// Session-only satellite-window links keyed by an assigned app's bundle
+    /// identifier. Populated when a preset with app assignments + grouped pairs
+    /// is applied: each unassigned slot's window that shares a grouped edge
+    /// with an assigned slot is recorded as a satellite of that bundle ID.
+    /// Used by the raise linkage so clicking a satellite also raises the
+    /// anchor app's frontmost window, and vice-versa.
+    @ObservationIgnored var appSlotSatellites: [String: Set<CGWindowID>] = [:]
+
+    /// Remembered frames per `(bundleID, satelliteWID)` for satellite pairs.
+    /// Updated continuously while a pair is the "active" binding (anchor +
+    /// its most-recent satellite); restored when the user flips the active
+    /// partner back to a remembered satellite so the pair snaps to its
+    /// last-known spatial arrangement.
+    @ObservationIgnored var savedSatellitePairFrames: [String: [CGWindowID: SatellitePairFrames]] = [:]
+
+    /// The "active" satellite per anchor bundleID — whichever of the
+    /// registered satellites was most recently surfaced. Movement of the
+    /// anchor or this satellite updates `savedSatellitePairFrames`.
+    @ObservationIgnored var activeSatellitePerBundle: [String: CGWindowID] = [:]
+
+    /// Timer that keeps `isApplyingGroupTransform` set during the post-
+    /// restore settle window (~2 s). Prevents the spatial-group polling
+    /// follower from interfering while the app (e.g. Xcode) auto-
+    /// repositions itself post-activation.
+    @ObservationIgnored var pairRestoreSettleTimer: DispatchSourceTimer?
+
+    /// Snapshot of the anchor + satellite frames for an app-slot pair.
+    struct SatellitePairFrames: Equatable {
+        let anchor: CGRect
+        let satellite: CGRect
+        let screenFrame: CGRect
+        let visibleFrame: CGRect
+    }
     /// Detected-but-not-yet-linked adjacencies. One badge per entry.
     @ObservationIgnored var pendingGroupCandidates: [WindowAdjacency] = []
     /// Timestamp when each pending candidate was first detected — used for 5s timeout.
@@ -1570,12 +1603,46 @@ final class AppState: NSObject, NSMenuDelegate {
 
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
+
+        // If the preset has any app assignment, route through the
+        // assignment-aware async pipeline (matches applyLayoutPreset).
+        let rectangleApps = preset.normalizedRectangleApps
+        if rectangleApps.contains(where: { $0 != nil }) {
+            let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+            var anchor = target
+            anchor = WindowTarget(
+                appElement: anchor.appElement,
+                windowElement: anchor.windowElement,
+                processIdentifier: anchor.processIdentifier,
+                appName: anchor.appName,
+                windowTitle: anchor.windowTitle,
+                frame: anchor.frame,
+                visibleFrame: visibleFrame,
+                screenFrame: screenFrame,
+                isHidden: anchor.isHidden,
+                spaceID: anchor.spaceID,
+                isOnOtherSpace: anchor.isOnOtherSpace,
+                cgWindowID: anchor.cgWindowID
+            )
+            Task { @MainActor [self] in
+                await applyPresetWithAppAssignments(
+                    presetID: id,
+                    allSelections: allSelections,
+                    rectangleApps: rectangleApps,
+                    groupedPairs: preset.groupedPairs,
+                    anchorTarget: anchor,
+                    presetName: preset.name
+                )
+            }
+            return
+        }
+
         let selection = preset.scaledSelection(toRows: rows, columns: columns)
         let secondarySelections = preset.scaledSecondarySelections(toRows: rows, columns: columns)
         commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: preset.groupedPairs)
     }
 
-    private func recordSelectionAndHide(selection: GridSelection, appName: String, wasConstrained: Bool = false) {
+    func recordSelectionAndHide(selection: GridSelection, appName: String, wasConstrained: Bool = false) {
         // hidePreviewOverlay / isShowingLayoutGrid / hideAllMainWindows are
         // already called by the caller before the resize for faster feedback.
         activeLayoutTarget = nil

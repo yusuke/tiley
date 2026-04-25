@@ -149,3 +149,12 @@
 "Linked with the window above" = "上のウインドウとグループ化されています";
 "Group these regions" = "これらの領域をグループ化";
 "Remove grouping" = "グループ化を解除";
+"Assign Application" = "アプリケーションを割り当てる";
+"Assign Application to Region" = "この領域にアプリケーションを割り当て";
+"Unassign Application" = "アプリケーションの割り当てを解除";
+"Other Application…" = "その他のアプリケーション…";
+"No running applications" = "起動中のアプリケーションがありません";
+"Assign" = "割り当て";
+"Choose an application to assign to this region." = "この領域に割り当てるアプリケーションを選択してください。";
+"%@ has no windows to place." = "%@ に配置できるウインドウがありません。";
+"Couldn't find a window for %@ after launching." = "%@ を起動しましたが、ウインドウが見つかりませんでした。";

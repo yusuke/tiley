@@ -98,6 +98,23 @@ extension AppState {
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
         let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+        let rectangleApps = preset.normalizedRectangleApps
+        let hasAnyAssignment = rectangleApps.contains(where: { $0 != nil })
+
+        if hasAnyAssignment {
+            Task { @MainActor [self] in
+                await applyPresetWithAppAssignments(
+                    presetID: id,
+                    allSelections: allSelections,
+                    rectangleApps: rectangleApps,
+                    groupedPairs: preset.groupedPairs,
+                    anchorTarget: target,
+                    presetName: preset.name
+                )
+            }
+            return
+        }
+
         if selectedWindowIndices.count > 1 {
             if selectedWindowIndices.count >= allSelections.count {
                 // Enough selected windows — use explicit selection order.

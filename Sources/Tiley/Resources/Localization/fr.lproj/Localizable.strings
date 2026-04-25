@@ -149,3 +149,12 @@
 "Linked with the window above" = "Groupée avec la fenêtre ci-dessus";
 "Group these regions" = "Grouper ces régions";
 "Remove grouping" = "Supprimer le groupe";
+"Assign Application" = "Attribuer une application";
+"Assign Application to Region" = "Attribuer une application à la région";
+"Unassign Application" = "Retirer l'application";
+"Other Application…" = "Autre application…";
+"No running applications" = "Aucune application en cours d'exécution";
+"Assign" = "Attribuer";
+"Choose an application to assign to this region." = "Choisissez une application à attribuer à cette région.";
+"%@ has no windows to place." = "%@ n'a aucune fenêtre à placer.";
+"Couldn't find a window for %@ after launching." = "Aucune fenêtre trouvée pour %@ après le lancement.";
