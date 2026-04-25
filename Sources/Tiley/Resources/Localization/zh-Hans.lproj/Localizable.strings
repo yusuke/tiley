@@ -23,6 +23,7 @@
 "Right Half" = "右半屏";
 "Top Half" = "上半屏";
 "Bottom Half" = "下半屏";
+"Center" = "居中";
 "Accessibility access is required. Enable Tiley in System Settings > Privacy & Security > Accessibility." = "需要辅助功能权限。请在“系统设置 > 隐私与安全性 > 辅助功能”中启用 Tiley。";
 "The frontmost application could not be identified." = "无法识别最前台应用。";
 "The frontmost window could not be identified." = "无法识别最前台窗口。";

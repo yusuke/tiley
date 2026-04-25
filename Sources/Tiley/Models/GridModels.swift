@@ -330,6 +330,16 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
                     HotKeyShortcut(keyCode: UInt32(kVK_ANSI_J), modifiers: 0),
                     HotKeyShortcut(keyCode: UInt32(kVK_DownArrow), modifiers: 0)
                 ]
+            ),
+            LayoutPreset(
+                id: UUID(),
+                name: NSLocalizedString("Center", comment: "Default layout preset name"),
+                selection: GridSelection(startColumn: 1, startRow: 1, endColumn: 2, endRow: 2),
+                baseRows: 4,
+                baseColumns: 4,
+                shortcuts: [
+                    HotKeyShortcut(keyCode: UInt32(kVK_ANSI_C), modifiers: 0)
+                ]
             )
         ]
     }

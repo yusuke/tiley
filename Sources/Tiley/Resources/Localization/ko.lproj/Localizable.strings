@@ -23,6 +23,7 @@
 "Right Half" = "오른쪽 절반";
 "Top Half" = "위쪽 절반";
 "Bottom Half" = "아래쪽 절반";
+"Center" = "중앙";
 "Accessibility access is required. Enable Tiley in System Settings > Privacy & Security > Accessibility." = "손쉬운 사용 권한이 필요합니다. 시스템 설정 > 개인정보 보호 및 보안 > 손쉬운 사용에서 Tiley를 허용하세요.";
 "The frontmost application could not be identified." = "전면 애플리케이션을 식별할 수 없습니다.";
 "The frontmost window could not be identified." = "전면 창을 식별할 수 없습니다.";

@@ -23,6 +23,7 @@
 "Right Half" = "Right Half";
 "Top Half" = "Top Half";
 "Bottom Half" = "Bottom Half";
+"Center" = "Center";
 "Accessibility access is required. Enable Tiley in System Settings > Privacy & Security > Accessibility." = "Accessibility access is required. Enable Tiley in System Settings > Privacy & Security > Accessibility.";
 "The frontmost application could not be identified." = "The frontmost application could not be identified.";
 "The frontmost window could not be identified." = "The frontmost window could not be identified.";

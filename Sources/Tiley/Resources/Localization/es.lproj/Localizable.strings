@@ -23,6 +23,7 @@
 "Right Half" = "Mitad derecha";
 "Top Half" = "Mitad superior";
 "Bottom Half" = "Mitad inferior";
+"Center" = "Centro";
 "Accessibility access is required. Enable Tiley in System Settings > Privacy & Security > Accessibility." = "Se requiere acceso de accesibilidad. Activa Tiley en Ajustes del Sistema > Privacidad y seguridad > Accesibilidad.";
 "The frontmost application could not be identified." = "No se pudo identificar la aplicación en primer plano.";
 "The frontmost window could not be identified." = "No se pudo identificar la ventana en primer plano.";

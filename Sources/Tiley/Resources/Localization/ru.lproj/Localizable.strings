@@ -23,6 +23,7 @@
 "Right Half" = "Правая половина";
 "Top Half" = "Верхняя половина";
 "Bottom Half" = "Нижняя половина";
+"Center" = "Центр";
 "Accessibility access is required. Enable Tiley in System Settings > Privacy & Security > Accessibility." = "Требуется доступ к универсальному доступу. Включите Tiley в Системных настройках > Конфиденциальность и безопасность > Универсальный доступ.";
 "The frontmost application could not be identified." = "Не удалось определить приложение на переднем плане.";
 "The frontmost window could not be identified." = "Не удалось определить окно на переднем плане.";

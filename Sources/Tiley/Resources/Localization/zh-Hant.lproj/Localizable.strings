@@ -23,6 +23,7 @@
 "Right Half" = "右半邊";
 "Top Half" = "上半邊";
 "Bottom Half" = "下半邊";
+"Center" = "置中";
 "Accessibility access is required. Enable Tiley in System Settings > Privacy & Security > Accessibility." = "需要輔助使用權限。請在\U201C系統設定 > 隱私權與安全性 > 輔助使用\U201D中啟用 Tiley。";
 "The frontmost application could not be identified." = "無法識別最前景應用程式。";
 "The frontmost window could not be identified." = "無法識別最前景視窗。";
