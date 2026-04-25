@@ -31,12 +31,20 @@ private enum BadgeStyle {
         static let buttonSpacing: CGFloat = 6
         /// Padding around the buttons inside the pill capsule.
         static let pillPadding: CGFloat = 6
-        /// Pill width = 2 buttons + spacing + 2× padding.
-        static let pillWidth: CGFloat = buttonDiameter * 2 + buttonSpacing + pillPadding * 2
+        /// Pill width for the given number of action buttons:
+        ///   N buttons + (N-1)× spacing + 2× padding.
+        static func pillWidth(buttonCount: Int) -> CGFloat {
+            let n = max(1, buttonCount)
+            return buttonDiameter * CGFloat(n)
+                + buttonSpacing * CGFloat(n - 1)
+                + pillPadding * 2
+        }
         /// Pill height = 1 button + 2× padding.
         static let pillHeight: CGFloat = buttonDiameter + pillPadding * 2
-        /// Total panel width when menu is shown.
-        static let panelWidth: CGFloat = max(windowSize, pillWidth)
+        /// Total panel width when the menu is shown for `buttonCount` buttons.
+        static func panelWidth(buttonCount: Int) -> CGFloat {
+            max(windowSize, pillWidth(buttonCount: buttonCount))
+        }
         /// Total panel height when menu is shown.
         static let panelHeight: CGFloat = windowSize + gap + pillHeight
         /// Font size for the SF Symbol on action buttons.
@@ -83,6 +91,12 @@ private enum BadgeStyle {
         static let defaultFadeOut: TimeInterval = 0.25
         /// Fade-out duration at the start of a drag / resize.
         static let fastFadeOut: TimeInterval = 0.15
+        /// Fade-in duration of the hover-menu pill when it appears.
+        static let menuFadeIn: TimeInterval = 0.16
+        /// Fade-out duration of the hover-menu pill when it disappears.
+        /// The NSPanel is kept at its expanded size for this same duration so
+        /// the pill isn't visually clipped mid-fade.
+        static let menuFadeOut: TimeInterval = 0.16
     }
 }
 
@@ -100,6 +114,10 @@ enum BadgeAction {
     case ungroup
     /// "Swap" button in the hover menu.
     case swap
+    /// "Match window extents" button in the hover menu — grows the smaller
+    /// window's perpendicular extent (height for L/R pairs, width for T/B
+    /// pairs) so both windows span the same outer envelope along that axis.
+    case matchExtents
 }
 
 /// Where the hover menu is placed relative to the badge.
@@ -119,6 +137,17 @@ struct GroupLinkBadge: Identifiable {
     let titleA: String
     /// Display name for `adjacency.windowB` (used in tooltip).
     let titleB: String
+    /// True when the two windows differ in their perpendicular-axis extent
+    /// (vertical span for left/right pairs, horizontal span for top/bottom
+    /// pairs), so the "match window heights/widths" hover-menu button has
+    /// something to do. When false, that third button is hidden because the
+    /// extents already line up.
+    let canMatchExtents: Bool
+}
+
+extension GroupLinkBadge {
+    /// Number of buttons rendered inside the linked-state hover pill.
+    var menuButtonCount: Int { canMatchExtents ? 3 : 2 }
 }
 
 /// Floating overlay that shows a `link.badge.plus` / `link` badge at the midpoint
@@ -137,8 +166,17 @@ final class GroupLinkBadgeController {
     /// The most recent `GroupLinkBadge` per id, so hover callbacks can re-render
     /// with the correct content.
     private var badgesByID: [AdjacencyKey: GroupLinkBadge] = [:]
-    /// Whether the hover menu is currently shown for a given badge.
+    /// Whether the hover-menu pill is currently *visible* for a given badge.
+    /// Drives the SwiftUI opacity animation. Cleared on hover-exit immediately
+    /// so the pill begins fading out.
     private var hoverShownByID: Set<AdjacencyKey> = []
+    /// Whether the NSPanel is currently sized to fit the menu pill. Kept set
+    /// for `Animation.menuFadeOut` after the pill starts fading so the panel
+    /// doesn't shrink and clip the still-fading pill mid-animation.
+    private var panelExpandedByID: Set<AdjacencyKey> = []
+    /// Pending "shrink the panel after fade-out" tasks, keyed by badge id, so
+    /// a re-hover during fade-out can cancel the shrink.
+    private var pendingPanelShrinkByID: [AdjacencyKey: DispatchWorkItem] = [:]
 
     init() {}
 
@@ -154,6 +192,8 @@ final class GroupLinkBadgeController {
             windowsByBadge.removeValue(forKey: id)
             badgesByID.removeValue(forKey: id)
             hoverShownByID.remove(id)
+            panelExpandedByID.remove(id)
+            pendingPanelShrinkByID.removeValue(forKey: id)?.cancel()
             fadeOutAndClose(window, duration: duration)
         }
 
@@ -163,6 +203,13 @@ final class GroupLinkBadgeController {
             // Drop any stale hover flag for badges that are no longer linked.
             if badge.state != .linked {
                 hoverShownByID.remove(badge.id)
+                panelExpandedByID.remove(badge.id)
+                pendingPanelShrinkByID.removeValue(forKey: badge.id)?.cancel()
+            } else if hoverShownByID.contains(badge.id) {
+                // Hover (or click-to-link) requested the menu — make sure the
+                // panel size flag tracks it so the pill has room to render.
+                panelExpandedByID.insert(badge.id)
+                pendingPanelShrinkByID.removeValue(forKey: badge.id)?.cancel()
             }
             renderBadge(badge, isNewlyCreated: nil)
         }
@@ -173,6 +220,9 @@ final class GroupLinkBadgeController {
         windowsByBadge.removeAll()
         badgesByID.removeAll()
         hoverShownByID.removeAll()
+        panelExpandedByID.removeAll()
+        for (_, work) in pendingPanelShrinkByID { work.cancel() }
+        pendingPanelShrinkByID.removeAll()
         for window in snapshot.values {
             fadeOutAndClose(window, duration: BadgeStyle.Animation.defaultFadeOut)
         }
@@ -181,9 +231,13 @@ final class GroupLinkBadgeController {
     /// Re-render the panel for `badge`. If `isNewlyCreated` is nil, infer based
     /// on whether a panel already exists.
     private func renderBadge(_ badge: GroupLinkBadge, isNewlyCreated explicitNew: Bool?) {
-        let showMenu = (badge.state == .linked) && hoverShownByID.contains(badge.id)
-        let placement = preferredPlacement(for: badge, showingMenu: showMenu)
-        let frame = panelFrame(for: badge, showingMenu: showMenu, placement: placement)
+        // `panelExpanded` drives panel sizing (kept set during fade-out so the
+        // pill has room to fade gracefully). `pillVisible` drives the SwiftUI
+        // opacity animation of the pill itself.
+        let panelExpanded = (badge.state == .linked) && panelExpandedByID.contains(badge.id)
+        let pillVisible = (badge.state == .linked) && hoverShownByID.contains(badge.id)
+        let placement = preferredPlacement(for: badge, showingMenu: panelExpanded)
+        let frame = panelFrame(for: badge, showingMenu: panelExpanded, placement: placement)
 
         let isNew: Bool
         let window: NSWindow
@@ -225,10 +279,30 @@ final class GroupLinkBadgeController {
         let id = badge.id
         let rootView = BadgeDot(
             badge: badge,
-            showMenu: showMenu,
+            showMenu: panelExpanded,
+            pillVisible: pillVisible,
             menuPlacement: placement,
             onTap: { [weak self] in
-                self?.onBadgeAction?(badge, .toggleLink)
+                // Pre-mark the badge as panel-expanded so the rebuilt
+                // `.linked` badge enters the view tree with the menu pill
+                // already in place — but at opacity 0. We then flip
+                // `hoverShownByID` on the next runloop so the pill fades in
+                // (same two-phase trick as `handleHoverChange`). Without the
+                // gap, the pill would render at opacity 1 from the start
+                // and no transition would play.
+                guard let self else { return }
+                self.panelExpandedByID.insert(id)
+                self.pendingPanelShrinkByID.removeValue(forKey: id)?.cancel()
+                self.onBadgeAction?(badge, .toggleLink)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    guard let current = self.badgesByID[id], current.state == .linked else { return }
+                    guard self.panelExpandedByID.contains(id) else { return }
+                    if !self.hoverShownByID.contains(id) {
+                        self.hoverShownByID.insert(id)
+                        self.renderBadge(current, isNewlyCreated: false)
+                    }
+                }
             },
             onHoverChange: { [weak self] hovering in
                 self?.handleHoverChange(id: id, hovering: hovering)
@@ -238,6 +312,9 @@ final class GroupLinkBadgeController {
             },
             onSwap: { [weak self] in
                 self?.handleMenuAction(id: id, action: .swap)
+            },
+            onMatchExtents: { [weak self] in
+                self?.handleMenuAction(id: id, action: .matchExtents)
             }
         )
         if let existingHost = window.contentView as? NSHostingView<BadgeDot> {
@@ -266,13 +343,55 @@ final class GroupLinkBadgeController {
         guard let badge = badgesByID[id], badge.state == .linked else { return }
         let wasShown = hoverShownByID.contains(id)
         if hovering {
-            if wasShown { return }
-            hoverShownByID.insert(id)
+            // Cancel any in-flight shrink — the user came back before the
+            // fade-out finished.
+            pendingPanelShrinkByID.removeValue(forKey: id)?.cancel()
+            if wasShown && panelExpandedByID.contains(id) { return }
+            // Two-phase render so the fade-in actually plays:
+            //   1. Render the panel at expanded size with the pill in the
+            //      view tree but at opacity 0 (pillVisible=false).
+            //   2. Next runloop turn, flip pillVisible to true so SwiftUI's
+            //      `.animation(value: pillVisible)` sees the change and
+            //      animates opacity 0 → 1. (Without phase 1 the pill would
+            //      enter the tree already at opacity 1 and no transition
+            //      would play.)
+            panelExpandedByID.insert(id)
+            renderBadge(badge, isNewlyCreated: false)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                // Cursor may have left during the gap, or the badge may have
+                // gone away entirely.
+                guard let current = self.badgesByID[id], current.state == .linked else { return }
+                guard self.panelExpandedByID.contains(id) else { return }
+                if !self.hoverShownByID.contains(id) {
+                    self.hoverShownByID.insert(id)
+                    self.renderBadge(current, isNewlyCreated: false)
+                }
+            }
         } else {
             if !wasShown { return }
+            // Hide the pill immediately (SwiftUI fades opacity to 0); keep the
+            // panel at its expanded size for `menuFadeOut` so the pill isn't
+            // clipped, then collapse the panel.
             hoverShownByID.remove(id)
+            renderBadge(badge, isNewlyCreated: false)
+            pendingPanelShrinkByID.removeValue(forKey: id)?.cancel()
+            let work = DispatchWorkItem { [weak self] in
+                guard let self else { return }
+                self.pendingPanelShrinkByID.removeValue(forKey: id)
+                // Don't shrink if the user re-hovered (or clicked → linked) in
+                // the meantime.
+                guard !self.hoverShownByID.contains(id) else { return }
+                guard let current = self.badgesByID[id] else { return }
+                self.panelExpandedByID.remove(id)
+                self.renderBadge(current, isNewlyCreated: false)
+            }
+            pendingPanelShrinkByID[id] = work
+            DispatchQueue.main.asyncAfter(
+                deadline: .now() + BadgeStyle.Animation.menuFadeOut,
+                execute: work
+            )
         }
-        renderBadge(badge, isNewlyCreated: false)
     }
 
     private func handleMenuAction(id: AdjacencyKey, action: BadgeAction) {
@@ -309,7 +428,7 @@ final class GroupLinkBadgeController {
             )
             return CGRect(origin: origin, size: CGSize(width: BadgeStyle.windowSize, height: BadgeStyle.windowSize))
         }
-        let width = BadgeStyle.Menu.panelWidth
+        let width = BadgeStyle.Menu.panelWidth(buttonCount: badge.menuButtonCount)
         let height = BadgeStyle.Menu.panelHeight
         let originX = badge.center.x - width / 2
         let originY: CGFloat
@@ -356,13 +475,21 @@ private struct BadgeTooltipModifier: ViewModifier {
 
 private struct BadgeDot: View {
     let badge: GroupLinkBadge
-    /// When true, the hover menu pill is rendered alongside the badge.
+    /// When true, the panel is sized to fit the menu pill and the pill is
+    /// laid out alongside the badge. The pill's *visual opacity* is driven
+    /// independently by `pillVisible` so it can fade out before the panel
+    /// collapses back to the badge-only size.
     let showMenu: Bool
+    /// When true, the pill renders fully opaque; when false it animates to
+    /// transparent. Independent from `showMenu` so the panel can keep its
+    /// expanded size for the duration of the fade-out.
+    let pillVisible: Bool
     let menuPlacement: BadgeMenuPlacement
     let onTap: () -> Void
     let onHoverChange: (Bool) -> Void
     let onUngroup: () -> Void
     let onSwap: () -> Void
+    let onMatchExtents: () -> Void
 
     @State private var isHovering = false
 
@@ -424,6 +551,16 @@ private struct BadgeDot: View {
             : "arrow.up.arrow.down.circle"
     }
 
+    /// SF Symbol for the "match extents" button. Points perpendicular to the
+    /// adjacency axis: a horizontal-edge pair (windows side-by-side) is
+    /// equalised along the *vertical* axis, so the icon shows up/down arrows;
+    /// a vertical-edge pair is equalised along the *horizontal* axis.
+    private var matchExtentsSymbolName: String {
+        badge.adjacency.edgeOfA.isHorizontal
+            ? "arrow.up.and.down.circle"
+            : "arrow.left.and.right.circle"
+    }
+
     var body: some View {
         Group {
             if showMenu {
@@ -441,7 +578,7 @@ private struct BadgeDot: View {
             }
         }
         .frame(
-            width: showMenu ? BadgeStyle.Menu.panelWidth : BadgeStyle.windowSize,
+            width: showMenu ? BadgeStyle.Menu.panelWidth(buttonCount: badge.menuButtonCount) : BadgeStyle.windowSize,
             height: showMenu ? BadgeStyle.Menu.panelHeight : BadgeStyle.windowSize
         )
         // Make the entire panel rectangle the hover region so the cursor can
@@ -487,6 +624,20 @@ private struct BadgeDot: View {
     }
 
     private var menuPill: some View {
+        menuPillContent
+            .opacity(pillVisible ? 1 : 0)
+            .animation(
+                .easeOut(duration: pillVisible
+                         ? BadgeStyle.Animation.menuFadeIn
+                         : BadgeStyle.Animation.menuFadeOut),
+                value: pillVisible
+            )
+            // Suppress hit-testing when invisible so a fading-out pill doesn't
+            // catch button presses or block clicks on whatever is underneath.
+            .allowsHitTesting(pillVisible)
+    }
+
+    private var menuPillContent: some View {
         HStack(spacing: BadgeStyle.Menu.buttonSpacing) {
             menuButton(
                 symbol: "xmark.circle.fill",
@@ -500,6 +651,14 @@ private struct BadgeDot: View {
                 accessibility: swapTooltipText,
                 action: onSwap
             )
+            if badge.canMatchExtents {
+                menuButton(
+                    symbol: matchExtentsSymbolName,
+                    tooltip: matchExtentsTooltipText,
+                    accessibility: matchExtentsTooltipText,
+                    action: onMatchExtents
+                )
+            }
         }
         .padding(BadgeStyle.Menu.pillPadding)
         .background(
@@ -546,6 +705,14 @@ private struct BadgeDot: View {
             return NSLocalizedString("Swap left/right windows", comment: "Tooltip for the swap action button on a horizontal window pair")
         } else {
             return NSLocalizedString("Swap top/bottom windows", comment: "Tooltip for the swap action button on a vertical window pair")
+        }
+    }
+
+    private var matchExtentsTooltipText: String {
+        if badge.adjacency.edgeOfA.isHorizontal {
+            return NSLocalizedString("Match window heights", comment: "Tooltip for the match-extents action button on a horizontal (left/right) window pair — both windows grow vertically to span the outer envelope")
+        } else {
+            return NSLocalizedString("Match window widths", comment: "Tooltip for the match-extents action button on a vertical (top/bottom) window pair — both windows grow horizontally to span the outer envelope")
         }
     }
 }

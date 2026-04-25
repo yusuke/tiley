@@ -151,6 +151,8 @@
 "%@ and %@ are grouped" = "「%@」と「%@」はグループ化されています";
 "Swap left/right windows" = "左右のウインドウを入れ換え";
 "Swap top/bottom windows" = "上下のウインドウを入れ換え";
+"Match window heights" = "ウインドウの高さを揃える";
+"Match window widths" = "ウインドウの幅を揃える";
 "Linked with the window above" = "上のウインドウとグループ化されています";
 "Group these regions" = "これらの領域をグループ化";
 "Remove grouping" = "グループ化を解除";

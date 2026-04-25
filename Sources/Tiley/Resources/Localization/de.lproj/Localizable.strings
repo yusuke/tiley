@@ -151,6 +151,8 @@
 "%@ and %@ are grouped" = "%@ und %@ sind gruppiert";
 "Swap left/right windows" = "Linkes/rechtes Fenster tauschen";
 "Swap top/bottom windows" = "Oberes/unteres Fenster tauschen";
+"Match window heights" = "Fensterhöhe angleichen";
+"Match window widths" = "Fensterbreite angleichen";
 "Linked with the window above" = "Mit dem Fenster oben gruppiert";
 "Group these regions" = "Diese Bereiche gruppieren";
 "Remove grouping" = "Gruppierung entfernen";

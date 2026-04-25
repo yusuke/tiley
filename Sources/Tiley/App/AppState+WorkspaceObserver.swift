@@ -218,6 +218,7 @@ extension AppState {
                 self.hasWindowListCache = true
                 debugLog("Window list cache updated: \(captured.targets.count) windows")
                 self.dissolveGroupsWithSplitSpaces()
+                self.ensureAllAvailableWindowsObservedForManualMove()
             }
         }
     }

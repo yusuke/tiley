@@ -318,6 +318,15 @@ final class AppState: NSObject, NSMenuDelegate {
     /// hijacking the polling source.
     @ObservationIgnored var recentlySetFrames: [CGWindowID: (frame: CGRect, time: CFAbsoluteTime)] = [:]
 
+    /// Windows that have moved/resized via the user (not via Tiley) since the last
+    /// settle pass. Drained by `processManuallyMovedWindows()` after the user
+    /// releases the drag, then fed into adjacency detection so newly touching
+    /// edges surface a "form group" candidate badge.
+    @ObservationIgnored var manuallyMovedWindowIDs: Set<CGWindowID> = []
+    /// Debounce timer that fires shortly after the last manual move/resize event
+    /// (or immediately on mouse-up) and runs the candidate detection pass.
+    @ObservationIgnored var manualMoveSettleTimer: DispatchSourceTimer?
+
     // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
     /// True when the user opened the overlay and is still holding the toggle modifiers.
     var isModifierHeldMode = false

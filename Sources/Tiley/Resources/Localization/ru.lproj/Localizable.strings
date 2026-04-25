@@ -151,6 +151,8 @@
 "%@ and %@ are grouped" = "%@ и %@ сгруппированы";
 "Swap left/right windows" = "Поменять местами левое и правое окна";
 "Swap top/bottom windows" = "Поменять местами верхнее и нижнее окна";
+"Match window heights" = "Выровнять высоту окон";
+"Match window widths" = "Выровнять ширину окон";
 "Linked with the window above" = "Сгруппировано с окном выше";
 "Group these regions" = "Сгруппировать эти области";
 "Remove grouping" = "Убрать группировку";

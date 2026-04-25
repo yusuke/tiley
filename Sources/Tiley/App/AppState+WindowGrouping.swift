@@ -22,6 +22,9 @@ extension AppState {
         }
         windowObservationService = service
         installGroupClickMonitor()
+        // Watch every currently-known window so manual move/resize gestures
+        // outside of any existing group surface "form group" badges on release.
+        ensureAllAvailableWindowsObservedForManualMove()
     }
 
     /// Called from `stop()`. Tears down all observations.
@@ -39,6 +42,9 @@ extension AppState {
         windowGroups.removeAll()
         groupIndexByWindow.removeAll()
         pendingGroupCandidates.removeAll()
+        manualMoveSettleTimer?.cancel()
+        manualMoveSettleTimer = nil
+        manuallyMovedWindowIDs.removeAll()
     }
 
     // MARK: - Click monitor (catches intra-app window switches)
@@ -114,14 +120,23 @@ extension AppState {
     /// progress, stop polling **immediately** (without waiting the 200 ms idle
     /// timeout) so the on-release resolve pass can run quickly.
     func handleSystemMouseUp() {
-        guard groupPollingTimer != nil else { return }
-        // Stop polling ~50 ms later → resolve. The small delay lets any final
-        // in-flight AX event arrive first.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
-            guard let self else { return }
-            // Stop only if still running (and a new drag hasn't started).
-            if self.groupPollingTimer != nil {
-                self.stopGroupPollingTimer()
+        // If a Tiley group polling session is in progress, end it promptly.
+        if groupPollingTimer != nil {
+            // Stop polling ~50 ms later → resolve. The small delay lets any final
+            // in-flight AX event arrive first.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                guard let self else { return }
+                if self.groupPollingTimer != nil {
+                    self.stopGroupPollingTimer()
+                }
+            }
+        }
+        // If the user dragged/resized any non-group window, finalize the
+        // manual-move detection pass shortly after release. The small delay
+        // lets the trailing AX move/resize event arrive first.
+        if !manuallyMovedWindowIDs.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) { [weak self] in
+                self?.processManuallyMovedWindows()
             }
         }
     }
@@ -357,6 +372,99 @@ extension AppState {
             }
         }
         debugLog("WindowGrouping: pending candidates after filtering: \(pendingGroupCandidates.count)")
+
+        refreshBadgeOverlays()
+    }
+
+    // MARK: - Manual move/resize → candidate detection
+
+    /// Ensures the AX observation service is watching every available window
+    /// for move/resize/destroy events, so manual user gestures on arbitrary
+    /// windows can be detected (not just on existing group members or pending
+    /// candidates). The service deduplicates per CGWindowID so repeated calls
+    /// are cheap.
+    func ensureAllAvailableWindowsObservedForManualMove() {
+        guard accessibilityGranted else { return }
+        guard let service = windowObservationService else { return }
+        var seen: Set<CGWindowID> = []
+        let lists: [[WindowTarget]] = [availableWindowTargets, cachedWindowTargets]
+        for list in lists {
+            for target in list where target.cgWindowID != 0 {
+                if !seen.insert(target.cgWindowID).inserted { continue }
+                service.observe(target: target)
+            }
+        }
+    }
+
+    /// (Re)starts a short debounce timer that calls
+    /// `processManuallyMovedWindows()` once movement settles. A separate
+    /// mouse-up trigger calls the same method with no delay so the badge
+    /// appears immediately on release.
+    func scheduleManualMoveSettle() {
+        manualMoveSettleTimer?.cancel()
+        let timer = DispatchSource.makeTimerSource(queue: .main)
+        // 250 ms after the last move/resize event — long enough to coalesce a
+        // burst, short enough to feel responsive when the user releases.
+        timer.schedule(deadline: .now() + .milliseconds(250))
+        timer.setEventHandler { [weak self] in
+            self?.processManuallyMovedWindows()
+        }
+        timer.resume()
+        manualMoveSettleTimer = timer
+    }
+
+    /// Drains `manuallyMovedWindowIDs`, runs adjacency detection across all
+    /// visible window frames, and surfaces newly-touching pairs (involving at
+    /// least one moved window) as pending candidate badges.
+    func processManuallyMovedWindows() {
+        manualMoveSettleTimer?.cancel()
+        manualMoveSettleTimer = nil
+        let movedIDs = manuallyMovedWindowIDs
+        manuallyMovedWindowIDs.removeAll()
+        guard !movedIDs.isEmpty else { return }
+        guard accessibilityGranted else { return }
+        // Avoid running while Tiley itself is mid-transform or showing the
+        // overlay — those flows manage their own candidate refresh.
+        if isApplyingGroupTransform { return }
+        if isShowingLayoutGrid { return }
+
+        let frames = allAvailableFrames()
+        let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+        let allDetected = WindowAdjacencyDetector.detect(frames: frames, edgeEpsilon: epsilon)
+        // Keep only adjacencies involving at least one window the user just moved.
+        let detected = allDetected.filter {
+            movedIDs.contains($0.windowA) || movedIDs.contains($0.windowB)
+        }
+        debugLog("WindowGrouping: manual-move settle — moved=\(movedIDs.count) detected=\(detected.count) (epsilon=\(epsilon))")
+
+        var merged: [AdjacencyKey: WindowAdjacency] = [:]
+        for adj in pendingGroupCandidates {
+            merged[adj.unorderedKey] = adj
+        }
+        for adj in detected {
+            // Skip pairs already inside the same existing group.
+            if let a = groupIndexByWindow[adj.windowA],
+               let b = groupIndexByWindow[adj.windowB], a == b {
+                continue
+            }
+            merged[adj.unorderedKey] = adj
+        }
+        pendingGroupCandidates = Array(merged.values)
+
+        let now = CFAbsoluteTimeGetCurrent()
+        for adj in pendingGroupCandidates {
+            let key = adj.unorderedKey
+            if pendingCandidateTimestamps[key] == nil {
+                pendingCandidateTimestamps[key] = now
+                let work = DispatchWorkItem { [weak self] in
+                    self?.expirePendingCandidate(key: key)
+                }
+                pendingCandidateFadeItems[key] = work
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: work)
+            }
+            observeWindowForCandidate(cgWindowID: adj.windowA)
+            observeWindowForCandidate(cgWindowID: adj.windowB)
+        }
 
         refreshBadgeOverlays()
     }
@@ -626,7 +734,8 @@ extension AppState {
                 center: adj.midpoint,
                 adjacency: adj,
                 titleA: badgeWindowTitle(for: adj.windowA),
-                titleB: badgeWindowTitle(for: adj.windowB)
+                titleB: badgeWindowTitle(for: adj.windowB),
+                canMatchExtents: false  // unlinked badges have no hover menu
             ))
         }
         // Drop expired / adjacency-lost candidates.
@@ -652,7 +761,8 @@ extension AppState {
                         center: adj.midpoint,
                         adjacency: adj,
                         titleA: badgeWindowTitle(for: adj.windowA),
-                        titleB: badgeWindowTitle(for: adj.windowB)
+                        titleB: badgeWindowTitle(for: adj.windowB),
+                        canMatchExtents: canMatchExtents(adj: adj, frames: liveFrames)
                     ))
                 }
             }
@@ -667,6 +777,23 @@ extension AppState {
             groupLinkBadgeController = controller
         }
         groupLinkBadgeController?.update(badges: badges, fadeOutDuration: fastHide ? 0.15 : nil)
+    }
+
+    /// True when the two windows of `adj` differ on the axis perpendicular to
+    /// their shared edge — i.e. the "match window heights/widths" action would
+    /// actually grow at least one window. Returns false (button hidden) when
+    /// the outer envelope already lines up on both sides, or when live frames
+    /// can't be read.
+    private func canMatchExtents(adj: WindowAdjacency, frames: [CGWindowID: CGRect]) -> Bool {
+        guard let fA = frames[adj.windowA], let fB = frames[adj.windowB] else { return false }
+        let tol: CGFloat = 1
+        if adj.edgeOfA.isHorizontal {
+            // Side-by-side pair → check vertical extent.
+            return abs(fA.minY - fB.minY) > tol || abs(fA.maxY - fB.maxY) > tol
+        } else {
+            // Stacked pair → check horizontal extent.
+            return abs(fA.minX - fB.minX) > tol || abs(fA.maxX - fB.maxX) > tol
+        }
     }
 
     /// Returns the set of CGWindowIDs whose entire frame is covered by some
@@ -736,6 +863,95 @@ extension AppState {
             unlinkAdjacency(badge.adjacency)
         case .swap:
             swapAdjacency(badge.adjacency)
+        case .matchExtents:
+            matchExtentsAdjacency(badge.adjacency)
+        }
+    }
+
+    /// Equalises the perpendicular extent of the two windows that share `adj`.
+    ///
+    /// For a horizontal-edge pair (windows arranged left/right) both windows'
+    /// vertical span is set to the union: top = max(maxY of A, maxY of B),
+    /// bottom = min(minY of A, minY of B). The shorter window grows to match
+    /// the outer top and outer bottom edges — if one side already extends
+    /// further on that axis, the other side stretches out to it.
+    ///
+    /// For a vertical-edge pair (windows arranged top/bottom) the same is done
+    /// along the horizontal axis (minX / maxX).
+    ///
+    /// The contact edge between the two windows is preserved; only the
+    /// perpendicular dimension changes.
+    func matchExtentsAdjacency(_ adj: WindowAdjacency) {
+        let idA = adj.windowA
+        let idB = adj.windowB
+
+        guard let frameA = liveFrame(of: idA), let frameB = liveFrame(of: idB) else {
+            debugLog("WindowGrouping: matchExtentsAdjacency aborted — could not read live frames for A=\(idA) B=\(idB)")
+            return
+        }
+
+        let newFrameA: CGRect
+        let newFrameB: CGRect
+        if adj.edgeOfA.isHorizontal {
+            // Side-by-side pair → unify vertical extent.
+            let outerMinY = min(frameA.minY, frameB.minY)
+            let outerMaxY = max(frameA.maxY, frameB.maxY)
+            let height = outerMaxY - outerMinY
+            newFrameA = CGRect(x: frameA.minX, y: outerMinY, width: frameA.width, height: height)
+            newFrameB = CGRect(x: frameB.minX, y: outerMinY, width: frameB.width, height: height)
+        } else {
+            // Stacked pair → unify horizontal extent.
+            let outerMinX = min(frameA.minX, frameB.minX)
+            let outerMaxX = max(frameA.maxX, frameB.maxX)
+            let width = outerMaxX - outerMinX
+            newFrameA = CGRect(x: outerMinX, y: frameA.minY, width: width, height: frameA.height)
+            newFrameB = CGRect(x: outerMinX, y: frameB.minY, width: width, height: frameB.height)
+        }
+
+        // No-op fast path: nothing to grow.
+        if Self.framesMatch(newFrameA, frameA, tolerance: 1) &&
+           Self.framesMatch(newFrameB, frameB, tolerance: 1) {
+            debugLog("WindowGrouping: matchExtentsAdjacency no-op — both windows already span the outer envelope")
+            return
+        }
+
+        // Suppress group transform reactions while both windows are being
+        // resized; we are explicitly choreographing both moves.
+        isApplyingGroupTransform = true
+
+        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idA }),
+           let window = target.windowElement {
+            _ = try? accessibilityService.setFrame(newFrameA, on: target.screenFrame, for: window)
+            recentlySetFrames[idA] = (newFrameA, CFAbsoluteTimeGetCurrent())
+        }
+        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idB }),
+           let window = target.windowElement {
+            _ = try? accessibilityService.setFrame(newFrameB, on: target.screenFrame, for: window)
+            recentlySetFrames[idB] = (newFrameB, CFAbsoluteTimeGetCurrent())
+        }
+
+        // Update cached state and recompute the adjacency from the new frames
+        // so the badge's position reflects the new shared-edge midpoint right
+        // away (same pattern as `swapAdjacency`).
+        if let gid = groupIndexByWindow[idA] ?? groupIndexByWindow[idB],
+           var group = windowGroups[gid] {
+            group.lastKnownFrames[idA] = newFrameA
+            group.lastKnownFrames[idB] = newFrameB
+            if let idx = group.adjacencies.firstIndex(where: { $0.unorderedKey == adj.unorderedKey }),
+               let recomputed = WindowAdjacencyDetector.adjacency(
+                a: idA, frameA: newFrameA, b: idB, frameB: newFrameB
+               ) {
+                group.adjacencies[idx] = recomputed
+            }
+            windowGroups[gid] = group
+        }
+
+        refreshBadgeOverlays()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
+            self.isApplyingGroupTransform = false
+            self.refreshBadgeOverlays()
         }
     }
 
@@ -1066,6 +1282,18 @@ extension AppState {
                 // One side of a candidate moved — revalidate adjacency, drop
                 // the candidate if it is no longer adjacent.
                 refreshBadgeOverlays()
+                // The user may also be moving the candidate window into contact
+                // with a *different* window. Track it for the manual-move pass
+                // so newly touching edges with other windows are detected too.
+                manuallyMovedWindowIDs.insert(id)
+                scheduleManualMoveSettle()
+            } else {
+                // Non-group, non-candidate window moved/resized manually.
+                // Record it; on settle (mouse-up or short idle) we'll check
+                // whether its edges now touch any other visible window and
+                // surface a "form group" candidate badge.
+                manuallyMovedWindowIDs.insert(id)
+                scheduleManualMoveSettle()
             }
         case .destroyed(let id):
             // Cleanup: the destroyed window could be a member or a candidate.
@@ -1077,6 +1305,7 @@ extension AppState {
                 pendingGroupCandidates.removeAll { $0.windowA == id || $0.windowB == id }
                 refreshBadgeOverlays()
             }
+            manuallyMovedWindowIDs.remove(id)
             // Also drop any app-slot satellite references to this window.
             removeDestroyedWindowFromSatellites(id)
             removeFrameMemory(for: id)

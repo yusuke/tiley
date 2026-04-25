@@ -451,6 +451,9 @@ extension AppState {
         // Cmd+Tab / focus-change events keep flowing for as long as the
         // satellite stays registered.
         ensureAllSatellitesObserved()
+        // Watch every available window for move/resize so manual user gestures
+        // on arbitrary windows can surface "form group" candidate badges.
+        ensureAllAvailableWindowsObservedForManualMove()
         // Authoritative data has landed — clear the loading flag so the
         // sidebar transitions from spinner to the populated list in a single
         // render.  Phase 2 intentionally leaves the flag set when the refresh

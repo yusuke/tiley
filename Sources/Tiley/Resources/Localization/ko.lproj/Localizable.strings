@@ -151,6 +151,8 @@
 "%@ and %@ are grouped" = "%@와(과) %@이(가) 그룹화됨";
 "Swap left/right windows" = "좌우 윈도우 바꾸기";
 "Swap top/bottom windows" = "상하 윈도우 바꾸기";
+"Match window heights" = "윈도우 높이 맞추기";
+"Match window widths" = "윈도우 너비 맞추기";
 "Linked with the window above" = "위 창과 그룹화됨";
 "Group these regions" = "이 영역들을 그룹화";
 "Remove grouping" = "그룹 해제";

@@ -151,6 +151,8 @@
 "%@ and %@ are grouped" = "%@ and %@ are grouped";
 "Swap left/right windows" = "Swap left/right windows";
 "Swap top/bottom windows" = "Swap top/bottom windows";
+"Match window heights" = "Match window heights";
+"Match window widths" = "Match window widths";
 "Linked with the window above" = "Linked with the window above";
 "Group these regions" = "Group these regions";
 "Remove grouping" = "Remove grouping";

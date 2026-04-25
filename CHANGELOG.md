@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The hover menu on a linked window-group badge now has a third button next to the swap button: **Match window heights** (for left/right pairs, icon: up/down arrows) or **Match window widths** (for top/bottom pairs, icon: left/right arrows). It expands the perpendicular extent of both windows to the outer envelope so the shorter side grows to meet the longer one — the contact edge is preserved. The button is hidden when the two windows already line up on that axis
+- "Form group" candidate badges now also appear when you manually move or resize a window so its edge ends up touching another window's edge — not only after applying a Tiley layout. The badge surfaces the moment you release the mouse (it stays hidden during the drag/resize itself), and clicking it links the pair into a window group exactly like the post-layout candidate badge does
+- Clicking a "form group" candidate badge now pops up the linked-state hover menu (Ungroup / Swap / Match heights or widths) right away, the instant the group is established — no need to move the cursor off the badge and back to surface the actions
+- The hover menu pill now fades in and out instead of snapping on and off. The badge's NSPanel keeps its expanded size for the duration of the fade-out so the pill doesn't get clipped mid-animation, and re-hovering during a fade cancels the pending collapse
 - Hovering a link badge on a grouped pair of real windows now shows a small action menu (below the badge, or above when there isn't enough room): an **Ungroup** button and a **Swap windows** button (left/right or top/bottom depending on how the pair is arranged). The badge itself no longer doubles as the unlink button — its only role is to signal that the windows are linked. Swapping a pair also drops any other links those two windows have to third windows, so the swapped pair is left as a clean two-window group
 
 ### Fixed
