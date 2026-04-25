@@ -285,28 +285,17 @@ extension AppState {
             debugLog("WindowGrouping:   window \(wid) frame=\(f)")
         }
 
-        // Tiley-driven moves that touched only part of a group dissolve that
-        // group — even if the untouched members still happen to be adjacent.
-        // A Tiley resize on one member without its partner is, by the user's
-        // intent, a "break the link" gesture.
-        let tileyMovedSet: Set<CGWindowID> = Set(targetWindowIDs ?? [])
-
         // Revalidate each existing group's adjacencies against current frames
-        // and drop pairs that no longer touch.
+        // and drop pairs that no longer touch. Adjacencies on the screen-edge
+        // side of a layout-resized window are unlinked up front in
+        // `unlinkScreenEdgeAdjacenciesBeforeLayout`; everything else is
+        // preserved as long as it still geometrically touches.
         for (gid, var group) in windowGroups {
             // Drop members that no longer exist.
             group.members = group.members.filter { frames[$0] != nil }
             if group.members.count < 2 {
                 dissolveGroup(gid)
                 continue
-            }
-            if !tileyMovedSet.isEmpty {
-                let moved = group.members.intersection(tileyMovedSet)
-                if !moved.isEmpty && moved.count < group.members.count {
-                    debugLog("WindowGrouping: partial Tiley resize on group \(gid) (moved=\(moved.count)/\(group.members.count)) — dissolving")
-                    dissolveGroup(gid)
-                    continue
-                }
             }
             // Recompute intra-group adjacencies.
             var retained: [WindowAdjacency] = []
@@ -1410,6 +1399,44 @@ extension AppState {
                               width: frameB.width, height: frameB.height)
             }
             return (newA, newB)
+        }
+    }
+
+    /// Before applying a layout that snaps a window flush against a screen
+    /// edge, drop any group adjacency where the partner sits on the same
+    /// edge of the target window that will become flush with the visible
+    /// frame. Adjacencies on other edges are preserved so the rest of the
+    /// group stays linked.
+    func unlinkScreenEdgeAdjacenciesBeforeLayout(
+        cgWindowID: CGWindowID,
+        targetFrame: CGRect,
+        visibleFrame: CGRect
+    ) {
+        guard cgWindowID != 0 else { return }
+        guard let gid = groupIndexByWindow[cgWindowID],
+              let group = windowGroups[gid] else { return }
+
+        let epsilon: CGFloat = 1.0
+        var screenEdges: Set<WindowAdjacency.Edge> = []
+        if abs(targetFrame.minX - visibleFrame.minX) <= epsilon { screenEdges.insert(.left) }
+        if abs(targetFrame.maxX - visibleFrame.maxX) <= epsilon { screenEdges.insert(.right) }
+        if abs(targetFrame.minY - visibleFrame.minY) <= epsilon { screenEdges.insert(.bottom) }
+        if abs(targetFrame.maxY - visibleFrame.maxY) <= epsilon { screenEdges.insert(.top) }
+        guard !screenEdges.isEmpty else { return }
+
+        let toUnlink: [WindowAdjacency] = group.adjacencies.compactMap { adj in
+            let edgeOnTarget: WindowAdjacency.Edge
+            if adj.windowA == cgWindowID {
+                edgeOnTarget = adj.edgeOfA
+            } else if adj.windowB == cgWindowID {
+                edgeOnTarget = adj.edgeOfA.opposite
+            } else {
+                return nil
+            }
+            return screenEdges.contains(edgeOnTarget) ? adj : nil
+        }
+        for adj in toUnlink {
+            unlinkAdjacency(adj)
         }
     }
 

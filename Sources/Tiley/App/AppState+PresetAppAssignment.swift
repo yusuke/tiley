@@ -338,6 +338,12 @@ extension AppState {
                 }
             }
 
+            unlinkScreenEdgeAdjacenciesBeforeLayout(
+                cgWindowID: target.cgWindowID,
+                targetFrame: frame,
+                visibleFrame: currentVisibleFrame
+            )
+
             do {
                 if enableDebugLog {
                     _ = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)

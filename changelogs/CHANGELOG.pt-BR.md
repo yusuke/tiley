@@ -18,6 +18,7 @@
 
 ### Alterado
 
+- Ao aplicar uma predefinição de layout que encosta uma janela em uma borda da tela, agora apenas as adjacências de grupo do lado da janela redimensionada que fica rente à borda da tela são desfeitas — as adjacências nas outras bordas são preservadas. Por exemplo, com um par horizontal A↔B e um par vertical A↔C, aplicar "Preencher largura da tela" em A desfaz o vínculo A↔B (a borda direita de A passa a ser a borda direita da tela), enquanto o vínculo A↔C é preservado enquanto a borda inferior de A não tocar o fundo da tela. Antes, qualquer redimensionamento do Tiley que afetasse apenas parte de um grupo dissolvia o grupo inteiro, independentemente das bordas envolvidas
 - O indicador de agrupamento da barra lateral foi redesenhado. Em vez de um selo de link flutuando entre as linhas, agora cada linha de janela agrupada mostra à direita — logo antes do selo de índice — os ícones dos aplicativos de todas as janelas parceiras vinculadas, lado a lado. Ao passar o cursor sobre um ícone parceiro, a linha da janela parceira é destacada na barra lateral e, ao mesmo tempo, esse ícone (assim como o ícone correspondente na linha da parceira) muda para um estado vermelho `x`, deixando claro de imediato quais duas janelas estão envolvidas. Um clique no estado `x` desvincula apenas essa conexão; assim, quando uma janela está vinculada a várias outras, os vínculos podem ser desfeitos um a um. O espaço do selo de índice é sempre reservado, então as linhas permanecem alinhadas mesmo quando nenhum índice é exibido
 
 ## [5.1.0] - 2026-04-25

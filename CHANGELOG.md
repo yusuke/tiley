@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- When applying a layout preset that snaps a window flush against a screen edge, only the group adjacencies on that screen-edge side of the resized window are released — adjacencies on other edges are preserved. For example, with horizontal pair A↔B and vertical pair A↔C, applying "fill screen width" to A drops the A↔B link (A's right edge becomes the screen-right edge) while keeping A↔C intact when A's bottom doesn't reach the screen bottom. Previously a Tiley resize that touched only part of a group dissolved the whole group regardless of which edges were affected
 - Sidebar grouping indicator redesigned: instead of a link badge floating between rows, each grouped window row now shows the app icons of its link partners on the right side, before the index badge. Hovering a partner icon highlights the partner window's row in the sidebar and flips the icon (and the matching icon on the partner's row) to a red `x`, so both ends of the link react together and you can clearly see which two windows are about to be unlinked. Clicking the icon while it shows the `x` unlinks just that one connection, so multi-partner groups can be dissolved one link at a time. The index badge slot is always reserved so rows stay aligned even when no index is shown
 
 ## [5.1.0] - 2026-04-25

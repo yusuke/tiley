@@ -1226,6 +1226,12 @@ final class AppState: NSObject, NSMenuDelegate {
                 }
             }
 
+            unlinkScreenEdgeAdjacenciesBeforeLayout(
+                cgWindowID: target.cgWindowID,
+                targetFrame: frame,
+                visibleFrame: currentVisibleFrame
+            )
+
             do {
                 if enableDebugLog {
                     _ = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
@@ -1381,6 +1387,12 @@ final class AppState: NSObject, NSMenuDelegate {
                 }
             }
 
+            unlinkScreenEdgeAdjacenciesBeforeLayout(
+                cgWindowID: target.cgWindowID,
+                targetFrame: frame,
+                visibleFrame: currentVisibleFrame
+            )
+
             do {
                 if enableDebugLog {
                     _ = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
@@ -1504,6 +1516,12 @@ final class AppState: NSObject, NSMenuDelegate {
 
         dismissOverlayImmediately()
         orderOutAllMainWindows()
+
+        unlinkScreenEdgeAdjacenciesBeforeLayout(
+            cgWindowID: target.cgWindowID,
+            targetFrame: frame,
+            visibleFrame: currentVisibleFrame
+        )
 
         do {
             let constrained: Bool

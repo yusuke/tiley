@@ -18,6 +18,7 @@
 
 ### Geändert
 
+- Beim Anwenden eines Layout-Presets, das ein Fenster bündig an einen Bildschirmrand schiebt, werden nur noch die Gruppen-Verbindungen an genau jener Bildschirmrand-Seite des angepassten Fensters gelöst — Verbindungen an anderen Kanten bleiben erhalten. Beispiel: Bei einem horizontalen Paar A↔B und einem vertikalen Paar A↔C löst „Bildschirmbreite ausfüllen" auf A die A↔B-Verknüpfung (da die rechte Kante von A zur rechten Bildschirmkante wird), während A↔C erhalten bleibt, solange A's Unterkante den Bildschirmboden nicht erreicht. Bisher löste eine Tiley-Größenänderung, die nur einen Teil einer Gruppe betraf, unabhängig von der Kante stets die gesamte Gruppe auf
 - Die Gruppierungsanzeige in der Seitenleiste wurde neu gestaltet: Statt eines schwebenden Link-Symbols zwischen den Zeilen werden in jeder gruppierten Fensterzeile rechts — direkt vor dem Index-Symbol — die App-Symbole aller verknüpften Partnerfenster nebeneinander angezeigt. Beim Überfahren eines Partner-Symbols wird die Zeile des Partnerfensters in der Seitenleiste hervorgehoben, und gleichzeitig wechselt dieses Symbol (sowie das entsprechende Symbol in der Partnerzeile) in einen roten `x`-Zustand, sodass auf einen Blick klar ist, welche beiden Fenster betroffen sind. Ein Klick im `x`-Zustand löst nur diese eine Verbindung — bei einem Fenster mit mehreren Verknüpfungen lassen sich die Links so einzeln lösen. Der Platz für das Index-Symbol bleibt immer reserviert, damit Zeilen auch ohne Index sauber ausgerichtet bleiben
 
 ## [5.1.0] - 2026-04-25
