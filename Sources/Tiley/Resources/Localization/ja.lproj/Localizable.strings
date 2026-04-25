@@ -147,6 +147,10 @@
 "Unlink window group" = "ウインドウグループを解除";
 "Group %@ with %@" = "「%@」と「%@」をグループ化";
 "Ungroup" = "グループ解除";
+"Window group" = "ウインドウグループ";
+"%@ and %@ are grouped" = "「%@」と「%@」はグループ化されています";
+"Swap left/right windows" = "左右のウインドウを入れ換え";
+"Swap top/bottom windows" = "上下のウインドウを入れ換え";
 "Linked with the window above" = "上のウインドウとグループ化されています";
 "Group these regions" = "これらの領域をグループ化";
 "Remove grouping" = "グループ化を解除";

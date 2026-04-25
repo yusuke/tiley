@@ -147,6 +147,10 @@
 "Unlink window group" = "Разгруппировать окна";
 "Group %@ with %@" = "Сгруппировать «%@» с «%@»";
 "Ungroup" = "Разгруппировать";
+"Window group" = "Группа окон";
+"%@ and %@ are grouped" = "%@ и %@ сгруппированы";
+"Swap left/right windows" = "Поменять местами левое и правое окна";
+"Swap top/bottom windows" = "Поменять местами верхнее и нижнее окна";
 "Linked with the window above" = "Сгруппировано с окном выше";
 "Group these regions" = "Сгруппировать эти области";
 "Remove grouping" = "Убрать группировку";

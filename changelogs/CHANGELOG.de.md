@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Wenn man mit dem Mauszeiger über das Verknüpfungs-Badge zwischen zwei gruppierten echten Fenstern fährt, erscheint jetzt ein kleines Aktionsmenü unter dem Badge (oder darüber, wenn unten kein Platz auf dem Bildschirm ist): eine **Gruppierung aufheben**-Schaltfläche und eine Schaltfläche zum Tauschen der Fenster — **Linkes/rechtes Fenster tauschen** oder **Oberes/unteres Fenster tauschen** je nach Anordnung des Paares. Das Badge selbst dient nicht mehr als Aufheben-Schaltfläche, sondern nur noch als visueller Hinweis auf die bestehende Verknüpfung. Beim Tauschen werden alle anderen Verknüpfungen, die diese beiden Fenster zu dritten Fenstern haben, gelöst, sodass nach dem Tausch eine saubere Zwei-Fenster-Gruppe übrig bleibt
+
 ### Behoben
 
 - Beim Anwenden eines Mehr-Rechteck-Layout-Presets wird die Breite oder Höhe des Nachbarfensters jetzt automatisch angepasst, wenn ein Fenster aufgrund der Mindestgröße der App nicht auf sein Ziel-Rechteck verkleinert werden kann, sodass die gemeinsame Kante ausgerichtet bleibt (Preset-Abstand wird beibehalten). Bisher kam es zu Überlappungen oder versetzten Lücken

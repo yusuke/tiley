@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Ajouté
+
+- En survolant le badge de lien entre deux fenêtres réelles regroupées, un petit menu d'actions apparaît désormais sous le badge (ou au-dessus, si l'espace en bas est insuffisant) : un bouton **Dissocier** et un bouton pour permuter les fenêtres — **Permuter les fenêtres gauche/droite** ou **Permuter les fenêtres haut/bas** selon la disposition de la paire. Le badge lui-même ne se transforme plus en bouton de dissociation ; il sert uniquement d'indicateur visuel du lien. La permutation supprime également tous les autres liens que ces deux fenêtres pourraient avoir avec d'autres fenêtres, ne laissant qu'un groupe propre composé uniquement de la paire permutée
+
 ### Corrigé
 
 - Lors de l'application d'un preset de mise en page multi-rectangles, si une fenêtre ne peut pas se réduire à son rectangle cible en raison de la taille minimale imposée par l'application, la largeur ou la hauteur de la fenêtre voisine est désormais ajustée automatiquement afin que le bord partagé reste aligné (l'écart du preset est préservé). Auparavant, cela provoquait des chevauchements ou des écarts mal alignés

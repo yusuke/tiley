@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Hovering a link badge on a grouped pair of real windows now shows a small action menu (below the badge, or above when there isn't enough room): an **Ungroup** button and a **Swap windows** button (left/right or top/bottom depending on how the pair is arranged). The badge itself no longer doubles as the unlink button — its only role is to signal that the windows are linked. Swapping a pair also drops any other links those two windows have to third windows, so the swapped pair is left as a clean two-window group
+
 ### Fixed
 
 - When applying a multi-rectangle layout preset, if a window cannot shrink to its target rectangle because of its app's minimum-size constraint, the neighbouring window's width or height is now adjusted so the shared edge stays aligned (with the preset gap preserved) instead of overlapping or leaving a misaligned gap

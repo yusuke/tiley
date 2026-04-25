@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Passando il puntatore sul badge di collegamento tra due finestre reali raggruppate, ora compare un piccolo menu di azioni sotto il badge (o sopra, se sotto uscirebbe dallo schermo): un pulsante **Separa** e un pulsante per scambiare le finestre — **Scambia finestre sinistra/destra** o **Scambia finestre alto/basso** in base alla disposizione della coppia. Il badge stesso non si trasforma più nel pulsante di separazione; serve soltanto come indicatore visivo del collegamento. Lo scambio rimuove anche tutti gli altri collegamenti che le due finestre hanno con eventuali terze finestre, lasciando un gruppo pulito composto solo dalla coppia scambiata
+
 ### Corretto
 
 - Quando si applica un preset di layout a più rettangoli, se una finestra non può ridursi al rettangolo di destinazione a causa della dimensione minima imposta dall'app, ora la larghezza o l'altezza della finestra adiacente viene adattata automaticamente in modo che il bordo condiviso resti allineato (mantenendo lo spazio del preset). In precedenza si verificavano sovrapposizioni o spazi disallineati

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Adicionado
+
+- Ao passar o cursor sobre a insígnia de vínculo entre duas janelas reais agrupadas, agora aparece um pequeno menu de ações abaixo da insígnia (ou acima, caso abaixo saísse da tela): um botão **Desagrupar** e um botão para trocar as janelas — **Trocar janelas esquerda/direita** ou **Trocar janelas superior/inferior**, conforme a disposição do par. A própria insígnia não se transforma mais em botão de desagrupar; passa a servir apenas como indicador visual do vínculo. Ao realizar a troca, todos os outros vínculos que essas duas janelas tenham com terceiras janelas também são removidos, deixando apenas um grupo limpo formado pelas duas janelas trocadas
+
 ### Corrigido
 
 - Ao aplicar um preset de layout com múltiplos retângulos, se uma janela não puder encolher até seu retângulo alvo por causa do tamanho mínimo do app, a largura ou altura da janela vizinha agora é ajustada automaticamente para que a borda compartilhada permaneça alinhada (preservando o espaçamento do preset). Antes ocorriam sobreposições ou vãos desalinhados

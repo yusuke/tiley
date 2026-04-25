@@ -147,6 +147,10 @@
 "Unlink window group" = "Fenstergruppe auflösen";
 "Group %@ with %@" = "„%@“ mit „%@“ gruppieren";
 "Ungroup" = "Gruppierung aufheben";
+"Window group" = "Fenstergruppe";
+"%@ and %@ are grouped" = "%@ und %@ sind gruppiert";
+"Swap left/right windows" = "Linkes/rechtes Fenster tauschen";
+"Swap top/bottom windows" = "Oberes/unteres Fenster tauschen";
 "Linked with the window above" = "Mit dem Fenster oben gruppiert";
 "Group these regions" = "Diese Bereiche gruppieren";
 "Remove grouping" = "Gruppierung entfernen";

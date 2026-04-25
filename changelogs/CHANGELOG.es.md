@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Añadido
+
+- Al pasar el cursor sobre la insignia de enlace entre dos ventanas reales agrupadas, ahora aparece un pequeño menú de acciones debajo de la insignia (o encima, si abajo se saliera de la pantalla): un botón **Desagrupar** y un botón para intercambiar las ventanas — **Intercambiar ventanas izquierda/derecha** o **Intercambiar ventanas superior/inferior**, según la disposición del par. La propia insignia ya no se transforma en botón para desagrupar; solo señala que las ventanas están enlazadas. Al intercambiarlas, también se eliminan los demás enlaces que esas dos ventanas mantengan con terceras ventanas, dejando solo el grupo limpio formado por las dos ventanas intercambiadas
+
 ### Corregido
 
 - Al aplicar un preset de diseño con varios rectángulos, si una ventana no puede reducirse hasta su rectángulo objetivo debido al tamaño mínimo de la app, ahora se ajusta automáticamente el ancho o alto de la ventana adyacente para que el borde compartido permanezca alineado (manteniendo el espacio del preset). Antes se producían superposiciones o huecos desalineados

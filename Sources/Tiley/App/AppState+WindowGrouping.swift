@@ -661,8 +661,8 @@ extension AppState {
 
         if groupLinkBadgeController == nil {
             let controller = GroupLinkBadgeController()
-            controller.onBadgeClick = { [weak self] badge in
-                self?.handleBadgeClick(badge)
+            controller.onBadgeAction = { [weak self] badge, action in
+                self?.handleBadgeAction(badge, action: action)
             }
             groupLinkBadgeController = controller
         }
@@ -725,12 +725,193 @@ extension AppState {
         return pidA == frontmostPID || pidB == frontmostPID
     }
 
-    private func handleBadgeClick(_ badge: GroupLinkBadge) {
-        switch badge.state {
-        case .unlinked:
-            linkAdjacency(badge.adjacency)
-        case .linked:
+    private func handleBadgeAction(_ badge: GroupLinkBadge, action: BadgeAction) {
+        switch action {
+        case .toggleLink:
+            // The badge itself only fires this when unlinked → user wants to link.
+            if case .unlinked = badge.state {
+                linkAdjacency(badge.adjacency)
+            }
+        case .ungroup:
             unlinkAdjacency(badge.adjacency)
+        case .swap:
+            swapAdjacency(badge.adjacency)
+        }
+    }
+
+    /// Swaps the positions of the two windows that share `adj`. Each window
+    /// takes over the other's frame (size and origin), so the union of their
+    /// occupied area stays the same and their shared edge keeps touching.
+    ///
+    /// Per the user-facing contract: any *other* adjacencies (links to a third
+    /// window) involving either of the two swapped windows are released — only
+    /// the direct A↔B link is preserved.
+    func swapAdjacency(_ adj: WindowAdjacency) {
+        let idA = adj.windowA
+        let idB = adj.windowB
+
+        // Read live frames before mutating anything.
+        guard let frameA = liveFrame(of: idA), let frameB = liveFrame(of: idB) else {
+            debugLog("WindowGrouping: swapAdjacency aborted — could not read live frames for A=\(idA) B=\(idB)")
+            return
+        }
+
+        // Drop other adjacencies that involve A or B (but not the A↔B pair
+        // itself). Each unlinkAdjacency call recomputes connected components
+        // and may split the group; collect the targets up front before any
+        // group state changes.
+        if let gid = groupIndexByWindow[idA] ?? groupIndexByWindow[idB],
+           let group = windowGroups[gid] {
+            let preservedKey = adj.unorderedKey
+            let toUnlink = group.adjacencies.filter { other in
+                guard other.unorderedKey != preservedKey else { return false }
+                let touchesA = other.windowA == idA || other.windowB == idA
+                let touchesB = other.windowA == idB || other.windowB == idB
+                return touchesA || touchesB
+            }
+            for other in toUnlink {
+                unlinkAdjacency(other)
+            }
+        }
+
+        // Compute the swapped frames. Each window keeps its own size — only
+        // the position along the adjacency axis changes, so a 1:2 pair
+        // becomes a 2:1 pair instead of becoming 1:2 with the bigger window's
+        // size assigned to the originally-smaller window.
+        let (newFrameA, newFrameB) = swappedFrames(frameA: frameA, frameB: frameB, axisIsHorizontal: adj.edgeOfA.isHorizontal)
+
+        // Suppress group transform reactions while the two windows move into
+        // their swapped positions; we are explicitly choreographing both moves.
+        isApplyingGroupTransform = true
+
+        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idA }),
+           let window = target.windowElement {
+            _ = try? accessibilityService.setFrame(newFrameA, on: target.screenFrame, for: window)
+            recentlySetFrames[idA] = (newFrameA, CFAbsoluteTimeGetCurrent())
+        }
+        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idB }),
+           let window = target.windowElement {
+            _ = try? accessibilityService.setFrame(newFrameB, on: target.screenFrame, for: window)
+            recentlySetFrames[idB] = (newFrameB, CFAbsoluteTimeGetCurrent())
+        }
+
+        // Update cached group state so the displacement detector and the
+        // badge overlay see the swap as the new ground truth — otherwise the
+        // detector compares the post-swap live frames against the *pre-swap*
+        // cached frames and tries to drag the windows back to where they
+        // were. The adjacency itself also needs to flip: A and B traded sides,
+        // so `edgeOfA` becomes its opposite, and the contact coordinate +
+        // overlap interval must be recomputed for the new shared edge.
+        if let gid = groupIndexByWindow[idA] ?? groupIndexByWindow[idB],
+           var group = windowGroups[gid] {
+            group.lastKnownFrames[idA] = newFrameA
+            group.lastKnownFrames[idB] = newFrameB
+            if let idx = group.adjacencies.firstIndex(where: { $0.unorderedKey == adj.unorderedKey }) {
+                group.adjacencies[idx] = swappedAdjacency(
+                    original: group.adjacencies[idx],
+                    newFrameA: newFrameA,
+                    newFrameB: newFrameB
+                )
+            }
+            windowGroups[gid] = group
+        }
+
+        // Refresh the badge overlay immediately so the link badge jumps to
+        // the new shared-edge midpoint instead of staying at the old contact
+        // point until the next event tick.
+        refreshBadgeOverlays()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
+            self.isApplyingGroupTransform = false
+            self.refreshBadgeOverlays()
+        }
+    }
+
+    /// Builds a new `WindowAdjacency` for the given pair after a swap. The
+    /// edge stored on A flips to its opposite (A and B traded sides), and
+    /// the contact coordinate / overlap interval are recomputed from the new
+    /// frames. The window IDs and adjacency-key ordering are preserved so
+    /// existing references stay valid.
+    private func swappedAdjacency(original: WindowAdjacency, newFrameA: CGRect, newFrameB: CGRect) -> WindowAdjacency {
+        let newEdge = original.edgeOfA.opposite
+        let contact: CGFloat
+        let overlapStart: CGFloat
+        let overlapEnd: CGFloat
+        switch newEdge {
+        case .right:
+            contact = (newFrameA.maxX + newFrameB.minX) / 2
+            overlapStart = max(newFrameA.minY, newFrameB.minY)
+            overlapEnd = min(newFrameA.maxY, newFrameB.maxY)
+        case .left:
+            contact = (newFrameB.maxX + newFrameA.minX) / 2
+            overlapStart = max(newFrameA.minY, newFrameB.minY)
+            overlapEnd = min(newFrameA.maxY, newFrameB.maxY)
+        case .top:
+            contact = (newFrameA.maxY + newFrameB.minY) / 2
+            overlapStart = max(newFrameA.minX, newFrameB.minX)
+            overlapEnd = min(newFrameA.maxX, newFrameB.maxX)
+        case .bottom:
+            contact = (newFrameB.maxY + newFrameA.minY) / 2
+            overlapStart = max(newFrameA.minX, newFrameB.minX)
+            overlapEnd = min(newFrameA.maxX, newFrameB.maxX)
+        }
+        return WindowAdjacency(
+            windowA: original.windowA,
+            windowB: original.windowB,
+            edgeOfA: newEdge,
+            overlapStart: overlapStart,
+            overlapEnd: overlapEnd,
+            contactCoordinate: contact
+        )
+    }
+
+    /// Computes the post-swap frames for a touching pair. Each window keeps
+    /// its own size; only its position along the adjacency axis flips so the
+    /// "left" and "right" (or "bottom" and "top") roles trade places. Any gap
+    /// between the original frames is preserved at the new shared edge.
+    ///
+    /// Example (horizontal): A at x=0..1, B at x=1+g..3+g (gap g).
+    /// After swap: B at x=0..2, A at x=2+g..3+g — combined span and gap unchanged.
+    private func swappedFrames(frameA: CGRect, frameB: CGRect, axisIsHorizontal: Bool) -> (CGRect, CGRect) {
+        if axisIsHorizontal {
+            let combinedMinX = min(frameA.minX, frameB.minX)
+            let combinedMaxX = max(frameA.maxX, frameB.maxX)
+            let aWasLeft = frameA.minX <= frameB.minX
+            let newA: CGRect
+            let newB: CGRect
+            if aWasLeft {
+                // A was on the left → moves to the right (right-aligned to combinedMaxX).
+                newA = CGRect(x: combinedMaxX - frameA.width, y: frameA.minY,
+                              width: frameA.width, height: frameA.height)
+                newB = CGRect(x: combinedMinX, y: frameB.minY,
+                              width: frameB.width, height: frameB.height)
+            } else {
+                newA = CGRect(x: combinedMinX, y: frameA.minY,
+                              width: frameA.width, height: frameA.height)
+                newB = CGRect(x: combinedMaxX - frameB.width, y: frameB.minY,
+                              width: frameB.width, height: frameB.height)
+            }
+            return (newA, newB)
+        } else {
+            let combinedMinY = min(frameA.minY, frameB.minY)
+            let combinedMaxY = max(frameA.maxY, frameB.maxY)
+            let aWasBottom = frameA.minY <= frameB.minY
+            let newA: CGRect
+            let newB: CGRect
+            if aWasBottom {
+                // A was at the bottom → moves to the top (top-aligned to combinedMaxY).
+                newA = CGRect(x: frameA.minX, y: combinedMaxY - frameA.height,
+                              width: frameA.width, height: frameA.height)
+                newB = CGRect(x: frameB.minX, y: combinedMinY,
+                              width: frameB.width, height: frameB.height)
+            } else {
+                newA = CGRect(x: frameA.minX, y: combinedMinY,
+                              width: frameA.width, height: frameA.height)
+                newB = CGRect(x: frameB.minX, y: combinedMaxY - frameB.height,
+                              width: frameB.width, height: frameB.height)
+            }
+            return (newA, newB)
         }
     }
 

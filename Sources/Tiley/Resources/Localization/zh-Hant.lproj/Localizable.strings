@@ -147,6 +147,10 @@
 "Unlink window group" = "解除視窗分組";
 "Group %@ with %@" = "將「%@」與「%@」分組";
 "Ungroup" = "解除分組";
+"Window group" = "視窗群組";
+"%@ and %@ are grouped" = "%@ 與 %@ 已分組";
+"Swap left/right windows" = "交換左右視窗";
+"Swap top/bottom windows" = "交換上下視窗";
 "Linked with the window above" = "與上方視窗已分組";
 "Group these regions" = "將這些區域分組";
 "Remove grouping" = "取消分組";
