@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- O indicador de agrupamento da barra lateral agora também exibe os vínculos satélites de slot de aplicativo que não fazem parte do grupo espacial atualmente ativo. Quando um preset com retângulos atribuídos a aplicativos e pares agrupados é aplicado, a janela do lado não atribuído é registrada como satélite usando o bundle ID do aplicativo atribuído. Se o preset (ou outro com o mesmo aplicativo âncora) for reaplicado usando uma janela diferente, o par anterior sai do `WindowGroup` espacial, mas seu vínculo satélite (a ligação de trazer ao primeiro plano ao clicar) é preservado. Até agora esses vínculos "em segundo plano, porém ainda ativos" não apareciam na barra lateral; agora são exibidos junto aos parceiros espaciais ativos como ícones de aplicativo parceiro, e cada um pode ser desvinculado individualmente com a mesma interação hover → clique. Isso vale também quando uma única janela é satélite de vários aplicativos âncora, ou quando o mesmo bundle de uma janela âncora tem vários satélites registrados
+
+### Alterado
+
+- O indicador de agrupamento da barra lateral foi redesenhado. Em vez de um selo de link flutuando entre as linhas, agora cada linha de janela agrupada mostra à direita — logo antes do selo de índice — os ícones dos aplicativos de todas as janelas parceiras vinculadas, lado a lado. Ao passar o cursor sobre um ícone parceiro, a linha da janela parceira é destacada na barra lateral e, ao mesmo tempo, esse ícone (assim como o ícone correspondente na linha da parceira) muda para um estado vermelho `x`, deixando claro de imediato quais duas janelas estão envolvidas. Um clique no estado `x` desvincula apenas essa conexão; assim, quando uma janela está vinculada a várias outras, os vínculos podem ser desfeitos um a um. O espaço do selo de índice é sempre reservado, então as linhas permanecem alinhadas mesmo quando nenhum índice é exibido
+
 ## [5.1.0] - 2026-04-25
 
 ### Adicionado

@@ -89,42 +89,68 @@ private struct BubbleShape: Shape {
     }
 }
 
-/// Small "link" indicator shown between two consecutive sidebar rows that
-/// belong to the same window group. Matches the subdued idle look of the
-/// on-screen `GroupLinkBadge` (linked state): dimmed black fill, muted white
-/// icon and stroke. On hover the badge turns red with an `x` icon; clicking
-/// invokes `onClick` (dissolves the group).
-private struct SidebarLinkBadge: View {
-    let onClick: () -> Void
+/// One partner shown in a sidebar row's group indicator. Carries the data
+/// needed to render the partner-app icon, route cross-row hover effects via a
+/// stable `key`, and execute the right unlink action (spatial adjacency vs
+/// app-slot satellite) for that specific link.
+struct SidebarLinkPartner {
+    let key: AdjacencyKey
+    let partnerPID: pid_t
+    let partnerItemID: Int
+    let unlink: () -> Void
+}
 
-    @State private var isHovering = false
+/// Sidebar indicator for a single grouped-window link partner. Renders the
+/// partner app's icon at idle, and flips to a red circle with an `x` when
+/// hovered (locally or via `forceHovered`, used to mirror the hover state on
+/// the partner row's icon so both ends of a link react together). Clicking
+/// invokes `onClick`, which unlinks just that one adjacency.
+private struct SidebarPartnerIcon: View {
+    let icon: NSImage?
+    let size: CGFloat
+    /// When true, render the icon in its hovered (red `x`) state regardless of
+    /// the local cursor.
+    var forceHovered: Bool = false
+    let onClick: () -> Void
+    var onHoverChange: ((Bool) -> Void)? = nil
+
+    @State private var isLocallyHovering = false
+
+    private var showsHoverState: Bool { isLocallyHovering || forceHovered }
 
     var body: some View {
         Button(action: onClick) {
             ZStack {
-                Circle()
-                    .fill(isHovering
-                          ? Color.red.opacity(0.85)
-                          : Color.black.opacity(0.25))
-                    .overlay(
-                        Circle().stroke(
-                            Color.white.opacity(isHovering ? 0.8 : 0.35),
-                            lineWidth: 0.5
+                if showsHoverState {
+                    Circle()
+                        .fill(Color.red.opacity(0.85))
+                        .overlay(
+                            Circle().stroke(Color.white.opacity(0.8), lineWidth: 0.5)
                         )
-                    )
-                Image(systemName: isHovering ? "xmark" : "link")
-                    .font(.system(size: 8, weight: .semibold))
-                    .foregroundStyle(Color.white.opacity(isHovering ? 1.0 : 0.6))
+                    Image(systemName: "xmark")
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(Color.white)
+                } else if let icon {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                } else {
+                    Color.clear
+                }
             }
-            .frame(width: 14, height: 14)
-            .shadow(color: .black.opacity(isHovering ? 0.4 : 0.15), radius: 1, x: 0, y: 0.5)
-            .scaleEffect(isHovering ? 1.12 : 1.0)
-            .animation(.easeOut(duration: 0.12), value: isHovering)
-            .contentShape(Circle())
+            .frame(width: size, height: size)
+            .shadow(color: .black.opacity(showsHoverState ? 0.4 : 0), radius: 1, x: 0, y: 0.5)
+            .scaleEffect(showsHoverState ? 1.12 : 1.0)
+            .animation(.easeOut(duration: 0.12), value: showsHoverState)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .onHover { isHovering = $0 }
-        .accessibilityLabel(Text(NSLocalizedString("Linked with the window above", comment: "Accessibility label for the link badge shown between grouped sidebar rows")))
+        .onHover { hovering in
+            isLocallyHovering = hovering
+            onHoverChange?(hovering)
+        }
+        .accessibilityLabel(Text(NSLocalizedString("Linked partner window", comment: "Accessibility label for the partner-window app icon shown in the sidebar group indicator")))
     }
 }
 
@@ -179,6 +205,13 @@ struct MainWindowView: View {
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
     @State private var hoveredWindowIndex: Int?
+    /// Item ID of the partner row to highlight when the user hovers a link
+    /// badge or partner-app icon in another row's group indicator.
+    @State private var hoveredLinkPartnerItemID: Int?
+    /// Adjacency key of the link badge currently being hovered. Both ends of
+    /// the same adjacency render the `x` state so the user can see which two
+    /// windows the click would unlink.
+    @State private var hoveredLinkAdjacencyKey: AdjacencyKey?
     @State private var hoveredAppHeaderPID: pid_t?
     @State private var hoveredScreenHeaderID: CGDirectDisplayID?
     @State private var hoveredEmptyScreenID: CGDirectDisplayID?
@@ -1758,34 +1791,6 @@ struct MainWindowView: View {
         return true
     }
 
-    /// Returns the set of window-item IDs that should display a "link" badge
-    /// above them in the sidebar — i.e. windows that belong to the same group
-    /// as the immediately preceding window row. A non-window row (header,
-    /// screen divider, etc.) breaks the chain.
-    private func sidebarLinkBadgeTargets(in rows: [SidebarRow]) -> Set<Int> {
-        var result: Set<Int> = []
-        let targets = appState.windowTargetList
-        var previousGroupID: UUID? = nil
-        for row in rows {
-            switch row {
-            case .window(let item):
-                let gid: UUID? = {
-                    guard item.id >= 0, item.id < targets.count else { return nil }
-                    let cgID = targets[item.id].cgWindowID
-                    guard cgID != 0 else { return nil }
-                    return appState.groupIndexByWindow[cgID]
-                }()
-                if let pg = previousGroupID, let cg = gid, pg == cg {
-                    result.insert(item.id)
-                }
-                previousGroupID = gid
-            case .appHeader, .screenHeader, .emptyScreen, .spaceHeader:
-                previousGroupID = nil
-            }
-        }
-        return result
-    }
-
     private func windowListSidebar(height: CGFloat) -> some View {
         VStack(spacing: 0) {
             // Action bar (always visible)
@@ -1873,7 +1878,6 @@ struct MainWindowView: View {
                 ScrollViewReader { proxy in
                     let rows = filteredSidebarRows
                     let _ = updateSidebarWindowOrder(rows)
-                    let badgeLinks = sidebarLinkBadgeTargets(in: rows)
                     ScrollView {
                         LazyVStack(spacing: 2) {
                             ForEach(rows) { row in
@@ -1887,7 +1891,7 @@ struct MainWindowView: View {
                                 case .appHeader(let pid, let appName):
                                     appHeaderRow(pid: pid, appName: appName)
                                 case .window(let item):
-                                    windowListRow(item: item, hasLinkBadgeAbove: badgeLinks.contains(item.id))
+                                    windowListRow(item: item)
                                 }
                             }
                         }
@@ -2509,13 +2513,29 @@ struct MainWindowView: View {
         return NSScreen.screens.filter { $0.displayID != currentDisplayID }
     }
 
-    private func windowListRow(item: WindowListItem, hasLinkBadgeAbove: Bool = false) -> some View {
+    private func windowListRow(item: WindowListItem) -> some View {
         let isPrimary = item.id == appState.currentWindowTargetIndex
         let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
         let isSelected = isPrimary || isInSelection
-        let isHovered = hoveredWindowIndex == item.id || (item.isUnderAppHeader && hoveredAppHeaderPID == item.pid)
+        let isHovered = hoveredWindowIndex == item.id
+            || (item.isUnderAppHeader && hoveredAppHeaderPID == item.pid)
+            || hoveredLinkPartnerItemID == item.id
         let showBorderOnHeader = item.isUnderAppHeader && sidebarSelection == .appHeader(pid: item.pid, appName: item.appName)
         let presetColorIndex = appState.presetHoverHighlights[item.id]
+        let linkPartners = groupLinkPartners(forItemID: item.id)
+        let partnerIconSize: CGFloat = 14
+        let indexBadgeSize: CGFloat = 16
+        let trailingHStackSpacing: CGFloat = 3
+        let trailingTrailingPadding: CGFloat = 4
+        let reservedTrailingWidth: CGFloat = {
+            // Always reserve the index badge slot, even when no index is shown.
+            var w = indexBadgeSize
+            let pairCount = CGFloat(linkPartners.count)
+            if pairCount > 0 {
+                w += pairCount * (partnerIconSize + trailingHStackSpacing)
+            }
+            return w + trailingTrailingPadding
+        }()
 
         return Button {
             let flags = NSApp.currentEvent?.modifierFlags ?? []
@@ -2556,6 +2576,7 @@ struct MainWindowView: View {
                     }
                 }
                 Spacer(minLength: 0)
+                Color.clear.frame(width: reservedTrailingWidth, height: 1)
             }
             .padding(.horizontal, 6)
             .padding(.vertical, 3)
@@ -2577,30 +2598,6 @@ struct MainWindowView: View {
                         lineWidth: presetColorIndex != nil ? 1 : ((isSelected && !showBorderOnHeader) ? 1 : 0)
                     )
             )
-            .overlay(alignment: .trailing) {
-                if let ci = presetColorIndex {
-                    Text("\(ci + 1)")
-                        .font(.system(size: 9, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                        .frame(width: 16, height: 16)
-                        .background(
-                            Circle()
-                                .fill(ThemeColors.indexedSelectionFill(index: ci, for: colorScheme))
-                        )
-                        .padding(.trailing, 4)
-                } else if appState.isMultiSelection,
-                          let selIdx = appState.currentSelectionOrder.firstIndex(of: item.id) {
-                    Text("\(selIdx + 1)")
-                        .font(.system(size: 9, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                        .frame(width: 16, height: 16)
-                        .background(
-                            Circle()
-                                .fill(ThemeColors.indexedSelectionFill(index: 0, for: colorScheme))
-                        )
-                        .padding(.trailing, 4)
-                }
-            }
             .animation(nil, value: isHovered)
         }
         .buttonStyle(.plain)
@@ -2721,31 +2718,159 @@ struct MainWindowView: View {
                 }
             }
         }
-        .overlay(alignment: .top) {
-            if hasLinkBadgeAbove {
-                // Float the badge over the 2pt gap between this row and the
-                // previous one. Centering the 14pt circle on the midline of
-                // that gap means the badge overlaps each neighbour by ~6pt,
-                // which reads clearly without reserving its own row slot.
-                SidebarLinkBadge {
-                    dissolveGroupForWindow(at: item.id)
+        .overlay(alignment: .trailing) {
+            HStack(spacing: trailingHStackSpacing) {
+                ForEach(Array(linkPartners.enumerated()), id: \.offset) { _, partner in
+                    SidebarPartnerIcon(
+                        icon: appInfoCache.icon(for: partner.partnerPID),
+                        size: partnerIconSize,
+                        forceHovered: hoveredLinkAdjacencyKey == partner.key,
+                        onClick: partner.unlink,
+                        onHoverChange: { hovering in
+                            if hovering {
+                                hoveredLinkAdjacencyKey = partner.key
+                                hoveredLinkPartnerItemID = partner.partnerItemID
+                            } else {
+                                if hoveredLinkAdjacencyKey == partner.key {
+                                    hoveredLinkAdjacencyKey = nil
+                                }
+                                if hoveredLinkPartnerItemID == partner.partnerItemID {
+                                    hoveredLinkPartnerItemID = nil
+                                }
+                            }
+                        }
+                    )
+                    .instantTooltip(NSLocalizedString("Unlink window group", comment: "Tooltip for the sidebar link badge — clicking it dissolves the window group"))
                 }
-                .offset(y: -(Self.sidebarLinkBadgeDiameter / 2) - (Self.sidebarRowSpacing / 2))
-                .instantTooltip(NSLocalizedString("Unlink window group", comment: "Tooltip for the sidebar link badge — clicking it dissolves the window group"))
+                ZStack {
+                    if let ci = presetColorIndex {
+                        Circle()
+                            .fill(ThemeColors.indexedSelectionFill(index: ci, for: colorScheme))
+                        Text("\(ci + 1)")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                    } else if appState.isMultiSelection,
+                              let selIdx = appState.currentSelectionOrder.firstIndex(of: item.id) {
+                        Circle()
+                            .fill(ThemeColors.indexedSelectionFill(index: 0, for: colorScheme))
+                        Text("\(selIdx + 1)")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                    }
+                }
+                .frame(width: indexBadgeSize, height: indexBadgeSize)
             }
+            .padding(.trailing, trailingTrailingPadding)
         }
     }
 
-    private func dissolveGroupForWindow(at itemID: Int) {
+    /// Returns the link partners of the given window row, in stable sidebar
+    /// order. Includes both *spatial* partners (the active `WindowGroup`'s
+    /// direct adjacencies) and *satellite* partners — app-slot bindings
+    /// registered when an app-assigned preset with grouped pairs was
+    /// applied. Satellite links outlive the spatial group: when a later
+    /// preset binds a different window to the same anchor app, the previous
+    /// pair stops being a spatial neighbour but its satellite linkage
+    /// remains, and would otherwise be invisible in the sidebar. Each
+    /// returned partner exposes its own `unlink` closure so the user can
+    /// drop just that one link.
+    private func groupLinkPartners(forItemID itemID: Int) -> [SidebarLinkPartner] {
         let targets = appState.windowTargetList
-        guard itemID >= 0, itemID < targets.count else { return }
+        guard itemID >= 0, itemID < targets.count else { return [] }
         let cgID = targets[itemID].cgWindowID
-        guard cgID != 0, let groupID = appState.groupIndexByWindow[cgID] else { return }
-        appState.dissolveGroup(groupID)
+        guard cgID != 0 else { return [] }
+
+        let myPID = targets[itemID].processIdentifier
+        let myBundleID = NSRunningApplication(processIdentifier: myPID)?.bundleIdentifier
+        let order = appState.sidebarWindowOrder
+
+        func resolve(partnerCGID: CGWindowID) -> (orderIndex: Int, pid: pid_t, itemID: Int)? {
+            guard let idx = targets.firstIndex(where: { $0.cgWindowID == partnerCGID }) else { return nil }
+            let orderIndex = order.firstIndex(of: idx) ?? Int.max
+            return (orderIndex, targets[idx].processIdentifier, idx)
+        }
+
+        func makeKey(_ a: CGWindowID, _ b: CGWindowID) -> AdjacencyKey {
+            AdjacencyKey(windowA: min(a, b), windowB: max(a, b))
+        }
+
+        var seen: Set<AdjacencyKey> = []
+        var collected: [(orderIndex: Int, partner: SidebarLinkPartner)] = []
+
+        // 1. Spatial-group adjacency partners (currently active links).
+        if let gid = appState.groupIndexByWindow[cgID],
+           let group = appState.windowGroups[gid] {
+            for adj in group.adjacencies {
+                let partnerCGID: CGWindowID
+                if adj.windowA == cgID { partnerCGID = adj.windowB }
+                else if adj.windowB == cgID { partnerCGID = adj.windowA }
+                else { continue }
+                let key = adj.unorderedKey
+                guard !seen.contains(key) else { continue }
+                seen.insert(key)
+                guard let resolved = resolve(partnerCGID: partnerCGID) else { continue }
+                let partner = SidebarLinkPartner(
+                    key: key,
+                    partnerPID: resolved.pid,
+                    partnerItemID: resolved.itemID,
+                    unlink: { [appState] in appState.unlinkAdjacency(adj) }
+                )
+                collected.append((resolved.orderIndex, partner))
+            }
+        }
+
+        // 2. This window is a *satellite* of one or more app bundles. The
+        //    "anchor" side is any running window of that bundle — show one
+        //    representative partner per bundle.
+        for (bundleID, satellites) in appState.appSlotSatellites where satellites.contains(cgID) {
+            guard let anchorTarget = targets.first(where: { t in
+                t.cgWindowID != cgID && t.cgWindowID != 0
+                    && NSRunningApplication(processIdentifier: t.processIdentifier)?.bundleIdentifier == bundleID
+            }) else { continue }
+            let partnerCGID = anchorTarget.cgWindowID
+            let key = makeKey(cgID, partnerCGID)
+            guard !seen.contains(key) else { continue }
+            seen.insert(key)
+            guard let resolved = resolve(partnerCGID: partnerCGID) else { continue }
+            let ownWID = cgID
+            let partner = SidebarLinkPartner(
+                key: key,
+                partnerPID: resolved.pid,
+                partnerItemID: resolved.itemID,
+                unlink: { [appState] in
+                    appState.unlinkAppSlotSatellitePair(windowA: ownWID, windowB: partnerCGID)
+                    appState.refreshBadgeOverlays()
+                }
+            )
+            collected.append((resolved.orderIndex, partner))
+        }
+
+        // 3. This window is an *anchor* — its app's bundle has registered
+        //    satellites. Each registered satellite is a separate link.
+        if let myBID = myBundleID, let satellites = appState.appSlotSatellites[myBID] {
+            for satCGID in satellites {
+                guard satCGID != cgID else { continue }
+                let key = makeKey(cgID, satCGID)
+                guard !seen.contains(key) else { continue }
+                seen.insert(key)
+                guard let resolved = resolve(partnerCGID: satCGID) else { continue }
+                let ownWID = cgID
+                let partner = SidebarLinkPartner(
+                    key: key,
+                    partnerPID: resolved.pid,
+                    partnerItemID: resolved.itemID,
+                    unlink: { [appState] in
+                        appState.unlinkAppSlotSatellitePair(windowA: ownWID, windowB: satCGID)
+                        appState.refreshBadgeOverlays()
+                    }
+                )
+                collected.append((resolved.orderIndex, partner))
+            }
+        }
+
+        return collected.sorted(by: { $0.orderIndex < $1.orderIndex }).map { $0.partner }
     }
 
-    private static let sidebarLinkBadgeDiameter: CGFloat = 14
-    private static let sidebarRowSpacing: CGFloat = 2
 
     // MARK: - Target Info (secondary screens)
 

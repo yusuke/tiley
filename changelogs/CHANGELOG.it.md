@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- L'indicatore di raggruppamento nella barra laterale ora mostra anche i collegamenti satellite degli slot app che non fanno parte del gruppo spaziale attualmente attivo. Quando viene applicato un preset con rettangoli assegnati ad applicazioni e coppie raggruppate, la finestra sul lato non assegnato viene registrata come satellite del bundle ID dell'app assegnata. Se si riapplica il preset (o un altro preset con la stessa app di ancoraggio) usando una finestra diversa, la coppia precedente esce dal `WindowGroup` spaziale, ma il suo collegamento satellite (il portare in primo piano al clic) viene mantenuto. Finora questi collegamenti "in background ma ancora attivi" non erano visibili nella barra laterale; ora vengono mostrati accanto ai partner spaziali attivi come icone delle app partner, e ciascuno può essere scollegato singolarmente con la stessa interazione hover → clic. Questo vale anche quando una singola finestra è satellite di più app di ancoraggio, o quando lo stesso bundle di una finestra di ancoraggio ha più satelliti registrati
+
+### Modificato
+
+- L'indicatore di raggruppamento nella barra laterale è stato ridisegnato: invece di un badge di collegamento fluttuante tra le righe, ora ogni riga di finestra raggruppata mostra a destra — subito prima del badge dell'indice — le icone delle app di tutte le finestre partner collegate, affiancate l'una all'altra. Passando il cursore su un'icona partner, la riga della finestra partner viene evidenziata nella barra laterale e contemporaneamente quell'icona (oltre all'icona corrispondente nella riga della partner) passa allo stato rosso `x`, in modo da rendere subito evidente quali due finestre sono coinvolte. Un clic nello stato `x` scollega solo quella connessione: così, quando una finestra è collegata a più altre, i collegamenti possono essere sciolti uno alla volta. Lo spazio del badge dell'indice è sempre riservato, in modo che le righe restino allineate anche quando non viene mostrato alcun indice
+
 ## [5.1.0] - 2026-04-25
 
 ### Aggiunto

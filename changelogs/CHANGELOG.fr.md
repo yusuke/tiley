@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- L'indicateur de regroupement de la barre latérale affiche désormais aussi les liens satellites de slot d'application qui ne font pas partie du groupe spatial actuellement actif. Quand un preset contenant des rectangles assignés à des applications et des paires regroupées est appliqué, la fenêtre du côté non assigné est enregistrée comme satellite du bundle ID de l'application assignée. Si l'on réapplique le preset (ou un autre preset avec la même application d'ancrage) en utilisant une autre fenêtre, la paire précédente sort du `WindowGroup` spatial, mais son lien satellite (la liaison de mise au premier plan au clic) est conservé. Jusqu'à présent, ces liens « en arrière-plan mais toujours actifs » n'apparaissaient pas dans la barre latérale ; ils sont désormais affichés à côté des partenaires spatiaux actifs sous forme d'icônes d'application partenaire, et chacun peut être délié individuellement via la même interaction survol → clic. Cela vaut aussi quand une même fenêtre est satellite de plusieurs applications d'ancrage, ou quand un même bundle de fenêtre d'ancrage a plusieurs satellites enregistrés
+
+### Modifié
+
+- L'indicateur de regroupement de la barre latérale a été repensé. Au lieu d'un badge de lien flottant entre les lignes, chaque ligne de fenêtre regroupée affiche maintenant à droite — juste avant le badge d'index — les icônes des applications de toutes ses fenêtres partenaires liées, alignées côte à côte. Le survol d'une icône partenaire met en surbrillance la ligne de la fenêtre partenaire dans la barre latérale, et fait simultanément basculer cette icône (ainsi que l'icône correspondante dans la ligne partenaire) dans un état rouge `x`, ce qui permet de voir d'un coup d'œil quelles deux fenêtres sont concernées. Un clic à l'état `x` ne défait que ce lien-là ; ainsi, lorsqu'une fenêtre est liée à plusieurs autres, les liens peuvent être défaits un par un. L'emplacement du badge d'index est toujours réservé, afin que les lignes restent alignées même lorsqu'aucun index n'est affiché
+
 ## [5.1.0] - 2026-04-25
 
 ### Ajouté

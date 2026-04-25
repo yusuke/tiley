@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Die Gruppierungsanzeige in der Seitenleiste zeigt jetzt auch App-Slot-Satellitenverknüpfungen an, die nicht Teil der aktuell aktiven räumlichen Gruppe sind. Wird ein Preset mit App-zugewiesenen Rechtecken und gruppierten Paaren angewendet, wird das Fenster auf der nicht zugewiesenen Seite über die Bundle-ID der zugewiesenen App als Satellit registriert. Wendet man dasselbe Preset (oder ein anderes mit derselben Anker-App) erneut mit einem anderen Fenster an, fällt das vorherige Paar aus der räumlichen `WindowGroup` heraus, die Satelliten-Verknüpfung (Mitführung beim Klick) bleibt jedoch erhalten. Bisher waren solche „im Hintergrund weiter aktiven" Verknüpfungen in der Seitenleiste nicht sichtbar — jetzt werden sie zusammen mit den aktiven räumlichen Partnern als Partner-App-Symbole angezeigt und lassen sich per Hover → Klick einzeln lösen. Dies gilt auch dann, wenn ein Fenster Satellit mehrerer Anker-Apps ist oder wenn der Bundle-ID eines Anker-Fensters mehrere Satelliten zugeordnet sind
+
+### Geändert
+
+- Die Gruppierungsanzeige in der Seitenleiste wurde neu gestaltet: Statt eines schwebenden Link-Symbols zwischen den Zeilen werden in jeder gruppierten Fensterzeile rechts — direkt vor dem Index-Symbol — die App-Symbole aller verknüpften Partnerfenster nebeneinander angezeigt. Beim Überfahren eines Partner-Symbols wird die Zeile des Partnerfensters in der Seitenleiste hervorgehoben, und gleichzeitig wechselt dieses Symbol (sowie das entsprechende Symbol in der Partnerzeile) in einen roten `x`-Zustand, sodass auf einen Blick klar ist, welche beiden Fenster betroffen sind. Ein Klick im `x`-Zustand löst nur diese eine Verbindung — bei einem Fenster mit mehreren Verknüpfungen lassen sich die Links so einzeln lösen. Der Platz für das Index-Symbol bleibt immer reserviert, damit Zeilen auch ohne Index sauber ausgerichtet bleiben
+
 ## [5.1.0] - 2026-04-25
 
 ### Hinzugefügt

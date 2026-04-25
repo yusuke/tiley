@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Sidebar group indicator now shows app-slot satellite links that aren't part of the currently active spatial group. When a preset with app-assigned rectangles and grouped pairs is applied, each unassigned slot's window becomes a satellite of the assigned app's bundle. Re-applying the preset (or another one with the same anchor app) makes the previous spatial group neighbour drop out of the active `WindowGroup`, but its satellite link is preserved so the raise linkage still works. These background-but-still-active satellite links are now rendered as partner icons in the sidebar (alongside the active spatial partners), and each can be unlinked individually with the same hover-and-click affordance — including the case where one window is satellite-linked to multiple anchor apps, or one anchor window has multiple satellites registered to its bundle
+
+### Changed
+
+- Sidebar grouping indicator redesigned: instead of a link badge floating between rows, each grouped window row now shows the app icons of its link partners on the right side, before the index badge. Hovering a partner icon highlights the partner window's row in the sidebar and flips the icon (and the matching icon on the partner's row) to a red `x`, so both ends of the link react together and you can clearly see which two windows are about to be unlinked. Clicking the icon while it shows the `x` unlinks just that one connection, so multi-partner groups can be dissolved one link at a time. The index badge slot is always reserved so rows stay aligned even when no index is shown
+
 ## [5.1.0] - 2026-04-25
 
 ### Added
