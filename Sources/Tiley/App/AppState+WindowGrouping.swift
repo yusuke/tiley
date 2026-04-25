@@ -1797,27 +1797,41 @@ extension AppState {
     }
 
     private func applyGroupResize(_ group: inout WindowGroup, sourceID: CGWindowID, oldFrame sourceOld: CGRect, newFrame sourceNew: CGRect) {
-        let dLeft = sourceNew.minX - sourceOld.minX
-        let dRight = sourceNew.maxX - sourceOld.maxX
-        let dTop = sourceNew.maxY - sourceOld.maxY
-        let dBottom = sourceNew.minY - sourceOld.minY
-        debugLog("WindowGrouping:   resize deltas dLeft=\(dLeft) dRight=\(dRight) dTop=\(dTop) dBottom=\(dBottom)")
-
         // Tolerance for deciding whether two parallel edges "match length".
         let parallelMatchTolerance: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
 
-        // Handle adjacencies that touch the source first.
+        // BFS through the adjacency graph: each adjusted follower becomes a
+        // secondary "source" so its own neighbors (e.g. Win3 in a Win1↔Win2↔Win3
+        // chain) receive the propagated change in the same tick.
+        var visited: Set<CGWindowID> = [sourceID]
+        var queue: [(id: CGWindowID, oldFrame: CGRect, newFrame: CGRect)] = [
+            (sourceID, sourceOld, sourceNew)
+        ]
+
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+            let curID = current.id
+            let curOld = current.oldFrame
+            let curNew = current.newFrame
+
+            let dLeft = curNew.minX - curOld.minX
+            let dRight = curNew.maxX - curOld.maxX
+            let dTop = curNew.maxY - curOld.maxY
+            let dBottom = curNew.minY - curOld.minY
+            debugLog("WindowGrouping:   resize deltas (from=\(curID)) dLeft=\(dLeft) dRight=\(dRight) dTop=\(dTop) dBottom=\(dBottom)")
+
         for adj in group.adjacencies {
             let (otherID, sourceEdge): (CGWindowID, WindowAdjacency.Edge)
-            if adj.windowA == sourceID {
+            if adj.windowA == curID {
                 otherID = adj.windowB
                 sourceEdge = adj.edgeOfA
-            } else if adj.windowB == sourceID {
+            } else if adj.windowB == curID {
                 otherID = adj.windowA
                 sourceEdge = adj.edgeOfA.opposite
             } else {
                 continue
             }
+            if visited.contains(otherID) { continue }
             guard let otherOld = group.lastKnownFrames[otherID] else { continue }
 
             var newMinX = otherOld.minX
@@ -1840,13 +1854,13 @@ extension AppState {
             // 2. Perpendicular-edge linkage (when both edges "match length").
             switch sourceEdge {
             case .right, .left:
-                let sharesBottom = abs(sourceOld.minY - otherOld.minY) <= parallelMatchTolerance
-                let sharesTop = abs(sourceOld.maxY - otherOld.maxY) <= parallelMatchTolerance
+                let sharesBottom = abs(curOld.minY - otherOld.minY) <= parallelMatchTolerance
+                let sharesTop = abs(curOld.maxY - otherOld.maxY) <= parallelMatchTolerance
                 if sharesBottom { newMinY = otherOld.minY + dBottom }
                 if sharesTop { newMaxY = otherOld.maxY + dTop }
             case .top, .bottom:
-                let sharesLeft = abs(sourceOld.minX - otherOld.minX) <= parallelMatchTolerance
-                let sharesRight = abs(sourceOld.maxX - otherOld.maxX) <= parallelMatchTolerance
+                let sharesLeft = abs(curOld.minX - otherOld.minX) <= parallelMatchTolerance
+                let sharesRight = abs(curOld.maxX - otherOld.maxX) <= parallelMatchTolerance
                 if sharesLeft { newMinX = otherOld.minX + dLeft }
                 if sharesRight { newMaxX = otherOld.maxX + dRight }
             }
@@ -1915,6 +1929,12 @@ extension AppState {
                 }
                 accessibilityService.setFrameLightweight(c, on: target.screenFrame, for: window)
             }
+
+            // Mark this follower visited and enqueue it as a secondary source
+            // so its own adjacencies (e.g. Win2↔Win3) propagate in this tick.
+            visited.insert(otherID)
+            queue.append((otherID, otherOld, idealFrame))
+        }
         }
         // Source over-drag (cutting into follower territory) is NOT corrected
         // per-tick. It is resolved in one pass on drag release via
@@ -1926,11 +1946,8 @@ extension AppState {
 
         // Z-order touch-up + raise once every 4 ticks (keeps the tick cheap).
         if groupPollingTickCount % 4 == 0 {
-            for adj in group.adjacencies {
-                let otherID = (adj.windowA == sourceID) ? adj.windowB : adj.windowA
-                if otherID != sourceID {
-                    orderFollowerBelowSource(followerID: otherID, sourceID: sourceID)
-                }
+            for member in visited where member != sourceID {
+                orderFollowerBelowSource(followerID: member, sourceID: sourceID)
             }
             raiseSourceWindow(sourceID: sourceID)
         }
