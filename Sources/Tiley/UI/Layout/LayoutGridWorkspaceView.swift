@@ -832,6 +832,7 @@ struct LayoutGridWorkspaceView: View {
                             .shadow(color: .black.opacity(0.4), radius: 1, y: 0.5)
                     }
                     .buttonStyle(.plain)
+                    .hoverScale()
                     .padding(4)
                 }
             }
@@ -887,7 +888,8 @@ struct LayoutGridWorkspaceView: View {
             onRequestAppPicker?(selectionIndex, sourceView, point)
         }
         .frame(width: diameter, height: diameter)
-        .help(NSLocalizedString("Assign Application to Region", comment: "Tooltip for the macwindow.badge.plus button inside a preset rectangle"))
+        .hoverScale()
+        .instantTooltip(NSLocalizedString("Assign Application to Region", comment: "Tooltip for the macwindow.badge.plus button inside a preset rectangle"))
     }
 
     /// Pixel center of the shared edge between two committed selections.
@@ -1066,6 +1068,30 @@ private struct AssignAppBadgeButton: NSViewRepresentable {
     }
 }
 
+/// Adds a subtle scale-up animation when the pointer hovers the view.
+/// Used on small action buttons (delete x, unassign x, assign app badge)
+/// inside preset rectangles to give visual feedback on hover.
+private struct HoverScaleModifier: ViewModifier {
+    var scale: CGFloat = 1.2
+    @State private var isHovered = false
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(isHovered ? scale : 1.0)
+            .onHover { hovering in
+                withAnimation(.easeOut(duration: 0.12)) {
+                    isHovered = hovering
+                }
+            }
+    }
+}
+
+private extension View {
+    func hoverScale(_ scale: CGFloat = 1.2) -> some View {
+        modifier(HoverScaleModifier(scale: scale))
+    }
+}
+
 /// Renders an assigned committed rectangle: a regular miniature window with
 /// the app's icon and localized name. Hovering the rectangle reveals an
 /// "unassign" button centered over the content.
@@ -1080,7 +1106,10 @@ private struct AssignedRectangleView: View {
     let onDelete: () -> Void
     let onUnassign: () -> Void
 
-    @State private var isHovering = false
+    @State private var isIconHovered = false
+    @State private var isUnassignHovered = false
+
+    private var showUnassign: Bool { isIconHovered || isUnassignHovered }
 
     var body: some View {
         ZStack {
@@ -1093,38 +1122,41 @@ private struct AssignedRectangleView: View {
             )
 
             if let icon = appIcon {
-                Image(nsImage: icon)
-                    .resizable()
-                    .interpolation(.high)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(
-                        width: max(16, min(selRect.width, selRect.height) * 0.45),
-                        height: max(16, min(selRect.width, selRect.height) * 0.45)
-                    )
-                    .allowsHitTesting(false)
-            }
+                let iconSide = max(16, min(selRect.width, selRect.height) * 0.45)
+                let xSize = min(14, min(selRect.width, selRect.height) * 0.22)
+                ZStack(alignment: .topLeading) {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: iconSide, height: iconSide)
+                        .contentShape(Rectangle())
+                        .onHover { hovering in
+                            withAnimation(.easeOut(duration: 0.12)) {
+                                isIconHovered = hovering
+                            }
+                        }
 
-            if isHovering {
-                Button(action: onUnassign) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.black.opacity(0.6))
-                            .frame(
-                                width: max(22, min(selRect.width, selRect.height) * 0.28),
-                                height: max(22, min(selRect.width, selRect.height) * 0.28)
-                            )
-                        Image(systemName: "xmark")
-                            .font(.system(
-                                size: max(11, min(selRect.width, selRect.height) * 0.14),
-                                weight: .bold
-                            ))
-                            .foregroundStyle(.white)
+                    if showUnassign {
+                        Button(action: onUnassign) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: xSize))
+                                .foregroundStyle(.white.opacity(0.85))
+                                .shadow(color: .black.opacity(0.4), radius: 1, y: 0.5)
+                        }
+                        .buttonStyle(.plain)
+                        .scaleEffect(isUnassignHovered ? 1.2 : 1.0)
+                        .instantTooltip(NSLocalizedString("Unassign Application", comment: "Tooltip shown when hovering the unassign button on an assigned preset rectangle"))
+                        .padding(max(2, xSize * 0.8))
+                        .onHover { hovering in
+                            withAnimation(.easeOut(duration: 0.12)) {
+                                isUnassignHovered = hovering
+                            }
+                        }
+                        .transition(.opacity)
                     }
-                    .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
                 }
-                .buttonStyle(.plain)
-                .help(NSLocalizedString("Unassign Application", comment: "Tooltip shown when hovering the unassign button on an assigned preset rectangle"))
-                .transition(.opacity)
+                .frame(width: iconSide, height: iconSide)
             }
         }
         .overlay(alignment: .topLeading) {
@@ -1136,12 +1168,8 @@ private struct AssignedRectangleView: View {
                         .shadow(color: .black.opacity(0.4), radius: 1, y: 0.5)
                 }
                 .buttonStyle(.plain)
+                .hoverScale()
                 .padding(4)
-            }
-        }
-        .onHover { hovering in
-            withAnimation(.easeOut(duration: 0.12)) {
-                isHovering = hovering
             }
         }
     }
