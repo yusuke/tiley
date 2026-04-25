@@ -393,6 +393,9 @@ struct PresetGridPreviewView: View {
     /// with a neutral fill and an app-icon overlay instead of the indexed
     /// color.
     var rectangleApps: [String?] = []
+    /// Pairs of indices into `[selection] + secondarySelections` that should
+    /// render a small grouping indicator at their shared edge.
+    var groupedPairs: [PresetGroupPair] = []
 
     var body: some View {
         GeometryReader { geometry in
@@ -482,7 +485,74 @@ struct PresetGridPreviewView: View {
                             .allowsHitTesting(false)
                     }
                 }
+
+                // Read-only grouping indicators on the mini grid.
+                if !groupedPairs.isEmpty, allSelections.count >= 2 {
+                    let pairSet = Set(groupedPairs)
+                    let adjacencies = SelectionAdjacencyDetector.detect(selections: allSelections)
+                    let badgeDiameter = max(8, min(cellWidth, cellHeight) * 0.7)
+                    ForEach(adjacencies, id: \.self) { adj in
+                        let pair = PresetGroupPair(adj.indexA, adj.indexB)
+                        if pairSet.contains(pair) {
+                            let center = miniBadgeCenter(
+                                for: adj,
+                                inSelections: allSelections,
+                                cellWidth: cellWidth,
+                                cellHeight: cellHeight,
+                                gap: gap
+                            )
+                            MiniPresetGroupingBadge(diameter: badgeDiameter)
+                                .position(center)
+                                .allowsHitTesting(false)
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private func miniBadgeCenter(
+        for adj: SelectionAdjacency,
+        inSelections selections: [GridSelection],
+        cellWidth: CGFloat,
+        cellHeight: CGFloat,
+        gap: CGFloat
+    ) -> CGPoint {
+        let a = selections[adj.indexA].normalized
+        let overlapMid = (CGFloat(adj.overlapStart) + CGFloat(adj.overlapEnd + 1)) / 2
+        switch adj.edgeOfA {
+        case .right:
+            let x = CGFloat(a.endColumn + 1) * (cellWidth + gap) - gap / 2
+            let y = overlapMid * (cellHeight + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        case .left:
+            let x = CGFloat(a.startColumn) * (cellWidth + gap) - gap / 2
+            let y = overlapMid * (cellHeight + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        case .bottom:
+            let y = CGFloat(a.endRow + 1) * (cellHeight + gap) - gap / 2
+            let x = overlapMid * (cellWidth + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        case .top:
+            let y = CGFloat(a.startRow) * (cellHeight + gap) - gap / 2
+            let x = overlapMid * (cellWidth + gap) - gap / 2
+            return CGPoint(x: x, y: y)
+        }
+    }
+}
+
+private struct MiniPresetGroupingBadge: View {
+    let diameter: CGFloat
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color.black.opacity(0.7))
+                .overlay(Circle().stroke(Color.white.opacity(0.85), lineWidth: max(0.5, diameter * 0.06)))
+            Image(systemName: "link")
+                .font(.system(size: max(5, diameter * 0.55), weight: .bold))
+                .foregroundStyle(.white)
+        }
+        .frame(width: diameter, height: diameter)
     }
 }

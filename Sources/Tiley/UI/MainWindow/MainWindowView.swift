@@ -2759,7 +2759,8 @@ struct MainWindowView: View {
                 columns: appState.columns,
                 selection: preset.scaledSelection(toRows: appState.rows, columns: appState.columns),
                 secondarySelections: preset.scaledSecondarySelections(toRows: appState.rows, columns: appState.columns),
-                rectangleApps: preset.normalizedRectangleApps
+                rectangleApps: preset.normalizedRectangleApps,
+                groupedPairs: preset.groupedPairs
             )
             .frame(width: presetGridSize.width, height: presetGridSize.height)
             .frame(width: Self.presetGridColumnWidth, alignment: .center)

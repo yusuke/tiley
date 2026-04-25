@@ -948,25 +948,25 @@ private struct PresetGroupingBadgeView: View {
     private var backgroundColor: Color {
         if isLinked {
             if showHoverAffordance {
-                return Color.red.opacity(0.85)
+                return Color.red.opacity(0.9)
             }
-            return Color.black.opacity(0.25)
+            return Color.black.opacity(0.65)
         }
-        return isHovering ? Color.accentColor.opacity(0.95) : Color.accentColor.opacity(0.85)
+        return isHovering ? Color.accentColor.opacity(0.98) : Color.accentColor.opacity(0.92)
     }
 
     private var foregroundColor: Color {
         if isLinked && !showHoverAffordance {
-            return Color.white.opacity(0.6)
+            return Color.white.opacity(0.95)
         }
         return .white
     }
 
     private var strokeColor: Color {
         if isLinked && !showHoverAffordance {
-            return Color.white.opacity(0.35)
+            return Color.white.opacity(0.7)
         }
-        return Color.white.opacity(0.8)
+        return Color.white.opacity(0.9)
     }
 
     private var tooltip: String {
@@ -1008,10 +1008,7 @@ private struct PresetGroupingBadgeView: View {
         .contentShape(Circle())
         .scaleEffect(showHoverAffordance ? 1.12 : 1.0)
         .animation(.easeOut(duration: 0.12), value: showHoverAffordance)
-        // Keep the badge a bit translucent so the grid preview underneath
-        // remains legible. Hover and interactive states still pop through the
-        // scale/colour change.
-        .opacity(showHoverAffordance ? 0.85 : 0.65)
+        .opacity(showHoverAffordance ? 1.0 : 0.95)
     }
 }
 
