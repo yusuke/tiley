@@ -153,6 +153,8 @@
 "Swap top/bottom windows" = "Permuter les fenêtres haut/bas";
 "Match window heights" = "Aligner la hauteur des fenêtres";
 "Match window widths" = "Aligner la largeur des fenêtres";
+"Fill screen width" = "Occuper la largeur de l'écran";
+"Fill screen height" = "Occuper la hauteur de l'écran";
 "Linked with the window above" = "Groupée avec la fenêtre ci-dessus";
 "Group these regions" = "Grouper ces régions";
 "Remove grouping" = "Supprimer le groupe";

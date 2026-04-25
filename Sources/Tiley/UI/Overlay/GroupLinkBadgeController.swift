@@ -118,6 +118,14 @@ enum BadgeAction {
     /// window's perpendicular extent (height for L/R pairs, width for T/B
     /// pairs) so both windows span the same outer envelope along that axis.
     case matchExtents
+    /// "Fill screen width" button in the hover menu — proportionally scales
+    /// every window in the group along the X axis so the group's bounding
+    /// box spans the screen's visible width (Dock / menu bar excluded).
+    case fillScreenWidth
+    /// "Fill screen height" button in the hover menu — proportionally scales
+    /// every window in the group along the Y axis so the group's bounding
+    /// box spans the screen's visible height (Dock / menu bar excluded).
+    case fillScreenHeight
 }
 
 /// Where the hover menu is placed relative to the badge.
@@ -143,11 +151,25 @@ struct GroupLinkBadge: Identifiable {
     /// something to do. When false, that third button is hidden because the
     /// extents already line up.
     let canMatchExtents: Bool
+    /// True when the group's bounding box doesn't yet span the screen's
+    /// visible width — surfaces the "fill screen width" button.
+    let canFillScreenWidth: Bool
+    /// True when the group's bounding box doesn't yet span the screen's
+    /// visible height — surfaces the "fill screen height" button.
+    let canFillScreenHeight: Bool
 }
 
 extension GroupLinkBadge {
     /// Number of buttons rendered inside the linked-state hover pill.
-    var menuButtonCount: Int { canMatchExtents ? 3 : 2 }
+    /// Ungroup + Swap are always present; the three remaining buttons
+    /// (match-extents, fill-width, fill-height) are conditional.
+    var menuButtonCount: Int {
+        var count = 2
+        if canMatchExtents { count += 1 }
+        if canFillScreenWidth { count += 1 }
+        if canFillScreenHeight { count += 1 }
+        return count
+    }
 }
 
 /// Floating overlay that shows a `link.badge.plus` / `link` badge at the midpoint
@@ -315,6 +337,12 @@ final class GroupLinkBadgeController {
             },
             onMatchExtents: { [weak self] in
                 self?.handleMenuAction(id: id, action: .matchExtents)
+            },
+            onFillScreenWidth: { [weak self] in
+                self?.handleMenuAction(id: id, action: .fillScreenWidth)
+            },
+            onFillScreenHeight: { [weak self] in
+                self?.handleMenuAction(id: id, action: .fillScreenHeight)
             }
         )
         if let existingHost = window.contentView as? NSHostingView<BadgeDot> {
@@ -490,6 +518,8 @@ private struct BadgeDot: View {
     let onUngroup: () -> Void
     let onSwap: () -> Void
     let onMatchExtents: () -> Void
+    let onFillScreenWidth: () -> Void
+    let onFillScreenHeight: () -> Void
 
     @State private var isHovering = false
 
@@ -659,6 +689,22 @@ private struct BadgeDot: View {
                     action: onMatchExtents
                 )
             }
+            if badge.canFillScreenWidth {
+                menuButton(
+                    symbol: "rectangle.portrait.arrowtriangle.2.outward",
+                    tooltip: fillScreenWidthTooltipText,
+                    accessibility: fillScreenWidthTooltipText,
+                    action: onFillScreenWidth
+                )
+            }
+            if badge.canFillScreenHeight {
+                menuButton(
+                    symbol: "rectangle.arrowtriangle.2.outward",
+                    tooltip: fillScreenHeightTooltipText,
+                    accessibility: fillScreenHeightTooltipText,
+                    action: onFillScreenHeight
+                )
+            }
         }
         .padding(BadgeStyle.Menu.pillPadding)
         .background(
@@ -714,5 +760,13 @@ private struct BadgeDot: View {
         } else {
             return NSLocalizedString("Match window widths", comment: "Tooltip for the match-extents action button on a vertical (top/bottom) window pair — both windows grow horizontally to span the outer envelope")
         }
+    }
+
+    private var fillScreenWidthTooltipText: String {
+        NSLocalizedString("Fill screen width", comment: "Tooltip for the hover-menu button that scales the window group horizontally to span the screen's visible width (Dock and menu bar excluded)")
+    }
+
+    private var fillScreenHeightTooltipText: String {
+        NSLocalizedString("Fill screen height", comment: "Tooltip for the hover-menu button that scales the window group vertically to span the screen's visible height (Dock and menu bar excluded)")
     }
 }

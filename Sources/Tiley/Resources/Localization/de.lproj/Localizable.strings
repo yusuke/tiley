@@ -153,6 +153,8 @@
 "Swap top/bottom windows" = "Oberes/unteres Fenster tauschen";
 "Match window heights" = "Fensterhöhe angleichen";
 "Match window widths" = "Fensterbreite angleichen";
+"Fill screen width" = "Bildschirmbreite ausfüllen";
+"Fill screen height" = "Bildschirmhöhe ausfüllen";
 "Linked with the window above" = "Mit dem Fenster oben gruppiert";
 "Group these regions" = "Diese Bereiche gruppieren";
 "Remove grouping" = "Gruppierung entfernen";

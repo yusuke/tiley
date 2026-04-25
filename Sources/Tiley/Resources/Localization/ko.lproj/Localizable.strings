@@ -153,6 +153,8 @@
 "Swap top/bottom windows" = "상하 윈도우 바꾸기";
 "Match window heights" = "윈도우 높이 맞추기";
 "Match window widths" = "윈도우 너비 맞추기";
+"Fill screen width" = "화면 너비에 가득 채우기";
+"Fill screen height" = "화면 높이에 가득 채우기";
 "Linked with the window above" = "위 창과 그룹화됨";
 "Group these regions" = "이 영역들을 그룹화";
 "Remove grouping" = "그룹 해제";

@@ -153,6 +153,8 @@
 "Swap top/bottom windows" = "交换上下窗口";
 "Match window heights" = "对齐窗口高度";
 "Match window widths" = "对齐窗口宽度";
+"Fill screen width" = "填满屏幕宽度";
+"Fill screen height" = "填满屏幕高度";
 "Linked with the window above" = "与上方窗口已分组";
 "Group these regions" = "将这些区域分组";
 "Remove grouping" = "取消分组";

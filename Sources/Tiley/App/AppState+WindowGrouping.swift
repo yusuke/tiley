@@ -735,7 +735,11 @@ extension AppState {
                 adjacency: adj,
                 titleA: badgeWindowTitle(for: adj.windowA),
                 titleB: badgeWindowTitle(for: adj.windowB),
-                canMatchExtents: false  // unlinked badges have no hover menu
+                // Unlinked badges have no hover menu, so these flags are
+                // irrelevant; pass false to keep the panel size minimal.
+                canMatchExtents: false,
+                canFillScreenWidth: false,
+                canFillScreenHeight: false
             ))
         }
         // Drop expired / adjacency-lost candidates.
@@ -755,6 +759,7 @@ extension AppState {
                 guard groupIsActive else { continue }
                 for adj in group.adjacencies {
                     if occludedIDs.contains(adj.windowA) || occludedIDs.contains(adj.windowB) { continue }
+                    let fill = canFillScreen(adj: adj, frames: liveFrames)
                     badges.append(GroupLinkBadge(
                         id: adj.unorderedKey,
                         state: .linked,
@@ -762,7 +767,9 @@ extension AppState {
                         adjacency: adj,
                         titleA: badgeWindowTitle(for: adj.windowA),
                         titleB: badgeWindowTitle(for: adj.windowB),
-                        canMatchExtents: canMatchExtents(adj: adj, frames: liveFrames)
+                        canMatchExtents: canMatchExtents(adj: adj, frames: liveFrames),
+                        canFillScreenWidth: fill.width,
+                        canFillScreenHeight: fill.height
                     ))
                 }
             }
@@ -794,6 +801,31 @@ extension AppState {
             // Stacked pair → check horizontal extent.
             return abs(fA.minX - fB.minX) > tol || abs(fA.maxX - fB.maxX) > tol
         }
+    }
+
+    /// Returns `(canFillWidth, canFillHeight)` for the group containing `adj`,
+    /// based on whether the group's bounding box already spans the visible
+    /// width / height of its screen (Dock and menu bar excluded). False on
+    /// either axis means the corresponding hover-menu button is hidden because
+    /// the group already fills the screen on that axis.
+    private func canFillScreen(adj: WindowAdjacency, frames: [CGWindowID: CGRect])
+        -> (width: Bool, height: Bool)
+    {
+        guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB],
+              let group = windowGroups[gid] else { return (false, false) }
+        let memberFrames = group.members.compactMap { frames[$0] }
+        guard memberFrames.count >= 2 else { return (false, false) }
+        guard let bounds = groupBoundingRect(frames: memberFrames) else { return (false, false) }
+        let screen = NSScreen.screens.first(where: { $0.frame.contains(CGPoint(x: bounds.midX, y: bounds.midY)) })
+            ?? NSScreen.main
+            ?? NSScreen.screens.first
+        guard let visible = screen?.visibleFrame else { return (false, false) }
+        let tol: CGFloat = 2
+        let alreadyFillsWidth = abs(bounds.minX - visible.minX) <= tol
+            && abs(bounds.maxX - visible.maxX) <= tol
+        let alreadyFillsHeight = abs(bounds.minY - visible.minY) <= tol
+            && abs(bounds.maxY - visible.maxY) <= tol
+        return (width: !alreadyFillsWidth, height: !alreadyFillsHeight)
     }
 
     /// Returns the set of CGWindowIDs whose entire frame is covered by some
@@ -865,7 +897,115 @@ extension AppState {
             swapAdjacency(badge.adjacency)
         case .matchExtents:
             matchExtentsAdjacency(badge.adjacency)
+        case .fillScreenWidth:
+            fillGroupToScreen(adj: badge.adjacency, axis: .horizontal)
+        case .fillScreenHeight:
+            fillGroupToScreen(adj: badge.adjacency, axis: .vertical)
         }
+    }
+
+    /// Whether to fill horizontally (X axis, screen width) or vertically
+    /// (Y axis, screen height).
+    enum FillAxis {
+        case horizontal
+        case vertical
+    }
+
+    /// Proportionally rescales every window in the group containing `adj`
+    /// along `axis` so the group's bounding box matches the visible frame
+    /// of its screen on that axis. The visible frame excludes the Dock and
+    /// menu bar (`NSScreen.visibleFrame`). Relative spacing between members
+    /// is preserved by linearly mapping each member's local span on that
+    /// axis from `groupBounds` to `visibleFrame`.
+    func fillGroupToScreen(adj: WindowAdjacency, axis: FillAxis) {
+        guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB],
+              var group = windowGroups[gid] else {
+            debugLog("WindowGrouping: fillGroupToScreen aborted — no group for adjacency")
+            return
+        }
+        let liveFrames = allAvailableFrames()
+        var memberFrames: [(CGWindowID, CGRect)] = []
+        for id in group.members {
+            if let f = liveFrames[id] { memberFrames.append((id, f)) }
+        }
+        guard memberFrames.count >= 2 else { return }
+        guard let bounds = groupBoundingRect(frames: memberFrames.map(\.1)) else { return }
+        // Pick the screen the group sits on. Use the screen that contains the
+        // bounding-box centre, falling back to the primary screen.
+        let screen = NSScreen.screens.first(where: { $0.frame.contains(CGPoint(x: bounds.midX, y: bounds.midY)) })
+            ?? NSScreen.main
+            ?? NSScreen.screens.first
+        guard let visible = screen?.visibleFrame else { return }
+
+        // Map [bounds.minAxis, bounds.maxAxis] → [visible.minAxis, visible.maxAxis]
+        // with a single linear scale so spacing/proportions are preserved.
+        var newFrames: [(CGWindowID, CGRect)] = []
+        switch axis {
+        case .horizontal:
+            guard bounds.width > 0, abs(visible.width - bounds.width) > 1 || abs(visible.minX - bounds.minX) > 1 else { return }
+            let scale = visible.width / bounds.width
+            for (id, f) in memberFrames {
+                let newMinX = visible.minX + (f.minX - bounds.minX) * scale
+                let newMaxX = visible.minX + (f.maxX - bounds.minX) * scale
+                let newRect = CGRect(x: newMinX, y: f.minY, width: newMaxX - newMinX, height: f.height)
+                newFrames.append((id, newRect))
+            }
+        case .vertical:
+            guard bounds.height > 0, abs(visible.height - bounds.height) > 1 || abs(visible.minY - bounds.minY) > 1 else { return }
+            let scale = visible.height / bounds.height
+            for (id, f) in memberFrames {
+                let newMinY = visible.minY + (f.minY - bounds.minY) * scale
+                let newMaxY = visible.minY + (f.maxY - bounds.minY) * scale
+                let newRect = CGRect(x: f.minX, y: newMinY, width: f.width, height: newMaxY - newMinY)
+                newFrames.append((id, newRect))
+            }
+        }
+
+        // Apply all moves under the group-transform suppression flag so the
+        // polling follower doesn't fight us.
+        isApplyingGroupTransform = true
+        for (id, newRect) in newFrames {
+            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == id }),
+                  let window = target.windowElement else { continue }
+            _ = try? accessibilityService.setFrame(newRect, on: target.screenFrame, for: window)
+            recentlySetFrames[id] = (newRect, CFAbsoluteTimeGetCurrent())
+            group.lastKnownFrames[id] = newRect
+        }
+        // Recompute every adjacency in the group from the new frames so badge
+        // midpoints jump to the new shared edges right away.
+        var rebuilt: [WindowAdjacency] = []
+        for old in group.adjacencies {
+            guard let fA = group.lastKnownFrames[old.windowA] ?? liveFrames[old.windowA],
+                  let fB = group.lastKnownFrames[old.windowB] ?? liveFrames[old.windowB] else { continue }
+            if let updated = WindowAdjacencyDetector.adjacency(a: old.windowA, frameA: fA, b: old.windowB, frameB: fB) {
+                rebuilt.append(updated)
+            } else {
+                rebuilt.append(old)
+            }
+        }
+        group.adjacencies = rebuilt
+        windowGroups[gid] = group
+
+        refreshBadgeOverlays()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
+            self.isApplyingGroupTransform = false
+            self.refreshBadgeOverlays()
+        }
+    }
+
+    /// Bounding rect of a non-empty array of frames. Returns nil for empty input.
+    private func groupBoundingRect(frames: [CGRect]) -> CGRect? {
+        guard let first = frames.first else { return nil }
+        var minX = first.minX, minY = first.minY, maxX = first.maxX, maxY = first.maxY
+        for f in frames.dropFirst() {
+            if f.minX < minX { minX = f.minX }
+            if f.minY < minY { minY = f.minY }
+            if f.maxX > maxX { maxX = f.maxX }
+            if f.maxY > maxY { maxY = f.maxY }
+        }
+        return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
 
     /// Equalises the perpendicular extent of the two windows that share `adj`.

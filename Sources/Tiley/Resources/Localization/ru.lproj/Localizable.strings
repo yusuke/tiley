@@ -153,6 +153,8 @@
 "Swap top/bottom windows" = "Поменять местами верхнее и нижнее окна";
 "Match window heights" = "Выровнять высоту окон";
 "Match window widths" = "Выровнять ширину окон";
+"Fill screen width" = "Растянуть на ширину экрана";
+"Fill screen height" = "Растянуть на высоту экрана";
 "Linked with the window above" = "Сгруппировано с окном выше";
 "Group these regions" = "Сгруппировать эти области";
 "Remove grouping" = "Убрать группировку";

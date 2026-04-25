@@ -153,6 +153,8 @@
 "Swap top/bottom windows" = "Swap top/bottom windows";
 "Match window heights" = "Match window heights";
 "Match window widths" = "Match window widths";
+"Fill screen width" = "Fill screen width";
+"Fill screen height" = "Fill screen height";
 "Linked with the window above" = "Linked with the window above";
 "Group these regions" = "Group these regions";
 "Remove grouping" = "Remove grouping";
