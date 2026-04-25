@@ -64,7 +64,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil, colorIndex: Int = 0) {
+    func showSelection(_ selection: GridSelection, rows: Int, columns: Int, gap: CGFloat, behind parentWindow: NSWindow?, resizability: WindowResizability = .both, windowSize: CGSize? = nil, appIcon: NSImage? = nil, windowTitle: String? = nil, appName: String? = nil, colorIndex: Int = 0, overrideFillNSColor: NSColor? = nil) {
         let frame = GridCalculator.frame(for: selection, in: visibleFrame, rows: rows, columns: columns, gap: gap)
         let rootView = SelectionPreviewOverlayView(
             frame: frame,
@@ -74,7 +74,8 @@ final class LayoutPreviewOverlayController: NSWindowController {
             appIcon: appIcon,
             windowTitle: windowTitle,
             appName: appName,
-            colorIndex: colorIndex
+            colorIndex: colorIndex,
+            overrideFillNSColor: overrideFillNSColor
         )
         window?.contentView = NSHostingView(rootView: rootView)
         window?.level = .normal
@@ -184,6 +185,11 @@ private struct SelectionPreviewOverlayView: View {
     /// When true, the slot is bound to a specific app in the preset — render
     /// with a neutral miniature-window fill (no indexed tint, no index label).
     var isAssigned: Bool = false
+    /// When non-nil, overrides both the fill and border colors. Used when the
+    /// hover preview must adopt the color of a specific rectangle that the
+    /// pointer is over (e.g. the desaturated app-icon color for assigned
+    /// slots, or the indexed color for an existing unassigned slot).
+    var overrideFillNSColor: NSColor?
 
     var body: some View {
         // Full requested frame in screen-local coordinates (top-left origin).
@@ -286,12 +292,20 @@ private struct SelectionPreviewOverlayView: View {
         ).height
         let showTitleBar = height > titleBarHeight * 2 && width > 60
 
-        let baseFill: Color = isAssigned
-            ? (colorScheme == .dark ? Color.white.opacity(0.08) : Color.white.opacity(0.45))
-            : ThemeColors.indexedSelectionFill(index: colorIndex, for: colorScheme)
-        let borderStroke: Color = isAssigned
-            ? (colorScheme == .dark ? Color.white.opacity(0.20) : Color.black.opacity(0.18))
-            : ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme)
+        let baseFill: Color = {
+            if let ns = overrideFillNSColor { return Color(nsColor: ns).opacity(0.45) }
+            return isAssigned
+                ? (colorScheme == .dark ? Color.white.opacity(0.08) : Color.white.opacity(0.45))
+                : ThemeColors.indexedSelectionFill(index: colorIndex, for: colorScheme)
+        }()
+        let borderStroke: Color = {
+            if let ns = overrideFillNSColor {
+                return Color(nsColor: ns).opacity(colorScheme == .dark ? 0.70 : 0.80)
+            }
+            return isAssigned
+                ? (colorScheme == .dark ? Color.white.opacity(0.20) : Color.black.opacity(0.18))
+                : ThemeColors.indexedSelectionBorder(index: colorIndex, for: colorScheme)
+        }()
 
         ZStack(alignment: .top) {
             // Base fill + border

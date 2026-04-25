@@ -1168,11 +1168,39 @@ struct MainWindowView: View {
                         },
                         onHoverChange: { selection in
                             guard activeLayoutSelection == nil else { return }
-                            let nextColorIndex = editingPresetID != nil ? editingPresetCommittedSelections.count : 0
-                            if let ctx = screenContext {
-                                appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex)
+                            // If hovering over an existing committed rectangle, adopt that
+                            // rectangle's color: app-icon-derived tint when assigned, or the
+                            // indexed palette color (1=blue, 2=green, ...) otherwise. For
+                            // empty cells, fall back to the next-index palette color.
+                            let matchedCommittedIndex: Int? = selection.flatMap { sel in
+                                let n = sel.normalized
+                                return editingPresetCommittedSelections.firstIndex { $0.normalized == n }
+                            }
+                            let nextColorIndex: Int
+                            let overrideFill: NSColor?
+                            if let mi = matchedCommittedIndex {
+                                let bundleID: String? = mi < editingPresetAppAssignments.count
+                                    ? editingPresetAppAssignments[mi]
+                                    : nil
+                                if let bid = bundleID,
+                                   let ns = AppIconLookup.averageColor(forBundleID: bid) {
+                                    overrideFill = ns
+                                    nextColorIndex = 0
+                                } else {
+                                    overrideFill = nil
+                                    let displayIndex: Int? = mi < editingPresetDisplayIndices.count
+                                        ? editingPresetDisplayIndices[mi]
+                                        : nil
+                                    nextColorIndex = (displayIndex ?? (mi + 1)) - 1
+                                }
                             } else {
-                                appState.updateLayoutPreview(selection, colorIndex: nextColorIndex)
+                                overrideFill = nil
+                                nextColorIndex = editingPresetID != nil ? editingPresetCommittedSelections.count : 0
+                            }
+                            if let ctx = screenContext {
+                                appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex, overrideFillNSColor: overrideFill)
+                            } else {
+                                appState.updateLayoutPreview(selection, colorIndex: nextColorIndex, overrideFillNSColor: overrideFill)
                             }
                         },
                         onSelectionCommit: { selection in

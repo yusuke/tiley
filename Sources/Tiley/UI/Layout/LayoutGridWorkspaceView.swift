@@ -65,6 +65,11 @@ struct LayoutGridWorkspaceView: View {
     @State private var isDragging = false
     @State private var isOutsideGrid = false
     @State private var hoverCell: (row: Int, column: Int)?
+    /// When the user clicks/drags starting on a cell already covered by a
+    /// committed selection (in edit mode), we ignore the entire gesture so it
+    /// has no visual effect. The X/app-assignment buttons remain interactive
+    /// because they consume their own taps above this gesture.
+    @State private var isInvalidDrag = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -533,12 +538,17 @@ struct LayoutGridWorkspaceView: View {
                     let hoveredCell = cell(at: location, cellWidth: cellWidth, cellHeight: cellHeight)
                     if hoverCell?.row != hoveredCell.row || hoverCell?.column != hoveredCell.column {
                         hoverCell = hoveredCell
-                        let hoverSelection = GridSelection(
-                            startColumn: hoveredCell.column,
-                            startRow: hoveredCell.row,
-                            endColumn: hoveredCell.column,
-                            endRow: hoveredCell.row
-                        )
+                        let hoverSelection: GridSelection
+                        if let committed = committedSelectionAt(row: hoveredCell.row, column: hoveredCell.column) {
+                            hoverSelection = committed.normalized
+                        } else {
+                            hoverSelection = GridSelection(
+                                startColumn: hoveredCell.column,
+                                startRow: hoveredCell.row,
+                                endColumn: hoveredCell.column,
+                                endRow: hoveredCell.row
+                            )
+                        }
                         onHoverChange?(hoverSelection)
                     }
                 case .ended:
@@ -550,6 +560,7 @@ struct LayoutGridWorkspaceView: View {
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
                         guard !isDragDisabled else { return }
+                        if isInvalidDrag { return }
                         isDragging = true
                         hoverCell = nil
                         onHoverChange?(nil)
@@ -562,12 +573,23 @@ struct LayoutGridWorkspaceView: View {
                         isOutsideGrid = false
                         let cell = cell(at: value.location, cellWidth: cellWidth, cellHeight: cellHeight)
                         if dragStart == nil {
+                            let isEditMode = onDeleteSelection != nil
+                            if isEditMode && cellIsOccupied(row: cell.row, column: cell.column) {
+                                isInvalidDrag = true
+                                isDragging = false
+                                return
+                            }
                             dragStart = cell
                         }
                         updateSelection(row: cell.row, column: cell.column)
                     }
                     .onEnded { value in
                         guard !isDragDisabled else { return }
+                        if isInvalidDrag {
+                            isInvalidDrag = false
+                            isDragging = false
+                            return
+                        }
                         isDragging = false
                         isOutsideGrid = false
                         guard isInsideGrid(value.location, in: geometry.size),
@@ -728,6 +750,17 @@ struct LayoutGridWorkspaceView: View {
     private var dragOverlapsCommitted: Bool {
         guard let drag = activeSelection?.normalized else { return false }
         return committedSelections.contains { drag.overlaps($0) }
+    }
+
+    /// Whether the given cell is covered by any committed selection.
+    private func cellIsOccupied(row: Int, column: Int) -> Bool {
+        committedSelectionAt(row: row, column: column) != nil
+    }
+
+    /// The committed selection covering the given cell, if any.
+    private func committedSelectionAt(row: Int, column: Int) -> GridSelection? {
+        let point = GridSelection(startColumn: column, startRow: row, endColumn: column, endRow: row)
+        return committedSelections.first { point.overlaps($0) }
     }
 
     /// Draws a committed selection rectangle with index label and optional delete button.
