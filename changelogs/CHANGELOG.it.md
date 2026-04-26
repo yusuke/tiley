@@ -2,14 +2,13 @@
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-26
+
 ### Corretto
 
-- Dopo l'applicazione di una preimpostazione di layout con raggruppamento, il badge candidato «Crea gruppo» poteva ricomparire tra finestre già raggruppate. Due cause:
-  1. La rivalidazione dei gruppi dopo l'applicazione utilizzava la tolleranza di bordo stretta di 2pt, mentre il rilevamento dei candidati utilizzava la tolleranza più ampia `gap + 4pt` — per qualsiasi layout con spaziatura, l'adiacenza del gruppo esistente veniva scartata (gruppo dissolto) e la stessa coppia veniva immediatamente rilevata come candidato «Crea gruppo». Entrambi i passaggi ora usano la stessa tolleranza consapevole della spaziatura
-  2. Le coppie già collegate tramite il meccanismo di satellite (ancora finestra o slot app) — ad esempio un partner inattivo di una coppia ancora-finestra ancora geometricamente adiacente — non vengono più offerte come candidati «Crea gruppo», poiché sono già collegate tramite il meccanismo di raise dei satelliti
-  3. Anche le coppie in cui entrambe le finestre appartengono già a raggruppamenti *distinti* vengono soppresse. Esempio: applicare una preimpostazione raggruppata sinistra/destra a (WinA, WinB), poi a (WinC, WinD), quindi trascinare WinC verso il basso finché non è adiacente al bordo di WinB — il badge che prima compariva tra WinB e WinC proponeva una fusione tra gruppi che quasi mai è l'intento. Le coppie in cui un lato è ancora senza gruppo continuano a mostrare un badge candidato, così il flusso «trascinare una finestra isolata accanto a un gruppo per unirla» continua a funzionare
-
-- I badge dei gruppi collegati sono ora limitati al **componente di raggruppamento della finestra in primo piano** anziché alla sola condivisione del PID dell'app in primo piano. In precedenza, portando una finestra dell'app X in primo piano comparivano i badge di *tutti* i gruppi i cui membri condividevano per caso quell'app — inclusi raggruppamenti di sfondo del tutto estranei. La nuova regola percorre l'intero grafo di raggruppamento (gruppo spaziale primario + pool di ancore finestra + pool di satelliti slot app) a partire dal CGWindowID in primo piano e mostra solo i badge dei gruppi che intersecano quel componente connesso
+- Tra finestre già collegate non compare più il badge candidato «Crea gruppo» — né tra coppie diventate adiacenti per caso dopo l'applicazione di una preimpostazione, né tra coppie appartenenti a due gruppi distinti, né tra coppie già connesse tramite il meccanismo di satellite delle preimpostazioni con app assegnate.
+- I badge dei gruppi collegati ora vengono mostrati solo per il gruppo che contiene la finestra in primo piano (o connesso a essa tramite satelliti). I badge di gruppi di sfondo non correlati che condividevano semplicemente l'app della finestra focalizzata sono spariti.
+- Portare in primo piano una finestra raggruppata — con un clic, selezionandola nella sidebar di Tiley e premendo Invio, o tramite il click-to-activate di macOS — porta ora avanti l'intero gruppo in modo affidabile. Sono stati corretti diversi casi in cui una finestra sorella del gruppo restava dietro un'altra finestra (finestre di un'altra app intercalate tra membri del gruppo, l'app rialzava la finestra principale precedente al posto di quella selezionata, e l'animazione di ripristino dei decentramenti fuori schermo di Tiley stesso veniva scambiata per un trascinamento manuale).
 
 ### Modificato
 

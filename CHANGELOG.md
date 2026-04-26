@@ -7,14 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-26
+
 ### Fixed
 
-- After applying a preset layout with grouping, a "form group" candidate badge could resurface between windows that were already grouped. Two issues caused this:
-  1. The post-apply group revalidation used the strict 2pt edge tolerance, while candidate detection used the wider `gap + 4pt` tolerance — so for any layout with a gap, the existing group's adjacency was dropped (group dissolved), then the same pair was immediately picked up as a "form group" candidate. Both passes now use the same gap-aware tolerance
-  2. Pairs already linked via the satellite mechanism (window-anchor or app-slot) — for example an inactive partner of a window-anchor pair that's still geometrically adjacent — are no longer offered as "form group" candidates, since they're already linked through the satellite raise machinery
-  3. Pairs where both windows already belong to *distinct* groupings are also suppressed. Example: apply a left/right grouped preset to (WinA, WinB), then to (WinC, WinD), then drag WinC down so it ends up edge-adjacent to WinB — the badge that previously appeared between WinB and WinC offered a cross-group merge that's almost never the intent. Pairs where one side is still ungrouped continue to surface a candidate badge so the existing "drag a stray window next to a group to join it" flow keeps working
-
-- Linked-group badges are now scoped to the **frontmost window's grouping component** instead of just sharing the frontmost app's PID. Previously, focusing a window in app X surfaced badges for *every* group whose members happened to share that app — including unrelated background groupings. The new rule walks the full grouping graph (primary spatial group + window-anchor pool + app-slot satellite pool) starting from the frontmost CGWindowID and only renders badges for groups that intersect that connected component
+- A "form group" candidate badge no longer appears between windows that are already linked — including pairs that happen to touch after a preset apply, pairs from two different existing groups, and pairs already connected through the app-assigned-preset satellite mechanism.
+- Linked-group badges now show only for the group containing (or transitively linked to) the frontmost window. Focusing a window no longer surfaces badges for unrelated background groups that happen to share its app.
+- Raising a grouped window — by clicking it, by selecting it in the Tiley sidebar and pressing Enter, or via macOS's click-to-activate — now reliably brings the whole group forward together. Several edge cases that previously left a group sibling buried behind another window are fixed (cross-app windows sandwiched between group members, the app's previously-main window being re-promoted ahead of the selection, and Tiley's own off-screen-displacement animation getting mistaken for a manual drag).
 
 ### Changed
 
@@ -817,7 +816,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.2...HEAD
+[5.1.2]: https://github.com/yusuke/tiley/releases/tag/v5.1.2
 [5.1.1]: https://github.com/yusuke/tiley/releases/tag/v5.1.1
 [5.1.0]: https://github.com/yusuke/tiley/releases/tag/v5.1.0
 [5.0.1]: https://github.com/yusuke/tiley/releases/tag/v5.0.1

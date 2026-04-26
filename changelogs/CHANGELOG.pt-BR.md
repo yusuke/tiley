@@ -2,14 +2,13 @@
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-26
+
 ### Corrigido
 
-- Após aplicar uma predefinição de layout com agrupamento, um emblema candidato "Criar grupo" podia reaparecer entre janelas já agrupadas. Duas causas:
-  1. A revalidação de grupos pós-aplicação usava a tolerância de borda estrita de 2pt, enquanto a detecção de candidatos usava a tolerância mais ampla `gap + 4pt` — para qualquer layout com espaçamento, a adjacência do grupo existente era descartada (grupo dissolvido) e o mesmo par era imediatamente captado como candidato a "Criar grupo". Ambos os passos agora usam a mesma tolerância consciente do espaçamento
-  2. Pares já vinculados pelo mecanismo de satélite (âncora de janela ou slot de app) — por exemplo, um parceiro inativo de um par âncora-janela que continua geometricamente adjacente — não são mais oferecidos como candidatos a "Criar grupo", pois já estão vinculados pela maquinaria de raise dos satélites
-  3. Pares em que ambas as janelas já pertencem a agrupamentos *distintos* também são suprimidos. Exemplo: aplicar uma predefinição agrupada esquerda/direita a (WinA, WinB), depois a (WinC, WinD), então arrastar WinC para baixo até ficar adjacente à borda de WinB — o emblema que antes aparecia entre WinB e WinC oferecia uma mesclagem entre grupos que quase nunca é a intenção. Pares em que um lado ainda está sem grupo continuam exibindo um emblema candidato para que o fluxo "arrastar uma janela solta para junto de um grupo para entrar" continue funcionando
-
-- Os emblemas de grupos vinculados agora são restritos ao **componente de agrupamento da janela em primeiro plano** em vez de simplesmente compartilhar o PID do app em primeiro plano. Antes, focar uma janela do app X exibia emblemas de *todos* os grupos cujos membros por acaso compartilhassem esse app — incluindo agrupamentos de plano de fundo totalmente alheios. A nova regra percorre todo o grafo de agrupamento (grupo espacial primário + pool de âncoras de janela + pool de satélites de slot de app) a partir do CGWindowID em primeiro plano e só exibe emblemas dos grupos que cruzam esse componente conexo
+- Não aparece mais o emblema candidato "Criar grupo" entre janelas já vinculadas — nem entre pares que ficam adjacentes por acaso após uma predefinição, nem entre pares pertencentes a dois grupos distintos, nem entre pares já conectados pelo mecanismo de satélites das predefinições com apps atribuídos.
+- Os emblemas de grupos vinculados agora aparecem apenas para o grupo que contém a janela em primeiro plano (ou conectado a ela via satélites). Os emblemas de grupos de fundo não relacionados, que apenas compartilhavam o app da janela focalizada, sumiram.
+- Trazer uma janela agrupada para a frente — clicando, selecionando-a na barra lateral do Tiley e pressionando Enter, ou via click-to-activate do macOS — agora traz o grupo inteiro junto de forma confiável. Foram corrigidos vários casos em que uma janela irmã do grupo permanecia atrás de outra janela (janelas de outro app intercaladas entre membros do grupo, o app reascendendo a janela principal anterior em vez da selecionada e a animação de restauração de deslocamento fora da tela do próprio Tiley sendo interpretada como arrasto manual).
 
 ### Alterado
 

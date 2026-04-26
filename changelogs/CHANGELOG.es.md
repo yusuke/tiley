@@ -2,14 +2,13 @@
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-26
+
 ### Corregido
 
-- Tras aplicar una preselección de diseño con agrupamiento, podía reaparecer una insignia candidata «Crear grupo» entre ventanas que ya estaban agrupadas. Dos causas:
-  1. La revalidación de grupos posterior a la aplicación usaba la tolerancia de borde estricta de 2pt, mientras que la detección de candidatos usaba la tolerancia más amplia `gap + 4pt` — para cualquier diseño con espacio, la adyacencia del grupo existente se descartaba (grupo disuelto) y el mismo par se recogía inmediatamente como candidato a «Crear grupo». Ahora ambos pases usan la misma tolerancia consciente del espacio
-  2. Los pares ya enlazados mediante el mecanismo de satélites (anclaje de ventana o ranura de app) — por ejemplo un compañero inactivo de un par anclaje-ventana que sigue siendo geométricamente adyacente — ya no se ofrecen como candidatos a «Crear grupo», pues ya están enlazados mediante la maquinaria de raise de satélites
-  3. También se suprimen los pares en los que ambas ventanas ya pertenecen a agrupaciones *distintas*. Ejemplo: aplicar un preset agrupado izquierda/derecha a (WinA, WinB), luego a (WinC, WinD), y después arrastrar WinC hacia abajo hasta que quede adyacente al borde de WinB — la insignia que antes aparecía entre WinB y WinC ofrecía una fusión entre grupos que casi nunca es la intención. Los pares donde un lado sigue sin agrupar continúan mostrando una insignia candidata para que el flujo «arrastrar una ventana suelta junto a un grupo para unirse» siga funcionando
-
-- Las insignias de grupos enlazados ahora se acotan al **componente de agrupación de la ventana frontal** en lugar de basarse solo en compartir el PID de la app frontal. Antes, enfocar una ventana de la app X mostraba insignias de *todos* los grupos cuyos miembros casualmente compartieran esa app — incluidas agrupaciones de fondo totalmente ajenas. La nueva regla recorre todo el grafo de agrupación (grupo espacial primario + grupo de anclaje de ventana + grupo de satélites de ranura de app) partiendo del CGWindowID frontal y solo muestra insignias de los grupos que cruzan ese componente conexo
+- Ya no aparece la insignia candidata «Crear grupo» entre ventanas que ya están enlazadas — ni entre pares que tras aplicar un preset quedan adyacentes por casualidad, ni entre pares que pertenecen a dos grupos distintos, ni entre pares ya conectados mediante el mecanismo de satélites de los presets con apps asignadas.
+- Las insignias de grupos enlazados ahora se muestran solo para el grupo que contiene la ventana frontal (o que está conectado a ella mediante satélites). Las insignias de grupos de fondo no relacionados que solo compartían la app de la ventana enfocada han desaparecido.
+- Llevar una ventana agrupada al frente — haciendo clic, seleccionándola en la barra lateral de Tiley y pulsando Enter, o mediante el click-to-activate de macOS — ahora trae al grupo entero de manera fiable. Se han corregido varios casos en los que una ventana hermana del grupo quedaba detrás de otra ventana (ventanas de otra app intercaladas entre miembros del grupo, la app reascendía la ventana principal anterior por encima de la seleccionada, y la animación de restauración del desplazamiento fuera de pantalla del propio Tiley se confundía con un arrastre manual).
 
 ### Cambiado
 

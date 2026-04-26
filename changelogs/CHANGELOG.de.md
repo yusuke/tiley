@@ -2,14 +2,13 @@
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-26
+
 ### Behoben
 
-- Nach dem Anwenden eines Layout-Presets mit Gruppierung konnte ein „Gruppe bilden"-Kandidaten-Badge erneut zwischen bereits gruppierten Fenstern erscheinen. Zwei Ursachen waren beteiligt:
-  1. Die Neuvalidierung bestehender Gruppen nach dem Apply nutzte die strikte 2pt-Kantentoleranz, während die Kandidatenerkennung die weitere `gap + 4pt`-Toleranz verwendete — bei jedem Layout mit Lücke wurde die Adjazenz der bestehenden Gruppe verworfen (Gruppe aufgelöst) und dasselbe Paar sofort als „Gruppe bilden"-Kandidat erfasst. Beide Durchläufe verwenden jetzt dieselbe lückenbewusste Toleranz
-  2. Paare, die bereits über den Satelliten-Mechanismus (Fenster-Anker oder App-Slot) verknüpft sind — etwa ein inaktiver Partner eines Fenster-Anker-Paars, der noch geometrisch benachbart ist — werden nicht mehr als „Gruppe bilden"-Kandidaten angeboten, da sie bereits über die Satelliten-Raise-Maschinerie verknüpft sind
-  3. Auch Paare, bei denen beide Fenster bereits zu *unterschiedlichen* Gruppierungen gehören, werden unterdrückt. Beispiel: Apply eines links/rechts gruppierten Presets auf (WinA, WinB), dann auf (WinC, WinD), dann WinC nach unten ziehen, sodass es kantenmäßig an WinB stößt — das vorher zwischen WinB und WinC erscheinende Badge bot eine gruppenübergreifende Verschmelzung an, die fast nie die Absicht ist. Paare, bei denen eine Seite noch ungruppiert ist, zeigen weiterhin ein Kandidaten-Badge, sodass der „ein einzelnes Fenster neben eine Gruppe ziehen, um beizutreten"-Workflow erhalten bleibt
-
-- Badges verknüpfter Gruppen werden jetzt auf die **Gruppierungskomponente des vordersten Fensters** beschränkt statt auf die PID der vordersten App. Bisher löste das Fokussieren eines Fensters in App X Badges für *jede* Gruppe aus, deren Mitglieder zufällig dieselbe App teilten — auch völlig unbeteiligte Hintergrundgruppen. Die neue Regel durchläuft den vollständigen Gruppierungsgraphen (primäre räumliche Gruppe + Fenster-Anker-Pool + App-Slot-Satelliten-Pool) ausgehend von der vordersten CGWindowID und zeigt nur Badges für Gruppen an, die diese Zusammenhangskomponente schneiden
+- Zwischen bereits verknüpften Fenstern erscheint kein „Gruppe bilden"-Kandidaten-Badge mehr — weder zwischen Paaren, die nach einem Preset zufällig aneinanderstoßen, noch zwischen Paaren aus zwei unterschiedlichen bestehenden Gruppen, noch zwischen Paaren, die über den Satelliten-Mechanismus eines app-zugewiesenen Presets verbunden sind.
+- Badges verknüpfter Gruppen erscheinen nur noch für die Gruppe, die das vorderste Fenster enthält (oder transitiv über Satelliten daran angeschlossen ist). Badges unbeteiligter Hintergrundgruppen, die nur zufällig die App des fokussierten Fensters teilen, werden nicht mehr eingeblendet.
+- Das Anheben eines gruppierten Fensters — per Klick, per Auswahl in der Tiley-Sidebar und Enter oder über macOS' Click-to-activate — bringt die ganze Gruppe nun zuverlässig gemeinsam nach vorn. Mehrere Fälle, in denen ein Geschwisterfenster zuvor hinter einem anderen Fenster verborgen blieb, sind behoben (Fenster fremder Apps, die zwischen Gruppenmitgliedern eingeklemmt waren; das vorher als Hauptfenster gemerkte Fenster derselben App, das vor das ausgewählte Fenster gehoben wurde; Tileys eigene Wiederherstellung der ausgelagerten Fenster, die als manueller Drag missdeutet wurde).
 
 ### Geändert
 

@@ -2,14 +2,13 @@
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-26
+
 ### Corrigé
 
-- Après l'application d'un préréglage de mise en page avec regroupement, un badge candidat « Créer un groupe » pouvait réapparaître entre des fenêtres déjà groupées. Deux causes :
-  1. La revalidation des groupes après application utilisait la tolérance d'arête stricte de 2pt, tandis que la détection des candidats utilisait la tolérance plus large `gap + 4pt` — pour toute mise en page avec espacement, l'adjacence du groupe existant était abandonnée (groupe dissous) et la même paire était immédiatement reprise comme candidat « Créer un groupe ». Les deux passes utilisent désormais la même tolérance tenant compte de l'espacement
-  2. Les paires déjà liées via le mécanisme de satellite (ancre de fenêtre ou emplacement d'application) — par exemple un partenaire inactif d'une paire ancre-fenêtre qui reste géométriquement adjacent — ne sont plus proposées comme candidats « Créer un groupe », puisqu'elles sont déjà liées via la machinerie de raise des satellites
-  3. Les paires dont les deux fenêtres appartiennent déjà à des regroupements *distincts* sont également supprimées. Exemple : appliquer un préréglage groupé gauche/droite à (WinA, WinB), puis à (WinC, WinD), puis faire glisser WinC vers le bas jusqu'à ce qu'il soit adjacent au bord de WinB — le badge qui apparaissait auparavant entre WinB et WinC proposait une fusion inter-groupes qui n'est presque jamais l'intention. Les paires où un côté n'est pas encore groupé continuent d'afficher un badge candidat afin que le flux « faire glisser une fenêtre isolée à côté d'un groupe pour la rejoindre » continue de fonctionner
-
-- Les badges des groupes liés sont désormais limités au **composant de groupage de la fenêtre au premier plan** plutôt qu'au simple partage du PID de l'application au premier plan. Auparavant, mettre une fenêtre de l'application X au premier plan faisait apparaître les badges de *tous* les groupes dont des membres partageaient incidemment cette application — y compris des regroupements d'arrière-plan totalement étrangers. La nouvelle règle parcourt tout le graphe de regroupement (groupe spatial primaire + pool d'ancres de fenêtre + pool de satellites d'emplacement d'application) depuis le CGWindowID au premier plan et n'affiche que les badges des groupes qui croisent ce composant connexe
+- Plus aucun badge candidat « Créer un groupe » n'apparaît entre des fenêtres déjà liées — qu'il s'agisse de paires devenues adjacentes par hasard après l'application d'un préréglage, de paires appartenant à deux groupes existants distincts, ou de paires déjà connectées via le mécanisme de satellite des préréglages avec applications assignées.
+- Les badges des groupes liés ne sont désormais affichés que pour le groupe contenant la fenêtre au premier plan (ou relié à elle via les satellites). Les badges des groupes d'arrière-plan sans rapport, qui partageaient simplement l'application de la fenêtre focalisée, ont disparu.
+- Mettre une fenêtre groupée au premier plan — par clic, par sélection dans la barre latérale de Tiley puis Entrée, ou via le clic-pour-activer de macOS — amène désormais l'ensemble du groupe en avant de manière fiable. Plusieurs cas où une fenêtre sœur du groupe restait derrière une autre fenêtre sont corrigés (fenêtres d'une autre application coincées entre des membres du groupe, l'application réascendant la précédente fenêtre principale plutôt que la fenêtre sélectionnée, et l'animation de restauration des décalages hors écran de Tiley elle-même qui était confondue avec un glissement manuel).
 
 ### Modifié
 
