@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- A janela de Ajustes agora abre centralizada na tela inteira em vez de no centro da área visível sem o Dock, aparecendo no centro real da tela independentemente da posição do Dock.
+
 ## [5.1.2] - 2026-04-26
 
 ### Corrigido

@@ -60,11 +60,11 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
     func show() {
         guard let window else { return }
         let screen = Self.screenUnderMouse()
-        let visibleFrame = screen.visibleFrame
+        let screenFrame = screen.frame
         let windowSize = window.frame.size
         let origin = NSPoint(
-            x: visibleFrame.midX - windowSize.width / 2,
-            y: visibleFrame.midY - windowSize.height / 2
+            x: screenFrame.midX - windowSize.width / 2,
+            y: screenFrame.midY - windowSize.height / 2
         )
         window.setFrameOrigin(origin)
         window.makeKeyAndOrderFront(nil)
