@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.3] - 2026-04-27
+
 ### Behoben
 
 - Das Einstellungsfenster wird nun in der Mitte des gesamten Bildschirms geöffnet statt im Zentrum des sichtbaren Bereichs ohne Dock. Es erscheint damit unabhängig von der Position des Docks in der tatsächlichen Bildschirmmitte.

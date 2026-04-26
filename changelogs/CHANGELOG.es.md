@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.3] - 2026-04-27
+
 ### Corregido
 
 - La ventana de Ajustes ahora se abre centrada en toda la pantalla en lugar de centrada en el área visible sin el Dock, por lo que aparece en el centro real de la pantalla independientemente de la posición del Dock.

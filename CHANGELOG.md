@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.1.3] - 2026-04-27
+
 ### Fixed
 
 - The Settings window now opens centered on the full screen instead of centered within the Dock-excluded visible area, so it appears at the actual screen center regardless of the Dock's position.
@@ -820,7 +822,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.2...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.3...HEAD
+[5.1.3]: https://github.com/yusuke/tiley/releases/tag/v5.1.3
 [5.1.2]: https://github.com/yusuke/tiley/releases/tag/v5.1.2
 [5.1.1]: https://github.com/yusuke/tiley/releases/tag/v5.1.1
 [5.1.0]: https://github.com/yusuke/tiley/releases/tag/v5.1.0

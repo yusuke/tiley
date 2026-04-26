@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.3] - 2026-04-27
+
 ### Corretto
 
 - La finestra Impostazioni ora si apre al centro dell'intero schermo invece che al centro dell'area visibile esclusa del Dock, quindi appare nel vero centro dello schermo indipendentemente dalla posizione del Dock.

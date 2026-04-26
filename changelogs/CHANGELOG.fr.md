@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.1.3] - 2026-04-27
+
 ### Corrigé
 
 - La fenêtre des Réglages s'ouvre désormais centrée sur l'écran entier, et non plus au centre de la zone visible excluant le Dock : elle apparaît au véritable centre de l'écran quelle que soit la position du Dock.
