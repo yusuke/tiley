@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Dopo l'applicazione di una preimpostazione di layout con raggruppamento, il badge candidato «Crea gruppo» poteva ricomparire tra finestre già raggruppate. Due cause:
+  1. La rivalidazione dei gruppi dopo l'applicazione utilizzava la tolleranza di bordo stretta di 2pt, mentre il rilevamento dei candidati utilizzava la tolleranza più ampia `gap + 4pt` — per qualsiasi layout con spaziatura, l'adiacenza del gruppo esistente veniva scartata (gruppo dissolto) e la stessa coppia veniva immediatamente rilevata come candidato «Crea gruppo». Entrambi i passaggi ora usano la stessa tolleranza consapevole della spaziatura
+  2. Le coppie già collegate tramite il meccanismo di satellite (ancora finestra o slot app) — ad esempio un partner inattivo di una coppia ancora-finestra ancora geometricamente adiacente — non vengono più offerte come candidati «Crea gruppo», poiché sono già collegate tramite il meccanismo di raise dei satelliti
+  3. Anche le coppie in cui entrambe le finestre appartengono già a raggruppamenti *distinti* vengono soppresse. Esempio: applicare una preimpostazione raggruppata sinistra/destra a (WinA, WinB), poi a (WinC, WinD), quindi trascinare WinC verso il basso finché non è adiacente al bordo di WinB — il badge che prima compariva tra WinB e WinC proponeva una fusione tra gruppi che quasi mai è l'intento. Le coppie in cui un lato è ancora senza gruppo continuano a mostrare un badge candidato, così il flusso «trascinare una finestra isolata accanto a un gruppo per unirla» continua a funzionare
+
+- I badge dei gruppi collegati sono ora limitati al **componente di raggruppamento della finestra in primo piano** anziché alla sola condivisione del PID dell'app in primo piano. In precedenza, portando una finestra dell'app X in primo piano comparivano i badge di *tutti* i gruppi i cui membri condividevano per caso quell'app — inclusi raggruppamenti di sfondo del tutto estranei. La nuova regola percorre l'intero grafo di raggruppamento (gruppo spaziale primario + pool di ancore finestra + pool di satelliti slot app) a partire dal CGWindowID in primo piano e mostra solo i badge dei gruppi che intersecano quel componente connesso
+
+### Modificato
+
+- Applicando una preimpostazione di layout la cui coppia raggruppata coinvolge una finestra già membro di un gruppo esistente, tutto non viene più unito in un unico gruppo più grande. La finestra condivisa diventa un'«ancora finestra» e ciascuno dei suoi partner (gli altri membri del gruppo preesistente e il partner appena aggiunto) viene registrato come satellite, rispecchiando il modello già usato per gli slot di preimpostazione assegnati alle app. Ogni coppia mantiene il proprio layout memorizzato: cliccando su un satellite l'ancora viene portata in primo piano e vengono ripristinate le posizioni salvate di quella coppia; cliccando sull'ancora, il satellite attualmente più in primo piano diventa la coppia attiva. Esempio: con un gruppo A↔B esistente, applicare una preimpostazione che accoppia C↔A lascia A↔B intatto — cliccando B, A torna accanto a B nel layout originale A↔B; cliccando C, A si posiziona accanto a C nel layout C↔A della preimpostazione. La coppia attiva mostra il badge di collegamento come prima; il passaggio tra satelliti ricostruisce dinamicamente il gruppo spaziale
+
 ## [5.1.1] - 2026-04-25
 
 ### Aggiunto

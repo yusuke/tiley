@@ -1183,6 +1183,570 @@ extension AppState {
         }
     }
 
+    /// True when (wid1, wid2) is already a known satellite pair — either via
+    /// the bundleID-keyed `appSlotSatellites` (one is the assigned-app's
+    /// anchor window, the other is one of its registered satellites) or via
+    /// the CGWindowID-keyed `windowAnchorSatellites`. Candidate-badge
+    /// detection consults this so that a still-adjacent satellite pair (e.g.
+    /// the inactive partner left over from a previous preset apply) does
+    /// **not** surface a "form group" badge — the windows are already
+    /// effectively grouped via the satellite mechanism.
+    func isSatellitePair(_ wid1: CGWindowID, _ wid2: CGWindowID) -> Bool {
+        // Window-anchor case: either side may be the anchor.
+        if windowAnchorSatellites[wid1]?.contains(wid2) == true { return true }
+        if windowAnchorSatellites[wid2]?.contains(wid1) == true { return true }
+        // App-slot satellite case: check whether wid1's bundle anchors wid2,
+        // or vice-versa.
+        let pid1 = availableWindowTargets.first(where: { $0.cgWindowID == wid1 })?.processIdentifier
+        let pid2 = availableWindowTargets.first(where: { $0.cgWindowID == wid2 })?.processIdentifier
+        let bid1 = pid1.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
+        let bid2 = pid2.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
+        if let bid = bid1, appSlotSatellites[bid]?.contains(wid2) == true { return true }
+        if let bid = bid2, appSlotSatellites[bid]?.contains(wid1) == true { return true }
+        return false
+    }
+
+    /// True when this window already participates in some grouping context —
+    /// a primary spatial `WindowGroup`, a window-anchor pool (as anchor or
+    /// satellite), or an app-slot satellite pool (as the assigned app's
+    /// window or as a registered satellite).
+    func isWindowAlreadyGrouped(_ wid: CGWindowID) -> Bool {
+        if groupIndexByWindow[wid] != nil { return true }
+        if windowAnchorSatellites[wid] != nil { return true }
+        for (_, sats) in windowAnchorSatellites where sats.contains(wid) { return true }
+        if let pid = availableWindowTargets.first(where: { $0.cgWindowID == wid })?.processIdentifier,
+           let bid = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier {
+            if appSlotSatellites[bid] != nil { return true }
+            for (_, sats) in appSlotSatellites where sats.contains(wid) { return true }
+        }
+        return false
+    }
+
+    /// Set of CGWindowIDs reachable from the frontmost window via the full
+    /// grouping graph (primary spatial groups + window-anchor pools +
+    /// app-slot satellite pools). Used to scope linked-group badges so only
+    /// groups containing the frontmost window — directly, or transitively
+    /// through a satellite chain — surface their badges.
+    ///
+    /// Returns an empty set when there is no frontmost window or when it
+    /// participates in no grouping at all.
+    func windowsConnectedToFrontmost(frontmostWID: CGWindowID?) -> Set<CGWindowID> {
+        guard let start = frontmostWID else { return [] }
+        var visited: Set<CGWindowID> = [start]
+        var queue: [CGWindowID] = [start]
+        while let wid = queue.popLast() {
+            // Primary spatial group neighbours.
+            if let gid = groupIndexByWindow[wid], let group = windowGroups[gid] {
+                for member in group.members where !visited.contains(member) {
+                    visited.insert(member)
+                    queue.append(member)
+                }
+            }
+            // Window-anchor pool: as anchor → all its satellites; as
+            // satellite → the anchor itself (and through the anchor any
+            // sibling satellites picked up on the next iteration).
+            if let sats = windowAnchorSatellites[wid] {
+                for s in sats where !visited.contains(s) {
+                    visited.insert(s)
+                    queue.append(s)
+                }
+            }
+            for (anchorWID, sats) in windowAnchorSatellites where sats.contains(wid) {
+                if !visited.contains(anchorWID) {
+                    visited.insert(anchorWID)
+                    queue.append(anchorWID)
+                }
+            }
+            // App-slot satellite pool: same idea, keyed by bundleID. The
+            // anchor is whichever window of the assigned app is currently
+            // available.
+            if let pid = availableWindowTargets.first(where: { $0.cgWindowID == wid })?.processIdentifier,
+               let bid = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier {
+                if let sats = appSlotSatellites[bid] {
+                    for s in sats where !visited.contains(s) {
+                        visited.insert(s)
+                        queue.append(s)
+                    }
+                }
+            }
+            for (anchorBID, sats) in appSlotSatellites where sats.contains(wid) {
+                if let app = NSRunningApplication.runningApplications(withBundleIdentifier: anchorBID)
+                    .first(where: { $0.activationPolicy == .regular }),
+                   let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }),
+                   !visited.contains(anchorTarget.cgWindowID) {
+                    visited.insert(anchorTarget.cgWindowID)
+                    queue.append(anchorTarget.cgWindowID)
+                }
+            }
+        }
+        return visited
+    }
+
+    /// Combined "should the candidate-badge mechanism suppress this pair?"
+    /// rule. Two cases:
+    ///   1. Already linked through a primary spatial group or a satellite
+    ///      pool — surfacing a "form group" badge is misleading.
+    ///   2. Both windows belong to *some* grouping (potentially different
+    ///      ones). A "form group" badge here would invite the user to merge
+    ///      two distinct groupings, which is almost never the intent.
+    ///      Example: applying preset 1 to (WinA, WinB) and preset 2 to
+    ///      (WinC, WinD); dragging WinC down so it ends up edge-adjacent to
+    ///      WinB must NOT prompt a "form group" between them — the user has
+    ///      already expressed two separate groupings and won't expect a
+    ///      cross-group merge offer.
+    /// A pair where one side is ungrouped is preserved (still a candidate),
+    /// so the existing "drag a stray window next to a group to join it"
+    /// workflow keeps working.
+    func shouldSuppressGroupingCandidate(_ adj: WindowAdjacency) -> Bool {
+        if let a = groupIndexByWindow[adj.windowA],
+           let b = groupIndexByWindow[adj.windowB], a == b { return true }
+        if isSatellitePair(adj.windowA, adj.windowB) { return true }
+        if isWindowAlreadyGrouped(adj.windowA) && isWindowAlreadyGrouped(adj.windowB) { return true }
+        return false
+    }
+
+    // MARK: - Window-anchor satellite pairs
+    //
+    // Window-anchor pairs are the bundle-less variant of the satellite
+    // mechanism above. They are formed when a preset's `groupedPairs` would
+    // otherwise merge into an existing primary group that already contains a
+    // third (non-pair) window. The shared window becomes a "window anchor"
+    // and each of its remembered partners is registered as a satellite of
+    // it. Activation, frame restoration, and z-order linkage mirror the
+    // bundleID-keyed flow but key on the anchor's CGWindowID.
+
+    /// Detects whether linking widA—widB would merge / expand a primary
+    /// group that already contains a third window. When it would, returns
+    /// the suggested `(anchor, partner)` pair where `anchor` is the
+    /// already-grouped (shared) side. Returns nil when there's no conflict
+    /// and the regular spatial linkage can proceed.
+    func detectWindowAnchorConflict(widA: CGWindowID, widB: CGWindowID) -> (anchor: CGWindowID, partner: CGWindowID)? {
+        let gidA = groupIndexByWindow[widA]
+        let gidB = groupIndexByWindow[widB]
+        if let ga = gidA, let group = windowGroups[ga],
+           !group.members.subtracting([widA, widB]).isEmpty {
+            return (anchor: widA, partner: widB)
+        }
+        if let gb = gidB, let group = windowGroups[gb],
+           !group.members.subtracting([widA, widB]).isEmpty {
+            return (anchor: widB, partner: widA)
+        }
+        // Both already in (different) groups, each carrying extra members:
+        // also a conflict — pick widA as anchor.
+        if let ga = gidA, let gb = gidB, ga != gb {
+            return (anchor: widA, partner: widB)
+        }
+        return nil
+    }
+
+    /// Convert any existing primary group containing the anchor into
+    /// window-anchor satellite links (preserving the anchor's existing
+    /// partners as satellites), then register the new partner as another
+    /// satellite. Each pair's frames are snapshotted so future activations
+    /// can restore them.
+    ///
+    /// IMPORTANT: by the time this runs, the preset has already moved the
+    /// anchor to its new (post-preset) position. For the existing partners
+    /// we therefore snapshot the OLD layout from the dissolving group's
+    /// `lastKnownFrames` — otherwise we'd capture the wrong layout and
+    /// switching back to an old partner later would do nothing visible.
+    func registerWindowAnchorPair(anchorWID: CGWindowID, partnerWID: CGWindowID) {
+        guard anchorWID != 0, partnerWID != 0, anchorWID != partnerWID else { return }
+
+        // Step 1: convert anchor's existing primary group (if any) into
+        // anchor-satellite links using the group's pre-preset
+        // lastKnownFrames so the original layout is preserved.
+        if let gid = groupIndexByWindow[anchorWID], let group = windowGroups[gid] {
+            let epsilon: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+            for memberWID in group.members where memberWID != anchorWID {
+                if let anchorFrame = group.lastKnownFrames[anchorWID],
+                   let satFrame = group.lastKnownFrames[memberWID],
+                   let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }) {
+                    let snapped = Self.snapAnchor(
+                        anchorFrame: anchorFrame,
+                        satelliteFrame: satFrame,
+                        anchorID: anchorWID,
+                        satelliteID: memberWID,
+                        epsilon: epsilon
+                    )
+                    savedWindowPairFrames[anchorWID, default: [:]][memberWID] = SatellitePairFrames(
+                        anchor: snapped,
+                        satellite: satFrame,
+                        screenFrame: anchorTarget.screenFrame,
+                        visibleFrame: anchorTarget.visibleFrame
+                    )
+                    debugLog("WindowAnchorPair: saved pre-preset (\(anchorWID), \(memberWID)) from old group lastKnownFrames anchor=\(snapped) sat=\(satFrame)")
+                } else {
+                    // Fallback: capture live frames (may be the post-preset
+                    // layout, but it's the best we have).
+                    saveCurrentWindowPairFrames(anchorWID: anchorWID, satelliteWID: memberWID)
+                }
+                windowAnchorSatellites[anchorWID, default: []].insert(memberWID)
+                observeSatelliteAndAnchor(satelliteWID: memberWID, anchorWID: anchorWID)
+            }
+            dissolveGroup(gid)
+        }
+        // The partner may itself have been in another primary group with a
+        // 3rd window. We don't promote that side's partners into the anchor's
+        // pool (they belong to a different conceptual cluster), but we do
+        // need to dissolve the partner's existing group so it can join the
+        // dynamic spatial group built by `rebuildAnchorSatelliteGroup`.
+        if let gid = groupIndexByWindow[partnerWID] {
+            dissolveGroup(gid)
+        }
+
+        // Step 2: register the new partner as a satellite. Frames are
+        // captured live — they reflect the just-applied preset layout,
+        // which is the desired arrangement for this pair.
+        windowAnchorSatellites[anchorWID, default: []].insert(partnerWID)
+        saveCurrentWindowPairFrames(anchorWID: anchorWID, satelliteWID: partnerWID)
+        observeSatelliteAndAnchor(satelliteWID: partnerWID, anchorWID: anchorWID)
+
+        // Step 3: the just-applied pair becomes the active binding.
+        activeSatellitePerWindowAnchor[anchorWID] = partnerWID
+
+        // Step 4: rebuild a spatial group for the active pair so that drag/
+        // resize cascades and the linked badge work for it.
+        rebuildAnchorSatelliteGroup(anchorWID: anchorWID, satelliteWID: partnerWID)
+
+        // Step 5: drop any stale "form group" candidate badges between the
+        // anchor and any of its satellites — they're now linked through the
+        // satellite mechanism and the badge would falsely invite the user to
+        // re-group them.
+        let satelliteSet = windowAnchorSatellites[anchorWID] ?? []
+        if !pendingGroupCandidates.isEmpty {
+            pendingGroupCandidates.removeAll { adj in
+                let pair = Set([adj.windowA, adj.windowB])
+                return pair.contains(anchorWID) && !pair.intersection(satelliteSet).isEmpty
+            }
+        }
+
+        debugLog("WindowAnchorPair: registered anchor=\(anchorWID) partner=\(partnerWID); satellites=\(windowAnchorSatellites[anchorWID] ?? [])")
+    }
+
+    /// Snapshot current frames of the (anchor, satellite) pair into
+    /// `savedWindowPairFrames`. The anchor side is snapped so it sits
+    /// pixel-flush against the satellite's edge.
+    func saveCurrentWindowPairFrames(anchorWID: CGWindowID, satelliteWID: CGWindowID) {
+        guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }),
+              let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) else {
+            return
+        }
+        let anchorFrame = liveFrame(of: anchorWID) ?? anchorTarget.frame
+        let satFrame = liveFrame(of: satelliteWID) ?? satTarget.frame
+
+        let epsilon: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+        let snappedAnchor = Self.snapAnchor(
+            anchorFrame: anchorFrame,
+            satelliteFrame: satFrame,
+            anchorID: anchorWID,
+            satelliteID: satelliteWID,
+            epsilon: epsilon
+        )
+        let frames = SatellitePairFrames(
+            anchor: snappedAnchor,
+            satellite: satFrame,
+            screenFrame: anchorTarget.screenFrame,
+            visibleFrame: anchorTarget.visibleFrame
+        )
+        savedWindowPairFrames[anchorWID, default: [:]][satelliteWID] = frames
+        debugLog("WindowAnchorPair: saved (\(anchorWID), \(satelliteWID)) anchor=\(snappedAnchor) sat=\(satFrame)")
+    }
+
+    /// Restore the anchor's saved position relative to the satellite's
+    /// **current** live position. Only the anchor moves; the satellite
+    /// stays where it is so the recorded offset reproduces the original
+    /// adjacency.
+    func restoreWindowPairFrames(anchorWID: CGWindowID, satelliteWID: CGWindowID) {
+        guard let frames = savedWindowPairFrames[anchorWID]?[satelliteWID] else {
+            debugLog("WindowAnchorPair: no saved frames for (\(anchorWID), \(satelliteWID))")
+            return
+        }
+        guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }) else {
+            return
+        }
+        let liveSatOrigin: CGPoint = liveFrame(of: satelliteWID)?.origin ??
+            availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID })?.frame.origin ??
+            frames.satellite.origin
+        let offset = CGPoint(
+            x: frames.anchor.origin.x - frames.satellite.origin.x,
+            y: frames.anchor.origin.y - frames.satellite.origin.y
+        )
+        let newAnchorFrame = CGRect(
+            origin: CGPoint(x: liveSatOrigin.x + offset.x, y: liveSatOrigin.y + offset.y),
+            size: frames.anchor.size
+        )
+
+        isApplyingGroupTransform = true
+        pairRestoreSettleTimer?.cancel()
+        let settleTimer = DispatchSource.makeTimerSource(queue: .main)
+        settleTimer.schedule(deadline: .now() + 2.0)
+        settleTimer.setEventHandler { [weak self] in
+            self?.isApplyingGroupTransform = false
+            self?.pairRestoreSettleTimer = nil
+        }
+        settleTimer.resume()
+        pairRestoreSettleTimer = settleTimer
+
+        do {
+            _ = try windowManager?.move(target: anchorTarget, to: newAnchorFrame, onScreenFrame: frames.screenFrame)
+        } catch {
+            debugLog("WindowAnchorPair: restore error: \(error.localizedDescription)")
+        }
+        debugLog("WindowAnchorPair: restored (\(anchorWID), \(satelliteWID)) → \(newAnchorFrame) (offset=\(offset) from liveSat=\(liveSatOrigin))")
+
+        // Re-snap retries to handle apps that auto-reposition shortly after
+        // activation (mirrors the bundle-anchor variant).
+        let retryDelays: [TimeInterval] = [0.35, 0.7, 1.1, 1.6]
+        for delay in retryDelays {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                guard let self else { return }
+                self.verifyAndReRestoreWindowPairIfDrifted(anchorWID: anchorWID, satelliteWID: satelliteWID)
+            }
+        }
+    }
+
+    private func verifyAndReRestoreWindowPairIfDrifted(anchorWID: CGWindowID, satelliteWID: CGWindowID) {
+        guard activeSatellitePerWindowAnchor[anchorWID] == satelliteWID else { return }
+        guard let frames = savedWindowPairFrames[anchorWID]?[satelliteWID] else { return }
+        guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }),
+              let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) else {
+            return
+        }
+        let liveAnchor = liveFrame(of: anchorWID) ?? anchorTarget.frame
+        let liveSat = liveFrame(of: satelliteWID) ?? satTarget.frame
+        let epsilon: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+        if WindowAdjacencyDetector.adjacency(
+            a: anchorWID, frameA: liveAnchor,
+            b: satelliteWID, frameB: liveSat,
+            edgeEpsilon: epsilon
+        ) != nil {
+            return
+        }
+        let offset = CGPoint(
+            x: frames.anchor.origin.x - frames.satellite.origin.x,
+            y: frames.anchor.origin.y - frames.satellite.origin.y
+        )
+        let newAnchorFrame = CGRect(
+            origin: CGPoint(x: liveSat.origin.x + offset.x, y: liveSat.origin.y + offset.y),
+            size: frames.anchor.size
+        )
+        let tolerance: CGFloat = 2
+        if abs(liveAnchor.origin.x - newAnchorFrame.origin.x) <= tolerance
+            && abs(liveAnchor.origin.y - newAnchorFrame.origin.y) <= tolerance
+            && abs(liveAnchor.size.width - newAnchorFrame.size.width) <= tolerance
+            && abs(liveAnchor.size.height - newAnchorFrame.size.height) <= tolerance {
+            return
+        }
+        do {
+            _ = try windowManager?.move(target: anchorTarget, to: newAnchorFrame, onScreenFrame: frames.screenFrame)
+        } catch {
+            debugLog("WindowAnchorPair: re-restore error: \(error.localizedDescription)")
+        }
+        debugLog("WindowAnchorPair: re-restored after drift — newAnchor=\(newAnchorFrame) liveAnchor=\(liveAnchor) liveSat=\(liveSat.origin)")
+    }
+
+    /// Refresh saved frames for any window-anchor pair whose anchor or
+    /// active satellite just moved. Called by the cascade end-of-drag pass
+    /// so the latest hand-arranged positions become the next "restore"
+    /// target. Mirrors `updateSavedFramesIfActivePair`.
+    func updateSavedWindowPairFramesIfActive(movedWID: CGWindowID) {
+        for (anchorWID, activeSat) in activeSatellitePerWindowAnchor {
+            guard movedWID == anchorWID || movedWID == activeSat else { continue }
+            guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }),
+                  let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == activeSat }) else { continue }
+            let anchorFrame = liveFrame(of: anchorWID) ?? anchorTarget.frame
+            let satFrame = liveFrame(of: activeSat) ?? satTarget.frame
+            let epsilon: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+            guard WindowAdjacencyDetector.adjacency(
+                a: anchorWID, frameA: anchorFrame,
+                b: activeSat, frameB: satFrame,
+                edgeEpsilon: epsilon
+            ) != nil else { continue }
+            let snappedAnchor = Self.snapAnchor(
+                anchorFrame: anchorFrame,
+                satelliteFrame: satFrame,
+                anchorID: anchorWID,
+                satelliteID: activeSat,
+                epsilon: epsilon
+            )
+            savedWindowPairFrames[anchorWID, default: [:]][activeSat] = SatellitePairFrames(
+                anchor: snappedAnchor,
+                satellite: satFrame,
+                screenFrame: anchorTarget.screenFrame,
+                visibleFrame: anchorTarget.visibleFrame
+            )
+        }
+    }
+
+    /// Mirror of `handleAppSlotSatelliteRaise` for window-anchor pairs.
+    /// Case C: focused is a satellite of one or more anchors → raise the
+    /// anchor and apply the saved frames for that pair.
+    /// Case D: focused IS an anchor → pick the frontmost remembered
+    /// satellite and apply that pair.
+    func handleWindowAnchorSatelliteRaise(focusedID: CGWindowID) {
+        guard !windowAnchorSatellites.isEmpty else { return }
+        if isShowingLayoutGrid { return }
+
+        // Case C: focused is a satellite of some anchor.
+        for (anchorWID, satellites) in windowAnchorSatellites where satellites.contains(focusedID) {
+            guard anchorWID != focusedID else { continue }
+            guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }) else {
+                continue
+            }
+            debugLog("WindowAnchorRaise: Case C — clicked sat=\(focusedID), anchor=\(anchorWID)")
+
+            let previouslyActive = activeSatellitePerWindowAnchor[anchorWID]
+            if previouslyActive != focusedID {
+                restoreWindowPairFrames(anchorWID: anchorWID, satelliteWID: focusedID)
+                activeSatellitePerWindowAnchor[anchorWID] = focusedID
+            }
+
+            let spatialHandled: Bool = {
+                guard let clickedGID = groupIndexByWindow[focusedID],
+                      let anchorGID = groupIndexByWindow[anchorWID] else { return false }
+                return clickedGID == anchorGID
+            }()
+            if !spatialHandled {
+                if let app = NSRunningApplication(processIdentifier: anchorTarget.processIdentifier) {
+                    app.activate()
+                    RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+                }
+                if let window = anchorTarget.windowElement {
+                    accessibilityService.raiseWindow(window)
+                }
+            }
+            if CGSPrivate.isOrderWindowAvailable {
+                for other in satellites where other != focusedID && other != 0 {
+                    _ = CGSPrivate.orderWindow(other, mode: CGSPrivate.kCGSOrderBelow, relativeTo: focusedID)
+                }
+                _ = CGSPrivate.orderWindow(anchorWID, mode: CGSPrivate.kCGSOrderBelow, relativeTo: focusedID)
+            }
+            rebuildAnchorSatelliteGroup(anchorWID: anchorWID, satelliteWID: focusedID)
+        }
+
+        // Case D: focused IS an anchor → bring the frontmost remembered
+        // satellite into the active pair.
+        if let satellites = windowAnchorSatellites[focusedID], !satellites.isEmpty {
+            let frontmostSat: CGWindowID? = {
+                guard let list = CGWindowListCopyWindowInfo(
+                    [.optionOnScreenOnly, .excludeDesktopElements],
+                    kCGNullWindowID
+                ) as? [[String: Any]] else { return nil }
+                for info in list {
+                    guard let wid = info[kCGWindowNumber as String] as? CGWindowID else { continue }
+                    guard let layer = info[kCGWindowLayer as String] as? Int, layer == 0 else { continue }
+                    if satellites.contains(wid) { return wid }
+                }
+                return nil
+            }()
+            guard let satID = frontmostSat,
+                  let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satID }),
+                  let satWindow = satTarget.windowElement else {
+                debugLog("WindowAnchorRaise: Case D — no live satellite for anchor=\(focusedID)")
+                return
+            }
+            debugLog("WindowAnchorRaise: Case D — clicked anchor=\(focusedID), pickedSat=\(satID)")
+
+            let previouslyActive = activeSatellitePerWindowAnchor[focusedID]
+            if previouslyActive != satID {
+                restoreWindowPairFrames(anchorWID: focusedID, satelliteWID: satID)
+            }
+            activeSatellitePerWindowAnchor[focusedID] = satID
+
+            let spatialHandled: Bool = {
+                guard let clickedGID = groupIndexByWindow[focusedID],
+                      let satGID = groupIndexByWindow[satID] else { return false }
+                return clickedGID == satGID
+            }()
+            if !spatialHandled {
+                NSRunningApplication(processIdentifier: satTarget.processIdentifier)?.activate()
+                RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+                accessibilityService.raiseWindow(satWindow)
+            }
+            if CGSPrivate.isOrderWindowAvailable {
+                for other in satellites where other != 0 && other != satID {
+                    _ = CGSPrivate.orderWindow(other, mode: CGSPrivate.kCGSOrderBelow, relativeTo: satID)
+                }
+                if satID != 0 {
+                    _ = CGSPrivate.orderWindow(satID, mode: CGSPrivate.kCGSOrderBelow, relativeTo: focusedID)
+                }
+            }
+            rebuildAnchorSatelliteGroup(anchorWID: focusedID, satelliteWID: satID)
+        }
+    }
+
+    /// Drop a destroyed window's references from the window-anchor data.
+    /// Called from the AX-destroyed handler alongside
+    /// `removeDestroyedWindowFromSatellites`.
+    func removeDestroyedWindowFromWindowAnchorPairs(_ id: CGWindowID) {
+        var touched = false
+        if windowAnchorSatellites[id] != nil {
+            windowAnchorSatellites.removeValue(forKey: id)
+            savedWindowPairFrames.removeValue(forKey: id)
+            activeSatellitePerWindowAnchor.removeValue(forKey: id)
+            touched = true
+        }
+        for (anchorWID, sats) in windowAnchorSatellites where sats.contains(id) {
+            var updated = sats
+            updated.remove(id)
+            if updated.isEmpty {
+                windowAnchorSatellites.removeValue(forKey: anchorWID)
+            } else {
+                windowAnchorSatellites[anchorWID] = updated
+            }
+            if var perAnchor = savedWindowPairFrames[anchorWID] {
+                perAnchor.removeValue(forKey: id)
+                if perAnchor.isEmpty {
+                    savedWindowPairFrames.removeValue(forKey: anchorWID)
+                } else {
+                    savedWindowPairFrames[anchorWID] = perAnchor
+                }
+            }
+            if activeSatellitePerWindowAnchor[anchorWID] == id {
+                activeSatellitePerWindowAnchor.removeValue(forKey: anchorWID)
+            }
+            touched = true
+        }
+        if touched {
+            debugLog("WindowAnchorPair: removed destroyed wid=\(id) from window-anchor records")
+        }
+    }
+
+    /// Manual unlink of a window-anchor pair (badge `x` button).
+    func unlinkWindowAnchorPair(windowA: CGWindowID, windowB: CGWindowID) {
+        guard !windowAnchorSatellites.isEmpty else { return }
+        func tryRemove(anchor: CGWindowID, sat: CGWindowID) -> Bool {
+            guard var sats = windowAnchorSatellites[anchor], sats.contains(sat) else { return false }
+            sats.remove(sat)
+            if sats.isEmpty {
+                windowAnchorSatellites.removeValue(forKey: anchor)
+            } else {
+                windowAnchorSatellites[anchor] = sats
+            }
+            if var perAnchor = savedWindowPairFrames[anchor] {
+                perAnchor.removeValue(forKey: sat)
+                if perAnchor.isEmpty {
+                    savedWindowPairFrames.removeValue(forKey: anchor)
+                } else {
+                    savedWindowPairFrames[anchor] = perAnchor
+                }
+            }
+            if activeSatellitePerWindowAnchor[anchor] == sat {
+                activeSatellitePerWindowAnchor.removeValue(forKey: anchor)
+            }
+            return true
+        }
+        if tryRemove(anchor: windowA, sat: windowB) {
+            debugLog("WindowAnchorPair: unlinked anchor=\(windowA) sat=\(windowB)")
+        }
+        if tryRemove(anchor: windowB, sat: windowA) {
+            debugLog("WindowAnchorPair: unlinked anchor=\(windowB) sat=\(windowA)")
+        }
+    }
+
+    // MARK: - End of window-anchor satellite pairs
+
     /// Presents an `NSOpenPanel` for the user to pick an application bundle,
     /// then assigns its bundle identifier to the given preset rectangle.
     func requestAppBrowse(forSelectionIndex selectionIndex: Int, ofPresetID presetID: UUID) {

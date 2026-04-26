@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Tras aplicar una preselección de diseño con agrupamiento, podía reaparecer una insignia candidata «Crear grupo» entre ventanas que ya estaban agrupadas. Dos causas:
+  1. La revalidación de grupos posterior a la aplicación usaba la tolerancia de borde estricta de 2pt, mientras que la detección de candidatos usaba la tolerancia más amplia `gap + 4pt` — para cualquier diseño con espacio, la adyacencia del grupo existente se descartaba (grupo disuelto) y el mismo par se recogía inmediatamente como candidato a «Crear grupo». Ahora ambos pases usan la misma tolerancia consciente del espacio
+  2. Los pares ya enlazados mediante el mecanismo de satélites (anclaje de ventana o ranura de app) — por ejemplo un compañero inactivo de un par anclaje-ventana que sigue siendo geométricamente adyacente — ya no se ofrecen como candidatos a «Crear grupo», pues ya están enlazados mediante la maquinaria de raise de satélites
+  3. También se suprimen los pares en los que ambas ventanas ya pertenecen a agrupaciones *distintas*. Ejemplo: aplicar un preset agrupado izquierda/derecha a (WinA, WinB), luego a (WinC, WinD), y después arrastrar WinC hacia abajo hasta que quede adyacente al borde de WinB — la insignia que antes aparecía entre WinB y WinC ofrecía una fusión entre grupos que casi nunca es la intención. Los pares donde un lado sigue sin agrupar continúan mostrando una insignia candidata para que el flujo «arrastrar una ventana suelta junto a un grupo para unirse» siga funcionando
+
+- Las insignias de grupos enlazados ahora se acotan al **componente de agrupación de la ventana frontal** en lugar de basarse solo en compartir el PID de la app frontal. Antes, enfocar una ventana de la app X mostraba insignias de *todos* los grupos cuyos miembros casualmente compartieran esa app — incluidas agrupaciones de fondo totalmente ajenas. La nueva regla recorre todo el grafo de agrupación (grupo espacial primario + grupo de anclaje de ventana + grupo de satélites de ranura de app) partiendo del CGWindowID frontal y solo muestra insignias de los grupos que cruzan ese componente conexo
+
+### Cambiado
+
+- Al aplicar una preselección de diseño cuyo par agrupado afecta a una ventana que ya forma parte de un grupo existente, ya no se fusiona todo en un único grupo más grande. La ventana compartida se convierte en un «anclaje de ventana» y cada uno de sus compañeros (los demás miembros del grupo preexistente y el compañero recién añadido) se registra como satélite, reflejando el modelo que ya se usa para las ranuras de preselección asignadas a apps. Cada pareja conserva su propio diseño recordado: al hacer clic en un satélite, el anclaje pasa al frente y se restauran las posiciones guardadas de esa pareja; al hacer clic en el anclaje, el satélite que esté más al frente se convierte en la pareja activa. Ejemplo: con un grupo A↔B existente, aplicar una preselección que empareje C↔A deja A↔B intacto — al hacer clic en B, A vuelve junto a B en el diseño original A↔B; al hacer clic en C, A se coloca junto a C en el diseño C↔A de la preselección. La pareja activa muestra la insignia de enlace como antes; al cambiar entre satélites, el grupo espacial se reconstruye dinámicamente
+
 ## [5.1.1] - 2026-04-25
 
 ### Añadido

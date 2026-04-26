@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Après l'application d'un préréglage de mise en page avec regroupement, un badge candidat « Créer un groupe » pouvait réapparaître entre des fenêtres déjà groupées. Deux causes :
+  1. La revalidation des groupes après application utilisait la tolérance d'arête stricte de 2pt, tandis que la détection des candidats utilisait la tolérance plus large `gap + 4pt` — pour toute mise en page avec espacement, l'adjacence du groupe existant était abandonnée (groupe dissous) et la même paire était immédiatement reprise comme candidat « Créer un groupe ». Les deux passes utilisent désormais la même tolérance tenant compte de l'espacement
+  2. Les paires déjà liées via le mécanisme de satellite (ancre de fenêtre ou emplacement d'application) — par exemple un partenaire inactif d'une paire ancre-fenêtre qui reste géométriquement adjacent — ne sont plus proposées comme candidats « Créer un groupe », puisqu'elles sont déjà liées via la machinerie de raise des satellites
+  3. Les paires dont les deux fenêtres appartiennent déjà à des regroupements *distincts* sont également supprimées. Exemple : appliquer un préréglage groupé gauche/droite à (WinA, WinB), puis à (WinC, WinD), puis faire glisser WinC vers le bas jusqu'à ce qu'il soit adjacent au bord de WinB — le badge qui apparaissait auparavant entre WinB et WinC proposait une fusion inter-groupes qui n'est presque jamais l'intention. Les paires où un côté n'est pas encore groupé continuent d'afficher un badge candidat afin que le flux « faire glisser une fenêtre isolée à côté d'un groupe pour la rejoindre » continue de fonctionner
+
+- Les badges des groupes liés sont désormais limités au **composant de groupage de la fenêtre au premier plan** plutôt qu'au simple partage du PID de l'application au premier plan. Auparavant, mettre une fenêtre de l'application X au premier plan faisait apparaître les badges de *tous* les groupes dont des membres partageaient incidemment cette application — y compris des regroupements d'arrière-plan totalement étrangers. La nouvelle règle parcourt tout le graphe de regroupement (groupe spatial primaire + pool d'ancres de fenêtre + pool de satellites d'emplacement d'application) depuis le CGWindowID au premier plan et n'affiche que les badges des groupes qui croisent ce composant connexe
+
+### Modifié
+
+- L'application d'une préréglage de mise en page dont la paire groupée cible une fenêtre déjà membre d'un groupe existant ne fusionne plus tout en un seul grand groupe. La fenêtre partagée devient une « ancre de fenêtre » et chacun de ses partenaires (les autres membres du groupe préexistant et le partenaire nouvellement ajouté) est enregistré comme satellite, reflétant le modèle déjà utilisé pour les emplacements de préréglage assignés à une application. Chaque paire conserve sa propre disposition mémorisée : cliquer sur un satellite ramène l'ancre au premier plan et restaure les positions sauvegardées de cette paire ; cliquer sur l'ancre fait passer en paire active le satellite actuellement le plus au premier plan. Exemple : avec un groupe A↔B existant, appliquer un préréglage qui appaire C↔A laisse A↔B intact — cliquer sur B ramène A à côté de B dans la disposition originale A↔B ; cliquer sur C place A à côté de C selon la disposition C↔A du préréglage. La paire active affiche le badge de liaison comme avant ; basculer entre satellites reconstruit dynamiquement le groupe spatial
+
 ## [5.1.1] - 2026-04-25
 
 ### Ajouté

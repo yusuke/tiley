@@ -108,8 +108,11 @@ extension AppState {
     /// settle, then triggers the raise linkage if that window is a group member
     /// or an app-anchored satellite.
     func handleSystemMouseDown() {
-        // No groups or app-anchored satellites → nothing to do (save CPU).
-        guard !windowGroups.isEmpty || !appSlotSatellites.isEmpty else { return }
+        // No groups, app-anchored satellites, or window-anchored satellites
+        // → nothing to do (save CPU).
+        guard !windowGroups.isEmpty
+              || !appSlotSatellites.isEmpty
+              || !windowAnchorSatellites.isEmpty else { return }
         // Give the system a moment to finish the click handoff. ~50ms is enough.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
             self?.checkFrontmostForGroupRaise()
@@ -155,6 +158,9 @@ extension AppState {
         // satellite linkage: clicking a satellite raises the assigned app
         // window, and clicking the anchor raises the frontmost satellite.
         handleAppSlotSatelliteRaise(focusedID: cgID)
+        // Same idea for window-anchor satellite pairs (created when a preset
+        // apply would have merged two distinct primary groups).
+        handleWindowAnchorSatelliteRaise(focusedID: cgID)
     }
 
     // MARK: - Preset apply hook
@@ -196,6 +202,17 @@ extension AppState {
                 a: widA, frameA: frameA, b: widB, frameB: frameB, edgeEpsilon: epsilon
             ) else {
                 debugLog("WindowGrouping: autoLinkPresetGroups skipped pair (\(pair.indexA),\(pair.indexB)) — target frames not adjacent within epsilon \(epsilon)")
+                continue
+            }
+            // Conflict detection: if linking this pair would expand or merge
+            // a primary group that already contains a third (non-pair)
+            // window, route the pair through the window-anchor satellite
+            // mechanism instead. The shared window becomes the anchor and
+            // the pre-existing group's other members become satellites
+            // alongside the new partner.
+            if let conflict = detectWindowAnchorConflict(widA: widA, widB: widB) {
+                debugLog("WindowGrouping: autoLinkPresetGroups conflict — routing to window-anchor pair anchor=\(conflict.anchor) partner=\(conflict.partner)")
+                registerWindowAnchorPair(anchorWID: conflict.anchor, partnerWID: conflict.partner)
                 continue
             }
             debugLog("WindowGrouping: autoLinkPresetGroups linking pair (\(pair.indexA),\(pair.indexB)) windows=\(widA),\(widB)")
@@ -285,6 +302,13 @@ extension AppState {
             debugLog("WindowGrouping:   window \(wid) frame=\(f)")
         }
 
+        // Use one epsilon for both group revalidation and candidate detection
+        // so that a gapped layout doesn't simultaneously (a) drop the
+        // group's adjacency under the strict default tolerance and (b)
+        // surface a "form group" candidate badge under the wider gap-aware
+        // tolerance for the very same pair.
+        let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+
         // Revalidate each existing group's adjacencies against current frames
         // and drop pairs that no longer touch. Adjacencies on the screen-edge
         // side of a layout-resized window are unlinked up front in
@@ -301,7 +325,7 @@ extension AppState {
             var retained: [WindowAdjacency] = []
             for adj in group.adjacencies {
                 guard let fA = frames[adj.windowA], let fB = frames[adj.windowB] else { continue }
-                if let newAdj = WindowAdjacencyDetector.adjacency(a: adj.windowA, frameA: fA, b: adj.windowB, frameB: fB) {
+                if let newAdj = WindowAdjacencyDetector.adjacency(a: adj.windowA, frameA: fA, b: adj.windowB, frameB: fB, edgeEpsilon: epsilon) {
                     retained.append(newAdj)
                 }
             }
@@ -315,11 +339,6 @@ extension AppState {
             windowGroups[gid] = group
         }
 
-        // Candidate detection: use only the subset of frames within scope.
-        // Widen the tolerance to `gap + 4pt` so layouts that use a gap still
-        // register as "touching" for badge purposes.
-        let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
-
         // If targetWindowIDs is nil, skip candidate detection entirely —
         // only existing groups are revalidated.
         if targetWindowIDs != nil {
@@ -330,15 +349,15 @@ extension AppState {
                 debugLog("WindowGrouping:   adj windowA=\(adj.windowA) windowB=\(adj.windowB) edgeOfA=\(adj.edgeOfA.rawValue) mid=\(adj.midpoint)")
             }
             // Merge: keep existing pending candidates, add newly detected ones,
-            // and exclude adjacencies that are already inside an existing group.
+            // and drop any pair that should be suppressed (same group, satellite-
+            // linked, or two distinct already-grouped clusters). Existing pendings
+            // are re-validated too so stale entries from before a group was
+            // formed don't survive.
             var merged: [AdjacencyKey: WindowAdjacency] = [:]
-            for adj in pendingGroupCandidates {
+            for adj in pendingGroupCandidates where !shouldSuppressGroupingCandidate(adj) {
                 merged[adj.unorderedKey] = adj
             }
-            for adj in detected {
-                let aInGroup = groupIndexByWindow[adj.windowA]
-                let bInGroup = groupIndexByWindow[adj.windowB]
-                if let a = aInGroup, let b = bInGroup, a == b { continue }
+            for adj in detected where !shouldSuppressGroupingCandidate(adj) {
                 merged[adj.unorderedKey] = adj
             }
             pendingGroupCandidates = Array(merged.values)
@@ -426,16 +445,16 @@ extension AppState {
         }
         debugLog("WindowGrouping: manual-move settle — moved=\(movedIDs.count) detected=\(detected.count) (epsilon=\(epsilon))")
 
+        // Re-validate existing pendings AND filter newly-detected ones the
+        // same way. The shared rule covers same-group, satellite-linked, and
+        // both-sides-already-grouped cases (which arise when dragging a
+        // member of one group near a member of another and would otherwise
+        // surface a misleading "form group" merge offer).
         var merged: [AdjacencyKey: WindowAdjacency] = [:]
-        for adj in pendingGroupCandidates {
+        for adj in pendingGroupCandidates where !shouldSuppressGroupingCandidate(adj) {
             merged[adj.unorderedKey] = adj
         }
-        for adj in detected {
-            // Skip pairs already inside the same existing group.
-            if let a = groupIndexByWindow[adj.windowA],
-               let b = groupIndexByWindow[adj.windowB], a == b {
-                continue
-            }
+        for adj in detected where !shouldSuppressGroupingCandidate(adj) {
             merged[adj.unorderedKey] = adj
         }
         pendingGroupCandidates = Array(merged.values)
@@ -682,6 +701,16 @@ extension AppState {
     /// drag/resize starts so badges disappear quickly).
     func refreshBadgeOverlays(fastHide: Bool = false) {
         let frontmostPID = NSWorkspace.shared.frontmostApplication?.processIdentifier
+        // Resolve the actual frontmost CGWindowID (not just its PID) so we
+        // can scope linked-group badges to the group containing it (or
+        // transitively connected via the satellite mechanism). PID-only
+        // gating used to also surface badges for unrelated groups whose
+        // members happened to share an app with the frontmost window.
+        let frontmostWID: CGWindowID? = {
+            guard let pid = frontmostPID, pid != getpid() else { return nil }
+            return resolveFocusedWindowID(for: pid)
+        }()
+        let frontmostConnectedSet = windowsConnectedToFrontmost(frontmostWID: frontmostWID)
         let now = CFAbsoluteTimeGetCurrent()
         var badges: [GroupLinkBadge] = []
 
@@ -717,6 +746,15 @@ extension AppState {
             // Suppress badges for pairs where either side is hidden behind
             // another window.
             if occludedIDs.contains(adj.windowA) || occludedIDs.contains(adj.windowB) { continue }
+            // Suppress badges for pairs that should not be grouping
+            // candidates: same primary group, satellite-linked, or both
+            // sides already participate in distinct groupings (a "form
+            // group" between them would offer a cross-group merge that's
+            // almost never what the user wants).
+            if shouldSuppressGroupingCandidate(adj) {
+                expiredKeys.append(adj.unorderedKey)
+                continue
+            }
             badges.append(GroupLinkBadge(
                 id: adj.unorderedKey,
                 state: .unlinked,
@@ -738,13 +776,16 @@ extension AppState {
             pendingCandidateFadeItems.removeValue(forKey: key)?.cancel()
         }
 
-        // Linked badges (members of an existing group): shown when any member
-        // belongs to the frontmost PID. Hidden while a drag/resize is active.
+        // Linked badges (members of an existing group): shown only when a
+        // member is the **frontmost window** (or transitively connected to
+        // it via the satellite mechanism). Without this, switching focus to
+        // a window in app X surfaced the badges of *every* group that
+        // happened to also contain a window owned by app X, including
+        // unrelated background groupings. Hidden entirely while a drag/
+        // resize is active.
         if !isInteracting {
             for group in windowGroups.values {
-                let groupIsActive = group.members.contains { cgWindowID in
-                    availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID })?.processIdentifier == frontmostPID
-                }
+                let groupIsActive = !group.members.isDisjoint(with: frontmostConnectedSet)
                 guard groupIsActive else { continue }
                 for adj in group.adjacencies {
                     if occludedIDs.contains(adj.windowA) || occludedIDs.contains(adj.windowB) { continue }
@@ -1453,6 +1494,8 @@ extension AppState {
         // Explicit unlink → drop the satellite + frame memory for whichever
         // direction of the pair is an app-anchor/satellite binding.
         unlinkAppSlotSatellitePair(windowA: adj.windowA, windowB: adj.windowB)
+        // Same for window-anchor satellite pairs.
+        unlinkWindowAnchorPair(windowA: adj.windowA, windowB: adj.windowB)
 
         guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB] else { return }
         guard var group = windowGroups[gid] else { return }
@@ -1567,6 +1610,7 @@ extension AppState {
             // Keep the saved-pair-frames memory fresh so that switching back
             // to this pair later restores its last-known position.
             updateSavedFramesIfActivePair(movedWID: id)
+            updateSavedWindowPairFramesIfActive(movedWID: id)
 
             let isGroupMember = groupIndexByWindow[id] != nil
             let isPendingCandidate = pendingGroupCandidates.contains { $0.windowA == id || $0.windowB == id }
@@ -1617,6 +1661,8 @@ extension AppState {
             manuallyMovedWindowIDs.remove(id)
             // Also drop any app-slot satellite references to this window.
             removeDestroyedWindowFromSatellites(id)
+            // ...and any window-anchor satellite references.
+            removeDestroyedWindowFromWindowAnchorPairs(id)
             removeFrameMemory(for: id)
         case .raised(let id):
             handleGroupMemberRaised(id: id)
@@ -1624,6 +1670,7 @@ extension AppState {
             // application switcher activations (which don't fire a mouse
             // event) can trigger the anchor-or-satellite raise.
             handleAppSlotSatelliteRaise(focusedID: id)
+            handleWindowAnchorSatelliteRaise(focusedID: id)
         }
     }
 

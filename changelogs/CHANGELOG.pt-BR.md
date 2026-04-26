@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Após aplicar uma predefinição de layout com agrupamento, um emblema candidato "Criar grupo" podia reaparecer entre janelas já agrupadas. Duas causas:
+  1. A revalidação de grupos pós-aplicação usava a tolerância de borda estrita de 2pt, enquanto a detecção de candidatos usava a tolerância mais ampla `gap + 4pt` — para qualquer layout com espaçamento, a adjacência do grupo existente era descartada (grupo dissolvido) e o mesmo par era imediatamente captado como candidato a "Criar grupo". Ambos os passos agora usam a mesma tolerância consciente do espaçamento
+  2. Pares já vinculados pelo mecanismo de satélite (âncora de janela ou slot de app) — por exemplo, um parceiro inativo de um par âncora-janela que continua geometricamente adjacente — não são mais oferecidos como candidatos a "Criar grupo", pois já estão vinculados pela maquinaria de raise dos satélites
+  3. Pares em que ambas as janelas já pertencem a agrupamentos *distintos* também são suprimidos. Exemplo: aplicar uma predefinição agrupada esquerda/direita a (WinA, WinB), depois a (WinC, WinD), então arrastar WinC para baixo até ficar adjacente à borda de WinB — o emblema que antes aparecia entre WinB e WinC oferecia uma mesclagem entre grupos que quase nunca é a intenção. Pares em que um lado ainda está sem grupo continuam exibindo um emblema candidato para que o fluxo "arrastar uma janela solta para junto de um grupo para entrar" continue funcionando
+
+- Os emblemas de grupos vinculados agora são restritos ao **componente de agrupamento da janela em primeiro plano** em vez de simplesmente compartilhar o PID do app em primeiro plano. Antes, focar uma janela do app X exibia emblemas de *todos* os grupos cujos membros por acaso compartilhassem esse app — incluindo agrupamentos de plano de fundo totalmente alheios. A nova regra percorre todo o grafo de agrupamento (grupo espacial primário + pool de âncoras de janela + pool de satélites de slot de app) a partir do CGWindowID em primeiro plano e só exibe emblemas dos grupos que cruzam esse componente conexo
+
+### Alterado
+
+- Ao aplicar uma predefinição de layout cujo par agrupado afeta uma janela que já faz parte de um grupo existente, tudo não é mais mesclado em um único grupo maior. A janela compartilhada se torna uma "âncora de janela" e cada um de seus parceiros (os outros membros do grupo preexistente e o parceiro recém-adicionado) é registrado como satélite, espelhando o modelo já usado para slots de predefinição atribuídos a aplicativos. Cada par mantém seu próprio layout lembrado: clicar em um satélite traz a âncora para frente e restaura as posições salvas desse par; clicar na âncora faz com que o satélite atualmente mais à frente se torne o par ativo. Exemplo: com um grupo A↔B existente, aplicar uma predefinição que pareia C↔A deixa A↔B intacto — clicar em B traz A de volta ao lado de B no layout A↔B original; clicar em C posiciona A ao lado de C no layout C↔A da predefinição. O par ativo exibe o emblema de vínculo como antes; alternar entre satélites reconstrói dinamicamente o grupo espacial
+
 ## [5.1.1] - 2026-04-25
 
 ### Adicionado

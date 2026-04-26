@@ -263,6 +263,22 @@ final class AppState: NSObject, NSMenuDelegate {
     /// anchor or this satellite updates `savedSatellitePairFrames`.
     @ObservationIgnored var activeSatellitePerBundle: [String: CGWindowID] = [:]
 
+    /// Same idea as `appSlotSatellites`, but keyed by a **window** (CGWindowID)
+    /// instead of a bundleID. Created when applying a preset whose grouped
+    /// pair (X, Y) would otherwise merge into an existing primary group that
+    /// already contains a third window: the shared window becomes a window-
+    /// anchor and each of its remembered partners is recorded as a satellite.
+    /// Lets one window participate in several distinct pair-layouts that
+    /// activate independently when a partner is brought to the front.
+    @ObservationIgnored var windowAnchorSatellites: [CGWindowID: Set<CGWindowID>] = [:]
+    /// Saved frames per `(anchorWID, satelliteWID)` — direct analog of
+    /// `savedSatellitePairFrames` for the window-anchor case.
+    @ObservationIgnored var savedWindowPairFrames: [CGWindowID: [CGWindowID: SatellitePairFrames]] = [:]
+    /// Active satellite per window-anchor — whichever partner was most
+    /// recently surfaced. Used when the anchor itself is clicked: the
+    /// frontmost remembered satellite becomes the active pair.
+    @ObservationIgnored var activeSatellitePerWindowAnchor: [CGWindowID: CGWindowID] = [:]
+
     /// Timer that keeps `isApplyingGroupTransform` set during the post-
     /// restore settle window (~2 s). Prevents the spatial-group polling
     /// follower from interfering while the app (e.g. Xcode) auto-

@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Nach dem Anwenden eines Layout-Presets mit Gruppierung konnte ein „Gruppe bilden"-Kandidaten-Badge erneut zwischen bereits gruppierten Fenstern erscheinen. Zwei Ursachen waren beteiligt:
+  1. Die Neuvalidierung bestehender Gruppen nach dem Apply nutzte die strikte 2pt-Kantentoleranz, während die Kandidatenerkennung die weitere `gap + 4pt`-Toleranz verwendete — bei jedem Layout mit Lücke wurde die Adjazenz der bestehenden Gruppe verworfen (Gruppe aufgelöst) und dasselbe Paar sofort als „Gruppe bilden"-Kandidat erfasst. Beide Durchläufe verwenden jetzt dieselbe lückenbewusste Toleranz
+  2. Paare, die bereits über den Satelliten-Mechanismus (Fenster-Anker oder App-Slot) verknüpft sind — etwa ein inaktiver Partner eines Fenster-Anker-Paars, der noch geometrisch benachbart ist — werden nicht mehr als „Gruppe bilden"-Kandidaten angeboten, da sie bereits über die Satelliten-Raise-Maschinerie verknüpft sind
+  3. Auch Paare, bei denen beide Fenster bereits zu *unterschiedlichen* Gruppierungen gehören, werden unterdrückt. Beispiel: Apply eines links/rechts gruppierten Presets auf (WinA, WinB), dann auf (WinC, WinD), dann WinC nach unten ziehen, sodass es kantenmäßig an WinB stößt — das vorher zwischen WinB und WinC erscheinende Badge bot eine gruppenübergreifende Verschmelzung an, die fast nie die Absicht ist. Paare, bei denen eine Seite noch ungruppiert ist, zeigen weiterhin ein Kandidaten-Badge, sodass der „ein einzelnes Fenster neben eine Gruppe ziehen, um beizutreten"-Workflow erhalten bleibt
+
+- Badges verknüpfter Gruppen werden jetzt auf die **Gruppierungskomponente des vordersten Fensters** beschränkt statt auf die PID der vordersten App. Bisher löste das Fokussieren eines Fensters in App X Badges für *jede* Gruppe aus, deren Mitglieder zufällig dieselbe App teilten — auch völlig unbeteiligte Hintergrundgruppen. Die neue Regel durchläuft den vollständigen Gruppierungsgraphen (primäre räumliche Gruppe + Fenster-Anker-Pool + App-Slot-Satelliten-Pool) ausgehend von der vordersten CGWindowID und zeigt nur Badges für Gruppen an, die diese Zusammenhangskomponente schneiden
+
+### Geändert
+
+- Beim Anwenden eines Layout-Presets, dessen gruppiertes Paar ein Fenster betrifft, das bereits Teil einer bestehenden Gruppe ist, werden nicht mehr alle Fenster in eine einzige größere Gruppe zusammengeführt. Das gemeinsame Fenster wird zu einem „Fenster-Anker" und jeder seiner Partner (die anderen Mitglieder der bestehenden Gruppe sowie der neu hinzugefügte Partner) wird als Satellit registriert — analog zum bereits für app-zugewiesene Preset-Slots verwendeten Modell. Jedes Paar behält sein eigenes gespeichertes Layout: Ein Klick auf einen Satelliten holt den Anker nach vorn und stellt die gespeicherten Positionen dieses Paars wieder her; ein Klick auf den Anker bringt denjenigen Satelliten in den Vordergrund, der derzeit am weitesten vorn ist. Beispiel: Bei einer bestehenden A↔B-Gruppe lässt das Anwenden eines Presets, das C↔A paart, A↔B intakt — ein Klick auf B bringt A im ursprünglichen A↔B-Layout neben B zurück, ein Klick auf C bringt A im Preset-Layout neben C. Das aktive Paar zeigt das verknüpfte Badge wie zuvor; das Wechseln zwischen Satelliten baut die räumliche Gruppe dynamisch um
+
 ## [5.1.1] - 2026-04-25
 
 ### Hinzugefügt

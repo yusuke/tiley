@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- After applying a preset layout with grouping, a "form group" candidate badge could resurface between windows that were already grouped. Two issues caused this:
+  1. The post-apply group revalidation used the strict 2pt edge tolerance, while candidate detection used the wider `gap + 4pt` tolerance — so for any layout with a gap, the existing group's adjacency was dropped (group dissolved), then the same pair was immediately picked up as a "form group" candidate. Both passes now use the same gap-aware tolerance
+  2. Pairs already linked via the satellite mechanism (window-anchor or app-slot) — for example an inactive partner of a window-anchor pair that's still geometrically adjacent — are no longer offered as "form group" candidates, since they're already linked through the satellite raise machinery
+  3. Pairs where both windows already belong to *distinct* groupings are also suppressed. Example: apply a left/right grouped preset to (WinA, WinB), then to (WinC, WinD), then drag WinC down so it ends up edge-adjacent to WinB — the badge that previously appeared between WinB and WinC offered a cross-group merge that's almost never the intent. Pairs where one side is still ungrouped continue to surface a candidate badge so the existing "drag a stray window next to a group to join it" flow keeps working
+
+- Linked-group badges are now scoped to the **frontmost window's grouping component** instead of just sharing the frontmost app's PID. Previously, focusing a window in app X surfaced badges for *every* group whose members happened to share that app — including unrelated background groupings. The new rule walks the full grouping graph (primary spatial group + window-anchor pool + app-slot satellite pool) starting from the frontmost CGWindowID and only renders badges for groups that intersect that connected component
+
+### Changed
+
+- Applying a layout preset whose grouped pair targets a window that's already part of an existing group no longer merges everything into one larger group. The shared window becomes a window-anchor and each of its partners (the pre-existing group's other members and the newly-applied partner) is registered as a satellite, mirroring the model already used for app-assigned preset slots. Each pair has its own remembered layout: clicking a satellite raises the anchor and restores that pair's positions; clicking the anchor surfaces whichever satellite is currently most frontmost. Example: with an existing A↔B group, applying a preset that pairs C↔A leaves A↔B intact — clicking B brings A back next to B in the original layout, while clicking C brings A next to C in the preset's layout. The active pair shows the linked badge as before; switching between satellites swaps the spatial group dynamically
+
 ## [5.1.1] - 2026-04-25
 
 ### Added
