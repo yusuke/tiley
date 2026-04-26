@@ -3,6 +3,65 @@
     <channel>
         <title>Tiley</title>
         <item>
+            <title>5.1.3</title>
+            <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
+<ul>
+<li>Окно настроек теперь открывается по центру всего экрана, а не по центру видимой области без учёта Dock, и появляется в фактическом центре экрана независимо от расположения Dock.</li>
+</ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>A janela de Ajustes agora abre centralizada na tela inteira em vez de no centro da área visível sem o Dock, aparecendo no centro real da tela independentemente da posição do Dock.</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>La finestra Impostazioni ora si apre al centro dell'intero schermo invece che al centro dell'area visibile esclusa del Dock, quindi appare nel vero centro dello schermo indipendentemente dalla posizione del Dock.</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>La fenêtre des Réglages s'ouvre désormais centrée sur l'écran entier, et non plus au centre de la zone visible excluant le Dock : elle apparaît au véritable centre de l'écran quelle que soit la position du Dock.</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>La ventana de Ajustes ahora se abre centrada en toda la pantalla en lugar de centrada en el área visible sin el Dock, por lo que aparece en el centro real de la pantalla independientemente de la posición del Dock.</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Das Einstellungsfenster wird nun in der Mitte des gesamten Bildschirms geöffnet statt im Zentrum des sichtbaren Bereichs ohne Dock. Es erscheint damit unabhängig von der Position des Docks in der tatsächlichen Bildschirmmitte.</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>設定視窗現在會顯示在整個螢幕的中央，而非排除 Dock 後的可見區域中央。無論 Dock 位於何處，都會顯示在螢幕的實際中央。</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>设置窗口现在显示在整个屏幕的中央，而不是排除 Dock 后的可见区域中央。无论 Dock 位置如何，都会显示在屏幕的实际中央。</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>설정 창이 Dock을 제외한 표시 영역의 중앙이 아니라 화면 전체의 중앙에 열리도록 수정했습니다. Dock 위치와 관계없이 실제 화면 중앙에 표시됩니다.</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>設定ウインドウが、Dock を除いた表示領域の中央ではなく、画面全体の中央に表示されるようになりました。Dock の位置にかかわらず、本来の画面の中央に開きます。</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>The Settings window now opens centered on the full screen instead of centered within the Dock-excluded visible area, so it appears at the actual screen center regardless of the Dock's position.</li>
+</ul>]]></description>
+            <pubDate>Mon, 27 Apr 2026 08:47:48 +0900</pubDate>
+            <sparkle:version>513</sparkle:version>
+            <sparkle:shortVersionString>5.1.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley-5.1.3.zip" length="6473197" type="application/octet-stream" sparkle:edSignature="qTSICLA666H8xTK9ZBQW7cF58fqgkG9SGy0sYDbyIN23/zLhP6lTaF7UqjoV6hZaCTDDciAaocr37dJP2kE9AQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley513-512.delta" sparkle:deltaFrom="512" length="29746" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="fCVoYkuXuRw+TQA4QRjhsDUFxjrzDckhgGBSfwBnE76BFG1hJdOmvVyY4e3zDmt+bxFrBfdWamtUDjkPi/jGBA=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley513-511.delta" sparkle:deltaFrom="511" length="399878" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="989qjcLqT8EdEwk8rmq9tWqyffXsncvpB8laKRfMzPoiIHo8xBlW200eOTFtsVMoKmyoJ7CkePHzgt7OVEo8DQ=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley513-510.delta" sparkle:deltaFrom="510" length="644278" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="BqeDWgv2h3CeZQw8q3XOUpkpbKVvapFeDHL2rJeTJa+knNgzYJMVZ+cAktKZjjehwiSRC35iOhixknHy/ujQBg=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley513-501.delta" sparkle:deltaFrom="501" length="1137046" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="scq2oxeGiz9JHcHdq0ACcZJF3oyBoLoawf/BWplXbipGaGjuAZsaLxPREYrbIFcmgl2uhUL/Ctw57wkxnAmVAw=="/>
+                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley513-500.delta" sparkle:deltaFrom="500" length="1136402" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="SQQIqKXuqp2jzvQpHY/BdGBURDV7RrgGoVosslPGdWAOf4X7XAM13jMKBK6eRIZ9H1abxO0LllkpzOyEQbGhDg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>5.1.2</title>
             <description xml:lang="ru"><![CDATA[<h3>Исправлено</h3>
 <ul>
@@ -114,11 +173,111 @@
 <ul>
 <li>Applying a layout preset whose grouped pair targets a window that's already part of an existing group no longer merges everything into one larger group. The shared window becomes a window-anchor and each of its partners (the pre-existing group's other members and the newly-applied partner) is registered as a satellite, mirroring the model already used for app-assigned preset slots. Each pair has its own remembered layout: clicking a satellite raises the anchor and restores that pair's positions; clicking the anchor surfaces whichever satellite is currently most frontmost. Example: with an existing A↔B group, applying a preset that pairs C↔A leaves A↔B intact — clicking B brings A back next to B in the original layout, while clicking C brings A next to C in the preset's layout. The active pair shows the linked badge as before; switching between satellites swaps the spatial group dynamically</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Corrigido</h3>
+<ul>
+<li>Não aparece mais o emblema candidato "Criar grupo" entre janelas já vinculadas — nem entre pares que ficam adjacentes por acaso após uma predefinição, nem entre pares pertencentes a dois grupos distintos, nem entre pares já conectados pelo mecanismo de satélites das predefinições com apps atribuídos.</li>
+<li>Os emblemas de grupos vinculados agora aparecem apenas para o grupo que contém a janela em primeiro plano (ou conectado a ela via satélites). Os emblemas de grupos de fundo não relacionados, que apenas compartilhavam o app da janela focalizada, sumiram.</li>
+<li>Trazer uma janela agrupada para a frente — clicando, selecionando-a na barra lateral do Tiley e pressionando Enter, ou via click-to-activate do macOS — agora traz o grupo inteiro junto de forma confiável. Foram corrigidos vários casos em que uma janela irmã do grupo permanecia atrás de outra janela (janelas de outro app intercaladas entre membros do grupo, o app reascendendo a janela principal anterior em vez da selecionada e a animação de restauração de deslocamento fora da tela do próprio Tiley sendo interpretada como arrasto manual).</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>Ao aplicar uma predefinição de layout cujo par agrupado afeta uma janela que já faz parte de um grupo existente, tudo não é mais mesclado em um único grupo maior. A janela compartilhada se torna uma "âncora de janela" e cada um de seus parceiros (os outros membros do grupo preexistente e o parceiro recém-adicionado) é registrado como satélite, espelhando o modelo já usado para slots de predefinição atribuídos a aplicativos. Cada par mantém seu próprio layout lembrado: clicar em um satélite traz a âncora para frente e restaura as posições salvas desse par; clicar na âncora faz com que o satélite atualmente mais à frente se torne o par ativo. Exemplo: com um grupo A↔B existente, aplicar uma predefinição que pareia C↔A deixa A↔B intacto — clicar em B traz A de volta ao lado de B no layout A↔B original; clicar em C posiciona A ao lado de C no layout C↔A da predefinição. O par ativo exibe o emblema de vínculo como antes; alternar entre satélites reconstrói dinamicamente o grupo espacial</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Corretto</h3>
+<ul>
+<li>Tra finestre già collegate non compare più il badge candidato «Crea gruppo» — né tra coppie diventate adiacenti per caso dopo l'applicazione di una preimpostazione, né tra coppie appartenenti a due gruppi distinti, né tra coppie già connesse tramite il meccanismo di satellite delle preimpostazioni con app assegnate.</li>
+<li>I badge dei gruppi collegati ora vengono mostrati solo per il gruppo che contiene la finestra in primo piano (o connesso a essa tramite satelliti). I badge di gruppi di sfondo non correlati che condividevano semplicemente l'app della finestra focalizzata sono spariti.</li>
+<li>Portare in primo piano una finestra raggruppata — con un clic, selezionandola nella sidebar di Tiley e premendo Invio, o tramite il click-to-activate di macOS — porta ora avanti l'intero gruppo in modo affidabile. Sono stati corretti diversi casi in cui una finestra sorella del gruppo restava dietro un'altra finestra (finestre di un'altra app intercalate tra membri del gruppo, l'app rialzava la finestra principale precedente al posto di quella selezionata, e l'animazione di ripristino dei decentramenti fuori schermo di Tiley stesso veniva scambiata per un trascinamento manuale).</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Applicando una preimpostazione di layout la cui coppia raggruppata coinvolge una finestra già membro di un gruppo esistente, tutto non viene più unito in un unico gruppo più grande. La finestra condivisa diventa un'«ancora finestra» e ciascuno dei suoi partner (gli altri membri del gruppo preesistente e il partner appena aggiunto) viene registrato come satellite, rispecchiando il modello già usato per gli slot di preimpostazione assegnati alle app. Ogni coppia mantiene il proprio layout memorizzato: cliccando su un satellite l'ancora viene portata in primo piano e vengono ripristinate le posizioni salvate di quella coppia; cliccando sull'ancora, il satellite attualmente più in primo piano diventa la coppia attiva. Esempio: con un gruppo A↔B esistente, applicare una preimpostazione che accoppia C↔A lascia A↔B intatto — cliccando B, A torna accanto a B nel layout originale A↔B; cliccando C, A si posiziona accanto a C nel layout C↔A della preimpostazione. La coppia attiva mostra il badge di collegamento come prima; il passaggio tra satelliti ricostruisce dinamicamente il gruppo spaziale</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Corrigé</h3>
+<ul>
+<li>Plus aucun badge candidat « Créer un groupe » n'apparaît entre des fenêtres déjà liées — qu'il s'agisse de paires devenues adjacentes par hasard après l'application d'un préréglage, de paires appartenant à deux groupes existants distincts, ou de paires déjà connectées via le mécanisme de satellite des préréglages avec applications assignées.</li>
+<li>Les badges des groupes liés ne sont désormais affichés que pour le groupe contenant la fenêtre au premier plan (ou relié à elle via les satellites). Les badges des groupes d'arrière-plan sans rapport, qui partageaient simplement l'application de la fenêtre focalisée, ont disparu.</li>
+<li>Mettre une fenêtre groupée au premier plan — par clic, par sélection dans la barre latérale de Tiley puis Entrée, ou via le clic-pour-activer de macOS — amène désormais l'ensemble du groupe en avant de manière fiable. Plusieurs cas où une fenêtre sœur du groupe restait derrière une autre fenêtre sont corrigés (fenêtres d'une autre application coincées entre des membres du groupe, l'application réascendant la précédente fenêtre principale plutôt que la fenêtre sélectionnée, et l'animation de restauration des décalages hors écran de Tiley elle-même qui était confondue avec un glissement manuel).</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>L'application d'une préréglage de mise en page dont la paire groupée cible une fenêtre déjà membre d'un groupe existant ne fusionne plus tout en un seul grand groupe. La fenêtre partagée devient une « ancre de fenêtre » et chacun de ses partenaires (les autres membres du groupe préexistant et le partenaire nouvellement ajouté) est enregistré comme satellite, reflétant le modèle déjà utilisé pour les emplacements de préréglage assignés à une application. Chaque paire conserve sa propre disposition mémorisée : cliquer sur un satellite ramène l'ancre au premier plan et restaure les positions sauvegardées de cette paire ; cliquer sur l'ancre fait passer en paire active le satellite actuellement le plus au premier plan. Exemple : avec un groupe A↔B existant, appliquer un préréglage qui appaire C↔A laisse A↔B intact — cliquer sur B ramène A à côté de B dans la disposition originale A↔B ; cliquer sur C place A à côté de C selon la disposition C↔A du préréglage. La paire active affiche le badge de liaison comme avant ; basculer entre satellites reconstruit dynamiquement le groupe spatial</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Corregido</h3>
+<ul>
+<li>Ya no aparece la insignia candidata «Crear grupo» entre ventanas que ya están enlazadas — ni entre pares que tras aplicar un preset quedan adyacentes por casualidad, ni entre pares que pertenecen a dos grupos distintos, ni entre pares ya conectados mediante el mecanismo de satélites de los presets con apps asignadas.</li>
+<li>Las insignias de grupos enlazados ahora se muestran solo para el grupo que contiene la ventana frontal (o que está conectado a ella mediante satélites). Las insignias de grupos de fondo no relacionados que solo compartían la app de la ventana enfocada han desaparecido.</li>
+<li>Llevar una ventana agrupada al frente — haciendo clic, seleccionándola en la barra lateral de Tiley y pulsando Enter, o mediante el click-to-activate de macOS — ahora trae al grupo entero de manera fiable. Se han corregido varios casos en los que una ventana hermana del grupo quedaba detrás de otra ventana (ventanas de otra app intercaladas entre miembros del grupo, la app reascendía la ventana principal anterior por encima de la seleccionada, y la animación de restauración del desplazamiento fuera de pantalla del propio Tiley se confundía con un arrastre manual).</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Al aplicar una preselección de diseño cuyo par agrupado afecta a una ventana que ya forma parte de un grupo existente, ya no se fusiona todo en un único grupo más grande. La ventana compartida se convierte en un «anclaje de ventana» y cada uno de sus compañeros (los demás miembros del grupo preexistente y el compañero recién añadido) se registra como satélite, reflejando el modelo que ya se usa para las ranuras de preselección asignadas a apps. Cada pareja conserva su propio diseño recordado: al hacer clic en un satélite, el anclaje pasa al frente y se restauran las posiciones guardadas de esa pareja; al hacer clic en el anclaje, el satélite que esté más al frente se convierte en la pareja activa. Ejemplo: con un grupo A↔B existente, aplicar una preselección que empareje C↔A deja A↔B intacto — al hacer clic en B, A vuelve junto a B en el diseño original A↔B; al hacer clic en C, A se coloca junto a C en el diseño C↔A de la preselección. La pareja activa muestra la insignia de enlace como antes; al cambiar entre satélites, el grupo espacial se reconstruye dinámicamente</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Behoben</h3>
+<ul>
+<li>Zwischen bereits verknüpften Fenstern erscheint kein „Gruppe bilden"-Kandidaten-Badge mehr — weder zwischen Paaren, die nach einem Preset zufällig aneinanderstoßen, noch zwischen Paaren aus zwei unterschiedlichen bestehenden Gruppen, noch zwischen Paaren, die über den Satelliten-Mechanismus eines app-zugewiesenen Presets verbunden sind.</li>
+<li>Badges verknüpfter Gruppen erscheinen nur noch für die Gruppe, die das vorderste Fenster enthält (oder transitiv über Satelliten daran angeschlossen ist). Badges unbeteiligter Hintergrundgruppen, die nur zufällig die App des fokussierten Fensters teilen, werden nicht mehr eingeblendet.</li>
+<li>Das Anheben eines gruppierten Fensters — per Klick, per Auswahl in der Tiley-Sidebar und Enter oder über macOS' Click-to-activate — bringt die ganze Gruppe nun zuverlässig gemeinsam nach vorn. Mehrere Fälle, in denen ein Geschwisterfenster zuvor hinter einem anderen Fenster verborgen blieb, sind behoben (Fenster fremder Apps, die zwischen Gruppenmitgliedern eingeklemmt waren; das vorher als Hauptfenster gemerkte Fenster derselben App, das vor das ausgewählte Fenster gehoben wurde; Tileys eigene Wiederherstellung der ausgelagerten Fenster, die als manueller Drag missdeutet wurde).</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Beim Anwenden eines Layout-Presets, dessen gruppiertes Paar ein Fenster betrifft, das bereits Teil einer bestehenden Gruppe ist, werden nicht mehr alle Fenster in eine einzige größere Gruppe zusammengeführt. Das gemeinsame Fenster wird zu einem „Fenster-Anker" und jeder seiner Partner (die anderen Mitglieder der bestehenden Gruppe sowie der neu hinzugefügte Partner) wird als Satellit registriert — analog zum bereits für app-zugewiesene Preset-Slots verwendeten Modell. Jedes Paar behält sein eigenes gespeichertes Layout: Ein Klick auf einen Satelliten holt den Anker nach vorn und stellt die gespeicherten Positionen dieses Paars wieder her; ein Klick auf den Anker bringt denjenigen Satelliten in den Vordergrund, der derzeit am weitesten vorn ist. Beispiel: Bei einer bestehenden A↔B-Gruppe lässt das Anwenden eines Presets, das C↔A paart, A↔B intakt — ein Klick auf B bringt A im ursprünglichen A↔B-Layout neben B zurück, ein Klick auf C bringt A im Preset-Layout neben C. Das aktive Paar zeigt das verknüpfte Badge wie zuvor; das Wechseln zwischen Satelliten baut die räumliche Gruppe dynamisch um</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>修正</h3>
+<ul>
+<li>已連結的視窗之間不再顯示「建立群組」候選徽章——包括套用預設後恰好相鄰的視窗對、分屬兩個既有群組的視窗對，以及透過應用程式指派預設的衛星機制連結的視窗對。</li>
+<li>連結群組徽章現在僅對包含最前景視窗（或透過衛星機制與之相連）的群組顯示。僅因與最前景應用程式相同就顯示無關背景群組徽章的問題已修正。</li>
+<li>將群組中的視窗提到前景（無論透過點擊、在 Tiley 側邊欄選擇後按 Enter，還是 macOS 的點擊啟用）現在都會可靠地把整個群組一起帶到前景。先前讓群組兄弟視窗殘留在其他視窗後方的若干情境已修正（其他應用程式的視窗夾在群組成員之間、應用程式先把先前的 main 視窗而非選中視窗重新提升、Tiley 自身的螢幕外迴避視窗還原動畫被誤判為手動拖曳等）。</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>當套用包含分組配對的版面配置預設時，若目標視窗已屬於其他分組，所有視窗不再被合併為單一大型分組。共用的視窗會成為「視窗錨點」，其既有的分組成員與新預設配對的成員會分別註冊為獨立的衛星視窗。此模型與應用程式指派預設中已使用的方式相同。每對視窗各自記憶版面配置：點擊衛星視窗會將錨點帶到前景並還原該對的保存位置；點擊錨點則會將目前最靠前的衛星視窗設為活動對。例如：在現有 A↔B 分組之下套用配對 C↔A 的預設不會破壞 A↔B — 點擊 B 時 A 會回到原 A↔B 版面配置位置與 B 相鄰，點擊 C 時 A 會依預設的 C↔A 版面配置位置與 C 並排。活動對依然顯示連結徽章；切換衛星視窗時會動態重建空間分組</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>修复</h3>
+<ul>
+<li>已经链接的窗口之间不再显示"创建分组"候选徽章——包括应用预设后碰巧相邻的窗口对、分别属于两个不同已有分组的窗口对，以及通过应用程序分配预设的卫星机制连接的窗口对。</li>
+<li>链接分组徽章现在仅对包含最前面窗口（或通过卫星机制与之相连）的分组显示。仅因为与最前面应用属于同一应用就显示无关后台分组的徽章的情况已修复。</li>
+<li>将分组中的窗口提到前台（无论通过点击、在 Tiley 侧边栏中选择并按 Enter，还是通过 macOS 的点击激活）现在都会可靠地把整个分组一起带上来。此前会让分组中的兄弟窗口残留在其他窗口后方的若干情况已修复（其他应用的窗口夹在分组成员之间、应用先把先前的 main 窗口而非选中窗口重新提升、Tiley 自身将屏幕外回避窗口动画恢复时被误识为手动拖动等）。</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>当应用包含分组配对的布局预设时，如果目标窗口已经属于其他分组，所有窗口不再被合并到一个大分组中。共享窗口成为"窗口锚点"，其原有的分组成员和新预设配对的成员分别作为独立的卫星窗口注册。该模型与应用程序分配预设中已使用的模型相同。每对窗口都拥有各自记忆的布局：点击卫星窗口会将锚点带到前面并恢复该对的保存位置；点击锚点则会将当前最靠前的卫星窗口设为活动对。例如：当已有 A↔B 分组时，应用配对 C↔A 的预设不会破坏 A↔B — 点击 B 时 A 会回到原 A↔B 布局位置与 B 相邻，点击 C 时 A 会按预设的 C↔A 布局位置与 C 排列。活动对仍像以前一样显示链接徽章；切换卫星窗口时会动态重建空间分组</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>수정</h3>
+<ul>
+<li>이미 연결된 창 사이에는 "그룹 만들기" 후보 배지가 표시되지 않습니다 — 프리셋 적용 후 우연히 인접한 쌍, 서로 다른 두 그룹에 속한 쌍, 앱 할당 프리셋의 위성 메커니즘으로 연결된 쌍 모두 해당됩니다.</li>
+<li>연결된 그룹의 배지는 최전면 창이 포함된(또는 위성 메커니즘으로 연결된) 그룹에 대해서만 표시됩니다. 단지 최전면 앱과 같은 앱이라는 이유로 무관한 배경 그룹의 배지가 함께 표시되는 일이 없어졌습니다.</li>
+<li>그룹화된 창을 전면으로 올릴 때(클릭, Tiley 사이드바에서 선택 후 Enter, macOS의 클릭-투-액티베이트 어느 경로든) 그룹 전체가 함께 안정적으로 올라옵니다. 이전에는 형제 창이 다른 창 뒤에 남는 경우가 있었습니다(다른 앱의 창이 그룹 멤버 사이에 끼어 있는 경우, 앱이 이전 main 창을 선택한 창보다 먼저 다시 승격시키는 경우, Tiley 자체의 화면 밖 회피 창 복원 애니메이션이 수동 드래그로 오인되는 경우 등).</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>그룹이 설정된 레이아웃 프리셋을 대상 창이 이미 다른 그룹에 속해 있는 상태에서 적용해도 모든 창이 하나의 큰 그룹으로 병합되지 않습니다. 공유된 창이 "창 앵커"가 되고, 기존 파트너와 새로 추가된 프리셋 파트너가 각각 독립된 위성으로 등록됩니다. 이는 앱 할당이 있는 프리셋에서 이미 사용되는 모델과 동일합니다. 각 쌍은 자체 레이아웃을 기억하며, 위성을 클릭하면 앵커가 앞으로 나오고 해당 쌍의 저장된 위치가 복원되고, 앵커를 클릭하면 현재 가장 앞에 있는 위성이 활성 쌍이 됩니다. 예: 기존 A↔B 그룹이 있는 상태에서 C↔A를 페어로 하는 프리셋을 적용해도 A↔B는 유지되며, B를 클릭하면 A가 원래 A↔B 레이아웃의 위치에서 B 옆으로 돌아오고, C를 클릭하면 A가 프리셋의 C↔A 레이아웃 위치에서 C 옆에 정렬됩니다. 활성 쌍에는 이전처럼 링크 배지가 표시되며, 위성을 전환할 때마다 공간 그룹이 동적으로 재구성됩니다</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>修正</h3>
+<ul>
+<li>すでにリンクされているウインドウ間に「グループ化」候補バッジが出ないようになりました — プリセット適用後にたまたま接しているペア、別々のグループに属する 2 つのペア、アプリ割り当て付きプリセットのサテライト機構で繋がっているペアのいずれも対象です。</li>
+<li>リンク済みグループのバッジは、最前面ウインドウが含まれる（または satellite 経由で繋がっている）グループのみ表示するようになりました。最前面アプリと PID を共有しているだけの無関係な背景グループのバッジは出なくなりました。</li>
+<li>グループ化されたウインドウを前面化したとき（クリック、Tiley サイドバーで選択して Enter、macOS のクリック・トゥ・アクティベートのいずれの経路でも）、グループ全体が一緒にきちんと前面に来るようになりました。これまで兄弟ウインドウが他のウインドウの後ろに残ってしまう複数のケース（別アプリのウインドウがメンバー間に挟まっているケース、アプリが以前 main だったウインドウを選択ウインドウより先に再昇格させるケース、Tiley 自身のオフスクリーン退避ウインドウの戻しアニメーションが手動ドラッグと誤認されるケース）を修正しました。</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>グループ化が設定されたレイアウトプリセットを、対象ウインドウがすでに別のグループに属している状態で適用しても、すべてが 1 つの大きなグループにマージされなくなりました。共有ウインドウが「ウインドウアンカー」になり、その既存パートナーと新しいプリセットパートナーがそれぞれ独立したサテライトとして登録されます。これはアプリ割り当て付きプリセットで既に使われている仕組みと同じモデルです。各ペアは独自のレイアウト記憶を持ち、サテライトをクリックするとアンカーが前面化されてそのペアの保存位置が復元され、アンカーをクリックすると現在最も前面にあるサテライトがアクティブペアになります。例: 既存の A↔B グループがあるところに C↔A をペアにしたプリセットを適用しても A↔B は維持され、B をクリックすると A が元の A↔B レイアウトの位置で B の隣に戻り、C をクリックすると A がプリセット側の C↔A レイアウトの位置で C の隣に並びます。アクティブなペアにはこれまで通りリンクバッジが表示され、サテライトを切り替えると空間的なグループも動的に組み直されます</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Fixed</h3>
+<ul>
+<li>A "form group" candidate badge no longer appears between windows that are already linked — including pairs that happen to touch after a preset apply, pairs from two different existing groups, and pairs already connected through the app-assigned-preset satellite mechanism.</li>
+<li>Linked-group badges now show only for the group containing (or transitively linked to) the frontmost window. Focusing a window no longer surfaces badges for unrelated background groups that happen to share its app.</li>
+<li>Raising a grouped window — by clicking it, by selecting it in the Tiley sidebar and pressing Enter, or via macOS's click-to-activate — now reliably brings the whole group forward together. Several edge cases that previously left a group sibling buried behind another window are fixed (cross-app windows sandwiched between group members, the app's previously-main window being re-promoted ahead of the selection, and Tiley's own off-screen-displacement animation getting mistaken for a manual drag).</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Applying a layout preset whose grouped pair targets a window that's already part of an existing group no longer merges everything into one larger group. The shared window becomes a window-anchor and each of its partners (the pre-existing group's other members and the newly-applied partner) is registered as a satellite, mirroring the model already used for app-assigned preset slots. Each pair has its own remembered layout: clicking a satellite raises the anchor and restores that pair's positions; clicking the anchor surfaces whichever satellite is currently most frontmost. Example: with an existing A↔B group, applying a preset that pairs C↔A leaves A↔B intact — clicking B brings A back next to B in the original layout, while clicking C brings A next to C in the preset's layout. The active pair shows the linked badge as before; switching between satellites swaps the spatial group dynamically</li>
+</ul>]]></description>
             <pubDate>Sun, 26 Apr 2026 23:55:44 +0900</pubDate>
             <sparkle:version>512</sparkle:version>
             <sparkle:shortVersionString>5.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.2/Tiley-5.1.2.zip" length="6473133" type="application/octet-stream" sparkle:edSignature="O4QLskG/YrYxX69ce5USPGgBIh1nPVHFSNqrtag0BEV8aIfEF85UNApwJMh1DeAj9DwnkQpOfIeox13OqErBCQ=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley-5.1.2.zip" length="6473133" type="application/octet-stream" sparkle:edSignature="O4QLskG/YrYxX69ce5USPGgBIh1nPVHFSNqrtag0BEV8aIfEF85UNApwJMh1DeAj9DwnkQpOfIeox13OqErBCQ=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.2/Tiley512-511.delta" sparkle:deltaFrom="511" length="401290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="wZ51Fjwkd6JQFQPKtuiHmKHhEqAtPk8p5MYRklXCuk8QkFl2fvijtJ9x/pIAW2zo+QE8KQkXa6Q8qBAZ0i8gDg=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.2/Tiley512-510.delta" sparkle:deltaFrom="510" length="643174" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9IK0kpjuuWEE5gG8rNFzJvWuV3h5eXD0JB4tjr7XDmxVZ7pVywKb2hfd/AP75NARtbe35LtVZDCS1yJ3sD4sBw=="/>
@@ -528,621 +687,207 @@
 <li>When applying a layout preset that snaps a window flush against a screen edge, only the group adjacencies on that screen-edge side of the resized window are released — adjacencies on other edges are preserved. For example, with horizontal pair A↔B and vertical pair A↔C, applying "fill screen width" to A drops the A↔B link (A's right edge becomes the screen-right edge) while keeping A↔C intact when A's bottom doesn't reach the screen bottom. Previously a Tiley resize that touched only part of a group dissolved the whole group regardless of which edges were affected</li>
 <li>Sidebar grouping indicator redesigned: instead of a link badge floating between rows, each grouped window row now shows the app icons of its link partners on the right side, before the index badge. Hovering a partner icon highlights the partner window's row in the sidebar and flips the icon (and the matching icon on the partner's row) to a red `x`, so both ends of the link react together and you can clearly see which two windows are about to be unlinked. Clicking the icon while it shows the `x` unlinks just that one connection, so multi-partner groups can be dissolved one link at a time. The index badge slot is always reserved so rows stay aligned even when no index is shown</li>
 </ul>]]></description>
+            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
+<ul>
+<li>O menu ao passar o cursor sobre a insígnia de vínculo de um grupo de janelas agora tem um terceiro botão ao lado do de troca: **Igualar altura das janelas** (para pares esquerda/direita, ícone de setas para cima/baixo) ou **Igualar largura das janelas** (para pares superior/inferior, ícone de setas para esquerda/direita). Alinha os dois lados da insígnia (todos os membros do grupo, classificados pela linha de contato) no eixo perpendicular. "Ambos os lados" não se refere apenas às duas janelas diretamente conectadas pela insígnia, mas sim a **todos os membros do grupo do mesmo lado da linha de contato** — incluindo "irmãs" que não estão diretamente vinculadas entre si mas compartilham uma borda pai (exemplo: em cima `[A]`, embaixo `[B]` e `[C]` ambas tocando a borda inferior de A sem estarem conectadas entre si → clicar em "Igualar largura" na insígnia A↔B trata `{B, C}` como um único lado e B+C juntas passam a ter a mesma largura que A). Em cada lado as janelas são ordenadas e reorganizadas borda a borda: as bordas mais externas se ancoram à envoltória externa e janelas adjacentes se encontram no ponto médio das bordas originais, portanto bordas compartilhadas já alinhadas permanecem onde estão, enquanto um vão ou sobreposição é distribuído igualmente entre as duas. O botão fica oculto quando ambos os lados já estão alinhados e não há vão ou sobreposição interna a corrigir</li>
+<li>As insígnias candidatas a "formar grupo" agora também aparecem quando você move ou redimensiona uma janela manualmente de modo que sua borda encoste na borda de outra janela — não apenas após aplicar um layout do Tiley. A insígnia surge no instante em que você solta o mouse (durante o arrasto/redimensionamento ela permanece oculta); ao clicar nela, o par é vinculado em um grupo de janelas exatamente como a insígnia candidata pós-layout</li>
+<li>Ao clicar numa insígnia candidata a "formar grupo", o menu de hover (Desagrupar / Trocar / Igualar altura ou largura) aparece imediatamente no mesmo instante em que o grupo é criado — não é mais preciso afastar o cursor da insígnia e voltar a passá-lo por cima</li>
+<li>O menu de hover (a cápsula de ações) agora aparece e some com efeito de fade-in/fade-out, em vez de surgir ou desaparecer de uma vez. Durante o fade-out o painel da insígnia mantém o tamanho expandido para que a cápsula não seja cortada; passar o cursor de novo durante a animação cancela o recolhimento</li>
+<li>Dois botões novos no menu de hover da insígnia vinculada: **Preencher a largura da tela** (ícone `rectangle.portrait.arrowtriangle.2.outward`) e **Preencher a altura da tela** (ícone `rectangle.arrowtriangle.2.outward`). Eles redimensionam proporcionalmente todas as janelas do grupo de modo que o retângulo envolvente coincida exatamente com a largura ou altura da área visível da tela (excluindo Dock e barra de menus), preservando o espaçamento relativo entre os membros. Cada botão fica oculto quando o grupo já preenche a tela nesse eixo</li>
+<li>Ao passar o cursor sobre a insígnia de vínculo entre duas janelas reais agrupadas, agora aparece um pequeno menu de ações abaixo da insígnia (ou acima, caso abaixo saísse da tela): um botão **Desagrupar** e um botão para trocar as janelas — **Trocar janelas esquerda/direita** ou **Trocar janelas superior/inferior**, conforme a disposição do par. A própria insígnia não se transforma mais em botão de desagrupar; passa a servir apenas como indicador visual do vínculo. Ao realizar a troca, todos os outros vínculos que essas duas janelas tenham com terceiras janelas também são removidos, deixando apenas um grupo limpo formado pelas duas janelas trocadas</li>
+</ul>
+<h3>Corrigido</h3>
+<ul>
+<li>Ao aplicar um preset de layout com múltiplos retângulos, se uma janela não puder encolher até seu retângulo alvo por causa do tamanho mínimo do app, a largura ou altura da janela vizinha agora é ajustada automaticamente para que a borda compartilhada permaneça alinhada (preservando o espaçamento do preset). Antes ocorriam sobreposições ou vãos desalinhados</li>
+<li>O indicador de agrupamento da barra lateral agora também exibe os vínculos satélites de slot de aplicativo que não fazem parte do grupo espacial atualmente ativo. Quando um preset com retângulos atribuídos a aplicativos e pares agrupados é aplicado, a janela do lado não atribuído é registrada como satélite usando o bundle ID do aplicativo atribuído. Se o preset (ou outro com o mesmo aplicativo âncora) for reaplicado usando uma janela diferente, o par anterior sai do `WindowGroup` espacial, mas seu vínculo satélite (a ligação de trazer ao primeiro plano ao clicar) é preservado. Até agora esses vínculos "em segundo plano, porém ainda ativos" não apareciam na barra lateral; agora são exibidos junto aos parceiros espaciais ativos como ícones de aplicativo parceiro, e cada um pode ser desvinculado individualmente com a mesma interação hover → clique. Isso vale também quando uma única janela é satélite de vários aplicativos âncora, ou quando o mesmo bundle de uma janela âncora tem vários satélites registrados</li>
+</ul>
+<h3>Alterado</h3>
+<ul>
+<li>Ao aplicar uma predefinição de layout que encosta uma janela em uma borda da tela, agora apenas as adjacências de grupo do lado da janela redimensionada que fica rente à borda da tela são desfeitas — as adjacências nas outras bordas são preservadas. Por exemplo, com um par horizontal A↔B e um par vertical A↔C, aplicar "Preencher largura da tela" em A desfaz o vínculo A↔B (a borda direita de A passa a ser a borda direita da tela), enquanto o vínculo A↔C é preservado enquanto a borda inferior de A não tocar o fundo da tela. Antes, qualquer redimensionamento do Tiley que afetasse apenas parte de um grupo dissolvia o grupo inteiro, independentemente das bordas envolvidas</li>
+<li>O indicador de agrupamento da barra lateral foi redesenhado. Em vez de um selo de link flutuando entre as linhas, agora cada linha de janela agrupada mostra à direita — logo antes do selo de índice — os ícones dos aplicativos de todas as janelas parceiras vinculadas, lado a lado. Ao passar o cursor sobre um ícone parceiro, a linha da janela parceira é destacada na barra lateral e, ao mesmo tempo, esse ícone (assim como o ícone correspondente na linha da parceira) muda para um estado vermelho `x`, deixando claro de imediato quais duas janelas estão envolvidas. Um clique no estado `x` desvincula apenas essa conexão; assim, quando uma janela está vinculada a várias outras, os vínculos podem ser desfeitos um a um. O espaço do selo de índice é sempre reservado, então as linhas permanecem alinhadas mesmo quando nenhum índice é exibido</li>
+</ul>]]></description>
+            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
+<ul>
+<li>Il menu di hover sul badge di collegamento di un gruppo di finestre ora include un terzo pulsante accanto a quello di scambio: **Uniforma l'altezza delle finestre** (per le coppie sinistra/destra, icona con frecce su/giù) oppure **Uniforma la larghezza delle finestre** (per le coppie alto/basso, icona con frecce sinistra/destra). Allinea i due lati del badge (tutti i membri del gruppo, ripartiti rispetto alla linea di contatto) sull'asse perpendicolare. "Entrambi i lati" non si riferisce solo alle due finestre direttamente collegate dal badge, ma a **tutti i membri del gruppo che stanno dallo stesso lato della linea di contatto** — comprese le finestre "sorelle" che non sono collegate direttamente tra loro ma condividono un bordo padre (esempio: in alto `[A]`, in basso `[B]` e `[C]` che toccano entrambe il bordo inferiore di A senza essere collegate tra loro → cliccando "Uniforma larghezza" sul badge A↔B si tratta `{B, C}` come un unico lato e B+C insieme assumono la stessa larghezza di A). Su ciascun lato le finestre vengono ordinate e ridisposte bordo a bordo: i bordi più esterni vengono ancorati all'inviluppo esterno e le finestre adiacenti si incontrano nel punto medio dei loro bordi originali, quindi i bordi condivisi già allineati restano fermi mentre un eventuale spazio vuoto o sovrapposizione viene chiuso ripartendolo equamente tra le due. Il pulsante è nascosto quando entrambi i lati sono già allineati e non c'è alcuno spazio o sovrapposizione interna da sistemare</li>
+<li>I badge candidati per "formare un gruppo" compaiono ora anche quando si sposta o si ridimensiona manualmente una finestra in modo che il suo bordo finisca a contatto con quello di un'altra — non solo dopo aver applicato un layout di Tiley. Il badge appare nel momento in cui si rilascia il mouse (resta nascosto durante il trascinamento/ridimensionamento), e cliccandolo la coppia viene collegata in un gruppo di finestre esattamente come fa il badge candidato dopo l'applicazione di un layout</li>
+<li>Cliccando su un badge candidato per "formare un gruppo", il menu di hover (Separa / Scambia / Uniforma altezza o larghezza) appare immediatamente nello stesso istante in cui il gruppo viene creato — non serve più allontanare il cursore dal badge e riportarlo sopra</li>
+<li>Il menu di hover (la pillola delle azioni) ora compare e scompare con una dissolvenza invece che apparire o sparire di colpo. Durante la dissolvenza in uscita il pannello del badge mantiene la dimensione estesa così la pillola non viene tagliata; passando di nuovo il cursore durante l'animazione la chiusura viene annullata</li>
+<li>Due nuovi pulsanti nel menu di hover del badge collegato: **Riempi la larghezza dello schermo** (icona `rectangle.portrait.arrowtriangle.2.outward`) e **Riempi l'altezza dello schermo** (icona `rectangle.arrowtriangle.2.outward`). Scalano proporzionalmente tutte le finestre del gruppo in modo che il rettangolo che le contiene combaci con la larghezza o l'altezza dell'area visibile dello schermo (Dock e barra dei menu esclusi), preservando la spaziatura relativa tra i membri. Ciascun pulsante viene nascosto quando il gruppo occupa già lo schermo su quell'asse</li>
+<li>Passando il puntatore sul badge di collegamento tra due finestre reali raggruppate, ora compare un piccolo menu di azioni sotto il badge (o sopra, se sotto uscirebbe dallo schermo): un pulsante **Separa** e un pulsante per scambiare le finestre — **Scambia finestre sinistra/destra** o **Scambia finestre alto/basso** in base alla disposizione della coppia. Il badge stesso non si trasforma più nel pulsante di separazione; serve soltanto come indicatore visivo del collegamento. Lo scambio rimuove anche tutti gli altri collegamenti che le due finestre hanno con eventuali terze finestre, lasciando un gruppo pulito composto solo dalla coppia scambiata</li>
+</ul>
+<h3>Corretto</h3>
+<ul>
+<li>Quando si applica un preset di layout a più rettangoli, se una finestra non può ridursi al rettangolo di destinazione a causa della dimensione minima imposta dall'app, ora la larghezza o l'altezza della finestra adiacente viene adattata automaticamente in modo che il bordo condiviso resti allineato (mantenendo lo spazio del preset). In precedenza si verificavano sovrapposizioni o spazi disallineati</li>
+<li>L'indicatore di raggruppamento nella barra laterale ora mostra anche i collegamenti satellite degli slot app che non fanno parte del gruppo spaziale attualmente attivo. Quando viene applicato un preset con rettangoli assegnati ad applicazioni e coppie raggruppate, la finestra sul lato non assegnato viene registrata come satellite del bundle ID dell'app assegnata. Se si riapplica il preset (o un altro preset con la stessa app di ancoraggio) usando una finestra diversa, la coppia precedente esce dal `WindowGroup` spaziale, ma il suo collegamento satellite (il portare in primo piano al clic) viene mantenuto. Finora questi collegamenti "in background ma ancora attivi" non erano visibili nella barra laterale; ora vengono mostrati accanto ai partner spaziali attivi come icone delle app partner, e ciascuno può essere scollegato singolarmente con la stessa interazione hover → clic. Questo vale anche quando una singola finestra è satellite di più app di ancoraggio, o quando lo stesso bundle di una finestra di ancoraggio ha più satelliti registrati</li>
+</ul>
+<h3>Modificato</h3>
+<ul>
+<li>Quando si applica un preset di layout che incolla una finestra contro un bordo dello schermo, ora vengono interrotte solo le adiacenze di gruppo sul lato della finestra ridimensionata che si trova a filo del bordo dello schermo — le adiacenze sugli altri lati vengono mantenute. Ad esempio, con una coppia orizzontale A↔B e una coppia verticale A↔C, applicare "Riempi larghezza schermo" su A interrompe il collegamento A↔B (poiché il bordo destro di A diventa il bordo destro dello schermo), mentre il collegamento A↔C resta intatto finché il bordo inferiore di A non raggiunge il bordo inferiore dello schermo. In precedenza qualsiasi ridimensionamento Tiley che coinvolgesse solo parte di un gruppo dissolveva l'intero gruppo, indipendentemente dai bordi interessati</li>
+<li>L'indicatore di raggruppamento nella barra laterale è stato ridisegnato: invece di un badge di collegamento fluttuante tra le righe, ora ogni riga di finestra raggruppata mostra a destra — subito prima del badge dell'indice — le icone delle app di tutte le finestre partner collegate, affiancate l'una all'altra. Passando il cursore su un'icona partner, la riga della finestra partner viene evidenziata nella barra laterale e contemporaneamente quell'icona (oltre all'icona corrispondente nella riga della partner) passa allo stato rosso `x`, in modo da rendere subito evidente quali due finestre sono coinvolte. Un clic nello stato `x` scollega solo quella connessione: così, quando una finestra è collegata a più altre, i collegamenti possono essere sciolti uno alla volta. Lo spazio del badge dell'indice è sempre riservato, in modo che le righe restino allineate anche quando non viene mostrato alcun indice</li>
+</ul>]]></description>
+            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
+<ul>
+<li>Le menu au survol du badge de lien d'un groupe de fenêtres comporte désormais un troisième bouton à côté de celui de permutation : **Aligner la hauteur des fenêtres** (pour les paires gauche/droite, icône flèches haut/bas) ou **Aligner la largeur des fenêtres** (pour les paires haut/bas, icône flèches gauche/droite). Il aligne les deux côtés du badge (tous les membres du groupe, classés par la ligne de contact) sur l'axe perpendiculaire. « Les deux côtés » désigne non seulement les deux fenêtres directement reliées par le badge, mais aussi **tous les membres du groupe situés du même côté de la ligne de contact** — y compris les « sœurs » qui ne sont pas directement reliées entre elles mais partagent un bord parent (exemple : `[A]` en haut, `[B]` et `[C]` touchant chacune le bord inférieur de A sans être reliées entre elles → cliquer sur « Aligner la largeur » sur le badge A↔B traite `{B, C}` comme un seul côté et B+C réunies prennent la même largeur que A). À l'intérieur de chaque côté, les fenêtres sont triées et reposées bord à bord : les bords extrêmes sont ancrés à l'enveloppe extérieure et les fenêtres adjacentes se rejoignent au milieu de leurs bords d'origine, donc les bords communs déjà alignés restent en place tandis qu'un écart ou un chevauchement est réparti à parts égales entre les deux fenêtres. Le bouton est masqué quand les deux côtés sont déjà alignés et qu'il n'y a aucun écart ou chevauchement interne à corriger</li>
+<li>Les badges candidats « former un groupe » apparaissent désormais aussi lorsque vous déplacez ou redimensionnez manuellement une fenêtre de sorte que son bord touche celui d'une autre fenêtre — pas seulement après l'application d'une mise en page Tiley. Le badge apparaît au moment où vous relâchez la souris (il reste masqué pendant le déplacement/redimensionnement lui-même), et un clic dessus relie la paire en un groupe de fenêtres exactement comme le badge candidat après application d'une mise en page</li>
+<li>Cliquer sur un badge candidat « former un groupe » fait apparaître immédiatement le menu de survol (Dissocier / Permuter / Aligner la hauteur ou la largeur) au moment même où le groupe est établi — plus besoin de sortir le curseur du badge puis d'y revenir</li>
+<li>Le menu de survol (la pilule d'actions) apparaît et disparaît désormais en fondu enchaîné au lieu de s'afficher et de se masquer brusquement. Pendant le fondu de sortie, le panneau du badge conserve sa taille étendue pour que la pilule ne soit pas coupée ; un re-survol pendant l'animation annule la rétraction</li>
+<li>Deux nouveaux boutons dans le menu de survol du badge lié : **Occuper la largeur de l'écran** (icône `rectangle.portrait.arrowtriangle.2.outward`) et **Occuper la hauteur de l'écran** (icône `rectangle.arrowtriangle.2.outward`). Ils mettent à l'échelle proportionnellement toutes les fenêtres du groupe pour que son rectangle englobant épouse exactement la largeur ou la hauteur de la zone visible de l'écran (Dock et barre de menus exclus), tout en préservant l'espacement relatif entre les membres. Chaque bouton est masqué quand le groupe occupe déjà l'écran sur cet axe</li>
+<li>En survolant le badge de lien entre deux fenêtres réelles regroupées, un petit menu d'actions apparaît désormais sous le badge (ou au-dessus, si l'espace en bas est insuffisant) : un bouton **Dissocier** et un bouton pour permuter les fenêtres — **Permuter les fenêtres gauche/droite** ou **Permuter les fenêtres haut/bas** selon la disposition de la paire. Le badge lui-même ne se transforme plus en bouton de dissociation ; il sert uniquement d'indicateur visuel du lien. La permutation supprime également tous les autres liens que ces deux fenêtres pourraient avoir avec d'autres fenêtres, ne laissant qu'un groupe propre composé uniquement de la paire permutée</li>
+</ul>
+<h3>Corrigé</h3>
+<ul>
+<li>Lors de l'application d'un preset de mise en page multi-rectangles, si une fenêtre ne peut pas se réduire à son rectangle cible en raison de la taille minimale imposée par l'application, la largeur ou la hauteur de la fenêtre voisine est désormais ajustée automatiquement afin que le bord partagé reste aligné (l'écart du preset est préservé). Auparavant, cela provoquait des chevauchements ou des écarts mal alignés</li>
+<li>L'indicateur de regroupement de la barre latérale affiche désormais aussi les liens satellites de slot d'application qui ne font pas partie du groupe spatial actuellement actif. Quand un preset contenant des rectangles assignés à des applications et des paires regroupées est appliqué, la fenêtre du côté non assigné est enregistrée comme satellite du bundle ID de l'application assignée. Si l'on réapplique le preset (ou un autre preset avec la même application d'ancrage) en utilisant une autre fenêtre, la paire précédente sort du `WindowGroup` spatial, mais son lien satellite (la liaison de mise au premier plan au clic) est conservé. Jusqu'à présent, ces liens « en arrière-plan mais toujours actifs » n'apparaissaient pas dans la barre latérale ; ils sont désormais affichés à côté des partenaires spatiaux actifs sous forme d'icônes d'application partenaire, et chacun peut être délié individuellement via la même interaction survol → clic. Cela vaut aussi quand une même fenêtre est satellite de plusieurs applications d'ancrage, ou quand un même bundle de fenêtre d'ancrage a plusieurs satellites enregistrés</li>
+</ul>
+<h3>Modifié</h3>
+<ul>
+<li>Lors de l'application d'un préréglage de disposition qui colle une fenêtre contre un bord d'écran, seules les adjacences de groupe situées du côté de la fenêtre redimensionnée qui touche le bord de l'écran sont désormais rompues — les adjacences sur les autres bords sont conservées. Par exemple, avec une paire horizontale A↔B et une paire verticale A↔C, appliquer « Remplir la largeur de l'écran » à A rompt le lien A↔B (le bord droit de A devient le bord droit de l'écran), mais le lien A↔C est préservé tant que le bord inférieur de A n'atteint pas le bord inférieur de l'écran. Auparavant, tout redimensionnement par Tiley n'affectant qu'une partie d'un groupe dissolvait le groupe entier, quels que soient les bords concernés</li>
+<li>L'indicateur de regroupement de la barre latérale a été repensé. Au lieu d'un badge de lien flottant entre les lignes, chaque ligne de fenêtre regroupée affiche maintenant à droite — juste avant le badge d'index — les icônes des applications de toutes ses fenêtres partenaires liées, alignées côte à côte. Le survol d'une icône partenaire met en surbrillance la ligne de la fenêtre partenaire dans la barre latérale, et fait simultanément basculer cette icône (ainsi que l'icône correspondante dans la ligne partenaire) dans un état rouge `x`, ce qui permet de voir d'un coup d'œil quelles deux fenêtres sont concernées. Un clic à l'état `x` ne défait que ce lien-là ; ainsi, lorsqu'une fenêtre est liée à plusieurs autres, les liens peuvent être défaits un par un. L'emplacement du badge d'index est toujours réservé, afin que les lignes restent alignées même lorsqu'aucun index n'est affiché</li>
+</ul>]]></description>
+            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
+<ul>
+<li>El menú al pasar el cursor sobre la insignia de un grupo de ventanas tiene ahora un tercer botón junto al de intercambio: **Igualar altura de las ventanas** (para pares izquierda/derecha, icono con flechas arriba/abajo) o **Igualar ancho de las ventanas** (para pares superior/inferior, icono con flechas izquierda/derecha). Iguala los dos lados de la insignia (todos los miembros del grupo según la línea de contacto) en el eje perpendicular. "Ambos lados" no se refiere solo a las dos ventanas que la insignia conecta directamente, sino a **todos los miembros del grupo del mismo lado de la línea de contacto** — incluidos los "hermanos" que no están enlazados entre sí pero comparten un borde padre (ejemplo: arriba `[A]`, abajo `[B]` y `[C]` ambos tocando el borde inferior de A pero no entre sí → al pulsar "Igualar ancho" en la insignia A↔B se trata `{B, C}` como un solo lado y B+C juntos pasan a tener el mismo ancho que A). Dentro de cada lado las ventanas se ordenan y se redistribuyen borde con borde: los bordes más exteriores se anclan a la envolvente exterior y las ventanas adyacentes se encuentran en el punto medio de sus bordes originales, así que los bordes compartidos limpios se mantienen y un hueco o solape se reparte por igual entre las dos. El botón se oculta cuando ambos lados ya están alineados y no hay hueco ni solape interno que limpiar</li>
+<li>Las insignias candidatas para "formar grupo" ahora aparecen también cuando mueves o cambias el tamaño de una ventana manualmente y su borde queda en contacto con el borde de otra ventana — no solo al aplicar un layout de Tiley. La insignia aparece en el momento en que sueltas el ratón (permanece oculta durante el arrastre o redimensionado), y al hacer clic enlaza el par en un grupo de ventanas igual que la insignia tras aplicar un layout</li>
+<li>Al hacer clic en una insignia candidata para "formar grupo", el menú al pasar el cursor (Desagrupar / Intercambiar / Igualar altura o ancho) se muestra de inmediato, en el mismo instante en que se crea el grupo — ya no es necesario mover el cursor fuera de la insignia y volver a colocarlo encima</li>
+<li>El menú al pasar el cursor (la cápsula de acciones) ahora aparece y desaparece con un fundido en/fundido salida en lugar de mostrarse u ocultarse de golpe. Durante el fundido de salida el panel de la insignia conserva su tamaño expandido para que la cápsula no se recorte; si vuelves a pasar el cursor mientras se desvanece, el colapso se cancela</li>
+<li>Dos botones nuevos en el menú al pasar el cursor de la insignia enlazada: **Ocupar el ancho de la pantalla** (icono `rectangle.portrait.arrowtriangle.2.outward`) y **Ocupar el alto de la pantalla** (icono `rectangle.arrowtriangle.2.outward`). Escalan proporcionalmente todas las ventanas del grupo de modo que su rectángulo envolvente se ajuste con precisión al ancho o alto del área visible de la pantalla (excluyendo el Dock y la barra de menús), conservando el espaciado relativo entre los miembros. Cada botón se oculta cuando el grupo ya ocupa la pantalla en ese eje</li>
+<li>Al pasar el cursor sobre la insignia de enlace entre dos ventanas reales agrupadas, ahora aparece un pequeño menú de acciones debajo de la insignia (o encima, si abajo se saliera de la pantalla): un botón **Desagrupar** y un botón para intercambiar las ventanas — **Intercambiar ventanas izquierda/derecha** o **Intercambiar ventanas superior/inferior**, según la disposición del par. La propia insignia ya no se transforma en botón para desagrupar; solo señala que las ventanas están enlazadas. Al intercambiarlas, también se eliminan los demás enlaces que esas dos ventanas mantengan con terceras ventanas, dejando solo el grupo limpio formado por las dos ventanas intercambiadas</li>
+</ul>
+<h3>Corregido</h3>
+<ul>
+<li>Al aplicar un preset de diseño con varios rectángulos, si una ventana no puede reducirse hasta su rectángulo objetivo debido al tamaño mínimo de la app, ahora se ajusta automáticamente el ancho o alto de la ventana adyacente para que el borde compartido permanezca alineado (manteniendo el espacio del preset). Antes se producían superposiciones o huecos desalineados</li>
+<li>El indicador de agrupación de la barra lateral ahora muestra también los enlaces satélite de las ranuras de aplicación que no forman parte del grupo espacial actualmente activo. Cuando se aplica un preset con rectángulos asignados a aplicaciones y pares agrupados, la ventana del lado sin asignar queda registrada como satélite del bundle ID de la aplicación asignada. Si se vuelve a aplicar el preset (o cualquier otro con la misma aplicación ancla) usando una ventana distinta, el par anterior deja de pertenecer al `WindowGroup` espacial, pero su enlace satélite (el comportamiento de elevación al hacer clic) se conserva. Hasta ahora estos enlaces "en segundo plano pero todavía activos" no aparecían en la barra lateral; ahora se muestran junto a los partners espaciales activos como iconos de aplicación compañera, y cada uno puede desvincularse de forma individual con la misma interacción de hover → clic. Esto incluye los casos en que una sola ventana es satélite de varias aplicaciones ancla, o en que un mismo bundle de ventana ancla tiene varios satélites registrados</li>
+</ul>
+<h3>Cambiado</h3>
+<ul>
+<li>Al aplicar un preajuste de diseño que ajusta una ventana al borde de la pantalla, ahora solo se rompen las adyacencias de grupo en el lado de la ventana redimensionada que queda pegado al borde de la pantalla — las adyacencias en los demás lados se conservan. Por ejemplo, con un par horizontal A↔B y un par vertical A↔C, aplicar "Llenar ancho de pantalla" a A rompe el enlace A↔B (porque el borde derecho de A pasa a coincidir con el borde derecho de la pantalla), pero el enlace A↔C se mantiene si el borde inferior de A no llega al borde inferior de la pantalla. Anteriormente, cualquier redimensionamiento de Tiley que afectara solo a parte de un grupo disolvía el grupo completo, independientemente de los bordes implicados</li>
+<li>Se rediseñó el indicador de agrupación de la barra lateral. En lugar de una insignia de enlace flotando entre las filas, ahora cada fila de ventana agrupada muestra a la derecha — justo antes de la insignia de índice — los iconos de las aplicaciones de todas sus ventanas compañeras vinculadas, uno al lado del otro. Al pasar el cursor sobre un icono compañero, se resalta en la barra lateral la fila de la ventana compañera y, al mismo tiempo, ese icono (así como el icono correspondiente en la fila de la compañera) pasa a un estado rojo `x`, dejando claro de un vistazo qué dos ventanas se verían afectadas. Un clic en el estado `x` desvincula únicamente esa conexión; así, cuando una ventana está enlazada con varias, cada enlace puede deshacerse uno a uno. El espacio de la insignia de índice siempre se reserva, por lo que las filas permanecen alineadas aunque no se muestre ningún índice</li>
+</ul>]]></description>
+            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
+<ul>
+<li>Im Hover-Menü des Verknüpfungs-Badges einer Fenstergruppe gibt es jetzt eine dritte Schaltfläche neben der Tausch-Schaltfläche: **Fensterhöhe angleichen** (für links/rechts angeordnete Paare, Symbol: Auf-/Abwärtspfeile) bzw. **Fensterbreite angleichen** (für oben/unten angeordnete Paare, Symbol: Links-/Rechtspfeile). Damit werden die beiden Seiten des Badges (alle Gruppenmitglieder, jeweils anhand der Kontaktlinie zugeordnet) auf der senkrechten Achse aneinander angeglichen. Mit „beide Seiten" sind nicht nur die zwei direkt vom Badge verbundenen Fenster gemeint, sondern **alle Gruppenmitglieder auf derselben Seite der Kontaktlinie** — auch „Geschwister", die zwar nicht direkt miteinander verknüpft sind, aber an derselben Elternkante hängen (Beispiel: oben `[A]`, unten `[B]` `[C]`, beide an A's Unterkante – nicht jedoch direkt miteinander verknüpft → ein Klick auf „Breite angleichen" am A↔B-Badge behandelt `{B, C}` als eine Seite und macht B+C zusammen genauso breit wie A). Innerhalb jeder Seite werden die Fenster sortiert und kantenbündig neu angeordnet: die äußersten Kanten verankern an der äußeren Hülle, benachbarte Fenster treffen sich am Mittelpunkt ihrer ursprünglichen Kanten — saubere gemeinsame Kanten bleiben unverändert, eine Lücke oder Überlappung wird gleichmäßig auf beide Seiten verteilt geschlossen. Die Schaltfläche wird ausgeblendet, wenn beide Seiten bereits ausgerichtet sind und es auch innen keine Lücke / Überlappung gibt</li>
+<li>„Gruppe bilden"-Vorschlags-Badges erscheinen jetzt auch, wenn Sie ein Fenster manuell verschieben oder dessen Größe ändern, sodass dessen Kante an die Kante eines anderen Fensters anschließt — nicht nur nach dem Anwenden eines Tiley-Layouts. Das Badge erscheint in dem Moment, in dem Sie die Maus loslassen (während des Ziehens/Vergrößerns selbst bleibt es ausgeblendet); ein Klick darauf verbindet das Paar zu einer Fenstergruppe, genau wie das Badge nach dem Layout-Anwenden</li>
+<li>Beim Klick auf ein „Gruppe bilden"-Vorschlags-Badge wird das Hover-Menü (Gruppierung aufheben / Tauschen / Höhe oder Breite angleichen) im selben Moment angezeigt, in dem die Gruppe entsteht — Sie müssen den Cursor nicht erst vom Badge wegbewegen und wieder darüber führen</li>
+<li>Das Hover-Menü (Aktions-Pille) wird jetzt sanft ein- und ausgeblendet, statt schlagartig zu erscheinen oder zu verschwinden. Während des Ausblendens behält das Badge-Panel seine erweiterte Größe, damit die Pille nicht abgeschnitten wird; ein erneutes Überfahren während der Animation bricht das Einklappen ab</li>
+<li>Im Hover-Menü eines verknüpften Badges gibt es zwei neue Schaltflächen: **Bildschirmbreite ausfüllen** (Symbol `rectangle.portrait.arrowtriangle.2.outward`) und **Bildschirmhöhe ausfüllen** (Symbol `rectangle.arrowtriangle.2.outward`). Sie skalieren proportional alle Fenster der Gruppe, sodass deren Begrenzungsrechteck die sichtbare Bildschirmbreite bzw. -höhe (ohne Dock und Menüleiste) genau ausfüllt — die relativen Abstände zwischen den Mitgliedern bleiben erhalten. Die jeweilige Schaltfläche wird ausgeblendet, wenn die Gruppe auf dieser Achse bereits den Bildschirm ausfüllt</li>
+<li>Wenn man mit dem Mauszeiger über das Verknüpfungs-Badge zwischen zwei gruppierten echten Fenstern fährt, erscheint jetzt ein kleines Aktionsmenü unter dem Badge (oder darüber, wenn unten kein Platz auf dem Bildschirm ist): eine **Gruppierung aufheben**-Schaltfläche und eine Schaltfläche zum Tauschen der Fenster — **Linkes/rechtes Fenster tauschen** oder **Oberes/unteres Fenster tauschen** je nach Anordnung des Paares. Das Badge selbst dient nicht mehr als Aufheben-Schaltfläche, sondern nur noch als visueller Hinweis auf die bestehende Verknüpfung. Beim Tauschen werden alle anderen Verknüpfungen, die diese beiden Fenster zu dritten Fenstern haben, gelöst, sodass nach dem Tausch eine saubere Zwei-Fenster-Gruppe übrig bleibt</li>
+</ul>
+<h3>Behoben</h3>
+<ul>
+<li>Beim Anwenden eines Mehr-Rechteck-Layout-Presets wird die Breite oder Höhe des Nachbarfensters jetzt automatisch angepasst, wenn ein Fenster aufgrund der Mindestgröße der App nicht auf sein Ziel-Rechteck verkleinert werden kann, sodass die gemeinsame Kante ausgerichtet bleibt (Preset-Abstand wird beibehalten). Bisher kam es zu Überlappungen oder versetzten Lücken</li>
+<li>Die Gruppierungsanzeige in der Seitenleiste zeigt jetzt auch App-Slot-Satellitenverknüpfungen an, die nicht Teil der aktuell aktiven räumlichen Gruppe sind. Wird ein Preset mit App-zugewiesenen Rechtecken und gruppierten Paaren angewendet, wird das Fenster auf der nicht zugewiesenen Seite über die Bundle-ID der zugewiesenen App als Satellit registriert. Wendet man dasselbe Preset (oder ein anderes mit derselben Anker-App) erneut mit einem anderen Fenster an, fällt das vorherige Paar aus der räumlichen `WindowGroup` heraus, die Satelliten-Verknüpfung (Mitführung beim Klick) bleibt jedoch erhalten. Bisher waren solche „im Hintergrund weiter aktiven" Verknüpfungen in der Seitenleiste nicht sichtbar — jetzt werden sie zusammen mit den aktiven räumlichen Partnern als Partner-App-Symbole angezeigt und lassen sich per Hover → Klick einzeln lösen. Dies gilt auch dann, wenn ein Fenster Satellit mehrerer Anker-Apps ist oder wenn der Bundle-ID eines Anker-Fensters mehrere Satelliten zugeordnet sind</li>
+</ul>
+<h3>Geändert</h3>
+<ul>
+<li>Beim Anwenden eines Layout-Presets, das ein Fenster bündig an einen Bildschirmrand schiebt, werden nur noch die Gruppen-Verbindungen an genau jener Bildschirmrand-Seite des angepassten Fensters gelöst — Verbindungen an anderen Kanten bleiben erhalten. Beispiel: Bei einem horizontalen Paar A↔B und einem vertikalen Paar A↔C löst „Bildschirmbreite ausfüllen" auf A die A↔B-Verknüpfung (da die rechte Kante von A zur rechten Bildschirmkante wird), während A↔C erhalten bleibt, solange A's Unterkante den Bildschirmboden nicht erreicht. Bisher löste eine Tiley-Größenänderung, die nur einen Teil einer Gruppe betraf, unabhängig von der Kante stets die gesamte Gruppe auf</li>
+<li>Die Gruppierungsanzeige in der Seitenleiste wurde neu gestaltet: Statt eines schwebenden Link-Symbols zwischen den Zeilen werden in jeder gruppierten Fensterzeile rechts — direkt vor dem Index-Symbol — die App-Symbole aller verknüpften Partnerfenster nebeneinander angezeigt. Beim Überfahren eines Partner-Symbols wird die Zeile des Partnerfensters in der Seitenleiste hervorgehoben, und gleichzeitig wechselt dieses Symbol (sowie das entsprechende Symbol in der Partnerzeile) in einen roten `x`-Zustand, sodass auf einen Blick klar ist, welche beiden Fenster betroffen sind. Ein Klick im `x`-Zustand löst nur diese eine Verbindung — bei einem Fenster mit mehreren Verknüpfungen lassen sich die Links so einzeln lösen. Der Platz für das Index-Symbol bleibt immer reserviert, damit Zeilen auch ohne Index sauber ausgerichtet bleiben</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
+<ul>
+<li>已分組視窗對的連結徽章懸停選單中，在交換按鈕旁新增了第三個按鈕：**對齊視窗高度**（左右配對，使用上下箭頭圖示）或 **對齊視窗寬度**（上下配對，使用左右箭頭圖示）。此按鈕會將徽章兩側（依接觸線劃分的群組中所有成員）的寬度／高度對齊。「兩側」不僅指徽章直接連結的 2 個視窗，還包括**接觸線同一側的群組中所有視窗** —— 即使彼此沒有直接連結，只要透過共同的父邊形成「兄弟」關係，也會歸到同一側（例：上方為 `[A]`，下方為 `[B]` `[C]`，B 與 C 分別接 A 的下邊而彼此沒有直接連結時，在 A↔B 的徽章上點擊「對齊寬度」會把 `{B, C}` 視為一側，讓 B+C 合併後的寬度與 A 一致）。每一側會按順序重新排列各視窗、讓邊與邊相接：最外側的邊對齊到外包絡，相鄰視窗在原接觸邊的中點處相接，因此已經對齊的共用邊保持不變，而間隙或重疊會以中點為界被兩側各吸收一半地填平。當兩側已經對齊且內部也沒有間隙或重疊時，此按鈕不會顯示</li>
+<li>「形成群組」候選徽章現在不僅在套用 Tiley 版面配置後出現，當您手動移動或調整視窗大小，使其邊緣與另一個視窗的邊緣相接觸時也會出現。徽章會在您鬆開滑鼠的瞬間顯示（在拖曳／調整大小過程中保持隱藏），點擊後會像版面配置後的候選徽章一樣將這對視窗連結為一個視窗群組</li>
+<li>點擊「形成群組」候選徽章建立群組的同時，懸停選單（解除群組、左右／上下交換、對齊高度／寬度）會立即顯示，無需先將游標移開再回到徽章上</li>
+<li>懸停選單（操作膠囊）現在以淡入／淡出方式平滑切換，而不是直接出現／消失。在淡出期間徽章面板會保持展開尺寸以避免膠囊被截斷；若在淡出過程中再次懸停，收起動作會被取消</li>
+<li>已連結徽章的懸停選單中新增 **填滿螢幕寬度**（圖示 `rectangle.portrait.arrowtriangle.2.outward`）與 **填滿螢幕高度**（圖示 `rectangle.arrowtriangle.2.outward`）按鈕。會按比例縮放群組內所有視窗，使其外包矩形精確填滿螢幕可視區域（不包括 Dock 與選單列）的寬度／高度，並保留成員之間的相對間距。當群組在該軸上已經填滿螢幕時，對應的按鈕不會顯示</li>
+<li>將滑鼠停留在已分組的實際視窗之間的連結徽章上時，徽章下方（如果下方會超出螢幕則顯示在上方）會出現一個小的操作選單：**解除分組** 按鈕，以及依視窗配對方向顯示的 **交換左右視窗** 或 **交換上下視窗** 按鈕。連結中的徽章本身不再變成解除分組按鈕，僅作為指示視窗已連結的視覺標記。執行交換時，參與交換的兩個視窗與第三個視窗之間的其他所有連結都會被解除，最終只保留這兩個視窗組成的乾淨分組</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>套用多矩形版面配置預設時，若某個視窗因應用程式的最小尺寸限制無法縮至目標矩形，現在會自動調整相鄰視窗的寬度／高度以保持共用邊緣對齊（保留預設間距）。先前會出現重疊或錯位的間隙</li>
+<li>側邊欄的群組指示器現在會顯示並未包含在目前活動空間群組中的應用程式槽衛星（satellite）連結。在指派了應用程式的矩形上設定群組並套用預設時，未指派那一側的視窗會以指派應用程式的 bundle ID 為鍵被註冊為該應用程式的衛星。當再次對同一錨點應用、但使用不同視窗的預設時，先前的配對會脫離空間 `WindowGroup`，但衛星連結（點擊連動）仍然有效。先前這種「在背景仍然存活」的連結不會出現在側邊欄中，現在會與活動的空間配對一起以夥伴應用程式圖示的形式顯示，可透過懸停 → 點擊的方式分別解除。即使一個視窗是多個錨點應用程式的衛星，或者同一個錨點視窗的 bundle 上註冊了多個衛星，也會全部顯示</li>
+</ul>
+<h3>變更</h3>
+<ul>
+<li>套用將視窗貼齊螢幕邊緣的版面配置預設時，僅會解除調整後視窗在螢幕邊緣那一側上的群組相鄰關係，其他邊的相鄰關係保持不變。例如，水平配對 A↔B 與垂直配對 A↔C 同時存在時，對 A 套用「填滿螢幕寬度」會切斷 A↔B 連結（因為 A 的右邊會成為螢幕右緣），但只要 A 的下邊未觸及螢幕底部，A↔C 連結仍會保留。先前只要 Tiley 的版面調整影響到群組中的部分視窗，無論涉及哪些邊，整個群組都會被解除</li>
+<li>重新設計了側邊欄的群組指示器。現在不再使用懸浮在行間的連結標記，而是在每個已群組視窗行的右側——索引標記前面——並排顯示其所有連結夥伴的應用程式圖示。將游標懸停在夥伴圖示上時，側邊欄中對應夥伴視窗所在的行會醒目顯示，同時該圖示（以及對方行中相對應的圖示）會切換為紅色 `x` 狀態，可以一眼看出即將解除的是哪兩個視窗之間的連結。在 `x` 狀態下點擊，僅會解除這一條連結；因此當一個視窗與多個其他視窗連結時，可以一次解除一條。索引標記的位置永遠會保留，因此即使沒有顯示索引也不會影響行的對齊</li>
+</ul>]]></description>
+            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
+<ul>
+<li>已分组窗口对的链接徽章悬停菜单中，在交换按钮旁新增了第三个按钮：**对齐窗口高度**（左右配对，使用上下箭头图标）或 **对齐窗口宽度**（上下配对，使用左右箭头图标）。该按钮会将徽章两侧（按接触线划分的分组中所有成员）的宽度／高度对齐。"两侧"不仅指徽章直接连接的 2 个窗口，还包括**接触线同一侧的分组中所有窗口** —— 即使彼此没有直接链接，只要通过共同的父边构成"兄弟"关系也会归到同一侧（例：上方为 `[A]`，下方为 `[B]` `[C]`，B 与 C 分别接 A 的下边而彼此没有直接链接时，在 A↔B 的徽章上点击"对齐宽度"会把 `{B, C}` 视为一侧，让 B+C 合并后的宽度与 A 一致）。每一侧会按顺序重新排列各窗口、让边与边相接：最外侧的边对齐到外包络，相邻窗口在原接触边的中点处相接，因此已经对齐的共有边保持不变，而间隙或重叠会以中点为界被两侧各吸收一半地填平。当两侧已经对齐且内部也没有间隙或重叠时，此按钮不会显示</li>
+<li>"形成分组"候选徽章现在不仅在应用 Tiley 布局后出现，当您手动移动或调整窗口大小，使其边缘与另一个窗口的边缘相接触时也会出现。徽章会在您松开鼠标的瞬间显示（在拖动／调整大小过程中保持隐藏），点击后会像布局后的候选徽章一样将这一对窗口链接为一个窗口组</li>
+<li>点击"形成分组"候选徽章建立分组的同时，悬停菜单（解除分组、左右／上下交换、对齐高度／宽度）会立即显示出来，无需先把光标移开再回到徽章上</li>
+<li>悬停菜单（操作胶囊）现在以淡入／淡出方式平滑切换，而不是直接出现／消失。在淡出期间徽章面板会保持展开尺寸以避免胶囊被截断；如果在淡出过程中再次悬停，收起动作会被取消</li>
+<li>已链接徽章的悬停菜单中新增 **填满屏幕宽度**（图标 `rectangle.portrait.arrowtriangle.2.outward`）与 **填满屏幕高度**（图标 `rectangle.arrowtriangle.2.outward`）按钮。会按比例缩放分组内所有窗口，使其包围矩形精确填满屏幕可视区域（不包括 Dock 与菜单栏）的宽度／高度，并保持成员之间的相对间距。当分组在该轴上已经填满屏幕时，对应的按钮不会显示</li>
+<li>将鼠标悬停在已分组的实际窗口之间的链接徽章上时，徽章下方（如果下方会超出屏幕则显示在上方）会出现一个小的操作菜单：**解除分组** 按钮，以及根据窗口配对方向显示的 **交换左右窗口** 或 **交换上下窗口** 按钮。链接中的徽章本身不再变成解除分组按钮，仅作为指示窗口已链接的视觉标记。执行交换时，参与交换的两个窗口与第三个窗口之间的其他所有链接都会被解除，最终只保留这两个窗口组成的干净分组</li>
+</ul>
+<h3>修复</h3>
+<ul>
+<li>应用多矩形布局预设时，如果某个窗口因应用的最小尺寸限制无法缩小到目标矩形，现在会自动调整相邻窗口的宽度／高度以保持共享边缘对齐（保留预设间距）。此前会出现重叠或错位的间隙</li>
+<li>侧边栏的分组指示器现在会显示并未包含在当前活动空间分组中的应用槽卫星（satellite）链接。在分配了应用的矩形上设置分组并应用预设时，未分配那一侧的窗口会以已分配应用的 bundle ID 为键被注册为该应用的卫星。当再次对同一锚点应用、但使用不同窗口的预设时，之前的配对会脱离空间 `WindowGroup`，但卫星链接（点击联动）依然有效。此前这种"在后台仍然存活"的链接不会出现在侧边栏中，现在会与活动的空间配对一起以伙伴应用图标的形式显示，可以通过悬停 → 点击的方式分别解除。即使一个窗口是多个锚点应用的卫星，或者同一个锚点窗口的 bundle 上注册了多个卫星，也会全部显示</li>
+</ul>
+<h3>变更</h3>
+<ul>
+<li>应用将窗口贴紧屏幕边缘的布局预设时，仅会解除调整后窗口在屏幕边缘一侧上的分组邻接关系，其他边的邻接关系保持不变。例如，存在水平配对 A↔B 与垂直配对 A↔C 时，对 A 应用"填满屏幕宽度"会断开 A↔B 链接（因为 A 的右边变为屏幕右缘），但只要 A 的下边没有触及屏幕底部，A↔C 链接仍会保留。此前，只要 Tiley 布局调整影响到分组中的部分窗口，无论涉及哪些边，整个分组都会被解除</li>
+<li>重新设计了侧边栏的分组指示器。现在不再使用悬浮在行间的链接徽章，而是在每个已分组窗口行的右侧——索引徽章前面——并排显示其所有链接伙伴的应用图标。将鼠标悬停在伙伴图标上时，侧边栏中对应伙伴窗口所在的行会高亮显示，同时该图标（以及对方行中相对应的图标）会切换为红色 `x` 状态，便于一眼确认即将解除的是哪两个窗口之间的链接。在 `x` 状态下点击，仅解除这一条链接；因此当一个窗口与多个其他窗口链接时，可以一次解除一条。索引徽章的位置始终保留，因此即使没有索引也不会影响行的对齐</li>
+</ul>]]></description>
+            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
+<ul>
+<li>그룹화된 윈도우 쌍의 링크 배지 호버 메뉴에 교체 버튼 옆에 세 번째 버튼이 추가되었습니다: **윈도우 높이 맞추기**(좌우 배치 쌍, 위/아래 화살표 아이콘) 또는 **윈도우 너비 맞추기**(상하 배치 쌍, 좌/우 화살표 아이콘). 배지의 양쪽(접촉선으로 나뉜 그룹 내 모든 멤버)의 폭/높이를 동일하게 맞춥니다. "양쪽"이란 배지의 2개 윈도우만이 아니라 **접촉선의 같은 쪽에 있는 그룹 내 모든 윈도우**를 의미하며, 서로 직접 연결되어 있지 않아도 공통 부모 변을 통한 "형제" 윈도우도 같은 쪽에 포함됩니다(예: 위에 `[A]`, 아래에 `[B]` `[C]` 가 각각 A의 아래 변에 연결되어 있을 때 A↔B 배지에서 "너비 맞추기"를 누르면 `{B, C}` 가 한 쪽으로 처리되어 B+C의 합계 너비가 A의 너비와 같아집니다). 각 쪽에서는 윈도우를 정렬해 변과 변이 맞닿도록 재배치합니다. 가장 바깥쪽 변은 외곽 포락선에 정렬되고, 인접한 윈도우는 원래 접촉 변의 중점에서 맞닿도록 조정되므로, 이미 정렬되어 있던 공통 변은 그대로 유지되고 간격이나 겹침은 중점에서 절반씩 흡수되어 채워집니다. 양쪽이 이미 정렬되어 있고 내부에도 간격이나 겹침이 없는 경우 이 버튼은 표시되지 않습니다</li>
+<li>Tiley 레이아웃을 적용했을 때뿐 아니라, 윈도우를 직접 이동하거나 크기를 조정해 다른 윈도우의 모서리에 닿게 했을 때에도 "그룹화" 후보 배지가 표시되도록 했습니다. 배지는 드래그/리사이즈 도중이 아니라 마우스를 놓는 순간에 나타나며, 클릭하면 레이아웃 적용 후의 후보 배지와 동일하게 두 윈도우가 윈도우 그룹으로 연결됩니다</li>
+<li>"그룹화" 후보 배지를 클릭해 그룹이 만들어지는 즉시 그룹 해제 / 좌우·상하 바꾸기 / 너비·높이 맞추기 호버 메뉴가 곧바로 표시되도록 했습니다. 커서를 배지에서 한 번 떼고 다시 올릴 필요가 없습니다</li>
+<li>호버 메뉴(액션 알약)가 즉시 켜졌다 꺼지는 대신 부드럽게 페이드 인/아웃으로 전환되도록 했습니다. 페이드 아웃이 끝날 때까지 배지의 패널 자체는 확장된 크기를 유지하므로 알약이 도중에 잘리지 않으며, 페이드 중에 다시 호버하면 축소 동작이 취소됩니다</li>
+<li>링크된 배지의 호버 메뉴에 **화면 너비에 가득 채우기**(아이콘 `rectangle.portrait.arrowtriangle.2.outward`), **화면 높이에 가득 채우기**(아이콘 `rectangle.arrowtriangle.2.outward`) 버튼을 추가했습니다. 그룹의 모든 윈도우를 비례적으로 확대해 바운딩 사각형을 화면의 표시 영역(Dock과 메뉴바 제외) 너비/높이에 정확히 맞춥니다. 멤버 간의 상대적인 배치는 그대로 유지됩니다. 그룹이 이미 해당 축에서 화면을 가득 채우고 있는 경우 해당 버튼은 표시되지 않습니다</li>
+<li>그룹화된 실제 창 사이의 링크 배지에 마우스를 올리면 배지 아래(아래에 표시할 때 화면을 벗어나는 경우 위)에 작은 액션 메뉴가 표시됩니다. **그룹 해제** 버튼과, 쌍의 배치에 따라 **좌우 윈도우 바꾸기** 또는 **상하 윈도우 바꾸기** 버튼이 나란히 배치됩니다. 링크된 배지 자체는 더 이상 그룹 해제 버튼으로 변하지 않으며, 링크되어 있음을 나타내는 표시 전용 역할만 합니다. 윈도우를 교체하면 해당 두 윈도우가 다른 제3의 윈도우와 맺고 있던 다른 링크는 모두 해제되고, 교체된 쌍은 2개 윈도우만으로 구성된 깔끔한 그룹으로 남습니다</li>
+</ul>
+<h3>수정</h3>
+<ul>
+<li>다중 사각형 레이아웃 프리셋 적용 시, 앱의 최소 크기 제약으로 창이 목표 사각형까지 줄어들 수 없는 경우, 인접 창의 너비/높이를 자동으로 조정해 공유 모서리가 정렬되도록 했습니다(프리셋 간격은 유지). 이전에는 겹침이나 어긋난 간격이 발생했습니다</li>
+<li>사이드바의 그룹화 표시에 현재 활성화된 공간 그룹에는 포함되지 않은 앱 슬롯 새틀라이트(satellite) 연결도 표시되도록 했습니다. 사각형에 앱이 할당된 프리셋에서 그룹화를 설정해 적용하면, 미할당 쪽의 윈도우는 할당된 앱의 번들 ID를 키로 새틀라이트로 등록됩니다. 동일한 앵커 앱에 대해 다른 윈도우를 쓰는 프리셋을 다시 적용하면 이전 페어는 공간적 `WindowGroup`에서 빠지지만, 새틀라이트 연결(클릭 연동)은 그대로 유지됩니다. 지금까지 이러한 "백그라운드에 남아 있지만 연결은 살아 있는" 관계는 사이드바에 표시되지 않았지만, 이제 활성 공간 페어와 함께 상대 앱 아이콘으로 표시되며, 호버 → 클릭으로 개별적으로 해제할 수 있습니다. 하나의 윈도우가 여러 앵커 앱의 새틀라이트가 되어 있는 경우나, 하나의 앵커 윈도우의 번들에 여러 새틀라이트가 등록되어 있는 경우에도 모두 표시됩니다</li>
+</ul>
+<h3>변경</h3>
+<ul>
+<li>화면 가장자리에 붙는 레이아웃 프리셋을 적용할 때, 리사이즈 후 윈도우의 화면 가장자리 쪽 변에서 연결된 그룹의 인접 관계만 해제되도록 변경했습니다. 다른 변의 인접 관계는 유지됩니다. 예를 들어 가로 페어 A↔B와 세로 페어 A↔C가 있을 때, A에 "화면 가로 가득"을 적용하면 A↔B 링크는 해제되지만(A의 오른쪽 변이 화면 오른쪽 끝이 되므로), A의 아래쪽 변이 화면 아래까지 닿지 않는 리사이즈라면 A↔C 링크는 유지됩니다. 이전에는 Tiley의 레이아웃 적용이 그룹의 일부 윈도우에만 영향을 주는 경우, 영향받는 변과 무관하게 그룹 전체가 해제되었습니다</li>
+<li>사이드바의 그룹화 표시 방식을 새롭게 디자인했습니다. 행 사이에 떠 있던 링크 배지 대신, 그룹화된 윈도우 행의 오른쪽 — 인덱스 배지 바로 앞 — 에 링크 상대 앱의 아이콘이 나열되어 표시됩니다. 상대 아이콘에 호버하면 사이드바에서 상대 윈도우 행이 강조 표시되고, 동시에 해당 아이콘(및 상대 측 행의 대응되는 아이콘)이 빨간 `x` 상태로 전환되므로, 어떤 두 윈도우 사이의 연결이 대상인지 한눈에 확인할 수 있습니다. `x` 상태에서 클릭하면 해당 연결만 해제되므로, 여러 윈도우와 연결되어 있는 경우에도 한 번에 한 줄씩 개별적으로 해제할 수 있습니다. 인덱스 배지 자리는 항상 확보되어 있어, 인덱스가 표시되지 않을 때에도 행 정렬이 어긋나지 않습니다</li>
+</ul>]]></description>
+            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
+<ul>
+<li>グループ化されたウインドウのリンクバッジのホバーメニューに、入れ換えボタンの隣に 3 つ目のボタンとして **ウインドウの高さを揃える**（左右配置のペア、上下矢印アイコン）／ **ウインドウの幅を揃える**（上下配置のペア、左右矢印アイコン）ボタンが追加されました。バッジの両側（接触ラインで分けたグループ内の全メンバー）の幅／高さを揃えます。「両側」はバッジの 2 つのウインドウだけでなく、**接触ラインの同じ側にあるグループ内の全ウインドウ**を含みます — 互いに直接リンクされていなくても、共通の親辺を介した「兄弟」関係のウインドウも同じ側に入ります（例: 上に `[A]`、下に `[B]` `[C]` がそれぞれ A の下辺に接続している場合、A↔B のバッジで「幅を揃える」を押すと `{B, C}` が片側として扱われ、B+C 合わせた幅が A の幅と揃います）。各側ではウインドウを並び順にソートして辺と辺で隙間なく再配置します。一番外側の辺は外側の包絡線に合わせ、隣接するウインドウ同士は元の接触辺の中点で接するように調整するので、すでに揃っていた共通辺はそのまま、隙間やオーバーラップは中点で半分ずつ吸収されて埋まります。両側がすでに揃っていて内部にも隙間やオーバーラップがない場合、このボタンは表示されません</li>
+<li>Tiley のレイアウトを適用したときだけでなく、ウインドウを手動で移動・リサイズして他のウインドウのエッジと接したときにも「グループ化」候補バッジが表示されるようになりました。バッジはドラッグ／リサイズの途中ではなく、マウスを離した瞬間に現れます。クリックするとレイアウト適用後の候補バッジと同じように、その 2 つのウインドウがウインドウグループとしてリンクされます</li>
+<li>「グループ化」候補バッジをクリックしてグループ化が確立された瞬間に、グループ解除・上下／左右入れ換え・幅／高さを揃えるといったホバーメニューがそのまま表示されるようになりました。一度バッジから離れて再ホバーする操作は不要です</li>
+<li>ホバーメニュー（アクションのピル）がパッと表示／非表示するのではなく、フェードイン／フェードアウトでスムーズに切り替わるようになりました。フェードアウトが終わるまでバッジのパネル自体は拡大サイズを保持するためピルが途中で切れることはなく、フェード途中で再ホバーすると縮小はキャンセルされます</li>
+<li>リンク済みバッジのホバーメニューに、**画面の横幅一杯に広げる**（アイコン `rectangle.portrait.arrowtriangle.2.outward`）と **画面の縦幅一杯に広げる**（アイコン `rectangle.arrowtriangle.2.outward`）ボタンを追加しました。グループ内すべてのウインドウを比例的にスケールし、バウンディング矩形を画面の可視領域（Dock とメニューバーを除いた領域）の横幅／縦幅にぴったり合わせます。メンバー間の相対的な配置は保たれます。グループがすでにその軸で画面一杯になっている場合、対応するボタンは表示されません</li>
+<li>グループ化された実ウインドウ間のリンクバッジにホバーすると、バッジの下（下に表示するとディスプレイからはみ出る場合は上）に小さなアクションメニューが表示されるようになりました。**グループ解除** ボタンと、ペアの並びに応じた **左右ウインドウの入れ換え** または **上下ウインドウの入れ換え** ボタンの 2 つが並びます。リンク中のバッジ自体は「グループ解除」のボタンには変わらなくなり、リンクされていることを示す表示専用の役割になります。入れ換えを実行すると、ペアの 2 つのウインドウが第三のウインドウとリンクしている他のリンクはすべて解除され、入れ換え後のペアは 2 ウインドウだけのクリーンなグループとして残ります</li>
+</ul>
+<h3>修正</h3>
+<ul>
+<li>複数矩形のレイアウトプリセット適用時、アプリの最小サイズ制約でウインドウが目標矩形まで縮小できない場合、もう一方のウインドウの幅／高さを自動調整して共有エッジが揃うようになりました（プリセットのギャップは維持）。これまでは重なりや不揃いなギャップが発生していました</li>
+<li>サイドバーのグループ化インジケータに、現在アクティブな空間グループには含まれていないアプリスロットのサテライトリンクも表示されるようになりました。矩形にアプリを割り当てたプリセットでグループ化を設定して適用すると、未割り当て側のウインドウは割り当てアプリのバンドル ID をキーにサテライトとして登録されます。同じアンカーアプリに対して別のウインドウを使うプリセットを再適用すると、それまでのペアは空間的な `WindowGroup` から外れますが、サテライトのリンク（クリック時の連動）は引き続き有効です。これまで、こうした「バックグラウンドに残っているがリンクは生きている」関係はサイドバー上に表示されませんでしたが、今後はアクティブな空間ペアと並んで相手アプリのアイコンとして表示されるようになり、ホバー → クリックで個別に解除できます。1 つのウインドウが複数のアンカーアプリのサテライトになっている場合や、1 つのアンカーウインドウのバンドルに複数のサテライトが登録されている場合も、すべて表示されます</li>
+</ul>
+<h3>変更</h3>
+<ul>
+<li>スクリーン端まで寄せるレイアウトプリセットを適用したとき、リサイズ後のウインドウのスクリーン端側の辺で繋がっているグループの隣接関係だけを解除するようにしました。それ以外の辺の隣接関係は維持されます。例えば、横並びのペア A↔B と縦のペア A↔C があるとき、A に「画面横一杯」を適用すると A↔B のリンクは解除されます（A の右辺が画面右端になるため）が、A の下辺が画面下端に届かないリサイズなら A↔C のリンクは維持されます。これまでは、Tiley のレイアウト適用がグループの一部のウインドウにのみ及んだ場合、影響する辺に関係なくグループ全体が解除されていました</li>
+<li>サイドバーのグループ化インジケータを再設計しました。行間に浮かぶリンクバッジではなく、グループ化されたウインドウの行の右側、インデックスバッジの手前にリンク相手のアプリアイコンを並べて表示するようになりました。相手アイコンにホバーすると、サイドバー上で相手のウインドウ行がハイライトされ、同時にそのアイコン（および相手側の行にある対応するアイコン）が赤い `x` に切り替わるため、どの 2 つのウインドウ間のリンクが対象になっているかを一目で確認できます。`x` の状態でクリックするとそのリンクだけが解除されるため、複数のウインドウとリンクされている場合でも 1 本ずつ個別に解除できます。インデックスバッジのスペースは常に確保されるため、インデックスが表示されていなくても行の位置がずれません</li>
+</ul>]]></description>
+            <description xml:lang="en"><![CDATA[<h3>Added</h3>
+<ul>
+<li>The hover menu on a linked window-group badge now has a third button next to the swap button: **Match window heights** (for left/right pairs, icon: up/down arrows) or **Match window widths** (for top/bottom pairs, icon: left/right arrows). Each side of the badge is the *whole set of group members on that side of the contact line*, not just the badge's two windows — including siblings that share a parent edge but aren't directly linked to each other (e.g. with `[A]` on top and `[B] [C]` both touching A's bottom, "Match widths" on A↔B treats `{B, C}` as one side and stretches B+C combined to A's width). On each side the windows are then re-laid-out edge-to-edge along the perpendicular axis: outer edges anchor to the outer envelope, and any gap or overlap between two neighbouring windows is closed by meeting at the midpoint of their original edges (clean shared edges stay put). The button is hidden when both sides already line up and have no internal gap or overlap to clean up</li>
+<li>"Form group" candidate badges now also appear when you manually move or resize a window so its edge ends up touching another window's edge — not only after applying a Tiley layout. The badge surfaces the moment you release the mouse (it stays hidden during the drag/resize itself), and clicking it links the pair into a window group exactly like the post-layout candidate badge does</li>
+<li>Clicking a "form group" candidate badge now pops up the linked-state hover menu (Ungroup / Swap / Match heights or widths) right away, the instant the group is established — no need to move the cursor off the badge and back to surface the actions</li>
+<li>The hover menu pill now fades in and out instead of snapping on and off. The badge's NSPanel keeps its expanded size for the duration of the fade-out so the pill doesn't get clipped mid-animation, and re-hovering during a fade cancels the pending collapse</li>
+<li>Two new buttons in the linked-badge hover menu: **Fill screen width** (icon `rectangle.portrait.arrowtriangle.2.outward`) and **Fill screen height** (icon `rectangle.arrowtriangle.2.outward`). They proportionally rescale every window in the group so its bounding box snaps to the screen's visible width or height (Dock and menu bar excluded), preserving the relative spacing between members. Each button is hidden when the group already fills that axis</li>
+<li>Hovering a link badge on a grouped pair of real windows now shows a small action menu (below the badge, or above when there isn't enough room): an **Ungroup** button and a **Swap windows** button (left/right or top/bottom depending on how the pair is arranged). The badge itself no longer doubles as the unlink button — its only role is to signal that the windows are linked. Swapping a pair also drops any other links those two windows have to third windows, so the swapped pair is left as a clean two-window group</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>When applying a multi-rectangle layout preset, if a window cannot shrink to its target rectangle because of its app's minimum-size constraint, the neighbouring window's width or height is now adjusted so the shared edge stays aligned (with the preset gap preserved) instead of overlapping or leaving a misaligned gap</li>
+<li>Sidebar group indicator now shows app-slot satellite links that aren't part of the currently active spatial group. When a preset with app-assigned rectangles and grouped pairs is applied, each unassigned slot's window becomes a satellite of the assigned app's bundle. Re-applying the preset (or another one with the same anchor app) makes the previous spatial group neighbour drop out of the active `WindowGroup`, but its satellite link is preserved so the raise linkage still works. These background-but-still-active satellite links are now rendered as partner icons in the sidebar (alongside the active spatial partners), and each can be unlinked individually with the same hover-and-click affordance — including the case where one window is satellite-linked to multiple anchor apps, or one anchor window has multiple satellites registered to its bundle</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>When applying a layout preset that snaps a window flush against a screen edge, only the group adjacencies on that screen-edge side of the resized window are released — adjacencies on other edges are preserved. For example, with horizontal pair A↔B and vertical pair A↔C, applying "fill screen width" to A drops the A↔B link (A's right edge becomes the screen-right edge) while keeping A↔C intact when A's bottom doesn't reach the screen bottom. Previously a Tiley resize that touched only part of a group dissolved the whole group regardless of which edges were affected</li>
+<li>Sidebar grouping indicator redesigned: instead of a link badge floating between rows, each grouped window row now shows the app icons of its link partners on the right side, before the index badge. Hovering a partner icon highlights the partner window's row in the sidebar and flips the icon (and the matching icon on the partner's row) to a red `x`, so both ends of the link react together and you can clearly see which two windows are about to be unlinked. Clicking the icon while it shows the `x` unlinks just that one connection, so multi-partner groups can be dissolved one link at a time. The index badge slot is always reserved so rows stay aligned even when no index is shown</li>
+</ul>]]></description>
             <pubDate>Sat, 25 Apr 2026 21:06:53 +0900</pubDate>
             <sparkle:version>511</sparkle:version>
             <sparkle:shortVersionString>5.1.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.2/Tiley-5.1.1.zip" length="6422287" type="application/octet-stream" sparkle:edSignature="Rs3SCFf12sMZPiLCC0H5Is5mmK2OAeRwRNHHwx7Jq7S5y78PxciLvzXBEIYWNCcbwHHdQPBp1epjNzAf02HHDg=="/>
+            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.3/Tiley-5.1.1.zip" length="6422287" type="application/octet-stream" sparkle:edSignature="Rs3SCFf12sMZPiLCC0H5Is5mmK2OAeRwRNHHwx7Jq7S5y78PxciLvzXBEIYWNCcbwHHdQPBp1epjNzAf02HHDg=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.1/Tiley511-510.delta" sparkle:deltaFrom="510" length="574734" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TvcZ+fALgvta52jTKuiKrgfCZOxsZHOgWPJWCTIiSVmO3EkWOlH4H+PYkz4DgbyDhj3qpls95r3YKBzoYbojCA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.1/Tiley511-501.delta" sparkle:deltaFrom="501" length="1082966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="LtMIjp0jKi3T8Pe5aaDQBRgxRxdgrvLQyNN6PJ2Ghv6QbD3YROCa1viaMluMnB+CrKNTkxpzYacZW4Ji1QUQDA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.1/Tiley511-500.delta" sparkle:deltaFrom="500" length="1084174" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="lB/9eIJO2VdSQejNlzH4ME4WJX2507N8HaSKdp64LRNV+75dhEoIrOOl7p1WgqygT215sbipiU+OLXRteta7DA=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.1/Tiley511-443.delta" sparkle:deltaFrom="443" length="1180470" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="4754q1Hfv07p4xmJsNzqDLUlzmHkZMB8Jjt5CIcDr4eKBglm6JAYRR5LkFsYU2OnbJuZzqYuVmC+wSSKj0CZDQ=="/>
                 <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.1/Tiley511-442.delta" sparkle:deltaFrom="442" length="1190682" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="NSSZcQ2177Xd8jNZxGNcbu2+0J47mkUkxzqNqDPfBtA+Io2UGHuqHReLTylUfAxEN1BvJZpzMRWKBPslBEpNDw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>5.1.0</title>
-            <description xml:lang="ru"><![CDATA[<h3>Добавлено</h3>
-<ul>
-<li>Добавлена стандартная предустановка макета «Центр»: сетка 4×4 с выделенной центральной областью 2×2, привязанная к сочетанию `C`</li>
-<li>В конце списка предустановок макета добавлена строка «+». Щелчок по ней создаёт предустановку с именем «Новая предустановка макета» и сразу переводит её в режим редактирования</li>
-<li>Группировку теперь можно задавать прямо при редактировании предустановки макета: на каждом общем ребре между областями появляется бейдж `link.badge.plus`; щелчок помечает пару как сгруппированную (бейдж переходит в «связанное» состояние, при наведении показывается значок разрыва). При наведении на предустановку в боковой панели на предпросмотре тоже показываются связанные бейджи, так что сразу видно, какие области будут сгруппированы. При применении такой предустановки соответствующие окна сразу оказываются сгруппированными — никаких дополнительных кликов</li>
-<li>Прямоугольники предустановки макета теперь можно привязывать к конкретному приложению. В редакторе предустановок у каждого прямоугольника есть бейдж `macwindow.badge.plus` — щёлкните, чтобы выбрать запущенное приложение (или через «Другое приложение…» найти его в файловой системе). Назначенный прямоугольник отображается как миниатюра окна с иконкой приложения вместо номера индекса; при наведении появляется ×, щелчок по которому снимает назначение. При применении предустановки в назначенный прямоугольник всегда попадает самое верхнее окно привязанного приложения (при необходимости приложение запускается и Tiley ждёт появления окна до 30 секунд). Если приложение запущено, но окон нет, отправляется системное уведомление. Если в паре сгруппированных областей назначена только одна сторона, окно, которое попало в ненаначенную сторону, связывается с окном назначенного приложения как «спутник» на время сеанса: щелчок по любому из двух также выводит партнёра на передний план</li>
-</ul>
-<h3>Изменено</h3>
-<ul>
-<li>Функция `debugLog` теперь использует `@autoclosure`: при выключенном журнале отладки интерполяция строк сообщений журнала полностью пропускается и не создаёт накладных расходов</li>
-</ul>
-<h3>Исправлено</h3>
-<ul>
-<li>Значки связи для группировки окон больше не появляются над окнами, полностью скрытыми за другим окном. После применения раскладки к большому числу окон значки показываются только между видимыми (передними) окнами; перекрытые окна исключаются из кандидатов на группировку, пока не будут выведены на передний план</li>
-</ul>
-<h3>Удалено</h3>
-<ul>
-<li>Удалена временная предустановка «Последний выбор», которая автоматически добавлялась после применения макета. Теперь новые предустановки создаются явно через строку «+»</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Novo preset de layout padrão "Centro": uma grade 4×4 com a região central 2×2 selecionada, vinculado ao atalho `C`</li>
-<li>Nova linha "+" no final da lista de presets de layout. Clicar nela cria um preset chamado "Novo preset de layout" e entra imediatamente no modo de edição</li>
-<li>Agora é possível definir agrupamento diretamente ao editar um preset de layout: um selo `link.badge.plus` aparece em cada borda compartilhada entre regiões do preset; clique para marcar o par como agrupado (o selo muda para o estado vinculado; ao passar o mouse, ele alterna para o ícone de remoção). Ao passar o mouse sobre um preset na barra lateral, os selos vinculados também aparecem sobre a pré-visualização, deixando claro de relance quais regiões serão agrupadas. Ao aplicar o preset, as janelas correspondentes já começam agrupadas, sem cliques adicionais</li>
-<li>Agora os retângulos de um preset de layout podem ser vinculados a um aplicativo específico. No editor de presets, cada retângulo exibe um selo `macwindow.badge.plus` — clique para escolher um aplicativo em execução (ou navegue pelo sistema de arquivos via "Outro aplicativo…"). Retângulos atribuídos são exibidos como uma janela em miniatura com o ícone do aplicativo em vez do número de índice; passe o mouse e clique no ícone para remover a atribuição. Ao aplicar o preset, um retângulo atribuído sempre recebe a janela mais à frente do aplicativo vinculado (iniciando-o e aguardando até 30 s se necessário). Se o aplicativo estiver em execução mas sem janelas, uma notificação do sistema é exibida. Quando um par agrupado tem exatamente um lado atribuído, a janela que cai no lado não atribuído é vinculada à janela do aplicativo atribuído como "satélite" durante a sessão: clicar em uma traz a outra para a frente também</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>`debugLog` agora usa `@autoclosure`, de modo que, quando o log de depuração está desativado, não há qualquer custo de interpolação de string das mensagens de log</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Os selos de vínculo para agrupamento de janelas não aparecem mais sobre janelas que estão totalmente escondidas atrás de outra janela. Após aplicar um layout a muitas janelas, os selos são exibidos apenas entre as janelas visíveis (à frente); as janelas ocultas ficam excluídas dos candidatos ao agrupamento até serem trazidas à frente</li>
-</ul>
-<h3>Removido</h3>
-<ul>
-<li>Removido o preset temporário "Última seleção" que era adicionado automaticamente após aplicar um layout. Novos presets agora são criados explicitamente pela linha "+"</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Nuovo preset di layout predefinito "Centro": una griglia 4×4 con la regione centrale 2×2 selezionata, associato alla scorciatoia `C`</li>
-<li>Nuova riga "+" in fondo all'elenco dei preset di layout. Facendo clic viene creato un preset chiamato "Nuovo preset di layout" e si entra immediatamente in modalità di modifica</li>
-<li>Ora è possibile definire il raggruppamento direttamente durante la modifica di un preset di layout: in corrispondenza di ogni bordo condiviso tra le regioni del preset compare un badge `link.badge.plus`; fai clic per contrassegnare la coppia come raggruppata (il badge passa allo stato collegato; al passaggio del mouse mostra l'icona di rimozione). Passando il mouse su un preset nella barra laterale, anche nell'anteprima vengono mostrati i badge collegati, così si capisce a colpo d'occhio quali regioni verranno raggruppate. Applicando il preset, le finestre corrispondenti risultano già raggruppate fin da subito, senza ulteriori clic</li>
-<li>I rettangoli di un preset di layout ora possono essere associati a un'applicazione specifica. Nell'editor dei preset, ogni rettangolo mostra un badge `macwindow.badge.plus` — fai clic per scegliere un'applicazione in esecuzione (oppure sfoglia il filesystem tramite "Altra applicazione…"). I rettangoli assegnati vengono visualizzati come una finestra in miniatura con l'icona dell'app al posto del numero di indice; passa con il mouse e fai clic sull'icona per rimuovere l'assegnazione. All'applicazione del preset, un rettangolo assegnato riceve sempre la finestra in primo piano dell'app associata (avviando l'app e attendendo fino a 30 s se necessario). Se l'app è in esecuzione ma non ha finestre, viene mostrata una notifica di sistema. Quando una coppia raggruppata ha esattamente un lato assegnato, la finestra che finisce nel lato non assegnato viene collegata come "satellite" alla finestra dell'app assegnata per l'intera sessione: fare clic su una delle due porta in primo piano anche l'altra</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>`debugLog` ora usa `@autoclosure`, così quando il log di debug è disattivato non viene sostenuto alcun costo per l'interpolazione delle stringhe dei messaggi di log</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>I badge di collegamento per il raggruppamento delle finestre non compaiono più sulle finestre completamente nascoste dietro un'altra finestra. Dopo aver applicato un layout a molte finestre, i badge vengono mostrati solo tra le finestre visibili (in primo piano); le finestre coperte vengono escluse dai candidati al raggruppamento finché non vengono portate in primo piano</li>
-</ul>
-<h3>Rimosso</h3>
-<ul>
-<li>Rimosso il preset temporaneo "Ultima selezione" che veniva aggiunto automaticamente dopo l'applicazione di un layout. I nuovi preset ora si creano esplicitamente tramite la riga "+"</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Nouveau préréglage de disposition par défaut « Centre » : une grille 4×4 avec la zone centrale 2×2 sélectionnée, associé au raccourci `C`</li>
-<li>Nouvelle ligne « + » à la fin de la liste des préréglages de disposition. Cliquer dessus crée un préréglage nommé « Nouveau préréglage de disposition » et passe immédiatement en mode édition</li>
-<li>Le regroupement peut désormais être défini directement lors de l'édition d'un préréglage : un badge `link.badge.plus` apparaît à chaque bord partagé entre deux zones du préréglage ; cliquez pour marquer la paire comme groupée (le badge passe en état lié ; le survol fait apparaître l'icône de suppression). Lorsque le pointeur survole un préréglage dans la barre latérale, les badges liés s'affichent également sur l'aperçu afin de voir d'un coup d'œil quelles zones seront groupées. À l'application du préréglage, les fenêtres correspondantes sont regroupées dès le départ, sans clic supplémentaire</li>
-<li>Les rectangles d'un préréglage de disposition peuvent désormais être liés à une application spécifique. Dans l'éditeur de préréglages, chaque rectangle affiche un badge `macwindow.badge.plus` : cliquez pour choisir une application en cours d'exécution (ou parcourez le système de fichiers via « Autre application… »). Les rectangles attribués s'affichent comme une fenêtre miniature avec l'icône de l'application au lieu d'un numéro ; survolez l'icône et cliquez dessus pour retirer l'attribution. À l'application du préréglage, un rectangle attribué reçoit toujours la fenêtre au premier plan de l'application liée (avec lancement automatique et attente jusqu'à 30 s si besoin). Si l'application est lancée mais n'a aucune fenêtre, une notification système est affichée. Lorsqu'une paire groupée a exactement un côté attribué, la fenêtre qui atterrit côté non attribué est liée à la fenêtre de l'application comme « satellite » pour la durée de la session : un clic sur l'une fait aussi passer l'autre au premier plan</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>`debugLog` utilise désormais `@autoclosure` : lorsque la journalisation de débogage est désactivée, l'interpolation des chaînes des messages de journal n'entraîne plus aucun coût</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Les badges de lien de groupement de fenêtres n'apparaissent plus sur les fenêtres entièrement masquées derrière une autre fenêtre. Après l'application d'une disposition à de nombreuses fenêtres, les badges ne s'affichent qu'entre les fenêtres visibles (au premier plan) ; les fenêtres occultées sont exclues des candidats au groupement jusqu'à ce qu'elles soient ramenées au premier plan</li>
-</ul>
-<h3>Supprimé</h3>
-<ul>
-<li>Suppression du préréglage temporaire « Dernière sélection » qui était automatiquement ajouté après l'application d'une disposition. Les nouveaux préréglages se créent désormais explicitement via la ligne « + »</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Nuevo preajuste de diseño predeterminado "Centro": una cuadrícula 4×4 con la región central 2×2 seleccionada, asignado al atajo `C`</li>
-<li>Nueva fila "+" al final de la lista de preajustes de diseño. Al hacer clic se crea un preajuste llamado "Nuevo preajuste de diseño" y se entra inmediatamente en modo de edición</li>
-<li>Ahora se puede definir el agrupamiento directamente al editar un preajuste de diseño: aparece una insignia `link.badge.plus` en cada borde compartido entre regiones del preajuste; haz clic para marcar el par como agrupado (la insignia pasa al estado enlazado; al pasar el puntero por encima muestra la opción de eliminar). Al pasar el puntero sobre un preajuste en la barra lateral, la vista previa también muestra las insignias enlazadas para que se vea de un vistazo qué regiones quedarán agrupadas. Al aplicar el preajuste, las ventanas correspondientes quedan agrupadas desde el principio, sin clics adicionales</li>
-<li>Ahora cada rectángulo de un preajuste de diseño puede vincularse a una aplicación específica. En el editor de preajustes, cada rectángulo muestra una insignia `macwindow.badge.plus`: haz clic para elegir una aplicación en ejecución (o explora el sistema de archivos con "Otra aplicación…"). Los rectángulos asignados se muestran como una ventana en miniatura con el icono de la aplicación en lugar de un número; pasa el puntero y haz clic en el icono para desasignarla. Al aplicar el preajuste, el rectángulo asignado siempre recibe la ventana más al frente de la aplicación vinculada (lanzándola y esperando hasta 30 s si es necesario). Si la aplicación está en ejecución pero no tiene ventanas, se muestra una notificación del sistema. Cuando un par agrupado tiene exactamente un lado asignado, la ventana que aterriza en el lado no asignado se enlaza como "satélite" con la ventana de la aplicación asignada durante la sesión: hacer clic en cualquiera de las dos también trae la otra al frente</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Se marcó `debugLog` con `@autoclosure` para que, cuando el registro de depuración esté desactivado, no se incurra en ningún coste de interpolación de cadenas de los mensajes de registro</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Las insignias de enlace para agrupar ventanas ya no aparecen sobre ventanas que están totalmente ocultas detrás de otra ventana. Tras aplicar un diseño a muchas ventanas, las insignias solo se muestran entre las ventanas visibles (frontales); las ventanas ocluidas quedan excluidas de los candidatos a agrupación hasta que se traen al frente</li>
-</ul>
-<h3>Eliminado</h3>
-<ul>
-<li>Se eliminó el preajuste temporal "Última selección" que se añadía automáticamente después de aplicar un diseño. Los nuevos preajustes ahora se crean de forma explícita mediante la fila "+"</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Neue Standard-Layout-Voreinstellung „Mitte": ein 4×4-Raster mit der mittleren 2×2-Region ausgewählt, gebunden an die Tastenkombination `C`</li>
-<li>Neue "+"-Zeile am Ende der Layout-Voreinstellungsliste. Ein Klick erstellt eine neue Voreinstellung namens "Neue Layout-Voreinstellung" und wechselt sofort in den Bearbeitungsmodus</li>
-<li>Gruppierungen lassen sich jetzt direkt beim Bearbeiten einer Layout-Voreinstellung festlegen: An jeder gemeinsamen Kante zwischen zwei Bereichen erscheint ein `link.badge.plus`-Abzeichen. Ein Klick markiert das Paar als Gruppe (das Abzeichen wechselt in den verbundenen Zustand; beim Darüberfahren erscheint ein Aufhebungs-Symbol). Auch beim Überfahren einer Voreinstellung in der Seitenleiste werden die verbundenen Kanten als Abzeichen auf der Vorschau angezeigt, damit auf einen Blick erkennbar ist, welche Bereiche gruppiert werden. Beim Anwenden der Voreinstellung sind die entsprechenden Fenster von Anfang an gruppiert — kein zusätzlicher Klick nötig</li>
-<li>Rechtecke einer Layout-Voreinstellung können jetzt an eine bestimmte Anwendung gebunden werden. Im Voreinstellungseditor zeigt jedes Rechteck ein `macwindow.badge.plus`-Abzeichen — ein Klick öffnet eine Liste laufender Anwendungen (oder über "Andere Anwendung…" den Dateisystem-Browser). Zugewiesene Rechtecke werden als Miniaturfenster mit dem App-Symbol statt mit einer Indexnummer dargestellt; ein Klick auf das beim Überfahren eingeblendete × hebt die Zuweisung auf. Beim Anwenden der Voreinstellung landet im zugewiesenen Rechteck stets das vorderste Fenster der gebundenen App (die App wird bei Bedarf gestartet und bis zu 30 Sekunden lang auf ein Fenster gewartet). Läuft die App, hat aber keine Fenster, wird eine Systembenachrichtigung gepostet. Wenn bei einem gruppierten Paar genau eine Seite zugewiesen ist, wird das Fenster, das in der nicht zugewiesenen Seite landet, sitzungsweit als "Satellit" mit dem Fenster der zugewiesenen App verknüpft: ein Klick auf eines bringt auch das andere nach vorne</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>`debugLog` wurde mit `@autoclosure` versehen, sodass bei deaktivierter Debug-Protokollierung keinerlei Kosten für die String-Interpolation der Log-Nachrichten anfallen</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Verknüpfungs-Badges für Fenstergruppen erscheinen nicht mehr auf Fenstern, die vollständig hinter einem anderen Fenster verborgen sind. Nach dem Anwenden eines Layouts auf viele Fenster werden Badges nur noch zwischen sichtbaren (vorderen) Fenstern angezeigt; verdeckte Fenster werden aus den Gruppierungskandidaten ausgeschlossen, bis sie in den Vordergrund gebracht werden</li>
-</ul>
-<h3>Entfernt</h3>
-<ul>
-<li>Die nach dem Anwenden eines Layouts automatisch hinzugefügte temporäre Voreinstellung "Letzte Auswahl" wurde entfernt. Neue Voreinstellungen werden jetzt explizit über die "+"-Zeile erstellt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增預設版面預設「置中」：一個 4×4 網格中央 2×2 區域被選取的預設，綁定到 `C` 快捷鍵</li>
-<li>在版面預設列表末尾新增了一個「+」按鈕列。點擊後會建立一個名為「新增版面預設」的預設並立即進入編輯模式</li>
-<li>在編輯版面預設時，可以直接為彼此相鄰的區域設定分組：相鄰邊的中點會出現 `link.badge.plus` 徽章，點擊即可將該組區域標記為分組（徽章會切換為已連接狀態，滑鼠懸停時會切換為移除圖示）。在側欄將滑鼠移到預設上時，預覽上也會顯示已連接的徽章，一眼就能看出哪些區域會被分組。套用該預設時，對應的視窗一開始就會處於分組狀態，不需要再額外點擊</li>
-<li>現在可以為版面預設的每個矩形綁定特定的應用程式。在預設編輯器中，每個矩形都會顯示一個 `macwindow.badge.plus` 徽章——點擊即可選擇執行中的應用程式（或透過「其他應用程式…」瀏覽檔案系統）。已指派的矩形會以包含應用程式圖示的迷你視窗形式顯示，而不是索引數字；懸停並點擊該圖示即可取消指派。套用預設時，已指派的矩形一定會放置該應用程式的最前面視窗（若未執行則會自動啟動並最多等待 30 秒）。若應用程式在執行中但沒有視窗，則會發出系統通知。當分組的兩個區域只有一側被指派應用程式時，落在未指派槽位的視窗會與已指派應用程式的視窗作為僅限本工作階段的「衛星」互相連結：點擊其中任一個都會將另一個也帶到最前面</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>將 `debugLog` 改為使用 `@autoclosure`，在停用偵錯記錄時完全跳過記錄訊息的字串插值開銷</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了對多個視窗套用配置後，被其他視窗完全遮蔽的視窗仍會顯示群組連結徽章的問題。現在只會在前景可見的視窗之間顯示徽章；被遮蔽的視窗在被帶到前景之前會從群組候選中排除</li>
-</ul>
-<h3>移除</h3>
-<ul>
-<li>移除了套用版面後自動新增的「上次選擇」暫存預設。現在需要透過列表末尾的「+」列明確建立新預設</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增默认布局预设"居中"：一个 4×4 网格中央 2×2 区域被选中的预设，绑定到 `C` 快捷键</li>
-<li>在布局预设列表末尾新增了一个"+"按钮行。点击后会创建一个名为"新建布局预设"的预设并立即进入编辑模式</li>
-<li>在编辑布局预设时，可以直接为彼此相邻的区域设置分组：相邻边的中点会出现 `link.badge.plus` 徽章，点击即可将这对区域标记为分组（徽章会切换为已连接状态，将鼠标悬停在上面会切换为移除图标）。在侧边栏中将鼠标悬停在预设上时，预览中也会显示已连接的徽章，方便一眼看出哪些区域会被分组。应用该预设时，对应的窗口会一开始就处于分组状态，无需再次点击</li>
-<li>现在可以为布局预设的每个矩形绑定一个特定的应用程序。在预设编辑器中，每个矩形都会显示一个 `macwindow.badge.plus` 徽章——点击即可选择正在运行的应用程序（或通过"其他应用程序…"浏览文件系统）。已分配的矩形会以包含应用图标的迷你窗口形式显示，而不是索引数字；悬停并点击该图标即可取消分配。应用该预设时，已分配的矩形始终会放置绑定应用的最前端窗口（如有必要会启动应用并最多等待 30 秒）。若应用正在运行但没有窗口，则会发出系统通知。当分组中的一对恰好只有一侧被分配时，落在未分配槽位中的窗口会与已分配应用的窗口作为会话级"卫星"相互链接：点击其中任一个都会将另一个也带到前端</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>将 `debugLog` 改为使用 `@autoclosure`，在禁用调试日志时完全跳过日志消息的字符串插值开销</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了对多个窗口应用布局后，被其他窗口完全遮挡的窗口仍然显示分组链接徽章的问题。现在仅在前台可见的窗口之间显示徽章；被遮挡的窗口在被带到前台之前会从分组候选中排除</li>
-</ul>
-<h3>移除</h3>
-<ul>
-<li>移除了在应用布局后自动添加的"上次选择"临时预设。现在需要通过列表末尾的"+"行显式创建新预设</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>기본 레이아웃 프리셋 "중앙"을 추가했습니다. 4×4 그리드의 가운데 2×2 영역을 선택한 상태이며, `C` 키가 단축키로 지정되어 있습니다</li>
-<li>레이아웃 프리셋 목록 맨 아래에 "+" 버튼 행을 추가했습니다. 클릭하면 "새 레이아웃 프리셋"이라는 이름의 프리셋이 생성되고 바로 편집 모드로 들어갑니다</li>
-<li>레이아웃 프리셋 편집 중에 서로 맞닿은 영역들을 바로 그룹으로 지정할 수 있게 되었습니다. 인접한 변 가운데에 `link.badge.plus` 배지가 표시되며, 클릭하면 해당 쌍이 그룹으로 표시됩니다(배지가 연결된 모양으로 바뀌고, 마우스를 올리면 해제 아이콘으로 전환됩니다). 사이드바에서 프리셋에 마우스를 올리면 미리보기 위에도 연결된 배지가 표시되어 어떤 영역이 그룹으로 연결되는지 한눈에 확인할 수 있습니다. 프리셋을 적용하면 해당 창들이 처음부터 그룹화된 상태로 배치됩니다</li>
-<li>레이아웃 프리셋의 각 사각형에 특정 애플리케이션을 할당할 수 있게 되었습니다. 프리셋 편집 화면에서 각 사각형에 표시되는 `macwindow.badge.plus` 배지를 클릭하면 실행 중인 애플리케이션 목록(맨 아래의 "기타 애플리케이션…"을 통해 파일 선택도 가능)이 나타납니다. 할당된 사각형은 인덱스 번호 대신 앱 아이콘이 포함된 미니어처 창으로 표시되며, 마우스를 올렸을 때 나오는 ×를 클릭하면 할당을 해제할 수 있습니다. 프리셋을 적용하면 할당된 사각형에는 해당 앱의 가장 앞에 있는 창이 항상 배치됩니다(실행 중이 아니면 자동으로 실행하고 최대 30초간 기다립니다). 앱은 실행 중이지만 창이 없을 때는 시스템 알림이 표시됩니다. 또한 그룹화된 쌍 중 한쪽만 앱에 할당되어 있는 경우, 할당되지 않은 쪽에 들어간 창이 할당된 앱 창과 세션 한정 "위성"으로 연결되어, 한쪽을 클릭하면 다른 쪽도 함께 앞으로 올라옵니다</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>`debugLog`을 `@autoclosure`로 변경하여 디버그 로그가 비활성화된 상태에서는 로그 메시지의 문자열 보간 비용이 전혀 발생하지 않도록 했습니다</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>여러 윈도우에 레이아웃을 적용한 뒤, 다른 윈도우에 완전히 가려진 윈도우에도 그룹화 링크 배지가 표시되던 문제를 수정했습니다. 이제 앞쪽에 보이는 윈도우들 사이에서만 배지가 표시되며, 뒤에 가려진 윈도우는 앞으로 나오기 전까지 그룹화 후보에서 제외됩니다</li>
-</ul>
-<h3>삭제</h3>
-<ul>
-<li>레이아웃 적용 후 자동으로 추가되던 "마지막 선택" 임시 프리셋을 제거했습니다. 이제 새 프리셋은 목록 끝의 "+" 행을 통해 명시적으로 생성합니다</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>デフォルトレイアウトプリセット「中央」を追加しました。4×4 グリッドの中央 2×2 領域を選択した状態で、`C` キーがショートカットとして割り当てられています</li>
-<li>レイアウトプリセット一覧の末尾に「+」ボタンの行を追加しました。クリックすると「新規レイアウトプリセット」という名前のプリセットが作成され、そのまま編集モードに入ります</li>
-<li>レイアウトプリセットの編集中に、プリセット内で辺が接している領域同士のグループ化をその場で設定できるようになりました。隣接する辺の中央に `link.badge.plus` バッジが表示され、クリックするとそのペアをグループとしてマークします（バッジはリンク済みの見た目に変わり、ホバーで解除アイコンに切り替わります）。サイドバーでプリセットにホバーしているときも、プレビュー上にリンク済みのバッジが表示されるため、どの領域が連結されるかが一目で分かります。プリセットを適用したときは、対応するウインドウが最初からグループ化された状態になります</li>
-<li>レイアウトプリセットの各矩形に特定のアプリケーションを割り当てられるようになりました。プリセット編集中に各矩形に表示される `macwindow.badge.plus` バッジをクリックすると、起動中のアプリケーション一覧（末尾には「その他のアプリケーション…」でファイル選択も可能）が開きます。割り当て済みの矩形はインデックス番号の代わりにアプリアイコン付きのミニチュアウインドウとして表示され、ホバー時に現れる × をクリックすると割り当てを解除できます。プリセット適用時は、割り当てられたアプリの最前面ウインドウが必ずその矩形に配置されます（未起動の場合は自動的に起動し、最大 30 秒待ちます）。アプリが起動中でもウインドウが無い場合はシステム通知を表示します。さらに、グルーピングされたペアのうち片側だけがアプリ割り当てになっている場合、未割り当て側に入ったウインドウが割り当てアプリのウインドウと「サテライト」としてリンクされ、どちらをクリックしてもペアの相手も前面に出るようになります（セッション内のみ有効）</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>`debugLog` を `@autoclosure` 化し、デバッグログが無効な状態ではログメッセージの文字列補間コストが一切発生しないようにしました</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>多数のウインドウにレイアウトを適用したあと、他のウインドウに完全に隠れているウインドウにもグループ化用のリンクバッジが出てしまう問題を修正しました。前面に見えているウインドウ同士にだけバッジが表示されるようになり、背景に隠れているウインドウは前面に出てくるまでグループ化候補から除外されます</li>
-</ul>
-<h3>削除</h3>
-<ul>
-<li>レイアウト適用後に自動追加されていた「最後の選択」一時プリセットを廃止しました。新しいプリセットは末尾の「+」行から明示的に作成するようになりました</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>New default layout preset "Center" — a 4×4 grid with the center 2×2 region selected, bound to the `C` shortcut</li>
-<li>New "+" row at the end of the layout preset list — click it to create a new preset named "New Layout Preset" and immediately enter edit mode</li>
-<li>Grouping can now be defined directly in layout preset editing: a `link.badge.plus` badge appears at every shared edge between regions of the preset; click to mark the pair as grouped (badge flips to a linked state, hover to reveal the remove affordance). Hovering a preset in the sidebar also shows the grouped edges on the preview so you can see at a glance which regions are linked. When the preset is applied, the corresponding windows start out already grouped — no extra click required</li>
-<li>Layout preset rectangles can now be bound to a specific application. In the preset editor each rectangle shows a `macwindow.badge.plus` badge — click it to pick a running application (or browse the filesystem via "Other Application…"). Assigned rectangles render as a miniature window with the app's icon instead of an index number; hover and click the icon to unassign. When the preset is applied, assigned rectangles always receive the frontmost window of the bound app (launching the app and waiting up to 30 s if needed). If the app is running with no windows, a system notification is posted. When a grouped pair has exactly one side assigned, the window that lands in the unassigned slot is linked to the assigned app's window as a session-only "satellite": clicking either brings its partner forward too</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Made `debugLog` zero-cost when debug logging is disabled by using `@autoclosure`, so string interpolation of log messages is skipped entirely in the common case</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Window grouping link badges no longer appear on top of windows that are completely hidden behind another window. After applying a layout to many windows, only the visible (front) windows show grouping badges; their occluded counterparts are excluded from grouping candidates until they're brought to the front</li>
-</ul>
-<h3>Removed</h3>
-<ul>
-<li>Removed the "Last Selection" transient preset that was automatically added after applying a layout. New presets are now created explicitly via the "+" row instead</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Novo preset de layout padrão "Centro": uma grade 4×4 com a região central 2×2 selecionada, vinculado ao atalho `C`</li>
-<li>Nova linha "+" no final da lista de presets de layout. Clicar nela cria um preset chamado "Novo preset de layout" e entra imediatamente no modo de edição</li>
-<li>Agora é possível definir agrupamento diretamente ao editar um preset de layout: um selo `link.badge.plus` aparece em cada borda compartilhada entre regiões do preset; clique para marcar o par como agrupado (o selo muda para o estado vinculado; ao passar o mouse, ele alterna para o ícone de remoção). Ao passar o mouse sobre um preset na barra lateral, os selos vinculados também aparecem sobre a pré-visualização, deixando claro de relance quais regiões serão agrupadas. Ao aplicar o preset, as janelas correspondentes já começam agrupadas, sem cliques adicionais</li>
-<li>Agora os retângulos de um preset de layout podem ser vinculados a um aplicativo específico. No editor de presets, cada retângulo exibe um selo `macwindow.badge.plus` — clique para escolher um aplicativo em execução (ou navegue pelo sistema de arquivos via "Outro aplicativo…"). Retângulos atribuídos são exibidos como uma janela em miniatura com o ícone do aplicativo em vez do número de índice; passe o mouse e clique no ícone para remover a atribuição. Ao aplicar o preset, um retângulo atribuído sempre recebe a janela mais à frente do aplicativo vinculado (iniciando-o e aguardando até 30 s se necessário). Se o aplicativo estiver em execução mas sem janelas, uma notificação do sistema é exibida. Quando um par agrupado tem exatamente um lado atribuído, a janela que cai no lado não atribuído é vinculada à janela do aplicativo atribuído como "satélite" durante a sessão: clicar em uma traz a outra para a frente também</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>`debugLog` agora usa `@autoclosure`, de modo que, quando o log de depuração está desativado, não há qualquer custo de interpolação de string das mensagens de log</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Os selos de vínculo para agrupamento de janelas não aparecem mais sobre janelas que estão totalmente escondidas atrás de outra janela. Após aplicar um layout a muitas janelas, os selos são exibidos apenas entre as janelas visíveis (à frente); as janelas ocultas ficam excluídas dos candidatos ao agrupamento até serem trazidas à frente</li>
-</ul>
-<h3>Removido</h3>
-<ul>
-<li>Removido o preset temporário "Última seleção" que era adicionado automaticamente após aplicar um layout. Novos presets agora são criados explicitamente pela linha "+"</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Nuovo preset di layout predefinito "Centro": una griglia 4×4 con la regione centrale 2×2 selezionata, associato alla scorciatoia `C`</li>
-<li>Nuova riga "+" in fondo all'elenco dei preset di layout. Facendo clic viene creato un preset chiamato "Nuovo preset di layout" e si entra immediatamente in modalità di modifica</li>
-<li>Ora è possibile definire il raggruppamento direttamente durante la modifica di un preset di layout: in corrispondenza di ogni bordo condiviso tra le regioni del preset compare un badge `link.badge.plus`; fai clic per contrassegnare la coppia come raggruppata (il badge passa allo stato collegato; al passaggio del mouse mostra l'icona di rimozione). Passando il mouse su un preset nella barra laterale, anche nell'anteprima vengono mostrati i badge collegati, così si capisce a colpo d'occhio quali regioni verranno raggruppate. Applicando il preset, le finestre corrispondenti risultano già raggruppate fin da subito, senza ulteriori clic</li>
-<li>I rettangoli di un preset di layout ora possono essere associati a un'applicazione specifica. Nell'editor dei preset, ogni rettangolo mostra un badge `macwindow.badge.plus` — fai clic per scegliere un'applicazione in esecuzione (oppure sfoglia il filesystem tramite "Altra applicazione…"). I rettangoli assegnati vengono visualizzati come una finestra in miniatura con l'icona dell'app al posto del numero di indice; passa con il mouse e fai clic sull'icona per rimuovere l'assegnazione. All'applicazione del preset, un rettangolo assegnato riceve sempre la finestra in primo piano dell'app associata (avviando l'app e attendendo fino a 30 s se necessario). Se l'app è in esecuzione ma non ha finestre, viene mostrata una notifica di sistema. Quando una coppia raggruppata ha esattamente un lato assegnato, la finestra che finisce nel lato non assegnato viene collegata come "satellite" alla finestra dell'app assegnata per l'intera sessione: fare clic su una delle due porta in primo piano anche l'altra</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>`debugLog` ora usa `@autoclosure`, così quando il log di debug è disattivato non viene sostenuto alcun costo per l'interpolazione delle stringhe dei messaggi di log</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>I badge di collegamento per il raggruppamento delle finestre non compaiono più sulle finestre completamente nascoste dietro un'altra finestra. Dopo aver applicato un layout a molte finestre, i badge vengono mostrati solo tra le finestre visibili (in primo piano); le finestre coperte vengono escluse dai candidati al raggruppamento finché non vengono portate in primo piano</li>
-</ul>
-<h3>Rimosso</h3>
-<ul>
-<li>Rimosso il preset temporaneo "Ultima selezione" che veniva aggiunto automaticamente dopo l'applicazione di un layout. I nuovi preset ora si creano esplicitamente tramite la riga "+"</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Nouveau préréglage de disposition par défaut « Centre » : une grille 4×4 avec la zone centrale 2×2 sélectionnée, associé au raccourci `C`</li>
-<li>Nouvelle ligne « + » à la fin de la liste des préréglages de disposition. Cliquer dessus crée un préréglage nommé « Nouveau préréglage de disposition » et passe immédiatement en mode édition</li>
-<li>Le regroupement peut désormais être défini directement lors de l'édition d'un préréglage : un badge `link.badge.plus` apparaît à chaque bord partagé entre deux zones du préréglage ; cliquez pour marquer la paire comme groupée (le badge passe en état lié ; le survol fait apparaître l'icône de suppression). Lorsque le pointeur survole un préréglage dans la barre latérale, les badges liés s'affichent également sur l'aperçu afin de voir d'un coup d'œil quelles zones seront groupées. À l'application du préréglage, les fenêtres correspondantes sont regroupées dès le départ, sans clic supplémentaire</li>
-<li>Les rectangles d'un préréglage de disposition peuvent désormais être liés à une application spécifique. Dans l'éditeur de préréglages, chaque rectangle affiche un badge `macwindow.badge.plus` : cliquez pour choisir une application en cours d'exécution (ou parcourez le système de fichiers via « Autre application… »). Les rectangles attribués s'affichent comme une fenêtre miniature avec l'icône de l'application au lieu d'un numéro ; survolez l'icône et cliquez dessus pour retirer l'attribution. À l'application du préréglage, un rectangle attribué reçoit toujours la fenêtre au premier plan de l'application liée (avec lancement automatique et attente jusqu'à 30 s si besoin). Si l'application est lancée mais n'a aucune fenêtre, une notification système est affichée. Lorsqu'une paire groupée a exactement un côté attribué, la fenêtre qui atterrit côté non attribué est liée à la fenêtre de l'application comme « satellite » pour la durée de la session : un clic sur l'une fait aussi passer l'autre au premier plan</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>`debugLog` utilise désormais `@autoclosure` : lorsque la journalisation de débogage est désactivée, l'interpolation des chaînes des messages de journal n'entraîne plus aucun coût</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Les badges de lien de groupement de fenêtres n'apparaissent plus sur les fenêtres entièrement masquées derrière une autre fenêtre. Après l'application d'une disposition à de nombreuses fenêtres, les badges ne s'affichent qu'entre les fenêtres visibles (au premier plan) ; les fenêtres occultées sont exclues des candidats au groupement jusqu'à ce qu'elles soient ramenées au premier plan</li>
-</ul>
-<h3>Supprimé</h3>
-<ul>
-<li>Suppression du préréglage temporaire « Dernière sélection » qui était automatiquement ajouté après l'application d'une disposition. Les nouveaux préréglages se créent désormais explicitement via la ligne « + »</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Nuevo preajuste de diseño predeterminado "Centro": una cuadrícula 4×4 con la región central 2×2 seleccionada, asignado al atajo `C`</li>
-<li>Nueva fila "+" al final de la lista de preajustes de diseño. Al hacer clic se crea un preajuste llamado "Nuevo preajuste de diseño" y se entra inmediatamente en modo de edición</li>
-<li>Ahora se puede definir el agrupamiento directamente al editar un preajuste de diseño: aparece una insignia `link.badge.plus` en cada borde compartido entre regiones del preajuste; haz clic para marcar el par como agrupado (la insignia pasa al estado enlazado; al pasar el puntero por encima muestra la opción de eliminar). Al pasar el puntero sobre un preajuste en la barra lateral, la vista previa también muestra las insignias enlazadas para que se vea de un vistazo qué regiones quedarán agrupadas. Al aplicar el preajuste, las ventanas correspondientes quedan agrupadas desde el principio, sin clics adicionales</li>
-<li>Ahora cada rectángulo de un preajuste de diseño puede vincularse a una aplicación específica. En el editor de preajustes, cada rectángulo muestra una insignia `macwindow.badge.plus`: haz clic para elegir una aplicación en ejecución (o explora el sistema de archivos con "Otra aplicación…"). Los rectángulos asignados se muestran como una ventana en miniatura con el icono de la aplicación en lugar de un número; pasa el puntero y haz clic en el icono para desasignarla. Al aplicar el preajuste, el rectángulo asignado siempre recibe la ventana más al frente de la aplicación vinculada (lanzándola y esperando hasta 30 s si es necesario). Si la aplicación está en ejecución pero no tiene ventanas, se muestra una notificación del sistema. Cuando un par agrupado tiene exactamente un lado asignado, la ventana que aterriza en el lado no asignado se enlaza como "satélite" con la ventana de la aplicación asignada durante la sesión: hacer clic en cualquiera de las dos también trae la otra al frente</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Se marcó `debugLog` con `@autoclosure` para que, cuando el registro de depuración esté desactivado, no se incurra en ningún coste de interpolación de cadenas de los mensajes de registro</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Las insignias de enlace para agrupar ventanas ya no aparecen sobre ventanas que están totalmente ocultas detrás de otra ventana. Tras aplicar un diseño a muchas ventanas, las insignias solo se muestran entre las ventanas visibles (frontales); las ventanas ocluidas quedan excluidas de los candidatos a agrupación hasta que se traen al frente</li>
-</ul>
-<h3>Eliminado</h3>
-<ul>
-<li>Se eliminó el preajuste temporal "Última selección" que se añadía automáticamente después de aplicar un diseño. Los nuevos preajustes ahora se crean de forma explícita mediante la fila "+"</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Neue Standard-Layout-Voreinstellung „Mitte": ein 4×4-Raster mit der mittleren 2×2-Region ausgewählt, gebunden an die Tastenkombination `C`</li>
-<li>Neue "+"-Zeile am Ende der Layout-Voreinstellungsliste. Ein Klick erstellt eine neue Voreinstellung namens "Neue Layout-Voreinstellung" und wechselt sofort in den Bearbeitungsmodus</li>
-<li>Gruppierungen lassen sich jetzt direkt beim Bearbeiten einer Layout-Voreinstellung festlegen: An jeder gemeinsamen Kante zwischen zwei Bereichen erscheint ein `link.badge.plus`-Abzeichen. Ein Klick markiert das Paar als Gruppe (das Abzeichen wechselt in den verbundenen Zustand; beim Darüberfahren erscheint ein Aufhebungs-Symbol). Auch beim Überfahren einer Voreinstellung in der Seitenleiste werden die verbundenen Kanten als Abzeichen auf der Vorschau angezeigt, damit auf einen Blick erkennbar ist, welche Bereiche gruppiert werden. Beim Anwenden der Voreinstellung sind die entsprechenden Fenster von Anfang an gruppiert — kein zusätzlicher Klick nötig</li>
-<li>Rechtecke einer Layout-Voreinstellung können jetzt an eine bestimmte Anwendung gebunden werden. Im Voreinstellungseditor zeigt jedes Rechteck ein `macwindow.badge.plus`-Abzeichen — ein Klick öffnet eine Liste laufender Anwendungen (oder über "Andere Anwendung…" den Dateisystem-Browser). Zugewiesene Rechtecke werden als Miniaturfenster mit dem App-Symbol statt mit einer Indexnummer dargestellt; ein Klick auf das beim Überfahren eingeblendete × hebt die Zuweisung auf. Beim Anwenden der Voreinstellung landet im zugewiesenen Rechteck stets das vorderste Fenster der gebundenen App (die App wird bei Bedarf gestartet und bis zu 30 Sekunden lang auf ein Fenster gewartet). Läuft die App, hat aber keine Fenster, wird eine Systembenachrichtigung gepostet. Wenn bei einem gruppierten Paar genau eine Seite zugewiesen ist, wird das Fenster, das in der nicht zugewiesenen Seite landet, sitzungsweit als "Satellit" mit dem Fenster der zugewiesenen App verknüpft: ein Klick auf eines bringt auch das andere nach vorne</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>`debugLog` wurde mit `@autoclosure` versehen, sodass bei deaktivierter Debug-Protokollierung keinerlei Kosten für die String-Interpolation der Log-Nachrichten anfallen</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Verknüpfungs-Badges für Fenstergruppen erscheinen nicht mehr auf Fenstern, die vollständig hinter einem anderen Fenster verborgen sind. Nach dem Anwenden eines Layouts auf viele Fenster werden Badges nur noch zwischen sichtbaren (vorderen) Fenstern angezeigt; verdeckte Fenster werden aus den Gruppierungskandidaten ausgeschlossen, bis sie in den Vordergrund gebracht werden</li>
-</ul>
-<h3>Entfernt</h3>
-<ul>
-<li>Die nach dem Anwenden eines Layouts automatisch hinzugefügte temporäre Voreinstellung "Letzte Auswahl" wurde entfernt. Neue Voreinstellungen werden jetzt explizit über die "+"-Zeile erstellt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增預設版面預設「置中」：一個 4×4 網格中央 2×2 區域被選取的預設，綁定到 `C` 快捷鍵</li>
-<li>在版面預設列表末尾新增了一個「+」按鈕列。點擊後會建立一個名為「新增版面預設」的預設並立即進入編輯模式</li>
-<li>在編輯版面預設時，可以直接為彼此相鄰的區域設定分組：相鄰邊的中點會出現 `link.badge.plus` 徽章，點擊即可將該組區域標記為分組（徽章會切換為已連接狀態，滑鼠懸停時會切換為移除圖示）。在側欄將滑鼠移到預設上時，預覽上也會顯示已連接的徽章，一眼就能看出哪些區域會被分組。套用該預設時，對應的視窗一開始就會處於分組狀態，不需要再額外點擊</li>
-<li>現在可以為版面預設的每個矩形綁定特定的應用程式。在預設編輯器中，每個矩形都會顯示一個 `macwindow.badge.plus` 徽章——點擊即可選擇執行中的應用程式（或透過「其他應用程式…」瀏覽檔案系統）。已指派的矩形會以包含應用程式圖示的迷你視窗形式顯示，而不是索引數字；懸停並點擊該圖示即可取消指派。套用預設時，已指派的矩形一定會放置該應用程式的最前面視窗（若未執行則會自動啟動並最多等待 30 秒）。若應用程式在執行中但沒有視窗，則會發出系統通知。當分組的兩個區域只有一側被指派應用程式時，落在未指派槽位的視窗會與已指派應用程式的視窗作為僅限本工作階段的「衛星」互相連結：點擊其中任一個都會將另一個也帶到最前面</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>將 `debugLog` 改為使用 `@autoclosure`，在停用偵錯記錄時完全跳過記錄訊息的字串插值開銷</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了對多個視窗套用配置後，被其他視窗完全遮蔽的視窗仍會顯示群組連結徽章的問題。現在只會在前景可見的視窗之間顯示徽章；被遮蔽的視窗在被帶到前景之前會從群組候選中排除</li>
-</ul>
-<h3>移除</h3>
-<ul>
-<li>移除了套用版面後自動新增的「上次選擇」暫存預設。現在需要透過列表末尾的「+」列明確建立新預設</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增默认布局预设"居中"：一个 4×4 网格中央 2×2 区域被选中的预设，绑定到 `C` 快捷键</li>
-<li>在布局预设列表末尾新增了一个"+"按钮行。点击后会创建一个名为"新建布局预设"的预设并立即进入编辑模式</li>
-<li>在编辑布局预设时，可以直接为彼此相邻的区域设置分组：相邻边的中点会出现 `link.badge.plus` 徽章，点击即可将这对区域标记为分组（徽章会切换为已连接状态，将鼠标悬停在上面会切换为移除图标）。在侧边栏中将鼠标悬停在预设上时，预览中也会显示已连接的徽章，方便一眼看出哪些区域会被分组。应用该预设时，对应的窗口会一开始就处于分组状态，无需再次点击</li>
-<li>现在可以为布局预设的每个矩形绑定一个特定的应用程序。在预设编辑器中，每个矩形都会显示一个 `macwindow.badge.plus` 徽章——点击即可选择正在运行的应用程序（或通过"其他应用程序…"浏览文件系统）。已分配的矩形会以包含应用图标的迷你窗口形式显示，而不是索引数字；悬停并点击该图标即可取消分配。应用该预设时，已分配的矩形始终会放置绑定应用的最前端窗口（如有必要会启动应用并最多等待 30 秒）。若应用正在运行但没有窗口，则会发出系统通知。当分组中的一对恰好只有一侧被分配时，落在未分配槽位中的窗口会与已分配应用的窗口作为会话级"卫星"相互链接：点击其中任一个都会将另一个也带到前端</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>将 `debugLog` 改为使用 `@autoclosure`，在禁用调试日志时完全跳过日志消息的字符串插值开销</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了对多个窗口应用布局后，被其他窗口完全遮挡的窗口仍然显示分组链接徽章的问题。现在仅在前台可见的窗口之间显示徽章；被遮挡的窗口在被带到前台之前会从分组候选中排除</li>
-</ul>
-<h3>移除</h3>
-<ul>
-<li>移除了在应用布局后自动添加的"上次选择"临时预设。现在需要通过列表末尾的"+"行显式创建新预设</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>기본 레이아웃 프리셋 "중앙"을 추가했습니다. 4×4 그리드의 가운데 2×2 영역을 선택한 상태이며, `C` 키가 단축키로 지정되어 있습니다</li>
-<li>레이아웃 프리셋 목록 맨 아래에 "+" 버튼 행을 추가했습니다. 클릭하면 "새 레이아웃 프리셋"이라는 이름의 프리셋이 생성되고 바로 편집 모드로 들어갑니다</li>
-<li>레이아웃 프리셋 편집 중에 서로 맞닿은 영역들을 바로 그룹으로 지정할 수 있게 되었습니다. 인접한 변 가운데에 `link.badge.plus` 배지가 표시되며, 클릭하면 해당 쌍이 그룹으로 표시됩니다(배지가 연결된 모양으로 바뀌고, 마우스를 올리면 해제 아이콘으로 전환됩니다). 사이드바에서 프리셋에 마우스를 올리면 미리보기 위에도 연결된 배지가 표시되어 어떤 영역이 그룹으로 연결되는지 한눈에 확인할 수 있습니다. 프리셋을 적용하면 해당 창들이 처음부터 그룹화된 상태로 배치됩니다</li>
-<li>레이아웃 프리셋의 각 사각형에 특정 애플리케이션을 할당할 수 있게 되었습니다. 프리셋 편집 화면에서 각 사각형에 표시되는 `macwindow.badge.plus` 배지를 클릭하면 실행 중인 애플리케이션 목록(맨 아래의 "기타 애플리케이션…"을 통해 파일 선택도 가능)이 나타납니다. 할당된 사각형은 인덱스 번호 대신 앱 아이콘이 포함된 미니어처 창으로 표시되며, 마우스를 올렸을 때 나오는 ×를 클릭하면 할당을 해제할 수 있습니다. 프리셋을 적용하면 할당된 사각형에는 해당 앱의 가장 앞에 있는 창이 항상 배치됩니다(실행 중이 아니면 자동으로 실행하고 최대 30초간 기다립니다). 앱은 실행 중이지만 창이 없을 때는 시스템 알림이 표시됩니다. 또한 그룹화된 쌍 중 한쪽만 앱에 할당되어 있는 경우, 할당되지 않은 쪽에 들어간 창이 할당된 앱 창과 세션 한정 "위성"으로 연결되어, 한쪽을 클릭하면 다른 쪽도 함께 앞으로 올라옵니다</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>`debugLog`을 `@autoclosure`로 변경하여 디버그 로그가 비활성화된 상태에서는 로그 메시지의 문자열 보간 비용이 전혀 발생하지 않도록 했습니다</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>여러 윈도우에 레이아웃을 적용한 뒤, 다른 윈도우에 완전히 가려진 윈도우에도 그룹화 링크 배지가 표시되던 문제를 수정했습니다. 이제 앞쪽에 보이는 윈도우들 사이에서만 배지가 표시되며, 뒤에 가려진 윈도우는 앞으로 나오기 전까지 그룹화 후보에서 제외됩니다</li>
-</ul>
-<h3>삭제</h3>
-<ul>
-<li>레이아웃 적용 후 자동으로 추가되던 "마지막 선택" 임시 프리셋을 제거했습니다. 이제 새 프리셋은 목록 끝의 "+" 행을 통해 명시적으로 생성합니다</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>デフォルトレイアウトプリセット「中央」を追加しました。4×4 グリッドの中央 2×2 領域を選択した状態で、`C` キーがショートカットとして割り当てられています</li>
-<li>レイアウトプリセット一覧の末尾に「+」ボタンの行を追加しました。クリックすると「新規レイアウトプリセット」という名前のプリセットが作成され、そのまま編集モードに入ります</li>
-<li>レイアウトプリセットの編集中に、プリセット内で辺が接している領域同士のグループ化をその場で設定できるようになりました。隣接する辺の中央に `link.badge.plus` バッジが表示され、クリックするとそのペアをグループとしてマークします（バッジはリンク済みの見た目に変わり、ホバーで解除アイコンに切り替わります）。サイドバーでプリセットにホバーしているときも、プレビュー上にリンク済みのバッジが表示されるため、どの領域が連結されるかが一目で分かります。プリセットを適用したときは、対応するウインドウが最初からグループ化された状態になります</li>
-<li>レイアウトプリセットの各矩形に特定のアプリケーションを割り当てられるようになりました。プリセット編集中に各矩形に表示される `macwindow.badge.plus` バッジをクリックすると、起動中のアプリケーション一覧（末尾には「その他のアプリケーション…」でファイル選択も可能）が開きます。割り当て済みの矩形はインデックス番号の代わりにアプリアイコン付きのミニチュアウインドウとして表示され、ホバー時に現れる × をクリックすると割り当てを解除できます。プリセット適用時は、割り当てられたアプリの最前面ウインドウが必ずその矩形に配置されます（未起動の場合は自動的に起動し、最大 30 秒待ちます）。アプリが起動中でもウインドウが無い場合はシステム通知を表示します。さらに、グルーピングされたペアのうち片側だけがアプリ割り当てになっている場合、未割り当て側に入ったウインドウが割り当てアプリのウインドウと「サテライト」としてリンクされ、どちらをクリックしてもペアの相手も前面に出るようになります（セッション内のみ有効）</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>`debugLog` を `@autoclosure` 化し、デバッグログが無効な状態ではログメッセージの文字列補間コストが一切発生しないようにしました</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>多数のウインドウにレイアウトを適用したあと、他のウインドウに完全に隠れているウインドウにもグループ化用のリンクバッジが出てしまう問題を修正しました。前面に見えているウインドウ同士にだけバッジが表示されるようになり、背景に隠れているウインドウは前面に出てくるまでグループ化候補から除外されます</li>
-</ul>
-<h3>削除</h3>
-<ul>
-<li>レイアウト適用後に自動追加されていた「最後の選択」一時プリセットを廃止しました。新しいプリセットは末尾の「+」行から明示的に作成するようになりました</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>New default layout preset "Center" — a 4×4 grid with the center 2×2 region selected, bound to the `C` shortcut</li>
-<li>New "+" row at the end of the layout preset list — click it to create a new preset named "New Layout Preset" and immediately enter edit mode</li>
-<li>Grouping can now be defined directly in layout preset editing: a `link.badge.plus` badge appears at every shared edge between regions of the preset; click to mark the pair as grouped (badge flips to a linked state, hover to reveal the remove affordance). Hovering a preset in the sidebar also shows the grouped edges on the preview so you can see at a glance which regions are linked. When the preset is applied, the corresponding windows start out already grouped — no extra click required</li>
-<li>Layout preset rectangles can now be bound to a specific application. In the preset editor each rectangle shows a `macwindow.badge.plus` badge — click it to pick a running application (or browse the filesystem via "Other Application…"). Assigned rectangles render as a miniature window with the app's icon instead of an index number; hover and click the icon to unassign. When the preset is applied, assigned rectangles always receive the frontmost window of the bound app (launching the app and waiting up to 30 s if needed). If the app is running with no windows, a system notification is posted. When a grouped pair has exactly one side assigned, the window that lands in the unassigned slot is linked to the assigned app's window as a session-only "satellite": clicking either brings its partner forward too</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Made `debugLog` zero-cost when debug logging is disabled by using `@autoclosure`, so string interpolation of log messages is skipped entirely in the common case</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Window grouping link badges no longer appear on top of windows that are completely hidden behind another window. After applying a layout to many windows, only the visible (front) windows show grouping badges; their occluded counterparts are excluded from grouping candidates until they're brought to the front</li>
-</ul>
-<h3>Removed</h3>
-<ul>
-<li>Removed the "Last Selection" transient preset that was automatically added after applying a layout. New presets are now created explicitly via the "+" row instead</li>
-</ul>]]></description>
-            <description xml:lang="pt-BR"><![CDATA[<h3>Adicionado</h3>
-<ul>
-<li>Novo preset de layout padrão "Centro": uma grade 4×4 com a região central 2×2 selecionada, vinculado ao atalho `C`</li>
-<li>Nova linha "+" no final da lista de presets de layout. Clicar nela cria um preset chamado "Novo preset de layout" e entra imediatamente no modo de edição</li>
-<li>Agora é possível definir agrupamento diretamente ao editar um preset de layout: um selo `link.badge.plus` aparece em cada borda compartilhada entre regiões do preset; clique para marcar o par como agrupado (o selo muda para o estado vinculado; ao passar o mouse, ele alterna para o ícone de remoção). Ao passar o mouse sobre um preset na barra lateral, os selos vinculados também aparecem sobre a pré-visualização, deixando claro de relance quais regiões serão agrupadas. Ao aplicar o preset, as janelas correspondentes já começam agrupadas, sem cliques adicionais</li>
-<li>Agora os retângulos de um preset de layout podem ser vinculados a um aplicativo específico. No editor de presets, cada retângulo exibe um selo `macwindow.badge.plus` — clique para escolher um aplicativo em execução (ou navegue pelo sistema de arquivos via "Outro aplicativo…"). Retângulos atribuídos são exibidos como uma janela em miniatura com o ícone do aplicativo em vez do número de índice; passe o mouse e clique no ícone para remover a atribuição. Ao aplicar o preset, um retângulo atribuído sempre recebe a janela mais à frente do aplicativo vinculado (iniciando-o e aguardando até 30 s se necessário). Se o aplicativo estiver em execução mas sem janelas, uma notificação do sistema é exibida. Quando um par agrupado tem exatamente um lado atribuído, a janela que cai no lado não atribuído é vinculada à janela do aplicativo atribuído como "satélite" durante a sessão: clicar em uma traz a outra para a frente também</li>
-</ul>
-<h3>Alterado</h3>
-<ul>
-<li>`debugLog` agora usa `@autoclosure`, de modo que, quando o log de depuração está desativado, não há qualquer custo de interpolação de string das mensagens de log</li>
-</ul>
-<h3>Corrigido</h3>
-<ul>
-<li>Os selos de vínculo para agrupamento de janelas não aparecem mais sobre janelas que estão totalmente escondidas atrás de outra janela. Após aplicar um layout a muitas janelas, os selos são exibidos apenas entre as janelas visíveis (à frente); as janelas ocultas ficam excluídas dos candidatos ao agrupamento até serem trazidas à frente</li>
-</ul>
-<h3>Removido</h3>
-<ul>
-<li>Removido o preset temporário "Última seleção" que era adicionado automaticamente após aplicar um layout. Novos presets agora são criados explicitamente pela linha "+"</li>
-</ul>]]></description>
-            <description xml:lang="it"><![CDATA[<h3>Aggiunto</h3>
-<ul>
-<li>Nuovo preset di layout predefinito "Centro": una griglia 4×4 con la regione centrale 2×2 selezionata, associato alla scorciatoia `C`</li>
-<li>Nuova riga "+" in fondo all'elenco dei preset di layout. Facendo clic viene creato un preset chiamato "Nuovo preset di layout" e si entra immediatamente in modalità di modifica</li>
-<li>Ora è possibile definire il raggruppamento direttamente durante la modifica di un preset di layout: in corrispondenza di ogni bordo condiviso tra le regioni del preset compare un badge `link.badge.plus`; fai clic per contrassegnare la coppia come raggruppata (il badge passa allo stato collegato; al passaggio del mouse mostra l'icona di rimozione). Passando il mouse su un preset nella barra laterale, anche nell'anteprima vengono mostrati i badge collegati, così si capisce a colpo d'occhio quali regioni verranno raggruppate. Applicando il preset, le finestre corrispondenti risultano già raggruppate fin da subito, senza ulteriori clic</li>
-<li>I rettangoli di un preset di layout ora possono essere associati a un'applicazione specifica. Nell'editor dei preset, ogni rettangolo mostra un badge `macwindow.badge.plus` — fai clic per scegliere un'applicazione in esecuzione (oppure sfoglia il filesystem tramite "Altra applicazione…"). I rettangoli assegnati vengono visualizzati come una finestra in miniatura con l'icona dell'app al posto del numero di indice; passa con il mouse e fai clic sull'icona per rimuovere l'assegnazione. All'applicazione del preset, un rettangolo assegnato riceve sempre la finestra in primo piano dell'app associata (avviando l'app e attendendo fino a 30 s se necessario). Se l'app è in esecuzione ma non ha finestre, viene mostrata una notifica di sistema. Quando una coppia raggruppata ha esattamente un lato assegnato, la finestra che finisce nel lato non assegnato viene collegata come "satellite" alla finestra dell'app assegnata per l'intera sessione: fare clic su una delle due porta in primo piano anche l'altra</li>
-</ul>
-<h3>Modificato</h3>
-<ul>
-<li>`debugLog` ora usa `@autoclosure`, così quando il log di debug è disattivato non viene sostenuto alcun costo per l'interpolazione delle stringhe dei messaggi di log</li>
-</ul>
-<h3>Corretto</h3>
-<ul>
-<li>I badge di collegamento per il raggruppamento delle finestre non compaiono più sulle finestre completamente nascoste dietro un'altra finestra. Dopo aver applicato un layout a molte finestre, i badge vengono mostrati solo tra le finestre visibili (in primo piano); le finestre coperte vengono escluse dai candidati al raggruppamento finché non vengono portate in primo piano</li>
-</ul>
-<h3>Rimosso</h3>
-<ul>
-<li>Rimosso il preset temporaneo "Ultima selezione" che veniva aggiunto automaticamente dopo l'applicazione di un layout. I nuovi preset ora si creano esplicitamente tramite la riga "+"</li>
-</ul>]]></description>
-            <description xml:lang="fr"><![CDATA[<h3>Ajouté</h3>
-<ul>
-<li>Nouveau préréglage de disposition par défaut « Centre » : une grille 4×4 avec la zone centrale 2×2 sélectionnée, associé au raccourci `C`</li>
-<li>Nouvelle ligne « + » à la fin de la liste des préréglages de disposition. Cliquer dessus crée un préréglage nommé « Nouveau préréglage de disposition » et passe immédiatement en mode édition</li>
-<li>Le regroupement peut désormais être défini directement lors de l'édition d'un préréglage : un badge `link.badge.plus` apparaît à chaque bord partagé entre deux zones du préréglage ; cliquez pour marquer la paire comme groupée (le badge passe en état lié ; le survol fait apparaître l'icône de suppression). Lorsque le pointeur survole un préréglage dans la barre latérale, les badges liés s'affichent également sur l'aperçu afin de voir d'un coup d'œil quelles zones seront groupées. À l'application du préréglage, les fenêtres correspondantes sont regroupées dès le départ, sans clic supplémentaire</li>
-<li>Les rectangles d'un préréglage de disposition peuvent désormais être liés à une application spécifique. Dans l'éditeur de préréglages, chaque rectangle affiche un badge `macwindow.badge.plus` : cliquez pour choisir une application en cours d'exécution (ou parcourez le système de fichiers via « Autre application… »). Les rectangles attribués s'affichent comme une fenêtre miniature avec l'icône de l'application au lieu d'un numéro ; survolez l'icône et cliquez dessus pour retirer l'attribution. À l'application du préréglage, un rectangle attribué reçoit toujours la fenêtre au premier plan de l'application liée (avec lancement automatique et attente jusqu'à 30 s si besoin). Si l'application est lancée mais n'a aucune fenêtre, une notification système est affichée. Lorsqu'une paire groupée a exactement un côté attribué, la fenêtre qui atterrit côté non attribué est liée à la fenêtre de l'application comme « satellite » pour la durée de la session : un clic sur l'une fait aussi passer l'autre au premier plan</li>
-</ul>
-<h3>Modifié</h3>
-<ul>
-<li>`debugLog` utilise désormais `@autoclosure` : lorsque la journalisation de débogage est désactivée, l'interpolation des chaînes des messages de journal n'entraîne plus aucun coût</li>
-</ul>
-<h3>Corrigé</h3>
-<ul>
-<li>Les badges de lien de groupement de fenêtres n'apparaissent plus sur les fenêtres entièrement masquées derrière une autre fenêtre. Après l'application d'une disposition à de nombreuses fenêtres, les badges ne s'affichent qu'entre les fenêtres visibles (au premier plan) ; les fenêtres occultées sont exclues des candidats au groupement jusqu'à ce qu'elles soient ramenées au premier plan</li>
-</ul>
-<h3>Supprimé</h3>
-<ul>
-<li>Suppression du préréglage temporaire « Dernière sélection » qui était automatiquement ajouté après l'application d'une disposition. Les nouveaux préréglages se créent désormais explicitement via la ligne « + »</li>
-</ul>]]></description>
-            <description xml:lang="es"><![CDATA[<h3>Añadido</h3>
-<ul>
-<li>Nuevo preajuste de diseño predeterminado "Centro": una cuadrícula 4×4 con la región central 2×2 seleccionada, asignado al atajo `C`</li>
-<li>Nueva fila "+" al final de la lista de preajustes de diseño. Al hacer clic se crea un preajuste llamado "Nuevo preajuste de diseño" y se entra inmediatamente en modo de edición</li>
-<li>Ahora se puede definir el agrupamiento directamente al editar un preajuste de diseño: aparece una insignia `link.badge.plus` en cada borde compartido entre regiones del preajuste; haz clic para marcar el par como agrupado (la insignia pasa al estado enlazado; al pasar el puntero por encima muestra la opción de eliminar). Al pasar el puntero sobre un preajuste en la barra lateral, la vista previa también muestra las insignias enlazadas para que se vea de un vistazo qué regiones quedarán agrupadas. Al aplicar el preajuste, las ventanas correspondientes quedan agrupadas desde el principio, sin clics adicionales</li>
-<li>Ahora cada rectángulo de un preajuste de diseño puede vincularse a una aplicación específica. En el editor de preajustes, cada rectángulo muestra una insignia `macwindow.badge.plus`: haz clic para elegir una aplicación en ejecución (o explora el sistema de archivos con "Otra aplicación…"). Los rectángulos asignados se muestran como una ventana en miniatura con el icono de la aplicación en lugar de un número; pasa el puntero y haz clic en el icono para desasignarla. Al aplicar el preajuste, el rectángulo asignado siempre recibe la ventana más al frente de la aplicación vinculada (lanzándola y esperando hasta 30 s si es necesario). Si la aplicación está en ejecución pero no tiene ventanas, se muestra una notificación del sistema. Cuando un par agrupado tiene exactamente un lado asignado, la ventana que aterriza en el lado no asignado se enlaza como "satélite" con la ventana de la aplicación asignada durante la sesión: hacer clic en cualquiera de las dos también trae la otra al frente</li>
-</ul>
-<h3>Cambiado</h3>
-<ul>
-<li>Se marcó `debugLog` con `@autoclosure` para que, cuando el registro de depuración esté desactivado, no se incurra en ningún coste de interpolación de cadenas de los mensajes de registro</li>
-</ul>
-<h3>Corregido</h3>
-<ul>
-<li>Las insignias de enlace para agrupar ventanas ya no aparecen sobre ventanas que están totalmente ocultas detrás de otra ventana. Tras aplicar un diseño a muchas ventanas, las insignias solo se muestran entre las ventanas visibles (frontales); las ventanas ocluidas quedan excluidas de los candidatos a agrupación hasta que se traen al frente</li>
-</ul>
-<h3>Eliminado</h3>
-<ul>
-<li>Se eliminó el preajuste temporal "Última selección" que se añadía automáticamente después de aplicar un diseño. Los nuevos preajustes ahora se crean de forma explícita mediante la fila "+"</li>
-</ul>]]></description>
-            <description xml:lang="de"><![CDATA[<h3>Hinzugefügt</h3>
-<ul>
-<li>Neue Standard-Layout-Voreinstellung „Mitte": ein 4×4-Raster mit der mittleren 2×2-Region ausgewählt, gebunden an die Tastenkombination `C`</li>
-<li>Neue "+"-Zeile am Ende der Layout-Voreinstellungsliste. Ein Klick erstellt eine neue Voreinstellung namens "Neue Layout-Voreinstellung" und wechselt sofort in den Bearbeitungsmodus</li>
-<li>Gruppierungen lassen sich jetzt direkt beim Bearbeiten einer Layout-Voreinstellung festlegen: An jeder gemeinsamen Kante zwischen zwei Bereichen erscheint ein `link.badge.plus`-Abzeichen. Ein Klick markiert das Paar als Gruppe (das Abzeichen wechselt in den verbundenen Zustand; beim Darüberfahren erscheint ein Aufhebungs-Symbol). Auch beim Überfahren einer Voreinstellung in der Seitenleiste werden die verbundenen Kanten als Abzeichen auf der Vorschau angezeigt, damit auf einen Blick erkennbar ist, welche Bereiche gruppiert werden. Beim Anwenden der Voreinstellung sind die entsprechenden Fenster von Anfang an gruppiert — kein zusätzlicher Klick nötig</li>
-<li>Rechtecke einer Layout-Voreinstellung können jetzt an eine bestimmte Anwendung gebunden werden. Im Voreinstellungseditor zeigt jedes Rechteck ein `macwindow.badge.plus`-Abzeichen — ein Klick öffnet eine Liste laufender Anwendungen (oder über "Andere Anwendung…" den Dateisystem-Browser). Zugewiesene Rechtecke werden als Miniaturfenster mit dem App-Symbol statt mit einer Indexnummer dargestellt; ein Klick auf das beim Überfahren eingeblendete × hebt die Zuweisung auf. Beim Anwenden der Voreinstellung landet im zugewiesenen Rechteck stets das vorderste Fenster der gebundenen App (die App wird bei Bedarf gestartet und bis zu 30 Sekunden lang auf ein Fenster gewartet). Läuft die App, hat aber keine Fenster, wird eine Systembenachrichtigung gepostet. Wenn bei einem gruppierten Paar genau eine Seite zugewiesen ist, wird das Fenster, das in der nicht zugewiesenen Seite landet, sitzungsweit als "Satellit" mit dem Fenster der zugewiesenen App verknüpft: ein Klick auf eines bringt auch das andere nach vorne</li>
-</ul>
-<h3>Geändert</h3>
-<ul>
-<li>`debugLog` wurde mit `@autoclosure` versehen, sodass bei deaktivierter Debug-Protokollierung keinerlei Kosten für die String-Interpolation der Log-Nachrichten anfallen</li>
-</ul>
-<h3>Behoben</h3>
-<ul>
-<li>Verknüpfungs-Badges für Fenstergruppen erscheinen nicht mehr auf Fenstern, die vollständig hinter einem anderen Fenster verborgen sind. Nach dem Anwenden eines Layouts auf viele Fenster werden Badges nur noch zwischen sichtbaren (vorderen) Fenstern angezeigt; verdeckte Fenster werden aus den Gruppierungskandidaten ausgeschlossen, bis sie in den Vordergrund gebracht werden</li>
-</ul>
-<h3>Entfernt</h3>
-<ul>
-<li>Die nach dem Anwenden eines Layouts automatisch hinzugefügte temporäre Voreinstellung "Letzte Auswahl" wurde entfernt. Neue Voreinstellungen werden jetzt explizit über die "+"-Zeile erstellt</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hant"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增預設版面預設「置中」：一個 4×4 網格中央 2×2 區域被選取的預設，綁定到 `C` 快捷鍵</li>
-<li>在版面預設列表末尾新增了一個「+」按鈕列。點擊後會建立一個名為「新增版面預設」的預設並立即進入編輯模式</li>
-<li>在編輯版面預設時，可以直接為彼此相鄰的區域設定分組：相鄰邊的中點會出現 `link.badge.plus` 徽章，點擊即可將該組區域標記為分組（徽章會切換為已連接狀態，滑鼠懸停時會切換為移除圖示）。在側欄將滑鼠移到預設上時，預覽上也會顯示已連接的徽章，一眼就能看出哪些區域會被分組。套用該預設時，對應的視窗一開始就會處於分組狀態，不需要再額外點擊</li>
-<li>現在可以為版面預設的每個矩形綁定特定的應用程式。在預設編輯器中，每個矩形都會顯示一個 `macwindow.badge.plus` 徽章——點擊即可選擇執行中的應用程式（或透過「其他應用程式…」瀏覽檔案系統）。已指派的矩形會以包含應用程式圖示的迷你視窗形式顯示，而不是索引數字；懸停並點擊該圖示即可取消指派。套用預設時，已指派的矩形一定會放置該應用程式的最前面視窗（若未執行則會自動啟動並最多等待 30 秒）。若應用程式在執行中但沒有視窗，則會發出系統通知。當分組的兩個區域只有一側被指派應用程式時，落在未指派槽位的視窗會與已指派應用程式的視窗作為僅限本工作階段的「衛星」互相連結：點擊其中任一個都會將另一個也帶到最前面</li>
-</ul>
-<h3>變更</h3>
-<ul>
-<li>將 `debugLog` 改為使用 `@autoclosure`，在停用偵錯記錄時完全跳過記錄訊息的字串插值開銷</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>修正了對多個視窗套用配置後，被其他視窗完全遮蔽的視窗仍會顯示群組連結徽章的問題。現在只會在前景可見的視窗之間顯示徽章；被遮蔽的視窗在被帶到前景之前會從群組候選中排除</li>
-</ul>
-<h3>移除</h3>
-<ul>
-<li>移除了套用版面後自動新增的「上次選擇」暫存預設。現在需要透過列表末尾的「+」列明確建立新預設</li>
-</ul>]]></description>
-            <description xml:lang="zh-Hans"><![CDATA[<h3>新增</h3>
-<ul>
-<li>新增默认布局预设"居中"：一个 4×4 网格中央 2×2 区域被选中的预设，绑定到 `C` 快捷键</li>
-<li>在布局预设列表末尾新增了一个"+"按钮行。点击后会创建一个名为"新建布局预设"的预设并立即进入编辑模式</li>
-<li>在编辑布局预设时，可以直接为彼此相邻的区域设置分组：相邻边的中点会出现 `link.badge.plus` 徽章，点击即可将这对区域标记为分组（徽章会切换为已连接状态，将鼠标悬停在上面会切换为移除图标）。在侧边栏中将鼠标悬停在预设上时，预览中也会显示已连接的徽章，方便一眼看出哪些区域会被分组。应用该预设时，对应的窗口会一开始就处于分组状态，无需再次点击</li>
-<li>现在可以为布局预设的每个矩形绑定一个特定的应用程序。在预设编辑器中，每个矩形都会显示一个 `macwindow.badge.plus` 徽章——点击即可选择正在运行的应用程序（或通过"其他应用程序…"浏览文件系统）。已分配的矩形会以包含应用图标的迷你窗口形式显示，而不是索引数字；悬停并点击该图标即可取消分配。应用该预设时，已分配的矩形始终会放置绑定应用的最前端窗口（如有必要会启动应用并最多等待 30 秒）。若应用正在运行但没有窗口，则会发出系统通知。当分组中的一对恰好只有一侧被分配时，落在未分配槽位中的窗口会与已分配应用的窗口作为会话级"卫星"相互链接：点击其中任一个都会将另一个也带到前端</li>
-</ul>
-<h3>变更</h3>
-<ul>
-<li>将 `debugLog` 改为使用 `@autoclosure`，在禁用调试日志时完全跳过日志消息的字符串插值开销</li>
-</ul>
-<h3>修复</h3>
-<ul>
-<li>修复了对多个窗口应用布局后，被其他窗口完全遮挡的窗口仍然显示分组链接徽章的问题。现在仅在前台可见的窗口之间显示徽章；被遮挡的窗口在被带到前台之前会从分组候选中排除</li>
-</ul>
-<h3>移除</h3>
-<ul>
-<li>移除了在应用布局后自动添加的"上次选择"临时预设。现在需要通过列表末尾的"+"行显式创建新预设</li>
-</ul>]]></description>
-            <description xml:lang="ko"><![CDATA[<h3>추가</h3>
-<ul>
-<li>기본 레이아웃 프리셋 "중앙"을 추가했습니다. 4×4 그리드의 가운데 2×2 영역을 선택한 상태이며, `C` 키가 단축키로 지정되어 있습니다</li>
-<li>레이아웃 프리셋 목록 맨 아래에 "+" 버튼 행을 추가했습니다. 클릭하면 "새 레이아웃 프리셋"이라는 이름의 프리셋이 생성되고 바로 편집 모드로 들어갑니다</li>
-<li>레이아웃 프리셋 편집 중에 서로 맞닿은 영역들을 바로 그룹으로 지정할 수 있게 되었습니다. 인접한 변 가운데에 `link.badge.plus` 배지가 표시되며, 클릭하면 해당 쌍이 그룹으로 표시됩니다(배지가 연결된 모양으로 바뀌고, 마우스를 올리면 해제 아이콘으로 전환됩니다). 사이드바에서 프리셋에 마우스를 올리면 미리보기 위에도 연결된 배지가 표시되어 어떤 영역이 그룹으로 연결되는지 한눈에 확인할 수 있습니다. 프리셋을 적용하면 해당 창들이 처음부터 그룹화된 상태로 배치됩니다</li>
-<li>레이아웃 프리셋의 각 사각형에 특정 애플리케이션을 할당할 수 있게 되었습니다. 프리셋 편집 화면에서 각 사각형에 표시되는 `macwindow.badge.plus` 배지를 클릭하면 실행 중인 애플리케이션 목록(맨 아래의 "기타 애플리케이션…"을 통해 파일 선택도 가능)이 나타납니다. 할당된 사각형은 인덱스 번호 대신 앱 아이콘이 포함된 미니어처 창으로 표시되며, 마우스를 올렸을 때 나오는 ×를 클릭하면 할당을 해제할 수 있습니다. 프리셋을 적용하면 할당된 사각형에는 해당 앱의 가장 앞에 있는 창이 항상 배치됩니다(실행 중이 아니면 자동으로 실행하고 최대 30초간 기다립니다). 앱은 실행 중이지만 창이 없을 때는 시스템 알림이 표시됩니다. 또한 그룹화된 쌍 중 한쪽만 앱에 할당되어 있는 경우, 할당되지 않은 쪽에 들어간 창이 할당된 앱 창과 세션 한정 "위성"으로 연결되어, 한쪽을 클릭하면 다른 쪽도 함께 앞으로 올라옵니다</li>
-</ul>
-<h3>변경</h3>
-<ul>
-<li>`debugLog`을 `@autoclosure`로 변경하여 디버그 로그가 비활성화된 상태에서는 로그 메시지의 문자열 보간 비용이 전혀 발생하지 않도록 했습니다</li>
-</ul>
-<h3>수정</h3>
-<ul>
-<li>여러 윈도우에 레이아웃을 적용한 뒤, 다른 윈도우에 완전히 가려진 윈도우에도 그룹화 링크 배지가 표시되던 문제를 수정했습니다. 이제 앞쪽에 보이는 윈도우들 사이에서만 배지가 표시되며, 뒤에 가려진 윈도우는 앞으로 나오기 전까지 그룹화 후보에서 제외됩니다</li>
-</ul>
-<h3>삭제</h3>
-<ul>
-<li>레이아웃 적용 후 자동으로 추가되던 "마지막 선택" 임시 프리셋을 제거했습니다. 이제 새 프리셋은 목록 끝의 "+" 행을 통해 명시적으로 생성합니다</li>
-</ul>]]></description>
-            <description xml:lang="ja"><![CDATA[<h3>追加</h3>
-<ul>
-<li>デフォルトレイアウトプリセット「中央」を追加しました。4×4 グリッドの中央 2×2 領域を選択した状態で、`C` キーがショートカットとして割り当てられています</li>
-<li>レイアウトプリセット一覧の末尾に「+」ボタンの行を追加しました。クリックすると「新規レイアウトプリセット」という名前のプリセットが作成され、そのまま編集モードに入ります</li>
-<li>レイアウトプリセットの編集中に、プリセット内で辺が接している領域同士のグループ化をその場で設定できるようになりました。隣接する辺の中央に `link.badge.plus` バッジが表示され、クリックするとそのペアをグループとしてマークします（バッジはリンク済みの見た目に変わり、ホバーで解除アイコンに切り替わります）。サイドバーでプリセットにホバーしているときも、プレビュー上にリンク済みのバッジが表示されるため、どの領域が連結されるかが一目で分かります。プリセットを適用したときは、対応するウインドウが最初からグループ化された状態になります</li>
-<li>レイアウトプリセットの各矩形に特定のアプリケーションを割り当てられるようになりました。プリセット編集中に各矩形に表示される `macwindow.badge.plus` バッジをクリックすると、起動中のアプリケーション一覧（末尾には「その他のアプリケーション…」でファイル選択も可能）が開きます。割り当て済みの矩形はインデックス番号の代わりにアプリアイコン付きのミニチュアウインドウとして表示され、ホバー時に現れる × をクリックすると割り当てを解除できます。プリセット適用時は、割り当てられたアプリの最前面ウインドウが必ずその矩形に配置されます（未起動の場合は自動的に起動し、最大 30 秒待ちます）。アプリが起動中でもウインドウが無い場合はシステム通知を表示します。さらに、グルーピングされたペアのうち片側だけがアプリ割り当てになっている場合、未割り当て側に入ったウインドウが割り当てアプリのウインドウと「サテライト」としてリンクされ、どちらをクリックしてもペアの相手も前面に出るようになります（セッション内のみ有効）</li>
-</ul>
-<h3>変更</h3>
-<ul>
-<li>`debugLog` を `@autoclosure` 化し、デバッグログが無効な状態ではログメッセージの文字列補間コストが一切発生しないようにしました</li>
-</ul>
-<h3>修正</h3>
-<ul>
-<li>多数のウインドウにレイアウトを適用したあと、他のウインドウに完全に隠れているウインドウにもグループ化用のリンクバッジが出てしまう問題を修正しました。前面に見えているウインドウ同士にだけバッジが表示されるようになり、背景に隠れているウインドウは前面に出てくるまでグループ化候補から除外されます</li>
-</ul>
-<h3>削除</h3>
-<ul>
-<li>レイアウト適用後に自動追加されていた「最後の選択」一時プリセットを廃止しました。新しいプリセットは末尾の「+」行から明示的に作成するようになりました</li>
-</ul>]]></description>
-            <description xml:lang="en"><![CDATA[<h3>Added</h3>
-<ul>
-<li>New default layout preset "Center" — a 4×4 grid with the center 2×2 region selected, bound to the `C` shortcut</li>
-<li>New "+" row at the end of the layout preset list — click it to create a new preset named "New Layout Preset" and immediately enter edit mode</li>
-<li>Grouping can now be defined directly in layout preset editing: a `link.badge.plus` badge appears at every shared edge between regions of the preset; click to mark the pair as grouped (badge flips to a linked state, hover to reveal the remove affordance). Hovering a preset in the sidebar also shows the grouped edges on the preview so you can see at a glance which regions are linked. When the preset is applied, the corresponding windows start out already grouped — no extra click required</li>
-<li>Layout preset rectangles can now be bound to a specific application. In the preset editor each rectangle shows a `macwindow.badge.plus` badge — click it to pick a running application (or browse the filesystem via "Other Application…"). Assigned rectangles render as a miniature window with the app's icon instead of an index number; hover and click the icon to unassign. When the preset is applied, assigned rectangles always receive the frontmost window of the bound app (launching the app and waiting up to 30 s if needed). If the app is running with no windows, a system notification is posted. When a grouped pair has exactly one side assigned, the window that lands in the unassigned slot is linked to the assigned app's window as a session-only "satellite": clicking either brings its partner forward too</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>Made `debugLog` zero-cost when debug logging is disabled by using `@autoclosure`, so string interpolation of log messages is skipped entirely in the common case</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Window grouping link badges no longer appear on top of windows that are completely hidden behind another window. After applying a layout to many windows, only the visible (front) windows show grouping badges; their occluded counterparts are excluded from grouping candidates until they're brought to the front</li>
-</ul>
-<h3>Removed</h3>
-<ul>
-<li>Removed the "Last Selection" transient preset that was automatically added after applying a layout. New presets are now created explicitly via the "+" row instead</li>
-</ul>]]></description>
-            <pubDate>Sat, 25 Apr 2026 13:12:36 +0900</pubDate>
-            <sparkle:version>510</sparkle:version>
-            <sparkle:shortVersionString>5.1.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.6</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.2/Tiley-5.1.0.zip" length="6321895" type="application/octet-stream" sparkle:edSignature="wn2Cwf/V4Uywb4hXOdAv6vXiWbKJ91s7vHaUVmI0oFVSUYU0S7prJLKSW+HP/xFnsTD5NaYFrAXOwJgh+Q26Dg=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-501.delta" sparkle:deltaFrom="501" length="930866" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="GgGNXPzrV6huU5SNgcE6k4LJDyz8Qx0VPbTo4wnh7MpDxDFb0MomWkhBPUOjMGbDqxvoEpgjQEzqwlLV5uRPBg=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-500.delta" sparkle:deltaFrom="500" length="931166" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="AVcHho0k/YMADd1QBe7s3lkEMsphoLkl6O5kWBHvQGSmUCxmTznNjoi3izLZOIOE+ShUIc+9ZvnO8QqPzo8JDQ=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-443.delta" sparkle:deltaFrom="443" length="1070806" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="EufW/ZA2xTzmK0Nt+zivI9tvbMPH8iF6cc7dwTh9ihSKWQ+755Ssda2W79W7sWvOEcWIQ6BmXNFalS9vvRfVDw=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-442.delta" sparkle:deltaFrom="442" length="1077026" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="SsSPpm/mE55gC0Yz0xmFerehTHZGI5EmbrP21LpPR+2ghhawGXYcczRn0NJzoBPh/SHW8CBkeTvX+AliuhceCA=="/>
-                <enclosure url="https://github.com/yusuke/tiley/releases/download/v5.1.0/Tiley510-441.delta" sparkle:deltaFrom="441" length="1079902" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977808" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zeher+c6IN4r3SmIsxdhhkEaNwBi3pmz5T4XEOSpNGT9LxQA3v3hQug2Tf3lG0K+ldrWVx72q9AQdsYBB3VZAQ=="/>
             </sparkle:deltas>
         </item>
     </channel>
