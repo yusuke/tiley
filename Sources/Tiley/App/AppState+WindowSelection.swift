@@ -298,11 +298,56 @@ extension AppState {
 
         dismissOverlayImmediately()
 
+        // Suppress observer-driven group raises while we sequence
+        // activate + AXRaise. Activating an app fires kAXMainWindowChanged
+        // for the app's *previously*-main window (not the one the user just
+        // selected); without suppression that AX event reaches the
+        // observer and runs `handleGroupMemberRaised` for the wrong
+        // window — and crucially sets `isApplyingGroupRaise=true` for
+        // 0.5 s, locking out the *correct* explicit raise we make at the
+        // end of this function. We clear the flag right before calling
+        // the explicit handler so it can do its job.
+        isApplyingGroupRaise = true
+
+        // Activate the app FIRST so AXRaise applies to an already-active app
+        // (per CLAUDE.md's z-order guidance: activate then raise, never the
+        // reverse). The 50ms run-loop pump gives the activation time to
+        // propagate before AXRaise lands. Without this ordering, AXRaise on
+        // a window of an inactive app is a no-op.
+        NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+
         if let window = target.windowElement {
             moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
             accessibilityService.raiseWindow(window)
+            // Pin the raised window as the app's main/focused. Without this,
+            // some apps (notably IntelliJ) re-promote their previously-main
+            // window asynchronously after the activate above, which lands
+            // after our AXRaise and shoves the selected window back behind
+            // a same-app sibling — visible to the user as a brief raise of
+            // the selected window followed by the previous main coming back
+            // on top.
+            AXUIElementSetAttributeValue(window, kAXMainAttribute as CFString, kCFBooleanTrue)
+            AXUIElementSetAttributeValue(window, kAXFocusedAttribute as CFString, kCFBooleanTrue)
         }
-        NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
+
+        // Release the suppression so the explicit raise below can run.
+        isApplyingGroupRaise = false
+
+        // Explicitly trigger the group / satellite raise machinery so the
+        // selected window's group siblings (and any registered satellites)
+        // come up with it. The AX `.raised` notification that normally
+        // wires this up is non-deterministic when AXRaise is invoked
+        // programmatically — without this explicit call, a same-app group
+        // sibling can stay buried behind a background app's window. The
+        // `isApplyingGroupRaise` guard inside `handleGroupMemberRaised`
+        // suppresses reentrancy if the AX event later fires.
+        let topWID = target.cgWindowID
+        if topWID != 0 {
+            handleGroupMemberRaised(id: topWID)
+            handleAppSlotSatelliteRaise(focusedID: topWID)
+            handleWindowAnchorSatelliteRaise(focusedID: topWID)
+        }
 
         // Animate displaced windows back after the selected window is operational.
         clearWindowCyclingState(animateRestore: true)
@@ -698,6 +743,20 @@ extension AppState {
     /// Restores all displaced windows back to their original positions instantly.
     func restoreDisplacedWindows() {
         guard !displacedWindowFrames.isEmpty else { return }
+        // Suppress observer-driven group cascade/raise side-effects while
+        // we move the displaced windows back. Without this, restoring a
+        // displaced grouped window (e.g. `shinjava` while the user just
+        // selected a different group's member like `loop` from the
+        // sidebar) fires `kAXWindowMovedNotification` on the displaced
+        // window — the move handler treats it as a manual drag, starts
+        // the group polling timer, and ends up cascading / raising the
+        // wrong group, putting the previously-main window back on top.
+        isApplyingGroupTransform = true
+        defer {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.isApplyingGroupTransform = false
+            }
+        }
         for (_, entry) in displacedWindowFrames {
             accessibilityService.setPosition(entry.origin, for: entry.window)
         }
@@ -722,11 +781,22 @@ extension AppState {
         let significantMoves = moves.filter {
             abs($0.from.x - $0.to.x) > 1 || abs($0.from.y - $0.to.y) > 1
         }
+        // Suppress observer-driven group cascade/raise side-effects for
+        // the duration of the restoration. Each animation tick fires
+        // `kAXWindowMovedNotification` on the moving window; without this
+        // flag, the move handler would treat the restoration as a manual
+        // drag, start the group polling timer, and cascade / raise the
+        // wrong group — landing the previously-main displaced window on
+        // top instead of the window the user just selected.
+        isApplyingGroupTransform = true
         guard !significantMoves.isEmpty else {
             for move in moves {
                 accessibilityService.setPosition(move.to, for: move.window)
             }
             displacedWindowFrames.removeAll()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.isApplyingGroupTransform = false
+            }
             return
         }
 
@@ -750,6 +820,12 @@ extension AppState {
                 timer.cancel()
                 self?.restorationAnimationTimer = nil
                 self?.displacedWindowFrames.removeAll()
+                // Hold the flag a little past the last AX event so any
+                // trailing notifications from the final setPosition land
+                // while it's still set.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                    self?.isApplyingGroupTransform = false
+                }
             }
         }
         restorationAnimationTimer = timer

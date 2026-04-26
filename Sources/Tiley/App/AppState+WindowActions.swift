@@ -280,6 +280,15 @@ extension AppState {
             windowsByApp[pid, default: []].append(idx)
         }
 
+        // Suppress observer-driven group raises during the activate +
+        // AXRaise sequence. Activating an app fires kAXMainWindowChanged
+        // for the app's *previously*-main window — without suppression
+        // that fires `handleGroupMemberRaised` on the wrong window first,
+        // setting `isApplyingGroupRaise=true` for 0.5 s and locking out
+        // the correct explicit raise we make at the end. We clear the
+        // flag right before that explicit call.
+        isApplyingGroupRaise = true
+
         for pid in appOrder.reversed() {
             guard let indicesInApp = windowsByApp[pid] else { continue }
             NSRunningApplication(processIdentifier: pid)?.activate()
@@ -292,6 +301,34 @@ extension AppState {
                 }
             }
             RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+        }
+
+        // Pin the topmost raised window as its app's main/focused so a late
+        // re-promotion of the previously-main window (some apps do this
+        // asynchronously after activate) doesn't shove the selected
+        // top-of-stack window back down.
+        if let topIdx = valid.first,
+           let topWindow = availableWindowTargets[topIdx].windowElement {
+            AXUIElementSetAttributeValue(topWindow, kAXMainAttribute as CFString, kCFBooleanTrue)
+            AXUIElementSetAttributeValue(topWindow, kAXFocusedAttribute as CFString, kCFBooleanTrue)
+        }
+
+        isApplyingGroupRaise = false
+
+        // Explicitly trigger the group / satellite raise machinery for the
+        // topmost raised window. The AX `.raised` notification that normally
+        // wires this up is non-deterministic when AXRaise is invoked
+        // programmatically in quick succession (sidebar Enter path) — without
+        // this explicit call, group siblings (e.g. WinA4 when WinA3 was
+        // raised from the sidebar) can remain buried behind windows of
+        // background apps that previously sat between them in z-order. The
+        // `isApplyingGroupRaise` guard inside `handleGroupMemberRaised`
+        // suppresses reentrancy from the AX event if it does fire.
+        if let topIdx = valid.first {
+            let topWID = availableWindowTargets[topIdx].cgWindowID
+            handleGroupMemberRaised(id: topWID)
+            handleAppSlotSatelliteRaise(focusedID: topWID)
+            handleWindowAnchorSatelliteRaise(focusedID: topWID)
         }
     }
 

@@ -2425,6 +2425,24 @@ extension AppState {
         }
         debugLog("WindowGrouping:   sameApp=\(sameAppMembers.count) diffApp=\(diffAppMembers.count)")
 
+        // 0. Force-activate the raised window's app even when it's already
+        //    frontmost. macOS's click-to-activate sometimes only lifts the
+        //    clicked window into the foreground layer; the app's other
+        //    windows (including same-app group siblings) can stay buried
+        //    behind windows of background apps. Re-activating here pulls
+        //    every regular window of the raised app into the foreground
+        //    layer so the subsequent AXRaise + CGSOrderWindow pass can
+        //    actually reorder them above other apps' windows. The push
+        //    pass at the end will then clean up any sandwich left over.
+        if !sameAppMembers.isEmpty,
+           let pid = raisedPID,
+           let app = NSRunningApplication(processIdentifier: pid) {
+            let result = app.activate(options: [])
+            debugLog("WindowGrouping:   [sameApp] activate(pid=\(pid)) → \(result)")
+            // Pump the run loop so the activation lands before AXRaise
+            // (mirrors the diff-app path's RunLoop pump).
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+        }
         // 1. AXRaise the same-app other members (pulls them to the frontmost
         //    layer and repairs the app's window block).
         for member in sameAppMembers {
@@ -2451,9 +2469,16 @@ extension AppState {
         if let rw = raisedWindow {
             AXUIElementPerformAction(rw, kAXRaiseAction as CFString)
         }
-        // 4. If any different-app members were involved, reassert focus on
-        //    the raised window.
-        if !diffAppMembers.isEmpty, let rw = raisedWindow {
+        // 4. Reassert main/focused on the raised window. Some apps (notably
+        //    IntelliJ) re-promote their *previously*-main window
+        //    asynchronously after an activate, which can land **after** our
+        //    AXRaise(raised) above and visually shove the raised window back
+        //    behind a same-app sibling. Setting kAXMain/kAXFocused here
+        //    pins the raised window as the app's main so the late
+        //    re-promotion doesn't pick a different window. Was previously
+        //    only done for diff-app members; the same-app case has the
+        //    same race.
+        if let rw = raisedWindow {
             AXUIElementSetAttributeValue(rw, kAXMainAttribute as CFString, kCFBooleanTrue)
             AXUIElementSetAttributeValue(rw, kAXFocusedAttribute as CFString, kCFBooleanTrue)
         }
@@ -2467,14 +2492,17 @@ extension AppState {
                 let ok = CGSPrivate.orderWindow(member, mode: CGSPrivate.kCGSOrderBelow, relativeTo: id)
                 debugLog("WindowGrouping:   CGSOrderWindow(\(member), below, \(id)) → \(ok)")
             }
-            // 6. A **non-member** window from the same app as a member can be
-            //    sandwiched between group members, visually hiding one of them.
-            //    Example: App A has winA1 and winA2; App B has winB1. After
-            //    grouping winA1 + winB1, winA2 can sit in front of winB1 and
-            //    hide it.
-            //    Fix: any non-member window that sits ahead of at least one
-            //    member is pushed below the deepest member.
-            pushNonMemberSameAppWindowsBelowDeepestMember(group: group)
+            // 6. A non-member window — from the same app as a member, OR
+            //    from an unrelated app — can sit between two members in
+            //    z-order and visually obscure one of them. Two examples:
+            //      • App A has winA1, winA2, winA3; group is {winA1, winA3};
+            //        activate(App A) lifted winA2 into the middle.
+            //      • App A's group is {winA1, winA2}; App B's winB1 is
+            //        sandwiched between them. Without the push, winA2 stays
+            //        buried behind winB1 even after AXRaise lands.
+            //    Push any sandwiched non-member that overlaps a member's
+            //    rect down below the deepest member.
+            pushSandwichedNonMemberWindowsBelowDeepestMember(group: group)
         }
     }
 
@@ -2522,33 +2550,52 @@ extension AppState {
         return true
     }
 
-    /// Any non-member window belonging to the same PID as a group member that
-    /// is currently sandwiched between members gets pushed below the deepest
-    /// member.
-    private func pushNonMemberSameAppWindowsBelowDeepestMember(group: WindowGroup) {
+    /// Push down any non-member window that's currently sandwiched between
+    /// two members of the just-raised group AND visually overlaps at least
+    /// one member. This restores a contiguous z-order block for the group.
+    ///
+    /// Two scenarios this handles:
+    ///   - Same-app non-member: e.g. App A has winA1, winA2, winA3; group is
+    ///     {winA1, winA3}; activating App A pulled winA2 forward into the
+    ///     middle of the group and obscured winA3.
+    ///   - **Different-app non-member**: e.g. App A's group is {winA1, winA2}
+    ///     with App B's winB1 sitting between them in z-order. Without this
+    ///     pass, raising winA1 leaves winA2 still buried behind winB1.
+    ///
+    /// The intersection check keeps the rule conservative — a foreground
+    /// floater from another app that doesn't overlap any member is left
+    /// alone (e.g. a notification panel in a screen corner away from the
+    /// group).
+    private func pushSandwichedNonMemberWindowsBelowDeepestMember(group: WindowGroup) {
         guard CGSPrivate.isOrderWindowAvailable else { return }
         guard let infoList = CGWindowListCopyWindowInfo(
             [.optionOnScreenOnly, .excludeDesktopElements],
             kCGNullWindowID
         ) as? [[String: Any]] else { return }
 
-        // Collect each window's Z-order index and owning PID.
+        // Collect each window's Z-order index, owning PID, and bounds.
         var positions: [CGWindowID: Int] = [:]
         var owners: [CGWindowID: pid_t] = [:]
+        var rects: [CGWindowID: CGRect] = [:]
         for (idx, info) in infoList.enumerated() {
             guard let wid = info[kCGWindowNumber as String] as? CGWindowID else { continue }
             guard let layer = info[kCGWindowLayer as String] as? Int, layer == 0 else { continue }
             guard let pid = info[kCGWindowOwnerPID as String] as? Int32 else { continue }
+            guard let boundsDict = info[kCGWindowBounds as String] as? [String: Any],
+                  let rect = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) else { continue }
             positions[wid] = idx
             owners[wid] = pid_t(pid)
+            rects[wid] = rect
         }
 
-        // Collect the PIDs of group members and their Z-order positions.
+        // Member positions, PIDs, and rects.
         var memberPIDs: Set<pid_t> = []
         var memberPositions: [Int] = []
+        var memberRects: [CGRect] = []
         for memberID in group.members {
             if let pid = owners[memberID] { memberPIDs.insert(pid) }
             if let pos = positions[memberID] { memberPositions.append(pos) }
+            if let rect = rects[memberID] { memberRects.append(rect) }
         }
         guard let shallowestMemberPos = memberPositions.min(),
               let deepestMemberPos = memberPositions.max() else { return }
@@ -2568,20 +2615,25 @@ extension AppState {
             debugLog("WindowGrouping:     z[\(idx)] wid=\(wid) pid=\(pid) layer=\(layer) name=\(name)\(isMember)")
         }
 
-        // Walk non-member windows; push any that are owned by a member's PID
-        // and sit between two members down below the deepest member.
+        // Walk non-member windows; push any that sit between two members in
+        // z-order AND visually overlap at least one member.
         for (wid, pos) in positions {
             if group.members.contains(wid) { continue }  // skip members
-            guard let pid = owners[wid], memberPIDs.contains(pid) else { continue }  // same app only
             // Deeper than shallowestMember, shallower than deepestMember → sandwiched.
             guard pos > shallowestMemberPos && pos < deepestMemberPos else { continue }
+            // Only push if it actually obscures one of the members; leaves
+            // unrelated floating windows away from the group untouched.
+            guard let candidateRect = rects[wid],
+                  memberRects.contains(where: { $0.intersects(candidateRect) }) else { continue }
+            let candidatePID = owners[wid] ?? 0
+            let isSameApp = memberPIDs.contains(candidatePID)
             // First, push below the deepest member.
             let ok1 = CGSPrivate.orderWindow(wid, mode: CGSPrivate.kCGSOrderBelow, relativeTo: deepestMemberID)
-            debugLog("WindowGrouping:   push non-member \(wid) (pid=\(pid), pos=\(pos)) below deepest member \(deepestMemberID) → \(ok1)")
+            debugLog("WindowGrouping:   push sandwich non-member \(wid) (pid=\(candidatePID), sameApp=\(isSameApp), pos=\(pos)) below deepest member \(deepestMemberID) → \(ok1)")
             // Belt-and-suspenders: also send to the very back, in case the
             // relative-to form of CGSOrderWindow is ignored across apps.
             let ok2 = CGSPrivate.orderWindow(wid, mode: CGSPrivate.kCGSOrderBelow, relativeTo: 0)
-            debugLog("WindowGrouping:   push non-member \(wid) to very back → \(ok2)")
+            debugLog("WindowGrouping:   push sandwich non-member \(wid) to very back → \(ok2)")
         }
     }
 }
