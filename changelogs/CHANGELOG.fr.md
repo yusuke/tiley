@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.1.4] - 2026-05-03
+
+### Corrigé
+
+- Après avoir explicitement dégroupé deux fenêtres, les avoir éloignées puis remises bord à bord, le badge candidat « former un groupe » réapparaît à nouveau. Auparavant, le dégroupage arrêtait l'observation d'Accessibilité des fenêtres devenues isolées, de sorte que leurs déplacements manuels ultérieurs ne déclenchaient plus les événements qui pilotent la détection d'adjacence — le badge ne réapparaissait silencieusement plus jusqu'à ce qu'un autre événement (changement de Space, activation d'une app, etc.) déclenche à nouveau le rafraîchissement du cache de liste de fenêtres.
+
 ## [5.1.3] - 2026-04-27
 
 ### Corrigé

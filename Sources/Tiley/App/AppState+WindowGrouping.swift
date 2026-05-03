@@ -1540,6 +1540,12 @@ extension AppState {
                 }
             }
         }
+        // The split above may have left the now-isolated windows un-observed.
+        // Re-attach observation across all available windows so subsequent
+        // manual moves still fire AX events — otherwise dragging the pair
+        // back together after an explicit ungroup wouldn't surface a fresh
+        // "form group" candidate badge.
+        ensureAllAvailableWindowsObservedForManualMove()
         refreshBadgeOverlays()
     }
 

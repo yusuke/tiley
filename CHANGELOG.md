@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.1.4] - 2026-05-03
+
+### Fixed
+
+- After explicitly ungrouping a pair of windows, dragging them apart and back into edge contact now surfaces a "form group" candidate badge again. Previously, ungrouping stopped Accessibility observation on the now-isolated windows, so their subsequent manual moves no longer fired the events that drive adjacency detection — the badge silently failed to reappear until something else (a Space change, an app activation, etc.) re-triggered the window-list cache refresh.
+
 ## [5.1.3] - 2026-04-27
 
 ### Fixed
@@ -822,7 +828,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.3...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.1.4...HEAD
+[5.1.4]: https://github.com/yusuke/tiley/releases/tag/v5.1.4
 [5.1.3]: https://github.com/yusuke/tiley/releases/tag/v5.1.3
 [5.1.2]: https://github.com/yusuke/tiley/releases/tag/v5.1.2
 [5.1.1]: https://github.com/yusuke/tiley/releases/tag/v5.1.1

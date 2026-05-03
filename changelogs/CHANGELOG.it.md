@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.1.4] - 2026-05-03
+
+### Corretto
+
+- Dopo aver disgregato esplicitamente una coppia di finestre, averle allontanate e poi riavvicinate fino a far combaciare i bordi, il badge candidato "forma gruppo" riappare di nuovo. In precedenza la disgregazione interrompeva l'osservazione Accessibility sulle finestre ormai isolate, quindi i loro spostamenti manuali successivi non emettevano più gli eventi che alimentano la rilevazione di adiacenza — il badge smetteva silenziosamente di ricomparire finché qualcos'altro (un cambio di Space, l'attivazione di un'app, ecc.) non riattivava l'aggiornamento della cache dell'elenco finestre.
+
 ## [5.1.3] - 2026-04-27
 
 ### Corretto

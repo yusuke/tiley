@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.1.4] - 2026-05-03
+
+### Corregido
+
+- Tras desagrupar explícitamente un par de ventanas, separarlas y volver a juntar sus bordes hasta que se toquen, vuelve a aparecer la insignia candidata de "formar grupo". Antes, la desagrupación detenía la observación de Accesibilidad sobre las ventanas ya aisladas, de modo que sus movimientos manuales posteriores ya no disparaban los eventos que impulsan la detección de adyacencia — la insignia dejaba de reaparecer en silencio hasta que algún otro evento (cambio de Space, activación de una app, etc.) volvía a disparar el refresco de la caché de la lista de ventanas.
+
 ## [5.1.3] - 2026-04-27
 
 ### Corregido

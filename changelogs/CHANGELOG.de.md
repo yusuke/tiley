@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.1.4] - 2026-05-03
+
+### Behoben
+
+- Wenn ein Fensterpaar explizit aus einer Gruppe gelöst, anschließend auseinandergezogen und wieder mit den Kanten zusammengeführt wird, erscheint nun erneut ein "Gruppe bilden"-Kandidaten-Badge. Zuvor stoppte das Gruppe-Lösen die Accessibility-Beobachtung der nun isolierten Fenster, sodass nachfolgende manuelle Bewegungen die Ereignisse, die die Nachbarschaftserkennung antreiben, nicht mehr auslösten — das Badge tauchte stillschweigend nicht mehr auf, bis ein anderer Auslöser (Space-Wechsel, App-Aktivierung usw.) die Fensterlisten-Cache-Aktualisierung erneut anstieß.
+
 ## [5.1.3] - 2026-04-27
 
 ### Behoben

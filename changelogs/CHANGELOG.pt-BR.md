@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [5.1.4] - 2026-05-03
+
+### Corrigido
+
+- Depois de desagrupar explicitamente um par de janelas, afastá-las e voltar a aproximá-las até as bordas se tocarem, o emblema candidato de "formar grupo" volta a aparecer. Antes, o desagrupamento interrompia a observação de Acessibilidade nas janelas que ficavam isoladas, de modo que os movimentos manuais subsequentes deixavam de disparar os eventos que alimentam a detecção de adjacência — o emblema silenciosamente deixava de reaparecer até que outro evento (troca de Space, ativação de um app, etc.) reativasse a atualização do cache da lista de janelas.
+
 ## [5.1.3] - 2026-04-27
 
 ### Corrigido
