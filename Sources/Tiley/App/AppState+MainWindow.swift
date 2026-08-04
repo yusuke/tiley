@@ -265,6 +265,8 @@ extension AppState {
         }
         // Pre-cache the window list for next overlay open.
         scheduleWindowListCacheRefresh()
+        // Release the overlay's retained SwiftUI graph once it stays idle.
+        scheduleMainWindowRelease()
     }
 
     func handleMainWindowEscape() -> Bool {
@@ -312,6 +314,7 @@ extension AppState {
     }
 
     func openTargetScreenWindow(on targetScreen: NSScreen) {
+        cancelMainWindowRelease()
         let displayID = targetScreen.displayID
         targetScreenDisplayID = displayID
 
@@ -350,6 +353,7 @@ extension AppState {
     }
 
     func openAllScreenWindows() {
+        cancelMainWindowRelease()
         let perfStart = CFAbsoluteTimeGetCurrent()
         func perfLog(_ label: String) {
             let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
@@ -499,6 +503,52 @@ extension AppState {
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
         debugLog("createWindowController displayID=\(displayID) isTarget=\(isTarget ? 1 : 0) (\(String(format: "%.1f", elapsed))ms)")
         return controller
+    }
+
+    // MARK: - Idle overlay teardown
+
+    /// How long the overlay stays hidden before its window controllers are
+    /// released. Keeps rapid re-opens instant while reclaiming memory once the
+    /// overlay is genuinely idle.
+    private static let mainWindowReleaseDelay: Duration = .seconds(30)
+
+    /// Schedule release of the (hidden) overlay window controllers after an
+    /// idle grace period. Called from `handleMainWindowHidden`.
+    func scheduleMainWindowRelease() {
+        mainWindowReleaseTask?.cancel()
+        mainWindowReleaseTask = Task { [weak self] in
+            try? await Task.sleep(for: Self.mainWindowReleaseDelay)
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                self?.releaseIdleMainWindowsIfPossible()
+            }
+        }
+    }
+
+    /// Cancel a pending release (e.g. because the overlay is being opened).
+    func cancelMainWindowRelease() {
+        mainWindowReleaseTask?.cancel()
+        mainWindowReleaseTask = nil
+    }
+
+    /// Release all overlay window controllers if the overlay is still idle.
+    /// Dropping the `mainWindowControllers` references deallocates each window,
+    /// its `NSHostingView`, and the retained SwiftUI graph. The overlay is
+    /// recreated lazily by `openTargetScreenWindow`/`openAllScreenWindows`.
+    private func releaseIdleMainWindowsIfPossible() {
+        mainWindowReleaseTask = nil
+        guard !isShowingLayoutGrid,
+              !isEditingSettings,
+              !isEditingLayoutPresets,
+              !isRecreatingWindows,
+              !isSwitchingActivationPolicy,
+              !mainWindowControllers.values.contains(where: { $0.isVisible })
+        else { return }
+        guard !mainWindowControllers.isEmpty else { return }
+        for controller in mainWindowControllers.values {
+            controller.releaseForTeardown()
+        }
+        mainWindowControllers.removeAll()
     }
 
     // MARK: - Key Commands
