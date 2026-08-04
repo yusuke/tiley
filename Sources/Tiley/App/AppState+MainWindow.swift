@@ -549,6 +549,10 @@ extension AppState {
             controller.releaseForTeardown()
         }
         mainWindowControllers.removeAll()
+        // The overlay is the only consumer of the downsampled wallpaper image.
+        // Drop it too so its backing surface is reclaimed while idle; it is
+        // cheap to re-decode (ImageIO thumbnail) on the next open.
+        invalidateWallpaperCache()
     }
 
     // MARK: - Key Commands
