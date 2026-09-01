@@ -247,11 +247,30 @@ extension AppState {
     /// Current window frames (AppKit coordinates) keyed by CGWindowID.
     /// Reads the **live** AX values. `target.frame` is a cached value and may
     /// be stale, so it is intentionally not used here.
+    /// Only the requested windows are read — each read is a synchronous AX
+    /// round-trip, so sweeping every available window here (as this method
+    /// once did via `allAvailableFrames()`) multiplied per-event cost by the
+    /// total window count.
     private func frameSnapshot(for ids: Set<CGWindowID>) -> [CGWindowID: CGRect] {
-        let all = allAvailableFrames()
         var result: [CGWindowID: CGRect] = [:]
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
         for id in ids {
-            if let f = all[id] { result[id] = f }
+            guard let target = windowTarget(byID: id) else { continue }
+            guard let window = target.windowElement else {
+                result[id] = target.frame
+                continue
+            }
+            let (axPos, size) = accessibilityService.readPositionAndSize(of: window)
+            guard size.width > 0, size.height > 0 else {
+                result[id] = target.frame
+                continue
+            }
+            result[id] = CGRect(
+                x: axPos.x,
+                y: primaryMaxY - axPos.y - size.height,
+                width: size.width,
+                height: size.height
+            )
         }
         return result
     }
@@ -296,7 +315,10 @@ extension AppState {
             candidateScope.formUnion(group.members)
         }
 
-        let frames = allAvailableFrames()
+        // Every use of `frames` below (group revalidation, candidate
+        // detection, lastKnownFrames refresh) is confined to the scope, so
+        // read only those windows instead of sweeping every available one.
+        let frames = frameSnapshot(for: candidateScope)
         debugLog("WindowGrouping: recomputeGroupsAndCandidates — totalFrames=\(frames.count) scope=\(candidateScope.count)")
         for (wid, f) in frames where candidateScope.isEmpty || candidateScope.contains(wid) {
             debugLog("WindowGrouping:   window \(wid) frame=\(f)")
@@ -335,7 +357,9 @@ extension AppState {
                 dissolveGroup(gid)
                 continue
             }
-            group.lastKnownFrames = frameSnapshot(for: group.members)
+            // Reuse the frames captured above (members ⊆ candidateScope)
+            // instead of issuing a second round of AX reads per group.
+            group.lastKnownFrames = frames.filter { group.members.contains($0.key) }
             windowGroups[gid] = group
         }
 
@@ -496,7 +520,8 @@ extension AppState {
         let existingA = groupIndexByWindow[adj.windowA]
         let existingB = groupIndexByWindow[adj.windowB]
 
-        let frames = allAvailableFrames()
+        // Only the two linked windows' frames are needed here.
+        let frames = frameSnapshot(for: [adj.windowA, adj.windowB])
         let memberMetaA = memberMeta(for: adj.windowA)
         let memberMetaB = memberMeta(for: adj.windowB)
         guard let metaA = memberMetaA, let metaB = memberMetaB else { return }
@@ -508,9 +533,8 @@ extension AppState {
                 members: [adj.windowA, adj.windowB],
                 adjacencies: [adj],
                 memberMeta: [adj.windowA: metaA, adj.windowB: metaB],
-                lastKnownFrames: frameSnapshot(for: [adj.windowA, adj.windowB])
+                lastKnownFrames: frames
             )
-            _ = frames  // reserved for future use
             windowGroups[group.id] = group
             groupIndexByWindow[adj.windowA] = group.id
             groupIndexByWindow[adj.windowB] = group.id
@@ -732,8 +756,19 @@ extension AppState {
         // (i.e. while the polling timer is running).
         let isInteracting = groupPollingTimer != nil
 
-        // Fetch live frames for adjacency checks.
-        let liveFrames = allAvailableFrames()
+        // Fetch live frames for adjacency checks — scoped to the windows
+        // that can actually surface a badge (candidate pairs + group
+        // members), since every entry costs a synchronous AX read and this
+        // method runs on focus changes.
+        var frameScope: Set<CGWindowID> = []
+        for adj in pendingGroupCandidates {
+            frameScope.insert(adj.windowA)
+            frameScope.insert(adj.windowB)
+        }
+        for group in windowGroups.values {
+            frameScope.formUnion(group.members)
+        }
+        let liveFrames = frameSnapshot(for: frameScope)
         let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
         // Hidden windows (fully covered by another window above them in
         // Z-order) shouldn't surface grouping badges — the user can't see
@@ -1013,7 +1048,7 @@ extension AppState {
             debugLog("WindowGrouping: fillGroupToScreen aborted — no group for adjacency")
             return
         }
-        let liveFrames = allAvailableFrames()
+        let liveFrames = frameSnapshot(for: group.members)
         var memberFrames: [(CGWindowID, CGRect)] = []
         for id in group.members {
             if let f = liveFrames[id] { memberFrames.append((id, f)) }
@@ -1123,7 +1158,7 @@ extension AppState {
             return
         }
 
-        let liveFrames = allAvailableFrames()
+        let liveFrames = frameSnapshot(for: group.members)
         let originalIsHorizontal = adj.edgeOfA.isHorizontal
 
         guard let (sideA, sideB) = partitionGroupByContact(
