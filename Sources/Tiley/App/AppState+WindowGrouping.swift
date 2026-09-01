@@ -563,7 +563,7 @@ extension AppState {
     /// Renders a single CGWindowID as `id [App: Title]` for log lines, falling
     /// back to just the numeric id when no live target is known.
     private func describeMember(_ id: CGWindowID) -> String {
-        if let t = availableWindowTargets.first(where: { $0.cgWindowID == id }) {
+        if let t = windowTarget(byID: id) {
             let raw = t.windowTitle ?? ""
             let title = raw.isEmpty ? "-" : raw
             return "\(id) [\(t.appName): \(title)]"
@@ -666,7 +666,7 @@ extension AppState {
     private func observeGroupMembers(_ group: WindowGroup) {
         guard let service = windowObservationService else { return }
         for id in group.members {
-            if let target = availableWindowTargets.first(where: { $0.cgWindowID == id }) {
+            if let target = windowTarget(byID: id) {
                 service.observe(target: target)
             }
         }
@@ -677,12 +677,12 @@ extension AppState {
     /// immediately.
     private func observeWindowForCandidate(cgWindowID: CGWindowID) {
         guard let service = windowObservationService else { return }
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }) else { return }
+        guard let target = windowTarget(byID: cgWindowID) else { return }
         service.observe(target: target)
     }
 
     private func memberMeta(for cgWindowID: CGWindowID) -> WindowGroupMember? {
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }) else { return nil }
+        guard let target = windowTarget(byID: cgWindowID) else { return nil }
         return WindowGroupMember(cgWindowID: cgWindowID, processIdentifier: target.processIdentifier)
     }
 
@@ -958,7 +958,7 @@ extension AppState {
     /// Returns a display-friendly title for the given window ID, used in badge tooltips.
     /// Prefers the AX window title and falls back to the owning app name.
     private func badgeWindowTitle(for cgWindowID: CGWindowID) -> String {
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }) else {
+        guard let target = windowTarget(byID: cgWindowID) else {
             return ""
         }
         if let title = target.windowTitle, !title.isEmpty {
@@ -969,8 +969,8 @@ extension AppState {
 
     private func isAdjacencyInFrontmostApp(_ adj: WindowAdjacency, frontmostPID: pid_t?) -> Bool {
         guard let frontmostPID else { return false }
-        let pidA = availableWindowTargets.first(where: { $0.cgWindowID == adj.windowA })?.processIdentifier
-        let pidB = availableWindowTargets.first(where: { $0.cgWindowID == adj.windowB })?.processIdentifier
+        let pidA = windowTarget(byID: adj.windowA)?.processIdentifier
+        let pidB = windowTarget(byID: adj.windowB)?.processIdentifier
         return pidA == frontmostPID || pidB == frontmostPID
     }
 
@@ -1055,7 +1055,7 @@ extension AppState {
         // polling follower doesn't fight us.
         isApplyingGroupTransform = true
         for (id, newRect) in newFrames {
-            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == id }),
+            guard let target = windowTarget(byID: id),
                   let window = target.windowElement else { continue }
             _ = try? accessibilityService.setFrame(newRect, on: target.screenFrame, for: window)
             recentlySetFrames[id] = (newRect, CFAbsoluteTimeGetCurrent())
@@ -1171,7 +1171,7 @@ extension AppState {
         // Suppress group transform reactions while we choreograph the resize.
         isApplyingGroupTransform = true
         for (id, newRect) in changes {
-            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == id }),
+            guard let target = windowTarget(byID: id),
                   let window = target.windowElement else { continue }
             _ = try? accessibilityService.setFrame(newRect, on: target.screenFrame, for: window)
             recentlySetFrames[id] = (newRect, CFAbsoluteTimeGetCurrent())
@@ -1349,12 +1349,12 @@ extension AppState {
         // their swapped positions; we are explicitly choreographing both moves.
         isApplyingGroupTransform = true
 
-        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idA }),
+        if let target = windowTarget(byID: idA),
            let window = target.windowElement {
             _ = try? accessibilityService.setFrame(newFrameA, on: target.screenFrame, for: window)
             recentlySetFrames[idA] = (newFrameA, CFAbsoluteTimeGetCurrent())
         }
-        if let target = availableWindowTargets.first(where: { $0.cgWindowID == idB }),
+        if let target = windowTarget(byID: idB),
            let window = target.windowElement {
             _ = try? accessibilityService.setFrame(newFrameB, on: target.screenFrame, for: window)
             recentlySetFrames[idB] = (newFrameB, CFAbsoluteTimeGetCurrent())
@@ -1730,9 +1730,28 @@ extension AppState {
         groupPollingLastChangeAt = CFAbsoluteTimeGetCurrent()
         if groupPollingTimer != nil { return }
         groupPollingTickCount = 0
+        // Shorten the AX messaging timeout on every group member for the
+        // duration of the polling session. Each tick issues synchronous AX
+        // reads/writes against the member apps; with the 6 s global default a
+        // single busy or hung follower (e.g. an Electron app under load)
+        // would stall Tiley's main thread mid-drag. Restored in
+        // `stopGroupPollingTimer`.
+        pollingTimeoutAdjustedWindows = []
+        if let sourceID = groupPollingSourceID,
+           let gid = groupIndexByWindow[sourceID],
+           let group = windowGroups[gid] {
+            for member in group.members {
+                guard let window = windowTarget(byID: member)?.windowElement else { continue }
+                if AXUIElementSetMessagingTimeout(window, 0.25) == .success {
+                    pollingTimeoutAdjustedWindows.append(window)
+                }
+            }
+        }
         let timer = DispatchSource.makeTimerSource(queue: .main)
-        // Poll at ~120 Hz (8 ms). Keep per-tick work minimal by skipping badge updates.
-        timer.schedule(deadline: .now(), repeating: .milliseconds(8), leeway: .milliseconds(1))
+        // Poll at ~60 Hz (16 ms) — matches display refresh; anything faster
+        // just multiplies synchronous AX IPC without smoother tracking.
+        // Keep per-tick work minimal by skipping badge updates.
+        timer.schedule(deadline: .now(), repeating: .milliseconds(16), leeway: .milliseconds(2))
         timer.setEventHandler { [weak self] in
             self?.pollGroupSource()
         }
@@ -1752,6 +1771,14 @@ extension AppState {
         groupPollingTimer = nil
         groupPollingSourceID = nil
         groupPollingIntendedSourceID = nil
+
+        // Restore the global-default AX messaging timeout on the members whose
+        // timeout was shortened for the polling session — the release-time
+        // corrections below intentionally use the slower, robust paths.
+        for window in pollingTimeoutAdjustedWindows {
+            AXUIElementSetMessagingTimeout(window, 0)
+        }
+        pollingTimeoutAdjustedWindows = []
 
         // If, during the drag, the source pushed past a follower's min width/
         // height and the two visually overlap, shrink the source back to the
@@ -1974,7 +2001,7 @@ extension AppState {
             }
 
             if sharesMinY || sharesMaxY || sharesMinX || sharesMaxX {
-                guard let target = availableWindowTargets.first(where: { $0.cgWindowID == otherID }),
+                guard let target = windowTarget(byID: otherID),
                       let window = target.windowElement else { continue }
                 for snapRetry in 0..<5 {
                     guard let lvSrc = liveFrame(of: lastSourceID),
@@ -2100,14 +2127,14 @@ extension AppState {
 
     /// Returns whether the given window is currently in native macOS fullscreen.
     private func isMemberFullScreen(cgWindowID: CGWindowID) -> Bool {
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
+        guard let target = windowTarget(byID: cgWindowID),
               let window = target.windowElement else { return false }
         return accessibilityService.isFullScreen(window)
     }
 
     /// Returns the window's current frame (AppKit coordinates, read live from AX).
     func liveFrame(of cgWindowID: CGWindowID) -> CGRect? {
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
+        guard let target = windowTarget(byID: cgWindowID),
               let window = target.windowElement else { return nil }
         let (axPos, size) = accessibilityService.readPositionAndSize(of: window)
         guard size.width > 0, size.height > 0 else { return nil }
@@ -2130,8 +2157,8 @@ extension AppState {
             // accumulate errors.
             group.lastKnownFrames[member] = newFrame
         }
-        // Run the Z-order touch-up once every 4 ticks to stay cheap (4 × 8 ms = 32 ms ≈ 30 Hz).
-        if groupPollingTickCount % 4 == 0 {
+        // Run the Z-order touch-up once every 2 ticks to stay cheap (2 × 16 ms = 32 ms ≈ 30 Hz).
+        if groupPollingTickCount % 2 == 0 {
             for member in group.members where member != sourceID {
                 orderFollowerBelowSource(followerID: member, sourceID: sourceID)
             }
@@ -2233,7 +2260,7 @@ extension AppState {
             case .top:    preservedEdgeValue = otherOld.maxY
             case .bottom: preservedEdgeValue = otherOld.minY
             }
-            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == otherID }),
+            guard let target = windowTarget(byID: otherID),
                   let window = target.windowElement else { continue }
             let actualSize = accessibilityService.setFrameLightweightPreservingEdge(
                 desiredFrame,
@@ -2253,10 +2280,12 @@ extension AppState {
 
             // Verify & correct pass: even with the size-first approach, some
             // apps don't propagate the new AX values immediately. Read live
-            // afterwards and, if the non-contact edge has drifted, force it
-            // back with a shift. Retry up to 3 times to settle.
-            for _ in 0..<3 {
-                guard let live = liveFrame(of: otherID) else { break }
+            // once and, if the non-contact edge has drifted, force it back
+            // with a single shift. A full retry-until-settled loop here would
+            // multiply synchronous AX IPC per follower per tick; residual
+            // drift is corrected on the next tick and finally by the
+            // release-time pass (`resolveAdjacencyOverlapsOnRelease`).
+            if let live = liveFrame(of: otherID) {
                 let actualEdge: CGFloat
                 switch sourceEdge {
                 case .right:  actualEdge = live.maxX
@@ -2264,15 +2293,16 @@ extension AppState {
                 case .top:    actualEdge = live.maxY
                 case .bottom: actualEdge = live.minY
                 }
-                if abs(actualEdge - preservedEdgeValue) <= 0.5 { break }  // stable
-                var c = live
-                switch sourceEdge {
-                case .right:  c.origin.x = preservedEdgeValue - live.width
-                case .left:   c.origin.x = preservedEdgeValue
-                case .top:    c.origin.y = preservedEdgeValue - live.height
-                case .bottom: c.origin.y = preservedEdgeValue
+                if abs(actualEdge - preservedEdgeValue) > 0.5 {
+                    var c = live
+                    switch sourceEdge {
+                    case .right:  c.origin.x = preservedEdgeValue - live.width
+                    case .left:   c.origin.x = preservedEdgeValue
+                    case .top:    c.origin.y = preservedEdgeValue - live.height
+                    case .bottom: c.origin.y = preservedEdgeValue
+                    }
+                    accessibilityService.setFrameLightweight(c, on: target.screenFrame, for: window)
                 }
-                accessibilityService.setFrameLightweight(c, on: target.screenFrame, for: window)
             }
 
             // Mark this follower visited and enqueue it as a secondary source
@@ -2289,8 +2319,8 @@ extension AppState {
         //   - cache-source to be overwritten so the source's delta carries error,
         //   - and downstream errors in the follower correction.
 
-        // Z-order touch-up + raise once every 4 ticks (keeps the tick cheap).
-        if groupPollingTickCount % 4 == 0 {
+        // Z-order touch-up + raise once every 2 ticks ≈ 30 Hz (keeps the tick cheap).
+        if groupPollingTickCount % 2 == 0 {
             for member in visited where member != sourceID {
                 orderFollowerBelowSource(followerID: member, sourceID: sourceID)
             }
@@ -2302,7 +2332,7 @@ extension AppState {
     /// Called during move/resize polling. The source's app is already active,
     /// so no cross-app switching occurs and no flicker is introduced.
     private func raiseSourceWindow(sourceID: CGWindowID) {
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == sourceID }) else { return }
+        guard let target = windowTarget(byID: sourceID) else { return }
         guard let window = target.windowElement else { return }
         AXUIElementPerformAction(window, kAXRaiseAction as CFString)
     }
@@ -2312,7 +2342,7 @@ extension AppState {
     /// + bounce + position fixup), then verifies against the live frame and
     /// retries on mismatch.
     private func robustMoveWindow(cgWindowID: CGWindowID, to frame: CGRect) {
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
+        guard let target = windowTarget(byID: cgWindowID),
               let window = target.windowElement else { return }
         // Retry up to 3 times so the app actually accepts the frame.
         for attempt in 0..<3 {
@@ -2332,7 +2362,7 @@ extension AppState {
     }
 
     private func moveMemberWindow(cgWindowID: CGWindowID, to frame: CGRect) {
-        guard let target = availableWindowTargets.first(where: { $0.cgWindowID == cgWindowID }),
+        guard let target = windowTarget(byID: cgWindowID),
               let window = target.windowElement else { return }
         // Use the lightweight setter for the high-frequency drag loop.
         // The full `setFrame` does a lot of AX calls (pre-nudge, bounce, etc.)
@@ -2579,14 +2609,14 @@ extension AppState {
         // whatever non-deterministic ordering AXRaise/activate left behind.
         // This prevents the "the last-AXRaised member ends up on top" failure
         // when there are 3+ members.
-        let raisedTarget = availableWindowTargets.first(where: { $0.cgWindowID == id })
+        let raisedTarget = windowTarget(byID: id)
         let raisedPID = raisedTarget?.processIdentifier
         let raisedWindow = raisedTarget?.windowElement
 
         var sameAppMembers: [CGWindowID] = []
         var diffAppMembers: [(cgID: CGWindowID, target: WindowTarget)] = []
         for member in group.members where member != id {
-            guard let t = availableWindowTargets.first(where: { $0.cgWindowID == member }) else {
+            guard let t = windowTarget(byID: member) else {
                 debugLog("WindowGrouping:   member \(member) not in availableWindowTargets")
                 continue
             }
@@ -2619,7 +2649,7 @@ extension AppState {
         // 1. AXRaise the same-app other members (pulls them to the frontmost
         //    layer and repairs the app's window block).
         for member in sameAppMembers {
-            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == member }),
+            guard let target = windowTarget(byID: member),
                   let window = target.windowElement else { continue }
             let axResult = AXUIElementPerformAction(window, kAXRaiseAction as CFString)
             debugLog("WindowGrouping:   [sameApp] AXRaise(\(member)) → \(axResult.rawValue)")

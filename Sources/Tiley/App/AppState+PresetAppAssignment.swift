@@ -606,7 +606,7 @@ extension AppState {
         // Case B: focused window is the anchor of some bundleID → activate
         // the frontmost satellite's app and raise it, then seat it below the
         // clicked anchor so the user's click target stays on top.
-        if let focusedTarget = availableWindowTargets.first(where: { $0.cgWindowID == focusedID }),
+        if let focusedTarget = windowTarget(byID: focusedID),
            let focusedBID = NSRunningApplication(processIdentifier: focusedTarget.processIdentifier)?.bundleIdentifier,
            let satellites = appSlotSatellites[focusedBID],
            !satellites.isEmpty {
@@ -627,7 +627,7 @@ extension AppState {
                 return nil
             }()
             guard let satID = frontmostSatelliteID,
-                  let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satID }),
+                  let satTarget = windowTarget(byID: satID),
                   let window = satTarget.windowElement else {
                 debugLog("SatelliteRaise:   Case B — no live satellite target for bundle=\(focusedBID)")
                 return
@@ -697,10 +697,10 @@ extension AppState {
     /// (the mouse click monitor only catches mouse events).
     func observeSatelliteAndAnchor(satelliteWID: CGWindowID, anchorWID: CGWindowID) {
         guard let service = windowObservationService else { return }
-        if let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) {
+        if let satTarget = windowTarget(byID: satelliteWID) {
             service.observe(target: satTarget)
         }
-        if let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }) {
+        if let anchorTarget = windowTarget(byID: anchorWID) {
             service.observe(target: anchorTarget)
         }
     }
@@ -721,7 +721,7 @@ extension AppState {
                 service.observe(target: anchorTarget)
             }
             for wid in satellites {
-                if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }) {
+                if let target = windowTarget(byID: wid) {
                     service.observe(target: target)
                 }
             }
@@ -747,7 +747,7 @@ extension AppState {
         guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
             .first(where: { $0.activationPolicy == .regular }),
               let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }),
-              let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) else {
+              let satTarget = windowTarget(byID: satelliteWID) else {
             return
         }
         let anchorFrame = liveFrame(of: anchorTarget.cgWindowID) ?? anchorTarget.frame
@@ -856,7 +856,7 @@ extension AppState {
         // *current* (live) position. Preserves the saved anchor size and
         // the anchor↔satellite offset captured at save time.
         let liveSatOrigin: CGPoint = liveFrame(of: satelliteWID)?.origin ??
-            availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID })?.frame.origin ??
+            windowTarget(byID: satelliteWID)?.frame.origin ??
             frames.satellite.origin
         let offset = CGPoint(
             x: frames.anchor.origin.x - frames.satellite.origin.x,
@@ -921,7 +921,7 @@ extension AppState {
         guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
             .first(where: { $0.activationPolicy == .regular }),
               let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }),
-              let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) else {
+              let satTarget = windowTarget(byID: satelliteWID) else {
             return
         }
         let liveAnchor = liveFrame(of: anchorTarget.cgWindowID) ?? anchorTarget.frame
@@ -984,7 +984,7 @@ extension AppState {
             }
             let anchorWID = anchorTarget.cgWindowID
             guard movedWID == anchorWID || movedWID == activeSat else { continue }
-            guard let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == activeSat }) else { continue }
+            guard let satTarget = windowTarget(byID: activeSat) else { continue }
             let anchorFrame = liveFrame(of: anchorWID) ?? anchorTarget.frame
             let satFrame = liveFrame(of: activeSat) ?? satTarget.frame
 
@@ -1037,8 +1037,8 @@ extension AppState {
     func unlinkAppSlotSatellitePair(windowA: CGWindowID, windowB: CGWindowID) {
         guard !appSlotSatellites.isEmpty else { return }
 
-        let pidA = availableWindowTargets.first(where: { $0.cgWindowID == windowA })?.processIdentifier
-        let pidB = availableWindowTargets.first(where: { $0.cgWindowID == windowB })?.processIdentifier
+        let pidA = windowTarget(byID: windowA)?.processIdentifier
+        let pidB = windowTarget(byID: windowB)?.processIdentifier
         let bidA = pidA.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
         let bidB = pidB.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
 
@@ -1118,8 +1118,8 @@ extension AppState {
         // cached `WindowTarget.frame` can lag by a refresh cycle, which
         // would cause us to form the group using stale positions.
         let newAdj: WindowAdjacency? = {
-            guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }),
-                  let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) else {
+            guard let anchorTarget = windowTarget(byID: anchorWID),
+                  let satTarget = windowTarget(byID: satelliteWID) else {
                 return nil
             }
             let anchorFrame = liveFrame(of: anchorWID) ?? anchorTarget.frame
@@ -1197,8 +1197,8 @@ extension AppState {
         if windowAnchorSatellites[wid2]?.contains(wid1) == true { return true }
         // App-slot satellite case: check whether wid1's bundle anchors wid2,
         // or vice-versa.
-        let pid1 = availableWindowTargets.first(where: { $0.cgWindowID == wid1 })?.processIdentifier
-        let pid2 = availableWindowTargets.first(where: { $0.cgWindowID == wid2 })?.processIdentifier
+        let pid1 = windowTarget(byID: wid1)?.processIdentifier
+        let pid2 = windowTarget(byID: wid2)?.processIdentifier
         let bid1 = pid1.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
         let bid2 = pid2.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
         if let bid = bid1, appSlotSatellites[bid]?.contains(wid2) == true { return true }
@@ -1214,7 +1214,7 @@ extension AppState {
         if groupIndexByWindow[wid] != nil { return true }
         if windowAnchorSatellites[wid] != nil { return true }
         for (_, sats) in windowAnchorSatellites where sats.contains(wid) { return true }
-        if let pid = availableWindowTargets.first(where: { $0.cgWindowID == wid })?.processIdentifier,
+        if let pid = windowTarget(byID: wid)?.processIdentifier,
            let bid = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier {
             if appSlotSatellites[bid] != nil { return true }
             for (_, sats) in appSlotSatellites where sats.contains(wid) { return true }
@@ -1260,7 +1260,7 @@ extension AppState {
             // App-slot satellite pool: same idea, keyed by bundleID. The
             // anchor is whichever window of the assigned app is currently
             // available.
-            if let pid = availableWindowTargets.first(where: { $0.cgWindowID == wid })?.processIdentifier,
+            if let pid = windowTarget(byID: wid)?.processIdentifier,
                let bid = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier {
                 if let sats = appSlotSatellites[bid] {
                     for s in sats where !visited.contains(s) {
@@ -1361,7 +1361,7 @@ extension AppState {
             for memberWID in group.members where memberWID != anchorWID {
                 if let anchorFrame = group.lastKnownFrames[anchorWID],
                    let satFrame = group.lastKnownFrames[memberWID],
-                   let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }) {
+                   let anchorTarget = windowTarget(byID: anchorWID) {
                     let snapped = Self.snapAnchor(
                         anchorFrame: anchorFrame,
                         satelliteFrame: satFrame,
@@ -1428,8 +1428,8 @@ extension AppState {
     /// `savedWindowPairFrames`. The anchor side is snapped so it sits
     /// pixel-flush against the satellite's edge.
     func saveCurrentWindowPairFrames(anchorWID: CGWindowID, satelliteWID: CGWindowID) {
-        guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }),
-              let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) else {
+        guard let anchorTarget = windowTarget(byID: anchorWID),
+              let satTarget = windowTarget(byID: satelliteWID) else {
             return
         }
         let anchorFrame = liveFrame(of: anchorWID) ?? anchorTarget.frame
@@ -1462,11 +1462,11 @@ extension AppState {
             debugLog("WindowAnchorPair: no saved frames for (\(anchorWID), \(satelliteWID))")
             return
         }
-        guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }) else {
+        guard let anchorTarget = windowTarget(byID: anchorWID) else {
             return
         }
         let liveSatOrigin: CGPoint = liveFrame(of: satelliteWID)?.origin ??
-            availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID })?.frame.origin ??
+            windowTarget(byID: satelliteWID)?.frame.origin ??
             frames.satellite.origin
         let offset = CGPoint(
             x: frames.anchor.origin.x - frames.satellite.origin.x,
@@ -1509,8 +1509,8 @@ extension AppState {
     private func verifyAndReRestoreWindowPairIfDrifted(anchorWID: CGWindowID, satelliteWID: CGWindowID) {
         guard activeSatellitePerWindowAnchor[anchorWID] == satelliteWID else { return }
         guard let frames = savedWindowPairFrames[anchorWID]?[satelliteWID] else { return }
-        guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }),
-              let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satelliteWID }) else {
+        guard let anchorTarget = windowTarget(byID: anchorWID),
+              let satTarget = windowTarget(byID: satelliteWID) else {
             return
         }
         let liveAnchor = liveFrame(of: anchorWID) ?? anchorTarget.frame
@@ -1553,8 +1553,8 @@ extension AppState {
     func updateSavedWindowPairFramesIfActive(movedWID: CGWindowID) {
         for (anchorWID, activeSat) in activeSatellitePerWindowAnchor {
             guard movedWID == anchorWID || movedWID == activeSat else { continue }
-            guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }),
-                  let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == activeSat }) else { continue }
+            guard let anchorTarget = windowTarget(byID: anchorWID),
+                  let satTarget = windowTarget(byID: activeSat) else { continue }
             let anchorFrame = liveFrame(of: anchorWID) ?? anchorTarget.frame
             let satFrame = liveFrame(of: activeSat) ?? satTarget.frame
             let epsilon: CGFloat = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
@@ -1591,7 +1591,7 @@ extension AppState {
         // Case C: focused is a satellite of some anchor.
         for (anchorWID, satellites) in windowAnchorSatellites where satellites.contains(focusedID) {
             guard anchorWID != focusedID else { continue }
-            guard let anchorTarget = availableWindowTargets.first(where: { $0.cgWindowID == anchorWID }) else {
+            guard let anchorTarget = windowTarget(byID: anchorWID) else {
                 continue
             }
             debugLog("WindowAnchorRaise: Case C — clicked sat=\(focusedID), anchor=\(anchorWID)")
@@ -1641,7 +1641,7 @@ extension AppState {
                 return nil
             }()
             guard let satID = frontmostSat,
-                  let satTarget = availableWindowTargets.first(where: { $0.cgWindowID == satID }),
+                  let satTarget = windowTarget(byID: satID),
                   let satWindow = satTarget.windowElement else {
                 debugLog("WindowAnchorRaise: Case D — no live satellite for anchor=\(focusedID)")
                 return

@@ -203,7 +203,15 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var cachedResizability: WindowResizability?
     @ObservationIgnored var cachedResizabilityPID: pid_t?
     @ObservationIgnored var layoutPreviewController: LayoutPreviewOverlayController?
-    @ObservationIgnored var availableWindowTargets: [WindowTarget] = []
+    @ObservationIgnored var availableWindowTargets: [WindowTarget] = [] {
+        didSet { rebuildWindowTargetIndex() }
+    }
+    /// O(1) index over `availableWindowTargets` keyed by CGWindowID (first
+    /// occurrence wins, matching `first(where:)` z-order semantics). Rebuilt
+    /// automatically whenever the list changes — the grouping/polling hot
+    /// paths look windows up hundreds of times per second and must not scan
+    /// the array linearly.
+    @ObservationIgnored var windowTargetsByID: [CGWindowID: WindowTarget] = [:]
     /// Mission Control space list (empty when detection is unavailable).
     @ObservationIgnored var spaceList: [SpaceInfo] = []
     /// The currently active Mission Control space IDs (one per display).
@@ -333,6 +341,11 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var groupPollingLastChangeAt: CFAbsoluteTime = 0
     /// Counts polling ticks; used to throttle expensive ops (e.g., AXRaise).
     @ObservationIgnored var groupPollingTickCount: Int = 0
+    /// AX window elements whose messaging timeout was shortened for the
+    /// current polling session (so one slow/hung follower app can't block
+    /// the main thread for the 6 s global AX default on every tick).
+    /// Restored to the global default when polling stops.
+    @ObservationIgnored var pollingTimeoutAdjustedWindows: [AXUIElement] = []
     /// Periodic (~1 Hz) timer that checks whether any group's members have
     /// ended up on different Spaces (see `dissolveGroupsWithSplitSpaces`).
     /// AX and workspace notifications don't cover every path for moving a
@@ -847,6 +860,22 @@ final class AppState: NSObject, NSMenuDelegate {
                 cgWindowID: target.cgWindowID
             )
         }
+    }
+
+    private func rebuildWindowTargetIndex() {
+        var index: [CGWindowID: WindowTarget] = [:]
+        index.reserveCapacity(availableWindowTargets.count)
+        for target in availableWindowTargets where target.cgWindowID != 0 {
+            if index[target.cgWindowID] == nil {
+                index[target.cgWindowID] = target
+            }
+        }
+        windowTargetsByID = index
+    }
+
+    /// O(1) lookup of an available window target by its CGWindowID.
+    func windowTarget(byID id: CGWindowID) -> WindowTarget? {
+        windowTargetsByID[id]
     }
 
     /// Sets the main (grid/sidebar) windows to floating level.

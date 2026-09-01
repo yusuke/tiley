@@ -662,6 +662,11 @@ struct LayoutGridWorkspaceView: View {
             endColumn: column,
             endRow: row
         ).normalized
+        // Drag events arrive far more often than the cell under the cursor
+        // changes. Without this guard every mouse-move rebuilds the screen
+        // preview overlay downstream (see the equivalent cell-change guard in
+        // the onContinuousHover handler above).
+        if dragSelection == selection { return selection }
         dragSelection = selection
         onSelectionChange(selection)
         return selection

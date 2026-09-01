@@ -34,10 +34,48 @@ private struct SelectionPreviewEntry {
     let displayLabel: Int?
 }
 
+/// Root content for the overlay's single, reused NSHostingView. Replacing
+/// `window.contentView` with a fresh NSHostingView on every update is
+/// expensive (view-hierarchy build + layout + layer creation) and the
+/// selection preview updates on every cell change during a drag — so the
+/// hosting view is created once and only its `rootView` is swapped.
+private enum PreviewOverlayContent {
+    case none
+    case selection(SelectionPreviewOverlayView)
+    case multi(MultiSelectionPreviewOverlayView)
+    case grid(GridPreviewOverlayView)
+}
+
+private struct PreviewOverlayRootView: View {
+    let content: PreviewOverlayContent
+
+    var body: some View {
+        switch content {
+        case .none: Color.clear
+        case .selection(let view): view
+        case .multi(let view): view
+        case .grid(let view): view
+        }
+    }
+}
+
 final class LayoutPreviewOverlayController: NSWindowController {
     let screenFrame: CGRect
     let visibleFrame: CGRect
     private weak var attachedParentWindow: NSWindow?
+    private var hostingView: NSHostingView<PreviewOverlayRootView>?
+
+    /// Assigns new content, reusing the hosting view after the first call.
+    private func setContent(_ content: PreviewOverlayContent) {
+        let root = PreviewOverlayRootView(content: content)
+        if let hostingView {
+            hostingView.rootView = root
+        } else {
+            let view = NSHostingView(rootView: root)
+            hostingView = view
+            window?.contentView = view
+        }
+    }
 
     init(screenFrame: CGRect, visibleFrame: CGRect) {
         self.screenFrame = screenFrame
@@ -77,7 +115,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
             colorIndex: colorIndex,
             overrideFillNSColor: overrideFillNSColor
         )
-        window?.contentView = NSHostingView(rootView: rootView)
+        setContent(.selection(rootView))
         window?.level = .normal
         present(behind: parentWindow)
     }
@@ -98,7 +136,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
             )
         }
         let rootView = MultiSelectionPreviewOverlayView(entries: frames, screenFrame: screenFrame, showIndexLabels: showIndexLabels)
-        window?.contentView = NSHostingView(rootView: rootView)
+        setContent(.multi(rootView))
         window?.level = .normal
         present(behind: parentWindow)
     }
@@ -111,7 +149,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
             columns: columns,
             gap: gap
         )
-        window?.contentView = NSHostingView(rootView: rootView)
+        setContent(.grid(rootView))
         window?.level = .normal
         present(behind: parentWindow)
     }
@@ -128,7 +166,7 @@ final class LayoutPreviewOverlayController: NSWindowController {
             appName: appName,
             colorIndex: 0
         )
-        window?.contentView = NSHostingView(rootView: rootView)
+        setContent(.selection(rootView))
         window?.level = .normal
         present(behind: parentWindow)
     }
@@ -142,7 +180,8 @@ final class LayoutPreviewOverlayController: NSWindowController {
             parentWindow.removeChildWindow(window)
         }
         attachedParentWindow = nil
-        window.contentView = nil
+        // Keep the hosting view for reuse; just drop its content.
+        hostingView?.rootView = PreviewOverlayRootView(content: .none)
         window.orderOut(nil)
     }
 

@@ -684,7 +684,7 @@ extension AppState {
         var shouldDisplace = Set<CGWindowID>()
         for i in 0..<selectedIdx {
             let wid = initialZOrderWindowIDs[i]
-            if let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+            if let target = windowTarget(byID: wid),
                target.frame.intersects(selectedFrame) {
                 shouldDisplace.insert(wid)
             }
@@ -724,13 +724,13 @@ extension AppState {
 
         // Sort by original Y position so stacking order is predictable.
         let sortedDisplace = shouldDisplace.sorted { a, b in
-            let aTarget = availableWindowTargets.first(where: { $0.cgWindowID == a })
-            let bTarget = availableWindowTargets.first(where: { $0.cgWindowID == b })
+            let aTarget = windowTarget(byID: a)
+            let bTarget = windowTarget(byID: b)
             return (aTarget?.frame.minY ?? 0) < (bTarget?.frame.minY ?? 0)
         }
 
         for wid in sortedDisplace {
-            guard let target = availableWindowTargets.first(where: { $0.cgWindowID == wid }),
+            guard let target = windowTarget(byID: wid),
                   let window = target.windowElement else { continue }
 
             // Save original position if not already tracked.
