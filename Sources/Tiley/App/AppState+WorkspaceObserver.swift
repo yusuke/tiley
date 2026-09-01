@@ -170,6 +170,10 @@ extension AppState {
         registerDisplayHotKeys()
         // Drop wallpaper entries cached for screens that may have disconnected.
         invalidateWallpaperCache()
+        // Also advance the wallpaper version so the per-screen
+        // DesktopPictureInfo cache in MainWindowView (keyed on this version)
+        // is rebuilt for the new screen arrangement.
+        desktopImageVersion += 1
         guard isShowingLayoutGrid, !isEditingSettings else { return }
         openAllScreenWindows()
     }

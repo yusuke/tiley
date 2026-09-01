@@ -243,8 +243,20 @@ struct MainWindowView: View {
     }
 
 
+    /// Cache for `computeDesktopPictureInfo(for:)`. Resolving the info reads
+    /// and deserializes the wallpaper Store plist and opens the wallpaper
+    /// image with ImageIO to read its pixel dimensions — synchronous disk I/O
+    /// that must not run on every body evaluation (the property is consulted
+    /// up to four times per pass, per display, at hover/drag frequency).
+    /// Keyed per screen (frame + scale); wiped when `desktopImageVersion`
+    /// advances. A `nil` result is cached too.
+    @MainActor
+    private enum DesktopPictureInfoCache {
+        static var version: Int = -1
+        static var byScreenKey: [String: DesktopPictureInfo?] = [:]
+    }
+
     private var desktopPictureInfo: DesktopPictureInfo? {
-        _ = appState.desktopImageVersion  // Invalidate when wallpaper changes
         let screen: NSScreen?
         if let ctx = screenContext {
             screen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
@@ -252,6 +264,18 @@ struct MainWindowView: View {
             screen = NSScreen.main
         }
         guard let screen else { return nil }
+        if DesktopPictureInfoCache.version != appState.desktopImageVersion {
+            DesktopPictureInfoCache.byScreenKey.removeAll(keepingCapacity: true)
+            DesktopPictureInfoCache.version = appState.desktopImageVersion
+        }
+        let key = "\(screen.frame)|\(screen.backingScaleFactor)"
+        if let cached = DesktopPictureInfoCache.byScreenKey[key] { return cached }
+        let info = Self.computeDesktopPictureInfo(for: screen)
+        DesktopPictureInfoCache.byScreenKey[key] = info
+        return info
+    }
+
+    private static func computeDesktopPictureInfo(for screen: NSScreen) -> DesktopPictureInfo? {
         guard let rawURL = NSWorkspace.shared.desktopImageURL(for: screen) else { return nil }
         let opts = NSWorkspace.shared.desktopImageOptions(for: screen)
 

@@ -301,6 +301,9 @@ extension AppState {
 
     func openMainWindow() {
         debugLog("openMainWindow start (isShowingLayoutGrid=\(isShowingLayoutGrid ? 1 : 0))")
+        // The Dock contents may have changed while Tiley's UI was closed.
+        // Re-read them once per open; body evaluations then hit the cache.
+        DockReader.invalidate()
         // Reset any stale bubble arrow state from a previous open cycle.
         // If this open was triggered by an icon click, triggerIconCenter is set
         // and MainWindowController.positionWindow() will set bubbleArrowEdge again.

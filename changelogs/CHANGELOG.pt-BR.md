@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- O Tiley executava uma varredura completa de Acessibilidade em todas as janelas abertas (além de uma consulta à lista de janelas do WindowServer) a cada troca de foco ou de janela em qualquer aplicativo — mesmo quando o recurso de agrupamento de janelas não estava sendo usado. A atualização dos badges agora retorna imediatamente quando não há grupos vinculados nem candidatos a grupo pendentes, e os eventos de mudança de foco são agrupados, de modo que uma única troca de janela (que dispara tanto a notificação de Acessibilidade de janela em foco quanto a de janela principal) causa no máximo uma atualização em vez de duas. Isso elimina a carga constante de CPU/IPC ao alternar entre aplicativos normalmente.
+- A sobreposição do Tiley relia do disco os metadados do papel de parede e a configuração do Dock a cada passagem de renderização do SwiftUI: a plist do Store de papéis de parede era reanalisada até quatro vezes por passagem (e o arquivo do papel de parede reaberto para ler suas dimensões em pixels), e quando uma borda do Dock estava visível, a plist do Dock e todos os ícones de seus aplicativos também eram recarregados a cada vez — E/S de disco síncrona na thread principal na frequência do movimento do mouse. As informações de exibição do papel de parede agora são armazenadas em cache por tela e invalidadas quando o papel de parede ou a configuração de telas muda, e o conteúdo do Dock é lido apenas uma vez a cada abertura da janela.
+
 ## [5.2.1] - 2026-07-31
 
 ### Corrigido

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Tiley führte bei jedem Fokus- oder Fensterwechsel in einer beliebigen App einen vollständigen Accessibility-Durchlauf über alle geöffneten Fenster durch (plus eine WindowServer-Fensterlisten-Abfrage) — selbst wenn die Fenstergruppierungs-Funktion überhaupt nicht genutzt wurde. Die Aktualisierung der Badge-Overlays kehrt jetzt sofort zurück, wenn weder verknüpfte Gruppen noch ausstehende Gruppenkandidaten existieren, und Fokuswechsel-Ereignisse werden zusammengefasst, sodass ein einzelner Fensterwechsel (der sowohl die Focused-Window- als auch die Main-Window-Accessibility-Benachrichtigung auslöst) höchstens eine statt zwei Aktualisierungen anstößt. Damit entfällt die konstante CPU-/IPC-Hintergrundlast beim normalen App-Wechsel.
+- Tileys Overlay las Wallpaper-Metadaten und die Dock-Konfiguration bei jedem SwiftUI-Renderdurchlauf erneut von der Festplatte: Die Wallpaper-Store-Plist wurde bis zu viermal pro Durchlauf neu geparst (und die Wallpaper-Datei zum Auslesen der Pixelmaße erneut geöffnet), und bei sichtbarer Dock-Kante wurden die Dock-Plist sowie alle Dock-App-Icons jedes Mal neu geladen — synchrone Festplatten-I/O auf dem Main-Thread in Mausbewegungs-Frequenz. Die Wallpaper-Anzeigedaten werden jetzt pro Bildschirm zwischengespeichert und bei Änderungen am Wallpaper oder an der Bildschirmkonfiguration verworfen; der Dock-Inhalt wird nur noch einmal pro Fensteröffnung gelesen.
+
 ## [5.2.1] - 2026-07-31
 
 ### Behoben

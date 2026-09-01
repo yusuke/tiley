@@ -352,6 +352,10 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Debounce timer that fires shortly after the last manual move/resize event
     /// (or immediately on mouse-up) and runs the candidate detection pass.
     @ObservationIgnored var manualMoveSettleTimer: DispatchSourceTimer?
+    /// Pending coalesced badge-overlay refresh (see `scheduleBadgeOverlayRefresh`).
+    /// Non-nil while a deferred `refreshBadgeOverlays()` is queued; any direct
+    /// refresh cancels it so at most one full sweep runs per burst of events.
+    @ObservationIgnored var badgeOverlayRefreshWorkItem: DispatchWorkItem?
 
     // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
     /// True when the user opened the overlay and is still holding the toggle modifiers.

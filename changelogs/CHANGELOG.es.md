@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corregido
+
+- Tiley realizaba un barrido completo de Accesibilidad sobre todas las ventanas abiertas (más una consulta de la lista de ventanas al WindowServer) en cada cambio de foco o de ventana en cualquier aplicación, incluso cuando la función de agrupación de ventanas no se estaba usando en absoluto. La actualización de los badges ahora retorna de inmediato cuando no hay grupos vinculados ni candidatos de grupo pendientes, y los eventos de cambio de foco se agrupan de modo que un único cambio de ventana (que dispara tanto la notificación de Accesibilidad de ventana enfocada como la de ventana principal) provoca como máximo una actualización en lugar de dos. Esto elimina la carga constante de CPU/IPC al cambiar de aplicación con normalidad.
+- La superposición de Tiley releía desde el disco los metadatos del fondo de pantalla y la configuración del Dock en cada pasada de renderizado de SwiftUI: la plist del Store de fondos se reanalizaba hasta cuatro veces por pasada (y el archivo del fondo se reabría para leer sus dimensiones en píxeles), y cuando un borde del Dock era visible también se recargaban la plist del Dock y todos los iconos de sus aplicaciones — E/S de disco síncrona en el hilo principal a la frecuencia del movimiento del ratón. La información del fondo de pantalla ahora se guarda en caché por pantalla y se invalida cuando cambia el fondo o la configuración de pantallas, y el contenido del Dock se lee una sola vez cada vez que se abre la ventana.
+
 ## [5.2.1] - 2026-07-31
 
 ### Corregido

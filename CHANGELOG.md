@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Tiley performed a full Accessibility sweep of every open window (plus a WindowServer window-list query) on every focus or window switch in any application — even when the window-grouping feature was completely idle. The badge-overlay refresh now returns immediately when there are no linked groups and no pending group candidates, and focus-change events are coalesced so a single window switch (which fires both the focused-window and main-window Accessibility notifications) triggers at most one refresh instead of two. This removes the constant background CPU/IPC load during normal app switching.
+- Tiley's overlay re-read wallpaper metadata and the Dock configuration from disk on every SwiftUI render pass: the wallpaper Store plist was re-parsed (and the wallpaper file reopened to read its pixel dimensions) up to four times per pass, and the Dock plist plus every Dock app icon were re-loaded whenever a Dock edge was visible — synchronous main-thread disk I/O at mouse-move frequency. Wallpaper display info is now cached per screen and invalidated when the wallpaper or the screen configuration changes, and the Dock contents are read once each time the window opens.
+
 ## [5.2.1] - 2026-07-31
 
 ### Fixed

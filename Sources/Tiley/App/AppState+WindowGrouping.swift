@@ -700,6 +700,20 @@ extension AppState {
     /// `fastHide = true` shortens the fade-out duration (used at the moment a
     /// drag/resize starts so badges disappear quickly).
     func refreshBadgeOverlays(fastHide: Bool = false) {
+        // An explicit refresh supersedes any coalesced one still pending.
+        badgeOverlayRefreshWorkItem?.cancel()
+        badgeOverlayRefreshWorkItem = nil
+
+        // Idle fast path: badges only ever come from pending candidates and
+        // linked groups. With both empty the result below is always an empty
+        // badge list, so skip the frontmost-window AX resolution, the
+        // full-window AX frame sweep, and the CGWindowList occlusion query —
+        // this method fires on every focus change system-wide.
+        if pendingGroupCandidates.isEmpty, windowGroups.isEmpty {
+            groupLinkBadgeController?.update(badges: [], fadeOutDuration: fastHide ? 0.15 : nil)
+            return
+        }
+
         let frontmostPID = NSWorkspace.shared.frontmostApplication?.processIdentifier
         // Resolve the actual frontmost CGWindowID (not just its PID) so we
         // can scope linked-group badges to the group containing it (or
@@ -820,6 +834,23 @@ extension AppState {
             groupLinkBadgeController = controller
         }
         groupLinkBadgeController?.update(badges: badges, fadeOutDuration: fastHide ? 0.15 : nil)
+    }
+
+    /// Coalesced variant of `refreshBadgeOverlays()` for high-frequency
+    /// triggers. A single window switch commonly fires both
+    /// `kAXFocusedWindowChangedNotification` and
+    /// `kAXMainWindowChangedNotification`, so calling the refresh directly
+    /// from the `.focusChanged` handler would run the full sweep twice per
+    /// switch. Events arriving within the window collapse into one refresh.
+    func scheduleBadgeOverlayRefresh(delay: TimeInterval = 0.05) {
+        guard badgeOverlayRefreshWorkItem == nil else { return }
+        let item = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.badgeOverlayRefreshWorkItem = nil
+            self.refreshBadgeOverlays()
+        }
+        badgeOverlayRefreshWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
     }
 
     /// True when the two sides of `adj` (partitioned by the badge's contact
@@ -1687,8 +1718,9 @@ extension AppState {
             // Re-evaluate badge visibility — covers sheets / modal dialogs
             // appearing or being dismissed within the same app, which the
             // `.raised` path can't handle (the sheet isn't in our observed
-            // window map).
-            refreshBadgeOverlays()
+            // window map). Coalesced: one window switch fires this twice
+            // (focused-window + main-window notifications).
+            scheduleBadgeOverlayRefresh()
         }
     }
 

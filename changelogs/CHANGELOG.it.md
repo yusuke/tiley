@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Tiley eseguiva una scansione completa di Accessibilità su tutte le finestre aperte (più una query dell'elenco finestre al WindowServer) a ogni cambio di focus o di finestra in qualsiasi applicazione — anche quando la funzione di raggruppamento finestre non era affatto in uso. L'aggiornamento dei badge ora termina immediatamente quando non esistono né gruppi collegati né candidati di gruppo in sospeso, e gli eventi di cambio focus vengono accorpati, così un singolo cambio di finestra (che genera sia la notifica di Accessibilità della finestra con focus sia quella della finestra principale) provoca al massimo un aggiornamento invece di due. Questo elimina il carico costante di CPU/IPC durante i normali cambi di applicazione.
+- L'overlay di Tiley rileggeva da disco i metadati dello sfondo e la configurazione del Dock a ogni passata di rendering SwiftUI: la plist dello Store degli sfondi veniva rianalizzata fino a quattro volte per passata (e il file dello sfondo riaperto per leggerne le dimensioni in pixel), e quando un bordo del Dock era visibile venivano ricaricati ogni volta anche la plist del Dock e tutte le icone delle sue app — I/O su disco sincrono sul thread principale alla frequenza dei movimenti del mouse. Le informazioni di visualizzazione dello sfondo ora vengono memorizzate nella cache per schermo e invalidate quando cambia lo sfondo o la configurazione degli schermi, e il contenuto del Dock viene letto una sola volta a ogni apertura della finestra.
+
 ## [5.2.1] - 2026-07-31
 
 ### Corretto

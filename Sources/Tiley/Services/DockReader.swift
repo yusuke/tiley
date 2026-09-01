@@ -2,14 +2,34 @@ import AppKit
 
 /// Reads the user's Dock configuration from the Dock plist and provides
 /// app icons in order.
+///
+/// The result is cached: reading the plist and resolving every Dock app's
+/// icon through NSWorkspace is synchronous disk I/O, and `readApps()` is
+/// called from SwiftUI body evaluations that re-run at hover/drag frequency.
+/// `invalidate()` is called each time the main window is (re)opened so Dock
+/// changes are picked up on the next open.
+@MainActor
 struct DockReader {
     struct DockApp {
         let icon: NSImage
     }
 
+    private static var cachedApps: [DockApp]?
+
+    static func readApps() -> [DockApp] {
+        if let cachedApps { return cachedApps }
+        let apps = loadApps()
+        cachedApps = apps
+        return apps
+    }
+
+    static func invalidate() {
+        cachedApps = nil
+    }
+
     /// Returns the ordered list of apps in the Dock's persistent-apps section.
     /// Finder is always prepended (macOS shows it first and it's not in the plist).
-    static func readApps() -> [DockApp] {
+    private static func loadApps() -> [DockApp] {
         var apps: [DockApp] = []
 
         // Finder is always the first item in the Dock but not in persistent-apps
