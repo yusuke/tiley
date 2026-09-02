@@ -192,7 +192,7 @@ struct LayoutGridWorkspaceView: View {
                    let hover = hoverCell, !isDragging, activeSelection == nil,
                    highlightSelection == nil, highlightSelections.isEmpty,
                    !isInCommittedSelection(row: hover.row, column: hover.column) {
-                    let nextIndex = committedSelections.count
+                    let nextIndex = nextCommittedIndex
                     let hoverSel = GridSelection(
                         startColumn: hover.column, startRow: hover.row,
                         endColumn: hover.column, endRow: hover.row
@@ -456,7 +456,7 @@ struct LayoutGridWorkspaceView: View {
                 if let sel = activeSelection?.normalized {
                     let selRect = rectForSelection(sel, cellWidth: cellWidth, cellHeight: cellHeight)
                     let overlaps = dragOverlapsCommitted
-                    let nextIndex = committedSelections.count
+                    let nextIndex = nextCommittedIndex
                     let isEditMode = onDeleteSelection != nil
 
                     if isEditMode {
@@ -772,6 +772,17 @@ struct LayoutGridWorkspaceView: View {
     private func committedSelectionAt(row: Int, column: Int) -> GridSelection? {
         let point = GridSelection(startColumn: column, startRow: row, endColumn: column, endRow: row)
         return committedSelections.first { point.overlaps($0) }
+    }
+
+    /// 0-based index (and colour slot) a newly committed selection would get.
+    /// Assigned slots show an app icon instead of a number, so the next
+    /// number counts only the *unassigned* committed selections — matching
+    /// `LayoutPreset.displayIndex(forSelectionIndex:)` once the drag commits.
+    private var nextCommittedIndex: Int {
+        committedSelections.indices.reduce(0) { acc, i in
+            let assigned = i < committedAppAssignments.count && committedAppAssignments[i] != nil
+            return assigned ? acc : acc + 1
+        }
     }
 
     /// Draws a committed selection rectangle with index label and optional delete button.

@@ -1196,7 +1196,7 @@ struct MainWindowView: View {
                                 appState.selectedLayoutPresetID = nil
                             }
                             activeLayoutSelection = selection
-                            let nextColorIndex = editingPresetID != nil ? editingPresetCommittedSelections.count : 0
+                            let nextColorIndex = editingPresetID != nil ? editingPresetNextColorIndex : 0
                             if let ctx = screenContext {
                                 appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex)
                             } else {
@@ -1232,7 +1232,7 @@ struct MainWindowView: View {
                                 }
                             } else {
                                 overrideFill = nil
-                                nextColorIndex = editingPresetID != nil ? editingPresetCommittedSelections.count : 0
+                                nextColorIndex = editingPresetID != nil ? editingPresetNextColorIndex : 0
                             }
                             if let ctx = screenContext {
                                 appState.updateLayoutPreview(selection, screenContext: ctx, colorIndex: nextColorIndex, overrideFillNSColor: overrideFill)
@@ -3365,6 +3365,13 @@ struct MainWindowView: View {
             return []
         }
         return preset.normalizedRectangleApps
+    }
+
+    /// 0-based colour index a newly committed selection would receive:
+    /// the number of *unassigned* slots already in the preset. Assigned
+    /// slots are skipped, matching `LayoutPreset.displayIndex(forSelectionIndex:)`.
+    private var editingPresetNextColorIndex: Int {
+        editingPresetAppAssignments.filter { $0 == nil }.count
     }
 
     /// Display indices (1-based among unassigned slots) parallel to
