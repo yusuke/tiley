@@ -1159,6 +1159,12 @@ final class AppState: NSObject, NSMenuDelegate {
                 self.isSwitchingActivationPolicy = true
             }
             CGSPrivate.dismissDesktopExpose(showDesktop: showDesktop, missionControl: missionControl)
+            // Verify the activation requested in Phase 1 actually took
+            // effect (macOS 14+ may deny it) and retry if not. The expose
+            // path activates on its own 0.5 s later, so skip it there.
+            if !isDismissingExpose {
+                self.ensureOverlayActivation()
+            }
 
             // Resolve the target if the cache wasn't available in Phase 1.
             if !hadCache {

@@ -195,12 +195,21 @@ extension AppState {
     }
 
     func handleAppDidResignActive() {
-        guard !isSwitchingActivationPolicy else { return }
-        guard !isRecreatingWindows else { return }
+        guard !isSwitchingActivationPolicy else {
+            debugLog("didResignActive ignored: isSwitchingActivationPolicy")
+            return
+        }
+        guard !isRecreatingWindows else {
+            debugLog("didResignActive ignored: isRecreatingWindows")
+            return
+        }
         // Don't hide windows if the permissions or settings window is open —
         // the user may be switching to System Settings or another app briefly.
         guard permissionsWindowController == nil else { return }
         guard settingsWindowController == nil else { return }
+        if isShowingLayoutGrid {
+            debugLog("didResignActive — hiding overlay")
+        }
         hidePreviewOverlay()
         hideMainWindow()
     }

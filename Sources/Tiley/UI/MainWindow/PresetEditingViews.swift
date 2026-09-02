@@ -383,8 +383,7 @@ struct FlowLayout: Layout {
     }
 }
 
-struct PresetGridPreviewView: View {
-    @Environment(\.colorScheme) private var colorScheme
+struct PresetGridPreviewView: View, Equatable {
     let rows: Int
     let columns: Int
     let selection: GridSelection
@@ -397,118 +396,150 @@ struct PresetGridPreviewView: View {
     /// render a small grouping indicator at their shared edge.
     var groupedPairs: [PresetGroupPair] = []
 
+    /// Explicit size instead of a `GeometryReader`: the caller already
+    /// fixes the frame, and a value-only input list keeps this view
+    /// `Equatable` so unrelated hover passes skip it via `.equatable()`.
+    let size: CGSize
+    /// Passed in rather than read from the environment for the same reason.
+    let colorScheme: ColorScheme
+
+    static func == (lhs: PresetGridPreviewView, rhs: PresetGridPreviewView) -> Bool {
+        lhs.rows == rhs.rows
+            && lhs.columns == rhs.columns
+            && lhs.selection == rhs.selection
+            && lhs.secondarySelections == rhs.secondarySelections
+            && lhs.rectangleApps == rhs.rectangleApps
+            && lhs.groupedPairs == rhs.groupedPairs
+            && lhs.size == rhs.size
+            && lhs.colorScheme == rhs.colorScheme
+    }
+
     var body: some View {
-        GeometryReader { geometry in
-            let gap: CGFloat = 2
-            let cellWidth = max(2, (geometry.size.width - gap * CGFloat(max(0, columns - 1))) / CGFloat(max(columns, 1)))
-            let cellHeight = max(2, (geometry.size.height - gap * CGFloat(max(0, rows - 1))) / CGFloat(max(rows, 1)))
-            let allSelections = [selection] + secondarySelections
+        let gap: CGFloat = 2
+        let cellWidth = max(2, (size.width - gap * CGFloat(max(0, columns - 1))) / CGFloat(max(columns, 1)))
+        let cellHeight = max(2, (size.height - gap * CGFloat(max(0, rows - 1))) / CGFloat(max(rows, 1)))
+        let allSelections = [selection] + secondarySelections
 
-            let paddedApps: [String?] = {
-                if rectangleApps.count >= allSelections.count {
-                    return Array(rectangleApps.prefix(allSelections.count))
-                }
-                return rectangleApps + Array(repeating: nil, count: allSelections.count - rectangleApps.count)
-            }()
+        let paddedApps: [String?] = {
+            if rectangleApps.count >= allSelections.count {
+                return Array(rectangleApps.prefix(allSelections.count))
+            }
+            return rectangleApps + Array(repeating: nil, count: allSelections.count - rectangleApps.count)
+        }()
 
-            // Color index for unassigned slots: 1-based position among
-            // unassigned-only entries, so the cycle (blue/green/orange/purple)
-            // is not shifted by preceding assigned slots.
-            let unassignedColorIndex: [Int: Int] = {
-                var result: [Int: Int] = [:]
-                var cursor = 0
-                for (idx, app) in paddedApps.enumerated() where app == nil {
-                    result[idx] = cursor
-                    cursor += 1
-                }
-                return result
-            }()
+        // Color index for unassigned slots: 1-based position among
+        // unassigned-only entries, so the cycle (blue/green/orange/purple)
+        // is not shifted by preceding assigned slots.
+        let unassignedColorIndex: [Int: Int] = {
+            var result: [Int: Int] = [:]
+            var cursor = 0
+            for (idx, app) in paddedApps.enumerated() where app == nil {
+                result[idx] = cursor
+                cursor += 1
+            }
+            return result
+        }()
 
-            ZStack(alignment: .topLeading) {
-                ForEach(0..<rows, id: \.self) { row in
-                    ForEach(0..<columns, id: \.self) { column in
-                        let matchIndex = allSelections.firstIndex { sel in
-                            let n = sel.normalized
-                            return n.startRow...n.endRow ~= row && n.startColumn...n.endColumn ~= column
-                        }
-                        let assignedBundleID: String? = {
-                            guard let mi = matchIndex else { return nil }
-                            return paddedApps[mi]
-                        }()
-                        let fillColor: Color = {
-                            guard matchIndex != nil else {
-                                return ThemeColors.presetGridUnselectedFill(for: colorScheme)
-                            }
-                            if let bid = assignedBundleID,
-                               let nsColor = AppIconLookup.averageColor(forBundleID: bid) {
-                                return Color(nsColor)
-                            }
-                            if assignedBundleID != nil {
-                                // Fallback when icon isn't available yet.
-                                return ThemeColors.presetGridUnselectedFill(for: colorScheme)
-                            }
-                            return ThemeColors.indexedPresetGridFill(
-                                index: unassignedColorIndex[matchIndex!] ?? matchIndex!,
-                                for: colorScheme
-                            )
-                        }()
-                        RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(fillColor)
-                            .frame(width: cellWidth, height: cellHeight)
-                            .position(
-                                x: CGFloat(column) * (cellWidth + gap) + (cellWidth / 2),
-                                y: CGFloat(row) * (cellHeight + gap) + (cellHeight / 2)
-                            )
+        // Cell → owning selection index (-1 = none), computed once per body
+        // instead of a linear `firstIndex` (re-normalizing every selection)
+        // per cell. First selection wins, as before.
+        let cellOwner: [Int] = {
+            var owner = Array(repeating: -1, count: max(0, rows * columns))
+            for (idx, sel) in allSelections.enumerated() {
+                let n = sel.normalized
+                for r in n.startRow...n.endRow where r >= 0 && r < rows {
+                    for c in n.startColumn...n.endColumn where c >= 0 && c < columns {
+                        let slot = r * columns + c
+                        if owner[slot] == -1 { owner[slot] = idx }
                     }
                 }
+            }
+            return owner
+        }()
 
-                // App icon overlays, once per assigned selection, centered on
-                // the selection's bounding box. Rendered after the per-cell
-                // fills so they appear on top.
-                ForEach(Array(allSelections.enumerated()), id: \.offset) { idx, sel in
-                    if let bid = paddedApps[idx],
-                       let icon = AppIconLookup.icon(forBundleID: bid) {
-                        let n = sel.normalized
-                        let width = CGFloat(n.endColumn - n.startColumn + 1) * cellWidth
-                            + CGFloat(n.endColumn - n.startColumn) * gap
-                        let height = CGFloat(n.endRow - n.startRow + 1) * cellHeight
-                            + CGFloat(n.endRow - n.startRow) * gap
-                        let centerX = CGFloat(n.startColumn) * (cellWidth + gap) + width / 2
-                        let centerY = CGFloat(n.startRow) * (cellHeight + gap) + height / 2
-                        let iconSide = min(width, height) * 0.6
-                        Image(nsImage: icon)
-                            .resizable()
-                            .interpolation(.high)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: iconSide, height: iconSide)
-                            .position(x: centerX, y: centerY)
+        ZStack(alignment: .topLeading) {
+            ForEach(0..<rows, id: \.self) { row in
+                ForEach(0..<columns, id: \.self) { column in
+                    let owner = cellOwner[row * columns + column]
+                    let matchIndex: Int? = owner >= 0 ? owner : nil
+                    let assignedBundleID: String? = {
+                        guard let mi = matchIndex else { return nil }
+                        return paddedApps[mi]
+                    }()
+                    let fillColor: Color = {
+                        guard matchIndex != nil else {
+                            return ThemeColors.presetGridUnselectedFill(for: colorScheme)
+                        }
+                        if let bid = assignedBundleID,
+                           let nsColor = AppIconLookup.averageColor(forBundleID: bid) {
+                            return Color(nsColor)
+                        }
+                        if assignedBundleID != nil {
+                            // Fallback when icon isn't available yet.
+                            return ThemeColors.presetGridUnselectedFill(for: colorScheme)
+                        }
+                        return ThemeColors.indexedPresetGridFill(
+                            index: unassignedColorIndex[matchIndex!] ?? matchIndex!,
+                            for: colorScheme
+                        )
+                    }()
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(fillColor)
+                        .frame(width: cellWidth, height: cellHeight)
+                        .position(
+                            x: CGFloat(column) * (cellWidth + gap) + (cellWidth / 2),
+                            y: CGFloat(row) * (cellHeight + gap) + (cellHeight / 2)
+                        )
+                }
+            }
+
+            // App icon overlays, once per assigned selection, centered on
+            // the selection's bounding box. Rendered after the per-cell
+            // fills so they appear on top.
+            ForEach(Array(allSelections.enumerated()), id: \.offset) { idx, sel in
+                if let bid = paddedApps[idx],
+                   let icon = AppIconLookup.icon(forBundleID: bid) {
+                    let n = sel.normalized
+                    let width = CGFloat(n.endColumn - n.startColumn + 1) * cellWidth
+                        + CGFloat(n.endColumn - n.startColumn) * gap
+                    let height = CGFloat(n.endRow - n.startRow + 1) * cellHeight
+                        + CGFloat(n.endRow - n.startRow) * gap
+                    let centerX = CGFloat(n.startColumn) * (cellWidth + gap) + width / 2
+                    let centerY = CGFloat(n.startRow) * (cellHeight + gap) + height / 2
+                    let iconSide = min(width, height) * 0.6
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: iconSide, height: iconSide)
+                        .position(x: centerX, y: centerY)
+                        .allowsHitTesting(false)
+                }
+            }
+
+            // Read-only grouping indicators on the mini grid.
+            if !groupedPairs.isEmpty, allSelections.count >= 2 {
+                let pairSet = Set(groupedPairs)
+                let adjacencies = SelectionAdjacencyDetector.detect(selections: allSelections)
+                let badgeDiameter = max(8, min(cellWidth, cellHeight) * 0.7)
+                ForEach(adjacencies, id: \.self) { adj in
+                    let pair = PresetGroupPair(adj.indexA, adj.indexB)
+                    if pairSet.contains(pair) {
+                        let center = miniBadgeCenter(
+                            for: adj,
+                            inSelections: allSelections,
+                            cellWidth: cellWidth,
+                            cellHeight: cellHeight,
+                            gap: gap
+                        )
+                        MiniPresetGroupingBadge(diameter: badgeDiameter)
+                            .position(center)
                             .allowsHitTesting(false)
-                    }
-                }
-
-                // Read-only grouping indicators on the mini grid.
-                if !groupedPairs.isEmpty, allSelections.count >= 2 {
-                    let pairSet = Set(groupedPairs)
-                    let adjacencies = SelectionAdjacencyDetector.detect(selections: allSelections)
-                    let badgeDiameter = max(8, min(cellWidth, cellHeight) * 0.7)
-                    ForEach(adjacencies, id: \.self) { adj in
-                        let pair = PresetGroupPair(adj.indexA, adj.indexB)
-                        if pairSet.contains(pair) {
-                            let center = miniBadgeCenter(
-                                for: adj,
-                                inSelections: allSelections,
-                                cellWidth: cellWidth,
-                                cellHeight: cellHeight,
-                                gap: gap
-                            )
-                            MiniPresetGroupingBadge(diameter: badgeDiameter)
-                                .position(center)
-                                .allowsHitTesting(false)
-                        }
                     }
                 }
             }
         }
+        .frame(width: size.width, height: size.height, alignment: .topLeading)
     }
 
     private func miniBadgeCenter(

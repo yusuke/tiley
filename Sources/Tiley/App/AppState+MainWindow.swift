@@ -252,21 +252,84 @@ extension AppState {
         NSRunningApplication(processIdentifier: lastTargetPID)?.activate()
     }
 
+    // MARK: - Overlay activation robustness
+
+    /// Verifies that Tiley actually became the active app after the overlay
+    /// was shown, retrying activation a couple of times if not.
+    ///
+    /// On macOS 14+ `NSApp.activate(ignoringOtherApps:)` behaves like the
+    /// cooperative `activate()` and can be *denied* — typically when the user
+    /// is interacting with another app, e.g. the hotkey is pressed right
+    /// after clicking another window to dismiss the previous overlay. When
+    /// that happens the overlay is on screen but Tiley is not active, so a
+    /// later click elsewhere produces no deactivation and the overlay never
+    /// hides (see `dismissOverlayOnOutsideClickIfInactive` for the fallback).
+    func ensureOverlayActivation(attempt: Int = 0) {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+        guard !isSwitchingActivationPolicy, !isRecreatingWindows else { return }
+        if NSApp.isActive {
+            if attempt > 0 { debugLog("overlay activation succeeded on retry \(attempt)") }
+            return
+        }
+        let frontmost = NSWorkspace.shared.frontmostApplication?.localizedName ?? "?"
+        debugLog("overlay shown but Tiley is not active (attempt \(attempt), frontmost=\(frontmost)) — re-activating")
+        NSApp.activate(ignoringOtherApps: true)
+        targetWindowController?.window?.makeKeyAndOrderFront(nil)
+        guard attempt < 2 else {
+            debugLog("overlay activation still denied after retries — outside clicks will hide via the event tap")
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+            self?.ensureOverlayActivation(attempt: attempt + 1)
+        }
+    }
+
+    /// Mouse-down fallback (fed by the group click event tap): while the
+    /// overlay is showing and Tiley is *not* the active app, a click outside
+    /// every Tiley main window hides the overlay — the same outcome a click
+    /// on another app produces through `handleAppDidResignActive` when
+    /// Tiley is active. A click on a Tiley window is left alone (it will
+    /// activate Tiley normally).
+    func dismissOverlayOnOutsideClickIfInactive(cgLocation: CGPoint) {
+        guard isShowingLayoutGrid, !isEditingSettings else { return }
+        guard !NSApp.isActive else { return }
+        guard !isSwitchingActivationPolicy, !isRecreatingWindows else { return }
+        guard permissionsWindowController == nil, settingsWindowController == nil else { return }
+        // CGEvent locations are top-left based on the primary screen.
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
+        let point = CGPoint(x: cgLocation.x, y: primaryMaxY - cgLocation.y)
+        let insideTiley = mainWindowControllers.values.contains { controller in
+            guard controller.isVisible, let frame = controller.window?.frame else { return false }
+            return frame.contains(point)
+        }
+        guard !insideTiley else { return }
+        debugLog("outside click while overlay shown and Tiley inactive — hiding overlay")
+        hidePreviewOverlay()
+        hideMainWindow()
+    }
+
     // MARK: - Main Window Lifecycle
 
     func handleMainWindowHidden(displayID: CGDirectDisplayID) {
         // During an activation-policy switch the window is temporarily hidden
         // by macOS. Don't reset UI state — the window will be restored shortly.
-        guard !isSwitchingActivationPolicy else { return }
+        guard !isSwitchingActivationPolicy else {
+            debugLog("handleMainWindowHidden skipped: isSwitchingActivationPolicy")
+            return
+        }
         // During window controller recreation the old windows are dismissed.
         // Don't reset UI state — new windows are about to be shown.
-        guard !isRecreatingWindows else { return }
+        guard !isRecreatingWindows else {
+            debugLog("handleMainWindowHidden skipped: isRecreatingWindows")
+            return
+        }
         // Settings editing hides main windows but needs activeLayoutTarget to
         // remain set so the grid preview overlay can be shown on hover.
         guard !isEditingSettings else { return }
         // If any Tiley window is still visible, don't reset state.
         let anyVisible = mainWindowControllers.values.contains { $0.isVisible }
         if anyVisible { return }
+        debugLog("handleMainWindowHidden: overlay session ended (displayID=\(displayID))")
         // A layout application is parked on the pending window-list refresh
         // (its windows were hidden up front) — keep the target and selection
         // state intact until it runs.

@@ -70,11 +70,13 @@ extension AppState {
                 guard let refcon = refcon else { return Unmanaged.passUnretained(event) }
                 let appState = Unmanaged<AppState>.fromOpaque(refcon).takeUnretainedValue()
                 let isMouseUp = (type == .leftMouseUp || type == .rightMouseUp)
+                // Read on the tap thread — CGEvent must not cross to main.
+                let location = event.location
                 DispatchQueue.main.async {
                     if isMouseUp {
                         appState.handleSystemMouseUp()
                     } else {
-                        appState.handleSystemMouseDown()
+                        appState.handleSystemMouseDown(at: location)
                     }
                 }
                 return Unmanaged.passUnretained(event)
@@ -107,7 +109,11 @@ extension AppState {
     /// Invoked right after a mouse-down. Waits briefly for the focused window to
     /// settle, then triggers the raise linkage if that window is a group member
     /// or an app-anchored satellite.
-    func handleSystemMouseDown() {
+    func handleSystemMouseDown(at cgLocation: CGPoint) {
+        // Overlay safety net (independent of grouping): if Tiley never became
+        // the active app when the overlay opened, a click elsewhere produces
+        // no deactivation, so hide on outside clicks here.
+        dismissOverlayOnOutsideClickIfInactive(cgLocation: cgLocation)
         // No groups, app-anchored satellites, or window-anchored satellites
         // → nothing to do (save CPU).
         guard !windowGroups.isEmpty

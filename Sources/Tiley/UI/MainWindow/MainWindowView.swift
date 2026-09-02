@@ -253,22 +253,46 @@ struct MainWindowView: View {
     @MainActor
     private enum DesktopPictureInfoCache {
         static var version: Int = -1
-        static var byScreenKey: [String: DesktopPictureInfo?] = [:]
+        static var byScreenKey: [ScreenKey: DesktopPictureInfo?] = [:]
+    }
+
+    /// Hashable identity of a screen by geometry, used as the key of the
+    /// per-screen caches. Replaces the former `"\(frame)|\(scale)"` string
+    /// keys, whose `CGRect` formatting ran on every body evaluation.
+    private struct ScreenKey: Hashable {
+        let x: CGFloat
+        let y: CGFloat
+        let width: CGFloat
+        let height: CGFloat
+        let scale: CGFloat
+        init(_ screen: NSScreen) {
+            let f = screen.frame
+            x = f.origin.x; y = f.origin.y; width = f.width; height = f.height
+            scale = screen.backingScaleFactor
+        }
+    }
+
+    /// The `NSScreen` this view previews, resolved from `screenContext`.
+    /// Resolve once per pass and pass it around — several helpers used to
+    /// each redo this `NSScreen.screens` scan.
+    private var previewScreen: NSScreen? {
+        if let ctx = screenContext {
+            return NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
+        }
+        return NSScreen.main
     }
 
     private var desktopPictureInfo: DesktopPictureInfo? {
-        let screen: NSScreen?
-        if let ctx = screenContext {
-            screen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
-        } else {
-            screen = NSScreen.main
-        }
+        desktopPictureInfo(for: previewScreen)
+    }
+
+    private func desktopPictureInfo(for screen: NSScreen?) -> DesktopPictureInfo? {
         guard let screen else { return nil }
         if DesktopPictureInfoCache.version != appState.desktopImageVersion {
             DesktopPictureInfoCache.byScreenKey.removeAll(keepingCapacity: true)
             DesktopPictureInfoCache.version = appState.desktopImageVersion
         }
-        let key = "\(screen.frame)|\(screen.backingScaleFactor)"
+        let key = ScreenKey(screen)
         if let cached = DesktopPictureInfoCache.byScreenKey[key] { return cached }
         let info = Self.computeDesktopPictureInfo(for: screen)
         DesktopPictureInfoCache.byScreenKey[key] = info
@@ -625,7 +649,7 @@ struct MainWindowView: View {
     @MainActor
     private enum MenuBarColorCache {
         static var version: Int = -1
-        static var byScreenKey: [String: Color] = [:]
+        static var byScreenKey: [ScreenKey?: Color] = [:]
     }
 
     /// Determines the menu bar text color for the current preview screen.
@@ -633,15 +657,7 @@ struct MainWindowView: View {
     /// For the screen where the status item lives, we read the actual macOS menu bar
     /// appearance (VibrantLight → black, VibrantDark → white).  For other screens we
     /// fall back to sampling the wallpaper image brightness.
-    private func menuBarForegroundColor(wallpaperImage: NSImage?) -> Color {
-        // Determine which screen we are previewing.
-        let previewScreen: NSScreen?
-        if let ctx = screenContext {
-            previewScreen = NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
-        } else {
-            previewScreen = NSScreen.main
-        }
-
+    private func menuBarForegroundColor(previewScreen: NSScreen?, wallpaperImage: NSImage?, info: DesktopPictureInfo?) -> Color {
         // If the status item is on the same screen, use the OS-reported
         // appearance. Not cached — it can change without a wallpaper-version
         // bump, and reading it is cheap.
@@ -656,16 +672,11 @@ struct MainWindowView: View {
             MenuBarColorCache.byScreenKey.removeAll(keepingCapacity: true)
             MenuBarColorCache.version = appState.desktopImageVersion
         }
-        let key: String
-        if let previewScreen {
-            key = "\(previewScreen.frame)|\(previewScreen.backingScaleFactor)"
-        } else {
-            key = "main"
-        }
+        let key = previewScreen.map(ScreenKey.init)
         if let cached = MenuBarColorCache.byScreenKey[key] { return cached }
         guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
         else { return .white }
-        let color = Self.menuBarForegroundColorFromImage(cgImage, info: desktopPictureInfo)
+        let color = Self.menuBarForegroundColorFromImage(cgImage, info: info)
         MenuBarColorCache.byScreenKey[key] = color
         return color
     }
@@ -764,8 +775,8 @@ struct MainWindowView: View {
 
     /// Edge insets for the bubble arrow, applied as content padding so the arrow
     /// area doesn't overlap interactive content.
-    private var bubbleArrowInsets: EdgeInsets {
-        guard let edge = appState.bubbleArrowEdge, isBubbleArrowScreen else { return EdgeInsets() }
+    private func bubbleArrowInsets(isArrowScreen: Bool) -> EdgeInsets {
+        guard let edge = appState.bubbleArrowEdge, isArrowScreen else { return EdgeInsets() }
         let h = Self.bubbleArrowHeight
         switch edge {
         case .top:      return EdgeInsets(top: h, leading: 0, bottom: 0, trailing: 0)
@@ -777,7 +788,10 @@ struct MainWindowView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let insets = bubbleArrowInsets
+            // `isBubbleArrowScreen` resolves an NSScreen; evaluate it once
+            // per pass for both the insets and the clip shape.
+            let arrowScreen = isBubbleArrowScreen
+            let insets = bubbleArrowInsets(isArrowScreen: arrowScreen)
             let contentSize = CGSize(
                 width: geometry.size.width - insets.leading - insets.trailing,
                 height: geometry.size.height - insets.top - insets.bottom
@@ -792,7 +806,7 @@ struct MainWindowView: View {
                     .padding(insets)
             }
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)
-            .clipShape(windowClipShape(size: geometry.size))
+            .clipShape(windowClipShape(size: geometry.size, isArrowScreen: arrowScreen))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
@@ -1028,17 +1042,23 @@ struct MainWindowView: View {
         gridHeight: CGFloat
     ) -> some View {
         let compositeSize = CGSize(width: compositeWidth, height: compositeHeight)
-        // Load wallpaper image once for both the background layer and menu bar color.
+        // Resolve the previewed screen, its wallpaper info, and the preset
+        // inputs for the grid ONCE per pass. These used to be re-derived
+        // three to nine times per evaluation (hover / drag frequency, per
+        // display) through the individual computed properties.
+        let previewScreen = self.previewScreen
+        let desktopInfo = desktopPictureInfo(for: previewScreen)
         let wallpaperImage: NSImage? = {
-            guard let info = desktopPictureInfo else { return nil }
+            guard let info = desktopInfo else { return nil }
             return appState.wallpaperImage(for: info.url)
         }()
         // Determine menu bar text color: OS detection for the active screen,
         // image luminance fallback for other screens.
-        let menuBarTextColor = menuBarForegroundColor(wallpaperImage: wallpaperImage)
+        let menuBarTextColor = menuBarForegroundColor(previewScreen: previewScreen, wallpaperImage: wallpaperImage, info: desktopInfo)
+        let gridInputs = makeGridPresetInputs()
         ZStack(alignment: .topLeading) {
             // Layer 1: Wallpaper spanning the full composite area (menu bar + grid + Dock)
-            if let info = desktopPictureInfo,
+            if let info = desktopInfo,
                let nsImage = wallpaperImage {
                 DesktopPictureBackgroundView(nsImage: nsImage, info: info, size: compositeSize)
                     .frame(width: compositeWidth, height: compositeHeight)
@@ -1135,18 +1155,18 @@ struct MainWindowView: View {
                         rows: appState.rows,
                         columns: appState.columns,
                         gap: appState.gap,
-                        highlightSelection: editingPresetHighlightSelection,
-                        highlightSelections: editingPresetHighlightSelections,
-                        highlightGroupedPairs: editingPresetHighlightGroupedPairs,
+                        highlightSelection: gridInputs.highlightSelection,
+                        highlightSelections: gridInputs.highlightSelections,
+                        highlightGroupedPairs: gridInputs.highlightGroupedPairs,
                         highlightWindowInfo: appState.presetHoverWindowInfo,
-                        highlightAppAssignments: editingPresetHighlightAppAssignments,
-                        desktopPictureInfo: desktopPictureInfo,
+                        highlightAppAssignments: gridInputs.highlightAppAssignments,
+                        desktopPictureInfo: desktopInfo,
                         showDesktopPicture: false,
                         windowFrameRelative: appState.currentLayoutTargetRelativeFrame,
                         showStaticWindowPreview: screenRole.isTarget,
                         resizePreviewRelativeFrame: appState.resizePreviewRelativeFrame,
                         screenEdgeInsets: gridScreenEdgeInsets,
-                        committedSelections: editingPresetCommittedSelections,
+                        committedSelections: gridInputs.committedSelections,
                         // Only provide the delete callback while actively editing a preset —
                         // the view uses this closure's presence as the edit-mode signal that
                         // switches rendering between preset-editing (committed-style
@@ -1157,7 +1177,7 @@ struct MainWindowView: View {
                             appState.removeSelection(atIndex: index, ofPresetID: editingID)
                             appState.updateLayoutPreview(nil)
                         },
-                        groupedPairs: editingPresetGroupedPairs,
+                        groupedPairs: gridInputs.groupedPairs,
                         onToggleGrouping: editingPresetID == nil ? nil : { a, b in
                             guard let editingID = editingPresetID else { return }
                             appState.updateLayoutPreset(editingID) { preset in
@@ -1169,8 +1189,8 @@ struct MainWindowView: View {
                                 }
                             }
                         },
-                        committedAppAssignments: editingPresetAppAssignments,
-                        committedDisplayIndices: editingPresetDisplayIndices,
+                        committedAppAssignments: gridInputs.appAssignments,
+                        committedDisplayIndices: gridInputs.displayIndices,
                         onRequestAppPicker: editingPresetID == nil ? nil : { selectionIndex, sourceView, point in
                             guard let editingID = editingPresetID else { return }
                             appState.presentAppPicker(
@@ -1378,8 +1398,8 @@ struct MainWindowView: View {
     }
 
     /// Returns the clip shape for the main window, optionally with a speech-bubble arrow.
-    private func windowClipShape(size: CGSize) -> AnyShape {
-        if let edge = appState.bubbleArrowEdge, isBubbleArrowScreen {
+    private func windowClipShape(size: CGSize, isArrowScreen: Bool) -> AnyShape {
+        if let edge = appState.bubbleArrowEdge, isArrowScreen {
             return AnyShape(BubbleShape(
                 cornerRadius: Self.windowCornerRadius,
                 arrowEdge: edge,
@@ -1696,7 +1716,7 @@ struct MainWindowView: View {
                 if groupMap[displayID] == nil {
                     let idx = screenGroups.count
                     groupMap[displayID] = idx
-                    screenGroups.append((displayID: displayID, name: screen.localizedName, items: []))
+                    screenGroups.append((displayID: displayID, name: screenName(screen), items: []))
                 }
             }
 
@@ -1708,10 +1728,10 @@ struct MainWindowView: View {
                 if let groupIdx = groupMap[displayID] {
                     screenGroups[groupIdx].items.append(item)
                 } else {
-                    let screenName = screen?.localizedName ?? NSLocalizedString("Unknown Display", comment: "Fallback screen name")
+                    let name = screen.map(screenName) ?? NSLocalizedString("Unknown Display", comment: "Fallback screen name")
                     let idx = screenGroups.count
                     groupMap[displayID] = idx
-                    screenGroups.append((displayID: displayID, name: screenName, items: [item]))
+                    screenGroups.append((displayID: displayID, name: name, items: [item]))
                 }
             }
 
@@ -1782,6 +1802,30 @@ struct MainWindowView: View {
         }
 
         return screenGroupedRows(from: filteredItems)
+    }
+
+    /// `NSScreen.localizedName` is not cached by AppKit (it goes through
+    /// CoreDisplay / IOKit, ~0.1–1 ms per call) and the sidebar asked for
+    /// every screen's name on every pass. Cached per display ID; the table is
+    /// wiped whenever `desktopImageVersion` advances, which
+    /// `handleScreenConfigurationChange` bumps on every screen-parameter
+    /// change.
+    @MainActor
+    private enum ScreenNameCache {
+        static var version: Int = -1
+        static var byDisplayID: [CGDirectDisplayID: String] = [:]
+    }
+
+    private func screenName(_ screen: NSScreen) -> String {
+        if ScreenNameCache.version != appState.desktopImageVersion {
+            ScreenNameCache.byDisplayID.removeAll(keepingCapacity: true)
+            ScreenNameCache.version = appState.desktopImageVersion
+        }
+        let id = screen.displayID
+        if let cached = ScreenNameCache.byDisplayID[id] { return cached }
+        let name = screen.localizedName
+        ScreenNameCache.byDisplayID[id] = name
+        return name
     }
 
     /// Extracts window-target indices from sidebar rows and syncs them to AppState
@@ -1885,6 +1929,9 @@ struct MainWindowView: View {
                 ScrollViewReader { proxy in
                     let rows = filteredSidebarRows
                     let _ = updateSidebarWindowOrder(rows)
+                    // Built after the order sync above (it reads
+                    // `sidebarWindowOrder`) and shared by every row.
+                    let linkIndex = makeSidebarLinkIndex()
                     ScrollView {
                         LazyVStack(spacing: 2) {
                             ForEach(rows) { row in
@@ -1898,7 +1945,7 @@ struct MainWindowView: View {
                                 case .appHeader(let pid, let appName):
                                     appHeaderRow(pid: pid, appName: appName)
                                 case .window(let item):
-                                    windowListRow(item: item)
+                                    windowListRow(item: item, linkIndex: linkIndex)
                                 }
                             }
                         }
@@ -2269,7 +2316,7 @@ struct MainWindowView: View {
                 menuItems: otherScreens.map { screen in
                     let title = String(
                         format: NSLocalizedString("Move to %@", comment: "Action bar menu item to move window to another display"),
-                        screen.localizedName
+                        screenName(screen)
                     )
                     return (title: title, screen: screen)
                 },
@@ -2524,7 +2571,7 @@ struct MainWindowView: View {
         return NSScreen.screens.filter { $0.displayID != currentDisplayID }
     }
 
-    private func windowListRow(item: WindowListItem) -> some View {
+    private func windowListRow(item: WindowListItem, linkIndex: SidebarLinkIndex) -> some View {
         let isPrimary = item.id == appState.currentWindowTargetIndex
         let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
         let isSelected = isPrimary || isInSelection
@@ -2533,7 +2580,7 @@ struct MainWindowView: View {
             || hoveredLinkPartnerItemID == item.id
         let showBorderOnHeader = item.isUnderAppHeader && sidebarSelection == .appHeader(pid: item.pid, appName: item.appName)
         let presetColorIndex = appState.presetHoverHighlights[item.id]
-        let linkPartners = groupLinkPartners(forItemID: item.id)
+        let linkPartners = groupLinkPartners(forItemID: item.id, linkIndex: linkIndex)
         let partnerIconSize: CGFloat = 14
         let indexBadgeSize: CGFloat = 16
         let trailingHStackSpacing: CGFloat = 3
@@ -2785,37 +2832,77 @@ struct MainWindowView: View {
     /// remains, and would otherwise be invisible in the sidebar. Each
     /// returned partner exposes its own `unlink` closure so the user can
     /// drop just that one link.
-    private func groupLinkPartners(forItemID itemID: Int) -> [SidebarLinkPartner] {
+    /// Per-pass lookup tables for `groupLinkPartners`, built once in
+    /// `windowListSidebar` and shared by every row. Previously each row
+    /// rebuilt its own index maps and scanned all targets per satellite
+    /// bundle — O(rows × windows) per pass as soon as one group or one
+    /// satellite pair existed anywhere.
+    private struct SidebarLinkIndex {
+        /// No group and no satellite exists: every row bails immediately.
+        let isIdle: Bool
+        let indexByCGID: [CGWindowID: Int]
+        let orderPosByIndex: [Int: Int]
+        /// Every window registered as a satellite of some app bundle.
+        let satelliteWIDs: Set<CGWindowID>
+        /// Window IDs per bundle ID in target order — resolves a satellite's
+        /// anchor window without scanning all targets. Only populated while
+        /// satellites are registered.
+        let windowIDsByBundle: [String: [CGWindowID]]
+
+        static let idle = SidebarLinkIndex(
+            isIdle: true, indexByCGID: [:], orderPosByIndex: [:], satelliteWIDs: [], windowIDsByBundle: [:]
+        )
+    }
+
+    private func makeSidebarLinkIndex() -> SidebarLinkIndex {
+        let hasSatellites = !appState.appSlotSatellites.isEmpty
+        guard !appState.windowGroups.isEmpty || hasSatellites else { return .idle }
+        let targets = appState.windowTargetList
+        var indexByCGID: [CGWindowID: Int] = [:]
+        var windowIDsByBundle: [String: [CGWindowID]] = [:]
+        for (idx, t) in targets.enumerated() where t.cgWindowID != 0 {
+            if indexByCGID[t.cgWindowID] == nil { indexByCGID[t.cgWindowID] = idx }
+            if hasSatellites, let bid = appInfoCache.bundleID(for: t.processIdentifier) {
+                windowIDsByBundle[bid, default: []].append(t.cgWindowID)
+            }
+        }
+        var orderPosByIndex: [Int: Int] = [:]
+        for (pos, idx) in appState.sidebarWindowOrder.enumerated() where orderPosByIndex[idx] == nil {
+            orderPosByIndex[idx] = pos
+        }
+        var satelliteWIDs: Set<CGWindowID> = []
+        for sats in appState.appSlotSatellites.values { satelliteWIDs.formUnion(sats) }
+        return SidebarLinkIndex(
+            isIdle: false,
+            indexByCGID: indexByCGID,
+            orderPosByIndex: orderPosByIndex,
+            satelliteWIDs: satelliteWIDs,
+            windowIDsByBundle: windowIDsByBundle
+        )
+    }
+
+    private func groupLinkPartners(forItemID itemID: Int, linkIndex: SidebarLinkIndex) -> [SidebarLinkPartner] {
         let targets = appState.windowTargetList
         guard itemID >= 0, itemID < targets.count else { return [] }
         let cgID = targets[itemID].cgWindowID
         guard cgID != 0 else { return [] }
+        if linkIndex.isIdle { return [] }
 
-        // Fast path: this row participates in no group and no satellites are
-        // registered anywhere — the overwhelmingly common case. Bail before
-        // any bundle-ID resolution; this runs per visible row per render pass.
-        if appState.groupIndexByWindow[cgID] == nil, appState.appSlotSatellites.isEmpty {
+        // Fast path: this row is neither a group member, a satellite, nor an
+        // anchor — the common case even while a satellite pair exists
+        // elsewhere (the old check bailed only when *no* satellite existed).
+        let isMember = appState.groupIndexByWindow[cgID] != nil
+        let isSatellite = linkIndex.satelliteWIDs.contains(cgID)
+        let myPID = targets[itemID].processIdentifier
+        let myBundleID: String? = appState.appSlotSatellites.isEmpty ? nil : appInfoCache.bundleID(for: myPID)
+        let isAnchor = myBundleID.map { appState.appSlotSatellites[$0] != nil } ?? false
+        if !isMember, !isSatellite, !isAnchor {
             return []
         }
 
-        let myPID = targets[itemID].processIdentifier
-        let myBundleID = appInfoCache.bundleID(for: myPID)
-        let order = appState.sidebarWindowOrder
-
-        // Index maps so partner resolution doesn't linearly scan the target
-        // and order arrays per partner.
-        var indexByCGID: [CGWindowID: Int] = [:]
-        for (idx, t) in targets.enumerated() where t.cgWindowID != 0 {
-            if indexByCGID[t.cgWindowID] == nil { indexByCGID[t.cgWindowID] = idx }
-        }
-        var orderPosByIndex: [Int: Int] = [:]
-        for (pos, idx) in order.enumerated() where orderPosByIndex[idx] == nil {
-            orderPosByIndex[idx] = pos
-        }
-
         func resolve(partnerCGID: CGWindowID) -> (orderIndex: Int, pid: pid_t, itemID: Int)? {
-            guard let idx = indexByCGID[partnerCGID] else { return nil }
-            let orderIndex = orderPosByIndex[idx] ?? Int.max
+            guard let idx = linkIndex.indexByCGID[partnerCGID] else { return nil }
+            let orderIndex = linkIndex.orderPosByIndex[idx] ?? Int.max
             return (orderIndex, targets[idx].processIdentifier, idx)
         }
 
@@ -2852,11 +2939,7 @@ struct MainWindowView: View {
         //    "anchor" side is any running window of that bundle — show one
         //    representative partner per bundle.
         for (bundleID, satellites) in appState.appSlotSatellites where satellites.contains(cgID) {
-            guard let anchorTarget = targets.first(where: { t in
-                t.cgWindowID != cgID && t.cgWindowID != 0
-                    && appInfoCache.bundleID(for: t.processIdentifier) == bundleID
-            }) else { continue }
-            let partnerCGID = anchorTarget.cgWindowID
+            guard let partnerCGID = linkIndex.windowIDsByBundle[bundleID]?.first(where: { $0 != cgID }) else { continue }
             let key = makeKey(cgID, partnerCGID)
             guard !seen.contains(key) else { continue }
             seen.insert(key)
@@ -2906,16 +2989,23 @@ struct MainWindowView: View {
     @ViewBuilder
     private func layoutPresetRow(_ preset: LayoutPreset) -> some View {
         let isInEditMode = editingPresetID == preset.id
+        let isSelected = isPresetSelected(preset.id)
         let presetGridSize = Self.presetGridThumbnailSize(for: screenContext)
         HStack(spacing: 12) {
+            // Equatable + `.equatable()`: the preview's inputs are all value
+            // types, so a hover elsewhere in the window no longer re-renders
+            // rows × columns cells for every preset row.
             PresetGridPreviewView(
                 rows: appState.rows,
                 columns: appState.columns,
                 selection: preset.scaledSelection(toRows: appState.rows, columns: appState.columns),
                 secondarySelections: preset.scaledSecondarySelections(toRows: appState.rows, columns: appState.columns),
                 rectangleApps: preset.normalizedRectangleApps,
-                groupedPairs: preset.groupedPairs
+                groupedPairs: preset.groupedPairs,
+                size: presetGridSize,
+                colorScheme: colorScheme
             )
+            .equatable()
             .frame(width: presetGridSize.width, height: presetGridSize.height)
             .frame(width: Self.presetGridColumnWidth, alignment: .center)
 
@@ -2942,11 +3032,11 @@ struct MainWindowView: View {
         .frame(height: Self.presetRowHeight)
         .background(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(ThemeColors.presetRowBackground(selected: isPresetSelected(preset.id), for: colorScheme))
+                .fill(ThemeColors.presetRowBackground(selected: isSelected, for: colorScheme))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(ThemeColors.presetRowBorder(selected: isPresetSelected(preset.id), for: colorScheme), lineWidth: 1)
+                .stroke(ThemeColors.presetRowBorder(selected: isSelected, for: colorScheme), lineWidth: 1)
         )
         .onHover { isHovering in
             guard draggingPresetID == nil else { return }
@@ -3358,23 +3448,62 @@ struct MainWindowView: View {
         )
     }
 
+    /// The preset currently being edited, if its ID still resolves.
+    private var editingPreset: LayoutPreset? {
+        guard let editingID = editingPresetID else { return nil }
+        return appState.layoutPresets.first(where: { $0.id == editingID })
+    }
+
+    /// Everything the grid workspace needs from the preset being edited and
+    /// the preset being hovered / keyboard-selected, resolved once per body
+    /// pass. The grid consumed nine of the individual computed properties
+    /// below per evaluation, each re-scanning `layoutPresets` (and
+    /// `highlightPreset` re-reading the mouse position) — this resolves both
+    /// presets a single time. The individual properties remain for the
+    /// event closures that need one value on demand.
+    private struct GridPresetInputs {
+        var committedSelections: [GridSelection] = []
+        var appAssignments: [String?] = []
+        var displayIndices: [Int?] = []
+        var groupedPairs: Set<PresetGroupPair> = []
+        var highlightSelection: GridSelection? = nil
+        var highlightSelections: [GridSelection] = []
+        var highlightGroupedPairs: Set<PresetGroupPair> = []
+        var highlightAppAssignments: [String?] = []
+    }
+
+    private func makeGridPresetInputs() -> GridPresetInputs {
+        var inputs = GridPresetInputs()
+        let rows = appState.rows
+        let columns = appState.columns
+        if let preset = editingPreset {
+            inputs.committedSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+            inputs.appAssignments = preset.normalizedRectangleApps
+            inputs.displayIndices = (0..<preset.allSelections.count).map { preset.displayIndex(forSelectionIndex: $0) }
+            inputs.groupedPairs = Set(preset.groupedPairs)
+        }
+        if let preset = highlightPreset {
+            if preset.secondarySelections.isEmpty {
+                inputs.highlightSelection = preset.scaledSelection(toRows: rows, columns: columns)
+            } else {
+                inputs.highlightSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+                inputs.highlightGroupedPairs = Set(preset.groupedPairs)
+            }
+            inputs.highlightAppAssignments = preset.normalizedRectangleApps
+        }
+        return inputs
+    }
+
     /// Committed selections for the grid workspace when editing a preset.
     private var editingPresetCommittedSelections: [GridSelection] {
-        guard let editingID = editingPresetID,
-              let preset = appState.layoutPresets.first(where: { $0.id == editingID }) else {
-            return []
-        }
+        guard let preset = editingPreset else { return [] }
         return preset.allScaledSelections(toRows: appState.rows, columns: appState.columns)
     }
 
     /// App assignments parallel to `editingPresetCommittedSelections`. `nil`
     /// entries correspond to unassigned slots.
     private var editingPresetAppAssignments: [String?] {
-        guard let editingID = editingPresetID,
-              let preset = appState.layoutPresets.first(where: { $0.id == editingID }) else {
-            return []
-        }
-        return preset.normalizedRectangleApps
+        editingPreset?.normalizedRectangleApps ?? []
     }
 
     /// 0-based colour index a newly committed selection would receive:
@@ -3387,10 +3516,7 @@ struct MainWindowView: View {
     /// Display indices (1-based among unassigned slots) parallel to
     /// `editingPresetCommittedSelections`. `nil` for assigned slots.
     private var editingPresetDisplayIndices: [Int?] {
-        guard let editingID = editingPresetID,
-              let preset = appState.layoutPresets.first(where: { $0.id == editingID }) else {
-            return []
-        }
+        guard let preset = editingPreset else { return [] }
         let n = preset.allSelections.count
         return (0..<n).map { preset.displayIndex(forSelectionIndex: $0) }
     }
@@ -3398,18 +3524,14 @@ struct MainWindowView: View {
     /// Grouped pairs of the preset currently being edited, keyed into
     /// `editingPresetCommittedSelections` indices. Empty when not editing.
     private var editingPresetGroupedPairs: Set<PresetGroupPair> {
-        guard let editingID = editingPresetID,
-              let preset = appState.layoutPresets.first(where: { $0.id == editingID }) else {
-            return []
-        }
+        guard let preset = editingPreset else { return [] }
         return Set(preset.groupedPairs)
     }
 
     /// Returns the preset to highlight (hovered or keyboard-selected), if any.
     private var highlightPreset: LayoutPreset? {
         // When editing a preset, committed selections handle the display.
-        if let editingID = editingPresetID,
-           appState.layoutPresets.contains(where: { $0.id == editingID }) {
+        if editingPreset != nil {
             return nil
         }
         if let hoveredID = hoveredPresetID,
