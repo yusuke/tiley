@@ -210,6 +210,14 @@ struct TahoeActionBarMenuButton: NSViewRepresentable {
 
     func updateNSView(_ nsView: TahoeMenuButtonView, context: Context) {
         let coord = context.coordinator
+        // Redraw only when an input the draw pass actually reads changed —
+        // this update runs on every SwiftUI pass (hover/keystroke frequency),
+        // and an unconditional needsDisplay forces a full AppKit redraw with
+        // fresh image tinting each time.
+        let needsRedraw = coord.symbolName != symbolName
+            || coord.disabled != disabled
+            || coord.colorScheme != colorScheme
+            || nsView.showChevron != showChevron
         coord.symbolName = symbolName
         coord.disabled = disabled
         coord.colorScheme = colorScheme
@@ -218,7 +226,9 @@ struct TahoeActionBarMenuButton: NSViewRepresentable {
         coord.onSelect = onSelect
         nsView.showChevron = showChevron
         nsView.isEnabled = !disabled
-        nsView.needsDisplay = true
+        if needsRedraw {
+            nsView.needsDisplay = true
+        }
         if triggerVersion != coord.lastTriggerVersion {
             coord.lastTriggerVersion = triggerVersion
             if triggerVersion > 0 && !disabled {
@@ -326,10 +336,7 @@ struct TahoeActionBarMenuButton: NSViewRepresentable {
 
             // Main icon
             let symbolName = coordinator?.symbolName ?? "rectangle.portrait.and.arrow.right"
-            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .medium)
-            if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
-                .withSymbolConfiguration(config) {
-                let tinted = image.tinted(with: tintColor)
+            if let tinted = TintedSymbolCache.image(symbolName: symbolName, pointSize: 11, weight: .medium, tint: tintColor) {
                 let imageSize = tinted.size
                 if showChevron {
                     // Shift icon left to make room for chevron
@@ -346,10 +353,7 @@ struct TahoeActionBarMenuButton: NSViewRepresentable {
 
             // Chevron down (right side, only for dropdown mode)
             if showChevron {
-                let chevronConfig = NSImage.SymbolConfiguration(pointSize: 7, weight: .bold)
-                if let chevron = NSImage(systemSymbolName: "chevron.down", accessibilityDescription: nil)?
-                    .withSymbolConfiguration(chevronConfig) {
-                    let tintedChevron = chevron.tinted(with: tintColor)
+                if let tintedChevron = TintedSymbolCache.image(symbolName: "chevron.down", pointSize: 7, weight: .bold, tint: tintColor) {
                     let chevronSize = tintedChevron.size
                     let cx = bounds.width - chevronSize.width - 5
                     let cy = (bounds.height - chevronSize.height) / 2
@@ -491,6 +495,9 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
 
     func updateNSView(_ nsView: ResizeMenuButtonView, context: Context) {
         let coord = context.coordinator
+        let needsRedraw = coord.symbolName != symbolName
+            || coord.disabled != disabled
+            || coord.colorScheme != colorScheme
         coord.symbolName = symbolName
         coord.disabled = disabled
         coord.colorScheme = colorScheme
@@ -501,7 +508,10 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
         coord.onPreview = onPreview
         coord.onPreviewHide = onPreviewHide
         nsView.isEnabled = !disabled
-        nsView.needsDisplay = true
+        // See TahoeActionBarMenuButton.updateNSView: redraw only on real changes.
+        if needsRedraw {
+            nsView.needsDisplay = true
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -606,10 +616,7 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
 
             // Main icon (shifted left to make room for chevron)
             let symbolName = coordinator?.symbolName ?? "arrow.up.left.and.arrow.down.right"
-            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .regular)
-            if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
-                .withSymbolConfiguration(config) {
-                let tinted = image.tinted(with: tintColor)
+            if let tinted = TintedSymbolCache.image(symbolName: symbolName, pointSize: 11, weight: .regular, tint: tintColor) {
                 let imageSize = tinted.size
                 let chevronSpace: CGFloat = 10
                 let x = (bounds.width - chevronSpace - imageSize.width) / 2
@@ -618,10 +625,7 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
             }
 
             // Chevron down (right side)
-            let chevronConfig = NSImage.SymbolConfiguration(pointSize: 7, weight: .bold)
-            if let chevron = NSImage(systemSymbolName: "chevron.down", accessibilityDescription: nil)?
-                .withSymbolConfiguration(chevronConfig) {
-                let tintedChevron = chevron.tinted(with: tintColor)
+            if let tintedChevron = TintedSymbolCache.image(symbolName: "chevron.down", pointSize: 7, weight: .bold, tint: tintColor) {
                 let chevronSize = tintedChevron.size
                 let cx = bounds.width - chevronSize.width - 5
                 let cy = (bounds.height - chevronSize.height) / 2
@@ -712,6 +716,30 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
         func hidePreview() {
             onPreviewHide?()
         }
+    }
+}
+
+// MARK: - Tinted symbol cache
+
+/// Cache for tinted SF Symbol images used by the AppKit button draws.
+/// `tinted(with:)` copies the bitmap and re-renders it on every call, and the
+/// draw passes run at hover frequency. Keyed per symbol, configuration, tint,
+/// and drawing appearance (dynamic colors resolve differently per appearance,
+/// so a theme switch renders fresh entries instead of reusing stale ones).
+@MainActor
+private enum TintedSymbolCache {
+    private static var cache: [String: NSImage] = [:]
+
+    static func image(symbolName: String, pointSize: CGFloat, weight: NSFont.Weight, tint: NSColor) -> NSImage? {
+        let appearance = NSAppearance.currentDrawing().name.rawValue
+        let key = "\(symbolName)|\(pointSize)|\(weight.rawValue)|\(tint.description)|\(appearance)"
+        if let cached = cache[key] { return cached }
+        let config = NSImage.SymbolConfiguration(pointSize: pointSize, weight: weight)
+        guard let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
+            .withSymbolConfiguration(config) else { return nil }
+        let tinted = image.tinted(with: tint)
+        cache[key] = tinted
+        return tinted
     }
 }
 
