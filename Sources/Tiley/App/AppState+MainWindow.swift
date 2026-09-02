@@ -117,8 +117,22 @@ extension AppState {
             return nil
         }
 
-        // Get all real standard windows (CGWindowList excludes desktop elements).
-        let (allTargets, _, _) = windowManager?.captureAllWindows() ?? ([], [], [])
+        // Get all real standard windows. Prefer the list we already have —
+        // `availableWindowTargets` (authoritative, or cache realigned against
+        // the live CG z-order at open time) or the realigned cache — over a
+        // fresh full AX sweep, which runs synchronously on the main thread
+        // and can stall it 100 ms+ with many windows. The authoritative
+        // background refresh reconciles the target moments later. Only fall
+        // back to a synchronous capture when no list exists at all.
+        let allTargets: [WindowTarget]
+        if !availableWindowTargets.isEmpty {
+            allTargets = availableWindowTargets
+        } else if hasWindowListCache, !cachedWindowTargets.isEmpty {
+            realignCacheWithLiveZOrder()
+            allTargets = cachedWindowTargets
+        } else {
+            allTargets = windowManager?.captureAllWindows().targets ?? []
+        }
 
         if let focused = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) {
             // Validate the focused window exists in the real window list.

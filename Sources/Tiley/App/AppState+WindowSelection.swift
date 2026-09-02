@@ -5,7 +5,13 @@ extension AppState {
     func cycleTargetWindow(forward: Bool) {
         guard isShowingLayoutGrid, !isEditingSettings else { return }
 
-        if originalFrontmostPID == nil {
+        // The list shown at open time was already realigned against the live
+        // CG z-order (order + frames), and the authoritative background
+        // refresh is in flight — a full synchronous capture here would stall
+        // the main thread 100 ms+ on the first Tab press. Only fall back to
+        // it when there is no list at all (first launch before the initial
+        // capture has completed).
+        if originalFrontmostPID == nil, availableWindowTargets.isEmpty {
             refreshAvailableWindowsSync()
         }
         guard !availableWindowTargets.isEmpty else { return }
