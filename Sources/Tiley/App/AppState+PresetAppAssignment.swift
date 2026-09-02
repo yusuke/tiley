@@ -1024,7 +1024,25 @@ extension AppState {
     /// frames aren't pixel-perfect adjacent, so restoring them later would
     /// fail to reproduce ぴったり.
     func updateSavedFramesIfActivePair(movedWID: CGWindowID) {
+        guard !activeSatellitePerBundle.isEmpty else { return }
+
+        // Cheap relevance gate first — this runs on every move/resize event
+        // of every observed window. Resolve the bundle identity of the moved
+        // window itself (one lookup, and only when it isn't a satellite)
+        // instead of querying Launch Services for every registered bundle on
+        // every event; the strict anchor check inside the loop is unchanged.
+        let movedIsSatellite = activeSatellitePerBundle.values.contains(movedWID)
+        var movedBundleID: String?
+        if !movedIsSatellite {
+            guard let movedPID = windowTarget(byID: movedWID)?.processIdentifier,
+                  let bid = NSRunningApplication(processIdentifier: movedPID)?.bundleIdentifier,
+                  activeSatellitePerBundle[bid] != nil else { return }
+            movedBundleID = bid
+        }
+
         for (bundleID, activeSat) in activeSatellitePerBundle {
+            // Only pairs the moved window can participate in.
+            guard movedWID == activeSat || bundleID == movedBundleID else { continue }
             guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
                 .first(where: { $0.activationPolicy == .regular }),
                   let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }) else {
