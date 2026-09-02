@@ -278,28 +278,50 @@ extension AppState {
     /// **Live** frames (read from AX) for every `availableWindowTargets`, keyed
     /// by CGWindowID. `target.frame` is a cache that can lag behind — especially
     /// right after a preset is applied — so we always re-read from AX here.
-    private func allAvailableFrames() -> [CGWindowID: CGRect] {
-        var result: [CGWindowID: CGRect] = [:]
-        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
-        for target in availableWindowTargets where target.cgWindowID != 0 {
-            guard let window = target.windowElement else {
-                result[target.cgWindowID] = target.frame
-                continue
-            }
-            let (axPos, size) = accessibilityService.readPositionAndSize(of: window)
-            guard size.width > 0, size.height > 0 else {
-                result[target.cgWindowID] = target.frame
-                continue
-            }
-            let frame = CGRect(
-                x: axPos.x,
-                y: primaryMaxY - axPos.y - size.height,
-                width: size.width,
-                height: size.height
-            )
-            result[target.cgWindowID] = frame
+    /// Frames for manual-move adjacency detection: the moved windows plus
+    /// every on-screen window that could possibly touch one of them.
+    ///
+    /// This runs on every drag release of any window in any app, so it must
+    /// not sweep every window with Accessibility reads (2 IPC each). Instead:
+    ///   1. the moved windows are read via AX (exact),
+    ///   2. partner candidates are pre-filtered with ONE CG window-list query
+    ///      (live WindowServer bounds, no AX) — only windows whose bounds come
+    ///      within `slack` of a moved window survive, and
+    ///   3. only those candidates are read via AX.
+    /// Detection itself therefore still compares AX frames with AX frames,
+    /// exactly like the rest of the grouping code, so any CG↔AX offset an
+    /// app may have cannot flip the adjacency result; CG only decides which
+    /// windows are worth reading, with a margin far larger than any offset
+    /// the window-list matcher tolerates (5 pt).
+    private func framesForManualMoveDetection(movedIDs: Set<CGWindowID>, epsilon: CGFloat) -> [CGWindowID: CGRect] {
+        var frames: [CGWindowID: CGRect] = [:]
+        var movedFrames: [CGRect] = []
+        for id in movedIDs {
+            guard let target = windowTarget(byID: id) else { continue }
+            let frame = liveFrame(of: id) ?? target.frame
+            frames[id] = frame
+            movedFrames.append(frame)
         }
-        return result
+        guard !movedFrames.isEmpty else { return frames }
+
+        let slack = epsilon + 40
+        let searchRects = movedFrames.map { $0.insetBy(dx: -slack, dy: -slack) }
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
+        for snapshot in AccessibilityService.currentZOrderedWindowSnapshots() {
+            let wid = snapshot.windowID
+            if frames[wid] != nil { continue }
+            guard let target = windowTarget(byID: wid) else { continue }
+            let b = snapshot.bounds
+            let appKitBounds = CGRect(
+                x: b.minX,
+                y: primaryMaxY - b.minY - b.height,
+                width: b.width,
+                height: b.height
+            )
+            guard searchRects.contains(where: { $0.intersects(appKitBounds) }) else { continue }
+            frames[wid] = liveFrame(of: wid) ?? target.frame
+        }
+        return frames
     }
 
     /// Refreshes adjacencies of existing groups, recomputes candidate badges,
@@ -428,16 +450,48 @@ extension AppState {
         }
     }
 
+    /// Records the post-move frames of windows Tiley itself just placed so
+    /// the trailing AX move/resize notifications those moves generate are
+    /// recognised as echoes (the `recentlySetFrames` check at the top of the
+    /// `.moved`/`.resized` handler) instead of being classified as manual
+    /// user moves. Without this, a preset apply ran a manual-move adjacency
+    /// pass over every window on screen and surfaced "form group" badges
+    /// between the placed windows and unrelated windows *behind* them whose
+    /// edges happened to coincide — visually an extra link badge on an edge
+    /// that had just been grouped.
+    ///
+    /// The frame recorded is the window's *live* frame, not the requested
+    /// one: apps may clamp the request (minimum size etc.) and the echo check
+    /// compares against what the window actually reports. Call after the
+    /// moves and any post-move alignment complete, and *before*
+    /// `isApplyingGroupTransform` is cleared, so no event slips through in
+    /// between. A genuine user drag afterwards still works: its first event
+    /// no longer matches the recorded frame, which drops the entry.
+    func recordTileyPlacedFrames(for ids: [CGWindowID]) {
+        let now = CFAbsoluteTimeGetCurrent()
+        for id in ids where id != 0 {
+            guard let live = liveFrame(of: id) else { continue }
+            recentlySetFrames[id] = (live, now)
+            manuallyMovedWindowIDs.remove(id)
+        }
+    }
+
     /// (Re)starts a short debounce timer that calls
     /// `processManuallyMovedWindows()` once movement settles. A separate
     /// mouse-up trigger calls the same method with no delay so the badge
     /// appears immediately on release.
     func scheduleManualMoveSettle() {
-        manualMoveSettleTimer?.cancel()
-        let timer = DispatchSource.makeTimerSource(queue: .main)
         // 250 ms after the last move/resize event — long enough to coalesce a
         // burst, short enough to feel responsive when the user releases.
-        timer.schedule(deadline: .now() + .milliseconds(250))
+        let deadline: DispatchTime = .now() + .milliseconds(250)
+        if let timer = manualMoveSettleTimer {
+            // Re-arm the existing source instead of cancelling and creating
+            // one per AX move event (dozens per second during a drag).
+            timer.schedule(deadline: deadline)
+            return
+        }
+        let timer = DispatchSource.makeTimerSource(queue: .main)
+        timer.schedule(deadline: deadline)
         timer.setEventHandler { [weak self] in
             self?.processManuallyMovedWindows()
         }
@@ -445,9 +499,10 @@ extension AppState {
         manualMoveSettleTimer = timer
     }
 
-    /// Drains `manuallyMovedWindowIDs`, runs adjacency detection across all
-    /// visible window frames, and surfaces newly-touching pairs (involving at
-    /// least one moved window) as pending candidate badges.
+    /// Drains `manuallyMovedWindowIDs`, runs adjacency detection between the
+    /// moved windows and the on-screen windows near them, and surfaces
+    /// newly-touching pairs (involving at least one moved window) as pending
+    /// candidate badges.
     func processManuallyMovedWindows() {
         manualMoveSettleTimer?.cancel()
         manualMoveSettleTimer = nil
@@ -460,14 +515,16 @@ extension AppState {
         if isApplyingGroupTransform { return }
         if isShowingLayoutGrid { return }
 
-        let frames = allAvailableFrames()
         let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+        let frames = framesForManualMoveDetection(movedIDs: movedIDs, epsilon: epsilon)
         let allDetected = WindowAdjacencyDetector.detect(frames: frames, edgeEpsilon: epsilon)
-        // Keep only adjacencies involving at least one window the user just moved.
+        // Keep only adjacencies involving at least one window the user just
+        // moved (the frame set may also contain two mutually-adjacent
+        // bystanders that both happen to sit near a moved window).
         let detected = allDetected.filter {
             movedIDs.contains($0.windowA) || movedIDs.contains($0.windowB)
         }
-        debugLog("WindowGrouping: manual-move settle — moved=\(movedIDs.count) detected=\(detected.count) (epsilon=\(epsilon))")
+        debugLog("WindowGrouping: manual-move settle — moved=\(describeMembers(movedIDs)) detected=\(detected.count) frames=\(frames.count) (epsilon=\(epsilon))")
 
         // Re-validate existing pendings AND filter newly-detected ones the
         // same way. The shared rule covers same-group, satellite-linked, and
@@ -1015,6 +1072,7 @@ extension AppState {
     }
 
     private func handleBadgeAction(_ badge: GroupLinkBadge, action: BadgeAction) {
+        debugLog("WindowGrouping: badge action \(action) state=\(badge.state) A=\(describeMember(badge.adjacency.windowA)) B=\(describeMember(badge.adjacency.windowB))")
         switch action {
         case .toggleLink:
             // The badge itself only fires this when unlinked → user wants to link.
@@ -1567,7 +1625,11 @@ extension AppState {
     /// badge), so we also clear the app-slot satellite link for this pair
     /// — otherwise the raise linkage would keep firing even after the user
     /// explicitly decoupled the two windows.
-    func unlinkAdjacency(_ adj: WindowAdjacency) {
+    func unlinkAdjacency(_ adj: WindowAdjacency, caller: String = #function) {
+        // This is the one group-removal path that used to leave no trace in
+        // the debug log (and the badge refresh that follows takes the silent
+        // idle fast path once no groups remain) — record it, with the caller.
+        debugLog("WindowGrouping: unlinkAdjacency A=\(describeMember(adj.windowA)) B=\(describeMember(adj.windowB)) edge=\(adj.edgeOfA.rawValue) group=\(groupIndexByWindow[adj.windowA]?.uuidString ?? groupIndexByWindow[adj.windowB]?.uuidString ?? "none") caller=\(caller)")
         // Explicit unlink → drop the satellite + frame memory for whichever
         // direction of the pair is an app-anchor/satellite binding.
         unlinkAppSlotSatellitePair(windowA: adj.windowA, windowB: adj.windowB)
@@ -1732,6 +1794,8 @@ extension AppState {
                 scheduleManualMoveSettle()
             }
         case .destroyed(let id):
+            let stillOnScreen = AccessibilityService.currentZOrderedWindowSnapshots().contains { $0.windowID == id }
+            debugLog("WindowGrouping: AX destroyed \(describeMember(id)) member=\(groupIndexByWindow[id] != nil) stillOnScreenPerCG=\(stillOnScreen)")
             // Cleanup: the destroyed window could be a member or a candidate.
             if groupIndexByWindow[id] != nil {
                 handleMemberDestroyed(id: id)
@@ -2492,6 +2556,7 @@ extension AppState {
     private func handleMemberDestroyed(id: CGWindowID) {
         guard let gid = groupIndexByWindow[id] else { return }
         guard var group = windowGroups[gid] else { return }
+        debugLog("WindowGrouping: member destroyed \(describeMember(id)) group=\(gid) remaining=\(describeMembers(group.members.subtracting([id])))")
         group.members.remove(id)
         group.adjacencies.removeAll { $0.windowA == id || $0.windowB == id }
         group.memberMeta.removeValue(forKey: id)

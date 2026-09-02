@@ -359,6 +359,7 @@ extension AppState {
             jobs, windowManager: wm, accessibilityService: accessibilityService, logMoves: enableDebugLog
         )
         alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
+        recordTileyPlacedFrames(for: placements.map { $0.target.cgWindowID })
         isApplyingGroupTransform = false
 
         // 5. Restore displaced non-target windows.

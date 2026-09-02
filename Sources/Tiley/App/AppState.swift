@@ -1433,6 +1433,7 @@ final class AppState: NSObject, NSMenuDelegate {
                 jobs, windowManager: wm, accessibilityService: axService, logMoves: logMoves
             )
             self.alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
+            self.recordTileyPlacedFrames(for: placements.map { $0.target.cgWindowID })
             self.isApplyingGroupTransform = false
 
             // Raise in the requested order so the primary (first-selected) ends
@@ -1666,6 +1667,7 @@ final class AppState: NSObject, NSMenuDelegate {
                 jobs, windowManager: wm, accessibilityService: axService, logMoves: logMoves
             )
             self.alignAdjacentEdgesAfterPreset(placements: placements, selections: selections, screenFrame: currentScreenFrame)
+            self.recordTileyPlacedFrames(for: placements.map { $0.target.cgWindowID })
             self.isApplyingGroupTransform = false
 
             // Raise in the requested order so the primary ends up topmost.
@@ -1789,6 +1791,9 @@ final class AppState: NSObject, NSMenuDelegate {
                 target: target, frame: frame, screenFrame: target.screenFrame,
                 windowManager: wm, logMoves: logMoves
             )
+            if case .success = result {
+                self.recordTileyPlacedFrames(for: [target.cgWindowID])
+            }
             self.isApplyingGroupTransform = false
             switch result {
             case .success:
@@ -1879,6 +1884,9 @@ final class AppState: NSObject, NSMenuDelegate {
                 target: target, frame: frame, screenFrame: currentScreenFrame,
                 windowManager: wm, logMoves: logMoves
             )
+            if case .success = result {
+                self.recordTileyPlacedFrames(for: [target.cgWindowID])
+            }
             self.isApplyingGroupTransform = false
             switch result {
             case .success:
