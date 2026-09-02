@@ -616,14 +616,24 @@ struct MainWindowView: View {
         return nil
     }
 
+    /// Cache for the sampled menu-bar text color on screens that don't host
+    /// the status item. The fallback path rasterizes the wallpaper NSImage
+    /// and histograms ~50k pixels, and would otherwise run on every body
+    /// evaluation of every such screen. Keyed per screen; wiped when
+    /// `desktopImageVersion` advances (wallpaper changes and screen-config
+    /// changes both advance it).
+    @MainActor
+    private enum MenuBarColorCache {
+        static var version: Int = -1
+        static var byScreenKey: [String: Color] = [:]
+    }
+
     /// Determines the menu bar text color for the current preview screen.
     ///
     /// For the screen where the status item lives, we read the actual macOS menu bar
     /// appearance (VibrantLight → black, VibrantDark → white).  For other screens we
     /// fall back to sampling the wallpaper image brightness.
     private func menuBarForegroundColor(wallpaperImage: NSImage?) -> Color {
-        _ = appState.desktopImageVersion  // re-evaluate when wallpaper changes
-
         // Determine which screen we are previewing.
         let previewScreen: NSScreen?
         if let ctx = screenContext {
@@ -632,17 +642,32 @@ struct MainWindowView: View {
             previewScreen = NSScreen.main
         }
 
-        // If the status item is on the same screen, use the OS-reported appearance.
+        // If the status item is on the same screen, use the OS-reported
+        // appearance. Not cached — it can change without a wallpaper-version
+        // bump, and reading it is cheap.
         let statusItemScreen = appState.statusItemScreen
         if let ps = previewScreen, let ss = statusItemScreen, ps.frame == ss.frame {
             return appState.menuBarIsDark ? .white : .black
         }
 
         // Fall back to image-based luminance for other screens.
-        guard let image = wallpaperImage,
-              let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
+        guard let image = wallpaperImage else { return .white }
+        if MenuBarColorCache.version != appState.desktopImageVersion {
+            MenuBarColorCache.byScreenKey.removeAll(keepingCapacity: true)
+            MenuBarColorCache.version = appState.desktopImageVersion
+        }
+        let key: String
+        if let previewScreen {
+            key = "\(previewScreen.frame)|\(previewScreen.backingScaleFactor)"
+        } else {
+            key = "main"
+        }
+        if let cached = MenuBarColorCache.byScreenKey[key] { return cached }
+        guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
         else { return .white }
-        return Self.menuBarForegroundColorFromImage(cgImage, info: desktopPictureInfo)
+        let color = Self.menuBarForegroundColorFromImage(cgImage, info: desktopPictureInfo)
+        MenuBarColorCache.byScreenKey[key] = color
+        return color
     }
 
     /// Returns the menu bar text color by sampling the top ~4 % of the image.
