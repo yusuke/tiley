@@ -317,8 +317,9 @@ extension AppState {
         restorationAnimationTimer?.cancel()
         restorationAnimationTimer = nil
 
-        var placements: [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)] = []
-
+        // Prepare jobs on the main actor; moves run off it, in parallel
+        // (this function is already async, so no wrapper task is needed).
+        var jobs: [WindowMoveJob] = []
         for entry in entries {
             var target = entry.target
             target = unhideAppIfNeeded(target)
@@ -330,12 +331,11 @@ extension AppState {
                 gap: gap
             )
 
-            if let window = target.windowElement,
-               target.screenFrame != currentScreenFrame {
-                let destScreen = NSScreen.screens.first(where: { $0.frame == currentScreenFrame })
-                if let dest = destScreen {
-                    moveWindowToDestinationScreen(window: window, destination: dest)
-                }
+            let destVisible: CGRect?
+            if target.windowElement != nil, target.screenFrame != currentScreenFrame {
+                destVisible = NSScreen.screens.first(where: { $0.frame == currentScreenFrame })?.visibleFrame
+            } else {
+                destVisible = nil
             }
 
             unlinkScreenEdgeAdjacenciesBeforeLayout(
@@ -344,19 +344,22 @@ extension AppState {
                 visibleFrame: currentVisibleFrame
             )
 
-            do {
-                if enableDebugLog {
-                    _ = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
-                } else {
-                    _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
-                }
-                placements.append((selectionIndex: entry.slotIndex, target: target, targetFrame: frame))
-            } catch {
-                NSLog("[Tiley] applyPresetWithAppAssignments error for slot \(entry.slotIndex): %@", error.localizedDescription)
-            }
+            jobs.append(WindowMoveJob(
+                selectionIndex: entry.slotIndex,
+                target: target,
+                frame: frame,
+                destinationVisibleFrame: destVisible,
+                screenFrame: currentScreenFrame
+            ))
         }
 
+        guard let wm = windowManager else { return }
+        isApplyingGroupTransform = true
+        let placements = await Self.performMoveJobs(
+            jobs, windowManager: wm, accessibilityService: accessibilityService, logMoves: enableDebugLog
+        )
         alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
+        isApplyingGroupTransform = false
 
         // 5. Restore displaced non-target windows.
         let movedWIDs = Set(entries.map { $0.target.cgWindowID })
@@ -365,19 +368,55 @@ extension AppState {
         }
         displacedWindowFrames.removeAll()
 
-        // 6. Raise primary first, secondaries after — use slotIndex ascending
-        // so slot 0 ends up topmost. Reuse the existing index-based raise when
-        // possible; otherwise raise by AX element directly.
-        raiseEntriesPreservingOrder(entries: entries.sorted(by: { $0.slotIndex < $1.slotIndex }))
+        // 6. Raise primary first, secondaries after.
+        //
+        // The primary is the window that fills the FIRST UNASSIGNED slot —
+        // that's the previously-frontmost window (the editor numbers only
+        // unassigned slots, starting at 1; assigned slots are pinned
+        // furniture). Sorting by raw slotIndex instead would make an app
+        // assigned to the preset's first rectangle steal the frontmost
+        // position from the window the user was actually working in.
+        // Falls back to the lowest slot when every slot is assigned.
+        // Suppress the group/satellite raise machinery for the WHOLE raise
+        // sequence and the tail below. The raise's activations fire AX focus
+        // events that are processed during its awaits — with satellites still
+        // registered from a previous apply, an echo for the just-raised
+        // primary window hits the satellite Case A and re-activates the
+        // assigned app over it. The tail then re-activates the primary app
+        // and registers this apply's satellites; those trailing echoes arrive
+        // asynchronously (often after registration, now that moves and raises
+        // are fast) and would do the same. Held until 0.5 s past the tail.
+        isApplyingGroupRaise = true
+        defer {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.isApplyingGroupRaise = false
+            }
+        }
 
-        let primaryEntry = entries.min(by: { $0.slotIndex < $1.slotIndex })
+        let isAssignedSlot: (Int) -> Bool = { idx in
+            idx < rectangleApps.count && rectangleApps[idx] != nil
+        }
+        let primaryEntry = entries
+            .filter { !isAssignedSlot($0.slotIndex) }
+            .min(by: { $0.slotIndex < $1.slotIndex })
+            ?? entries.min(by: { $0.slotIndex < $1.slotIndex })
+
+        var raiseOrder = entries.sorted(by: { $0.slotIndex < $1.slotIndex })
+        if let primaryEntry,
+           let pos = raiseOrder.firstIndex(where: { $0.slotIndex == primaryEntry.slotIndex }) {
+            let primary = raiseOrder.remove(at: pos)
+            raiseOrder.insert(primary, at: 0)
+        }
+        await raiseEntriesPreservingOrder(entries: raiseOrder)
+
         if let primary = primaryEntry {
             lastTargetPID = primary.target.processIdentifier
         }
 
-        let primarySelection = allSelections.first ?? LayoutPreset.emptySelection
-        let primaryName = primaryEntry?.target.appName ?? anchorTarget.appName
-        recordSelectionAndHide(selection: primarySelection, appName: primaryName, wasConstrained: false)
+        let primarySelection = primaryEntry.flatMap { entry in
+            entry.slotIndex < allSelections.count ? allSelections[entry.slotIndex] : nil
+        } ?? allSelections.first ?? LayoutPreset.emptySelection
+        finalizeLayoutApplication()
         let norm = primarySelection.normalized
         TelemetryDeck.signal("layoutApplied", parameters: [
             "columns": "\(norm.endColumn - norm.startColumn + 1)",
@@ -465,7 +504,7 @@ extension AppState {
     /// mirrors the logic in `raiseWindowsPreservingOrder(indices:)`.
     func raiseEntriesPreservingOrder(
         entries: [(target: WindowTarget, selection: GridSelection, slotIndex: Int)]
-    ) {
+    ) async {
         guard !entries.isEmpty else { return }
 
         var appOrder: [pid_t] = []
@@ -481,14 +520,14 @@ extension AppState {
         for pid in appOrder.reversed() {
             guard let windows = entriesByApp[pid] else { continue }
             NSRunningApplication(processIdentifier: pid)?.activate()
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+            try? await Task.sleep(nanoseconds: 50_000_000)
 
             for target in windows.reversed() {
                 if let window = target.windowElement {
                     accessibilityService.raiseWindow(window)
                 }
             }
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+            try? await Task.sleep(nanoseconds: 50_000_000)
         }
     }
 
@@ -505,6 +544,15 @@ extension AppState {
     func handleAppSlotSatelliteRaise(focusedID: CGWindowID) {
         guard !appSlotSatellites.isEmpty else {
             debugLog("SatelliteRaise: skipped (no satellites registered) focusedID=\(focusedID)")
+            return
+        }
+        // Suppress echo-driven raises while Tiley itself is sequencing an
+        // activate + raise (mirrors handleGroupMemberRaised). Without this, a
+        // preset apply's own trailing focus events — delivered asynchronously
+        // after the apply registered its satellites — hit Case A below and
+        // activate the assigned app over the window the user had frontmost.
+        if isApplyingGroupRaise {
+            debugLog("SatelliteRaise: skipped (isApplyingGroupRaise) focusedID=\(focusedID)")
             return
         }
         // While the Tiley overlay is showing, suppress raise linkage — the
@@ -1587,6 +1635,9 @@ extension AppState {
     func handleWindowAnchorSatelliteRaise(focusedID: CGWindowID) {
         guard !windowAnchorSatellites.isEmpty else { return }
         if isShowingLayoutGrid { return }
+        // See handleAppSlotSatelliteRaise: suppress echo-driven raises while
+        // Tiley sequences its own activate + raise.
+        if isApplyingGroupRaise { return }
 
         // Case C: focused is a satellite of some anchor.
         for (anchorWID, satellites) in windowAnchorSatellites where satellites.contains(focusedID) {

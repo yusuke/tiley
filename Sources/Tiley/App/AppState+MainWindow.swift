@@ -52,21 +52,13 @@ extension AppState {
         }
         if !isShowingLayoutGrid {
             activeLayoutTarget = initialLayoutTarget()
-            if let activeLayoutTarget {
+            // Show the grid when a target is known, or when the last target
+            // app is at least still running (its AX window resolves later).
+            if activeLayoutTarget != nil {
                 isShowingLayoutGrid = true
-                launchMessage = String(
-                    format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                    activeLayoutTarget.appName
-                )
             } else if let lastTargetPID,
-                      let name = NSRunningApplication(processIdentifier: lastTargetPID)?.localizedName {
+                      NSRunningApplication(processIdentifier: lastTargetPID)?.localizedName != nil {
                 isShowingLayoutGrid = true
-                launchMessage = String(
-                    format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                    name
-                )
-            } else {
-                launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt to activate target window")
             }
         }
         openMainWindow()
@@ -122,7 +114,6 @@ extension AppState {
         if let frontmostApp = NSWorkspace.shared.frontmostApplication,
            frontmostApp.processIdentifier == getpid(),
            lastTargetPID == nil {
-            launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt when frontmost app is self")
             return nil
         }
 
@@ -270,7 +261,13 @@ extension AppState {
         registerAllHotKeys()
         bubbleArrowEdge = nil
         bubbleArrowDisplayID = nil
-        if !NSApp.isActive {
+        // Don't refocus while a programmatic move/raise sequence is in
+        // flight: the fade can complete mid-sequence now that the main
+        // thread stays free, and `lastTargetPID` may transiently hold one
+        // of the apps the sequence itself activated (the workspace observer
+        // updates it on every activation, including our own). The sequence's
+        // tail re-activates the correct primary app itself.
+        if !NSApp.isActive, !isApplyingGroupTransform, !isApplyingGroupRaise {
             refocusLastTargetApp()
         }
         // Pre-cache the window list for next overlay open.

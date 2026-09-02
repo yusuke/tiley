@@ -24,7 +24,7 @@ extension AppState {
 
     @discardableResult
     func setLaunchAtLoginEnabled(_ enabled: Bool) -> Bool {
-        updateLaunchAtLogin(enabled: enabled, updateMessageOnFailure: true)
+        updateLaunchAtLogin(enabled: enabled)
     }
 
     func loadSettings() {
@@ -82,7 +82,7 @@ extension AppState {
     }
 
     @discardableResult
-    func updateLaunchAtLogin(enabled: Bool, updateMessageOnFailure: Bool) -> Bool {
+    func updateLaunchAtLogin(enabled: Bool) -> Bool {
         do {
             if enabled {
                 try SMAppService.mainApp.register()
@@ -93,12 +93,6 @@ extension AppState {
             return launchAtLoginEnabled == enabled
         } catch {
             launchAtLoginEnabled = (SMAppService.mainApp.status == .enabled)
-            if updateMessageOnFailure {
-                launchMessage = String(
-                    format: NSLocalizedString("Could not update login item: %@", comment: "Login item update error"),
-                    error.localizedDescription
-                )
-            }
             return false
         }
     }
@@ -120,7 +114,7 @@ extension AppState {
         alert.addButton(withTitle: NSLocalizedString("Not Now", comment: "Launch at login cancel button"))
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
-            _ = updateLaunchAtLogin(enabled: true, updateMessageOnFailure: true)
+            _ = updateLaunchAtLogin(enabled: true)
         }
     }
 

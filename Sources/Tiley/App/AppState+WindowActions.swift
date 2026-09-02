@@ -253,31 +253,38 @@ extension AppState {
             }
         }
 
-        raiseWindowsPreservingOrder(indices: sidebarOrder)
-
-        clearWindowCyclingState(animateRestore: true)
+        let targetsInOrder = sidebarOrder.map { availableWindowTargets[$0] }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            await self.raiseWindowsPreservingOrder(targets: targetsInOrder)
+            self.clearWindowCyclingState(animateRestore: true)
+        }
     }
 
-    /// Raises the given window indices so that `indices[0]` ends up topmost.
+    /// Raises the given windows so that `targets[0]` ends up topmost.
     ///
-    /// 前提: `indices` は望む Z-order（indices[0] = 最前面）。
+    /// 前提: `targets` は望む Z-order（targets[0] = 最前面）。
     /// - アプリ間: 最後に `activate()` したアプリが前面に来る
-    ///   → `indices` 下位のアプリを先に、上位のアプリを最後に処理
+    ///   → `targets` 下位のアプリを先に、上位のアプリを最後に処理
     /// - アプリ内: 最後に `AXRaise` したウインドウがアプリ内最前面になる
-    ///   → アプリ内も `indices` 下位のウインドウを先に、上位を最後に AXRaise
-    func raiseWindowsPreservingOrder(indices: [Int]) {
-        let valid = indices.filter { $0 < availableWindowTargets.count }
-        guard !valid.isEmpty else { return }
+    ///   → アプリ内も `targets` 下位のウインドウを先に、上位を最後に AXRaise
+    ///
+    /// `async`: the pauses that let each activation land used to pump the
+    /// run loop synchronously (blocking the main thread ~100 ms per app);
+    /// `Task.sleep` on the main actor lets events process while suspended.
+    /// Targets are passed by value so nothing shifts under the awaits.
+    func raiseWindowsPreservingOrder(targets: [WindowTarget]) async {
+        guard !targets.isEmpty else { return }
 
         // Group by PID while preserving the requested order.
         var appOrder: [pid_t] = []
-        var windowsByApp: [pid_t: [Int]] = [:]
-        for idx in valid {
-            let pid = availableWindowTargets[idx].processIdentifier
+        var windowsByApp: [pid_t: [WindowTarget]] = [:]
+        for target in targets {
+            let pid = target.processIdentifier
             if windowsByApp[pid] == nil {
                 appOrder.append(pid)
             }
-            windowsByApp[pid, default: []].append(idx)
+            windowsByApp[pid, default: []].append(target)
         }
 
         // Suppress observer-driven group raises during the activate +
@@ -290,25 +297,23 @@ extension AppState {
         isApplyingGroupRaise = true
 
         for pid in appOrder.reversed() {
-            guard let indicesInApp = windowsByApp[pid] else { continue }
+            guard let windowsInApp = windowsByApp[pid] else { continue }
             NSRunningApplication(processIdentifier: pid)?.activate()
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+            try? await Task.sleep(nanoseconds: 50_000_000)
 
-            for idx in indicesInApp.reversed() {
-                let target = availableWindowTargets[idx]
+            for target in windowsInApp.reversed() {
                 if let window = target.windowElement {
                     accessibilityService.raiseWindow(window)
                 }
             }
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+            try? await Task.sleep(nanoseconds: 50_000_000)
         }
 
         // Pin the topmost raised window as its app's main/focused so a late
         // re-promotion of the previously-main window (some apps do this
         // asynchronously after activate) doesn't shove the selected
         // top-of-stack window back down.
-        if let topIdx = valid.first,
-           let topWindow = availableWindowTargets[topIdx].windowElement {
+        if let topWindow = targets.first?.windowElement {
             AXUIElementSetAttributeValue(topWindow, kAXMainAttribute as CFString, kCFBooleanTrue)
             AXUIElementSetAttributeValue(topWindow, kAXFocusedAttribute as CFString, kCFBooleanTrue)
         }
@@ -324,8 +329,8 @@ extension AppState {
         // background apps that previously sat between them in z-order. The
         // `isApplyingGroupRaise` guard inside `handleGroupMemberRaised`
         // suppresses reentrancy from the AX event if it does fire.
-        if let topIdx = valid.first {
-            let topWID = availableWindowTargets[topIdx].cgWindowID
+        if let topTarget = targets.first {
+            let topWID = topTarget.cgWindowID
             handleGroupMemberRaised(id: topWID)
             handleAppSlotSatelliteRaise(focusedID: topWID)
             handleWindowAnchorSatelliteRaise(focusedID: topWID)

@@ -615,7 +615,9 @@ extension AppState {
 
         let allMemberIDs = Array(Set(windowGroups.values.flatMap { $0.members }))
         guard !allMemberIDs.isEmpty else { return }
-        let spaceByWID = AccessibilityService.buildWindowSpaceMap(windowIDs: allMemberIDs)
+        // Bypass the TTL cache: this check exists precisely to notice a
+        // Space move as soon as it happens.
+        let spaceByWID = AccessibilityService.buildWindowSpaceMap(windowIDs: allMemberIDs, bypassCache: true)
 
         for (gid, group) in windowGroups {
             let known = group.members.compactMap { spaceByWID[$0] }
@@ -638,12 +640,15 @@ extension AppState {
     // periodic check is the most reliable way to catch "member moved to
     // another Space while the other stayed behind".
 
-    /// Starts a ~1 s interval timer that runs `dissolveGroupsWithSplitSpaces`.
+    /// Starts a ~2 s interval timer that runs `dissolveGroupsWithSplitSpaces`.
     /// Idempotent — safe to call whenever a group is created/linked.
+    /// (Each check is one CGS IPC per member; 2 s keeps the standing cost
+    /// half of the previous 1 s cadence while a split Space is still
+    /// noticed promptly.)
     func startGroupSpaceMonitorTimer() {
         guard groupSpaceMonitorTimer == nil else { return }
         let timer = DispatchSource.makeTimerSource(queue: .main)
-        timer.schedule(deadline: .now() + 1.0, repeating: 1.0, leeway: .milliseconds(200))
+        timer.schedule(deadline: .now() + 2.0, repeating: 2.0, leeway: .milliseconds(400))
         timer.setEventHandler { [weak self] in
             guard let self else { return }
             if self.windowGroups.isEmpty {

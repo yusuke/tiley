@@ -367,6 +367,58 @@ final class AccessibilityService {
         }
     }
 
+    /// Moves a window into `destVisible` (an AppKit-coordinate visible frame),
+    /// keeping its size where possible; shrinks only when the window is larger
+    /// than the area, and clamps the position so it stays fully visible.
+    /// Pure AX + geometry, so background move jobs can perform the
+    /// cross-screen hop without touching the main actor.
+    func moveWindowKeepingSize(_ window: AXUIElement, toVisibleFrame destVisible: CGRect) {
+        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? destVisible.maxY
+        let (currentPos, currentSize) = readPositionAndSize(of: window)
+
+        // Visible frame bounds in AX coordinates (top-left origin on primary screen)
+        let visibleAXTop = primaryMaxY - destVisible.maxY
+        let visibleAXLeft = destVisible.minX
+        let visibleAXRight = destVisible.maxX
+        let visibleAXBottom = primaryMaxY - destVisible.minY
+
+        var newPos = currentPos
+        var newSize = currentSize
+
+        // If the window is larger than the destination area, resize to fit
+        if newSize.width > destVisible.width {
+            newSize.width = destVisible.width
+        }
+        if newSize.height > destVisible.height {
+            newSize.height = destVisible.height
+        }
+
+        // Clamp position so the window stays within the visible area
+        if newPos.x + newSize.width > visibleAXRight {
+            newPos.x = visibleAXRight - newSize.width
+        }
+        newPos.x = max(newPos.x, visibleAXLeft)
+
+        if newPos.y + newSize.height > visibleAXBottom {
+            newPos.y = visibleAXBottom - newSize.height
+        }
+        newPos.y = max(newPos.y, visibleAXTop)
+
+        // Apply size change first if needed, then position
+        let needsResize = abs(newSize.width - currentSize.width) > 1
+                       || abs(newSize.height - currentSize.height) > 1
+        if needsResize {
+            var size = newSize
+            if let sizeVal = AXValueCreate(.cgSize, &size) {
+                AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeVal)
+            }
+        }
+        var pos = newPos
+        if let posVal = AXValueCreate(.cgPoint, &pos) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, posVal)
+        }
+    }
+
     /// Moves a window to the given AX position (top-left origin, y-down)
     /// without changing its size.
     func setPosition(_ position: CGPoint, for window: AXUIElement) {
@@ -1171,17 +1223,58 @@ final class AccessibilityService {
 
     // MARK: - Space detection helpers
 
+    /// Short-lived cache for `buildWindowSpaceMap`. A window's Space
+    /// assignment changes only when it is explicitly moved to another Space,
+    /// but the map is rebuilt for every window on every window-list refresh
+    /// (i.e. on each app switch), and each entry costs one WindowServer IPC
+    /// round-trip. Entries expire after `windowSpaceCacheTTL` so staleness is
+    /// bounded. Accessed from the main thread and the background capture
+    /// task, hence the lock.
+    private static let windowSpaceCacheLock = NSLock()
+    private nonisolated(unsafe) static var cachedWindowSpaces: [CGWindowID: (space: UInt64, at: CFAbsoluteTime)] = [:]
+    private static let windowSpaceCacheTTL: CFAbsoluteTime = 5.0
+
+    static func invalidateWindowSpaceCache() {
+        windowSpaceCacheLock.lock()
+        cachedWindowSpaces.removeAll(keepingCapacity: true)
+        windowSpaceCacheLock.unlock()
+    }
+
     /// Builds a mapping from CGWindowID to the space ID it belongs to.
-    static func buildWindowSpaceMap(windowIDs: [CGWindowID]) -> [CGWindowID: UInt64] {
+    /// Pass `bypassCache: true` for callers that must observe a Space move
+    /// promptly (e.g. the split-space group monitor); fresh results still
+    /// repopulate the cache for everyone else.
+    static func buildWindowSpaceMap(windowIDs: [CGWindowID], bypassCache: Bool = false) -> [CGWindowID: UInt64] {
         guard !windowIDs.isEmpty,
               let cid = CGSPrivate.mainConnectionID() else { return [:] }
+        let now = CFAbsoluteTimeGetCurrent()
         var result: [CGWindowID: UInt64] = [:]
+        var toQuery: [CGWindowID] = []
+        if bypassCache {
+            toQuery = windowIDs
+        } else {
+            windowSpaceCacheLock.lock()
+            for wid in windowIDs {
+                if let entry = cachedWindowSpaces[wid], now - entry.at < windowSpaceCacheTTL {
+                    result[wid] = entry.space
+                } else {
+                    toQuery.append(wid)
+                }
+            }
+            windowSpaceCacheLock.unlock()
+        }
+        guard !toQuery.isEmpty else { return result }
         // Query one window at a time for reliable 1:1 mapping.
-        for wid in windowIDs {
+        var fresh: [CGWindowID: (space: UInt64, at: CFAbsoluteTime)] = [:]
+        for wid in toQuery {
             guard let spacesArray = CGSPrivate.spacesForWindows(cid, mask: CGSPrivate.kCGSSpaceAll, windowIDs: [wid]) as? [NSNumber],
                   let firstSpace = spacesArray.first else { continue }
             result[wid] = firstSpace.uint64Value
+            fresh[wid] = (firstSpace.uint64Value, now)
         }
+        windowSpaceCacheLock.lock()
+        for (wid, entry) in fresh { cachedWindowSpaces[wid] = entry }
+        windowSpaceCacheLock.unlock()
         return result
     }
 

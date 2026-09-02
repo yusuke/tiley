@@ -148,7 +148,6 @@ final class AppState: NSObject, NSMenuDelegate {
     var displayShortcutSettings = DisplayShortcutSettings.default
     var layoutPresets: [LayoutPreset] = []
     var selectedLayoutPresetID: UUID?
-    var launchMessage = NSLocalizedString("Show the grid from the menu bar or use the global shortcut.", comment: "Initial launch message")
 
     @ObservationIgnored var updater: SPUUpdater?
     var hasUpdateBadge = false
@@ -184,6 +183,11 @@ final class AppState: NSObject, NSMenuDelegate {
     /// display renders the arrow; other displays use a plain rounded rectangle.
     var bubbleArrowDisplayID: CGDirectDisplayID?
     @ObservationIgnored var screenChangeTask: Task<Void, Never>?
+    /// The most recent layout-application task. Window moves run off the main
+    /// actor (the AX retry dance sleeps between steps); rapid repeated applies
+    /// chain onto this task so they keep the strict ordering the old
+    /// synchronous implementation had.
+    @ObservationIgnored var layoutApplyTask: Task<Void, Never>?
     @ObservationIgnored var isSwitchingActivationPolicy = false
     @ObservationIgnored var isRecreatingWindows = false
     @ObservationIgnored var hotKeyRef: EventHotKeyRef?
@@ -645,29 +649,12 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         activeLayoutTarget = initialLayoutTarget()
-        if activeLayoutTarget == nil, lastTargetPID != nil {
-            // AX window is not available yet (Tiley just launched and is frontmost).
-            // Show the grid using the app name from NSRunningApplication; the actual
-            // AX window will be resolved when the user commits a layout selection.
-            let targetAppName = NSRunningApplication(processIdentifier: lastTargetPID!)?.localizedName
-                ?? NSLocalizedString("App", comment: "Generic app name fallback")
-            launchMessage = String(
-                format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                targetAppName
-            )
-            if showMainWindowOnLaunch {
-                isShowingLayoutGrid = true
-            }
-        } else if activeLayoutTarget == nil {
-            launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt to activate target window")
-        } else if let activeLayoutTarget {
-            launchMessage = String(
-                format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                activeLayoutTarget.appName
-            )
-            if showMainWindowOnLaunch {
-                isShowingLayoutGrid = true
-            }
+        // Show the grid when a target is known — or when only the PID is
+        // known (Tiley just launched and is frontmost, so the AX window
+        // can't be resolved yet; it is resolved when the user commits a
+        // layout selection).
+        if showMainWindowOnLaunch, activeLayoutTarget != nil || lastTargetPID != nil {
+            isShowingLayoutGrid = true
         }
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -906,7 +893,7 @@ final class AppState: NSObject, NSMenuDelegate {
         hotKeyShortcut = settings.hotKeyShortcut
         displayShortcutSettings = settings.displayShortcutSettings
         saveDisplayShortcuts()
-        _ = updateLaunchAtLogin(enabled: settings.launchAtLoginEnabled, updateMessageOnFailure: true)
+        _ = updateLaunchAtLogin(enabled: settings.launchAtLoginEnabled)
         setMenuIconVisible(settings.menuIconVisible)
         setDockIconVisible(settings.dockIconVisible)
         showNearIcon = settings.showNearIcon
@@ -930,7 +917,6 @@ final class AppState: NSObject, NSMenuDelegate {
         isEditingSettings = false
         isShowingLayoutGrid = true
         activeLayoutTarget = initialLayoutTarget()
-        launchMessage = NSLocalizedString("Applied grid settings.", comment: "Settings applied confirmation")
         openMainWindow()
     }
 
@@ -946,7 +932,6 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterDisplayHotKeys()
         registerMainHotKey()
         activeLayoutTarget = initialLayoutTarget()
-        launchMessage = NSLocalizedString("Canceled settings changes.", comment: "Settings canceled confirmation")
         openMainWindow()
     }
 
@@ -1196,15 +1181,6 @@ final class AppState: NSObject, NSMenuDelegate {
                 self.isLoadingWindowList = true
             }
 
-            if let target {
-                self.launchMessage = String(
-                    format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                    target.appName
-                )
-            } else {
-                self.launchMessage = NSLocalizedString("No windows available.", comment: "Message when no windows are available to arrange")
-            }
-
             // Deferred refresh to pick up changes since the cache was built.
             if isDismissingExpose {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -1239,10 +1215,6 @@ final class AppState: NSObject, NSMenuDelegate {
                             $0.processIdentifier == freshTarget.processIdentifier
                             && $0.windowTitle == freshTarget.windowTitle
                         }) ?? 0
-                        self.launchMessage = String(
-                            format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                            freshTarget.appName
-                        )
                     }
                     self.selectedWindowIndices = [self.activeTargetIndex]
                     self.selectionOrder = [self.activeTargetIndex]
@@ -1290,7 +1262,6 @@ final class AppState: NSObject, NSMenuDelegate {
             activeLayoutTarget = resolveWindowTarget()
         }
         guard let target = activeLayoutTarget else {
-            launchMessage = NSLocalizedString("No active target window.", comment: "No active target error")
             isShowingLayoutGrid = false
             hidePreviewOverlay()
             return
@@ -1335,7 +1306,6 @@ final class AppState: NSObject, NSMenuDelegate {
         }
 
         let allSelections = [selection] + secondarySelections
-        var placements: [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)] = []
 
         dismissOverlayImmediately()
         orderOutAllMainWindows()
@@ -1351,6 +1321,9 @@ final class AppState: NSObject, NSMenuDelegate {
         // Order selected window indices by selection order (first selected = primary).
         let orderedIndices = selectionOrder.filter { $0 < availableWindowTargets.count }
 
+        // Prepare all move jobs on the main actor; the moves themselves run
+        // off it (the AX retry dance sleeps between steps) and in parallel.
+        var jobs: [WindowMoveJob] = []
         for (windowPosition, idx) in orderedIndices.enumerated() {
             var target = availableWindowTargets[idx]
 
@@ -1368,13 +1341,13 @@ final class AppState: NSObject, NSMenuDelegate {
                 gap: gap
             )
 
-            // If the window is on a different screen, move it to the target screen first.
-            if let window = target.windowElement,
-               target.screenFrame != currentScreenFrame {
-                let destScreen = NSScreen.screens.first(where: { $0.frame == currentScreenFrame })
-                if let dest = destScreen {
-                    moveWindowToDestinationScreen(window: window, destination: dest)
-                }
+            // If the window is on a different screen, the job moves it to the
+            // target screen before resizing.
+            let destVisible: CGRect?
+            if target.windowElement != nil, target.screenFrame != currentScreenFrame {
+                destVisible = NSScreen.screens.first(where: { $0.frame == currentScreenFrame })?.visibleFrame
+            } else {
+                destVisible = nil
             }
 
             unlinkScreenEdgeAdjacenciesBeforeLayout(
@@ -1383,80 +1356,162 @@ final class AppState: NSObject, NSMenuDelegate {
                 visibleFrame: currentVisibleFrame
             )
 
-            do {
-                if enableDebugLog {
-                    _ = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
-                } else {
-                    _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
-                }
-                placements.append((selectionIndex: selectionIndex, target: target, targetFrame: frame))
-            } catch {
-                NSLog("[Tiley] applyToMultipleWindows error for index \(idx): %@", error.localizedDescription)
-            }
+            jobs.append(WindowMoveJob(
+                selectionIndex: selectionIndex,
+                target: target,
+                frame: frame,
+                destinationVisibleFrame: destVisible,
+                screenFrame: currentScreenFrame
+            ))
         }
-
-        alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
 
         // Restore displaced windows that are NOT layout targets — they were
         // pushed aside to reveal the selected window and need to return to
-        // their original positions.  Layout targets have already been moved
-        // to their new frames, so we only clear their entries.
-        //
-        // This MUST run before raiseWindowsPreservingOrder: that function
-        // pumps the run loop via RunLoop.run(until:), which lets the
-        // deferred handleMainWindowHidden → clearWindowCyclingState →
-        // restoreDisplacedWindowsAnimated task fire.  If displacedWindowFrames
-        // still contains the layout targets at that point, the restoration
-        // animation will slowly drag them back to their pre-displacement
-        // origins, undoing the layout.
-        let movedWIDs = Set(orderedIndices.map { availableWindowTargets[$0].cgWindowID })
+        // their original positions.  This runs BEFORE the async moves: the
+        // main actor is free while they run, so the deferred
+        // handleMainWindowHidden → clearWindowCyclingState →
+        // restoreDisplacedWindowsAnimated task can fire mid-move.  If
+        // displacedWindowFrames still contained the layout targets at that
+        // point, the restoration animation would drag them back to their
+        // pre-displacement origins, undoing the layout.
+        let movedWIDs = Set(jobs.map { $0.target.cgWindowID })
         for (wid, entry) in displacedWindowFrames where !movedWIDs.contains(wid) {
             accessibilityService.setPosition(entry.origin, for: entry.window)
         }
         displacedWindowFrames.removeAll()
 
-        // Raise in the requested order so the primary (first-selected) ends
-        // up topmost. A per-iteration AXRaise would reverse this because the
-        // last-raised window wins within its app.
-        raiseWindowsPreservingOrder(indices: orderedIndices)
+        guard let wm = windowManager else { return }
+        let axService = accessibilityService
+        let logMoves = enableDebugLog
+        let previousApply = layoutApplyTask
+        layoutApplyTask = Task { @MainActor [weak self] in
+            await previousApply?.value
+            guard let self else { return }
+            // Suppress observer-driven group linkage while our own moves are
+            // in flight — with the main actor free, the AX move events now
+            // arrive mid-batch instead of after it.
+            self.isApplyingGroupTransform = true
+            let placements = await Self.performMoveJobs(
+                jobs, windowManager: wm, accessibilityService: axService, logMoves: logMoves
+            )
+            self.alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
+            self.isApplyingGroupTransform = false
 
-        // Activate the primary window (frontmost in sidebar order) so it
-        // becomes the active window after layout application.
-        let primaryWindowTarget: WindowTarget? = orderedIndices.first.map { availableWindowTargets[$0] }
-        if let primary = primaryWindowTarget {
-            lastTargetPID = primary.processIdentifier
+            // Raise in the requested order so the primary (first-selected) ends
+            // up topmost. A per-iteration AXRaise would reverse this because the
+            // last-raised window wins within its app.
+            await self.raiseWindowsPreservingOrder(targets: jobs.map(\.target))
+
+            // Activate the primary window (frontmost in sidebar order) so it
+            // becomes the active window after layout application.
+            let primaryWindowTarget: WindowTarget? = jobs.first?.target
+            if let primary = primaryWindowTarget {
+                self.lastTargetPID = primary.processIdentifier
+            }
+
+            self.finalizeLayoutApplication()
+            let norm = selection.normalized
+            TelemetryDeck.signal("layoutApplied", parameters: [
+                "columns": "\(norm.endColumn - norm.startColumn + 1)",
+                "rows": "\(norm.endRow - norm.startRow + 1)",
+                "multiSelection": "\(self.selectedWindowIndices.count)",
+                "selectionCount": "\(allSelections.count)",
+            ])
+            let movedWindowIDs = jobs.map { $0.target.cgWindowID }
+            self.refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
+
+            // Auto-group any preset-marked pairs. Uses the first window that landed
+            // on each selection index; extra windows piled on the last selection
+            // do not claim any other slot.
+            if !groupedPairs.isEmpty {
+                var windowIDBySelectionIndex: [Int: CGWindowID] = [:]
+                for job in jobs {
+                    if windowIDBySelectionIndex[job.selectionIndex] == nil, job.target.cgWindowID != 0 {
+                        windowIDBySelectionIndex[job.selectionIndex] = job.target.cgWindowID
+                    }
+                }
+                self.autoLinkPresetGroups(
+                    groupedPairs: groupedPairs,
+                    selections: allSelections,
+                    windowIDBySelectionIndex: windowIDBySelectionIndex,
+                    visibleFrame: currentVisibleFrame
+                )
+            }
         }
+    }
 
-        recordSelectionAndHide(selection: selection, appName: primaryWindowTarget?.appName ?? primaryTarget.appName, wasConstrained: false)
-        let norm = selection.normalized
-        TelemetryDeck.signal("layoutApplied", parameters: [
-            "columns": "\(norm.endColumn - norm.startColumn + 1)",
-            "rows": "\(norm.endRow - norm.startRow + 1)",
-            "multiSelection": "\(selectedWindowIndices.count)",
-            "selectionCount": "\(allSelections.count)",
-        ])
-        let movedWindowIDs = orderedIndices.map { availableWindowTargets[$0].cgWindowID }
-        refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
+    /// One window-move job, prepared on the main actor and executed off it.
+    struct WindowMoveJob {
+        let selectionIndex: Int
+        let target: WindowTarget
+        let frame: CGRect
+        /// Non-nil when the window must hop to another screen before the resize.
+        let destinationVisibleFrame: CGRect?
+        let screenFrame: CGRect
+    }
 
-        // Auto-group any preset-marked pairs. Uses the first window that landed
-        // on each selection index; extra windows piled on the last selection
-        // do not claim any other slot.
-        if !groupedPairs.isEmpty {
-            var windowIDBySelectionIndex: [Int: CGWindowID] = [:]
-            for (windowPosition, idx) in orderedIndices.enumerated() {
-                let selectionIndex = min(windowPosition, allSelections.count - 1)
-                let wid = availableWindowTargets[idx].cgWindowID
-                if windowIDBySelectionIndex[selectionIndex] == nil, wid != 0 {
-                    windowIDBySelectionIndex[selectionIndex] = wid
+    /// Executes prepared move jobs concurrently on background threads and
+    /// returns the successful placements in job order. The AX retry dance in
+    /// `AccessibilityService.setFrame` deliberately sleeps between steps;
+    /// running it off the main actor keeps Tiley responsive, and independent
+    /// windows move in parallel instead of serially (the per-window step
+    /// sequence is unchanged).
+    nonisolated static func performMoveJobs(
+        _ jobs: [WindowMoveJob],
+        windowManager: WindowManager,
+        accessibilityService: AccessibilityService,
+        logMoves: Bool
+    ) async -> [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)] {
+        await withTaskGroup(of: (Int, Bool).self) { group in
+            for (i, job) in jobs.enumerated() {
+                group.addTask {
+                    if let destVisible = job.destinationVisibleFrame,
+                       let window = job.target.windowElement {
+                        accessibilityService.moveWindowKeepingSize(window, toVisibleFrame: destVisible)
+                    }
+                    do {
+                        if logMoves {
+                            _ = try windowManager.moveWithLog(target: job.target, to: job.frame, on: job.screenFrame)
+                        } else {
+                            _ = try windowManager.move(target: job.target, to: job.frame, onScreenFrame: job.screenFrame)
+                        }
+                        return (i, true)
+                    } catch {
+                        NSLog("[Tiley] window move failed (selection %d): %@", job.selectionIndex, error.localizedDescription)
+                        return (i, false)
+                    }
                 }
             }
-            autoLinkPresetGroups(
-                groupedPairs: groupedPairs,
-                selections: allSelections,
-                windowIDBySelectionIndex: windowIDBySelectionIndex,
-                visibleFrame: currentVisibleFrame
-            )
+            var succeeded = Set<Int>()
+            for await (i, ok) in group where ok { succeeded.insert(i) }
+            return jobs.enumerated().compactMap { i, job in
+                succeeded.contains(i) ? (job.selectionIndex, job.target, job.frame) : nil
+            }
         }
+    }
+
+    /// Single-window variant of `performMoveJobs` that surfaces the
+    /// "constrained" flag and the error for the caller's status message.
+    nonisolated static func performMove(
+        target: WindowTarget,
+        frame: CGRect,
+        screenFrame: CGRect,
+        windowManager: WindowManager,
+        logMoves: Bool
+    ) async -> Result<Bool, Error> {
+        await Task.detached(priority: .userInitiated) {
+            do {
+                let constrained: Bool
+                if logMoves {
+                    constrained = try windowManager.moveWithLog(target: target, to: frame, on: screenFrame)
+                } else {
+                    constrained = try windowManager.move(target: target, to: frame, onScreenFrame: screenFrame)
+                }
+                return .success(constrained)
+            } catch {
+                return .failure(error)
+            }
+        }.value
     }
 
     /// Builds an ordered list of window indices for a multi-layout preset.
@@ -1514,8 +1569,9 @@ final class AppState: NSObject, NSMenuDelegate {
 
         // Selected windows first, then fill from z-order.
         let orderedIndices = buildZOrderedWindowIndices(count: selections.count)
-        var placements: [(selectionIndex: Int, target: WindowTarget, targetFrame: CGRect)] = []
 
+        // Prepare jobs on the main actor; moves run off it, in parallel.
+        var jobs: [WindowMoveJob] = []
         for (position, idx) in orderedIndices.enumerated() {
             var target = availableWindowTargets[idx]
             let sel = selections[position]
@@ -1530,12 +1586,11 @@ final class AppState: NSObject, NSMenuDelegate {
                 gap: gap
             )
 
-            if let window = target.windowElement,
-               target.screenFrame != currentScreenFrame {
-                let destScreen = NSScreen.screens.first(where: { $0.frame == currentScreenFrame })
-                if let dest = destScreen {
-                    moveWindowToDestinationScreen(window: window, destination: dest)
-                }
+            let destVisible: CGRect?
+            if target.windowElement != nil, target.screenFrame != currentScreenFrame {
+                destVisible = NSScreen.screens.first(where: { $0.frame == currentScreenFrame })?.visibleFrame
+            } else {
+                destVisible = nil
             }
 
             unlinkScreenEdgeAdjacenciesBeforeLayout(
@@ -1544,66 +1599,73 @@ final class AppState: NSObject, NSMenuDelegate {
                 visibleFrame: currentVisibleFrame
             )
 
-            do {
-                if enableDebugLog {
-                    _ = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame)
-                } else {
-                    _ = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame)
-                }
-                placements.append((selectionIndex: position, target: target, targetFrame: frame))
-            } catch {
-                NSLog("[Tiley] applyPresetToZOrderedWindows error for index \(idx): %@", error.localizedDescription)
-            }
+            jobs.append(WindowMoveJob(
+                selectionIndex: position,
+                target: target,
+                frame: frame,
+                destinationVisibleFrame: destVisible,
+                screenFrame: currentScreenFrame
+            ))
         }
 
-        alignAdjacentEdgesAfterPreset(placements: placements, selections: selections, screenFrame: currentScreenFrame)
-
-        // Restore displaced windows that are NOT layout targets.
-        // Must run before raiseWindowsPreservingOrder — see the comment in
-        // applyToMultipleWindows for details.
-        let movedWIDs2 = Set(orderedIndices.map { availableWindowTargets[$0].cgWindowID })
+        // Restore displaced windows that are NOT layout targets — before the
+        // async moves, for the reason documented in applyToMultipleWindows.
+        let movedWIDs2 = Set(jobs.map { $0.target.cgWindowID })
         for (wid, entry) in displacedWindowFrames where !movedWIDs2.contains(wid) {
             accessibilityService.setPosition(entry.origin, for: entry.window)
         }
         displacedWindowFrames.removeAll()
 
-        // Raise in the requested order so the primary ends up topmost.
-        raiseWindowsPreservingOrder(indices: orderedIndices)
-
-        let primaryWindowTarget: WindowTarget? = orderedIndices.first.map { availableWindowTargets[$0] }
-        if let primary = primaryWindowTarget {
-            lastTargetPID = primary.processIdentifier
-        }
-
-        let primarySelection = selections[0]
-        recordSelectionAndHide(selection: primarySelection, appName: primaryWindowTarget?.appName ?? primaryTarget.appName, wasConstrained: false)
-        let norm = primarySelection.normalized
-        TelemetryDeck.signal("layoutApplied", parameters: [
-            "columns": "\(norm.endColumn - norm.startColumn + 1)",
-            "rows": "\(norm.endRow - norm.startRow + 1)",
-            "multiSelection": "\(selectedWindowIndices.count)",
-            "selectionCount": "\(selections.count)",
-            "zOrderBased": "true",
-        ])
-        let movedWindowIDs = orderedIndices.map { availableWindowTargets[$0].cgWindowID }
-        refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
-
-        // Auto-group any preset-marked pairs using the position→window mapping.
-        if !groupedPairs.isEmpty {
-            var windowIDBySelectionIndex: [Int: CGWindowID] = [:]
-            for (position, idx) in orderedIndices.enumerated() {
-                guard position < selections.count else { break }
-                let wid = availableWindowTargets[idx].cgWindowID
-                if wid != 0 {
-                    windowIDBySelectionIndex[position] = wid
-                }
-            }
-            autoLinkPresetGroups(
-                groupedPairs: groupedPairs,
-                selections: selections,
-                windowIDBySelectionIndex: windowIDBySelectionIndex,
-                visibleFrame: currentVisibleFrame
+        guard let wm = windowManager else { return }
+        let axService = accessibilityService
+        let logMoves = enableDebugLog
+        let previousApply = layoutApplyTask
+        layoutApplyTask = Task { @MainActor [weak self] in
+            await previousApply?.value
+            guard let self else { return }
+            self.isApplyingGroupTransform = true
+            let placements = await Self.performMoveJobs(
+                jobs, windowManager: wm, accessibilityService: axService, logMoves: logMoves
             )
+            self.alignAdjacentEdgesAfterPreset(placements: placements, selections: selections, screenFrame: currentScreenFrame)
+            self.isApplyingGroupTransform = false
+
+            // Raise in the requested order so the primary ends up topmost.
+            await self.raiseWindowsPreservingOrder(targets: jobs.map(\.target))
+
+            let primaryWindowTarget: WindowTarget? = jobs.first?.target
+            if let primary = primaryWindowTarget {
+                self.lastTargetPID = primary.processIdentifier
+            }
+
+            let primarySelection = selections[0]
+            self.finalizeLayoutApplication()
+            let norm = primarySelection.normalized
+            TelemetryDeck.signal("layoutApplied", parameters: [
+                "columns": "\(norm.endColumn - norm.startColumn + 1)",
+                "rows": "\(norm.endRow - norm.startRow + 1)",
+                "multiSelection": "\(self.selectedWindowIndices.count)",
+                "selectionCount": "\(selections.count)",
+                "zOrderBased": "true",
+            ])
+            let movedWindowIDs = jobs.map { $0.target.cgWindowID }
+            self.refreshGroupCandidatesAfterPresetApply(targetWindowIDs: movedWindowIDs)
+
+            // Auto-group any preset-marked pairs using the position→window mapping.
+            if !groupedPairs.isEmpty {
+                var windowIDBySelectionIndex: [Int: CGWindowID] = [:]
+                for job in jobs where job.selectionIndex < selections.count {
+                    if job.target.cgWindowID != 0 {
+                        windowIDBySelectionIndex[job.selectionIndex] = job.target.cgWindowID
+                    }
+                }
+                self.autoLinkPresetGroups(
+                    groupedPairs: groupedPairs,
+                    selections: selections,
+                    windowIDBySelectionIndex: windowIDBySelectionIndex,
+                    visibleFrame: currentVisibleFrame
+                )
+            }
         }
     }
 
@@ -1643,7 +1705,6 @@ final class AppState: NSObject, NSMenuDelegate {
 
         hideAllMainWindows()
         clearWindowCyclingState(animateRestore: true)
-        launchMessage = NSLocalizedString("Canceled layout selection.", comment: "Layout selection canceled")
     }
 
     func apply(selection: GridSelection, to target: WindowTarget) {
@@ -1679,27 +1740,34 @@ final class AppState: NSObject, NSMenuDelegate {
             visibleFrame: currentVisibleFrame
         )
 
-        do {
-            let constrained: Bool
-            if enableDebugLog {
-                constrained = try windowManager?.moveWithLog(target: target, to: frame, on: target.screenFrame) ?? false
-            } else {
-                constrained = try windowManager?.move(target: target, to: frame) ?? false
+        guard let wm = windowManager else { return }
+        let logMoves = enableDebugLog
+        let previousApply = layoutApplyTask
+        layoutApplyTask = Task { @MainActor [weak self] in
+            await previousApply?.value
+            guard let self else { return }
+            self.isApplyingGroupTransform = true
+            let result = await Self.performMove(
+                target: target, frame: frame, screenFrame: target.screenFrame,
+                windowManager: wm, logMoves: logMoves
+            )
+            self.isApplyingGroupTransform = false
+            switch result {
+            case .success:
+                wm.raiseWindow(target: target)
+                self.finalizeLayoutApplication()
+                let norm = selection.normalized
+                TelemetryDeck.signal("layoutApplied", parameters: [
+                    "columns": "\(norm.endColumn - norm.startColumn + 1)",
+                    "rows": "\(norm.endRow - norm.startRow + 1)",
+                ])
+                if target.cgWindowID != 0 {
+                    self.refreshGroupCandidatesAfterPresetApply(targetWindowIDs: [target.cgWindowID])
+                }
+            case .failure(let error):
+                NSLog("[Tiley] apply(selection:to:) error: %@", error.localizedDescription)
+                self.finalizeLayoutApplication()
             }
-            windowManager?.raiseWindow(target: target)
-            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
-            let norm = selection.normalized
-            TelemetryDeck.signal("layoutApplied", parameters: [
-                "columns": "\(norm.endColumn - norm.startColumn + 1)",
-                "rows": "\(norm.endRow - norm.startRow + 1)",
-            ])
-            if target.cgWindowID != 0 {
-                refreshGroupCandidatesAfterPresetApply(targetWindowIDs: [target.cgWindowID])
-            }
-        } catch {
-            NSLog("[Tiley] apply(selection:to:) error: %@", error.localizedDescription)
-            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: false)
-            launchMessage = error.localizedDescription
         }
     }
 
@@ -1714,7 +1782,6 @@ final class AppState: NSObject, NSMenuDelegate {
             activeLayoutTarget = resolveWindowTarget()
         }
         guard var target = activeLayoutTarget else {
-            launchMessage = NSLocalizedString("No active target window.", comment: "No active target error")
             isShowingLayoutGrid = false
             hidePreviewOverlay()
             return
@@ -1763,21 +1830,29 @@ final class AppState: NSObject, NSMenuDelegate {
         dismissOverlayImmediately()
         orderOutAllMainWindows()
 
-        do {
-            let constrained: Bool
-            if enableDebugLog {
-                constrained = try windowManager?.moveWithLog(target: target, to: frame, on: currentScreenFrame) ?? false
-            } else {
-                constrained = try windowManager?.move(target: target, to: frame, onScreenFrame: currentScreenFrame) ?? false
+        guard let wm = windowManager else { return }
+        let logMoves = enableDebugLog
+        let previousApply = layoutApplyTask
+        layoutApplyTask = Task { @MainActor [weak self] in
+            await previousApply?.value
+            guard let self else { return }
+            self.isApplyingGroupTransform = true
+            let result = await Self.performMove(
+                target: target, frame: frame, screenFrame: currentScreenFrame,
+                windowManager: wm, logMoves: logMoves
+            )
+            self.isApplyingGroupTransform = false
+            switch result {
+            case .success:
+                wm.raiseWindow(target: target)
+                self.finalizeLayoutApplication()
+                if target.cgWindowID != 0 {
+                    self.refreshGroupCandidatesAfterPresetApply(targetWindowIDs: [target.cgWindowID])
+                }
+            case .failure(let error):
+                NSLog("[Tiley] commitLayoutSelectionOnScreen error: %@", error.localizedDescription)
+                self.finalizeLayoutApplication()
             }
-            windowManager?.raiseWindow(target: target)
-            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: constrained)
-            if target.cgWindowID != 0 {
-                refreshGroupCandidatesAfterPresetApply(targetWindowIDs: [target.cgWindowID])
-            }
-        } catch {
-            recordSelectionAndHide(selection: selection, appName: target.appName, wasConstrained: false)
-            launchMessage = error.localizedDescription
         }
     }
 
@@ -1842,24 +1917,13 @@ final class AppState: NSObject, NSMenuDelegate {
         commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: preset.groupedPairs)
     }
 
-    func recordSelectionAndHide(selection: GridSelection, appName: String, wasConstrained: Bool = false) {
-        // hidePreviewOverlay / isShowingLayoutGrid / hideAllMainWindows are
-        // already called by the caller before the resize for faster feedback.
+    /// Common tail of every layout application: drops the active target,
+    /// re-activates the target app, and restores cycling state.
+    /// (hidePreviewOverlay / isShowingLayoutGrid / hideAllMainWindows are
+    /// already handled by the caller before the resize for faster feedback.)
+    func finalizeLayoutApplication() {
         activeLayoutTarget = nil
         clearResizabilityCache()
-        if wasConstrained {
-            launchMessage = String(
-                format: NSLocalizedString("Moved %@ to %@ (size adjusted due to window constraints).", comment: "Window moved with size constraint message"),
-                appName,
-                selection.description
-            )
-        } else {
-            launchMessage = String(
-                format: NSLocalizedString("Moved %@ to %@.", comment: "Window moved message"),
-                appName,
-                selection.description
-            )
-        }
         _ = reactivateLastTargetApp(clearingState: false)
         clearWindowCyclingState(animateRestore: true)
     }

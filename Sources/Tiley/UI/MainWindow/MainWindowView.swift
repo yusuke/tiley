@@ -2756,13 +2756,31 @@ struct MainWindowView: View {
         let cgID = targets[itemID].cgWindowID
         guard cgID != 0 else { return [] }
 
+        // Fast path: this row participates in no group and no satellites are
+        // registered anywhere — the overwhelmingly common case. Bail before
+        // any bundle-ID resolution; this runs per visible row per render pass.
+        if appState.groupIndexByWindow[cgID] == nil, appState.appSlotSatellites.isEmpty {
+            return []
+        }
+
         let myPID = targets[itemID].processIdentifier
-        let myBundleID = NSRunningApplication(processIdentifier: myPID)?.bundleIdentifier
+        let myBundleID = appInfoCache.bundleID(for: myPID)
         let order = appState.sidebarWindowOrder
 
+        // Index maps so partner resolution doesn't linearly scan the target
+        // and order arrays per partner.
+        var indexByCGID: [CGWindowID: Int] = [:]
+        for (idx, t) in targets.enumerated() where t.cgWindowID != 0 {
+            if indexByCGID[t.cgWindowID] == nil { indexByCGID[t.cgWindowID] = idx }
+        }
+        var orderPosByIndex: [Int: Int] = [:]
+        for (pos, idx) in order.enumerated() where orderPosByIndex[idx] == nil {
+            orderPosByIndex[idx] = pos
+        }
+
         func resolve(partnerCGID: CGWindowID) -> (orderIndex: Int, pid: pid_t, itemID: Int)? {
-            guard let idx = targets.firstIndex(where: { $0.cgWindowID == partnerCGID }) else { return nil }
-            let orderIndex = order.firstIndex(of: idx) ?? Int.max
+            guard let idx = indexByCGID[partnerCGID] else { return nil }
+            let orderIndex = orderPosByIndex[idx] ?? Int.max
             return (orderIndex, targets[idx].processIdentifier, idx)
         }
 
@@ -2801,7 +2819,7 @@ struct MainWindowView: View {
         for (bundleID, satellites) in appState.appSlotSatellites where satellites.contains(cgID) {
             guard let anchorTarget = targets.first(where: { t in
                 t.cgWindowID != cgID && t.cgWindowID != 0
-                    && NSRunningApplication(processIdentifier: t.processIdentifier)?.bundleIdentifier == bundleID
+                    && appInfoCache.bundleID(for: t.processIdentifier) == bundleID
             }) else { continue }
             let partnerCGID = anchorTarget.cgWindowID
             let key = makeKey(cgID, partnerCGID)

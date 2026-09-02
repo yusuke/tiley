@@ -138,12 +138,16 @@ final class AppInfoCache {
         let bundle = Bundle(url: bundleURL)
         // Read CFBundleName from the root Info.plist (not the localized version).
         let name = bundle?.infoDictionary?["CFBundleName"] as? String
-        // Only store if it differs from the localized name.
+        // Only report a name if it differs from the localized one. Use
+        // updateValue so the negative result is actually stored — a plain
+        // `originalNames[pid] = nil` REMOVES the key, which made every
+        // same-name app (the common case) re-create a Bundle and re-read
+        // its Info.plist on each call.
         if let name, name.lowercased() != app.localizedName?.lowercased() {
-            originalNames[pid] = name
+            originalNames.updateValue(name, forKey: pid)
             return name
         }
-        originalNames[pid] = nil
+        originalNames.updateValue(nil, forKey: pid)
         return nil
     }
 

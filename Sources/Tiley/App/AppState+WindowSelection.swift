@@ -371,51 +371,7 @@ extension AppState {
     /// Moves a window to the destination screen, keeping its size if possible.
     /// Prefers repositioning over resizing; only resizes if the window is larger than the screen.
     func moveWindowToDestinationScreen(window: AXUIElement, destination: NSScreen) {
-        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? destination.frame.maxY
-        let (currentPos, currentSize) = accessibilityService.readPositionAndSize(of: window)
-        let destVisible = destination.visibleFrame
-
-        // Visible frame bounds in AX coordinates (top-left origin on primary screen)
-        let visibleAXTop = primaryMaxY - destVisible.maxY
-        let visibleAXLeft = destVisible.minX
-        let visibleAXRight = destVisible.maxX
-        let visibleAXBottom = primaryMaxY - destVisible.minY
-
-        var newPos = currentPos
-        var newSize = currentSize
-
-        // If the window is larger than the destination screen, resize to fit
-        if newSize.width > destVisible.width {
-            newSize.width = destVisible.width
-        }
-        if newSize.height > destVisible.height {
-            newSize.height = destVisible.height
-        }
-
-        // Clamp position so the window stays within the visible area
-        if newPos.x + newSize.width > visibleAXRight {
-            newPos.x = visibleAXRight - newSize.width
-        }
-        newPos.x = max(newPos.x, visibleAXLeft)
-
-        if newPos.y + newSize.height > visibleAXBottom {
-            newPos.y = visibleAXBottom - newSize.height
-        }
-        newPos.y = max(newPos.y, visibleAXTop)
-
-        // Apply size change first if needed, then position
-        let needsResize = abs(newSize.width - currentSize.width) > 1
-                       || abs(newSize.height - currentSize.height) > 1
-        if needsResize {
-            var size = newSize
-            if let sizeVal = AXValueCreate(.cgSize, &size) {
-                AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeVal)
-            }
-        }
-        var pos = newPos
-        if let posVal = AXValueCreate(.cgPoint, &pos) {
-            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, posVal)
-        }
+        accessibilityService.moveWindowKeepingSize(window, toVisibleFrame: destination.visibleFrame)
     }
 
     func applyTargetAtCurrentIndex() {
@@ -428,11 +384,6 @@ extension AppState {
 
         layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: newTarget)
-
-        launchMessage = String(
-            format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-            newTarget.appName
-        )
 
         // When the target moves to a different screen, update the target
         // display ID without recreating windows (which causes visible flicker).
@@ -923,10 +874,6 @@ extension AppState {
         layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: fallback)
         windowTargetListVersion += 1
-        launchMessage = String(
-            format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-            fallback.appName
-        )
     }
 
     /// If the target's app is hidden (Cmd-H), unhide it so the window becomes
@@ -958,14 +905,26 @@ extension AppState {
         return target
     }
 
+    /// Cache for `originalAppName(for:)` — the lookup creates a `Bundle` and
+    /// reads its Info.plist, and the search filter in `cycleTargetWindow`
+    /// consults it per window per keystroke. `nil` results are cached too
+    /// (the common case: original name equals the localized one).
+    @MainActor
+    private static var originalAppNameCache: [pid_t: String?] = [:]
+
     /// Returns the non-localized app name if it differs from the localized one.
     private static func originalAppName(for pid: pid_t) -> String? {
-        guard let app = NSRunningApplication(processIdentifier: pid),
-              let bundleURL = app.bundleURL,
-              let bundle = Bundle(url: bundleURL),
-              let name = bundle.infoDictionary?["CFBundleName"] as? String,
-              name.lowercased() != app.localizedName?.lowercased()
-        else { return nil }
+        if let cached = originalAppNameCache[pid] { return cached }
+        let name: String? = {
+            guard let app = NSRunningApplication(processIdentifier: pid),
+                  let bundleURL = app.bundleURL,
+                  let bundle = Bundle(url: bundleURL),
+                  let name = bundle.infoDictionary?["CFBundleName"] as? String,
+                  name.lowercased() != app.localizedName?.lowercased()
+            else { return nil }
+            return name
+        }()
+        originalAppNameCache.updateValue(name, forKey: pid)
         return name
     }
 }

@@ -123,6 +123,9 @@ extension AppState {
             for await _ in notifications {
                 guard !Task.isCancelled else { break }
                 await MainActor.run { [weak self] in
+                    // Space layout just changed — drop the short-lived
+                    // window→Space cache so the upcoming refresh re-queries.
+                    AccessibilityService.invalidateWindowSpaceCache()
                     self?.dissolveGroupsWithSplitSpaces()
                     self?.scheduleWindowListCacheRefresh()
                 }
@@ -240,20 +243,6 @@ extension AppState {
         guard accessibilityGranted else { return }
         dismissPermissionsOnly()
         activeLayoutTarget = initialLayoutTarget()
-        if let activeLayoutTarget {
-            launchMessage = String(
-                format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                activeLayoutTarget.appName
-            )
-        } else if let lastTargetPID,
-                  let appName = NSRunningApplication(processIdentifier: lastTargetPID)?.localizedName {
-            launchMessage = String(
-                format: NSLocalizedString("Select a layout region for %@.", comment: "Prompt to select region for app"),
-                appName
-            )
-        } else {
-            launchMessage = NSLocalizedString("Activate the window you want to arrange, then choose Show Layout Grid.", comment: "Prompt to activate target window")
-        }
         // Setting isShowingLayoutGrid = true here mirrors start()'s behavior
         // and is required so refreshAvailableWindows()'s async callback
         // applies the result (it bails out when isShowingLayoutGrid is false).
