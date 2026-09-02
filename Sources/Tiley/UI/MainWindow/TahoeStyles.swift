@@ -474,8 +474,11 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
     let colorScheme: ColorScheme
     let groupedPresets: [(ratio: String, presets: [WindowResizePreset])]
     let onSelect: (CGSize) -> Void
-    /// Current window position in AX coordinates (top-left origin on primary screen).
-    var windowAXPosition: CGPoint = .zero
+    /// Resolves the current window position in AX coordinates (top-left
+    /// origin on primary screen). Invoked once when the menu actually opens
+    /// — never during SwiftUI body evaluation — because the read is a
+    /// synchronous Accessibility round-trip into the target app.
+    var windowAXPositionProvider: (() -> CGPoint)? = nil
     /// Screen the window resides on.
     var windowScreen: NSScreen? = nil
     /// Callbacks for showing/hiding preview via AppState.
@@ -503,7 +506,7 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
         coord.colorScheme = colorScheme
         coord.groupedPresets = groupedPresets
         coord.onSelect = onSelect
-        coord.windowAXPosition = windowAXPosition
+        coord.windowAXPositionProvider = windowAXPositionProvider
         coord.windowScreen = windowScreen
         coord.onPreview = onPreview
         coord.onPreviewHide = onPreviewHide
@@ -583,6 +586,11 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
             // Use NSMenuDelegate to track highlighted item for live preview
             menu.delegate = coord
 
+            // Read the live window position now (one AX round-trip) so the
+            // highlight previews are anchored to where the window actually is
+            // at the moment the menu opens.
+            coord.windowAXPosition = coord.windowAXPositionProvider?() ?? .zero
+
             coord.didSelectItem = false
             coord.selectedSize = nil
             menu.popUp(positioning: nil, at: NSPoint(x: 0, y: bounds.height + 2), in: self)
@@ -640,6 +648,8 @@ struct TahoeResizeMenuButton: NSViewRepresentable {
         var colorScheme: ColorScheme
         var groupedPresets: [(ratio: String, presets: [WindowResizePreset])]
         var onSelect: (CGSize) -> Void
+        var windowAXPositionProvider: (() -> CGPoint)? = nil
+        /// Snapshot taken by `showMenuProgrammatically()` when the menu opens.
         var windowAXPosition: CGPoint = .zero
         var windowScreen: NSScreen? = nil
         var onPreview: ((CGRect, NSScreen) -> Void)? = nil

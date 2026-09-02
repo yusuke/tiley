@@ -2212,18 +2212,18 @@ struct MainWindowView: View {
         let groupedPresets = screen.map { WindowResizePreset.presetsAvailable(on: $0) } ?? []
         let noPresets = groupedPresets.isEmpty
 
-        // Read current window AX position and info for hover preview
+        // Nothing below may touch Accessibility or Launch Services: this
+        // builder runs on every render pass (hover / keystroke / preset
+        // hover, once per display). The window's AX position is read by the
+        // button itself when the menu opens, and the icon is resolved from
+        // the per-window cache only when a preview is actually shown.
         let selectedTarget = (!disabled && idx < targets.count) ? targets[idx] : nil
-        let windowAXPos: CGPoint = {
-            guard let window = selectedTarget?.windowElement else { return .zero }
-            let (pos, _) = appState.accessibilityService.readPositionAndSize(of: window)
-            return pos
-        }()
-        let targetAppIcon: NSImage? = selectedTarget.flatMap {
-            NSRunningApplication(processIdentifier: $0.processIdentifier)?.icon
-        }
+        let selectedWindow = selectedTarget?.windowElement
+        let selectedPID = selectedTarget?.processIdentifier
         let targetWindowTitle = selectedTarget?.windowTitle
         let targetAppName = selectedTarget?.appName
+        let accessibilityService = appState.accessibilityService
+        let appInfoCache = self.appInfoCache
 
         TahoeResizeMenuButton(
             symbolName: "arrow.up.left.and.arrow.down.right",
@@ -2233,10 +2233,14 @@ struct MainWindowView: View {
             onSelect: { size in
                 appState.resizeWindow(at: idx, to: size)
             },
-            windowAXPosition: windowAXPos,
+            windowAXPositionProvider: {
+                guard let selectedWindow else { return .zero }
+                return accessibilityService.readPositionAndSize(of: selectedWindow).0
+            },
             windowScreen: screen,
             onPreview: { frame, screen in
-                appState.showResizePreview(frame: frame, on: screen, windowTitle: targetWindowTitle, appName: targetAppName, appIcon: targetAppIcon)
+                let appIcon = selectedPID.flatMap { appInfoCache.icon(for: $0) }
+                appState.showResizePreview(frame: frame, on: screen, windowTitle: targetWindowTitle, appName: targetAppName, appIcon: appIcon)
             },
             onPreviewHide: {
                 appState.hideResizePreview()

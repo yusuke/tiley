@@ -23,6 +23,7 @@
 - La ventana de ajustes volvía a resolver las huellas de identidad de las pantallas conectadas y reconstruía el conjunto de presets por defecto en cada pasada de renderizado — cada tick al arrastrar los deslizadores de la cuadrícula. Ambos están ahora memoizados y solo se recalculan cuando la configuración de pantallas o el tamaño de la cuadrícula cambia realmente.
 - Editar un preset (renombrar, asignar apps, editar rectángulos) daba de baja y volvía a registrar todos los atajos globales de presets en cada cambio, y reordenarlos también. Ahora los atajos solo se vuelven a registrar cuando una edición toca realmente los atajos de un preset; reordenar y crear presets nuevos lo omiten por completo.
 - Con el registro de depuración activado, cada línea abría, añadía y cerraba el archivo de registro — volviendo las rutas de alta frecuencia dependientes de E/S justo mientras se medían. El identificador del archivo ahora se abre una vez y se reutiliza.
+- El botón de redimensionar de la barra lateral leía la posición de la ventana mediante una llamada síncrona de Accesibilidad a la app de destino —y consultaba su icono— en cada pase de renderizado de SwiftUI (cada hover, pulsación o hover sobre un preset, una vez por pantalla). Una app de destino ocupada podía bloquear la superposición en cada pase. Ahora la posición se lee una sola vez al abrir realmente el menú de redimensionar, el icono proviene de la caché por ventana y la lista de presets de tamaño que caben en la pantalla se guarda en caché por tamaño de pantalla.
 
 ### Eliminado
 

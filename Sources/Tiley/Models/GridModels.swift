@@ -531,13 +531,31 @@ struct WindowResizePreset {
     ]
 
     /// Returns presets that fit within the given screen's visible frame, grouped by aspect ratio.
+    ///
+    /// The result depends only on the visible frame's size, and the caller
+    /// (the sidebar action bar) evaluates it on every SwiftUI render pass,
+    /// so it is memoized per size. Screen configuration changes produce a
+    /// different size and therefore a fresh entry; the table stays tiny.
+    @MainActor
     static func presetsAvailable(on screen: NSScreen) -> [(ratio: String, presets: [WindowResizePreset])] {
         let visible = screen.visibleFrame
-        return all.compactMap { group in
+        let key = AvailablePresetsKey(width: visible.width, height: visible.height)
+        if let cached = availablePresetsCache[key] { return cached }
+        let result = all.compactMap { group -> (ratio: String, presets: [WindowResizePreset])? in
             let filtered = group.presets.filter { CGFloat($0.width) <= visible.width && CGFloat($0.height) <= visible.height }
             return filtered.isEmpty ? nil : (ratio: group.ratio, presets: filtered)
         }
+        availablePresetsCache[key] = result
+        return result
     }
+
+    private struct AvailablePresetsKey: Hashable {
+        let width: CGFloat
+        let height: CGFloat
+    }
+
+    @MainActor
+    private static var availablePresetsCache: [AvailablePresetsKey: [(ratio: String, presets: [WindowResizePreset])]] = [:]
 }
 
 // MARK: - Subsequence Search

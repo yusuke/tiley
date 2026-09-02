@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - The settings window re-resolved the connected displays' identity fingerprints and rebuilt the default preset set on every render pass — every tick while dragging the grid sliders. Both are now memoized and recomputed only when the screen configuration or the grid size actually changes.
 - Editing a preset (renaming, assigning apps, editing rectangles) tore down and re-registered every global preset hotkey on each change, and reordering presets did too. Hotkeys are now re-registered only when an edit actually touches a preset's shortcuts; reorders and newly created presets skip it entirely.
 - With debug logging enabled, every log line opened, appended to, and closed the log file — making the high-frequency paths I/O-bound precisely while they were being measured. The log file handle is now opened once and reused.
+- The sidebar's resize button read the selected window's position through a synchronous Accessibility call to the target app — and looked up its app icon — on every SwiftUI render pass (every hover, keystroke, or preset hover, once per display), so a busy target app could stall the overlay on each pass. The window position is now read once when the resize menu actually opens, the icon comes from the per-window cache, and the list of resize presets that fit the screen is cached per screen size.
 
 ### Removed
 

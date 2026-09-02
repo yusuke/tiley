@@ -23,6 +23,7 @@
 - Das Einstellungsfenster löste bei jedem Renderdurchlauf — jedem Tick beim Ziehen der Raster-Schieberegler — die Identitäts-Fingerabdrücke der angeschlossenen Displays neu auf und baute den Standard-Preset-Satz neu. Beides ist jetzt memoisiert und wird nur neu berechnet, wenn sich die Bildschirmkonfiguration oder die Rastergröße tatsächlich ändert.
 - Das Bearbeiten eines Presets (Umbenennen, App-Zuweisung, Rechteck-Bearbeitung) hob bei jeder Änderung sämtliche globalen Preset-Hotkeys auf und registrierte sie neu — Umsortieren ebenso. Hotkeys werden jetzt nur neu registriert, wenn eine Bearbeitung tatsächlich die Kurzbefehle eines Presets berührt; Umsortieren und neu erstellte Presets überspringen dies vollständig.
 - Bei aktiviertem Debug-Log öffnete, ergänzte und schloss jede Logzeile die Logdatei — was genau die vermessenen Hochfrequenz-Pfade I/O-gebunden machte. Das Datei-Handle wird jetzt einmal geöffnet und wiederverwendet.
+- Die Größenänderungs-Schaltfläche der Seitenleiste las bei jedem SwiftUI-Renderdurchlauf (bei jedem Hover, Tastendruck oder Preset-Hover, einmal pro Display) die Fensterposition über einen synchronen Bedienungshilfen-Aufruf an die Ziel-App aus und ermittelte jedes Mal das App-Symbol. Eine beschäftigte Ziel-App konnte das Overlay bei jedem Durchlauf ausbremsen. Die Fensterposition wird jetzt nur noch einmal beim tatsächlichen Öffnen des Größenmenüs gelesen, das Symbol kommt aus dem Fenster-Cache, und die Liste der auf den Bildschirm passenden Größen-Presets wird pro Bildschirmgröße zwischengespeichert.
 
 ### Entfernt
 

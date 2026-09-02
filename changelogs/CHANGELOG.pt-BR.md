@@ -23,6 +23,7 @@
 - A janela de ajustes resolvia novamente as impressões digitais de identidade das telas conectadas e reconstruía o conjunto de presets padrão a cada passagem de renderização — a cada tick ao arrastar os controles deslizantes da grade. Ambos agora são memoizados e recalculados apenas quando a configuração de telas ou o tamanho da grade realmente muda.
 - Editar um preset (renomear, atribuir apps, editar retângulos) cancelava e registrava novamente todos os atalhos globais de presets a cada mudança, e reordenar também. Agora os atalhos só são registrados novamente quando uma edição realmente toca os atalhos de um preset; reordenações e presets recém-criados pulam isso completamente.
 - Com o log de depuração ativado, cada linha abria, anexava e fechava o arquivo de log — tornando os caminhos de alta frequência limitados por E/S exatamente enquanto eram medidos. O identificador do arquivo agora é aberto uma vez e reutilizado.
+- O botão de redimensionar da barra lateral lia a posição da janela por meio de uma chamada síncrona de Acessibilidade ao app de destino — e buscava seu ícone — a cada passagem de renderização do SwiftUI (cada hover, tecla ou hover em um preset, uma vez por tela). Um app de destino ocupado podia travar a sobreposição a cada passagem. Agora a posição é lida uma única vez quando o menu de redimensionar é realmente aberto, o ícone vem do cache por janela e a lista de presets de tamanho que cabem na tela é armazenada em cache por tamanho de tela.
 
 ### Removido
 
