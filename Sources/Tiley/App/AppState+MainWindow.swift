@@ -212,7 +212,12 @@ extension AppState {
 
     func refreshAccessibilityState() {
         let wasGranted = accessibilityGranted
-        accessibilityGranted = accessibilityService.checkAccess(prompt: false)
+        let granted = accessibilityService.checkAccess(prompt: false)
+        // `@Observable` notifies on every set; this runs on every app
+        // activation, so only write on an actual transition.
+        if granted != wasGranted {
+            accessibilityGranted = granted
+        }
         // Install group observation lazily once accessibility is granted.
         // Doing this earlier creates a CGEventTap before the user has
         // approved Accessibility, which causes macOS to show a "key event

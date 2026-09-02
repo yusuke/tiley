@@ -777,28 +777,6 @@ final class AppState: NSObject, NSMenuDelegate {
         updateStatusMenu()
     }
 
-    /// Reorders `cachedWindowTargets` so that windows owned by `pid` appear
-    /// first, preserving the relative order within the frontmost group and the
-    /// rest of the list.  Cheap O(n) pass used to paper over the ~150 ms
-    /// window where `scheduleWindowListCacheRefresh` hasn't yet captured fresh
-    /// data after a frontmost app switch, so the sidebar doesn't visibly
-    /// reshuffle shortly after the grid appears.
-    func reorderCacheForFrontmost(pid: pid_t) {
-        guard hasWindowListCache else { return }
-        guard cachedWindowTargets.contains(where: { $0.processIdentifier == pid }) else { return }
-        guard cachedWindowTargets.first?.processIdentifier != pid else { return }
-        var frontWindows: [WindowTarget] = []
-        var otherWindows: [WindowTarget] = []
-        for target in cachedWindowTargets {
-            if target.processIdentifier == pid {
-                frontWindows.append(target)
-            } else {
-                otherWindows.append(target)
-            }
-        }
-        cachedWindowTargets = frontWindows + otherWindows
-    }
-
     /// Realigns `cachedWindowTargets` against the authoritative live CG state
     /// returned by `AccessibilityService.currentZOrderedWindowSnapshots()` (a
     /// fast CG-only query, typically 1–5 ms): reorders every cached window to
@@ -808,9 +786,9 @@ final class AppState: NSObject, NSMenuDelegate {
     /// rendered frame, without waiting for the asynchronous
     /// `refreshAvailableWindows` capture to land.
     ///
-    /// Unlike `reorderCacheForFrontmost` (which only promotes a given PID's
-    /// windows), the per-window ordering also correctly tracks intra-app
-    /// window raises (which don't fire `didActivateApplicationNotification`).
+    /// Because the ordering is per window (not merely "promote the frontmost
+    /// app's windows"), it also correctly tracks intra-app window raises
+    /// (which don't fire `didActivateApplicationNotification`).
     ///
     /// Windows not present in the live on-screen list (minimized, other
     /// spaces, etc.) retain their previous relative order at the tail,

@@ -107,6 +107,24 @@ enum WindowAccessError: LocalizedError {
 }
 
 final class AccessibilityService {
+    /// Process-wide Accessibility messaging timeout, in seconds.
+    ///
+    /// The system default is 6 s per attribute read. Tiley talks to arbitrary
+    /// third-party apps — many of them from the main thread (focus queries,
+    /// frame reads, raises) — so a single unresponsive app (beachball,
+    /// SIGSTOP, debugger) used to stall Tiley for seconds. One second is
+    /// generous for a healthy app; a slow app degrades to a missed entry
+    /// that the next refresh picks up. Per-element overrides (e.g. the
+    /// group-polling followers) still apply on top; passing 0 to
+    /// `AXUIElementSetMessagingTimeout` restores *this* default, not 6 s.
+    static let globalMessagingTimeout: Float = 1.0
+
+    init() {
+        // Setting the timeout on the system-wide element makes it the
+        // default for every AXUIElement this process creates.
+        AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), Self.globalMessagingTimeout)
+    }
+
     func checkAccess(prompt: Bool) -> Bool {
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: prompt] as CFDictionary
         return AXIsProcessTrustedWithOptions(options)

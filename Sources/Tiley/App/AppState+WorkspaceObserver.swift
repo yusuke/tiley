@@ -15,11 +15,11 @@ extension AppState {
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     self.lastTargetPID = app.processIdentifier
-                    // Immediately realign the existing cache against the live
-                    // CG z-order so that, until the debounced background
-                    // refresh completes, the sidebar reflects the current
-                    // ordering across all apps (not just the newly-frontmost).
-                    self.realignCacheWithLiveZOrder()
+                    // No cache realign here: nothing renders the cache while
+                    // the overlay is closed, and `toggleOverlay` realigns it
+                    // against the live z-order the moment it opens. Doing it
+                    // per activation was a WindowServer query + full re-sort
+                    // whose result was always discarded.
                     self.refreshAccessibilityState()
                     self.updateStatusMenu()
                     self.scheduleWindowListCacheRefresh()
@@ -44,6 +44,11 @@ extension AppState {
                     let targetPID = app.processIdentifier
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
                         guard let self else { return }
+                        // No groups → nothing to link. Check this *before*
+                        // `resolveFocusedWindowID`, which is a synchronous
+                        // Accessibility round-trip into the app that was just
+                        // activated (and may be busy or hung).
+                        guard !self.groupIndexByWindow.isEmpty else { return }
                         guard let focusedCGID = self.resolveFocusedWindowID(for: targetPID),
                               self.groupIndexByWindow[focusedCGID] != nil else { return }
                         // Re-confirm the app is still frontmost — user may
