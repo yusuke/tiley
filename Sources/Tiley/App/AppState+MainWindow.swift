@@ -267,7 +267,7 @@ extension AppState {
         // state intact until it runs.
         guard pendingWindowListRefreshActions.isEmpty else { return }
         removeModifierReleaseMonitor()
-        hidePreviewOverlay()
+        releasePreviewOverlay()
         isShowingLayoutGrid = false
         activeLayoutTarget = nil
         clearResizabilityCache()

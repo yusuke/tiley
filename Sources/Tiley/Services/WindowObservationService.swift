@@ -12,8 +12,12 @@ import ApplicationServices
 @MainActor
 final class WindowObservationService {
     enum Event {
-        case moved(CGWindowID, CGRect)
-        case resized(CGWindowID, CGRect)
+        /// The window moved / resized. No frame is carried: reading it back
+        /// costs two synchronous Accessibility round-trips into the app that
+        /// is busy dragging, for every event, and consumers that need the
+        /// live frame read it themselves (only on the rare paths that do).
+        case moved(CGWindowID)
+        case resized(CGWindowID)
         case destroyed(CGWindowID)
         case raised(CGWindowID)
         /// The focused/main window of the given app changed. Fires regardless
@@ -40,6 +44,10 @@ final class WindowObservationService {
     /// Reverse lookup: AXUIElement → CGWindowID (used inside the C callback to
     /// identify which window fired the event).
     private var windowIDByAXElement: [AXUIElementBox: CGWindowID] = [:]
+    /// Last `.raised` dispatch, used to collapse the focused-window and
+    /// main-window notifications that macOS fires together for one click.
+    private var lastRaiseDispatch: (pid: pid_t, time: CFAbsoluteTime)?
+    private static let raiseCoalesceWindow: CFAbsoluteTime = 0.05
 
     /// Wrapper that lets an AXUIElement be used as a Hashable dictionary key.
     private struct AXUIElementBox: Hashable {
@@ -61,6 +69,9 @@ final class WindowObservationService {
 
         if entriesByWindowID[cgID] != nil { return }  // already observing
 
+        // refcon points to self so the C callback can dispatch back.
+        let refcon = Unmanaged.passUnretained(self).toOpaque()
+
         // Create or reuse observer for this PID.
         let observer: AXObserver
         if let existing = observersByPID[pid] {
@@ -75,15 +86,34 @@ final class WindowObservationService {
             observer = created
             observersByPID[pid] = observer
             CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
+
+            // Focus/Main-window-change notifications are attached to the app
+            // element, so register them once per observer (i.e. per app) —
+            // registering per window only produced
+            // `kAXErrorNotificationAlreadyRegistered` round-trips for every
+            // additional window of the same app.
+            // Both are needed to cover different scenarios:
+            //   - kAXFocusedWindowChangedNotification: window focus changes (app activation)
+            //   - kAXMainWindowChangedNotification: main window changes (intra-app clicks when
+            //     app is already active — e.g., clicking another window of the same app)
+            AXObserverAddNotification(
+                observer,
+                target.appElement,
+                kAXFocusedWindowChangedNotification as CFString,
+                refcon
+            )
+            AXObserverAddNotification(
+                observer,
+                target.appElement,
+                kAXMainWindowChangedNotification as CFString,
+                refcon
+            )
         }
 
         let entry = ObservedEntry(cgWindowID: cgID, pid: pid, appElement: target.appElement, windowElement: window)
         entriesByWindowID[cgID] = entry
         windowIDByAXElement[AXUIElementBox(element: window)] = cgID
         observerRefCount[pid, default: 0] += 1
-
-        // refcon points to self so the C callback can dispatch back.
-        let refcon = Unmanaged.passUnretained(self).toOpaque()
 
         // Window-level notifications are attached to the window element.
         let windowNotifications: [CFString] = [
@@ -94,24 +124,6 @@ final class WindowObservationService {
         for note in windowNotifications {
             AXObserverAddNotification(observer, window, note, refcon)
         }
-
-        // Focus/Main-window-change notifications are attached to the app element.
-        // Both are needed to cover different scenarios:
-        //   - kAXFocusedWindowChangedNotification: window focus changes (app activation)
-        //   - kAXMainWindowChangedNotification: main window changes (intra-app clicks when
-        //     app is already active — e.g., clicking another window of the same app)
-        AXObserverAddNotification(
-            observer,
-            target.appElement,
-            kAXFocusedWindowChangedNotification as CFString,
-            refcon
-        )
-        AXObserverAddNotification(
-            observer,
-            target.appElement,
-            kAXMainWindowChangedNotification as CFString,
-            refcon
-        )
     }
 
     func stopObserving(cgWindowID: CGWindowID) {
@@ -148,25 +160,39 @@ final class WindowObservationService {
 
         if note == kAXFocusedWindowChangedNotification as String
             || note == kAXMainWindowChangedNotification as String {
-            // `element` here is the app element. Fetch the current main/focused window.
-            // Prefer Main for intra-app clicks (fires even when app was already active),
-            // fallback to Focused.
-            let attr: CFString = (note == kAXMainWindowChangedNotification as String)
-                ? (kAXMainWindowAttribute as CFString)
-                : (kAXFocusedWindowAttribute as CFString)
-            var target: CFTypeRef?
-            let err = AXUIElementCopyAttributeValue(element, attr, &target)
-            if err == .success, let targetCF = target, CFGetTypeID(targetCF) == AXUIElementGetTypeID() {
-                let windowElement = targetCF as! AXUIElement
-                if let cgID = windowIDByAXElement[AXUIElementBox(element: windowElement)] {
-                    onEvent?(.raised(cgID))
+            // `element` here is the app element.
+            var pid: pid_t = 0
+            let havePID = AXUIElementGetPid(element, &pid) == .success
+
+            // One click fires both the focused-window and the main-window
+            // notification. If a `.raised` was just dispatched for this app,
+            // skip the second attribute read (a synchronous round-trip into
+            // the app that is mid-activation) and the duplicate dispatch,
+            // which otherwise ran the whole raise linkage twice.
+            let now = CFAbsoluteTimeGetCurrent()
+            let isDuplicateRaise = havePID
+                && lastRaiseDispatch.map { $0.pid == pid && now - $0.time < Self.raiseCoalesceWindow } == true
+            if !isDuplicateRaise {
+                // Fetch the current main/focused window. Prefer Main for
+                // intra-app clicks (fires even when app was already active),
+                // fallback to Focused.
+                let attr: CFString = (note == kAXMainWindowChangedNotification as String)
+                    ? (kAXMainWindowAttribute as CFString)
+                    : (kAXFocusedWindowAttribute as CFString)
+                var target: CFTypeRef?
+                let err = AXUIElementCopyAttributeValue(element, attr, &target)
+                if err == .success, let targetCF = target, CFGetTypeID(targetCF) == AXUIElementGetTypeID() {
+                    let windowElement = targetCF as! AXUIElement
+                    if let cgID = windowIDByAXElement[AXUIElementBox(element: windowElement)] {
+                        if havePID { lastRaiseDispatch = (pid, now) }
+                        onEvent?(.raised(cgID))
+                    }
                 }
             }
             // Always fire a generic focus-changed event so listeners can react
             // even when the new focused element isn't a window we observe
             // (notably: sheets and modal dialogs the app just presented).
-            var pid: pid_t = 0
-            if AXUIElementGetPid(element, &pid) == .success {
+            if havePID {
                 onEvent?(.focusChanged(pid))
             }
             return
@@ -176,12 +202,11 @@ final class WindowObservationService {
 
         switch note {
         case kAXWindowMovedNotification as String, kAXWindowResizedNotification as String:
-            guard let entry = entriesByWindowID[cgID] else { return }
-            let frame = currentFrame(of: entry.windowElement)
+            guard entriesByWindowID[cgID] != nil else { return }
             if note == kAXWindowMovedNotification as String {
-                onEvent?(.moved(cgID, frame))
+                onEvent?(.moved(cgID))
             } else {
-                onEvent?(.resized(cgID, frame))
+                onEvent?(.resized(cgID))
             }
         case kAXUIElementDestroyedNotification as String:
             onEvent?(.destroyed(cgID))
@@ -189,30 +214,6 @@ final class WindowObservationService {
         default:
             break
         }
-    }
-
-    /// Returns the current frame of the window in AppKit coordinates (bottom-left origin).
-    private func currentFrame(of window: AXUIElement) -> CGRect {
-        var posRef: CFTypeRef?
-        var sizeRef: CFTypeRef?
-        AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &posRef)
-        AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeRef)
-        var axPos = CGPoint.zero
-        var axSize = CGSize.zero
-        if let posVal = posRef, CFGetTypeID(posVal) == AXValueGetTypeID() {
-            AXValueGetValue(posVal as! AXValue, .cgPoint, &axPos)
-        }
-        if let sizeVal = sizeRef, CFGetTypeID(sizeVal) == AXValueGetTypeID() {
-            AXValueGetValue(sizeVal as! AXValue, .cgSize, &axSize)
-        }
-        // Convert AX (top-left origin, primary screen) to AppKit (bottom-left).
-        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
-        return CGRect(
-            x: axPos.x,
-            y: primaryMaxY - axPos.y - axSize.height,
-            width: axSize.width,
-            height: axSize.height
-        )
     }
 
     // MARK: - C callback trampoline

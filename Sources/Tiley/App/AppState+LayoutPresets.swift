@@ -85,7 +85,11 @@ extension AppState {
     // MARK: - Query / Select / Apply
 
     func selectLayoutPreset(_ id: UUID) {
-        selectedLayoutPresetID = id
+        // Skip no-op writes: `@Observable` invalidates observers on every
+        // set regardless of value, and every display's view reads this.
+        if selectedLayoutPresetID != id {
+            selectedLayoutPresetID = id
+        }
     }
 
     func applyLayoutPreset(id: UUID) {

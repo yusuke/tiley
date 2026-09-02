@@ -572,8 +572,14 @@ struct LayoutGridWorkspaceView: View {
                         onHoverChange?(nil)
                         guard isInsideGrid(value.location, in: geometry.size) else {
                             isOutsideGrid = true
-                            dragSelection = nil
-                            onSelectionChange(nil)
+                            // Report the transition once. Without this guard
+                            // every drag event outside the grid re-wrote the
+                            // (already nil) selection, which re-rendered every
+                            // display's window at mouse-event rate.
+                            if dragSelection != nil {
+                                dragSelection = nil
+                                onSelectionChange(nil)
+                            }
                             return
                         }
                         isOutsideGrid = false

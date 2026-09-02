@@ -655,7 +655,7 @@ extension AppState {
         // the frontmost satellite's app and raise it, then seat it below the
         // clicked anchor so the user's click target stays on top.
         if let focusedTarget = windowTarget(byID: focusedID),
-           let focusedBID = NSRunningApplication(processIdentifier: focusedTarget.processIdentifier)?.bundleIdentifier,
+           let focusedBID = cachedBundleID(forPID: focusedTarget.processIdentifier),
            let satellites = appSlotSatellites[focusedBID],
            !satellites.isEmpty {
             // Query CGWindowList directly for a fresh z-order snapshot.
@@ -763,9 +763,7 @@ extension AppState {
     func ensureAllSatellitesObserved() {
         guard let service = windowObservationService else { return }
         for (bundleID, satellites) in appSlotSatellites {
-            if let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
-                .first(where: { $0.activationPolicy == .regular }),
-               let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }) {
+            if let anchorTarget = anchorWindowTarget(forBundleID: bundleID) {
                 service.observe(target: anchorTarget)
             }
             for wid in satellites {
@@ -792,9 +790,7 @@ extension AppState {
     /// across repeated drag cycles and the restored pair would end up with
     /// a visible gap/overlap.
     func saveCurrentPairFrames(bundleID: String, satelliteWID: CGWindowID) {
-        guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
-            .first(where: { $0.activationPolicy == .regular }),
-              let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }),
+        guard let anchorTarget = anchorWindowTarget(forBundleID: bundleID),
               let satTarget = windowTarget(byID: satelliteWID) else {
             return
         }
@@ -894,9 +890,7 @@ extension AppState {
             debugLog("PairFrames: no saved frames for (\(bundleID), \(satelliteWID))")
             return
         }
-        guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
-            .first(where: { $0.activationPolicy == .regular }),
-              let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }) else {
+        guard let anchorTarget = anchorWindowTarget(forBundleID: bundleID) else {
             return
         }
 
@@ -966,9 +960,7 @@ extension AppState {
         guard activeSatellitePerBundle[bundleID] == satelliteWID else { return }
 
         guard let frames = savedSatellitePairFrames[bundleID]?[satelliteWID] else { return }
-        guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
-            .first(where: { $0.activationPolicy == .regular }),
-              let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }),
+        guard let anchorTarget = anchorWindowTarget(forBundleID: bundleID),
               let satTarget = windowTarget(byID: satelliteWID) else {
             return
         }
@@ -1035,7 +1027,7 @@ extension AppState {
         var movedBundleID: String?
         if !movedIsSatellite {
             guard let movedPID = windowTarget(byID: movedWID)?.processIdentifier,
-                  let bid = NSRunningApplication(processIdentifier: movedPID)?.bundleIdentifier,
+                  let bid = cachedBundleID(forPID: movedPID),
                   activeSatellitePerBundle[bid] != nil else { return }
             movedBundleID = bid
         }
@@ -1043,9 +1035,7 @@ extension AppState {
         for (bundleID, activeSat) in activeSatellitePerBundle {
             // Only pairs the moved window can participate in.
             guard movedWID == activeSat || bundleID == movedBundleID else { continue }
-            guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
-                .first(where: { $0.activationPolicy == .regular }),
-                  let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }) else {
+            guard let anchorTarget = anchorWindowTarget(forBundleID: bundleID) else {
                 continue
             }
             let anchorWID = anchorTarget.cgWindowID
@@ -1105,8 +1095,8 @@ extension AppState {
 
         let pidA = windowTarget(byID: windowA)?.processIdentifier
         let pidB = windowTarget(byID: windowB)?.processIdentifier
-        let bidA = pidA.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
-        let bidB = pidB.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
+        let bidA = pidA.flatMap { cachedBundleID(forPID: $0) }
+        let bidB = pidB.flatMap { cachedBundleID(forPID: $0) }
 
         // Treat each direction: if windowA is the anchor of bundle bidA and
         // windowB is a satellite of bidA, remove it.
@@ -1265,8 +1255,8 @@ extension AppState {
         // or vice-versa.
         let pid1 = windowTarget(byID: wid1)?.processIdentifier
         let pid2 = windowTarget(byID: wid2)?.processIdentifier
-        let bid1 = pid1.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
-        let bid2 = pid2.flatMap { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
+        let bid1 = pid1.flatMap { cachedBundleID(forPID: $0) }
+        let bid2 = pid2.flatMap { cachedBundleID(forPID: $0) }
         if let bid = bid1, appSlotSatellites[bid]?.contains(wid2) == true { return true }
         if let bid = bid2, appSlotSatellites[bid]?.contains(wid1) == true { return true }
         return false
@@ -1281,7 +1271,7 @@ extension AppState {
         if windowAnchorSatellites[wid] != nil { return true }
         for (_, sats) in windowAnchorSatellites where sats.contains(wid) { return true }
         if let pid = windowTarget(byID: wid)?.processIdentifier,
-           let bid = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier {
+           let bid = cachedBundleID(forPID: pid) {
             if appSlotSatellites[bid] != nil { return true }
             for (_, sats) in appSlotSatellites where sats.contains(wid) { return true }
         }
@@ -1327,7 +1317,7 @@ extension AppState {
             // anchor is whichever window of the assigned app is currently
             // available.
             if let pid = windowTarget(byID: wid)?.processIdentifier,
-               let bid = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier {
+               let bid = cachedBundleID(forPID: pid) {
                 if let sats = appSlotSatellites[bid] {
                     for s in sats where !visited.contains(s) {
                         visited.insert(s)
@@ -1336,9 +1326,7 @@ extension AppState {
                 }
             }
             for (anchorBID, sats) in appSlotSatellites where sats.contains(wid) {
-                if let app = NSRunningApplication.runningApplications(withBundleIdentifier: anchorBID)
-                    .first(where: { $0.activationPolicy == .regular }),
-                   let anchorTarget = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }),
+                if let anchorTarget = anchorWindowTarget(forBundleID: anchorBID),
                    !visited.contains(anchorTarget.cgWindowID) {
                     visited.insert(anchorTarget.cgWindowID)
                     queue.append(anchorTarget.cgWindowID)

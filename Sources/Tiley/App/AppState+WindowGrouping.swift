@@ -1666,7 +1666,7 @@ extension AppState {
     /// (fading the badge) if it no longer applies.
     func handleGroupObservationEvent(_ event: WindowObservationService.Event) {
         switch event {
-        case .moved(let id, _), .resized(let id, _):
+        case .moved(let id), .resized(let id):
             if isApplyingGroupTransform { return }
             // While the Tiley overlay is showing, suppress all group-linkage
             // side-effects of move/resize events. Tiley displaces the

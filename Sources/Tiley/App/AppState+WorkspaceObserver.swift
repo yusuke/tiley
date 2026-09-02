@@ -153,9 +153,14 @@ extension AppState {
                     let notifications = NSWorkspace.shared.notificationCenter.notifications(
                         named: NSWorkspace.didTerminateApplicationNotification
                     )
-                    for await _ in notifications {
+                    for await notification in notifications {
                         guard !Task.isCancelled else { break }
+                        let terminatedPID = (notification.userInfo?[NSWorkspace.applicationUserInfoKey]
+                            as? NSRunningApplication)?.processIdentifier
                         await MainActor.run { [weak self] in
+                            if let terminatedPID {
+                                self?.invalidateAppInfoCache(forPID: terminatedPID)
+                            }
                             self?.scheduleWindowListCacheRefresh()
                         }
                     }
@@ -177,6 +182,9 @@ extension AppState {
         // DesktopPictureInfo cache in MainWindowView (keyed on this version)
         // is rebuilt for the new screen arrangement.
         desktopImageVersion += 1
+        // The preview window is sized to a specific screen; drop it so the
+        // next preview is built against the new arrangement.
+        releasePreviewOverlay()
         guard isShowingLayoutGrid, !isEditingSettings else { return }
         openAllScreenWindows()
     }

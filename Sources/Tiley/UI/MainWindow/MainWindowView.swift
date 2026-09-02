@@ -1192,8 +1192,14 @@ struct MainWindowView: View {
                             if editingPresetID == nil {
                                 dismissPresetNameEditingIfNeeded()
                                 dismissShortcutEditingIfNeeded()
-                                hoveredPresetID = nil
-                                appState.selectedLayoutPresetID = nil
+                                if hoveredPresetID != nil { hoveredPresetID = nil }
+                                // `@Observable` notifies on every set, even
+                                // when the value is unchanged — and every
+                                // display's body reads this via
+                                // `highlightPreset`. Only write on a real change.
+                                if appState.selectedLayoutPresetID != nil {
+                                    appState.selectedLayoutPresetID = nil
+                                }
                             }
                             activeLayoutSelection = selection
                             let nextColorIndex = editingPresetID != nil ? editingPresetNextColorIndex : 0
@@ -1412,7 +1418,7 @@ struct MainWindowView: View {
             return NSLocalizedString("Close", comment: "Status bar hint for slash key to close window")
         }
         let pid = targets[idx].processIdentifier
-        let isFinder = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder"
+        let isFinder = appInfoCache.bundleID(for: pid) == "com.apple.finder"
         if isFinder {
             return NSLocalizedString("Close", comment: "Status bar hint for slash key to close window")
         }
@@ -1981,7 +1987,7 @@ struct MainWindowView: View {
         let hasSelection = idx >= 0 && idx < targets.count
         let selectedTarget = hasSelection ? targets[idx] : nil
         let pid = selectedTarget?.processIdentifier ?? 0
-        let isFinder = hasSelection && NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder"
+        let isFinder = hasSelection && appInfoCache.bundleID(for: pid) == "com.apple.finder"
         let sameAppCount = hasSelection ? targets.filter { $0.processIdentifier == pid }.count : 0
         let otherScreens = hasSelection ? otherScreensForWindow(at: idx) : []
 
@@ -2062,7 +2068,7 @@ struct MainWindowView: View {
     @ViewBuilder
     private func appHeaderActionButtons(pid: pid_t, appName: String) -> some View {
         let otherScreens = otherScreensForApp(pid: pid)
-        let isFinder = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder"
+        let isFinder = appInfoCache.bundleID(for: pid) == "com.apple.finder"
 
         // Move all windows to other display
         let appScreen: NSScreen? = appState.windowTargetList
@@ -2475,7 +2481,7 @@ struct MainWindowView: View {
 
             Divider()
 
-            if NSRunningApplication(processIdentifier: pid)?.bundleIdentifier == "com.apple.finder" {
+            if appInfoCache.bundleID(for: pid) == "com.apple.finder" {
                 Button {
                     appState.closeAllWindows(pid: pid)
                 } label: {

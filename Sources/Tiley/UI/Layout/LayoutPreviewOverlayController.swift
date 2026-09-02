@@ -203,7 +203,11 @@ final class LayoutPreviewOverlayController: NSWindowController {
             parentWindow.addChildWindow(window, ordered: .below)
             attachedParentWindow = parentWindow
         }
-        window.orderFront(nil)
+        // `orderFront` is a WindowServer round-trip; this runs on every
+        // grid-cell change, and the window is already ordered once shown.
+        if !window.isVisible {
+            window.orderFront(nil)
+        }
     }
 }
 

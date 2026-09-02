@@ -208,8 +208,21 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var cachedResizabilityPID: pid_t?
     @ObservationIgnored var layoutPreviewController: LayoutPreviewOverlayController?
     @ObservationIgnored var availableWindowTargets: [WindowTarget] = [] {
-        didSet { rebuildWindowTargetIndex() }
+        didSet {
+            rebuildWindowTargetIndex()
+            anchorTargetMemoByBundleID.removeAll(keepingCapacity: true)
+        }
     }
+    /// pid → bundle identifier / icon caches for the model layer (the UI
+    /// layer has its own `AppInfoCache`). `NSRunningApplication(processIdentifier:)`
+    /// is a Launch Services lookup, and `.icon` returns a *new* `NSImage`
+    /// on every call — which made every `Equatable` check on the preview
+    /// structs carrying the icon fail, so the grid/miniature views re-rendered
+    /// on every body pass. Entries are dropped when the process terminates.
+    @ObservationIgnored var bundleIDByPID: [pid_t: String] = [:]
+    @ObservationIgnored var appIconByPID: [pid_t: NSImage] = [:]
+    /// Memo for `anchorWindowTarget(forBundleID:)`; valid for one window list.
+    @ObservationIgnored var anchorTargetMemoByBundleID: [String: WindowTarget] = [:]
     /// O(1) index over `availableWindowTargets` keyed by CGWindowID (first
     /// occurrence wins, matching `first(where:)` z-order semantics). Rebuilt
     /// automatically whenever the list changes — the grouping/polling hot
@@ -454,11 +467,53 @@ final class AppState: NSObject, NSMenuDelegate {
         )
     }
 
+    // MARK: - Per-process app info cache
+
+    /// Bundle identifier for `pid`, cached for the life of the process.
+    func cachedBundleID(forPID pid: pid_t) -> String? {
+        if let cached = bundleIDByPID[pid] { return cached }
+        guard let bid = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier else { return nil }
+        bundleIDByPID[pid] = bid
+        return bid
+    }
+
+    /// App icon for `pid`. Returns the *same* `NSImage` instance on every
+    /// call so value types that carry it stay `Equatable`-stable.
+    func cachedAppIcon(forPID pid: pid_t) -> NSImage? {
+        if let cached = appIconByPID[pid] { return cached }
+        guard let icon = NSRunningApplication(processIdentifier: pid)?.icon else { return nil }
+        appIconByPID[pid] = icon
+        return icon
+    }
+
+    /// Drops cached app info for a terminated process (PIDs are recycled).
+    func invalidateAppInfoCache(forPID pid: pid_t) {
+        bundleIDByPID.removeValue(forKey: pid)
+        appIconByPID.removeValue(forKey: pid)
+        anchorTargetMemoByBundleID = anchorTargetMemoByBundleID.filter { $0.value.processIdentifier != pid }
+    }
+
+    /// The window that anchors an app-slot satellite pair for `bundleID`:
+    /// the frontmost available window of the first *regular* running app
+    /// with that bundle identifier. The Launch Services enumeration behind
+    /// this is memoized per window list — the satellite paths call it on
+    /// every click / move event.
+    func anchorWindowTarget(forBundleID bundleID: String) -> WindowTarget? {
+        if let memo = anchorTargetMemoByBundleID[bundleID] { return memo }
+        guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
+            .first(where: { $0.activationPolicy == .regular }),
+              let target = availableWindowTargets.first(where: { $0.processIdentifier == app.processIdentifier }) else {
+            return nil
+        }
+        anchorTargetMemoByBundleID[bundleID] = target
+        return target
+    }
+
     var currentLayoutTargetIcon: NSImage? {
         // Access windowTargetListVersion to trigger SwiftUI updates when the target changes.
         _ = windowTargetListVersion
         guard let pid = activeLayoutTarget?.processIdentifier ?? lastTargetPID else { return nil }
-        return NSRunningApplication(processIdentifier: pid)?.icon
+        return cachedAppIcon(forPID: pid)
     }
 
     var currentLayoutTargetPrimaryText: String {
@@ -609,7 +664,9 @@ final class AppState: NSObject, NSMenuDelegate {
         let menuBarHeight = target.screenFrame.height - vf.height - vf.minY + target.screenFrame.minY
         let menuBarFraction = max(0, menuBarHeight / vf.height)
 
-        let icon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+        // Cached: a fresh `NSImage` per access would defeat `WindowFrameRelative`'s
+        // identity-based icon comparison and re-render the grid every pass.
+        let icon = cachedAppIcon(forPID: target.processIdentifier)
         return WindowFrameRelative(
             x: relX, y: relY, width: relW, height: relH,
             menuBarHeightFraction: menuBarFraction,

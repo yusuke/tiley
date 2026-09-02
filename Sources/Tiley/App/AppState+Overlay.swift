@@ -49,7 +49,7 @@ extension AppState {
         let resizability = resizabilityForActiveTarget()
         let windowSize = activeLayoutTarget?.frame.size
         let appIcon: NSImage? = activeLayoutTarget.flatMap {
-            NSRunningApplication(processIdentifier: $0.processIdentifier)?.icon
+            cachedAppIcon(forPID: $0.processIdentifier)
         }
 
         layoutPreviewController?.showSelection(
@@ -137,19 +137,7 @@ extension AppState {
         // unassigned-slot pool doesn't pick the same window as its filler.
         // Matches the real apply behavior: assigned slots consume the app's
         // frontmost window.
-        var claimedWIDs: Set<CGWindowID> = []
-        let assignedBundleIDs: Set<String> = Set(rectangleApps.compactMap { $0 })
-        if !assignedBundleIDs.isEmpty {
-            var seenBundles: Set<String> = []
-            for target in availableWindowTargets {
-                guard let bid = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier,
-                      assignedBundleIDs.contains(bid), !seenBundles.contains(bid) else { continue }
-                seenBundles.insert(bid)
-                if target.cgWindowID != 0 {
-                    claimedWIDs.insert(target.cgWindowID)
-                }
-            }
-        }
+        let claimedWIDs = claimedWindowIDs(assignedBundleIDs: Set(rectangleApps.compactMap { $0 }))
 
         // Pick windows for unassigned slots from user selection + z-order,
         // excluding windows already claimed by assigned slots.
@@ -190,7 +178,7 @@ extension AppState {
             } else {
                 let colorIdx = (unassignedDisplayIndex[slotIdx] ?? (slotIdx + 1)) - 1
                 if let target = windowBySlot[slotIdx] {
-                    let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+                    let appIcon = cachedAppIcon(forPID: target.processIdentifier)
                     items.append(SelectionPreviewItem(
                         selection: sel,
                         resizability: slotIdx == 0 ? resizabilityForActiveTarget() : .both,
@@ -248,7 +236,7 @@ extension AppState {
                     windowTitle: ""
                 ))
             } else if let target = activeLayoutTarget {
-                let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+                let appIcon = cachedAppIcon(forPID: target.processIdentifier)
                 windowInfo.append(PresetHoverWindowInfo(
                     appIcon: appIcon,
                     appName: target.appName,
@@ -262,19 +250,7 @@ extension AppState {
 
         // Claim the frontmost window of each assigned bundle ID so the
         // unassigned-slot filler doesn't pick them.
-        var claimedWIDs: Set<CGWindowID> = []
-        let assignedBundleIDs: Set<String> = Set(rectangleApps.compactMap { $0 })
-        if !assignedBundleIDs.isEmpty {
-            var seenBundles: Set<String> = []
-            for target in availableWindowTargets {
-                guard let bid = NSRunningApplication(processIdentifier: target.processIdentifier)?.bundleIdentifier,
-                      assignedBundleIDs.contains(bid), !seenBundles.contains(bid) else { continue }
-                seenBundles.insert(bid)
-                if target.cgWindowID != 0 {
-                    claimedWIDs.insert(target.cgWindowID)
-                }
-            }
-        }
+        let claimedWIDs = claimedWindowIDs(assignedBundleIDs: Set(rectangleApps.compactMap { $0 }))
 
         // Unassigned slot fillers, in selection + z-order, skipping claimed.
         let unassignedSlotIndices: [Int] = rectangleApps.enumerated().compactMap { idx, app in
@@ -302,7 +278,7 @@ extension AppState {
                 ))
             } else if let windowIdx = slotToWindowIndex[slotIdx] {
                 let target = availableWindowTargets[windowIdx]
-                let appIcon = NSRunningApplication(processIdentifier: target.processIdentifier)?.icon
+                let appIcon = cachedAppIcon(forPID: target.processIdentifier)
                 windowInfo.append(PresetHoverWindowInfo(
                     appIcon: appIcon,
                     appName: target.appName,
@@ -366,9 +342,34 @@ extension AppState {
         )
     }
 
+    /// CGWindowIDs of the frontmost window of each assigned bundle — the
+    /// windows an app-assigned slot will consume on apply, which the
+    /// unassigned-slot filler must therefore skip. Dictionary lookups only;
+    /// no Launch Services traffic on the hover path.
+    private func claimedWindowIDs(assignedBundleIDs: Set<String>) -> Set<CGWindowID> {
+        guard !assignedBundleIDs.isEmpty else { return [] }
+        var claimed: Set<CGWindowID> = []
+        var seenBundles: Set<String> = []
+        for target in availableWindowTargets {
+            guard let bid = cachedBundleID(forPID: target.processIdentifier),
+                  assignedBundleIDs.contains(bid), !seenBundles.contains(bid) else { continue }
+            seenBundles.insert(bid)
+            if target.cgWindowID != 0 {
+                claimed.insert(target.cgWindowID)
+            }
+        }
+        return claimed
+    }
+
+    /// Hides the preview overlay but keeps its window alive for reuse.
+    ///
+    /// This runs at interaction frequency (every drag start, every time the
+    /// pointer leaves the grid, every preset hover exit). Dropping the
+    /// controller here used to force a brand-new full-screen `NSWindow` +
+    /// hosting view (and a screen-sized backing store) on the very next
+    /// preview. `releasePreviewOverlay()` is the explicit teardown.
     func hidePreviewOverlay() {
         layoutPreviewController?.hide()
-        layoutPreviewController = nil
         if !presetHoverHighlights.isEmpty {
             presetHoverHighlights = [:]
         }
@@ -421,15 +422,23 @@ extension AppState {
     /// Hide the resize preview overlay and grid mini preview.
     func hideResizePreview() {
         layoutPreviewController?.hide()
-        layoutPreviewController = nil
         resizePreviewRelativeFrame = nil
+    }
+
+    /// Hides the preview overlay *and* releases its window. Call when the
+    /// overlay session ends (all main windows hidden) or when the screen
+    /// configuration changes; `updateLayoutPreview` recreates it on demand
+    /// (and also whenever the screen/visible frame no longer matches).
+    func releasePreviewOverlay() {
+        hidePreviewOverlay()
+        layoutPreviewController = nil
     }
 
     /// Immediately dismisses the overlay, layout grid, and all main windows
     /// so the user doesn't wait for subsequent (potentially slow) AX operations.
     func dismissOverlayImmediately() {
         removeModifierReleaseMonitor()
-        hidePreviewOverlay()
+        releasePreviewOverlay()
         isShowingLayoutGrid = false
         hideAllMainWindows()
     }
