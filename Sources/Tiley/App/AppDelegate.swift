@@ -278,7 +278,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Eject the DMG volume and move the DMG file to Trash.
-    private func performDMGCleanup(mountPoint: String, dmgPath: String?) {
+    nonisolated private func performDMGCleanup(mountPoint: String, dmgPath: String?) {
         // Eject the volume via hdiutil detach.
         let detach = Process()
         detach.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
@@ -312,24 +312,39 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             dmgPath = args[pathIdx + 1]
         }
 
-        performDMGCleanup(mountPoint: mountPoint, dmgPath: dmgPath)
+        // `hdiutil detach` blocks until the volume is ejected — keep it off
+        // the main thread so it doesn't delay launch.
+        Task.detached(priority: .utility) { [self] in
+            performDMGCleanup(mountPoint: mountPoint, dmgPath: dmgPath)
+        }
     }
 
     /// Check whether a Tiley disk image volume is currently mounted and, if so,
     /// offer to eject it and trash the DMG.  Called when the app is already
     /// running from /Applications (i.e. the user copied it manually).
     private func cleanupMountedDiskImageIfNeeded() {
-        guard let (mountPoint, _) = findMountedTileyDiskImage() else { return }
-        let dmgPath = dmgPathForVolume(mountPoint)
-        if askCleanupDiskImage(mountPoint: mountPoint, dmgPath: dmgPath, copiedByApp: false) {
-            performDMGCleanup(mountPoint: mountPoint, dmgPath: dmgPath)
+        // `hdiutil info` spawns a subprocess and can take hundreds of
+        // milliseconds; this runs on every launch from /Applications, so do
+        // the discovery off the main thread and come back only when a
+        // mounted Tiley image was actually found. The image path returned by
+        // the discovery is reused directly (the old code re-ran hdiutil a
+        // second time just to resolve the same path).
+        Task.detached(priority: .utility) { [self] in
+            guard let (mountPoint, dmgPath) = findMountedTileyDiskImage() else { return }
+            await MainActor.run {
+                if askCleanupDiskImage(mountPoint: mountPoint, dmgPath: dmgPath, copiedByApp: false) {
+                    Task.detached(priority: .utility) { [self] in
+                        performDMGCleanup(mountPoint: mountPoint, dmgPath: dmgPath)
+                    }
+                }
+            }
         }
     }
 
     /// Use `hdiutil info -plist` to find a mounted volume whose DMG filename
     /// contains "Tiley" (case-insensitive).  Returns the mount point and DMG
     /// path, or `nil` if none is found.
-    private func findMountedTileyDiskImage() -> (mountPoint: String, dmgPath: String)? {
+    nonisolated private func findMountedTileyDiskImage() -> (mountPoint: String, dmgPath: String)? {
         guard let images = hdiutilImageList() else { return nil }
         let appName = (Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Tiley").lowercased()
         for image in images {
@@ -347,7 +362,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Use `hdiutil info -plist` to find the disk image file backing a volume.
-    private func dmgPathForVolume(_ mountPoint: String) -> String? {
+    nonisolated private func dmgPathForVolume(_ mountPoint: String) -> String? {
         guard let images = hdiutilImageList() else { return nil }
         for image in images {
             guard let entities = image["system-entities"] as? [[String: Any]] else { continue }
@@ -361,7 +376,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Run `hdiutil info -plist` and return the images array.
-    private func hdiutilImageList() -> [[String: Any]]? {
+    nonisolated private func hdiutilImageList() -> [[String: Any]]? {
         let proc = Process()
         proc.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
         proc.arguments = ["info", "-plist"]

@@ -135,7 +135,7 @@ enum BadgeMenuPlacement {
 }
 
 /// Represents a single badge.
-struct GroupLinkBadge: Identifiable {
+struct GroupLinkBadge: Identifiable, Equatable {
     let id: AdjacencyKey
     let state: GroupLinkBadgeState
     /// Badge center in AppKit screen coordinates (bottom-left origin).
@@ -221,6 +221,8 @@ final class GroupLinkBadgeController {
 
         // New or updated badges.
         for badge in badges {
+            let previous = badgesByID[badge.id]
+            let flagsBefore = (panelExpandedByID.contains(badge.id), hoverShownByID.contains(badge.id))
             badgesByID[badge.id] = badge
             // Drop any stale hover flag for badges that are no longer linked.
             if badge.state != .linked {
@@ -232,6 +234,15 @@ final class GroupLinkBadgeController {
                 // panel size flag tracks it so the pill has room to render.
                 panelExpandedByID.insert(badge.id)
                 pendingPanelShrinkByID.removeValue(forKey: badge.id)?.cancel()
+            }
+            let flagsAfter = (panelExpandedByID.contains(badge.id), hoverShownByID.contains(badge.id))
+            // Skip the re-render when nothing the panel displays changed —
+            // update() runs on every badge refresh (each focus change while
+            // groups exist), and an unconditional render rebuilds the SwiftUI
+            // root view and re-sets the panel frame every time.
+            if let previous, previous == badge, flagsBefore == flagsAfter,
+               windowsByBadge[badge.id] != nil {
+                continue
             }
             renderBadge(badge, isNewlyCreated: nil)
         }

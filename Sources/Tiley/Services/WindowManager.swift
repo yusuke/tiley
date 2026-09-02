@@ -32,26 +32,48 @@ func rotateDebugLogIfNeeded(maxFiles: Int = 5) {
     }
 }
 
+/// Shared handle for the debug log. Opening/seeking/closing the file for
+/// every line made the high-frequency paths (e.g. the 60 Hz group polling)
+/// I/O-bound whenever debug logging was enabled; the handle is opened once
+/// and reused. Guarded by a lock — `debugLog` is called from the main thread
+/// and from background move/capture tasks alike.
+private let debugLogLock = NSLock()
+private nonisolated(unsafe) var debugLogHandle: FileHandle?
+
+/// Appends pre-encoded data to ~/tiley.log via the shared handle.
+private func debugLogWrite(_ data: Data) {
+    debugLogLock.lock()
+    defer { debugLogLock.unlock() }
+    if debugLogHandle == nil {
+        let logURL = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("tiley.log")
+        if !FileManager.default.fileExists(atPath: logURL.path) {
+            FileManager.default.createFile(atPath: logURL.path, contents: nil)
+        }
+        guard let handle = try? FileHandle(forWritingTo: logURL) else { return }
+        handle.seekToEndOfFile()
+        debugLogHandle = handle
+    }
+    debugLogHandle?.write(data)
+}
+
 /// Appends a timestamped line to ~/tiley.log when the debug-log setting is on.
 /// Replaces the `NSLog("[Tiley:perf] …")` calls so that performance traces are
 /// only emitted when the user has explicitly opted in.
 func debugLog(_ message: @autoclosure () -> String) {
     guard UserDefaults.standard.bool(forKey: "enableDebugLog") else { return }
     let msg = message()
-    let logURL = FileManager.default.homeDirectoryForCurrentUser
-        .appendingPathComponent("tiley.log")
     let timestamp = ISO8601DateFormatter.shared.string(from: Date())
     let line = "[\(timestamp)] [Tiley:perf] \(msg)\n"
     guard let data = line.data(using: .utf8) else { return }
-    if FileManager.default.fileExists(atPath: logURL.path) {
-        if let handle = try? FileHandle(forWritingTo: logURL) {
-            handle.seekToEndOfFile()
-            handle.write(data)
-            handle.closeFile()
-        }
-    } else {
-        try? data.write(to: logURL)
-    }
+    debugLogWrite(data)
+}
+
+/// Appends a raw, caller-formatted line via the shared handle. Used by
+/// debug-only paths (e.g. `moveWithLog`) that write their own line format.
+func debugLogRawLine(_ line: String) {
+    guard let data = (line + "\n").data(using: .utf8) else { return }
+    debugLogWrite(data)
 }
 
 private extension ISO8601DateFormatter {
@@ -110,22 +132,8 @@ final class WindowManager {
         let axY = primaryMaxY - frame.maxY
         let targetSize = frame.size
 
-        let logURL = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("tiley.log")
-
         func log(_ message: String) {
-            let line = message + "\n"
-            if let data = line.data(using: .utf8) {
-                if FileManager.default.fileExists(atPath: logURL.path) {
-                    if let handle = try? FileHandle(forWritingTo: logURL) {
-                        handle.seekToEndOfFile()
-                        handle.write(data)
-                        handle.closeFile()
-                    }
-                } else {
-                    try? data.write(to: logURL)
-                }
-            }
+            debugLogRawLine(message)
         }
 
         func readPosAndSize() -> (pos: CGPoint, size: CGSize) {

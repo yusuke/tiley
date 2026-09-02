@@ -381,8 +381,47 @@ struct SettingsView: View {
         draftSettings.gap == Self.defaultGridGap
     }
 
+    /// Memoized display resolver — building one enumerates every screen and
+    /// queries each display's vendor/model/serial fingerprint, and the
+    /// settings body re-evaluates per slider tick. Rebuilt only when the
+    /// screen configuration actually changes.
+    @MainActor
+    private enum DisplayResolverCache {
+        static var signature: String = ""
+        static var resolver: DisplayFingerprintResolver?
+    }
+
+    @MainActor
+    private static func cachedDisplayResolver() -> DisplayFingerprintResolver {
+        let sig = NSScreen.screens.map { "\($0.displayID):\($0.frame)" }.joined(separator: "|")
+        if let cached = DisplayResolverCache.resolver, DisplayResolverCache.signature == sig {
+            return cached
+        }
+        let fresh = DisplayFingerprintResolver()
+        DisplayResolverCache.signature = sig
+        DisplayResolverCache.resolver = fresh
+        return fresh
+    }
+
+    /// Cache for `LayoutPreset.defaultPresets` keyed by grid size — the
+    /// default set is rebuilt per body pass otherwise (settings body
+    /// re-evaluates per slider tick).
+    @MainActor
+    private enum DefaultPresetsCache {
+        static var key: String = ""
+        static var presets: [LayoutPreset] = []
+        static func presets(rows: Int, columns: Int) -> [LayoutPreset] {
+            let k = "\(rows)x\(columns)"
+            if k == key { return presets }
+            let fresh = LayoutPreset.defaultPresets(rows: rows, columns: columns)
+            key = k
+            presets = fresh
+            return fresh
+        }
+    }
+
     private var isLayoutPresetsAtDefault: Bool {
-        let defaults = LayoutPreset.defaultPresets(rows: appState.rows, columns: appState.columns)
+        let defaults = DefaultPresetsCache.presets(rows: appState.rows, columns: appState.columns)
         guard appState.layoutPresets.count == defaults.count else { return false }
         return zip(appState.layoutPresets, defaults).allSatisfy { current, def in
             current.name == def.name &&
@@ -554,7 +593,7 @@ struct SettingsView: View {
                     systemImage: "filemenu.and.selection"
                 )
 
-                let resolver = DisplayFingerprintResolver()
+                let resolver = Self.cachedDisplayResolver()
                 ForEach(resolver.displays, id: \.displayID) { resolved in
                     Divider().opacity(0.4)
 

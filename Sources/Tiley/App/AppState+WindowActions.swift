@@ -1,6 +1,24 @@
 import AppKit
 
 extension AppState {
+
+    /// Debounced sidebar refresh used after window actions (hide, close,
+    /// move-to-screen, quit). Bulk actions on many windows used to schedule
+    /// one full window-list refresh per window; coalescing them into a single
+    /// deferred refresh keeps the post-action capture cost constant.
+    func scheduleDeferredWindowRefresh(after delay: TimeInterval = 0.3) {
+        deferredWindowRefreshWorkItem?.cancel()
+        let item = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.deferredWindowRefreshWorkItem = nil
+            self.refreshAvailableWindows()
+        }
+        deferredWindowRefreshWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
+    }
+}
+
+extension AppState {
     func focusWindowAndDismiss(at index: Int) {
         guard index >= 0, index < availableWindowTargets.count else { return }
         let target = unhideAppIfNeeded(availableWindowTargets[index])
@@ -64,9 +82,7 @@ extension AppState {
         }
 
         // Refresh the window list after a short delay to let the window close.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     /// Close other windows of the same application, keeping the one at the given index.
@@ -81,9 +97,7 @@ extension AppState {
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     /// Quit the application that owns the window at the given index.
@@ -99,9 +113,7 @@ extension AppState {
 
         NSRunningApplication(processIdentifier: target.processIdentifier)?.terminate()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     /// Hide all applications except the one that owns the window at the given index.
@@ -129,9 +141,7 @@ extension AppState {
                 app.hide()
             }
             // Refresh to reflect hidden state (opacity) in the sidebar.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self?.refreshAvailableWindows()
-            }
+            self?.scheduleDeferredWindowRefresh()
         }
     }
 
@@ -150,9 +160,7 @@ extension AppState {
                     && app.processIdentifier != selfPID {
                 app.hide()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self?.refreshAvailableWindows()
-            }
+            self?.scheduleDeferredWindowRefresh()
         }
     }
 
@@ -164,9 +172,7 @@ extension AppState {
 
         moveWindowToDestinationScreen(window: window, destination: screen)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     /// Move all windows belonging to the given PID to the given screen.
@@ -186,9 +192,7 @@ extension AppState {
                 accessibilityService.closeWindow(window)
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     /// Gather all windows from other screens to the given screen.
@@ -215,9 +219,7 @@ extension AppState {
     /// Quit the application with the given PID.
     func quitApp(pid: pid_t) {
         NSRunningApplication(processIdentifier: pid)?.terminate()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     // MARK: - Multi-Selection Batch Actions
@@ -393,9 +395,7 @@ extension AppState {
         selectionAnchorIndex = nil
 
         // Refresh after a short delay to let windows close.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     /// Move all selected windows to the given screen.
@@ -405,9 +405,7 @@ extension AppState {
             guard let window = target.windowElement else { continue }
             moveWindowToDestinationScreen(window: window, destination: screen)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refreshAvailableWindows()
-        }
+        scheduleDeferredWindowRefresh()
     }
 
     /// Resize a window to the given size, keeping its top-left position.
@@ -467,9 +465,7 @@ extension AppState {
             self.accessibilityService.raiseWindow(window)
             NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.refreshAvailableWindows()
-            }
+            self.scheduleDeferredWindowRefresh()
         }
     }
 }

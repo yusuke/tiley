@@ -14,11 +14,17 @@ extension AppState {
 
     func updateLayoutPreset(_ id: UUID, mutate: (inout LayoutPreset) -> Void) {
         guard let index = layoutPresets.firstIndex(where: { $0.id == id }) else { return }
+        let shortcutsBefore = layoutPresets[index].shortcuts
         mutate(&layoutPresets[index])
         sanitizeShortcutGlobalFlags(for: &layoutPresets[index])
         selectedLayoutPresetID = id
         saveLayoutPresets()
-        registerPresetHotKeys()
+        // Re-registering tears down and re-creates every Carbon hotkey;
+        // it's only needed when this edit actually touched the shortcuts
+        // (renames, app assignments, rectangle edits, etc. don't).
+        if layoutPresets[index].shortcuts != shortcutsBefore {
+            registerPresetHotKeys()
+        }
     }
 
     /// Creates a new blank layout preset, appends it to `layoutPresets`, and returns its ID.
@@ -36,7 +42,7 @@ extension AppState {
         layoutPresets.append(preset)
         selectedLayoutPresetID = preset.id
         saveLayoutPresets()
-        registerPresetHotKeys()
+        // A brand-new preset has no shortcuts — no hotkey re-registration needed.
         return preset.id
     }
 
@@ -50,7 +56,8 @@ extension AppState {
         layoutPresets.insert(preset, at: insertIndex)
         selectedLayoutPresetID = preset.id
         saveLayoutPresets()
-        registerPresetHotKeys()
+        // Reordering doesn't change any shortcut — hotkey registrations map
+        // IDs to preset UUIDs directly and are order-independent.
     }
 
     func moveLayoutPreset(from sourceID: UUID?, toIndex targetIndex: Int) {
@@ -72,7 +79,7 @@ extension AppState {
         layoutPresets.insert(preset, at: insertIndex)
         selectedLayoutPresetID = preset.id
         saveLayoutPresets()
-        registerPresetHotKeys()
+        // See moveLayoutPreset(from:to:) — order-independent registrations.
     }
 
     // MARK: - Query / Select / Apply

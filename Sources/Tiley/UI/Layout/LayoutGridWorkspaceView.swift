@@ -19,6 +19,12 @@ struct LayoutGridWorkspaceView: View {
     /// (unassigned-among-unassigned) position.
     var highlightAppAssignments: [String?] = []
     var desktopPictureInfo: MainWindowView.DesktopPictureInfo?
+    /// Pre-decoded wallpaper image for `desktopPictureInfo`. Callers that
+    /// enable `showDesktopPicture` must supply this from the cached,
+    /// downsampled accessor (`appState.wallpaperImage(for: info.url)`) —
+    /// this body must never decode the wallpaper from disk itself (a full
+    /// `NSImage(contentsOf:)` decode per body pass).
+    var desktopPictureImage: NSImage? = nil
     /// When false, wallpaper background is not rendered (used when the parent
     /// composite view renders the wallpaper at a larger scale).
     var showDesktopPicture: Bool = true
@@ -79,7 +85,7 @@ struct LayoutGridWorkspaceView: View {
             ZStack(alignment: .topLeading) {
                 if showDesktopPicture,
                    let info = desktopPictureInfo,
-                   let nsImage = NSImage(contentsOf: info.url) {
+                   let nsImage = desktopPictureImage {
                     DesktopPictureBackgroundView(nsImage: nsImage, info: info, size: geometry.size)
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .opacity(0.5)
