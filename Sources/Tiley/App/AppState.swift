@@ -211,6 +211,11 @@ final class AppState: NSObject, NSMenuDelegate {
         didSet {
             rebuildWindowTargetIndex()
             anchorTargetMemoByBundleID.removeAll(keepingCapacity: true)
+            let pids = Set(availableWindowTargets.map(\.processIdentifier))
+            if pids != lastWindowPIDSet {
+                lastWindowPIDSet = pids
+                windowPIDSetVersion += 1
+            }
         }
     }
     /// pid → bundle identifier / icon caches for the model layer (the UI
@@ -415,7 +420,21 @@ final class AppState: NSObject, NSMenuDelegate {
     /// so we can restore its Z-order when switching to another target.
     /// Whether the user has cycled the target window at least once via Tab.
     var hasUsedTabCycling: Bool { originalFrontmostPID != nil }
+    /// Bumped when the *content* of the window list changes (a refresh that
+    /// produced a different list, a cache publish on open).
     var windowTargetListVersion: Int = 0
+    /// Bumped when the selection / active target changes — sidebar click,
+    /// Tab cycle, select-all, target re-resolution. Readers that only depend
+    /// on the selection observe this instead of `windowTargetListVersion`,
+    /// so a click no longer invalidates every list-dependent view. A single
+    /// overlay open used to bump the list version four to five times.
+    var windowSelectionVersion: Int = 0
+    /// Bumped only when the *set of PIDs* in `availableWindowTargets`
+    /// changes — the only event that makes the UI's per-PID caches stale.
+    /// The sidebar used to wipe its app-info cache on every list-version
+    /// bump and re-resolve every row's app on the next pass.
+    var windowPIDSetVersion: Int = 0
+    @ObservationIgnored var lastWindowPIDSet: Set<pid_t> = []
     /// The window-target indices in the order displayed in the sidebar.
     /// Updated by the sidebar view whenever its rows are recomputed.
     @ObservationIgnored var sidebarWindowOrder: [Int] = []
@@ -518,14 +537,14 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var currentLayoutTargetIcon: NSImage? {
-        // Access windowTargetListVersion to trigger SwiftUI updates when the target changes.
-        _ = windowTargetListVersion
+        // Observe the selection version so SwiftUI updates when the target changes.
+        _ = windowSelectionVersion
         guard let pid = activeLayoutTarget?.processIdentifier ?? lastTargetPID else { return nil }
         return cachedAppIcon(forPID: pid)
     }
 
     var currentLayoutTargetPrimaryText: String {
-        _ = windowTargetListVersion
+        _ = windowSelectionVersion
         if let target = activeLayoutTarget {
             return target.appName
         }
@@ -537,7 +556,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var currentLayoutTargetSecondaryText: String? {
-        _ = windowTargetListVersion
+        _ = windowSelectionVersion
         guard let title = activeLayoutTarget?.windowTitle?.trimmingCharacters(in: .whitespacesAndNewlines),
               !title.isEmpty else {
             return nil
@@ -619,25 +638,25 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var currentWindowTargetIndex: Int {
-        _ = windowTargetListVersion
+        _ = windowSelectionVersion
         return activeTargetIndex
     }
 
     /// The set of all selected window indices (for multi-selection).
     var currentSelectedWindowIndices: Set<Int> {
-        _ = windowTargetListVersion
+        _ = windowSelectionVersion
         return selectedWindowIndices
     }
 
     /// True when multiple windows are selected.
     var isMultiSelection: Bool {
-        _ = windowTargetListVersion
+        _ = windowSelectionVersion
         return selectedWindowIndices.count > 1
     }
 
     /// The selection order of window indices (for displaying selection index badges).
     var currentSelectionOrder: [Int] {
-        _ = windowTargetListVersion
+        _ = windowSelectionVersion
         return selectionOrder
     }
 
@@ -655,7 +674,7 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     var currentLayoutTargetRelativeFrame: WindowFrameRelative? {
-        _ = windowTargetListVersion
+        _ = windowSelectionVersion
         guard let target = activeLayoutTarget,
               !target.isHidden,
               target.visibleFrame.width > 0,
@@ -740,6 +759,7 @@ final class AppState: NSObject, NSMenuDelegate {
                     self.spaceList = self.cachedSpaceList
                     self.activeSpaceIDs = self.cachedActiveSpaceIDs
                     self.windowTargetListVersion += 1
+                    self.windowSelectionVersion += 1
                     self.isLoadingWindowList = false
                 } else {
                     self.isLoadingWindowList = true
@@ -1127,6 +1147,7 @@ final class AppState: NSObject, NSMenuDelegate {
             selectionOrder = [activeTargetIndex]
             isLoadingWindowList = false
             windowTargetListVersion += 1
+            windowSelectionVersion += 1
         } else {
             // No cache yet (first launch before the initial capture has
             // completed).  Show the spinner from the first rendered frame
@@ -1195,7 +1216,9 @@ final class AppState: NSObject, NSMenuDelegate {
 
             // Enter modifier-held mode.
             self.installModifierReleaseMonitor()
-            self.windowTargetListVersion += 1
+            // Only the target may have changed here; the list itself was
+            // published in Phase 1 (or is published below).
+            self.windowSelectionVersion += 1
 
             if target != nil {
                 self.fetchTargetMenuBarTitles()
@@ -1215,6 +1238,7 @@ final class AppState: NSObject, NSMenuDelegate {
                 self.spaceList = self.cachedSpaceList
                 self.activeSpaceIDs = self.cachedActiveSpaceIDs
                 self.windowTargetListVersion += 1
+                self.windowSelectionVersion += 1
                 if let current = self.activeLayoutTarget {
                     self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
                         $0.processIdentifier == current.processIdentifier
@@ -1272,6 +1296,7 @@ final class AppState: NSObject, NSMenuDelegate {
                     self.selectedWindowIndices = [self.activeTargetIndex]
                     self.selectionOrder = [self.activeTargetIndex]
                     self.windowTargetListVersion += 1
+                    self.windowSelectionVersion += 1
                     self.revalidateActiveTarget()
                     debugLog("Post-expose refresh done: \(self.availableWindowTargets.count) windows, activeTargetIndex=\(self.activeTargetIndex)")
                 }

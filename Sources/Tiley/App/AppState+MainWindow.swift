@@ -72,6 +72,7 @@ extension AppState {
             spaceList = cachedSpaceList
             activeSpaceIDs = cachedActiveSpaceIDs
             windowTargetListVersion += 1
+            windowSelectionVersion += 1
             if let current = activeLayoutTarget {
                 activeTargetIndex = availableWindowTargets.firstIndex(where: {
                     $0.processIdentifier == current.processIdentifier
@@ -102,6 +103,7 @@ extension AppState {
             self.revalidateActiveTarget()
         }
         windowTargetListVersion += 1
+        windowSelectionVersion += 1
     }
 
     @objc func quit() {

@@ -57,6 +57,26 @@ struct WindowTarget {
     }
 }
 
+extension WindowTarget {
+    /// Value-level comparison used to skip republishing an identical window
+    /// list (a refresh that changed nothing visible). The AX elements are
+    /// not compared by reference — a fresh capture always creates new ones
+    /// for the same windows.
+    func contentMatches(_ other: WindowTarget) -> Bool {
+        cgWindowID == other.cgWindowID
+            && processIdentifier == other.processIdentifier
+            && appName == other.appName
+            && windowTitle == other.windowTitle
+            && frame == other.frame
+            && visibleFrame == other.visibleFrame
+            && screenFrame == other.screenFrame
+            && isHidden == other.isHidden
+            && spaceID == other.spaceID
+            && isOnOtherSpace == other.isOnOtherSpace
+            && (windowElement == nil) == (other.windowElement == nil)
+    }
+}
+
 /// Represents a Mission Control space (desktop).
 struct SpaceInfo: Identifiable, Equatable {
     let id: UInt64

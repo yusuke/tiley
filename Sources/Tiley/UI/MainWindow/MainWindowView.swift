@@ -872,7 +872,10 @@ struct MainWindowView: View {
                 windowSearchText = newValue
             }
         }
-        .onChange(of: appState.windowTargetListVersion) { _, _ in
+        // Per-PID data (icon, bundle ID, original name) only goes stale
+        // when the set of apps in the list changes — not on every list or
+        // selection update.
+        .onChange(of: appState.windowPIDSetVersion) { _, _ in
             appInfoCache.invalidate()
         }
         .onChange(of: appState.selectedLayoutPresetID) { _, selectedID in

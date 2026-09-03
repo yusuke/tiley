@@ -282,6 +282,7 @@ extension AppState {
             spaceList = cachedSpaceList
             activeSpaceIDs = cachedActiveSpaceIDs
             windowTargetListVersion += 1
+            windowSelectionVersion += 1
             isLoadingWindowList = false
         } else {
             isLoadingWindowList = true

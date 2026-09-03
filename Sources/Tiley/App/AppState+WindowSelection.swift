@@ -170,7 +170,7 @@ extension AppState {
             activeTargetIndex = index
         }
 
-        windowTargetListVersion += 1
+        windowSelectionVersion += 1
         applyTargetAtCurrentIndex()
     }
 
@@ -239,7 +239,7 @@ extension AppState {
             activeTargetIndex = appIndices.first!
         }
 
-        windowTargetListVersion += 1
+        windowSelectionVersion += 1
         applyTargetAtCurrentIndex()
     }
 
@@ -266,7 +266,7 @@ extension AppState {
         }
         selectionAnchorIndex = nil
         activeTargetIndex = selectionOrder.first!
-        windowTargetListVersion += 1
+        windowSelectionVersion += 1
         applyTargetAtCurrentIndex()
     }
 
@@ -290,7 +290,7 @@ extension AppState {
         // Selection order: current active first, then rest in index order.
         let allIndices = Array(availableWindowTargets.indices)
         selectionOrder = [activeTargetIndex] + allIndices.filter { $0 != activeTargetIndex }
-        windowTargetListVersion += 1
+        windowSelectionVersion += 1
     }
 
     /// Raises (brings to front) the currently selected target window and activates its app.
@@ -386,7 +386,7 @@ extension AppState {
         activeLayoutTarget = newTarget
         clearResizabilityCache()
         lastTargetPID = newTarget.processIdentifier
-        windowTargetListVersion += 1
+        windowSelectionVersion += 1
 
         layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: newTarget)
@@ -480,6 +480,14 @@ extension AppState {
         for action in actions { action() }
     }
 
+    /// Value-level comparison of two window lists (order matters — the
+    /// sidebar is z-ordered).
+    static func windowListsMatch(_ a: [WindowTarget], _ b: [WindowTarget]) -> Bool {
+        guard a.count == b.count else { return false }
+        for (x, y) in zip(a, b) where !x.contentMatches(y) { return false }
+        return true
+    }
+
     /// Synchronous variant used when the result must be applied immediately
     /// (e.g. after committing a layout selection where stale data would
     /// cause incorrect window targeting).
@@ -494,10 +502,24 @@ extension AppState {
     ) {
         isWindowListRefreshInFlight = false
         windowListRefreshGeneration += 1
+        // The common case on open is a capture identical to the list already
+        // on screen. Adopt the fresh targets regardless (their AX elements
+        // are the newest), but only publish a list change — which
+        // re-renders every list-dependent view on every display — when the
+        // content actually differs. The selection is reconciled below
+        // either way, so its version always advances.
+        let listChanged = !Self.windowListsMatch(availableWindowTargets, captured.targets)
+            || spaceList != captured.spaceList
+            || activeSpaceIDs != captured.activeSpaceIDs
         availableWindowTargets = captured.targets
         spaceList = captured.spaceList
         activeSpaceIDs = captured.activeSpaceIDs
-        windowTargetListVersion += 1
+        if listChanged {
+            windowTargetListVersion += 1
+        } else {
+            debugLog("window list refresh: content unchanged (\(captured.targets.count) windows) — list version not bumped")
+        }
+        windowSelectionVersion += 1
         dissolveGroupsWithSplitSpaces()
         pruneStaleAppSlotSatellites()
         // Re-attach AX observation on all registered satellites. Window-list
@@ -879,7 +901,7 @@ extension AppState {
         clearResizabilityCache()
         layoutPreviewController?.hide()
         layoutPreviewController = makeLayoutPreviewController(for: fallback)
-        windowTargetListVersion += 1
+        windowSelectionVersion += 1
     }
 
     /// If the target's app is hidden (Cmd-H), unhide it so the window becomes
