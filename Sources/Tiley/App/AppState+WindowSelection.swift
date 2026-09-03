@@ -321,42 +321,50 @@ extension AppState {
         // propagate before AXRaise lands. Without this ordering, AXRaise on
         // a window of an inactive app is a no-op.
         NSRunningApplication(processIdentifier: target.processIdentifier)?.activate()
-        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+        // The pause that lets the activation land used to pump the run loop
+        // synchronously (blocking the main thread 50 ms on every Enter /
+        // modifier-release confirm); suspend on the main actor instead, like
+        // the multi-window `raiseWindowsPreservingOrder`. `target` is a
+        // value copy, so nothing shifts under the await.
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            guard let self else { return }
 
-        if let window = target.windowElement {
-            moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
-            accessibilityService.raiseWindow(window)
-            // Pin the raised window as the app's main/focused. Without this,
-            // some apps (notably IntelliJ) re-promote their previously-main
-            // window asynchronously after the activate above, which lands
-            // after our AXRaise and shoves the selected window back behind
-            // a same-app sibling — visible to the user as a brief raise of
-            // the selected window followed by the previous main coming back
-            // on top.
-            AXUIElementSetAttributeValue(window, kAXMainAttribute as CFString, kCFBooleanTrue)
-            AXUIElementSetAttributeValue(window, kAXFocusedAttribute as CFString, kCFBooleanTrue)
+            if let window = target.windowElement {
+                moveWindowToMouseScreenIfNeeded(window: window, windowScreenFrame: target.screenFrame, windowFrame: target.frame)
+                accessibilityService.raiseWindow(window)
+                // Pin the raised window as the app's main/focused. Without this,
+                // some apps (notably IntelliJ) re-promote their previously-main
+                // window asynchronously after the activate above, which lands
+                // after our AXRaise and shoves the selected window back behind
+                // a same-app sibling — visible to the user as a brief raise of
+                // the selected window followed by the previous main coming back
+                // on top.
+                AXUIElementSetAttributeValue(window, kAXMainAttribute as CFString, kCFBooleanTrue)
+                AXUIElementSetAttributeValue(window, kAXFocusedAttribute as CFString, kCFBooleanTrue)
+            }
+
+            // Release the suppression so the explicit raise below can run.
+            isApplyingGroupRaise = false
+
+            // Explicitly trigger the group / satellite raise machinery so the
+            // selected window's group siblings (and any registered satellites)
+            // come up with it. The AX `.raised` notification that normally
+            // wires this up is non-deterministic when AXRaise is invoked
+            // programmatically — without this explicit call, a same-app group
+            // sibling can stay buried behind a background app's window. The
+            // `isApplyingGroupRaise` guard inside `handleGroupMemberRaised`
+            // suppresses reentrancy if the AX event later fires.
+            let topWID = target.cgWindowID
+            if topWID != 0 {
+                handleGroupMemberRaised(id: topWID)
+                handleAppSlotSatelliteRaise(focusedID: topWID)
+                handleWindowAnchorSatelliteRaise(focusedID: topWID)
+            }
+
+            // Animate displaced windows back after the selected window is operational.
+            self.clearWindowCyclingState(animateRestore: true)
         }
-
-        // Release the suppression so the explicit raise below can run.
-        isApplyingGroupRaise = false
-
-        // Explicitly trigger the group / satellite raise machinery so the
-        // selected window's group siblings (and any registered satellites)
-        // come up with it. The AX `.raised` notification that normally
-        // wires this up is non-deterministic when AXRaise is invoked
-        // programmatically — without this explicit call, a same-app group
-        // sibling can stay buried behind a background app's window. The
-        // `isApplyingGroupRaise` guard inside `handleGroupMemberRaised`
-        // suppresses reentrancy if the AX event later fires.
-        let topWID = target.cgWindowID
-        if topWID != 0 {
-            handleGroupMemberRaised(id: topWID)
-            handleAppSlotSatelliteRaise(focusedID: topWID)
-            handleWindowAnchorSatelliteRaise(focusedID: topWID)
-        }
-
-        // Animate displaced windows back after the selected window is operational.
-        clearWindowCyclingState(animateRestore: true)
     }
 
     /// Moves a window to the mouse pointer's screen when they are on different screens.

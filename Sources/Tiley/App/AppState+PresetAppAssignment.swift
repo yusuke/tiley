@@ -926,11 +926,7 @@ extension AppState {
         settleTimer.resume()
         pairRestoreSettleTimer = settleTimer
 
-        do {
-            _ = try windowManager?.move(target: anchorTarget, to: newAnchorFrame, onScreenFrame: frames.screenFrame)
-        } catch {
-            debugLog("PairFrames: restore error: \(error.localizedDescription)")
-        }
+        moveWindowOffMain(anchorTarget, to: newAnchorFrame, screenFrame: frames.screenFrame, label: "PairFrames restore")
         debugLog("PairFrames: restored (\(bundleID), \(satelliteWID)) newAnchor=\(newAnchorFrame) (offset=\(offset) from liveSat=\(liveSatOrigin)) — satellite left in place")
 
         // Some apps (e.g. Xcode) auto-reposition their window a few hundred
@@ -1000,11 +996,7 @@ extension AppState {
             return
         }
 
-        do {
-            _ = try windowManager?.move(target: anchorTarget, to: newAnchorFrame, onScreenFrame: frames.screenFrame)
-        } catch {
-            debugLog("PairFrames: re-restore error: \(error.localizedDescription)")
-        }
+        moveWindowOffMain(anchorTarget, to: newAnchorFrame, screenFrame: frames.screenFrame, label: "PairFrames re-restore")
         debugLog("PairFrames: re-restored after satellite drift — newAnchor=\(newAnchorFrame) liveAnchor=\(liveAnchor) liveSat=\(liveSat.origin)")
     }
 
@@ -1516,6 +1508,27 @@ extension AppState {
         debugLog("WindowAnchorPair: saved (\(anchorWID), \(satelliteWID)) anchor=\(snappedAnchor) sat=\(satFrame)")
     }
 
+    /// Moves one window off the main actor, chained behind any in-flight
+    /// layout application. The satellite pair restores (and their drift
+    /// re-checks) used to run the synchronous `setFrame` retry ladder —
+    /// 50 ms minimum, up to several hundred — on the main thread on every
+    /// satellite switch.
+    func moveWindowOffMain(_ target: WindowTarget, to frame: CGRect, screenFrame: CGRect, label: String) {
+        guard let wm = windowManager else { return }
+        let logMoves = enableDebugLog
+        let previousApply = layoutApplyTask
+        layoutApplyTask = Task { @MainActor in
+            await previousApply?.value
+            let result = await Self.performMove(
+                target: target, frame: frame, screenFrame: screenFrame,
+                windowManager: wm, logMoves: logMoves
+            )
+            if case .failure(let error) = result {
+                debugLog("\(label): move error: \(error.localizedDescription)")
+            }
+        }
+    }
+
     /// Restore the anchor's saved position relative to the satellite's
     /// **current** live position. Only the anchor moves; the satellite
     /// stays where it is so the recorded offset reproduces the original
@@ -1551,11 +1564,7 @@ extension AppState {
         settleTimer.resume()
         pairRestoreSettleTimer = settleTimer
 
-        do {
-            _ = try windowManager?.move(target: anchorTarget, to: newAnchorFrame, onScreenFrame: frames.screenFrame)
-        } catch {
-            debugLog("WindowAnchorPair: restore error: \(error.localizedDescription)")
-        }
+        moveWindowOffMain(anchorTarget, to: newAnchorFrame, screenFrame: frames.screenFrame, label: "WindowAnchorPair restore")
         debugLog("WindowAnchorPair: restored (\(anchorWID), \(satelliteWID)) → \(newAnchorFrame) (offset=\(offset) from liveSat=\(liveSatOrigin))")
 
         // Re-snap retries to handle apps that auto-reposition shortly after
@@ -1601,11 +1610,7 @@ extension AppState {
             && abs(liveAnchor.size.height - newAnchorFrame.size.height) <= tolerance {
             return
         }
-        do {
-            _ = try windowManager?.move(target: anchorTarget, to: newAnchorFrame, onScreenFrame: frames.screenFrame)
-        } catch {
-            debugLog("WindowAnchorPair: re-restore error: \(error.localizedDescription)")
-        }
+        moveWindowOffMain(anchorTarget, to: newAnchorFrame, screenFrame: frames.screenFrame, label: "WindowAnchorPair re-restore")
         debugLog("WindowAnchorPair: re-restored after drift — newAnchor=\(newAnchorFrame) liveAnchor=\(liveAnchor) liveSat=\(liveSat.origin)")
     }
 

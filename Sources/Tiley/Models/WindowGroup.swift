@@ -59,6 +59,15 @@ struct WindowAdjacency: Hashable {
     }
 }
 
+/// Which perpendicular edges two adjacent windows share (see
+/// `AppState.pollingSharedEdgesByAdjacency`).
+struct SharedPerpendicularEdges {
+    let minY: Bool
+    let maxY: Bool
+    let minX: Bool
+    let maxX: Bool
+}
+
 /// Key that uniquely identifies a `WindowAdjacency` per pair.
 struct AdjacencyKey: Hashable {
     let windowA: CGWindowID

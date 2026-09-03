@@ -1148,7 +1148,7 @@ extension AppState {
     /// axis from `groupBounds` to `visibleFrame`.
     func fillGroupToScreen(adj: WindowAdjacency, axis: FillAxis) {
         guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB],
-              var group = windowGroups[gid] else {
+              let group = windowGroups[gid] else {
             debugLog("WindowGrouping: fillGroupToScreen aborted — no group for adjacency")
             return
         }
@@ -1190,22 +1190,85 @@ extension AppState {
             }
         }
 
-        // Apply all moves under the group-transform suppression flag so the
-        // polling follower doesn't fight us.
-        isApplyingGroupTransform = true
-        for (id, newRect) in newFrames {
-            guard let target = windowTarget(byID: id),
-                  let window = target.windowElement else { continue }
-            _ = try? accessibilityService.setFrame(newRect, on: target.screenFrame, for: window)
-            recentlySetFrames[id] = (newRect, CFAbsoluteTimeGetCurrent())
-            group.lastKnownFrames[id] = newRect
+        // Apply the moves off the main actor under the group-transform
+        // suppression flag; the group state is updated once they land.
+        performGroupFrameChanges(newFrames) { [weak self] applied in
+            self?.applyGroupFrameResults(groupID: gid, applied: applied, fallbackFrames: liveFrames)
         }
-        // Recompute every adjacency in the group from the new frames so badge
-        // midpoints jump to the new shared edges right away.
+    }
+
+    /// Runs a batch of Tiley-driven member frame changes off the main actor
+    /// (the AX retry ladder in `setFrame` sleeps 50 ms per step, so a
+    /// four-member fill used to block the main thread for 200 ms or more)
+    /// and hands the successful placements back on the main actor.
+    ///
+    /// `isApplyingGroupTransform` is raised immediately and held until the
+    /// moves have actually landed (plus the short grace period the old code
+    /// used for trailing AX echoes) — previously it was released a fixed
+    /// 0.1 s after *issuing* the synchronous writes. Chained behind any
+    /// in-flight layout application like the preset paths.
+    private func performGroupFrameChanges(
+        _ changes: [(CGWindowID, CGRect)],
+        completion: @escaping ([(CGWindowID, CGRect)]) -> Void
+    ) {
+        guard let wm = windowManager else { return }
+        var jobs: [WindowMoveJob] = []
+        for (index, change) in changes.enumerated() {
+            guard let target = windowTarget(byID: change.0), target.windowElement != nil else { continue }
+            jobs.append(WindowMoveJob(
+                selectionIndex: index,
+                target: target,
+                frame: change.1,
+                destinationVisibleFrame: nil,
+                screenFrame: target.screenFrame
+            ))
+        }
+        guard !jobs.isEmpty else { return }
+
+        isApplyingGroupTransform = true
+        let axService = accessibilityService
+        let logMoves = enableDebugLog
+        let previousApply = layoutApplyTask
+        layoutApplyTask = Task { @MainActor [weak self] in
+            await previousApply?.value
+            guard let self else { return }
+            let placements = await Self.performMoveJobs(
+                jobs, windowManager: wm, accessibilityService: axService, logMoves: logMoves
+            )
+            let now = CFAbsoluteTimeGetCurrent()
+            var applied: [(CGWindowID, CGRect)] = []
+            for placement in placements {
+                self.recentlySetFrames[placement.target.cgWindowID] = (placement.targetFrame, now)
+                applied.append((placement.target.cgWindowID, placement.targetFrame))
+            }
+            completion(applied)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let self else { return }
+                self.isApplyingGroupTransform = false
+                self.scheduleBadgeOverlayRefresh(delay: 0)
+            }
+        }
+    }
+
+    /// After a batch of Tiley-driven member moves has landed: records the new
+    /// frames as the group's ground truth, recomputes every adjacency from
+    /// them so badge midpoints jump to the new shared edges, and refreshes.
+    private func applyGroupFrameResults(
+        groupID gid: UUID,
+        applied: [(CGWindowID, CGRect)],
+        fallbackFrames: [CGWindowID: CGRect]
+    ) {
+        guard var group = windowGroups[gid] else { return }
+        for (id, rect) in applied {
+            group.lastKnownFrames[id] = rect
+        }
         var rebuilt: [WindowAdjacency] = []
         for old in group.adjacencies {
-            guard let fA = group.lastKnownFrames[old.windowA] ?? liveFrames[old.windowA],
-                  let fB = group.lastKnownFrames[old.windowB] ?? liveFrames[old.windowB] else { continue }
+            guard let fA = group.lastKnownFrames[old.windowA] ?? fallbackFrames[old.windowA],
+                  let fB = group.lastKnownFrames[old.windowB] ?? fallbackFrames[old.windowB] else {
+                rebuilt.append(old)
+                continue
+            }
             if let updated = WindowAdjacencyDetector.adjacency(a: old.windowA, frameA: fA, b: old.windowB, frameB: fB) {
                 rebuilt.append(updated)
             } else {
@@ -1214,14 +1277,7 @@ extension AppState {
         }
         group.adjacencies = rebuilt
         windowGroups[gid] = group
-
-        refreshBadgeOverlays()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            guard let self else { return }
-            self.isApplyingGroupTransform = false
-            self.refreshBadgeOverlays()
-        }
+        scheduleBadgeOverlayRefresh(delay: 0)
     }
 
     /// Bounding rect of a non-empty array of frames. Returns nil for empty input.
@@ -1257,7 +1313,7 @@ extension AppState {
     /// rightmost edges anchor to the outer envelope.
     func matchExtentsAdjacency(_ adj: WindowAdjacency) {
         guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB],
-              var group = windowGroups[gid] else {
+              let group = windowGroups[gid] else {
             debugLog("WindowGrouping: matchExtentsAdjacency aborted — no group for adjacency")
             return
         }
@@ -1307,42 +1363,10 @@ extension AppState {
             return
         }
 
-        // Suppress group transform reactions while we choreograph the resize.
-        isApplyingGroupTransform = true
-        for (id, newRect) in changes {
-            guard let target = windowTarget(byID: id),
-                  let window = target.windowElement else { continue }
-            _ = try? accessibilityService.setFrame(newRect, on: target.screenFrame, for: window)
-            recentlySetFrames[id] = (newRect, CFAbsoluteTimeGetCurrent())
-            group.lastKnownFrames[id] = newRect
-        }
-
-        // Recompute every adjacency in the group from the new frames so badge
-        // midpoints jump to the new shared edges right away.
-        var rebuilt: [WindowAdjacency] = []
-        for old in group.adjacencies {
-            guard let fA = group.lastKnownFrames[old.windowA] ?? liveFrames[old.windowA],
-                  let fB = group.lastKnownFrames[old.windowB] ?? liveFrames[old.windowB] else {
-                rebuilt.append(old)
-                continue
-            }
-            if let updated = WindowAdjacencyDetector.adjacency(
-                a: old.windowA, frameA: fA, b: old.windowB, frameB: fB
-            ) {
-                rebuilt.append(updated)
-            } else {
-                rebuilt.append(old)
-            }
-        }
-        group.adjacencies = rebuilt
-        windowGroups[gid] = group
-
-        refreshBadgeOverlays()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            guard let self else { return }
-            self.isApplyingGroupTransform = false
-            self.refreshBadgeOverlays()
+        // Choreograph the resize off the main actor; the group state is
+        // updated once the moves land.
+        performGroupFrameChanges(changes) { [weak self] applied in
+            self?.applyGroupFrameResults(groupID: gid, applied: applied, fallbackFrames: liveFrames)
         }
     }
 
@@ -1484,51 +1508,32 @@ extension AppState {
         // size assigned to the originally-smaller window.
         let (newFrameA, newFrameB) = swappedFrames(frameA: frameA, frameB: frameB, axisIsHorizontal: adj.edgeOfA.isHorizontal)
 
-        // Suppress group transform reactions while the two windows move into
-        // their swapped positions; we are explicitly choreographing both moves.
-        isApplyingGroupTransform = true
-
-        if let target = windowTarget(byID: idA),
-           let window = target.windowElement {
-            _ = try? accessibilityService.setFrame(newFrameA, on: target.screenFrame, for: window)
-            recentlySetFrames[idA] = (newFrameA, CFAbsoluteTimeGetCurrent())
-        }
-        if let target = windowTarget(byID: idB),
-           let window = target.windowElement {
-            _ = try? accessibilityService.setFrame(newFrameB, on: target.screenFrame, for: window)
-            recentlySetFrames[idB] = (newFrameB, CFAbsoluteTimeGetCurrent())
-        }
-
-        // Update cached group state so the displacement detector and the
-        // badge overlay see the swap as the new ground truth — otherwise the
-        // detector compares the post-swap live frames against the *pre-swap*
-        // cached frames and tries to drag the windows back to where they
-        // were. The adjacency itself also needs to flip: A and B traded sides,
-        // so `edgeOfA` becomes its opposite, and the contact coordinate +
-        // overlap interval must be recomputed for the new shared edge.
-        if let gid = groupIndexByWindow[idA] ?? groupIndexByWindow[idB],
-           var group = windowGroups[gid] {
-            group.lastKnownFrames[idA] = newFrameA
-            group.lastKnownFrames[idB] = newFrameB
-            if let idx = group.adjacencies.firstIndex(where: { $0.unorderedKey == adj.unorderedKey }) {
-                group.adjacencies[idx] = swappedAdjacency(
-                    original: group.adjacencies[idx],
-                    newFrameA: newFrameA,
-                    newFrameB: newFrameB
-                )
-            }
-            windowGroups[gid] = group
-        }
-
-        // Refresh the badge overlay immediately so the link badge jumps to
-        // the new shared-edge midpoint instead of staying at the old contact
-        // point until the next event tick.
-        refreshBadgeOverlays()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+        // Both windows move off the main actor under the group-transform
+        // suppression flag; we are explicitly choreographing both moves.
+        performGroupFrameChanges([(idA, newFrameA), (idB, newFrameB)]) { [weak self] _ in
             guard let self else { return }
-            self.isApplyingGroupTransform = false
-            self.refreshBadgeOverlays()
+            // Update cached group state so the displacement detector and the
+            // badge overlay see the swap as the new ground truth — otherwise the
+            // detector compares the post-swap live frames against the *pre-swap*
+            // cached frames and tries to drag the windows back to where they
+            // were. The adjacency itself also needs to flip: A and B traded sides,
+            // so `edgeOfA` becomes its opposite, and the contact coordinate +
+            // overlap interval must be recomputed for the new shared edge.
+            if let gid = self.groupIndexByWindow[idA] ?? self.groupIndexByWindow[idB],
+               var group = self.windowGroups[gid] {
+                group.lastKnownFrames[idA] = newFrameA
+                group.lastKnownFrames[idB] = newFrameB
+                if let idx = group.adjacencies.firstIndex(where: { $0.unorderedKey == adj.unorderedKey }) {
+                    group.adjacencies[idx] = self.swappedAdjacency(
+                        original: group.adjacencies[idx],
+                        newFrameA: newFrameA,
+                        newFrameB: newFrameB
+                    )
+                }
+                self.windowGroups[gid] = group
+            }
+            // Refresh so the link badge jumps to the new shared-edge midpoint.
+            self.scheduleBadgeOverlayRefresh(delay: 0)
         }
     }
 
@@ -1839,6 +1844,7 @@ extension AppState {
                 // At session start, pin the intended source (doesn't change mid-session).
                 if groupPollingTimer == nil {
                     groupPollingIntendedSourceID = id
+                    snapshotSharedPerpendicularEdges(sourceID: id)
                 }
                 groupPollingSourceID = id
                 startOrResetGroupPollingTimer()
@@ -1956,6 +1962,7 @@ extension AppState {
         if let lastSourceID {
             resolveAdjacencyOverlapsOnRelease(lastSourceID: lastSourceID)
         }
+        pollingSharedEdgesByAdjacency.removeAll(keepingCapacity: true)
 
         // **Important**: leave the follower caches at their "ideal" values
         // (don't sync to live). Even if the app rejected a size, having the
@@ -2159,15 +2166,29 @@ extension AppState {
                 ?? liveFrame(of: otherID) ?? .zero
 
             let sharesMinY: Bool, sharesMaxY: Bool, sharesMinX: Bool, sharesMaxX: Bool
-            switch sourceEdge {
-            case .right, .left:
-                sharesMinY = abs(sourceCached.minY - followerCached.minY) <= alignTolerance
-                sharesMaxY = abs(sourceCached.maxY - followerCached.maxY) <= alignTolerance
-                sharesMinX = false; sharesMaxX = false
-            case .top, .bottom:
-                sharesMinY = false; sharesMaxY = false
-                sharesMinX = abs(sourceCached.minX - followerCached.minX) <= alignTolerance
-                sharesMaxX = abs(sourceCached.maxX - followerCached.maxX) <= alignTolerance
+            if let recorded = pollingSharedEdgesByAdjacency[adj.unorderedKey] {
+                // Decided at drag start, when the caches were consistent.
+                // The gap/overlap pass above may just have written the
+                // follower's live frame into its cache; if the app ignored a
+                // vertical (or horizontal) translation mid-drag, comparing
+                // caches here would report the edges as no longer shared and
+                // leave the pair misaligned — exactly the case this snap
+                // exists to fix.
+                sharesMinY = recorded.minY
+                sharesMaxY = recorded.maxY
+                sharesMinX = recorded.minX
+                sharesMaxX = recorded.maxX
+            } else {
+                switch sourceEdge {
+                case .right, .left:
+                    sharesMinY = abs(sourceCached.minY - followerCached.minY) <= alignTolerance
+                    sharesMaxY = abs(sourceCached.maxY - followerCached.maxY) <= alignTolerance
+                    sharesMinX = false; sharesMaxX = false
+                case .top, .bottom:
+                    sharesMinY = false; sharesMaxY = false
+                    sharesMinX = abs(sourceCached.minX - followerCached.minX) <= alignTolerance
+                    sharesMaxX = abs(sourceCached.maxX - followerCached.maxX) <= alignTolerance
+                }
             }
 
             if sharesMinY || sharesMaxY || sharesMinX || sharesMaxX {
@@ -2293,6 +2314,41 @@ extension AppState {
         // Badges are hidden during interaction, so skip coordinate recomputation
         // and badge refresh here (keeps the tick cheap). They are recomputed in
         // `stopGroupPollingTimer` when interaction ends.
+    }
+
+    /// Records, for every adjacency of the drag source, which perpendicular
+    /// edges (top/bottom for a left/right contact, left/right for a
+    /// top/bottom contact) the pair shares at the start of a drag/resize
+    /// session — from the pre-drag cached frames, which are consistent at
+    /// that moment. Consumed by the release-time perpendicular snap.
+    private func snapshotSharedPerpendicularEdges(sourceID: CGWindowID) {
+        pollingSharedEdgesByAdjacency.removeAll(keepingCapacity: true)
+        guard let gid = groupIndexByWindow[sourceID], let group = windowGroups[gid] else { return }
+        let tolerance = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
+        for adj in group.adjacencies {
+            guard adj.windowA == sourceID || adj.windowB == sourceID else { continue }
+            let otherID = (adj.windowA == sourceID) ? adj.windowB : adj.windowA
+            let sourceEdge: WindowAdjacency.Edge = (adj.windowA == sourceID) ? adj.edgeOfA : adj.edgeOfA.opposite
+            guard let src = group.lastKnownFrames[sourceID] ?? liveFrame(of: sourceID),
+                  let fol = group.lastKnownFrames[otherID] ?? liveFrame(of: otherID) else { continue }
+            let shared: SharedPerpendicularEdges
+            switch sourceEdge {
+            case .right, .left:
+                shared = SharedPerpendicularEdges(
+                    minY: abs(src.minY - fol.minY) <= tolerance,
+                    maxY: abs(src.maxY - fol.maxY) <= tolerance,
+                    minX: false, maxX: false
+                )
+            case .top, .bottom:
+                shared = SharedPerpendicularEdges(
+                    minY: false, maxY: false,
+                    minX: abs(src.minX - fol.minX) <= tolerance,
+                    maxX: abs(src.maxX - fol.maxX) <= tolerance
+                )
+            }
+            pollingSharedEdgesByAdjacency[adj.unorderedKey] = shared
+            debugLog("WindowGrouping: session shared edges source=\(sourceID) partner=\(otherID) minY=\(shared.minY) maxY=\(shared.maxY) minX=\(shared.minX) maxX=\(shared.maxX)")
+        }
     }
 
     /// Returns whether the given window is currently in native macOS fullscreen.

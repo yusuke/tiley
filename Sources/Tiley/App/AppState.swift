@@ -359,6 +359,15 @@ final class AppState: NSObject, NSMenuDelegate {
     /// detected when polling started. Doesn't change mid-session even if AX echoes
     /// would otherwise switch sourceID. Used for release-time corrections.
     @ObservationIgnored var groupPollingIntendedSourceID: CGWindowID?
+    /// Which perpendicular edges each of the drag source's adjacencies
+    /// shared with its partner when the current drag/resize session
+    /// started (keyed by adjacency). The release-time alignment snaps those
+    /// edges back together; deciding "shared" from the caches at release
+    /// time was unreliable — the gap/overlap resolution that runs first
+    /// writes the follower's *live* frame into its cache, so a follower
+    /// that had ignored a vertical translation mid-drag no longer looked
+    /// shared and was left misaligned.
+    @ObservationIgnored var pollingSharedEdgesByAdjacency: [AdjacencyKey: SharedPerpendicularEdges] = [:]
     /// Absolute time of the last detected frame change during polling.
     @ObservationIgnored var groupPollingLastChangeAt: CFAbsoluteTime = 0
     /// Counts polling ticks; used to throttle expensive ops (e.g., AXRaise).
@@ -1788,6 +1797,12 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func apply(selection: GridSelection, to target: WindowTarget) {
+        if target.isHidden {
+            // Unhiding a placeholder target pumps the run loop for ~150 ms
+            // (`unhideAppIfNeeded`); take Tiley's windows off screen first so
+            // the overlay doesn't visibly linger through it.
+            orderOutAllMainWindows()
+        }
         let target = unhideAppIfNeeded(target)
 
         // If the target window is on a different space than the selected space,
@@ -1868,6 +1883,12 @@ final class AppState: NSObject, NSMenuDelegate {
             isShowingLayoutGrid = false
             hidePreviewOverlay()
             return
+        }
+        if target.isHidden {
+            // Unhiding a placeholder target pumps the run loop for ~150 ms
+            // (`unhideAppIfNeeded`); take Tiley's windows off screen first so
+            // the overlay doesn't visibly linger through it.
+            orderOutAllMainWindows()
         }
         target = unhideAppIfNeeded(target)
         activeLayoutTarget = target
@@ -1959,6 +1980,12 @@ final class AppState: NSObject, NSMenuDelegate {
         } else {
             guard let resolved = resolveWindowTarget() else { return }
             target = resolved
+        }
+        if target.isHidden {
+            // Unhiding a placeholder target pumps the run loop for ~150 ms
+            // (`unhideAppIfNeeded`); take Tiley's windows off screen first so
+            // the overlay doesn't visibly linger through it.
+            orderOutAllMainWindows()
         }
         target = unhideAppIfNeeded(target)
 
