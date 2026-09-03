@@ -1191,14 +1191,21 @@ extension AppState {
         // Dissolve any existing group containing the anchor or the new
         // partner — regardless of whether we can form a new one. A stale
         // partner must not keep its spatial/raise claim on the anchor.
-        if let gid = groupIndexByWindow[anchorWID] { dissolveGroup(gid) }
-        if let gid = groupIndexByWindow[satelliteWID] { dissolveGroup(gid) }
+        // Both dissolves skip the per-call recompute: `linkAdjacency` below
+        // refreshes the badges itself, and the no-adjacency branch runs one
+        // recompute for both.
+        var dissolvedAny = false
+        if let gid = groupIndexByWindow[anchorWID] { dissolveGroup(gid, recompute: false); dissolvedAny = true }
+        if let gid = groupIndexByWindow[satelliteWID] { dissolveGroup(gid, recompute: false); dissolvedAny = true }
 
         if let adj = newAdj {
             linkAdjacency(adj)
             debugLog("DynamicGroup: formed spatial group anchor=\(anchorWID) satellite=\(satelliteWID)")
         } else {
             debugLog("DynamicGroup: dissolved stale group; no adjacency for anchor=\(anchorWID) satellite=\(satelliteWID) — raise-only linkage")
+            if dissolvedAny {
+                recomputeGroupsAndCandidates()
+            }
         }
         // dissolveGroup()'s stopObserving may have un-observed windows that
         // are still registered as satellites. Re-attach observation so
@@ -1439,7 +1446,8 @@ extension AppState {
                 windowAnchorSatellites[anchorWID, default: []].insert(memberWID)
                 observeSatelliteAndAnchor(satelliteWID: memberWID, anchorWID: anchorWID)
             }
-            dissolveGroup(gid)
+            // Step 4's `rebuildAnchorSatelliteGroup` recomputes / refreshes.
+            dissolveGroup(gid, recompute: false)
         }
         // The partner may itself have been in another primary group with a
         // 3rd window. We don't promote that side's partners into the anchor's
@@ -1447,7 +1455,7 @@ extension AppState {
         // need to dissolve the partner's existing group so it can join the
         // dynamic spatial group built by `rebuildAnchorSatelliteGroup`.
         if let gid = groupIndexByWindow[partnerWID] {
-            dissolveGroup(gid)
+            dissolveGroup(gid, recompute: false)
         }
 
         // Step 2: register the new partner as a satellite. Frames are

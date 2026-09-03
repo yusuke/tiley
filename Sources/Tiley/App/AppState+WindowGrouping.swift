@@ -336,7 +336,7 @@ extension AppState {
     /// If `targetWindowIDs` is nil, only existing groups are revalidated (no
     /// new candidates are generated). Otherwise candidate detection is limited
     /// to those windows plus existing group members.
-    private func recomputeGroupsAndCandidates(targetWindowIDs: [CGWindowID]? = nil) {
+    func recomputeGroupsAndCandidates(targetWindowIDs: [CGWindowID]? = nil) {
         // Scope: windows the preset moved + existing group members.
         var candidateScope: Set<CGWindowID> = Set(targetWindowIDs ?? [])
         for group in windowGroups.values {
@@ -368,7 +368,8 @@ extension AppState {
             // Drop members that no longer exist.
             group.members = group.members.filter { frames[$0] != nil }
             if group.members.count < 2 {
-                dissolveGroup(gid)
+                // Inside the recompute itself — no nested recompute.
+                dissolveGroup(gid, recompute: false)
                 continue
             }
             // Recompute intra-group adjacencies.
@@ -382,7 +383,8 @@ extension AppState {
             group.adjacencies = retained
             // No adjacencies left → dissolve the group.
             if retained.isEmpty {
-                dissolveGroup(gid)
+                // Inside the recompute itself — no nested recompute.
+                dissolveGroup(gid, recompute: false)
                 continue
             }
             // Reuse the frames captured above (members ⊆ candidateScope)
@@ -433,7 +435,9 @@ extension AppState {
         }
         debugLog("WindowGrouping: pending candidates after filtering: \(pendingGroupCandidates.count)")
 
-        refreshBadgeOverlays()
+        // Direct (not coalesced) so the frames read above are reused instead
+        // of being re-read by the refresh a moment later.
+        refreshBadgeOverlays(knownFrames: frames)
     }
 
     // MARK: - Manual move/resize → candidate detection
@@ -571,7 +575,7 @@ extension AppState {
         pendingCandidateTimestamps.removeValue(forKey: key)
         pendingCandidateFadeItems.removeValue(forKey: key)
         if pendingGroupCandidates.count != before {
-            refreshBadgeOverlays()
+            scheduleBadgeOverlayRefresh(delay: 0)
         }
     }
 
@@ -644,7 +648,7 @@ extension AppState {
             $0.unorderedKey == adj.unorderedKey
         }
         startGroupSpaceMonitorTimer()
-        refreshBadgeOverlays()
+        scheduleBadgeOverlayRefresh(delay: 0)
     }
 
     /// Renders a single CGWindowID as `id [App: Title]` for log lines, falling
@@ -682,6 +686,7 @@ extension AppState {
         // Space move as soon as it happens.
         let spaceByWID = AccessibilityService.buildWindowSpaceMap(windowIDs: allMemberIDs, bypassCache: true)
 
+        var dissolvedAny = false
         for (gid, group) in windowGroups {
             let known = group.members.compactMap { spaceByWID[$0] }
             // Skip if any member has no reported Space; a closed window or
@@ -690,8 +695,12 @@ extension AppState {
             let distinct = Set(known)
             if distinct.count > 1 {
                 debugLog("WindowGrouping: group \(gid) members spread across spaces \(distinct) — dissolving")
-                dissolveGroup(gid)
+                dissolveGroup(gid, recompute: false)
+                dissolvedAny = true
             }
+        }
+        if dissolvedAny {
+            recomputeGroupsAndCandidates()
         }
     }
 
@@ -730,16 +739,25 @@ extension AppState {
     }
 
     /// Called when the user taps the `x` on a badge, or when a window is closed.
-    func dissolveGroup(_ groupID: UUID) {
+    ///
+    /// `recompute: false` skips the trailing `recomputeGroupsAndCandidates()`
+    /// for callers that dissolve several groups in one pass (or are
+    /// themselves running inside the recompute) and recompute / refresh once
+    /// at the end. Each recompute re-reads every remaining member's frame
+    /// via AX and runs a full badge refresh, so the old unconditional call
+    /// turned one satellite click into four to five refresh passes.
+    func dissolveGroup(_ groupID: UUID, recompute: Bool = true) {
         guard let group = windowGroups.removeValue(forKey: groupID) else { return }
         debugLog("WindowGrouping: group dissolved id=\(groupID) members=\(describeMembers(group.members))")
         for id in group.members {
             groupIndexByWindow.removeValue(forKey: id)
             windowObservationService?.stopObserving(cgWindowID: id)
         }
-        // After dissolving, any remaining windows that still touch become
-        // candidates again.
-        recomputeGroupsAndCandidates()
+        // After dissolving, revalidate the remaining groups and refresh the
+        // badges (candidate detection itself is scoped to preset targets).
+        if recompute {
+            recomputeGroupsAndCandidates()
+        }
     }
 
     private func mergeGroups(into keepID: UUID, from removeID: UUID, bridgingAdjacency: WindowAdjacency) {
@@ -791,7 +809,7 @@ extension AppState {
     /// while a drag/resize is in progress.
     /// `fastHide = true` shortens the fade-out duration (used at the moment a
     /// drag/resize starts so badges disappear quickly).
-    func refreshBadgeOverlays(fastHide: Bool = false) {
+    func refreshBadgeOverlays(fastHide: Bool = false, knownFrames: [CGWindowID: CGRect] = [:]) {
         // An explicit refresh supersedes any coalesced one still pending.
         badgeOverlayRefreshWorkItem?.cancel()
         badgeOverlayRefreshWorkItem = nil
@@ -836,7 +854,13 @@ extension AppState {
         for group in windowGroups.values {
             frameScope.formUnion(group.members)
         }
-        let liveFrames = frameSnapshot(for: frameScope)
+        // Reuse frames the caller just read (`recomputeGroupsAndCandidates`
+        // hands over its snapshot) and read only the remainder.
+        var liveFrames = knownFrames
+        let missingFrames = frameScope.subtracting(knownFrames.keys)
+        if !missingFrames.isEmpty {
+            liveFrames.merge(frameSnapshot(for: missingFrames)) { _, new in new }
+        }
         let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
         // Hidden windows (fully covered by another window above them in
         // Z-order) shouldn't surface grouping badges — the user can't see
@@ -945,8 +969,19 @@ extension AppState {
     /// `kAXMainWindowChangedNotification`, so calling the refresh directly
     /// from the `.focusChanged` handler would run the full sweep twice per
     /// switch. Events arriving within the window collapse into one refresh.
+    ///
+    /// Also the terminal step of link / unlink / dissolve / destroy /
+    /// expire (`delay: 0` = next run-loop turn): one user action commonly
+    /// chains several of those, and each used to run its own full refresh.
+    /// Requests collapse onto the earliest pending deadline, so a `delay: 0`
+    /// request replaces a pending 50 ms one rather than waiting behind it.
     func scheduleBadgeOverlayRefresh(delay: TimeInterval = 0.05) {
-        guard badgeOverlayRefreshWorkItem == nil else { return }
+        let deadline = CFAbsoluteTimeGetCurrent() + delay
+        if let pending = badgeOverlayRefreshWorkItem {
+            if badgeOverlayRefreshDeadline <= deadline { return }
+            pending.cancel()
+        }
+        badgeOverlayRefreshDeadline = deadline
         let item = DispatchWorkItem { [weak self] in
             guard let self else { return }
             self.badgeOverlayRefreshWorkItem = nil
@@ -1617,9 +1652,9 @@ extension AppState {
             }
             return screenEdges.contains(edgeOnTarget) ? adj : nil
         }
-        for adj in toUnlink {
-            unlinkAdjacency(adj)
-        }
+        // One split and no badge refresh: the apply that follows refreshes
+        // (`refreshGroupCandidatesAfterPresetApply`) once the windows land.
+        unlinkAdjacencies(toUnlink, refresh: false)
     }
 
     /// Removes only the given adjacency from its group.
@@ -1632,29 +1667,52 @@ extension AppState {
     /// — otherwise the raise linkage would keep firing even after the user
     /// explicitly decoupled the two windows.
     func unlinkAdjacency(_ adj: WindowAdjacency, caller: String = #function) {
-        // This is the one group-removal path that used to leave no trace in
-        // the debug log (and the badge refresh that follows takes the silent
-        // idle fast path once no groups remain) — record it, with the caller.
-        debugLog("WindowGrouping: unlinkAdjacency A=\(describeMember(adj.windowA)) B=\(describeMember(adj.windowB)) edge=\(adj.edgeOfA.rawValue) group=\(groupIndexByWindow[adj.windowA]?.uuidString ?? groupIndexByWindow[adj.windowB]?.uuidString ?? "none") caller=\(caller)")
-        // Explicit unlink → drop the satellite + frame memory for whichever
-        // direction of the pair is an app-anchor/satellite binding.
-        unlinkAppSlotSatellitePair(windowA: adj.windowA, windowB: adj.windowB)
-        // Same for window-anchor satellite pairs.
-        unlinkWindowAnchorPair(windowA: adj.windowA, windowB: adj.windowB)
+        unlinkAdjacencies([adj], refresh: true, caller: caller)
+    }
 
-        guard let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB] else { return }
-        guard var group = windowGroups[gid] else { return }
+    /// Batch variant: drops several adjacencies (normally all of one group),
+    /// splits the affected group(s) into connected components ONCE, and —
+    /// when `refresh` is true — schedules a single badge refresh. Callers
+    /// that refresh on their own right afterwards (the layout-apply
+    /// pre-pass) pass `false`. The per-adjacency loop this replaces re-ran
+    /// the component split, the observation re-attach, and a full badge
+    /// refresh for every adjacency.
+    func unlinkAdjacencies(_ adjs: [WindowAdjacency], refresh: Bool, caller: String = #function) {
+        guard !adjs.isEmpty else { return }
 
-        // Drop the matching adjacency.
-        group.adjacencies.removeAll { $0.unorderedKey == adj.unorderedKey }
+        // Bookkeeping per adjacency, and the owning group of each — resolved
+        // *before* any split mutates `groupIndexByWindow`.
+        var keysByGroup: [UUID: Set<AdjacencyKey>] = [:]
+        for adj in adjs {
+            // This used to be the one group-removal path that left no trace
+            // in the debug log (and the badge refresh that follows takes the
+            // silent idle fast path once no groups remain) — record it.
+            debugLog("WindowGrouping: unlinkAdjacency A=\(describeMember(adj.windowA)) B=\(describeMember(adj.windowB)) edge=\(adj.edgeOfA.rawValue) group=\(groupIndexByWindow[adj.windowA]?.uuidString ?? groupIndexByWindow[adj.windowB]?.uuidString ?? "none") caller=\(caller)")
+            // Explicit unlink → drop the satellite + frame memory for whichever
+            // direction of the pair is an app-anchor/satellite binding.
+            unlinkAppSlotSatellitePair(windowA: adj.windowA, windowB: adj.windowB)
+            // Same for window-anchor satellite pairs.
+            unlinkWindowAnchorPair(windowA: adj.windowA, windowB: adj.windowB)
+            if let gid = groupIndexByWindow[adj.windowA] ?? groupIndexByWindow[adj.windowB] {
+                keysByGroup[gid, default: []].insert(adj.unorderedKey)
+            }
+        }
+        guard !keysByGroup.isEmpty else { return }
 
-        // Recompute connected components over the remaining adjacencies.
-        let components = connectedComponents(members: group.members, adjacencies: group.adjacencies)
+        for (gid, keys) in keysByGroup {
+            guard var group = windowGroups[gid] else { continue }
 
-        if components.count == 1 {
-            // Still fully connected → keep the group as-is.
-            windowGroups[gid] = group
-        } else {
+            // Drop the matching adjacencies.
+            group.adjacencies.removeAll { keys.contains($0.unorderedKey) }
+
+            // Recompute connected components over the remaining adjacencies.
+            let components = connectedComponents(members: group.members, adjacencies: group.adjacencies)
+
+            if components.count == 1 {
+                // Still fully connected → keep the group as-is.
+                windowGroups[gid] = group
+                continue
+            }
             // Split into multiple components → rebuild the group(s).
             windowGroups.removeValue(forKey: gid)
             for id in group.members {
@@ -1691,7 +1749,9 @@ extension AppState {
         // back together after an explicit ungroup wouldn't surface a fresh
         // "form group" candidate badge.
         ensureAllAvailableWindowsObservedForManualMove()
-        refreshBadgeOverlays()
+        if refresh {
+            scheduleBadgeOverlayRefresh(delay: 0)
+        }
     }
 
     /// Given a set of members and a list of adjacencies, returns each connected
@@ -2580,7 +2640,7 @@ extension AppState {
         } else {
             windowGroups[gid] = group
         }
-        refreshBadgeOverlays()
+        scheduleBadgeOverlayRefresh(delay: 0)
     }
 
     /// True when the frontmost app is presenting a sheet or modal dialog that
@@ -2673,6 +2733,16 @@ extension AppState {
             debugLog("WindowGrouping: raise short-circuit (isShowingLayoutGrid=true) id=\(id)")
             return
         }
+        // One click reaches here up to three times (AX `.raised`, the
+        // mouse-down monitor ~50 ms later, the workspace observer ~200 ms
+        // later) and each pass costs at least a CGWindowList copy for the
+        // visibility check. Collapse repeats for the same window.
+        let now = CFAbsoluteTimeGetCurrent()
+        if let last = lastGroupRaiseDispatch, last.id == id, now - last.time < 0.1 {
+            debugLog("WindowGrouping: raise deduped id=\(id)")
+            return
+        }
+        lastGroupRaiseDispatch = (id, now)
         guard let gid = groupIndexByWindow[id] else {
             debugLog("WindowGrouping: raise id=\(id) not in any group")
             return

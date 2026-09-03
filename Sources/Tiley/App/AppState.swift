@@ -389,6 +389,14 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Non-nil while a deferred `refreshBadgeOverlays()` is queued; any direct
     /// refresh cancels it so at most one full sweep runs per burst of events.
     @ObservationIgnored var badgeOverlayRefreshWorkItem: DispatchWorkItem?
+    /// Absolute deadline of `badgeOverlayRefreshWorkItem`, so a later request
+    /// with a *shorter* delay can replace a pending longer one.
+    @ObservationIgnored var badgeOverlayRefreshDeadline: CFAbsoluteTime = 0
+    /// Last window for which `handleGroupMemberRaised` actually ran, with the
+    /// time — one click reaches it up to three times (AX `.raised`, the
+    /// mouse-down monitor, the workspace observer); repeats within a short
+    /// window are dropped.
+    @ObservationIgnored var lastGroupRaiseDispatch: (id: CGWindowID, time: CFAbsoluteTime)?
 
     // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)
     /// True when the user opened the overlay and is still holding the toggle modifiers.
