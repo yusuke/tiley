@@ -123,6 +123,17 @@ enum CGSPrivate {
     /// We detect this by checking if the majority of layer-0 windows have
     /// their centre point well outside all display bounds.
     static func isShowDesktopLikelyActive() -> Bool {
+        let options = CGWindowListOption([.optionOnScreenOnly, .excludeDesktopElements])
+        guard let list = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
+            return false
+        }
+        return isShowDesktopLikelyActive(in: list)
+    }
+
+    /// Evaluates the Show Desktop heuristic on an already-copied on-screen
+    /// window list (see `exposeState()`). The list may include desktop
+    /// elements — the `layer == 0` filter below excludes them either way.
+    static func isShowDesktopLikelyActive(in list: [[String: Any]]) -> Bool {
         let myPID = getpid()
         let screens = NSScreen.screens
         guard !screens.isEmpty else { return false }
@@ -141,11 +152,6 @@ enum CGSPrivate {
         // outside all screens. During Show Desktop windows are pushed
         // hundreds of pixels beyond the edge.
         let expandedBounds = totalBounds.insetBy(dx: -50, dy: -50)
-
-        let options = CGWindowListOption([.optionOnScreenOnly, .excludeDesktopElements])
-        guard let list = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
-            return false
-        }
 
         var normalCount = 0
         var offScreenCount = 0
@@ -186,6 +192,12 @@ enum CGSPrivate {
         guard let list = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
             return false
         }
+        return isMissionControlLikelyActive(in: list)
+    }
+
+    /// Evaluates the Mission Control heuristic on an already-copied
+    /// on-screen window list (see `exposeState()`).
+    static func isMissionControlLikelyActive(in list: [[String: Any]]) -> Bool {
         var dockOverlayCount = 0
         for info in list {
             guard let owner = info[kCGWindowOwnerName as String] as? String,
@@ -199,6 +211,26 @@ enum CGSPrivate {
         }
         debugLog("isMissionControlLikelyActive: dockOverlayCount=\(dockOverlayCount)")
         return dockOverlayCount > 5
+    }
+
+    struct ExposeState {
+        let showDesktop: Bool
+        let missionControl: Bool
+    }
+
+    /// Both expose heuristics from a SINGLE `CGWindowListCopyWindowInfo`
+    /// copy. Callers used to invoke the two probes back to back (two copies
+    /// of the on-screen list) on every overlay open and before every
+    /// window-list cache refresh.
+    static func exposeState() -> ExposeState {
+        let options = CGWindowListOption([.optionOnScreenOnly])
+        guard let list = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
+            return ExposeState(showDesktop: false, missionControl: false)
+        }
+        return ExposeState(
+            showDesktop: isShowDesktopLikelyActive(in: list),
+            missionControl: isMissionControlLikelyActive(in: list)
+        )
     }
 
     /// Log the frontmost app state for Show Desktop debugging.

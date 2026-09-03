@@ -238,8 +238,9 @@ extension AppState {
             // During these states windows are pushed off-screen and CG/AX
             // positions diverge, producing an unreliable window list.
             // The last good cache from before the state change is preserved.
-            let showDesktop = CGSPrivate.isShowDesktopLikelyActive()
-            let missionControl = CGSPrivate.isMissionControlLikelyActive()
+            let expose = CGSPrivate.exposeState()
+            let showDesktop = expose.showDesktop
+            let missionControl = expose.missionControl
             if showDesktop || missionControl {
                 debugLog("Window list cache skipped (showDesktop=\(showDesktop) missionControl=\(missionControl))")
                 return

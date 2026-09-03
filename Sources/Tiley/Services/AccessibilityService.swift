@@ -886,9 +886,9 @@ final class AccessibilityService {
     /// windows from non-current Mission Control spaces with `isOnOtherSpace` set.
     func allWindowTargets(includeOtherSpaces: Bool = false) -> (targets: [WindowTarget], spaceList: [SpaceInfo], activeSpaceIDs: Set<UInt64>) {
         let perfStart = CFAbsoluteTimeGetCurrent()
-        func perfLog(_ label: String) {
+        func perfLog(_ label: @autoclosure () -> String) {
             let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
-            debugLog("allWindowTargets: \(label) (t=\(String(format: "%.1f", elapsed))ms)")
+            debugLog("allWindowTargets: \(label()) (t=\(String(format: "%.1f", elapsed))ms)")
         }
         guard checkAccess(prompt: false) else { return ([], [], []) }
 
@@ -1003,11 +1003,18 @@ final class AccessibilityService {
 
         // Collect unique PIDs preserving first-seen order.
         // Exclude PIDs of hidden apps so they are handled in the hidden-apps section below.
-        let hiddenPIDs = Set(
-            NSWorkspace.shared.runningApplications
-                .filter { $0.isHidden }
-                .map(\.processIdentifier)
-        )
+        // One Launch Services snapshot and one screen list for the whole
+        // capture. Hidden-app detection, per-window app names, the
+        // other-space activation-policy checks, the hidden-apps pass, and
+        // every screen resolution below read from these instead of
+        // re-querying per window.
+        let runningApps = NSWorkspace.shared.runningApplications
+        var runningAppsByPID: [pid_t: NSRunningApplication] = [:]
+        for app in runningApps { runningAppsByPID[app.processIdentifier] = app }
+        let hiddenPIDs = Set(runningApps.filter { $0.isHidden }.map(\.processIdentifier))
+        let screens = NSScreen.screens
+        let mainScreen = NSScreen.main
+        let primaryMaxY: CGFloat? = screens.first?.frame.maxY
         var seenPIDs = Set<pid_t>()
         var orderedPIDs: [pid_t] = []
         for entry in currentSpaceEntries {
@@ -1022,27 +1029,29 @@ final class AccessibilityService {
             let element: AXUIElement
             let origin: CGPoint   // AX/CG top-left coordinates
             let size: CGSize
+            let title: String?
         }
 
         perfLog("cgEntries filtered (\(cgEntries.count) entries, \(orderedPIDs.count) unique PIDs)")
 
         var axWindowsByPID: [pid_t: [AXWindowInfo]] = [:]
+        // Reused for the resulting `WindowTarget`s instead of creating a
+        // fresh application element per window.
+        var appElementsByPID: [pid_t: AXUIElement] = [:]
         for pid in orderedPIDs {
             let appElement = AXUIElementCreateApplication(pid)
+            appElementsByPID[pid] = appElement
             guard let axWindows = try? copyAllWindowElements(from: appElement) else { continue }
             var infos: [AXWindowInfo] = []
             for w in axWindows {
-                // Only include standard windows (skip palettes, toolbars, dialogs, etc.)
-                let subrole = try? copyStringAttribute(w, attribute: kAXSubroleAttribute)
-                guard subrole == "AXStandardWindow" else { continue }
-                guard let pos = try? copyAXValueAttribute(w, attribute: kAXPositionAttribute),
-                      let sz = try? copyAXValueAttribute(w, attribute: kAXSizeAttribute) else { continue }
-                var origin = CGPoint.zero
-                var size = CGSize.zero
-                guard AXValueGetValue(pos, .cgPoint, &origin),
-                      AXValueGetValue(sz, .cgSize, &size) else { continue }
-                guard size.width > 0, size.height > 0 else { continue }
-                infos.append(AXWindowInfo(element: w, origin: origin, size: size))
+                // Only include standard windows (skip palettes, toolbars,
+                // dialogs, etc.). Subrole, position, size, and title arrive
+                // in ONE round-trip per window instead of three or four.
+                guard let summary = readWindowSummary(w),
+                      summary.subrole == "AXStandardWindow",
+                      let origin = summary.origin, let size = summary.size,
+                      size.width > 0, size.height > 0 else { continue }
+                infos.append(AXWindowInfo(element: w, origin: origin, size: size, title: summary.title))
             }
             axWindowsByPID[pid] = infos
         }
@@ -1098,17 +1107,17 @@ final class AccessibilityService {
             let axInfo = axInfos[idx]
             usedAXWindows.insert(ObjectIdentifier(axInfo.element))
 
-            let screen = resolveScreen(forAXOrigin: axInfo.origin, size: axInfo.size)
-            let frame = frameForAXOrigin(axInfo.origin, size: axInfo.size, on: screen)
-            let screenFrame = screen?.frame ?? NSScreen.main?.frame ?? frame
-            let visibleFrame = screen?.visibleFrame ?? NSScreen.main?.visibleFrame ?? frame
-            let appName = NSRunningApplication(processIdentifier: cgEntry.pid)?.localizedName
+            let screen = resolveScreen(forAXOrigin: axInfo.origin, size: axInfo.size, screens: screens)
+            let frame = frameForAXOrigin(axInfo.origin, size: axInfo.size, on: screen, primaryMaxY: primaryMaxY)
+            let screenFrame = screen?.frame ?? mainScreen?.frame ?? frame
+            let visibleFrame = screen?.visibleFrame ?? mainScreen?.visibleFrame ?? frame
+            let appName = runningAppsByPID[cgEntry.pid]?.localizedName
                 ?? cgEntry.ownerName
                 ?? NSLocalizedString("App", comment: "Generic app name fallback")
-            let windowTitle = try? copyStringAttribute(axInfo.element, attribute: kAXTitleAttribute)
+            let windowTitle = axInfo.title
 
             let target = WindowTarget(
-                appElement: AXUIElementCreateApplication(cgEntry.pid),
+                appElement: appElementsByPID[cgEntry.pid] ?? AXUIElementCreateApplication(cgEntry.pid),
                 windowElement: axInfo.element,
                 processIdentifier: cgEntry.pid,
                 appName: appName,
@@ -1127,11 +1136,11 @@ final class AccessibilityService {
 
         // Append windows from other spaces (display-only, no AX element).
         if spaceMap.isAvailable && !otherSpaceEntries.isEmpty {
-            let defaultScreen = NSScreen.main?.frame ?? .zero
-            let defaultVisible = NSScreen.main?.visibleFrame ?? .zero
+            let defaultScreen = mainScreen?.frame ?? .zero
+            let defaultVisible = mainScreen?.visibleFrame ?? .zero
             for cgEntry in otherSpaceEntries {
                 guard !hiddenPIDs.contains(cgEntry.pid) else { continue }
-                let app = NSRunningApplication(processIdentifier: cgEntry.pid)
+                let app = runningAppsByPID[cgEntry.pid]
                 // Skip apps that aren't regular (no dock icon).
                 guard app?.activationPolicy == .regular else { continue }
                 let appName = app?.localizedName
@@ -1139,19 +1148,19 @@ final class AccessibilityService {
                     ?? NSLocalizedString("App", comment: "Generic app name fallback")
                 // Use CG bounds for frame (CG coordinate space = top-left origin).
                 // Convert to AppKit coordinate space (bottom-left origin).
-                let screen = NSScreen.screens.first { $0.frame.contains(cgEntry.bounds.origin) }
-                    ?? NSScreen.main
+                let screen = screens.first { $0.frame.contains(cgEntry.bounds.origin) }
+                    ?? mainScreen
                 let screenFrame = screen?.frame ?? defaultScreen
                 let visibleFrame = screen?.visibleFrame ?? defaultVisible
-                let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
+                let baseY = primaryMaxY ?? screenFrame.maxY
                 let appKitFrame = CGRect(
                     x: cgEntry.bounds.origin.x,
-                    y: primaryMaxY - cgEntry.bounds.origin.y - cgEntry.bounds.height,
+                    y: baseY - cgEntry.bounds.origin.y - cgEntry.bounds.height,
                     width: cgEntry.bounds.width,
                     height: cgEntry.bounds.height
                 )
                 results.append(WindowTarget(
-                    appElement: AXUIElementCreateApplication(cgEntry.pid),
+                    appElement: appElementsByPID[cgEntry.pid] ?? AXUIElementCreateApplication(cgEntry.pid),
                     windowElement: nil,
                     processIdentifier: cgEntry.pid,
                     appName: appName,
@@ -1173,11 +1182,11 @@ final class AccessibilityService {
         // AX queries often fail with kAXErrorCannotComplete for hidden apps, so
         // if we can't enumerate individual windows, we add a single placeholder
         // entry (with a nil windowElement) showing just the app name.
-        let hiddenApps = NSWorkspace.shared.runningApplications.filter {
+        let hiddenApps = runningApps.filter {
             $0.isHidden && $0.activationPolicy == .regular && $0.processIdentifier != selfPID
         }
-        let defaultScreen = NSScreen.main?.frame ?? .zero
-        let defaultVisible = NSScreen.main?.visibleFrame ?? .zero
+        let defaultScreen = mainScreen?.frame ?? .zero
+        let defaultVisible = mainScreen?.visibleFrame ?? .zero
         for app in hiddenApps {
             let pid = app.processIdentifier
             guard !seenPIDs.contains(pid) else { continue }
@@ -1188,21 +1197,16 @@ final class AccessibilityService {
             let axWindows = (try? copyAllWindowElements(from: appElement)) ?? []
             var addedAny = false
             for w in axWindows {
-                let subrole = try? copyStringAttribute(w, attribute: kAXSubroleAttribute)
-                guard subrole == "AXStandardWindow" else { continue }
-                guard let pos = try? copyAXValueAttribute(w, attribute: kAXPositionAttribute),
-                      let sz = try? copyAXValueAttribute(w, attribute: kAXSizeAttribute) else { continue }
-                var origin = CGPoint.zero
-                var size = CGSize.zero
-                guard AXValueGetValue(pos, .cgPoint, &origin),
-                      AXValueGetValue(sz, .cgSize, &size) else { continue }
-                guard size.width > 0, size.height > 0 else { continue }
+                guard let summary = readWindowSummary(w),
+                      summary.subrole == "AXStandardWindow",
+                      let origin = summary.origin, let size = summary.size,
+                      size.width > 0, size.height > 0 else { continue }
 
-                let screen = resolveScreen(forAXOrigin: origin, size: size)
-                let frame = frameForAXOrigin(origin, size: size, on: screen)
+                let screen = resolveScreen(forAXOrigin: origin, size: size, screens: screens)
+                let frame = frameForAXOrigin(origin, size: size, on: screen, primaryMaxY: primaryMaxY)
                 let screenFrame = screen?.frame ?? defaultScreen
                 let visibleFrame = screen?.visibleFrame ?? defaultVisible
-                let windowTitle = try? copyStringAttribute(w, attribute: kAXTitleAttribute)
+                let windowTitle = summary.title
 
                 results.append(WindowTarget(
                     appElement: appElement,
@@ -1414,15 +1418,70 @@ final class AccessibilityService {
         try copyAttribute(element, attribute: attribute) as? String
     }
 
+    /// The per-window attributes `allWindowTargets` needs, fetched in a
+    /// single `AXUIElementCopyMultipleAttributeValues` message.
+    private struct WindowSummary {
+        let subrole: String?
+        let origin: CGPoint?
+        let size: CGSize?
+        let title: String?
+    }
+
+    private static let windowSummaryAttributes: CFArray = [
+        kAXSubroleAttribute, kAXPositionAttribute, kAXSizeAttribute, kAXTitleAttribute,
+    ] as CFArray
+
+    /// Reads subrole, position, size, and title with ONE round-trip into the
+    /// owning app (the previous per-attribute reads cost three to four).
+    /// Returns nil when the call itself fails (e.g. the app timed out);
+    /// individual attributes the window lacks come back as nil fields —
+    /// HIServices reports those as `AXValue`s of type `.axError`.
+    private func readWindowSummary(_ window: AXUIElement) -> WindowSummary? {
+        var valuesRef: CFArray?
+        let err = AXUIElementCopyMultipleAttributeValues(window, Self.windowSummaryAttributes, [], &valuesRef)
+        guard err == .success, let values = valuesRef as? [AnyObject], values.count == 4 else { return nil }
+
+        func present(_ value: AnyObject) -> AnyObject? {
+            if CFGetTypeID(value) == AXValueGetTypeID(),
+               AXValueGetType(unsafeBitCast(value, to: AXValue.self)) == .axError {
+                return nil
+            }
+            return value
+        }
+        func point(_ value: AnyObject) -> CGPoint? {
+            guard let v = present(value), CFGetTypeID(v) == AXValueGetTypeID() else { return nil }
+            var p = CGPoint.zero
+            return AXValueGetValue(unsafeBitCast(v, to: AXValue.self), .cgPoint, &p) ? p : nil
+        }
+        func cgSize(_ value: AnyObject) -> CGSize? {
+            guard let v = present(value), CFGetTypeID(v) == AXValueGetTypeID() else { return nil }
+            var s = CGSize.zero
+            return AXValueGetValue(unsafeBitCast(v, to: AXValue.self), .cgSize, &s) ? s : nil
+        }
+        return WindowSummary(
+            subrole: present(values[0]) as? String,
+            origin: point(values[1]),
+            size: cgSize(values[2]),
+            title: present(values[3]) as? String
+        )
+    }
+
     private func resolveScreen(forAXOrigin origin: CGPoint, size: CGSize) -> NSScreen? {
-        let screens = NSScreen.screens
+        resolveScreen(forAXOrigin: origin, size: size, screens: NSScreen.screens)
+    }
+
+    /// `screens` variant for callers that enumerate many windows per pass
+    /// (`allWindowTargets` used to re-fetch `NSScreen.screens` S+2 times per
+    /// window through this helper and `frameForAXOrigin`).
+    private func resolveScreen(forAXOrigin origin: CGPoint, size: CGSize, screens: [NSScreen]) -> NSScreen? {
         guard !screens.isEmpty else { return NSScreen.main }
+        let primaryMaxY = screens.first?.frame.maxY
 
         var bestScreen: NSScreen?
         var bestIntersectionArea: CGFloat = 0
 
         for screen in screens {
-            let candidateFrame = frameForAXOrigin(origin, size: size, on: screen)
+            let candidateFrame = frameForAXOrigin(origin, size: size, on: screen, primaryMaxY: primaryMaxY)
             let intersection = candidateFrame.intersection(screen.frame)
             let intersectionArea = intersection.isNull ? 0 : (intersection.width * intersection.height)
             if intersectionArea > bestIntersectionArea {
@@ -1445,12 +1504,16 @@ final class AccessibilityService {
     }
 
     private func frameForAXOrigin(_ origin: CGPoint, size: CGSize, on screen: NSScreen?) -> CGRect {
+        frameForAXOrigin(origin, size: size, on: screen, primaryMaxY: NSScreen.screens.first?.frame.maxY)
+    }
+
+    private func frameForAXOrigin(_ origin: CGPoint, size: CGSize, on screen: NSScreen?, primaryMaxY: CGFloat?) -> CGRect {
         // AX coordinates have their origin at the top-left of the primary
         // screen, so use the primary screen's maxY for the conversion.
-        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen?.frame.maxY ?? (origin.y + size.height)
+        let baseY = primaryMaxY ?? screen?.frame.maxY ?? (origin.y + size.height)
         return CGRect(
             x: origin.x,
-            y: primaryMaxY - origin.y - size.height,
+            y: baseY - origin.y - size.height,
             width: size.width,
             height: size.height
         )

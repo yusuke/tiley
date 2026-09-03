@@ -1152,8 +1152,9 @@ final class AppState: NSObject, NSMenuDelegate {
             guard let self, self.isShowingLayoutGrid else { return }
 
             // Dismiss "Show Desktop" or Mission Control if active.
-            let showDesktop = CGSPrivate.isShowDesktopLikelyActive()
-            let missionControl = CGSPrivate.isMissionControlLikelyActive()
+            let expose = CGSPrivate.exposeState()
+            let showDesktop = expose.showDesktop
+            let missionControl = expose.missionControl
             let isDismissingExpose = showDesktop || missionControl
             if isDismissingExpose {
                 self.isSwitchingActivationPolicy = true
