@@ -147,41 +147,41 @@ struct LayoutGridWorkspaceView: View {
                     .allowsHitTesting(false)
                 }
 
-                // Base grid cells (non-selected appearance only)
-                ForEach(0..<rows, id: \.self) { row in
-                    ForEach(0..<columns, id: \.self) { column in
-                        let frame = rectForCell(row: row, column: column, width: cellWidth, height: cellHeight)
-                        // When a miniature window is overlaid, keep grid cells visible under the drag selection.
-                        let isInSelection = windowFrameRelative == nil && isSelected(row: row, column: column)
-                        let isInHighlight = isHighlighted(row: row, column: column)
-                        let isInCommitted = isInCommittedSelection(row: row, column: column)
-                        let isInMultiHighlight = isInHighlightSelections(row: row, column: column)
-                        if !isInSelection && !isInHighlight && !isInCommitted && !isInMultiHighlight {
-                            let hovered = isHovered(row: row, column: column)
-                            // In edit mode, the hover preview is rendered as a dedicated
-                            // committed-style rectangle overlay, so suppress the per-cell
-                            // hover fill here. Also suppressed when a miniature window is
-                            // overlaid.
-                            let showHoverFill = hovered && windowFrameRelative == nil && onDeleteSelection == nil
+                // Base grid cells (non-selected appearance only). An
+                // `Equatable` child whose inputs do not include the hover
+                // cell, so a hover change no longer re-diffs rows × columns
+                // cell views (up to 144, each with four selection scans).
+                GridBaseCellsView(
+                    rows: rows,
+                    columns: columns,
+                    cellWidth: cellWidth,
+                    cellHeight: cellHeight,
+                    gap: gap,
+                    cornerRadius: cellCornerRadius,
+                    covered: coveredCellMask(),
+                    colorScheme: colorScheme,
+                    size: geometry.size
+                )
+                .equatable()
+
+                // Hover fill for the hovered base cell — one overlay drawn on
+                // top of the (clear-filled) base cell instead of per-cell
+                // hover state. In edit mode the hover preview is a dedicated
+                // committed-style rectangle instead; also suppressed while a
+                // miniature window is overlaid.
+                if let hover = hoverCell, !isDragging,
+                   windowFrameRelative == nil, onDeleteSelection == nil,
+                   !isCellCovered(row: hover.row, column: hover.column) {
+                    let frame = rectForCell(row: hover.row, column: hover.column, width: cellWidth, height: cellHeight)
+                    RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
+                        .fill(ThemeColors.gridCellHoverFill(for: colorScheme))
+                        .overlay(
                             RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
-                                .fill(showHoverFill
-                                      ? ThemeColors.gridCellHoverFill(for: colorScheme)
-                                      : ThemeColors.gridCellFill(for: colorScheme))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
-                                        .stroke(showHoverFill
-                                                ? ThemeColors.gridCellHoverBorder(for: colorScheme)
-                                                : ThemeColors.gridCellBorder(for: colorScheme), lineWidth: 1.5)
-                                )
-                                .frame(width: frame.width, height: frame.height)
-                                .position(x: frame.midX, y: frame.midY)
-                        } else {
-                            // Transparent placeholder so the grid spacing is preserved
-                            Color.clear
-                                .frame(width: frame.width, height: frame.height)
-                                .position(x: frame.midX, y: frame.midY)
-                        }
-                    }
+                                .stroke(ThemeColors.gridCellHoverBorder(for: colorScheme), lineWidth: 1.5)
+                        )
+                        .frame(width: frame.width, height: frame.height)
+                        .position(x: frame.midX, y: frame.midY)
+                        .allowsHitTesting(false)
                 }
 
                 // Single-cell hover preview during preset editing —
@@ -738,9 +738,27 @@ struct LayoutGridWorkspaceView: View {
         return sel.startRow...sel.endRow ~= row && sel.startColumn...sel.endColumn ~= column
     }
 
-    private func isHovered(row: Int, column: Int) -> Bool {
-        guard let hover = hoverCell, !isDragging else { return false }
-        return hover.row == row && hover.column == column
+    /// Whether a base cell is covered by the drag selection, a highlight, a
+    /// committed rectangle, or a multi-selection highlight — i.e. only a
+    /// transparent placeholder is laid out for it. (When a miniature window
+    /// is overlaid, cells stay visible under the drag selection.)
+    private func isCellCovered(row: Int, column: Int) -> Bool {
+        (windowFrameRelative == nil && isSelected(row: row, column: column))
+            || isHighlighted(row: row, column: column)
+            || isInCommittedSelection(row: row, column: column)
+            || isInHighlightSelections(row: row, column: column)
+    }
+
+    /// `isCellCovered` for every cell, row-major — the value input of
+    /// `GridBaseCellsView`.
+    private func coveredCellMask() -> [Bool] {
+        var mask = Array(repeating: false, count: max(0, rows * columns))
+        for row in 0..<rows {
+            for column in 0..<columns {
+                mask[row * columns + column] = isCellCovered(row: row, column: column)
+            }
+        }
+        return mask
     }
 
     private func isHighlighted(row: Int, column: Int) -> Bool {
@@ -1197,5 +1215,56 @@ private struct AssignedRectangleView: View {
                 .padding(4)
             }
         }
+    }
+}
+
+// MARK: - Base cells
+
+/// The non-selected base cells of the grid. Split out of
+/// `LayoutGridWorkspaceView` as an `Equatable` view so that its rows ×
+/// columns cell views are diffed only when a value input changes; the
+/// parent's hover cell (which changes at pointer-move rate) is not an
+/// input — the parent draws the hover fill as a single overlay instead.
+private struct GridBaseCellsView: View, Equatable {
+    let rows: Int
+    let columns: Int
+    let cellWidth: CGFloat
+    let cellHeight: CGFloat
+    let gap: CGFloat
+    let cornerRadius: CGFloat
+    /// Row-major; `true` where only a transparent placeholder is laid out.
+    let covered: [Bool]
+    let colorScheme: ColorScheme
+    let size: CGSize
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            ForEach(0..<rows, id: \.self) { row in
+                ForEach(0..<columns, id: \.self) { column in
+                    let frame = CGRect(
+                        x: CGFloat(column) * (cellWidth + gap),
+                        y: CGFloat(row) * (cellHeight + gap),
+                        width: cellWidth,
+                        height: cellHeight
+                    )
+                    if !covered[row * columns + column] {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(ThemeColors.gridCellFill(for: colorScheme))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                                    .stroke(ThemeColors.gridCellBorder(for: colorScheme), lineWidth: 1.5)
+                            )
+                            .frame(width: frame.width, height: frame.height)
+                            .position(x: frame.midX, y: frame.midY)
+                    } else {
+                        // Transparent placeholder so the grid spacing is preserved
+                        Color.clear
+                            .frame(width: frame.width, height: frame.height)
+                            .position(x: frame.midX, y: frame.midY)
+                    }
+                }
+            }
+        }
+        .frame(width: size.width, height: size.height, alignment: .topLeading)
     }
 }

@@ -207,6 +207,9 @@ struct MainWindowView: View {
     @State private var isSearchFieldFocused = false
     @State private var isSearchFieldVisible = false
     @State private var sidebarSelection: SidebarSelection?
+    /// See `memoizedSidebarRows()`. A class box so the memo can be updated
+    /// during body evaluation without invalidating state.
+    @State private var sidebarMemo = SidebarRowsMemo()
 
     init(appState: AppState, screenRole: ScreenRole = .target) {
         self.appState = appState
@@ -1820,6 +1823,60 @@ struct MainWindowView: View {
         return name
     }
 
+    /// Memo for `filteredSidebarRows` and the link index. Both used to be
+    /// rebuilt on every pass of this body — preset hover, selection change,
+    /// keystroke — although their inputs change only with the window list,
+    /// the search text, the active Spaces, the screen configuration, or the
+    /// group / satellite state. Keys are compared by value each pass (a few
+    /// small collections); the rows are rebuilt only on a miss.
+    private final class SidebarRowsMemo {
+        struct RowsKey: Equatable {
+            let listVersion: Int
+            let query: String
+            let activeSpaceIDs: Set<UInt64>
+            let groupIndex: [CGWindowID: UUID]
+            let screensVersion: Int
+        }
+        struct IndexKey: Equatable {
+            let rowsKey: RowsKey
+            let satellites: [String: Set<CGWindowID>]
+            let sidebarOrder: [Int]
+        }
+        var rowsKey: RowsKey?
+        var rows: [SidebarRow] = []
+        var indexKey: IndexKey?
+        var linkIndex: SidebarLinkIndex = .idle
+    }
+
+    private func memoizedSidebarRows() -> (rows: [SidebarRow], linkIndex: SidebarLinkIndex) {
+        let memo = sidebarMemo
+        let rowsKey = SidebarRowsMemo.RowsKey(
+            listVersion: appState.windowTargetListVersion,
+            query: debouncedSearchText,
+            activeSpaceIDs: appState.currentActiveSpaceIDs,
+            groupIndex: appState.groupIndexByWindow,
+            screensVersion: appState.desktopImageVersion
+        )
+        if memo.rowsKey != rowsKey {
+            memo.rows = filteredSidebarRows
+            memo.rowsKey = rowsKey
+        }
+        // Cheap, and re-syncs the Tab-cycling order if AppState reset it.
+        updateSidebarWindowOrder(memo.rows)
+        // The link index reads `sidebarWindowOrder`, hence built after the
+        // sync above.
+        let indexKey = SidebarRowsMemo.IndexKey(
+            rowsKey: rowsKey,
+            satellites: appState.appSlotSatellites,
+            sidebarOrder: appState.sidebarWindowOrder
+        )
+        if memo.indexKey != indexKey {
+            memo.linkIndex = makeSidebarLinkIndex()
+            memo.indexKey = indexKey
+        }
+        return (memo.rows, memo.linkIndex)
+    }
+
     /// Extracts window-target indices from sidebar rows and syncs them to AppState
     /// so that Tab cycling follows the same visual order as the sidebar.
     @discardableResult
@@ -1918,18 +1975,14 @@ struct MainWindowView: View {
                     .frame(maxWidth: .infinity)
                 Spacer()
             } else {
-                let rows = filteredSidebarRows
-                let _ = updateSidebarWindowOrder(rows)
-                // Built after the order sync above (it reads
-                // `sidebarWindowOrder`) and shared by every row.
-                let linkIndex = makeSidebarLinkIndex()
+                let sidebar = memoizedSidebarRows()
                 // Own view: row hover state lives there, so hovering a row
                 // no longer re-evaluates this whole body (grid, presets,
                 // hints bar) — see `SidebarRowsView`.
                 SidebarRowsView(
                     appState: appState,
-                    rows: rows,
-                    linkIndex: linkIndex,
+                    rows: sidebar.rows,
+                    linkIndex: sidebar.linkIndex,
                     appInfoCache: appInfoCache,
                     sidebarSelection: $sidebarSelection
                 )
