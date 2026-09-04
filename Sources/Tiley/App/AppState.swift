@@ -203,6 +203,10 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var settingsWindowController: SettingsWindowController?
     @ObservationIgnored var permissionsWindowController: PermissionsWindowController?
     @ObservationIgnored var mainWindowControllers: [CGDirectDisplayID: MainWindowController] = [:]
+    /// Pending task that releases idle overlay window controllers after they
+    /// have been hidden for a grace period, reclaiming the retained SwiftUI
+    /// hosting-view graph and its IOSurface backing store.
+    @ObservationIgnored var mainWindowReleaseTask: Task<Void, Never>?
     @ObservationIgnored var targetScreenDisplayID: CGDirectDisplayID?
     /// Screen-coordinate point where the trigger icon is located (menu bar icon center or Dock icon center).
     /// Set before opening the main window; consumed by MainWindowController.positionWindow().
