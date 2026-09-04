@@ -258,6 +258,21 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window?.orderOut(nil)
     }
 
+    /// Fully release the window and its SwiftUI hosting view so the retained
+    /// view graph and its layer/IOSurface backing are reclaimed. Unlike
+    /// `teardown()` (orderOut only), this drops the hosting view explicitly and
+    /// closes the window so AppKit stops retaining it. The controller must be
+    /// discarded (removed from `mainWindowControllers`) immediately after.
+    func releaseForTeardown() {
+        screenParameterTask?.cancel()
+        screenParameterTask = nil
+        guard let window else { return }
+        window.delegate = nil
+        window.orderOut(nil)
+        window.contentView = nil
+        window.close()
+    }
+
     /// Whether the window is logically visible to the user.
     /// Note: after hide()/dismissSilently() the window remains on screen
     /// with ignoresMouseEvents=true, so NSWindow.isVisible alone is unreliable.
