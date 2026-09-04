@@ -359,6 +359,10 @@ final class AppState: NSObject, NSMenuDelegate {
     /// detected when polling started. Doesn't change mid-session even if AX echoes
     /// would otherwise switch sourceID. Used for release-time corrections.
     @ObservationIgnored var groupPollingIntendedSourceID: CGWindowID?
+    /// File watcher on the wallpaper Store's Index.plist (see
+    /// `installWallpaperStoreWatcher`) and the debounce for its rechecks.
+    @ObservationIgnored var wallpaperStoreWatchSource: DispatchSourceFileSystemObject?
+    @ObservationIgnored var wallpaperRecheckWorkItem: DispatchWorkItem?
     /// See `displayFingerprintResolverForHotKeys()`.
     @ObservationIgnored var cachedDisplayResolverForHotKeys: (signature: String, resolver: DisplayFingerprintResolver)?
     /// Which perpendicular edges each of the drag source's adjacencies
@@ -730,6 +734,7 @@ final class AppState: NSObject, NSMenuDelegate {
         isShowingLayoutGrid = false
         refreshAccessibilityState()
         installWorkspaceObserver()
+        prewarmWallpaperCache()
         applyStatusItemVisibility()
         applyDockIconVisibility(isInitialStartup: true)
         installHotKeyHandler()
@@ -802,6 +807,9 @@ final class AppState: NSObject, NSMenuDelegate {
         screenChangeTask?.cancel()
         windowListCacheTask?.cancel()
         appLaunchTerminationTask?.cancel()
+        wallpaperStoreWatchSource?.cancel()
+        wallpaperStoreWatchSource = nil
+        wallpaperRecheckWorkItem?.cancel()
         uninstallGroupObservation()
     }
 
@@ -2103,13 +2111,135 @@ final class AppState: NSObject, NSMenuDelegate {
         wallpaperImageCache.removeAll(keepingCapacity: true)
     }
 
+    /// Resolves and decodes every screen's wallpaper thumbnail off the main
+    /// thread and primes both caches — the downsampled image here and the
+    /// per-screen `DesktopPictureInfo` in `MainWindowView` — so the first
+    /// body evaluation after a wallpaper or screen change finds them
+    /// populated. Both caches are correct and bounded but were filled
+    /// lazily on the main thread inside that first body: a 6K HEIC costs
+    /// 30–150 ms per screen to thumbnail, and dynamic wallpapers bump the
+    /// version on every transition and light/dark switch. Results are
+    /// dropped if the version moved on while decoding.
+    func prewarmWallpaperCache(attempt: Int = 0) {
+        let version = desktopImageVersion
+        let appearanceIsDark = MainWindowView.currentAppearanceIsDark
+        let screens = NSScreen.screens.map {
+            WallpaperPrewarmScreen(screen: $0, frame: $0.frame, scale: $0.backingScaleFactor)
+        }
+        Task.detached(priority: .utility) {
+            var results: [WallpaperPrewarmResult] = []
+            var decodedURLs: Set<URL> = []
+            for entry in screens {
+                let info = MainWindowView.computeDesktopPictureInfo(for: entry.screen, appearanceIsDark: appearanceIsDark)
+                var image: NSImage? = nil
+                if let url = info?.url, !decodedURLs.contains(url) {
+                    decodedURLs.insert(url)
+                    image = Self.downsampledWallpaperImage(url: url, maxPixelSize: Self.wallpaperCacheMaxPixelSize)
+                }
+                results.append(WallpaperPrewarmResult(frame: entry.frame, scale: entry.scale, info: info, image: image))
+            }
+            let finished = results
+            await MainActor.run { [weak self] in
+                guard let self, self.desktopImageVersion == version else { return }
+                if self.wallpaperImageCacheVersion != version {
+                    self.wallpaperImageCache.removeAll(keepingCapacity: true)
+                    self.wallpaperImageCacheVersion = version
+                }
+                var imageCount = 0
+                var incomplete = false
+                for result in finished {
+                    let url = result.info?.url
+                    let decoded = result.image != nil
+                        || (url.map { self.wallpaperImageCache[$0] != nil } ?? false)
+                    debugLog("wallpaper prewarm: screen=\(result.frame) url=\(url?.lastPathComponent ?? "nil") decoded=\(decoded)")
+                    if let url, let image = result.image, self.wallpaperImageCache[url] == nil {
+                        self.wallpaperImageCache[url] = image
+                        imageCount += 1
+                    }
+                    // Only prime the per-screen info when the wallpaper both
+                    // resolved and decoded. Right after a change the Store /
+                    // thumbnail files can still be in flux; a nil or
+                    // undecodable result must not shadow the lazy path.
+                    if result.info != nil, decoded {
+                        MainWindowView.primeDesktopPictureInfo(result.info, screenFrame: result.frame, scale: result.scale, version: version)
+                    } else {
+                        incomplete = true
+                    }
+                }
+                debugLog("wallpaper cache prewarmed: \(imageCount) image(s), \(finished.count) screen(s), version \(version), attempt \(attempt)")
+                if incomplete, attempt == 0 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                        guard let self, self.desktopImageVersion == version else { return }
+                        self.prewarmWallpaperCache(attempt: 1)
+                    }
+                }
+            }
+        }
+    }
+
+    /// Re-resolves every screen's wallpaper off the main thread and, if the
+    /// result differs from what is cached for the current version, advances
+    /// `desktopImageVersion` (which re-primes and re-renders). Needed because
+    /// `NSWorkspaceDidChangeDesktopImageNotification` fires *before* the
+    /// wallpaper Store's Index.plist reflects the new choice while System
+    /// Settings' Wallpaper pane is open — the prewarm at notification time
+    /// then cached the previous wallpaper as a perfectly valid result.
+    /// Triggered by the Store file watcher and a delayed follow-up after
+    /// each wallpaper notification.
+    func recheckWallpaperIfChanged() {
+        let version = desktopImageVersion
+        let appearanceIsDark = MainWindowView.currentAppearanceIsDark
+        let screens = NSScreen.screens.map {
+            WallpaperPrewarmScreen(screen: $0, frame: $0.frame, scale: $0.backingScaleFactor)
+        }
+        Task.detached(priority: .utility) {
+            let resolved: [WallpaperRecheckResult] = screens.map { entry in
+                let info = MainWindowView.computeDesktopPictureInfo(for: entry.screen, appearanceIsDark: appearanceIsDark)
+                return WallpaperRecheckResult(frame: entry.frame, scale: entry.scale, url: info?.url)
+            }
+            await MainActor.run { [weak self] in
+                guard let self, self.desktopImageVersion == version else { return }
+                let changed = resolved.contains { result in
+                    MainWindowView.primedDesktopPictureURL(screenFrame: result.frame, scale: result.scale, version: version) != result.url
+                }
+                guard changed else { return }
+                debugLog("wallpaper recheck: resolved wallpaper differs from the cached one (version \(version)) — refreshing")
+                self.desktopImageVersion += 1
+                self.prewarmWallpaperCache()
+            }
+        }
+    }
+
+    private struct WallpaperRecheckResult: Sendable {
+        let frame: CGRect
+        let scale: CGFloat
+        let url: URL?
+    }
+
+    /// Inputs / outputs of `prewarmWallpaperCache()` crossing the detached
+    /// task boundary. `NSScreen` / `NSImage` aren't `Sendable`; the screen is
+    /// only used for the wallpaper lookup and the image is handed straight
+    /// into the main-actor cache, so the unchecked conformance is safe.
+    private struct WallpaperPrewarmScreen: @unchecked Sendable {
+        let screen: NSScreen
+        let frame: CGRect
+        let scale: CGFloat
+    }
+
+    private struct WallpaperPrewarmResult: @unchecked Sendable {
+        let frame: CGRect
+        let scale: CGFloat
+        let info: MainWindowView.DesktopPictureInfo?
+        let image: NSImage?
+    }
+
     /// Max pixel dimension (long edge) for cached wallpaper images. The overlay
     /// only ever renders the wallpaper as a half-opacity miniature preview, so a
     /// full-resolution decode is wasteful. A 6K HEIC decodes to 60MB+ resident
     /// and spikes peak memory by 150MB+ on first overlay open. Downsampling to
     /// this size keeps the preview crisp while cutting each cached image to a
     /// few MB.
-    private static let wallpaperCacheMaxPixelSize = 1600
+    private nonisolated static let wallpaperCacheMaxPixelSize = 1600
 
     /// Decodes `url` directly at a reduced resolution via ImageIO, avoiding a
     /// full-resolution decode. Aspect ratio is preserved. Geometry that needs
@@ -2117,7 +2247,7 @@ final class AppState: NSObject, NSMenuDelegate {
     /// (`DesktopPictureInfo.originalImageSize`), so downsampling does not affect
     /// tile/center/fit placement. Menu-bar luminance sampling stays accurate
     /// because it samples the top strip proportionally.
-    private static func downsampledWallpaperImage(url: URL, maxPixelSize: Int) -> NSImage? {
+    private nonisolated static func downsampledWallpaperImage(url: URL, maxPixelSize: Int) -> NSImage? {
         let sourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let source = CGImageSourceCreateWithURL(url as CFURL, sourceOptions) else {
             return nil

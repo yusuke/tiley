@@ -258,9 +258,11 @@ struct MainWindowView: View {
         let height: CGFloat
         let scale: CGFloat
         init(_ screen: NSScreen) {
-            let f = screen.frame
-            x = f.origin.x; y = f.origin.y; width = f.width; height = f.height
-            scale = screen.backingScaleFactor
+            self.init(frame: screen.frame, scale: screen.backingScaleFactor)
+        }
+        init(frame: CGRect, scale: CGFloat) {
+            x = frame.origin.x; y = frame.origin.y; width = frame.width; height = frame.height
+            self.scale = scale
         }
     }
 
@@ -272,6 +274,30 @@ struct MainWindowView: View {
             return NSScreen.screens.first(where: { $0.frame == ctx.screenFrame })
         }
         return NSScreen.main
+    }
+
+    /// Lets `AppState.prewarmWallpaperCache()` fill this cache from its
+    /// background resolution so the first body evaluation after a wallpaper
+    /// or screen change doesn't read the wallpaper Store plist and image
+    /// metadata on the main thread.
+    @MainActor
+    static func primeDesktopPictureInfo(_ info: DesktopPictureInfo?, screenFrame: CGRect, scale: CGFloat, version: Int) {
+        if DesktopPictureInfoCache.version != version {
+            DesktopPictureInfoCache.byScreenKey.removeAll(keepingCapacity: true)
+            DesktopPictureInfoCache.version = version
+        }
+        DesktopPictureInfoCache.byScreenKey[ScreenKey(frame: screenFrame, scale: scale)] = info
+    }
+
+    /// The wallpaper URL currently cached for a screen at `version`, or nil
+    /// when nothing (or a nil result) is cached. Used by
+    /// `AppState.recheckWallpaperIfChanged()` to detect that the wallpaper
+    /// Store now resolves to something else.
+    @MainActor
+    static func primedDesktopPictureURL(screenFrame: CGRect, scale: CGFloat, version: Int) -> URL? {
+        guard DesktopPictureInfoCache.version == version,
+              let entry = DesktopPictureInfoCache.byScreenKey[ScreenKey(frame: screenFrame, scale: scale)] else { return nil }
+        return entry?.url
     }
 
     private var desktopPictureInfo: DesktopPictureInfo? {
@@ -286,24 +312,40 @@ struct MainWindowView: View {
         }
         let key = ScreenKey(screen)
         if let cached = DesktopPictureInfoCache.byScreenKey[key] { return cached }
-        let info = Self.computeDesktopPictureInfo(for: screen)
+        let info = Self.computeDesktopPictureInfo(for: screen, appearanceIsDark: Self.currentAppearanceIsDark)
         DesktopPictureInfoCache.byScreenKey[key] = info
         return info
     }
 
-    private static func computeDesktopPictureInfo(for screen: NSScreen) -> DesktopPictureInfo? {
+    /// Whether the app's effective appearance is dark. Read on the main
+    /// actor and passed into the (nonisolated) wallpaper resolution, which
+    /// may run on a background task.
+    @MainActor
+    static var currentAppearanceIsDark: Bool {
+        NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+    }
+
+    nonisolated static func computeDesktopPictureInfo(for screen: NSScreen, appearanceIsDark: Bool) -> DesktopPictureInfo? {
         guard let rawURL = NSWorkspace.shared.desktopImageURL(for: screen) else { return nil }
         let opts = NSWorkspace.shared.desktopImageOptions(for: screen)
 
         // On macOS 15+, desktopImageURL always returns DefaultDesktop.heic for system
         // wallpapers. Try to resolve the actual image and display mode via the wallpaper Store.
-        let storeInfo = Self.resolvedWallpaperInfo(for: rawURL)
+        let storeInfo = Self.resolvedWallpaperInfo(for: rawURL, appearanceIsDark: appearanceIsDark)
+
+        // Whether rawURL points to a custom user image (not DefaultDesktop.heic system symlink).
+        // On macOS 15+, custom images still have their actual path in desktopImageURL.
+        let isCustomImage = rawURL.lastPathComponent != "DefaultDesktop.heic"
 
         // Use thumbnail when available (aerial wallpapers with assetID); otherwise fall back to
         // the raw URL (DefaultDesktop.heic for preset wallpapers like "Lake Tahoe").
         // DefaultDesktop.heic is not the actual preset image, but Fill mode covers the grid
         // regardless of aspect ratio, so no gaps will appear.
-        let url = storeInfo?.thumbnailURL ?? rawURL
+        //
+        // A custom image path is the live truth: the Store (still consulted
+        // below for placement) can lag behind while System Settings' Wallpaper
+        // pane is open, so its thumbnail must never override it.
+        let url = isCustomImage ? rawURL : (storeInfo?.thumbnailURL ?? rawURL)
 
         // Always read the actual pixel dimensions of the wallpaper image.
         // nsImage.size is DPI-dependent (e.g. a 144 DPI Retina screenshot reports
@@ -317,10 +359,6 @@ struct MainWindowView: View {
            let pixelHeight = props[kCGImagePropertyPixelHeight] as? CGFloat {
             originalImageSize = CGSize(width: pixelWidth, height: pixelHeight)
         }
-
-        // Whether rawURL points to a custom user image (not DefaultDesktop.heic system symlink).
-        // On macOS 15+, custom images still have their actual path in desktopImageURL.
-        let isCustomImage = rawURL.lastPathComponent != "DefaultDesktop.heic"
 
         // Whether the wallpaper is user-provided content whose display mode (placement)
         // should be respected. This includes custom image files AND user-content providers
@@ -448,7 +486,7 @@ struct MainWindowView: View {
     /// On macOS 15+, desktopImageURL always returns DefaultDesktop.heic for system wallpapers.
     /// This method reads the wallpaper Store plist and returns the placement mode and fill color
     /// (and a thumbnail URL when available for aerial wallpapers with an assetID).
-    private static func resolvedWallpaperInfo(for rawURL: URL) -> WallpaperStoreInfo? {
+    private nonisolated static func resolvedWallpaperInfo(for rawURL: URL, appearanceIsDark: Bool) -> WallpaperStoreInfo? {
         let storeURL = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Application Support/com.apple.wallpaper/Store/Index.plist")
         guard let data = try? Data(contentsOf: storeURL),
@@ -529,7 +567,7 @@ struct MainWindowView: View {
         // (Sequoia, Sonoma, Ventura, Monterey).
         if thumbnailURL == nil, !isCustomImage,
            let provider = first["Provider"] as? String {
-            thumbnailURL = Self.thumbnailForProvider(provider)
+            thumbnailURL = Self.thumbnailForProvider(provider, isDark: appearanceIsDark)
         }
 
         // Read placement and fill color from EncodedOptionValues
@@ -568,9 +606,7 @@ struct MainWindowView: View {
     /// Resolves a thumbnail URL for provider-based dynamic wallpapers.
     /// Maps known provider strings to system thumbnail files, choosing
     /// a light or dark variant based on the current system appearance.
-    private static func thumbnailForProvider(_ provider: String) -> URL? {
-        let isDark = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-
+    private nonisolated static func thumbnailForProvider(_ provider: String, isDark: Bool) -> URL? {
         switch provider {
         case "com.apple.wallpaper.choice.sequoia":
             // Sequoia thumbnails live inside the extension bundle.
@@ -613,7 +649,7 @@ struct MainWindowView: View {
 
     /// Looks up a wallpaper thumbnail in `/System/Library/Desktop Pictures/.thumbnails/`
     /// with light/dark variant support.
-    private static func thumbnailInSystemDir(name: String, isDark: Bool) -> URL? {
+    private nonisolated static func thumbnailInSystemDir(name: String, isDark: Bool) -> URL? {
         let dir = "/System/Library/Desktop Pictures/.thumbnails"
         let suffix = isDark ? " Dark" : " Light"
         return firstExisting([
@@ -623,7 +659,7 @@ struct MainWindowView: View {
     }
 
     /// Returns the first path that exists on disk as a file URL, or nil.
-    private static func firstExisting(_ paths: [String]) -> URL? {
+    private nonisolated static func firstExisting(_ paths: [String]) -> URL? {
         for path in paths {
             if FileManager.default.fileExists(atPath: path) {
                 return URL(fileURLWithPath: path)

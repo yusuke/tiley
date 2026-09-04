@@ -112,6 +112,11 @@ extension AppState {
                 guard !Task.isCancelled else { break }
                 await MainActor.run { [weak self] in
                     self?.desktopImageVersion += 1
+                    self?.prewarmWallpaperCache()
+                    // The Store can still hold the previous choice at this
+                    // point (System Settings writes it a little later while
+                    // its Wallpaper pane stays open); verify once it settles.
+                    self?.scheduleWallpaperRecheck(delay: 2.0)
                     // Redraw the badge icon tint color to match the light/dark appearance
                     self?.applyStatusItemIcon()
                 }
@@ -173,8 +178,59 @@ extension AppState {
             }
         }
 
+        installWallpaperStoreWatcher()
+
         // Perform an initial cache so the window list is ready on first open.
         scheduleWindowListCacheRefresh()
+    }
+
+    /// Watches the wallpaper Store's Index.plist. System Settings keeps
+    /// rewriting it while its Wallpaper pane is open — sometimes *after* the
+    /// desktop-image notification has already fired — so the file is the
+    /// only reliable signal that the recorded choice changed. Writes are
+    /// debounced into `recheckWallpaperIfChanged()`, which only advances the
+    /// version when the resolved wallpaper actually differs. The plist is
+    /// replaced atomically, so the watch is re-armed after delete / rename.
+    func installWallpaperStoreWatcher() {
+        wallpaperStoreWatchSource?.cancel()
+        wallpaperStoreWatchSource = nil
+        let path = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Application Support/com.apple.wallpaper/Store/Index.plist").path
+        let fd = open(path, O_EVTONLY)
+        guard fd >= 0 else {
+            debugLog("wallpaper Store watcher: could not open \(path)")
+            return
+        }
+        let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fd,
+            eventMask: [.write, .extend, .attrib, .delete, .rename],
+            queue: .main
+        )
+        source.setEventHandler { [weak self] in
+            guard let self else { return }
+            let flags = source.data
+            self.scheduleWallpaperRecheck(delay: 0.4)
+            if flags.contains(.delete) || flags.contains(.rename) {
+                // Atomic replace — the watched vnode is gone; re-arm on the new file.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                    self?.installWallpaperStoreWatcher()
+                }
+            }
+        }
+        source.setCancelHandler { close(fd) }
+        source.resume()
+        wallpaperStoreWatchSource = source
+    }
+
+    /// Debounced entry point for `recheckWallpaperIfChanged()`.
+    func scheduleWallpaperRecheck(delay: TimeInterval) {
+        wallpaperRecheckWorkItem?.cancel()
+        let item = DispatchWorkItem { [weak self] in
+            self?.wallpaperRecheckWorkItem = nil
+            self?.recheckWallpaperIfChanged()
+        }
+        wallpaperRecheckWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
     }
 
     func handleScreenConfigurationChange() {
@@ -187,6 +243,7 @@ extension AppState {
         // DesktopPictureInfo cache in MainWindowView (keyed on this version)
         // is rebuilt for the new screen arrangement.
         desktopImageVersion += 1
+        prewarmWallpaperCache()
         // The preview window is sized to a specific screen; drop it so the
         // next preview is built against the new arrangement.
         releasePreviewOverlay()
