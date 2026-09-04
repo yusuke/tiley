@@ -396,8 +396,7 @@ extension AppState {
         lastTargetPID = newTarget.processIdentifier
         windowSelectionVersion += 1
 
-        layoutPreviewController?.hide()
-        layoutPreviewController = makeLayoutPreviewController(for: newTarget)
+        ensureLayoutPreviewController(for: newTarget)
 
         // When the target moves to a different screen, update the target
         // display ID without recreating windows (which causes visible flicker).
@@ -409,7 +408,10 @@ extension AppState {
             }
         }
 
-        CATransaction.flush()
+        // No forced `CATransaction.flush()` here: the displacement animation
+        // below starts its first step one frame later, which gives Core
+        // Animation the run-loop turn it needs to commit the sidebar /
+        // preview update before any AX move lands.
 
         // Move windows that occlude the selected target off-screen so it
         // becomes visible without changing focus.
@@ -634,7 +636,6 @@ extension AppState {
     }
 
     func clearWindowCyclingState(animateRestore: Bool = true) {
-        CATransaction.flush()
         displacementAnimationTimer?.cancel()
         displacementAnimationTimer = nil
         if animateRestore {
@@ -720,16 +721,16 @@ extension AppState {
             guard let target = windowTarget(byID: wid),
                   let window = target.windowElement else { continue }
 
-            // Save original position if not already tracked.
+            // One AX read per window: the current position doubles as the
+            // saved origin when this window isn't tracked yet.
+            let (currentPos, axSize) = accessibilityService.readPositionAndSize(of: window)
             if displacedWindowFrames[wid] == nil {
-                let (axPos, _) = accessibilityService.readPositionAndSize(of: window)
-                displacedWindowFrames[wid] = (origin: axPos, window: window)
+                displacedWindowFrames[wid] = (origin: currentPos, window: window)
             }
 
             let destination = CGPoint(x: target.frame.minX, y: nextY)
             nextY += gap
 
-            let (currentPos, axSize) = accessibilityService.readPositionAndSize(of: window)
             debugLog("displaceOccluding: wid=\(wid) cgFrame=\(target.frame) axPos=\(currentPos) axSize=\(axSize) to=\(destination)")
             moves.append((window: window, from: currentPos, to: destination))
         }
@@ -773,7 +774,11 @@ extension AppState {
         var step = 0
 
         let timer = DispatchSource.makeTimerSource(queue: .main)
-        timer.schedule(deadline: .now(), repeating: .milliseconds(15))
+        // First step one frame out (was `.now()` plus a forced
+        // `CATransaction.flush()` at the call sites): the pending UI update
+        // — sidebar highlight, preview — gets committed by the run loop
+        // before the first AX move goes out, without blocking for it.
+        timer.schedule(deadline: .now() + .milliseconds(16), repeating: .milliseconds(15))
         timer.setEventHandler { [weak self] in
             step += 1
             let t = min(Double(step) / Double(totalSteps), 1.0)
@@ -861,7 +866,11 @@ extension AppState {
         let totalSteps = 16
         var step = 0
         let timer = DispatchSource.makeTimerSource(queue: .main)
-        timer.schedule(deadline: .now(), repeating: .milliseconds(15))
+        // First step one frame out (was `.now()` plus a forced
+        // `CATransaction.flush()` at the call sites): the pending UI update
+        // — sidebar highlight, preview — gets committed by the run loop
+        // before the first AX move goes out, without blocking for it.
+        timer.schedule(deadline: .now() + .milliseconds(16), repeating: .milliseconds(15))
         timer.setEventHandler { [weak self] in
             step += 1
             let t = min(Double(step) / Double(totalSteps), 1.0)
@@ -907,8 +916,7 @@ extension AppState {
         activeLayoutTarget = fallback
         lastTargetPID = fallback.processIdentifier
         clearResizabilityCache()
-        layoutPreviewController?.hide()
-        layoutPreviewController = makeLayoutPreviewController(for: fallback)
+        ensureLayoutPreviewController(for: fallback)
         windowSelectionVersion += 1
     }
 

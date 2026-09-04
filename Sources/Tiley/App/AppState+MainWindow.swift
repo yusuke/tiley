@@ -205,8 +205,7 @@ extension AppState {
             hidePreviewOverlay()
             return nil
         }
-        layoutPreviewController?.hide()
-        layoutPreviewController = makeLayoutPreviewController(for: target)
+        ensureLayoutPreviewController(for: target)
         return target
     }
 
@@ -685,10 +684,26 @@ extension AppState {
 
     // MARK: - Layout Preview
 
-    func makeLayoutPreviewController(for target: WindowTarget) -> LayoutPreviewOverlayController {
-        LayoutPreviewOverlayController(
+    /// Returns the preview overlay controller for `target`'s screen, reusing
+    /// the existing one (content cleared, window kept alive) when its screen
+    /// and visible frame already match. Every Tab / arrow / sidebar click
+    /// used to discard the controller and allocate a fresh full-screen
+    /// `NSWindow` + hosting view — a WindowServer round-trip per keystroke —
+    /// although the target almost always stays on the same screen.
+    @discardableResult
+    func ensureLayoutPreviewController(for target: WindowTarget) -> LayoutPreviewOverlayController {
+        if let existing = layoutPreviewController,
+           existing.screenFrame == target.screenFrame,
+           existing.visibleFrame == target.visibleFrame {
+            existing.hide()
+            return existing
+        }
+        layoutPreviewController?.hide()
+        let controller = LayoutPreviewOverlayController(
             screenFrame: target.screenFrame,
             visibleFrame: target.visibleFrame
         )
+        layoutPreviewController = controller
+        return controller
     }
 }

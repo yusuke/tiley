@@ -1202,11 +1202,12 @@ final class AppState: NSObject, NSMenuDelegate {
             }
             let target = self.activeLayoutTarget
 
-            // Build the layout preview overlay.
-            self.layoutPreviewController?.hide()
+            // Build (or reuse) the layout preview overlay.
             if let target {
-                self.layoutPreviewController = self.makeLayoutPreviewController(for: target)
-                perfLog("makeLayoutPreviewController done")
+                self.ensureLayoutPreviewController(for: target)
+                perfLog("ensureLayoutPreviewController done")
+            } else {
+                self.layoutPreviewController?.hide()
             }
 
             // Enter modifier-held mode.
@@ -1310,8 +1311,7 @@ final class AppState: NSObject, NSMenuDelegate {
                     self.activeLayoutTarget = freshTarget
                     self.lastTargetPID = freshTarget.processIdentifier
                     self.clearResizabilityCache()
-                    self.layoutPreviewController?.hide()
-                    self.layoutPreviewController = self.makeLayoutPreviewController(for: freshTarget)
+                    self.ensureLayoutPreviewController(for: freshTarget)
                     self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
                         $0.processIdentifier == freshTarget.processIdentifier
                         && $0.windowElement == freshTarget.windowElement

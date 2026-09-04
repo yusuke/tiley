@@ -328,12 +328,7 @@ extension AppState {
             return
         }
 
-        if layoutPreviewController == nil ||
-            layoutPreviewController?.screenFrame != target.screenFrame ||
-            layoutPreviewController?.visibleFrame != target.visibleFrame {
-            layoutPreviewController?.hide()
-            layoutPreviewController = makeLayoutPreviewController(for: target)
-        }
+        ensureLayoutPreviewController(for: target)
         layoutPreviewController?.showGrid(
             rows: settings.rows,
             columns: settings.columns,
