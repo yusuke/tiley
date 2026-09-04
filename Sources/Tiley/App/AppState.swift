@@ -104,9 +104,38 @@ final class AppState: NSObject, NSMenuDelegate {
     var statusItemScreen: NSScreen? {
         statusItem?.button?.window?.screen
     }
-    var accessibilityGranted = false
-    var isEditingSettings = false
-    var isShowingLayoutGrid = false
+    // MARK: Change-guarded observable properties
+    //
+    // `@Observable` publishes a mutation on every set, even when the value is
+    // unchanged — and several of these are written unconditionally on hot
+    // paths: every app activation, every overlay open, every list refresh,
+    // every display's window setup. Each publish invalidates every view that
+    // read the property, on every display. The properties below keep their
+    // storage in ignored backing fields and publish only on a real change.
+    @ObservationIgnored private var accessibilityGrantedStorage: Bool = false
+    var accessibilityGranted: Bool {
+        get { access(keyPath: \.accessibilityGranted); return accessibilityGrantedStorage }
+        set {
+            guard newValue != accessibilityGrantedStorage else { return }
+            withMutation(keyPath: \.accessibilityGranted) { accessibilityGrantedStorage = newValue }
+        }
+    }
+    @ObservationIgnored private var isEditingSettingsStorage: Bool = false
+    var isEditingSettings: Bool {
+        get { access(keyPath: \.isEditingSettings); return isEditingSettingsStorage }
+        set {
+            guard newValue != isEditingSettingsStorage else { return }
+            withMutation(keyPath: \.isEditingSettings) { isEditingSettingsStorage = newValue }
+        }
+    }
+    @ObservationIgnored private var isShowingLayoutGridStorage: Bool = false
+    var isShowingLayoutGrid: Bool {
+        get { access(keyPath: \.isShowingLayoutGrid); return isShowingLayoutGridStorage }
+        set {
+            guard newValue != isShowingLayoutGridStorage else { return }
+            withMutation(keyPath: \.isShowingLayoutGrid) { isShowingLayoutGridStorage = newValue }
+        }
+    }
     var columns = 6 {
         didSet { UserDefaults.standard.set(columns, forKey: UserDefaultsKey.columns) }
     }
@@ -147,7 +176,14 @@ final class AppState: NSObject, NSMenuDelegate {
     }
     var displayShortcutSettings = DisplayShortcutSettings.default
     var layoutPresets: [LayoutPreset] = []
-    var selectedLayoutPresetID: UUID?
+    @ObservationIgnored private var selectedLayoutPresetIDStorage: UUID? = nil
+    var selectedLayoutPresetID: UUID? {
+        get { access(keyPath: \.selectedLayoutPresetID); return selectedLayoutPresetIDStorage }
+        set {
+            guard newValue != selectedLayoutPresetIDStorage else { return }
+            withMutation(keyPath: \.selectedLayoutPresetID) { selectedLayoutPresetIDStorage = newValue }
+        }
+    }
 
     @ObservationIgnored var updater: SPUUpdater?
     var hasUpdateBadge = false
@@ -176,12 +212,26 @@ final class AppState: NSObject, NSMenuDelegate {
 
     /// Which edge of the main window the bubble arrow should appear on.
     /// Set by MainWindowController when positioning near a trigger icon; nil when no arrow.
-    var bubbleArrowEdge: BubbleArrowEdge? = nil
+    @ObservationIgnored private var bubbleArrowEdgeStorage: BubbleArrowEdge? = nil
+    var bubbleArrowEdge: BubbleArrowEdge? {
+        get { access(keyPath: \.bubbleArrowEdge); return bubbleArrowEdgeStorage }
+        set {
+            guard newValue != bubbleArrowEdgeStorage else { return }
+            withMutation(keyPath: \.bubbleArrowEdge) { bubbleArrowEdgeStorage = newValue }
+        }
+    }
     /// Fraction (0–1) along the arrow edge where the arrow tip is positioned.
     var bubbleArrowFraction: CGFloat = 0.5
     /// The display ID that should show the bubble arrow. Only the window on this
     /// display renders the arrow; other displays use a plain rounded rectangle.
-    var bubbleArrowDisplayID: CGDirectDisplayID?
+    @ObservationIgnored private var bubbleArrowDisplayIDStorage: CGDirectDisplayID? = nil
+    var bubbleArrowDisplayID: CGDirectDisplayID? {
+        get { access(keyPath: \.bubbleArrowDisplayID); return bubbleArrowDisplayIDStorage }
+        set {
+            guard newValue != bubbleArrowDisplayIDStorage else { return }
+            withMutation(keyPath: \.bubbleArrowDisplayID) { bubbleArrowDisplayIDStorage = newValue }
+        }
+    }
     @ObservationIgnored var screenChangeTask: Task<Void, Never>?
     /// The most recent layout-application task. Window moves run off the main
     /// actor (the AX retry dance sleeps between steps); rapid repeated applies
@@ -454,7 +504,14 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Updated by the sidebar view whenever its rows are recomputed.
     @ObservationIgnored var sidebarWindowOrder: [Int] = []
     /// True while the deferred `refreshAvailableWindows` is pending.
-    var isLoadingWindowList = false
+    @ObservationIgnored private var isLoadingWindowListStorage: Bool = false
+    var isLoadingWindowList: Bool {
+        get { access(keyPath: \.isLoadingWindowList); return isLoadingWindowListStorage }
+        set {
+            guard newValue != isLoadingWindowListStorage else { return }
+            withMutation(keyPath: \.isLoadingWindowList) { isLoadingWindowListStorage = newValue }
+        }
+    }
     /// True while an authoritative `refreshAvailableWindows` capture is still
     /// running in the background.  Layout application is deferred until it
     /// lands so the resize never targets windows picked from the stale
@@ -487,7 +544,14 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Incremented to signal Cmd+F when search field IS focused: hide sidebar.
     var windowSearchHideRequestVersion: Int = 0
     /// Current window search query, synced from the UI for filtered cycling.
-    var windowSearchQuery: String = ""
+    @ObservationIgnored private var windowSearchQueryStorage: String = ""
+    var windowSearchQuery: String {
+        get { access(keyPath: \.windowSearchQuery); return windowSearchQueryStorage }
+        set {
+            guard newValue != windowSearchQueryStorage else { return }
+            withMutation(keyPath: \.windowSearchQuery) { windowSearchQueryStorage = newValue }
+        }
+    }
     /// Incremented to signal the action bar to show the "Move to Other Display" popup.
     /// Only the window on the display matching `moveToOtherDisplayTargetID` should respond.
     var moveToOtherDisplayRequestVersion: Int = 0
@@ -581,11 +645,18 @@ final class AppState: NSObject, NSMenuDelegate {
 
     /// Menu bar titles fetched asynchronously from the target app via Accessibility API.
     /// Falls back to localized placeholder strings until the fetch completes.
-    var targetMenuBarTitles: [String] = [
+    @ObservationIgnored private var targetMenuBarTitlesStorage: [String] = [
         NSLocalizedString("menu.bar.fallback.file", comment: "Fallback menu title: File"),
         NSLocalizedString("menu.bar.fallback.edit", comment: "Fallback menu title: Edit"),
         NSLocalizedString("menu.bar.fallback.view", comment: "Fallback menu title: View"),
     ]
+    var targetMenuBarTitles: [String] {
+        get { access(keyPath: \.targetMenuBarTitles); return targetMenuBarTitlesStorage }
+        set {
+            guard newValue != targetMenuBarTitlesStorage else { return }
+            withMutation(keyPath: \.targetMenuBarTitles) { targetMenuBarTitlesStorage = newValue }
+        }
+    }
 
     /// Fetches the menu bar item titles from the target app using Accessibility API.
     /// Updates targetMenuBarTitles on the main actor when done.
