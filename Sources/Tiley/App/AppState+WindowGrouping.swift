@@ -1963,6 +1963,7 @@ extension AppState {
             resolveAdjacencyOverlapsOnRelease(lastSourceID: lastSourceID)
         }
         pollingSharedEdgesByAdjacency.removeAll(keepingCapacity: true)
+        pollingPrimaryMaxY = nil
 
         // **Important**: leave the follower caches at their "ideal" values
         // (don't sync to live). Even if the app rejected a size, having the
@@ -1975,10 +1976,15 @@ extension AppState {
         // After interaction, recompute each group's adjacency coordinates from
         // the current frames before re-showing the linked badges, so the badge
         // positions track the new edge locations.
-        for gid in windowGroups.keys {
-            recomputeAdjacenciesForGroup(gid)
+        // Only the dragged group's frames changed — followers of other
+        // groups were never touched — so recompute that one and hand its
+        // snapshot to the badge refresh instead of re-reading the members.
+        if let lastSourceID, let gid = groupIndexByWindow[lastSourceID] {
+            let frames = recomputeAdjacenciesForGroup(gid)
+            refreshBadgeOverlays(knownFrames: frames)
+        } else {
+            refreshBadgeOverlays()
         }
-        refreshBadgeOverlays()
     }
 
     /// Two patterns of correction applied on drag release:
@@ -2066,9 +2072,17 @@ extension AppState {
             // follower live each pass to recompute the contact (handles apps
             // that continue to nudge their layout dynamically).
             let tol: CGFloat = 0.5
+            // The frames read at the top of this adjacency are still current
+            // unless the follower was just shifted; reuse them for the first
+            // pass and re-read only after a correction has actually been
+            // issued (each read is a synchronous AX round-trip).
+            var cachedSource: CGRect? = sourceFrame
+            var cachedFollower: CGRect? = followerShifted ? nil : otherFrame
             for retry in 0..<3 {
-                guard let liveFollower = liveFrame(of: otherID),
-                      let liveSource = liveFrame(of: lastSourceID) else { break }
+                guard let liveFollower = cachedFollower ?? liveFrame(of: otherID),
+                      let liveSource = cachedSource ?? liveFrame(of: lastSourceID) else { break }
+                cachedSource = nil
+                cachedFollower = nil
                 let liveTarget = followerShifted ? followerFixed : liveFollower
 
                 var srcCorr: CGRect? = nil
@@ -2323,6 +2337,7 @@ extension AppState {
     /// that moment. Consumed by the release-time perpendicular snap.
     private func snapshotSharedPerpendicularEdges(sourceID: CGWindowID) {
         pollingSharedEdgesByAdjacency.removeAll(keepingCapacity: true)
+        pollingPrimaryMaxY = NSScreen.screens.first?.frame.maxY
         guard let gid = groupIndexByWindow[sourceID], let group = windowGroups[gid] else { return }
         let tolerance = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)
         for adj in group.adjacencies {
@@ -2364,7 +2379,7 @@ extension AppState {
               let window = target.windowElement else { return nil }
         let (axPos, size) = accessibilityService.readPositionAndSize(of: window)
         guard size.width > 0, size.height > 0 else { return nil }
-        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? 0
+        let primaryMaxY = pollingPrimaryMaxY ?? NSScreen.screens.first?.frame.maxY ?? 0
         return CGRect(
             x: axPos.x,
             y: primaryMaxY - axPos.y - size.height,
@@ -2511,7 +2526,13 @@ extension AppState {
             // multiply synchronous AX IPC per follower per tick; residual
             // drift is corrected on the next tick and finally by the
             // release-time pass (`resolveAdjacencyOverlapsOnRelease`).
-            if let live = liveFrame(of: otherID) {
+            // When the app honored the requested size, the setter's final
+            // position write is deterministic and any asynchronous settling
+            // is fixed by the release pass — skip the verify read (2 IPC per
+            // follower per tick in the common case).
+            let sizeHonored = abs(actualSize.width - desiredFrame.width) <= 0.5
+                && abs(actualSize.height - desiredFrame.height) <= 0.5
+            if !sizeHonored, let live = liveFrame(of: otherID) {
                 let actualEdge: CGFloat
                 switch sourceEdge {
                 case .right:  actualEdge = live.maxX
@@ -2616,8 +2637,10 @@ extension AppState {
         CGSPrivate.orderWindow(followerID, mode: CGSPrivate.kCGSOrderBelow, relativeTo: sourceID)
     }
 
-    private func recomputeAdjacenciesForGroup(_ groupID: UUID) {
-        guard var group = windowGroups[groupID] else { return }
+    /// Returns the frame snapshot it read so callers can reuse it.
+    @discardableResult
+    private func recomputeAdjacenciesForGroup(_ groupID: UUID) -> [CGWindowID: CGRect] {
+        guard var group = windowGroups[groupID] else { return [:] }
         let frames = frameSnapshot(for: group.members)
         var updated: [WindowAdjacency] = []
         // Existing adjacencies are **not dropped**. During a resize the
@@ -2636,6 +2659,7 @@ extension AppState {
         }
         group.adjacencies = updated
         windowGroups[groupID] = group
+        return frames
     }
 
     /// Returns a new `WindowAdjacency` that preserves the existing edge

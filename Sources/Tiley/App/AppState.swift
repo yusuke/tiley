@@ -424,6 +424,9 @@ final class AppState: NSObject, NSMenuDelegate {
     /// that had ignored a vertical translation mid-drag no longer looked
     /// shared and was left misaligned.
     @ObservationIgnored var pollingSharedEdgesByAdjacency: [AdjacencyKey: SharedPerpendicularEdges] = [:]
+    /// Primary screen's `maxY` captured at the start of a drag/resize session
+    /// so `liveFrame(of:)` doesn't query `NSScreen.screens` 1+F times per tick.
+    @ObservationIgnored var pollingPrimaryMaxY: CGFloat?
     /// Absolute time of the last detected frame change during polling.
     @ObservationIgnored var groupPollingLastChangeAt: CFAbsoluteTime = 0
     /// Counts polling ticks; used to throttle expensive ops (e.g., AXRaise).

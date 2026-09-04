@@ -248,13 +248,9 @@ final class AccessibilityService {
         let perfStart = CFAbsoluteTimeGetCurrent()
         let appElement = AXUIElementCreateApplication(pid)
         let windowElement = try copyWindowElement(from: appElement)
-        let position = try copyAXValueAttribute(windowElement, attribute: kAXPositionAttribute)
-        let size = try copyAXValueAttribute(windowElement, attribute: kAXSizeAttribute)
-
-        var origin = CGPoint.zero
-        var sizeRect = CGSize.zero
-        guard AXValueGetValue(position, .cgPoint, &origin),
-              AXValueGetValue(size, .cgSize, &sizeRect) else {
+        // Position, size, and title in one round-trip (was three).
+        guard let summary = readWindowSummary(windowElement),
+              let origin = summary.origin, let sizeRect = summary.size else {
             throw WindowAccessError.unsupportedWindow
         }
 
@@ -263,7 +259,7 @@ final class AccessibilityService {
         let screenFrame = screen?.frame ?? NSScreen.main?.frame ?? frame
         let visibleFrame = screen?.visibleFrame ?? NSScreen.main?.visibleFrame ?? frame
         let appName = NSRunningApplication(processIdentifier: pid)?.localizedName ?? NSLocalizedString("App", comment: "Generic app name fallback")
-        let windowTitle = try? copyStringAttribute(windowElement, attribute: kAXTitleAttribute)
+        let windowTitle = summary.title
 
         let result = WindowTarget(
             appElement: appElement,
@@ -605,14 +601,30 @@ final class AccessibilityService {
     }
 
     /// Reads the current AX position and size of a window.
+    /// Position and size in ONE Accessibility round-trip. This is the hot
+    /// read of the grouping code (every 16 ms polling tick, every release
+    /// correction, every displacement) and of `setFrame`'s retry ladder; it
+    /// used to issue two messages. Unreadable attributes yield zero values,
+    /// as before (HIServices reports them as `AXValue`s of type `.axError`).
+    private static let positionSizeAttributes: CFArray = [
+        kAXPositionAttribute, kAXSizeAttribute,
+    ] as CFArray
+
     func readPositionAndSize(of window: AXUIElement) -> (pos: CGPoint, size: CGSize) {
         var pos = CGPoint.zero
         var size = CGSize.zero
-        if let posVal = try? copyAXValueAttribute(window, attribute: kAXPositionAttribute) {
-            AXValueGetValue(posVal, .cgPoint, &pos)
+        var valuesRef: CFArray?
+        guard AXUIElementCopyMultipleAttributeValues(window, Self.positionSizeAttributes, [], &valuesRef) == .success,
+              let values = valuesRef as? [AnyObject], values.count == 2 else {
+            return (pos, size)
         }
-        if let szVal = try? copyAXValueAttribute(window, attribute: kAXSizeAttribute) {
-            AXValueGetValue(szVal, .cgSize, &size)
+        if CFGetTypeID(values[0]) == AXValueGetTypeID() {
+            let v = unsafeBitCast(values[0], to: AXValue.self)
+            if AXValueGetType(v) == .cgPoint { AXValueGetValue(v, .cgPoint, &pos) }
+        }
+        if CFGetTypeID(values[1]) == AXValueGetTypeID() {
+            let v = unsafeBitCast(values[1], to: AXValue.self)
+            if AXValueGetType(v) == .cgSize { AXValueGetValue(v, .cgSize, &size) }
         }
         return (pos, size)
     }

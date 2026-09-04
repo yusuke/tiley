@@ -137,15 +137,7 @@ final class WindowManager {
         }
 
         func readPosAndSize() -> (pos: CGPoint, size: CGSize) {
-            var posRef: CFTypeRef?
-            var szRef: CFTypeRef?
-            AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &posRef)
-            AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &szRef)
-            var pos = CGPoint.zero
-            var sz = CGSize.zero
-            if let p = posRef { AXValueGetValue(p as! AXValue, .cgPoint, &pos) }
-            if let s = szRef { AXValueGetValue(s as! AXValue, .cgSize, &sz) }
-            return (pos, sz)
+            accessibilityService.readPositionAndSize(of: window)
         }
 
         func logState(_ label: String) {
