@@ -204,17 +204,6 @@ struct MainWindowView: View {
     @State private var appInfoCache = AppInfoCache()
     @State private var windowSearchFocusTrigger: Int = 0
     @State private var windowSearchBlurTrigger: Int = 0
-    @State private var hoveredWindowIndex: Int?
-    /// Item ID of the partner row to highlight when the user hovers a link
-    /// badge or partner-app icon in another row's group indicator.
-    @State private var hoveredLinkPartnerItemID: Int?
-    /// Adjacency key of the link badge currently being hovered. Both ends of
-    /// the same adjacency render the `x` state so the user can see which two
-    /// windows the click would unlink.
-    @State private var hoveredLinkAdjacencyKey: AdjacencyKey?
-    @State private var hoveredAppHeaderPID: pid_t?
-    @State private var hoveredScreenHeaderID: CGDirectDisplayID?
-    @State private var hoveredEmptyScreenID: CGDirectDisplayID?
     @State private var isSearchFieldFocused = false
     @State private var isSearchFieldVisible = false
     @State private var sidebarSelection: SidebarSelection?
@@ -1558,7 +1547,7 @@ struct MainWindowView: View {
 
     // MARK: - Window List Sidebar
 
-    private struct WindowListItem: Identifiable {
+    fileprivate struct WindowListItem: Identifiable {
         let id: Int
         let appName: String
         let windowTitle: String
@@ -1574,13 +1563,13 @@ struct MainWindowView: View {
     }
 
     /// Tracks which sidebar item is selected for action bar operations.
-    private enum SidebarSelection: Equatable {
+    fileprivate enum SidebarSelection: Equatable {
         case window(index: Int)
         case appHeader(pid: pid_t, appName: String)
         case screenHeader(displayID: CGDirectDisplayID, name: String)
     }
 
-    private enum SidebarRow: Identifiable {
+    fileprivate enum SidebarRow: Identifiable {
         case spaceHeader(spaceID: UInt64, index: Int, isCurrent: Bool)
         case screenHeader(displayID: CGDirectDisplayID, name: String, hasWindowsOnOtherScreens: Bool, hasWindowsOnThisScreen: Bool)
         case emptyScreen(displayID: CGDirectDisplayID, name: String)
@@ -1929,52 +1918,21 @@ struct MainWindowView: View {
                     .frame(maxWidth: .infinity)
                 Spacer()
             } else {
-                ScrollViewReader { proxy in
-                    let rows = filteredSidebarRows
-                    let _ = updateSidebarWindowOrder(rows)
-                    // Built after the order sync above (it reads
-                    // `sidebarWindowOrder`) and shared by every row.
-                    let linkIndex = makeSidebarLinkIndex()
-                    ScrollView {
-                        LazyVStack(spacing: 2) {
-                            ForEach(rows) { row in
-                                switch row {
-                                case .spaceHeader:
-                                    EmptyView()
-                                case .screenHeader(let displayID, let name, let hasOther, let hasThis):
-                                    screenHeaderRow(displayID: displayID, name: name, hasWindowsOnOtherScreens: hasOther, hasWindowsOnThisScreen: hasThis)
-                                case .emptyScreen(let displayID, let name):
-                                    emptyScreenRow(displayID: displayID, name: name)
-                                case .appHeader(let pid, let appName):
-                                    appHeaderRow(pid: pid, appName: appName)
-                                case .window(let item):
-                                    windowListRow(item: item, linkIndex: linkIndex)
-                                }
-                            }
-                        }
-                        .padding(.top, 4)
-                        .padding(.bottom, 40)
-                        .padding(.horizontal, 6)
-                    }
-                    .scrollIndicators(.automatic)
-                    .onChange(of: appState.currentWindowTargetIndex) { _, newIndex in
-                        sidebarSelection = .window(index: newIndex)
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            proxy.scrollTo("window-\(newIndex)", anchor: .center)
-                        }
-                    }
-                    .onChange(of: appState.windowTargetListVersion, initial: true) { _, _ in
-                        // When the window list is populated (e.g. after Phase 2
-                        // of toggleOverlay), sync sidebarSelection if it hasn't
-                        // been set yet so toolbar buttons are enabled.
-                        if sidebarSelection == nil {
-                            let idx = appState.currentWindowTargetIndex
-                            if idx >= 0, idx < appState.windowTargetList.count {
-                                sidebarSelection = .window(index: idx)
-                            }
-                        }
-                    }
-                }
+                let rows = filteredSidebarRows
+                let _ = updateSidebarWindowOrder(rows)
+                // Built after the order sync above (it reads
+                // `sidebarWindowOrder`) and shared by every row.
+                let linkIndex = makeSidebarLinkIndex()
+                // Own view: row hover state lives there, so hovering a row
+                // no longer re-evaluates this whole body (grid, presets,
+                // hints bar) — see `SidebarRowsView`.
+                SidebarRowsView(
+                    appState: appState,
+                    rows: rows,
+                    linkIndex: linkIndex,
+                    appInfoCache: appInfoCache,
+                    sidebarSelection: $sidebarSelection
+                )
             }
         }
         .frame(width: Self.sidebarWidth - 8, height: height - 16)
@@ -2010,6 +1968,27 @@ struct MainWindowView: View {
 
     private func screenForDisplay(_ displayID: CGDirectDisplayID) -> NSScreen? {
         NSScreen.screens.first { $0.displayID == displayID }
+    }
+
+    /// Returns all other screens (for moving all app windows to a different screen).
+    private func otherScreensForApp(pid: pid_t) -> [NSScreen] {
+        let screens = NSScreen.screens
+        guard screens.count > 1 else { return [] }
+        // Use the screen of the first window of this app as "current".
+        let targets = appState.windowTargetList
+        let firstTarget = targets.first { $0.processIdentifier == pid }
+        let currentDisplayID = firstTarget.flatMap { NSScreen.screen(containing: $0.screenFrame)?.displayID }
+        return screens.filter { $0.displayID != currentDisplayID }
+    }
+
+    /// Returns screens that are different from where a specific window is.
+    private func otherScreensForWindow(at index: Int) -> [NSScreen] {
+        guard NSScreen.screens.count > 1 else { return [] }
+        let targets = appState.windowTargetList
+        guard index >= 0, index < targets.count else { return [] }
+        let target = targets[index]
+        let currentDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
+        return NSScreen.screens.filter { $0.displayID != currentDisplayID }
     }
 
     /// Action buttons shown next to the search field, adapting to the current sidebar selection.
@@ -2349,498 +2328,12 @@ struct MainWindowView: View {
     }
 
 
-    private func screenHeaderRow(displayID: CGDirectDisplayID, name: String, hasWindowsOnOtherScreens: Bool, hasWindowsOnThisScreen: Bool) -> some View {
-        let isHovered = hoveredScreenHeaderID == displayID
-        let isSelected = sidebarSelection == .screenHeader(displayID: displayID, name: name)
-        let otherScreens = otherScreensForDisplay(displayID)
-
-        return Button {
-            sidebarSelection = .screenHeader(displayID: displayID, name: name)
-            appState.selectAllWindowsOnScreen(displayID: displayID)
-        } label: {
-            HStack(spacing: 6) {
-                ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
-                Text(name)
-                    .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
-                    .foregroundStyle(isSelected ? .primary : .secondary)
-                    .lineLimit(1)
-                Spacer(minLength: 0)
-            }
-            .padding(.horizontal, 6)
-            .padding(.vertical, 3)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .stroke(ThemeColors.presetRowBorder(selected: isSelected, for: colorScheme), lineWidth: isSelected ? 1 : 0)
-            )
-        }
-        .buttonStyle(.plain)
-        .contentShape(Rectangle())
-        .onHover { hovering in hoveredScreenHeaderID = hovering ? displayID : nil }
-        .contextMenu {
-            if hasWindowsOnOtherScreens {
-                Button {
-                    if let screen = screenForDisplay(displayID) {
-                        appState.gatherWindowsToScreen(screen)
-                        appState.hideMainWindow()
-                    }
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Gather windows to %@", comment: "Menu item to gather all windows from other screens to this screen"), name),
-                        systemImage: "rectangle.compress.vertical"
-                    )
-                }
-            }
-
-            if !otherScreens.isEmpty {
-                if hasWindowsOnOtherScreens {
-                    Divider()
-                }
-                ForEach(otherScreens, id: \.displayID) { screen in
-                    Button {
-                        appState.moveScreenWindowsToScreen(from: displayID, to: screen)
-                        appState.hideMainWindow()
-                    } label: {
-                        Label(
-                            String(format: NSLocalizedString("Move %1$@ windows to %2$@", comment: "Menu item to move all windows from one screen to another. First arg is source screen, second is destination screen"), name, screen.localizedName),
-                            systemImage: "rectangle.portrait.and.arrow.right"
-                        )
-                    }
-                    .disabled(!hasWindowsOnThisScreen)
-                }
-            }
-        }
-    }
-
-    private func emptyScreenRow(displayID: CGDirectDisplayID, name: String) -> some View {
-        let isHovered = hoveredEmptyScreenID == displayID
-        return Button {
-            if let screen = screenForDisplay(displayID) {
-                appState.gatherWindowsToScreen(screen)
-                appState.hideMainWindow()
-            }
-        } label: {
-            HStack(spacing: 6) {
-                ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(name)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                    Text(isHovered
-                         ? NSLocalizedString("Gather windows", comment: "Label shown on hover to gather windows to an empty screen")
-                         : NSLocalizedString("No windows", comment: "Placeholder shown when a screen has no windows"))
-                        .font(.system(size: 10))
-                        .foregroundStyle(isHovered ? .secondary : .tertiary)
-                        .lineLimit(1)
-                }
-                Spacer(minLength: 0)
-            }
-            .padding(.horizontal, 6)
-            .padding(.vertical, 3)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(isHovered
-                          ? ThemeColors.presetRowBackground(selected: true, for: colorScheme)
-                          : Color.clear)
-            )
-        }
-        .buttonStyle(.plain)
-        .contentShape(Rectangle())
-        .onHover { hovering in hoveredEmptyScreenID = hovering ? displayID : nil }
-    }
-
-    private func appHeaderRow(pid: pid_t, appName: String) -> some View {
-        let isExplicitlySelected = sidebarSelection == .appHeader(pid: pid, appName: appName)
-        // Only highlight when ALL child windows of this app are selected.
-        let allChildrenSelected: Bool = {
-            let targets = appState.windowTargetList
-            let selectedIndices = appState.currentSelectedWindowIndices
-            let appIndices = targets.indices.filter { targets[$0].processIdentifier == pid }
-            return !appIndices.isEmpty && appIndices.allSatisfy { selectedIndices.contains($0) }
-        }()
-        let isSelected = isExplicitlySelected || allChildrenSelected
-        let isHovered = hoveredAppHeaderPID == pid
-
-        return Button {
-            let flags = NSApp.currentEvent?.modifierFlags ?? []
-            let shift = flags.contains(.shift)
-            let cmd = flags.contains(.command)
-            sidebarSelection = .appHeader(pid: pid, appName: appName)
-            appState.selectAllWindowsOfApp(pid: pid, shift: shift, cmd: cmd)
-        } label: {
-            HStack(spacing: 6) {
-                if let icon = appInfoCache.icon(for: pid) {
-                    Image(nsImage: icon)
-                        .resizable()
-                        .interpolation(.high)
-                        .frame(width: 14, height: 14)
-                        .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
-                }
-                Text(appName)
-                    .font(.system(size: 10, weight: isSelected ? .bold : .medium))
-                    .foregroundStyle(isSelected ? .primary : .secondary)
-                    .lineLimit(1)
-                Spacer(minLength: 0)
-            }
-            .padding(.horizontal, 6)
-            .padding(.top, 4)
-            .padding(.bottom, 1)
-            .background(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .stroke(ThemeColors.presetRowBorder(selected: isExplicitlySelected, for: colorScheme), lineWidth: isExplicitlySelected ? 1 : 0)
-            )
-        }
-        .buttonStyle(.plain)
-        .contentShape(Rectangle())
-        .onHover { hovering in hoveredAppHeaderPID = hovering ? pid : nil }
-        .contextMenu {
-            let otherScreens = otherScreensForApp(pid: pid)
-            if !otherScreens.isEmpty {
-                ForEach(otherScreens, id: \.displayID) { screen in
-                    Button {
-                        appState.moveAllAppWindowsToScreen(pid: pid, screen: screen)
-                        appState.hideMainWindow()
-                    } label: {
-                        Label(
-                            String(format: NSLocalizedString("Move %1$@ to %2$@", comment: "Menu item to move a window/app to another screen. First arg is window/app name, second is screen name"), appName, screen.localizedName),
-                            systemImage: "rectangle.portrait.and.arrow.right"
-                        )
-                    }
-                }
-                Divider()
-            }
-
-            Button {
-                appState.hideOtherApps(exceptPID: pid)
-            } label: {
-                Label(
-                    String(format: NSLocalizedString("Hide windows besides %@", comment: "Menu item to hide all windows except the selected app"), appName),
-                    systemImage: "eye.slash"
-                )
-            }
-
-            Divider()
-
-            if appInfoCache.bundleID(for: pid) == "com.apple.finder" {
-                Button {
-                    appState.closeAllWindows(pid: pid)
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Close all %@ windows", comment: "Action bar tooltip to close all windows of an app"), appName),
-                        systemImage: "xmark"
-                    )
-                }
-            } else {
-                Button {
-                    appState.quitApp(pid: pid)
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"), appName),
-                        systemImage: "power"
-                    )
-                }
-            }
-        }
-    }
-
-    /// Returns all other screens (for moving all app windows to a different screen).
-    private func otherScreensForApp(pid: pid_t) -> [NSScreen] {
-        let screens = NSScreen.screens
-        guard screens.count > 1 else { return [] }
-        // Use the screen of the first window of this app as "current".
-        let targets = appState.windowTargetList
-        let firstTarget = targets.first { $0.processIdentifier == pid }
-        let currentDisplayID = firstTarget.flatMap { NSScreen.screen(containing: $0.screenFrame)?.displayID }
-        return screens.filter { $0.displayID != currentDisplayID }
-    }
-
-    /// Returns screens that are different from where a specific window is.
-    private func otherScreensForWindow(at index: Int) -> [NSScreen] {
-        guard NSScreen.screens.count > 1 else { return [] }
-        let targets = appState.windowTargetList
-        guard index >= 0, index < targets.count else { return [] }
-        let target = targets[index]
-        let currentDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
-        return NSScreen.screens.filter { $0.displayID != currentDisplayID }
-    }
-
-    private func windowListRow(item: WindowListItem, linkIndex: SidebarLinkIndex) -> some View {
-        let isPrimary = item.id == appState.currentWindowTargetIndex
-        let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
-        let isSelected = isPrimary || isInSelection
-        let isHovered = hoveredWindowIndex == item.id
-            || (item.isUnderAppHeader && hoveredAppHeaderPID == item.pid)
-            || hoveredLinkPartnerItemID == item.id
-        let showBorderOnHeader = item.isUnderAppHeader && sidebarSelection == .appHeader(pid: item.pid, appName: item.appName)
-        let presetColorIndex = appState.presetHoverHighlights[item.id]
-        let linkPartners = groupLinkPartners(forItemID: item.id, linkIndex: linkIndex)
-        let partnerIconSize: CGFloat = 14
-        let indexBadgeSize: CGFloat = 16
-        let trailingHStackSpacing: CGFloat = 3
-        let trailingTrailingPadding: CGFloat = 4
-        let reservedTrailingWidth: CGFloat = {
-            // Always reserve the index badge slot, even when no index is shown.
-            var w = indexBadgeSize
-            let pairCount = CGFloat(linkPartners.count)
-            if pairCount > 0 {
-                w += pairCount * (partnerIconSize + trailingHStackSpacing)
-            }
-            return w + trailingTrailingPadding
-        }()
-
-        return Button {
-            let flags = NSApp.currentEvent?.modifierFlags ?? []
-            let shift = flags.contains(.shift)
-            let cmd = flags.contains(.command)
-            appState.selectWindowTarget(at: item.id, shift: shift, cmd: cmd)
-            if item.isUnderAppHeader {
-                sidebarSelection = .appHeader(pid: item.pid, appName: item.appName)
-            } else {
-                sidebarSelection = .window(index: item.id)
-            }
-        } label: {
-            HStack(spacing: 6) {
-                if item.isUnderAppHeader {
-                    // Under an app header: show only window title, indented.
-                    Text(item.windowTitle.isEmpty ? item.appName : item.windowTitle)
-                        .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
-                        .lineLimit(1)
-                        .padding(.leading, 20)
-                } else {
-                    if let icon = appInfoCache.icon(for: item.pid) {
-                        Image(nsImage: icon)
-                            .resizable()
-                            .interpolation(.high)
-                            .frame(width: 16, height: 16)
-                            .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
-                    }
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(item.appName)
-                            .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
-                            .lineLimit(1)
-                        if !item.windowTitle.isEmpty {
-                            Text(item.windowTitle)
-                                .font(.system(size: 10))
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
-                        }
-                    }
-                }
-                Spacer(minLength: 0)
-                Color.clear.frame(width: reservedTrailingWidth, height: 1)
-            }
-            .padding(.horizontal, 6)
-            .padding(.vertical, 3)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(
-                        presetColorIndex != nil
-                            ? ThemeColors.indexedSidebarHighlight(index: presetColorIndex!, for: colorScheme)
-                            : ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme)
-                    )
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .stroke(
-                        presetColorIndex != nil
-                            ? ThemeColors.indexedSidebarHighlightBorder(index: presetColorIndex!, for: colorScheme)
-                            : ThemeColors.presetRowBorder(selected: isPrimary && !showBorderOnHeader, for: colorScheme),
-                        lineWidth: presetColorIndex != nil ? 1 : ((isSelected && !showBorderOnHeader) ? 1 : 0)
-                    )
-            )
-            .animation(nil, value: isHovered)
-        }
-        .buttonStyle(.plain)
-        .opacity(item.isHidden ? 0.5 : 1.0)
-        .onHover { hovering in hoveredWindowIndex = hovering ? item.id : nil }
-        .simultaneousGesture(
-            TapGesture(count: 2).onEnded {
-                appState.focusWindowAndDismiss(at: item.id)
-            }
-        )
-        .contextMenu {
-            let otherScreens = otherScreensForWindow(at: item.id)
-            if !otherScreens.isEmpty {
-                let windowName = item.windowTitle.isEmpty ? item.appName : item.windowTitle
-                ForEach(otherScreens, id: \.displayID) { screen in
-                    Button {
-                        appState.moveWindowToScreen(at: item.id, screen: screen)
-                        appState.hideMainWindow()
-                    } label: {
-                        Label(
-                            String(format: NSLocalizedString("Move %1$@ to %2$@", comment: "Menu item to move a window/app to another screen. First arg is window/app name, second is screen name"), windowName, screen.localizedName),
-                            systemImage: "rectangle.portrait.and.arrow.right"
-                        )
-                    }
-                }
-                Divider()
-            }
-
-            // Resize submenu
-            let resizeScreen: NSScreen? = {
-                let targets = appState.windowTargetList
-                guard item.id >= 0, item.id < targets.count else { return NSScreen.screens.first }
-                return NSScreen.screen(containing: targets[item.id].screenFrame) ?? NSScreen.screens.first
-            }()
-            let resizeGroups = resizeScreen.map { WindowResizePreset.presetsAvailable(on: $0) } ?? []
-            if !resizeGroups.isEmpty {
-                Menu {
-                    ForEach(Array(resizeGroups.enumerated()), id: \.offset) { _, group in
-                        Section(group.ratio) {
-                            ForEach(Array(group.presets.enumerated()), id: \.offset) { _, preset in
-                                Button(preset.label) {
-                                    appState.resizeWindow(at: item.id, to: preset.size)
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    Label(
-                        NSLocalizedString("Resize", comment: "Context menu item for resize submenu"),
-                        systemImage: "arrow.up.left.and.arrow.down.right"
-                    )
-                }
-                Divider()
-            }
-
-            if appState.isMultiSelection, appState.currentSelectedWindowIndices.contains(item.id) {
-                let count = appState.currentSelectedWindowIndices.count
-                Button {
-                    appState.closeSelectedWindows()
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Close %d windows", comment: "Action bar tooltip for closing multiple windows"), count),
-                        systemImage: "xmark.rectangle.portrait"
-                    )
-                }
-                Divider()
-            }
-
-            if item.isUnderAppHeader || item.isFinder {
-                Button {
-                    appState.closeWindowTarget(at: item.id)
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Close %@", comment: "Menu item to close a window"), item.windowTitle.isEmpty ? item.appName : item.windowTitle),
-                        systemImage: "xmark"
-                    )
-                }
-            }
-
-            if item.sameAppWindowCount > 1 {
-                Button {
-                    appState.closeOtherWindowTargets(except: item.id)
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Close other windows of %@", comment: "Menu item to close other windows of the same app"), item.appName),
-                        systemImage: "xmark.rectangle"
-                    )
-                }
-            }
-
-            Button {
-                appState.hideOtherApps(except: item.id)
-            } label: {
-                Label(
-                    String(format: NSLocalizedString("Hide windows besides %@", comment: "Menu item to hide all windows except the selected app"), item.appName),
-                    systemImage: "eye.slash"
-                )
-            }
-
-            Divider()
-            if item.isFinder {
-                Button {
-                    appState.closeAllWindows(pid: item.pid)
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Close all %@ windows", comment: "Action bar tooltip to close all windows of an app"), item.appName),
-                        systemImage: "xmark"
-                    )
-                }
-            } else {
-                Button {
-                    appState.quitApp(at: item.id)
-                } label: {
-                    Label(
-                        String(format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"), item.appName),
-                        systemImage: "power"
-                    )
-                }
-            }
-        }
-        .overlay(alignment: .trailing) {
-            HStack(spacing: trailingHStackSpacing) {
-                ForEach(Array(linkPartners.enumerated()), id: \.offset) { _, partner in
-                    SidebarPartnerIcon(
-                        icon: appInfoCache.icon(for: partner.partnerPID),
-                        size: partnerIconSize,
-                        forceHovered: hoveredLinkAdjacencyKey == partner.key,
-                        onClick: partner.unlink,
-                        onHoverChange: { hovering in
-                            if hovering {
-                                hoveredLinkAdjacencyKey = partner.key
-                                hoveredLinkPartnerItemID = partner.partnerItemID
-                            } else {
-                                if hoveredLinkAdjacencyKey == partner.key {
-                                    hoveredLinkAdjacencyKey = nil
-                                }
-                                if hoveredLinkPartnerItemID == partner.partnerItemID {
-                                    hoveredLinkPartnerItemID = nil
-                                }
-                            }
-                        }
-                    )
-                    .instantTooltip(NSLocalizedString("Unlink window group", comment: "Tooltip for the sidebar link badge — clicking it dissolves the window group"))
-                }
-                ZStack {
-                    if let ci = presetColorIndex {
-                        Circle()
-                            .fill(ThemeColors.indexedSelectionFill(index: ci, for: colorScheme))
-                        Text("\(ci + 1)")
-                            .font(.system(size: 9, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                    } else if appState.isMultiSelection,
-                              let selIdx = appState.currentSelectionOrder.firstIndex(of: item.id) {
-                        Circle()
-                            .fill(ThemeColors.indexedSelectionFill(index: 0, for: colorScheme))
-                        Text("\(selIdx + 1)")
-                            .font(.system(size: 9, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                    }
-                }
-                .frame(width: indexBadgeSize, height: indexBadgeSize)
-            }
-            .padding(.trailing, trailingTrailingPadding)
-        }
-    }
-
-    /// Returns the link partners of the given window row, in stable sidebar
-    /// order. Includes both *spatial* partners (the active `WindowGroup`'s
-    /// direct adjacencies) and *satellite* partners — app-slot bindings
-    /// registered when an app-assigned preset with grouped pairs was
-    /// applied. Satellite links outlive the spatial group: when a later
-    /// preset binds a different window to the same anchor app, the previous
-    /// pair stops being a spatial neighbour but its satellite linkage
-    /// remains, and would otherwise be invisible in the sidebar. Each
-    /// returned partner exposes its own `unlink` closure so the user can
-    /// drop just that one link.
     /// Per-pass lookup tables for `groupLinkPartners`, built once in
     /// `windowListSidebar` and shared by every row. Previously each row
     /// rebuilt its own index maps and scanned all targets per satellite
     /// bundle — O(rows × windows) per pass as soon as one group or one
     /// satellite pair existed anywhere.
-    private struct SidebarLinkIndex {
+    fileprivate struct SidebarLinkIndex {
         /// No group and no satellite exists: every row bails immediately.
         let isIdle: Bool
         let indexByCGID: [CGWindowID: Int]
@@ -2883,109 +2376,6 @@ struct MainWindowView: View {
             windowIDsByBundle: windowIDsByBundle
         )
     }
-
-    private func groupLinkPartners(forItemID itemID: Int, linkIndex: SidebarLinkIndex) -> [SidebarLinkPartner] {
-        let targets = appState.windowTargetList
-        guard itemID >= 0, itemID < targets.count else { return [] }
-        let cgID = targets[itemID].cgWindowID
-        guard cgID != 0 else { return [] }
-        if linkIndex.isIdle { return [] }
-
-        // Fast path: this row is neither a group member, a satellite, nor an
-        // anchor — the common case even while a satellite pair exists
-        // elsewhere (the old check bailed only when *no* satellite existed).
-        let isMember = appState.groupIndexByWindow[cgID] != nil
-        let isSatellite = linkIndex.satelliteWIDs.contains(cgID)
-        let myPID = targets[itemID].processIdentifier
-        let myBundleID: String? = appState.appSlotSatellites.isEmpty ? nil : appInfoCache.bundleID(for: myPID)
-        let isAnchor = myBundleID.map { appState.appSlotSatellites[$0] != nil } ?? false
-        if !isMember, !isSatellite, !isAnchor {
-            return []
-        }
-
-        func resolve(partnerCGID: CGWindowID) -> (orderIndex: Int, pid: pid_t, itemID: Int)? {
-            guard let idx = linkIndex.indexByCGID[partnerCGID] else { return nil }
-            let orderIndex = linkIndex.orderPosByIndex[idx] ?? Int.max
-            return (orderIndex, targets[idx].processIdentifier, idx)
-        }
-
-        func makeKey(_ a: CGWindowID, _ b: CGWindowID) -> AdjacencyKey {
-            AdjacencyKey(windowA: min(a, b), windowB: max(a, b))
-        }
-
-        var seen: Set<AdjacencyKey> = []
-        var collected: [(orderIndex: Int, partner: SidebarLinkPartner)] = []
-
-        // 1. Spatial-group adjacency partners (currently active links).
-        if let gid = appState.groupIndexByWindow[cgID],
-           let group = appState.windowGroups[gid] {
-            for adj in group.adjacencies {
-                let partnerCGID: CGWindowID
-                if adj.windowA == cgID { partnerCGID = adj.windowB }
-                else if adj.windowB == cgID { partnerCGID = adj.windowA }
-                else { continue }
-                let key = adj.unorderedKey
-                guard !seen.contains(key) else { continue }
-                seen.insert(key)
-                guard let resolved = resolve(partnerCGID: partnerCGID) else { continue }
-                let partner = SidebarLinkPartner(
-                    key: key,
-                    partnerPID: resolved.pid,
-                    partnerItemID: resolved.itemID,
-                    unlink: { [appState] in appState.unlinkAdjacency(adj) }
-                )
-                collected.append((resolved.orderIndex, partner))
-            }
-        }
-
-        // 2. This window is a *satellite* of one or more app bundles. The
-        //    "anchor" side is any running window of that bundle — show one
-        //    representative partner per bundle.
-        for (bundleID, satellites) in appState.appSlotSatellites where satellites.contains(cgID) {
-            guard let partnerCGID = linkIndex.windowIDsByBundle[bundleID]?.first(where: { $0 != cgID }) else { continue }
-            let key = makeKey(cgID, partnerCGID)
-            guard !seen.contains(key) else { continue }
-            seen.insert(key)
-            guard let resolved = resolve(partnerCGID: partnerCGID) else { continue }
-            let ownWID = cgID
-            let partner = SidebarLinkPartner(
-                key: key,
-                partnerPID: resolved.pid,
-                partnerItemID: resolved.itemID,
-                unlink: { [appState] in
-                    appState.unlinkAppSlotSatellitePair(windowA: ownWID, windowB: partnerCGID)
-                    appState.refreshBadgeOverlays()
-                }
-            )
-            collected.append((resolved.orderIndex, partner))
-        }
-
-        // 3. This window is an *anchor* — its app's bundle has registered
-        //    satellites. Each registered satellite is a separate link.
-        if let myBID = myBundleID, let satellites = appState.appSlotSatellites[myBID] {
-            for satCGID in satellites {
-                guard satCGID != cgID else { continue }
-                let key = makeKey(cgID, satCGID)
-                guard !seen.contains(key) else { continue }
-                seen.insert(key)
-                guard let resolved = resolve(partnerCGID: satCGID) else { continue }
-                let ownWID = cgID
-                let partner = SidebarLinkPartner(
-                    key: key,
-                    partnerPID: resolved.pid,
-                    partnerItemID: resolved.itemID,
-                    unlink: { [appState] in
-                        appState.unlinkAppSlotSatellitePair(windowA: ownWID, windowB: satCGID)
-                        appState.refreshBadgeOverlays()
-                    }
-                )
-                collected.append((resolved.orderIndex, partner))
-            }
-        }
-
-        return collected.sorted(by: { $0.orderIndex < $1.orderIndex }).map { $0.partner }
-    }
-
 
     // MARK: - Target Info (secondary screens)
 
@@ -3788,3 +3178,699 @@ struct MainWindowView: View {
 
 // Tahoe UI styles moved to TahoeStyles.swift
 
+
+// MARK: - Sidebar rows (own view so hover state stays local)
+
+/// The scrolling row list of the window sidebar, split out of
+/// `MainWindowView` so that hovering a row re-evaluates only this view.
+/// The row hover `@State` used to live on `MainWindowView`, whose entire
+/// body — screen composite, grid with miniature windows, every preset row,
+/// hints bar — re-ran on each row enter/exit, per display. Everything the
+/// rows need arrives as values from the parent (which still builds the rows
+/// and the link index once per *list* change); the selection is a binding
+/// because clicks change it.
+private struct SidebarRowsView: View {
+    typealias SidebarRow = MainWindowView.SidebarRow
+    typealias WindowListItem = MainWindowView.WindowListItem
+    typealias SidebarSelection = MainWindowView.SidebarSelection
+    typealias SidebarLinkIndex = MainWindowView.SidebarLinkIndex
+
+    @Environment(\.colorScheme) private var colorScheme
+    let appState: AppState
+    let rows: [SidebarRow]
+    let linkIndex: SidebarLinkIndex
+    let appInfoCache: AppInfoCache
+    @Binding var sidebarSelection: SidebarSelection?
+
+    @State private var hoveredWindowIndex: Int?
+    /// Item ID of the partner row to highlight when the user hovers a link
+    /// badge or partner-app icon in another row's group indicator.
+    @State private var hoveredLinkPartnerItemID: Int?
+    /// Adjacency key of the link badge currently being hovered. Both ends of
+    /// the same adjacency render the `x` state so the user can see which two
+    /// windows the click would unlink.
+    @State private var hoveredLinkAdjacencyKey: AdjacencyKey?
+    @State private var hoveredAppHeaderPID: pid_t?
+    @State private var hoveredScreenHeaderID: CGDirectDisplayID?
+    @State private var hoveredEmptyScreenID: CGDirectDisplayID?
+
+    // Explicit: the private `@State` properties would make the memberwise
+    // initializer private, and the parent lives in another type.
+    fileprivate init(
+        appState: AppState,
+        rows: [SidebarRow],
+        linkIndex: SidebarLinkIndex,
+        appInfoCache: AppInfoCache,
+        sidebarSelection: Binding<SidebarSelection?>
+    ) {
+        self.appState = appState
+        self.rows = rows
+        self.linkIndex = linkIndex
+        self.appInfoCache = appInfoCache
+        self._sidebarSelection = sidebarSelection
+    }
+
+    var body: some View {
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack(spacing: 2) {
+                    ForEach(rows) { row in
+                        switch row {
+                        case .spaceHeader:
+                            EmptyView()
+                        case .screenHeader(let displayID, let name, let hasOther, let hasThis):
+                            screenHeaderRow(displayID: displayID, name: name, hasWindowsOnOtherScreens: hasOther, hasWindowsOnThisScreen: hasThis)
+                        case .emptyScreen(let displayID, let name):
+                            emptyScreenRow(displayID: displayID, name: name)
+                        case .appHeader(let pid, let appName):
+                            appHeaderRow(pid: pid, appName: appName)
+                        case .window(let item):
+                            windowListRow(item: item, linkIndex: linkIndex)
+                        }
+                    }
+                }
+                .padding(.top, 4)
+                .padding(.bottom, 40)
+                .padding(.horizontal, 6)
+            }
+            .scrollIndicators(.automatic)
+            .onChange(of: appState.currentWindowTargetIndex) { _, newIndex in
+                sidebarSelection = .window(index: newIndex)
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    proxy.scrollTo("window-\(newIndex)", anchor: .center)
+                }
+            }
+            .onChange(of: appState.windowTargetListVersion, initial: true) { _, _ in
+                // When the window list is populated (e.g. after Phase 2
+                // of toggleOverlay), sync sidebarSelection if it hasn't
+                // been set yet so toolbar buttons are enabled.
+                if sidebarSelection == nil {
+                    let idx = appState.currentWindowTargetIndex
+                    if idx >= 0, idx < appState.windowTargetList.count {
+                        sidebarSelection = .window(index: idx)
+                    }
+                }
+            }
+        }
+    }
+
+    private func otherScreensForDisplay(_ displayID: CGDirectDisplayID) -> [NSScreen] {
+        let screens = NSScreen.screens
+        guard screens.count > 1 else { return [] }
+        return screens.filter { $0.displayID != displayID }
+    }
+
+    private func screenForDisplay(_ displayID: CGDirectDisplayID) -> NSScreen? {
+        NSScreen.screens.first { $0.displayID == displayID }
+    }
+
+    private func screenHeaderRow(displayID: CGDirectDisplayID, name: String, hasWindowsOnOtherScreens: Bool, hasWindowsOnThisScreen: Bool) -> some View {
+        let isHovered = hoveredScreenHeaderID == displayID
+        let isSelected = sidebarSelection == .screenHeader(displayID: displayID, name: name)
+        let otherScreens = otherScreensForDisplay(displayID)
+
+        return Button {
+            sidebarSelection = .screenHeader(displayID: displayID, name: name)
+            appState.selectAllWindowsOnScreen(displayID: displayID)
+        } label: {
+            HStack(spacing: 6) {
+                ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
+                Text(name)
+                    .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                    .foregroundStyle(isSelected ? .primary : .secondary)
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .stroke(ThemeColors.presetRowBorder(selected: isSelected, for: colorScheme), lineWidth: isSelected ? 1 : 0)
+            )
+        }
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .onHover { hovering in hoveredScreenHeaderID = hovering ? displayID : nil }
+        .contextMenu {
+            if hasWindowsOnOtherScreens {
+                Button {
+                    if let screen = screenForDisplay(displayID) {
+                        appState.gatherWindowsToScreen(screen)
+                        appState.hideMainWindow()
+                    }
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Gather windows to %@", comment: "Menu item to gather all windows from other screens to this screen"), name),
+                        systemImage: "rectangle.compress.vertical"
+                    )
+                }
+            }
+
+            if !otherScreens.isEmpty {
+                if hasWindowsOnOtherScreens {
+                    Divider()
+                }
+                ForEach(otherScreens, id: \.displayID) { screen in
+                    Button {
+                        appState.moveScreenWindowsToScreen(from: displayID, to: screen)
+                        appState.hideMainWindow()
+                    } label: {
+                        Label(
+                            String(format: NSLocalizedString("Move %1$@ windows to %2$@", comment: "Menu item to move all windows from one screen to another. First arg is source screen, second is destination screen"), name, screen.localizedName),
+                            systemImage: "rectangle.portrait.and.arrow.right"
+                        )
+                    }
+                    .disabled(!hasWindowsOnThisScreen)
+                }
+            }
+        }
+    }
+
+    private func emptyScreenRow(displayID: CGDirectDisplayID, name: String) -> some View {
+        let isHovered = hoveredEmptyScreenID == displayID
+        return Button {
+            if let screen = screenForDisplay(displayID) {
+                appState.gatherWindowsToScreen(screen)
+                appState.hideMainWindow()
+            }
+        } label: {
+            HStack(spacing: 6) {
+                ScreenArrangementIcon(highlightDisplayID: displayID, size: 16)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(name)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                    Text(isHovered
+                         ? NSLocalizedString("Gather windows", comment: "Label shown on hover to gather windows to an empty screen")
+                         : NSLocalizedString("No windows", comment: "Placeholder shown when a screen has no windows"))
+                        .font(.system(size: 10))
+                        .foregroundStyle(isHovered ? .secondary : .tertiary)
+                        .lineLimit(1)
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(isHovered
+                          ? ThemeColors.presetRowBackground(selected: true, for: colorScheme)
+                          : Color.clear)
+            )
+        }
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .onHover { hovering in hoveredEmptyScreenID = hovering ? displayID : nil }
+    }
+
+    private func appHeaderRow(pid: pid_t, appName: String) -> some View {
+        let isExplicitlySelected = sidebarSelection == .appHeader(pid: pid, appName: appName)
+        // Only highlight when ALL child windows of this app are selected.
+        let allChildrenSelected: Bool = {
+            let targets = appState.windowTargetList
+            let selectedIndices = appState.currentSelectedWindowIndices
+            let appIndices = targets.indices.filter { targets[$0].processIdentifier == pid }
+            return !appIndices.isEmpty && appIndices.allSatisfy { selectedIndices.contains($0) }
+        }()
+        let isSelected = isExplicitlySelected || allChildrenSelected
+        let isHovered = hoveredAppHeaderPID == pid
+
+        return Button {
+            let flags = NSApp.currentEvent?.modifierFlags ?? []
+            let shift = flags.contains(.shift)
+            let cmd = flags.contains(.command)
+            sidebarSelection = .appHeader(pid: pid, appName: appName)
+            appState.selectAllWindowsOfApp(pid: pid, shift: shift, cmd: cmd)
+        } label: {
+            HStack(spacing: 6) {
+                if let icon = appInfoCache.icon(for: pid) {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .frame(width: 14, height: 14)
+                        .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                }
+                Text(appName)
+                    .font(.system(size: 10, weight: isSelected ? .bold : .medium))
+                    .foregroundStyle(isSelected ? .primary : .secondary)
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 6)
+            .padding(.top, 4)
+            .padding(.bottom, 1)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .stroke(ThemeColors.presetRowBorder(selected: isExplicitlySelected, for: colorScheme), lineWidth: isExplicitlySelected ? 1 : 0)
+            )
+        }
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .onHover { hovering in hoveredAppHeaderPID = hovering ? pid : nil }
+        .contextMenu {
+            let otherScreens = otherScreensForApp(pid: pid)
+            if !otherScreens.isEmpty {
+                ForEach(otherScreens, id: \.displayID) { screen in
+                    Button {
+                        appState.moveAllAppWindowsToScreen(pid: pid, screen: screen)
+                        appState.hideMainWindow()
+                    } label: {
+                        Label(
+                            String(format: NSLocalizedString("Move %1$@ to %2$@", comment: "Menu item to move a window/app to another screen. First arg is window/app name, second is screen name"), appName, screen.localizedName),
+                            systemImage: "rectangle.portrait.and.arrow.right"
+                        )
+                    }
+                }
+                Divider()
+            }
+
+            Button {
+                appState.hideOtherApps(exceptPID: pid)
+            } label: {
+                Label(
+                    String(format: NSLocalizedString("Hide windows besides %@", comment: "Menu item to hide all windows except the selected app"), appName),
+                    systemImage: "eye.slash"
+                )
+            }
+
+            Divider()
+
+            if appInfoCache.bundleID(for: pid) == "com.apple.finder" {
+                Button {
+                    appState.closeAllWindows(pid: pid)
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Close all %@ windows", comment: "Action bar tooltip to close all windows of an app"), appName),
+                        systemImage: "xmark"
+                    )
+                }
+            } else {
+                Button {
+                    appState.quitApp(pid: pid)
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"), appName),
+                        systemImage: "power"
+                    )
+                }
+            }
+        }
+    }
+
+    /// Returns all other screens (for moving all app windows to a different screen).
+    private func otherScreensForApp(pid: pid_t) -> [NSScreen] {
+        let screens = NSScreen.screens
+        guard screens.count > 1 else { return [] }
+        // Use the screen of the first window of this app as "current".
+        let targets = appState.windowTargetList
+        let firstTarget = targets.first { $0.processIdentifier == pid }
+        let currentDisplayID = firstTarget.flatMap { NSScreen.screen(containing: $0.screenFrame)?.displayID }
+        return screens.filter { $0.displayID != currentDisplayID }
+    }
+
+    /// Returns screens that are different from where a specific window is.
+    private func otherScreensForWindow(at index: Int) -> [NSScreen] {
+        guard NSScreen.screens.count > 1 else { return [] }
+        let targets = appState.windowTargetList
+        guard index >= 0, index < targets.count else { return [] }
+        let target = targets[index]
+        let currentDisplayID = NSScreen.screen(containing: target.screenFrame)?.displayID
+        return NSScreen.screens.filter { $0.displayID != currentDisplayID }
+    }
+
+    private func windowListRow(item: WindowListItem, linkIndex: SidebarLinkIndex) -> some View {
+        let isPrimary = item.id == appState.currentWindowTargetIndex
+        let isInSelection = appState.currentSelectedWindowIndices.contains(item.id)
+        let isSelected = isPrimary || isInSelection
+        let isHovered = hoveredWindowIndex == item.id
+            || (item.isUnderAppHeader && hoveredAppHeaderPID == item.pid)
+            || hoveredLinkPartnerItemID == item.id
+        let showBorderOnHeader = item.isUnderAppHeader && sidebarSelection == .appHeader(pid: item.pid, appName: item.appName)
+        let presetColorIndex = appState.presetHoverHighlights[item.id]
+        let linkPartners = groupLinkPartners(forItemID: item.id, linkIndex: linkIndex)
+        let partnerIconSize: CGFloat = 14
+        let indexBadgeSize: CGFloat = 16
+        let trailingHStackSpacing: CGFloat = 3
+        let trailingTrailingPadding: CGFloat = 4
+        let reservedTrailingWidth: CGFloat = {
+            // Always reserve the index badge slot, even when no index is shown.
+            var w = indexBadgeSize
+            let pairCount = CGFloat(linkPartners.count)
+            if pairCount > 0 {
+                w += pairCount * (partnerIconSize + trailingHStackSpacing)
+            }
+            return w + trailingTrailingPadding
+        }()
+
+        return Button {
+            let flags = NSApp.currentEvent?.modifierFlags ?? []
+            let shift = flags.contains(.shift)
+            let cmd = flags.contains(.command)
+            appState.selectWindowTarget(at: item.id, shift: shift, cmd: cmd)
+            if item.isUnderAppHeader {
+                sidebarSelection = .appHeader(pid: item.pid, appName: item.appName)
+            } else {
+                sidebarSelection = .window(index: item.id)
+            }
+        } label: {
+            HStack(spacing: 6) {
+                if item.isUnderAppHeader {
+                    // Under an app header: show only window title, indented.
+                    Text(item.windowTitle.isEmpty ? item.appName : item.windowTitle)
+                        .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                        .lineLimit(1)
+                        .padding(.leading, 20)
+                } else {
+                    if let icon = appInfoCache.icon(for: item.pid) {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .frame(width: 16, height: 16)
+                            .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                    }
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(item.appName)
+                            .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                            .lineLimit(1)
+                        if !item.windowTitle.isEmpty {
+                            Text(item.windowTitle)
+                                .font(.system(size: 10))
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+                }
+                Spacer(minLength: 0)
+                Color.clear.frame(width: reservedTrailingWidth, height: 1)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(
+                        presetColorIndex != nil
+                            ? ThemeColors.indexedSidebarHighlight(index: presetColorIndex!, for: colorScheme)
+                            : ThemeColors.presetRowBackground(selected: isSelected || isHovered, for: colorScheme)
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .stroke(
+                        presetColorIndex != nil
+                            ? ThemeColors.indexedSidebarHighlightBorder(index: presetColorIndex!, for: colorScheme)
+                            : ThemeColors.presetRowBorder(selected: isPrimary && !showBorderOnHeader, for: colorScheme),
+                        lineWidth: presetColorIndex != nil ? 1 : ((isSelected && !showBorderOnHeader) ? 1 : 0)
+                    )
+            )
+            .animation(nil, value: isHovered)
+        }
+        .buttonStyle(.plain)
+        .opacity(item.isHidden ? 0.5 : 1.0)
+        .onHover { hovering in hoveredWindowIndex = hovering ? item.id : nil }
+        .simultaneousGesture(
+            TapGesture(count: 2).onEnded {
+                appState.focusWindowAndDismiss(at: item.id)
+            }
+        )
+        .contextMenu {
+            let otherScreens = otherScreensForWindow(at: item.id)
+            if !otherScreens.isEmpty {
+                let windowName = item.windowTitle.isEmpty ? item.appName : item.windowTitle
+                ForEach(otherScreens, id: \.displayID) { screen in
+                    Button {
+                        appState.moveWindowToScreen(at: item.id, screen: screen)
+                        appState.hideMainWindow()
+                    } label: {
+                        Label(
+                            String(format: NSLocalizedString("Move %1$@ to %2$@", comment: "Menu item to move a window/app to another screen. First arg is window/app name, second is screen name"), windowName, screen.localizedName),
+                            systemImage: "rectangle.portrait.and.arrow.right"
+                        )
+                    }
+                }
+                Divider()
+            }
+
+            // Resize submenu
+            let resizeScreen: NSScreen? = {
+                let targets = appState.windowTargetList
+                guard item.id >= 0, item.id < targets.count else { return NSScreen.screens.first }
+                return NSScreen.screen(containing: targets[item.id].screenFrame) ?? NSScreen.screens.first
+            }()
+            let resizeGroups = resizeScreen.map { WindowResizePreset.presetsAvailable(on: $0) } ?? []
+            if !resizeGroups.isEmpty {
+                Menu {
+                    ForEach(Array(resizeGroups.enumerated()), id: \.offset) { _, group in
+                        Section(group.ratio) {
+                            ForEach(Array(group.presets.enumerated()), id: \.offset) { _, preset in
+                                Button(preset.label) {
+                                    appState.resizeWindow(at: item.id, to: preset.size)
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    Label(
+                        NSLocalizedString("Resize", comment: "Context menu item for resize submenu"),
+                        systemImage: "arrow.up.left.and.arrow.down.right"
+                    )
+                }
+                Divider()
+            }
+
+            if appState.isMultiSelection, appState.currentSelectedWindowIndices.contains(item.id) {
+                let count = appState.currentSelectedWindowIndices.count
+                Button {
+                    appState.closeSelectedWindows()
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Close %d windows", comment: "Action bar tooltip for closing multiple windows"), count),
+                        systemImage: "xmark.rectangle.portrait"
+                    )
+                }
+                Divider()
+            }
+
+            if item.isUnderAppHeader || item.isFinder {
+                Button {
+                    appState.closeWindowTarget(at: item.id)
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Close %@", comment: "Menu item to close a window"), item.windowTitle.isEmpty ? item.appName : item.windowTitle),
+                        systemImage: "xmark"
+                    )
+                }
+            }
+
+            if item.sameAppWindowCount > 1 {
+                Button {
+                    appState.closeOtherWindowTargets(except: item.id)
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Close other windows of %@", comment: "Menu item to close other windows of the same app"), item.appName),
+                        systemImage: "xmark.rectangle"
+                    )
+                }
+            }
+
+            Button {
+                appState.hideOtherApps(except: item.id)
+            } label: {
+                Label(
+                    String(format: NSLocalizedString("Hide windows besides %@", comment: "Menu item to hide all windows except the selected app"), item.appName),
+                    systemImage: "eye.slash"
+                )
+            }
+
+            Divider()
+            if item.isFinder {
+                Button {
+                    appState.closeAllWindows(pid: item.pid)
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Close all %@ windows", comment: "Action bar tooltip to close all windows of an app"), item.appName),
+                        systemImage: "xmark"
+                    )
+                }
+            } else {
+                Button {
+                    appState.quitApp(at: item.id)
+                } label: {
+                    Label(
+                        String(format: NSLocalizedString("Quit %@", comment: "Menu item to quit the application"), item.appName),
+                        systemImage: "power"
+                    )
+                }
+            }
+        }
+        .overlay(alignment: .trailing) {
+            HStack(spacing: trailingHStackSpacing) {
+                ForEach(Array(linkPartners.enumerated()), id: \.offset) { _, partner in
+                    SidebarPartnerIcon(
+                        icon: appInfoCache.icon(for: partner.partnerPID),
+                        size: partnerIconSize,
+                        forceHovered: hoveredLinkAdjacencyKey == partner.key,
+                        onClick: partner.unlink,
+                        onHoverChange: { hovering in
+                            if hovering {
+                                hoveredLinkAdjacencyKey = partner.key
+                                hoveredLinkPartnerItemID = partner.partnerItemID
+                            } else {
+                                if hoveredLinkAdjacencyKey == partner.key {
+                                    hoveredLinkAdjacencyKey = nil
+                                }
+                                if hoveredLinkPartnerItemID == partner.partnerItemID {
+                                    hoveredLinkPartnerItemID = nil
+                                }
+                            }
+                        }
+                    )
+                    .instantTooltip(NSLocalizedString("Unlink window group", comment: "Tooltip for the sidebar link badge — clicking it dissolves the window group"))
+                }
+                ZStack {
+                    if let ci = presetColorIndex {
+                        Circle()
+                            .fill(ThemeColors.indexedSelectionFill(index: ci, for: colorScheme))
+                        Text("\(ci + 1)")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                    } else if appState.isMultiSelection,
+                              let selIdx = appState.currentSelectionOrder.firstIndex(of: item.id) {
+                        Circle()
+                            .fill(ThemeColors.indexedSelectionFill(index: 0, for: colorScheme))
+                        Text("\(selIdx + 1)")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                    }
+                }
+                .frame(width: indexBadgeSize, height: indexBadgeSize)
+            }
+            .padding(.trailing, trailingTrailingPadding)
+        }
+    }
+
+    /// Returns the link partners of the given window row, in stable sidebar
+    /// order. Includes both *spatial* partners (the active `WindowGroup`'s
+    /// direct adjacencies) and *satellite* partners — app-slot bindings
+    /// registered when an app-assigned preset with grouped pairs was
+    /// applied. Satellite links outlive the spatial group: when a later
+    /// preset binds a different window to the same anchor app, the previous
+    /// pair stops being a spatial neighbour but its satellite linkage
+    /// remains, and would otherwise be invisible in the sidebar. Each
+    /// returned partner exposes its own `unlink` closure so the user can
+    /// drop just that one link.
+    private func groupLinkPartners(forItemID itemID: Int, linkIndex: SidebarLinkIndex) -> [SidebarLinkPartner] {
+        let targets = appState.windowTargetList
+        guard itemID >= 0, itemID < targets.count else { return [] }
+        let cgID = targets[itemID].cgWindowID
+        guard cgID != 0 else { return [] }
+        if linkIndex.isIdle { return [] }
+
+        // Fast path: this row is neither a group member, a satellite, nor an
+        // anchor — the common case even while a satellite pair exists
+        // elsewhere (the old check bailed only when *no* satellite existed).
+        let isMember = appState.groupIndexByWindow[cgID] != nil
+        let isSatellite = linkIndex.satelliteWIDs.contains(cgID)
+        let myPID = targets[itemID].processIdentifier
+        let myBundleID: String? = appState.appSlotSatellites.isEmpty ? nil : appInfoCache.bundleID(for: myPID)
+        let isAnchor = myBundleID.map { appState.appSlotSatellites[$0] != nil } ?? false
+        if !isMember, !isSatellite, !isAnchor {
+            return []
+        }
+
+        func resolve(partnerCGID: CGWindowID) -> (orderIndex: Int, pid: pid_t, itemID: Int)? {
+            guard let idx = linkIndex.indexByCGID[partnerCGID] else { return nil }
+            let orderIndex = linkIndex.orderPosByIndex[idx] ?? Int.max
+            return (orderIndex, targets[idx].processIdentifier, idx)
+        }
+
+        func makeKey(_ a: CGWindowID, _ b: CGWindowID) -> AdjacencyKey {
+            AdjacencyKey(windowA: min(a, b), windowB: max(a, b))
+        }
+
+        var seen: Set<AdjacencyKey> = []
+        var collected: [(orderIndex: Int, partner: SidebarLinkPartner)] = []
+
+        // 1. Spatial-group adjacency partners (currently active links).
+        if let gid = appState.groupIndexByWindow[cgID],
+           let group = appState.windowGroups[gid] {
+            for adj in group.adjacencies {
+                let partnerCGID: CGWindowID
+                if adj.windowA == cgID { partnerCGID = adj.windowB }
+                else if adj.windowB == cgID { partnerCGID = adj.windowA }
+                else { continue }
+                let key = adj.unorderedKey
+                guard !seen.contains(key) else { continue }
+                seen.insert(key)
+                guard let resolved = resolve(partnerCGID: partnerCGID) else { continue }
+                let partner = SidebarLinkPartner(
+                    key: key,
+                    partnerPID: resolved.pid,
+                    partnerItemID: resolved.itemID,
+                    unlink: { [appState] in appState.unlinkAdjacency(adj) }
+                )
+                collected.append((resolved.orderIndex, partner))
+            }
+        }
+
+        // 2. This window is a *satellite* of one or more app bundles. The
+        //    "anchor" side is any running window of that bundle — show one
+        //    representative partner per bundle.
+        for (bundleID, satellites) in appState.appSlotSatellites where satellites.contains(cgID) {
+            guard let partnerCGID = linkIndex.windowIDsByBundle[bundleID]?.first(where: { $0 != cgID }) else { continue }
+            let key = makeKey(cgID, partnerCGID)
+            guard !seen.contains(key) else { continue }
+            seen.insert(key)
+            guard let resolved = resolve(partnerCGID: partnerCGID) else { continue }
+            let ownWID = cgID
+            let partner = SidebarLinkPartner(
+                key: key,
+                partnerPID: resolved.pid,
+                partnerItemID: resolved.itemID,
+                unlink: { [appState] in
+                    appState.unlinkAppSlotSatellitePair(windowA: ownWID, windowB: partnerCGID)
+                    appState.refreshBadgeOverlays()
+                }
+            )
+            collected.append((resolved.orderIndex, partner))
+        }
+
+        // 3. This window is an *anchor* — its app's bundle has registered
+        //    satellites. Each registered satellite is a separate link.
+        if let myBID = myBundleID, let satellites = appState.appSlotSatellites[myBID] {
+            for satCGID in satellites {
+                guard satCGID != cgID else { continue }
+                let key = makeKey(cgID, satCGID)
+                guard !seen.contains(key) else { continue }
+                seen.insert(key)
+                guard let resolved = resolve(partnerCGID: satCGID) else { continue }
+                let ownWID = cgID
+                let partner = SidebarLinkPartner(
+                    key: key,
+                    partnerPID: resolved.pid,
+                    partnerItemID: resolved.itemID,
+                    unlink: { [appState] in
+                        appState.unlinkAppSlotSatellitePair(windowA: ownWID, windowB: satCGID)
+                        appState.refreshBadgeOverlays()
+                    }
+                )
+                collected.append((resolved.orderIndex, partner))
+            }
+        }
+
+        return collected.sorted(by: { $0.orderIndex < $1.orderIndex }).map { $0.partner }
+    }
+
+
+}
