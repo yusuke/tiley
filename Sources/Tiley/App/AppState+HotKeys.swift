@@ -116,23 +116,31 @@ extension AppState {
             var hotKeyID = EventHotKeyID()
             GetEventParameter(event, EventParamName(kEventParamDirectObject), EventParamType(typeEventHotKeyID), nil, MemoryLayout<EventHotKeyID>.size, nil, &hotKeyID)
             // Release build: skip handling if a debug version is running.
-            if appState.hotKeysYieldedToDebug || appState.isDebugVersionRunning {
+            // `hotKeysYieldedToDebug` is maintained by the launch/terminate
+            // observers (`installDebugHotKeyCoordination`); re-checking with
+            // `isDebugVersionRunning` here cost a Launch Services
+            // enumeration on every hotkey press.
+            if appState.hotKeysYieldedToDebug {
                 return noErr
             }
+            // Carbon delivers application-target hotkey events on the main
+            // thread. `assumeIsolated` runs the handler right here instead
+            // of hopping through a Task — that hop landed the overlay open
+            // one main-queue drain later, behind whatever else was queued.
             if hotKeyID.id == 1 {
                 debugLog("hotkey triggered")
                 if appState.isEditingSettings {
                     return noErr
                 }
-                Task { @MainActor in
+                MainActor.assumeIsolated {
                     appState.toggleOverlay()
                 }
             } else if let presetID = appState.presetHotKeyIDs[hotKeyID.id] {
-                Task { @MainActor in
+                MainActor.assumeIsolated {
                     appState.applyLayoutPreset(id: presetID)
                 }
             } else if let action = appState.displayHotKeyActions[hotKeyID.id] {
-                Task { @MainActor in
+                MainActor.assumeIsolated {
                     appState.executeDisplayShortcutGlobal(action)
                 }
             }
@@ -143,7 +151,14 @@ extension AppState {
     func registerAllHotKeys() {
         guard !hotKeysYieldedToDebug else { return }
         guard shortcutRecordingSessionCount == 0 else { return }
-        registerMainHotKey()
+        // The overlay open/close cycle only unregisters the preset and
+        // display hotkeys; the main one stays registered, and tearing it
+        // down to re-register the identical shortcut cost two Carbon
+        // round-trips on every close. Shortcut changes go through
+        // `registerMainHotKey()` directly (`apply(settings:)`).
+        if hotKeyRef == nil {
+            registerMainHotKey()
+        }
         registerPresetHotKeys()
         registerDisplayHotKeys()
     }
@@ -247,12 +262,26 @@ extension AppState {
         if displayShortcutSettings.moveToOther.globalEnabled {
             registerOne(displayShortcutSettings.moveToOther.global, action: .moveToOther)
         }
-        let resolver = DisplayFingerprintResolver()
+        let resolver = displayFingerprintResolverForHotKeys()
         for entry in displayShortcutSettings.moveToDisplay {
             guard entry.shortcuts.globalEnabled,
                   let resolved = resolver.resolve(entry.fingerprint, occurrenceIndex: entry.occurrenceIndex) else { continue }
             registerOne(entry.shortcuts.global, action: .moveToDisplay(displayID: resolved.displayID))
         }
+    }
+
+    /// `DisplayFingerprintResolver()` reads vendor / model / serial and the
+    /// bounds of every display; it was rebuilt on every overlay close (via
+    /// `registerAllHotKeys`). Memoized on the screen configuration, like
+    /// the Settings view's copy.
+    private func displayFingerprintResolverForHotKeys() -> DisplayFingerprintResolver {
+        let signature = NSScreen.screens.map { "\($0.displayID):\($0.frame)" }.joined(separator: "|")
+        if let cached = cachedDisplayResolverForHotKeys, cached.signature == signature {
+            return cached.resolver
+        }
+        let resolver = DisplayFingerprintResolver()
+        cachedDisplayResolverForHotKeys = (signature, resolver)
+        return resolver
     }
 
     func unregisterDisplayHotKeys() {

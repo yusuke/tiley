@@ -359,6 +359,8 @@ final class AppState: NSObject, NSMenuDelegate {
     /// detected when polling started. Doesn't change mid-session even if AX echoes
     /// would otherwise switch sourceID. Used for release-time corrections.
     @ObservationIgnored var groupPollingIntendedSourceID: CGWindowID?
+    /// See `displayFingerprintResolverForHotKeys()`.
+    @ObservationIgnored var cachedDisplayResolverForHotKeys: (signature: String, resolver: DisplayFingerprintResolver)?
     /// Which perpendicular edges each of the drag source's adjacencies
     /// shared with its partner when the current drag/resize session
     /// started (keyed by adjacency). The release-time alignment snaps those
@@ -1189,22 +1191,6 @@ final class AppState: NSObject, NSMenuDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self, self.isShowingLayoutGrid else { return }
 
-            // Dismiss "Show Desktop" or Mission Control if active.
-            let expose = CGSPrivate.exposeState()
-            let showDesktop = expose.showDesktop
-            let missionControl = expose.missionControl
-            let isDismissingExpose = showDesktop || missionControl
-            if isDismissingExpose {
-                self.isSwitchingActivationPolicy = true
-            }
-            CGSPrivate.dismissDesktopExpose(showDesktop: showDesktop, missionControl: missionControl)
-            // Verify the activation requested in Phase 1 actually took
-            // effect (macOS 14+ may deny it) and retry if not. The expose
-            // path activates on its own 0.5 s later, so skip it there.
-            if !isDismissingExpose {
-                self.ensureOverlayActivation()
-            }
-
             // Resolve the target if the cache wasn't available in Phase 1.
             if !hadCache {
                 let target = self.resolveWindowTarget()
@@ -1267,77 +1253,105 @@ final class AppState: NSObject, NSMenuDelegate {
                 self.isLoadingWindowList = true
             }
 
-            // Deferred refresh to pick up changes since the cache was built.
-            if isDismissingExpose {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                    guard let self else { return }
-                    guard self.isShowingLayoutGrid else {
-                        self.isSwitchingActivationPolicy = false
-                        // A layout application is parked on this refresh
-                        // (Tiley's UI was hidden up front) — still capture so
-                        // it runs against the authoritative list.
-                        if !self.pendingWindowListRefreshActions.isEmpty {
-                            self.refreshAvailableWindows()
-                        } else {
-                            self.isWindowListRefreshInFlight = false
-                            self.windowListRefreshGeneration += 1
-                        }
-                        return
-                    }
-                    NSApp.activate(ignoringOtherApps: true)
-                    self.targetWindowController?.window?.makeKeyAndOrderFront(nil)
-                    self.isSwitchingActivationPolicy = false
-                    self.refreshAvailableWindows()
-                    if let freshTarget = self.resolveWindowTarget() {
-                        self.activeLayoutTarget = freshTarget
-                        self.lastTargetPID = freshTarget.processIdentifier
-                        self.clearResizabilityCache()
-                        self.layoutPreviewController?.hide()
-                        self.layoutPreviewController = self.makeLayoutPreviewController(for: freshTarget)
-                        self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
-                            $0.processIdentifier == freshTarget.processIdentifier
-                            && $0.windowElement == freshTarget.windowElement
-                        }) ?? self.availableWindowTargets.firstIndex(where: {
-                            $0.processIdentifier == freshTarget.processIdentifier
-                            && $0.windowTitle == freshTarget.windowTitle
-                        }) ?? 0
-                    }
-                    self.selectedWindowIndices = [self.activeTargetIndex]
-                    self.selectionOrder = [self.activeTargetIndex]
-                    self.windowTargetListVersion += 1
-                    self.windowSelectionVersion += 1
-                    self.revalidateActiveTarget()
-                    debugLog("Post-expose refresh done: \(self.availableWindowTargets.count) windows, activeTargetIndex=\(self.activeTargetIndex)")
-                }
-            } else {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
-                    guard self.isShowingLayoutGrid || !self.pendingWindowListRefreshActions.isEmpty else {
-                        self.isWindowListRefreshInFlight = false
-                        self.windowListRefreshGeneration += 1
-                        return
-                    }
-                    // snapToFreshTop: on the first post-open refresh, trust
-                    // the authoritative z-order from CGWindowList over any
-                    // stale target Phase 1 picked via async APIs.
-                    //
-                    // Note: `refreshAvailableWindows` is asynchronous; do NOT
-                    // clear `isLoadingWindowList` here — the flag must stay
-                    // true until `applyRefreshedWindowList` populates
-                    // `availableWindowTargets`, otherwise the spinner vanishes
-                    // before any data is available and the sidebar briefly
-                    // renders an empty list (only display headers).
-                    self.refreshAvailableWindows(snapToFreshTop: true)
-                    self.selectedWindowIndices = [self.activeTargetIndex]
-                    self.selectionOrder = [self.activeTargetIndex]
-                    debugLog("refreshAvailableWindows scheduled (deferred)")
-                    self.revalidateActiveTarget()
+            // The Show Desktop / Mission Control check needs a window-list
+            // copy (1–5 ms with many windows). Run it off the main thread
+            // and finish the open — expose dismissal, activation check, the
+            // authoritative refresh — when it comes back. Nothing above
+            // depends on it, so the first frames no longer wait for it.
+            Task.detached(priority: .userInitiated) { [weak self] in
+                let expose = CGSPrivate.exposeState()
+                await MainActor.run { [weak self] in
+                    self?.completeOverlayOpen(showDesktop: expose.showDesktop, missionControl: expose.missionControl)
                 }
             }
 
             TelemetryDeck.signal("gridOverlayOpened")
             perfLog("toggleOverlay phase 2 done")
         }
+    }
+
+    /// Second half of `toggleOverlay`'s Phase 2, entered once the expose
+    /// probe (run off the main thread) reports back.
+    private func completeOverlayOpen(showDesktop: Bool, missionControl: Bool) {
+        let isDismissingExpose = showDesktop || missionControl
+        if isDismissingExpose {
+            isSwitchingActivationPolicy = true
+        }
+        CGSPrivate.dismissDesktopExpose(showDesktop: showDesktop, missionControl: missionControl)
+        // Verify the activation requested in Phase 1 actually took effect
+        // (macOS 14+ may deny it) and retry if not. The expose path
+        // activates on its own 0.5 s later, so skip it there.
+        if !isDismissingExpose {
+            ensureOverlayActivation()
+        }
+
+        // Deferred refresh to pick up changes since the cache was built.
+        if isDismissingExpose {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self else { return }
+                guard self.isShowingLayoutGrid else {
+                    self.isSwitchingActivationPolicy = false
+                    // A layout application is parked on this refresh
+                    // (Tiley's UI was hidden up front) — still capture so
+                    // it runs against the authoritative list.
+                    if !self.pendingWindowListRefreshActions.isEmpty {
+                        self.refreshAvailableWindows()
+                    } else {
+                        self.isWindowListRefreshInFlight = false
+                        self.windowListRefreshGeneration += 1
+                    }
+                    return
+                }
+                NSApp.activate(ignoringOtherApps: true)
+                self.targetWindowController?.window?.makeKeyAndOrderFront(nil)
+                self.isSwitchingActivationPolicy = false
+                self.refreshAvailableWindows()
+                if let freshTarget = self.resolveWindowTarget() {
+                    self.activeLayoutTarget = freshTarget
+                    self.lastTargetPID = freshTarget.processIdentifier
+                    self.clearResizabilityCache()
+                    self.layoutPreviewController?.hide()
+                    self.layoutPreviewController = self.makeLayoutPreviewController(for: freshTarget)
+                    self.activeTargetIndex = self.availableWindowTargets.firstIndex(where: {
+                        $0.processIdentifier == freshTarget.processIdentifier
+                        && $0.windowElement == freshTarget.windowElement
+                    }) ?? self.availableWindowTargets.firstIndex(where: {
+                        $0.processIdentifier == freshTarget.processIdentifier
+                        && $0.windowTitle == freshTarget.windowTitle
+                    }) ?? 0
+                }
+                self.selectedWindowIndices = [self.activeTargetIndex]
+                self.selectionOrder = [self.activeTargetIndex]
+                self.windowTargetListVersion += 1
+                self.windowSelectionVersion += 1
+                self.revalidateActiveTarget()
+                debugLog("Post-expose refresh done: \(self.availableWindowTargets.count) windows, activeTargetIndex=\(self.activeTargetIndex)")
+            }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                guard self.isShowingLayoutGrid || !self.pendingWindowListRefreshActions.isEmpty else {
+                    self.isWindowListRefreshInFlight = false
+                    self.windowListRefreshGeneration += 1
+                    return
+                }
+                // snapToFreshTop: on the first post-open refresh, trust
+                // the authoritative z-order from CGWindowList over any
+                // stale target Phase 1 picked via async APIs.
+                //
+                // Note: `refreshAvailableWindows` is asynchronous; do NOT
+                // clear `isLoadingWindowList` here — the flag must stay
+                // true until `applyRefreshedWindowList` populates
+                // `availableWindowTargets`, otherwise the spinner vanishes
+                // before any data is available and the sidebar briefly
+                // renders an empty list (only display headers).
+                self.refreshAvailableWindows(snapToFreshTop: true)
+                self.selectedWindowIndices = [self.activeTargetIndex]
+                self.selectionOrder = [self.activeTargetIndex]
+                debugLog("refreshAvailableWindows scheduled (deferred)")
+            }
+        }
+
     }
 
     func commitLayoutSelection(_ selection: GridSelection) {
