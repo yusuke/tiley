@@ -179,9 +179,9 @@ extension AppState {
         }
 
         installWallpaperStoreWatcher()
-
-        // Perform an initial cache so the window list is ready on first open.
-        scheduleWindowListCacheRefresh()
+        // The initial window-list cache is scheduled by `start()` once it
+        // knows whether the grid opens immediately (in which case
+        // `refreshAvailableWindows` enumerates instead).
     }
 
     /// Watches the wallpaper Store's Index.plist. System Settings keeps

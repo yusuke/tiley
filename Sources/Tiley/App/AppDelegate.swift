@@ -54,10 +54,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let telemetryConfig = TelemetryDeck.Config(appID: "9B33124A-BA08-47CC-9633-935F30737BCF")
         TelemetryDeck.initialize(config: telemetryConfig)
 
-        appState.updater = updaterController.updater
         performDeferredDMGCleanupIfNeeded()
         moveToApplicationsFolderIfNeeded()
         appState.start(showMainWindowOnLaunch: !wasLaunchedAsLoginItem())
+        // Sparkle's updater is only needed by the settings sheet and by
+        // scheduled checks; instantiating it here (the `lazy var`) used to
+        // sit on the launch path ahead of the first window. Start it one
+        // run-loop turn later, after the grid is already on screen.
+        DispatchQueue.main.async { [self] in
+            appState.updater = updaterController.updater
+        }
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -447,7 +453,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         //      - The app is registered as a login item, AND
         //      - The system has been up for less than 120 seconds (i.e. we are
         //        still in the login phase).
-        if SMAppService.mainApp.status == .enabled {
+        // Single `SMAppService` query for the whole launch; `loadSettings()`
+        // reuses the resolved value instead of asking again.
+        appState.refreshLaunchAtLoginState()
+        if appState.launchAtLoginEnabled {
             var bootTime = timeval()
             var size = MemoryLayout<timeval>.size
             var mib: [Int32] = [CTL_KERN, KERN_BOOTTIME]

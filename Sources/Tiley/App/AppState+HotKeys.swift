@@ -351,18 +351,28 @@ extension AppState {
     }
 
     func sanitizePresetGlobalShortcutEligibility() {
+        // Write a preset back only when a flag actually flipped; an
+        // unconditional `inout` through the `layoutPresets` subscript is an
+        // observation mutation per preset even when nothing changed.
         for presetIndex in layoutPresets.indices {
-            sanitizeShortcutGlobalFlags(for: &layoutPresets[presetIndex])
+            var preset = layoutPresets[presetIndex]
+            guard sanitizeShortcutGlobalFlags(for: &preset) else { continue }
+            layoutPresets[presetIndex] = preset
         }
     }
 
-    func sanitizeShortcutGlobalFlags(for preset: inout LayoutPreset) {
+    /// Returns `true` when at least one flag was cleared.
+    @discardableResult
+    func sanitizeShortcutGlobalFlags(for preset: inout LayoutPreset) -> Bool {
+        var changed = false
         for shortcutIndex in preset.shortcuts.indices {
             if preset.shortcuts[shortcutIndex].isGlobal,
                !canEnableGlobalShortcut(for: preset.shortcuts[shortcutIndex]) {
                 preset.shortcuts[shortcutIndex].isGlobal = false
+                changed = true
             }
         }
+        return changed
     }
 
     // MARK: - Modifier-held cycling (Cmd+Tab-like interaction)

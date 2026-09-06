@@ -136,17 +136,36 @@ final class AppState: NSObject, NSMenuDelegate {
             withMutation(keyPath: \.isShowingLayoutGrid) { isShowingLayoutGridStorage = newValue }
         }
     }
+    /// True while `loadSettings()` assigns the persisted values. The
+    /// `didSet`s below write straight back to UserDefaults (and re-render
+    /// the status / Dock badges), which at startup meant up to nine cfprefsd
+    /// writes and three badge compositions to store values that were just
+    /// read. They are skipped while this is set.
+    @ObservationIgnored var isLoadingSettings = false
+    /// Whether `launchAtLoginEnabled` reflects an actual `SMAppService`
+    /// query (an XPC round-trip). Lets startup query it exactly once.
+    @ObservationIgnored var launchAtLoginStateResolved = false
     var columns = 6 {
-        didSet { UserDefaults.standard.set(columns, forKey: UserDefaultsKey.columns) }
+        didSet {
+            guard !isLoadingSettings else { return }
+            UserDefaults.standard.set(columns, forKey: UserDefaultsKey.columns)
+        }
     }
     var rows = 6 {
-        didSet { UserDefaults.standard.set(rows, forKey: UserDefaultsKey.rows) }
+        didSet {
+            guard !isLoadingSettings else { return }
+            UserDefaults.standard.set(rows, forKey: UserDefaultsKey.rows)
+        }
     }
     var gap: CGFloat = 0 {
-        didSet { UserDefaults.standard.set(Double(gap), forKey: UserDefaultsKey.gap) }
+        didSet {
+            guard !isLoadingSettings else { return }
+            UserDefaults.standard.set(Double(gap), forKey: UserDefaultsKey.gap)
+        }
     }
     var hotKeyShortcut = HotKeyShortcut.default {
         didSet {
+            guard !isLoadingSettings else { return }
             UserDefaults.standard.set(Int(hotKeyShortcut.keyCode), forKey: UserDefaultsKey.hotKeyCode)
             UserDefaults.standard.set(Int(hotKeyShortcut.modifiers), forKey: UserDefaultsKey.hotKeyModifiers)
         }
@@ -155,10 +174,14 @@ final class AppState: NSObject, NSMenuDelegate {
     var menuIconVisible = true
     var dockIconVisible = false
     var quitAppOnLastWindowClose = true {
-        didSet { UserDefaults.standard.set(quitAppOnLastWindowClose, forKey: UserDefaultsKey.quitAppOnLastWindowClose) }
+        didSet {
+            guard !isLoadingSettings else { return }
+            UserDefaults.standard.set(quitAppOnLastWindowClose, forKey: UserDefaultsKey.quitAppOnLastWindowClose)
+        }
     }
     var enableDebugLog = false {
         didSet {
+            guard !isLoadingSettings else { return }
             UserDefaults.standard.set(enableDebugLog, forKey: UserDefaultsKey.enableDebugLog)
             applyStatusItemIcon()
             applyDockIconBadge()
@@ -166,13 +189,17 @@ final class AppState: NSObject, NSMenuDelegate {
     }
     var debugSimulateUpdate = false {
         didSet {
+            guard !isLoadingSettings else { return }
             UserDefaults.standard.set(debugSimulateUpdate, forKey: UserDefaultsKey.debugSimulateUpdate)
             applyStatusItemIcon()
             applyDockIconBadge()
         }
     }
     var showNearIcon = true {
-        didSet { UserDefaults.standard.set(showNearIcon, forKey: UserDefaultsKey.showNearIcon) }
+        didSet {
+            guard !isLoadingSettings else { return }
+            UserDefaults.standard.set(showNearIcon, forKey: UserDefaultsKey.showNearIcon)
+        }
     }
     var displayShortcutSettings = DisplayShortcutSettings.default
     var layoutPresets: [LayoutPreset] = []
@@ -837,6 +864,12 @@ final class AppState: NSObject, NSMenuDelegate {
         if showMainWindowOnLaunch, activeLayoutTarget != nil || lastTargetPID != nil {
             isShowingLayoutGrid = true
         }
+        // Warm the window-list cache for the first hotkey press — but only
+        // when the grid is *not* about to open: `refreshAvailableWindows`
+        // below performs the same full enumeration, and the cache refresh
+        // would have discarded its own result on landing (it bails while
+        // the grid is showing). Previously both ran at every launch.
+        scheduleWindowListCacheRefresh()
         Task { @MainActor [weak self] in
             guard let self else { return }
             if showMainWindowOnLaunch {
@@ -1050,25 +1083,43 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func apply(settings: SettingsSnapshot) {
-        columns = settings.columns
-        rows = settings.rows
-        gap = settings.gap
-        hotKeyShortcut = settings.hotKeyShortcut
-        displayShortcutSettings = settings.displayShortcutSettings
-        saveDisplayShortcuts()
-        _ = updateLaunchAtLogin(enabled: settings.launchAtLoginEnabled)
-        setMenuIconVisible(settings.menuIconVisible)
-        setDockIconVisible(settings.dockIconVisible)
-        showNearIcon = settings.showNearIcon
-        quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
-        enableDebugLog = settings.enableDebugLog
-        debugSimulateUpdate = settings.debugSimulateUpdate
-        sanitizePresetGlobalShortcutEligibility()
-        TelemetryDeck.signal("settingsChanged", parameters: [
-            "columns": "\(settings.columns)",
-            "rows": "\(settings.rows)",
-            "gap": "\(settings.gap)",
-        ])
+        // Closing the settings sheet always comes through here, so apply
+        // only what differs from the live state. Every unconditional write
+        // had a side effect — a cfprefsd write in a `didSet`, an
+        // `SMAppService` register/unregister XPC round-trip, or (worst) the
+        // Dock icon's `.prohibited → .accessory` policy transition, which
+        // hides every window for a frame — even when nothing was touched.
+        let current = settingsSnapshot
+        if settings.columns != current.columns { columns = settings.columns }
+        if settings.rows != current.rows { rows = settings.rows }
+        if settings.gap != current.gap { gap = settings.gap }
+        if settings.hotKeyShortcut != current.hotKeyShortcut { hotKeyShortcut = settings.hotKeyShortcut }
+        if settings.displayShortcutSettings != current.displayShortcutSettings {
+            displayShortcutSettings = settings.displayShortcutSettings
+            saveDisplayShortcuts()
+        }
+        if settings.launchAtLoginEnabled != current.launchAtLoginEnabled {
+            _ = updateLaunchAtLogin(enabled: settings.launchAtLoginEnabled)
+        }
+        if settings.menuIconVisible != current.menuIconVisible { setMenuIconVisible(settings.menuIconVisible) }
+        if settings.dockIconVisible != current.dockIconVisible { setDockIconVisible(settings.dockIconVisible) }
+        if settings.showNearIcon != current.showNearIcon { showNearIcon = settings.showNearIcon }
+        if settings.quitAppOnLastWindowClose != current.quitAppOnLastWindowClose {
+            quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
+        }
+        if settings.enableDebugLog != current.enableDebugLog { enableDebugLog = settings.enableDebugLog }
+        if settings.debugSimulateUpdate != current.debugSimulateUpdate { debugSimulateUpdate = settings.debugSimulateUpdate }
+        // Preset shortcuts only conflict with the main shortcut.
+        if settings.hotKeyShortcut != current.hotKeyShortcut {
+            sanitizePresetGlobalShortcutEligibility()
+        }
+        if settings != current {
+            TelemetryDeck.signal("settingsChanged", parameters: [
+                "columns": "\(settings.columns)",
+                "rows": "\(settings.rows)",
+                "gap": "\(settings.gap)",
+            ])
+        }
         // Only register the main toggle hotkey; keep preset global hotkeys
         // unregistered while the layout grid is visible so local shortcuts work.
         unregisterPresetHotKeys()

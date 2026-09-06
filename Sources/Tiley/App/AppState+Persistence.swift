@@ -28,6 +28,10 @@ extension AppState {
     }
 
     func loadSettings() {
+        // Suppress the `didSet` write-backs (and badge re-renders) while the
+        // stored values are assigned; see `isLoadingSettings`.
+        isLoadingSettings = true
+        defer { isLoadingSettings = false }
         let defaults = UserDefaults.standard
         let storedColumns = defaults.integer(forKey: UserDefaultsKey.columns)
         let storedRows = defaults.integer(forKey: UserDefaultsKey.rows)
@@ -74,11 +78,17 @@ extension AppState {
            let settings = try? JSONDecoder().decode(DisplayShortcutSettings.self, from: data) {
             displayShortcutSettings = settings
         }
-        refreshLaunchAtLoginState()
+        // `AppDelegate.wasLaunchedAsLoginItem()` may already have queried
+        // the login-item status for its own heuristic; don't pay the XPC
+        // round-trip twice.
+        if !launchAtLoginStateResolved {
+            refreshLaunchAtLoginState()
+        }
     }
 
     func refreshLaunchAtLoginState() {
         launchAtLoginEnabled = (SMAppService.mainApp.status == .enabled)
+        launchAtLoginStateResolved = true
     }
 
     @discardableResult
@@ -89,10 +99,10 @@ extension AppState {
             } else {
                 try SMAppService.mainApp.unregister()
             }
-            launchAtLoginEnabled = (SMAppService.mainApp.status == .enabled)
+            refreshLaunchAtLoginState()
             return launchAtLoginEnabled == enabled
         } catch {
-            launchAtLoginEnabled = (SMAppService.mainApp.status == .enabled)
+            refreshLaunchAtLoginState()
             return false
         }
     }
