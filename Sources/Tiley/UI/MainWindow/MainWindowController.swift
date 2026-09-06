@@ -42,7 +42,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     /// Must match `MainWindowView.bubbleArrowHeight`.
     private static let bubbleArrowHeight: CGFloat = 12
     private static let layoutModeWindowAlpha: CGFloat = 0.99
-    private static let fadeDuration: CFTimeInterval = 0.18
+    private static let fadeDuration: CFTimeInterval = 0.09
 
     private weak var appState: AppState?
     private(set) var screenRole: ScreenRole
