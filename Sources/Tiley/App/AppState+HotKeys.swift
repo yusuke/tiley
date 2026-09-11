@@ -15,7 +15,7 @@ extension AppState {
             return NSLocalizedString("⌘F is reserved for searching the window list.", comment: "Cmd+F shortcut reserved for window search")
         }
 
-        if shortcut == hotKeyShortcut {
+        if !hotKeyShortcut.isEmpty, shortcut == hotKeyShortcut {
             return NSLocalizedString("This shortcut is already used by the global shortcut.", comment: "Layout shortcut conflict with app global shortcut")
         }
 
@@ -166,6 +166,10 @@ extension AppState {
     func registerMainHotKey() {
         guard !hotKeysYieldedToDebug else { return }
         unregisterHotKey()
+        // `HotKeyShortcut.empty` is keyCode 0 / no modifiers — and keyCode 0
+        // is `kVK_ANSI_A`. Registering it turned a cleared shortcut into a
+        // bare "A" hotkey that fired on ordinary typing (GitHub issue #5).
+        guard !hotKeyShortcut.isEmpty else { return }
         let hotKeyID = EventHotKeyID(signature: OSType(0x44565659), id: 1)
         RegisterEventHotKey(
             hotKeyShortcut.keyCode,
@@ -344,7 +348,7 @@ extension AppState {
     func canEnableGlobalShortcut(for shortcut: HotKeyShortcut) -> Bool {
         // Preset shortcuts accept non-modifier keys as well.
         // Keep only the hard conflict guard against Tiley's own main global shortcut.
-        if shortcut == hotKeyShortcut {
+        if !hotKeyShortcut.isEmpty, shortcut == hotKeyShortcut {
             return false
         }
         return true

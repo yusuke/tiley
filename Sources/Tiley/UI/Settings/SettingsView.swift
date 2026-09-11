@@ -92,6 +92,10 @@ struct SettingsView: View {
             }
         }
         .onChange(of: draftSettings) {
+            // Mirror the draft so any exit path (status item, app switch,
+            // window close, Quit) can persist it — see
+            // `AppState.pendingSettingsDraft`.
+            appState.pendingSettingsDraft = draftSettings
             if isHoveringGridSection {
                 appState.updateSettingsPreview(draftSettings)
             }

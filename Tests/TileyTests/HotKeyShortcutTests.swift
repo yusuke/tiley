@@ -13,6 +13,16 @@ struct HotKeyShortcutTests {
         #expect(shortcut.modifiers == UInt32(cmdKey | shiftKey))
     }
 
+    @Test("empty sentinel is recognised")
+    func emptySentinel() {
+        #expect(HotKeyShortcut.empty.isEmpty)
+        #expect(HotKeyShortcut.empty.keyCode == 0)
+        #expect(HotKeyShortcut.empty.modifiers == 0)
+        #expect(!HotKeyShortcut.default.isEmpty)
+        #expect(!HotKeyShortcut(keyCode: 0, modifiers: UInt32(cmdKey)).isEmpty)
+        #expect(!HotKeyShortcut(keyCode: UInt32(kVK_ANSI_S), modifiers: 0).isEmpty)
+    }
+
     @Test("equality for matching keyCode and modifiers")
     func equality() {
         let a = HotKeyShortcut(keyCode: 0, modifiers: UInt32(cmdKey))

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- The global "Show Tiley" shortcut could not be reliably cleared or changed. Clearing it actually registered a bare `A` key (the internal "no shortcut" value shares its key code with `A`), so ordinary typing opened Tiley. Separately, leaving the settings sheet by any route other than the Back button — clicking the menu bar icon, switching to another app, closing the window, or pressing "Quit Tiley" — silently discarded every unsaved change, so the previous shortcut stayed active and in UserDefaults. A cleared shortcut is now left unregistered, and settings edits are saved on every way out of the sheet.
+
 ## [5.3.0] - 2026-09-11
 
 ### Fixed

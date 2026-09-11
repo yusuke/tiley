@@ -10,6 +10,9 @@ extension AppState {
     }
 
     func quitApp() {
+        // "Quit Tiley" lives inside the settings sheet; persist its draft
+        // before the process goes away.
+        commitPendingSettingsDraft()
         NSApp.terminate(nil)
     }
 

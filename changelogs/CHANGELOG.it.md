@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- La scorciatoia globale «Mostra Tiley» non poteva essere cancellata o modificata in modo affidabile. Cancellandola veniva registrato il valore interno «nessuna scorciatoia» (il cui codice tasto coincide con quello di `A`) come una semplice `A`, quindi la normale digitazione apriva Tiley. Inoltre, uscire dalla finestra delle impostazioni in qualsiasi modo diverso dal pulsante Indietro — clic sull'icona nella barra dei menu, passaggio a un'altra app, chiusura della finestra o «Esci da Tiley» — scartava silenziosamente tutte le modifiche non salvate, così la scorciatoia precedente restava attiva e in UserDefaults. Ora una scorciatoia cancellata non viene registrata e le modifiche vengono salvate in qualunque modo si esca dalle impostazioni.
+
 ## [5.3.0] - 2026-09-11
 
 ### Corretto

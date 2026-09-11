@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- O atalho global "Mostrar Tiley" não podia ser limpo nem alterado de forma confiável. Ao limpá-lo, o valor interno "sem atalho" (cujo código de tecla é o mesmo de `A`) era registrado como um `A` sem modificadores, então digitar normalmente abria o Tiley. Além disso, sair da janela de ajustes por qualquer caminho que não fosse o botão Voltar — clicar no ícone da barra de menus, alternar para outro app, fechar a janela ou "Encerrar Tiley" — descartava silenciosamente todas as alterações não salvas, e o atalho anterior continuava ativo e no UserDefaults. Agora um atalho limpo não é registrado, e as alterações são salvas por qualquer caminho de saída dos ajustes.
+
 ## [5.3.0] - 2026-09-11
 
 ### Corrigido

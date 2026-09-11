@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Le raccourci global « Afficher Tiley » ne pouvait pas être effacé ni modifié de façon fiable. L'effacer enregistrait la valeur interne « aucun raccourci » (dont le code de touche est celui de `A`) comme un simple `A`, si bien que la frappe normale ouvrait Tiley. Par ailleurs, quitter la fenêtre des réglages autrement que par le bouton Retour — clic sur l'icône de la barre des menus, passage à une autre app, fermeture de la fenêtre ou « Quitter Tiley » — abandonnait silencieusement toutes les modifications non enregistrées : l'ancien raccourci restait actif et dans UserDefaults. Un raccourci effacé n'est désormais plus enregistré, et les modifications sont sauvegardées quelle que soit la façon de quitter les réglages.
+
 ## [5.3.0] - 2026-09-11
 
 ### Corrigé

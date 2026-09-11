@@ -142,6 +142,14 @@ final class AppState: NSObject, NSMenuDelegate {
     /// writes and three badge compositions to store values that were just
     /// read. They are skipped while this is set.
     @ObservationIgnored var isLoadingSettings = false
+    /// The settings sheet's live draft, mirrored by `SettingsView` on every
+    /// edit. The sheet can be left through several paths besides the Back
+    /// button — clicking the status item, activating another app, the
+    /// window being closed, or "Quit Tiley" — and each of them used to
+    /// throw the draft away, so a shortcut change silently never reached
+    /// UserDefaults (GitHub issue #5). `commitPendingSettingsDraft()`
+    /// applies it on every exit path instead.
+    @ObservationIgnored var pendingSettingsDraft: SettingsSnapshot?
     /// Whether `launchAtLoginEnabled` reflects an actual `SMAppService`
     /// query (an XPC round-trip). Lets startup query it exactly once.
     @ObservationIgnored var launchAtLoginStateResolved = false
@@ -1090,12 +1098,38 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     func apply(settings: SettingsSnapshot) {
-        // Closing the settings sheet always comes through here, so apply
-        // only what differs from the live state. Every unconditional write
-        // had a side effect — a cfprefsd write in a `didSet`, an
-        // `SMAppService` register/unregister XPC round-trip, or (worst) the
-        // Dock icon's `.prohibited → .accessory` policy transition, which
-        // hides every window for a frame — even when nothing was touched.
+        pendingSettingsDraft = nil
+        commit(settings: settings)
+        // Only register the main toggle hotkey; keep preset global hotkeys
+        // unregistered while the layout grid is visible so local shortcuts work.
+        unregisterPresetHotKeys()
+        unregisterDisplayHotKeys()
+        registerMainHotKey()
+        hidePreviewOverlay()
+        settingsWindowController?.dismiss()
+        settingsWindowController = nil
+        isEditingSettings = false
+        isShowingLayoutGrid = true
+        activeLayoutTarget = initialLayoutTarget()
+        openMainWindow()
+    }
+
+    /// Applies the draft the settings sheet left behind (if any) without
+    /// touching the windows. Called from every path that leaves the sheet
+    /// other than `apply(settings:)`.
+    func commitPendingSettingsDraft() {
+        guard let draft = pendingSettingsDraft else { return }
+        pendingSettingsDraft = nil
+        commit(settings: draft)
+    }
+
+    /// Writes `settings` into the live state and persists it. Applies
+    /// only what differs from the live state: every unconditional write
+    /// had a side effect — a cfprefsd write in a `didSet`, an
+    /// `SMAppService` register/unregister XPC round-trip, or (worst) the
+    /// Dock icon's `.prohibited → .accessory` policy transition, which
+    /// hides every window for a frame — even when nothing was touched.
+    func commit(settings: SettingsSnapshot) {
         let current = settingsSnapshot
         if settings.columns != current.columns { columns = settings.columns }
         if settings.rows != current.rows { rows = settings.rows }
@@ -1127,21 +1161,13 @@ final class AppState: NSObject, NSMenuDelegate {
                 "gap": "\(settings.gap)",
             ])
         }
-        // Only register the main toggle hotkey; keep preset global hotkeys
-        // unregistered while the layout grid is visible so local shortcuts work.
-        unregisterPresetHotKeys()
-        unregisterDisplayHotKeys()
-        registerMainHotKey()
-        hidePreviewOverlay()
-        settingsWindowController?.dismiss()
-        settingsWindowController = nil
-        isEditingSettings = false
-        isShowingLayoutGrid = true
-        activeLayoutTarget = initialLayoutTarget()
-        openMainWindow()
     }
 
+    /// Leaves the settings sheet without going through the Back button
+    /// (status item click, window closed by the window manager). The
+    /// sheet has no Cancel affordance, so edits made there are kept.
     func cancelSettingsEditing() {
+        commitPendingSettingsDraft()
         hidePreviewOverlay()
         settingsWindowController?.dismiss()
         settingsWindowController = nil
@@ -1163,6 +1189,7 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
+        pendingSettingsDraft = nil
         hideAllMainWindows()
         settingsWindowController = SettingsWindowController(appState: self, mainWindowFrame: mainFrame)
         settingsWindowController?.show()
@@ -1175,6 +1202,7 @@ final class AppState: NSObject, NSMenuDelegate {
         unregisterAllHotKeys()
         isShowingLayoutGrid = false
         isEditingSettings = true
+        pendingSettingsDraft = nil
         hideAllMainWindows()
         settingsWindowController = SettingsWindowController(appState: self, mainWindowFrame: mainFrame)
         settingsWindowController?.show()
@@ -1192,6 +1220,7 @@ final class AppState: NSObject, NSMenuDelegate {
     func handleSettingsWindowDeactivated() {
         guard isEditingSettings else { return }
         guard !isSwitchingActivationPolicy else { return }
+        commitPendingSettingsDraft()
         hidePreviewOverlay()
         settingsWindowController?.dismiss()
         settingsWindowController = nil
