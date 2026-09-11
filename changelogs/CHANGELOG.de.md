@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-09-11
+
 ### Behoben
 
 - Wurde Tiley als Anmeldeobjekt gestartet, während „Dock-Symbol anzeigen“ deaktiviert war, konnte das Symbol trotzdem im Dock registriert werden. Das App-Bundle deklariert sich jetzt als Menüleisten-App (`LSUIElement`), sodass der Prozess ohne Dock-Kachel startet und sich nur bei aktiviertem Dock-Symbol zu einer regulären App hochstuft. Zuvor startete die App als reguläre App und wechselte erst einen Moment später zur Accessory-Richtlinie – während der Anmeldung, wenn das Dock noch Apps registrierte, war das zu spät. Die Dock-Kachel wird jetzt auch entfernt, wenn die App nach abgelehnter Verschiebe-Abfrage außerhalb des Programme-Ordners weiterläuft.

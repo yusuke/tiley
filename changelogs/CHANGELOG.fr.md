@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-09-11
+
 ### Corrigé
 
 - Lorsque Tiley était lancé comme élément d'ouverture de session avec « Afficher l'icône dans le Dock » désactivé, son icône pouvait quand même être enregistrée dans le Dock. Le bundle de l'app se déclare désormais comme application de barre des menus (`LSUIElement`) : le processus démarre sans tuile dans le Dock et ne passe en app ordinaire que si l'icône du Dock est activée. Auparavant, il démarrait en app ordinaire puis basculait vers la politique accessoire un instant plus tard, ce qui était trop tard pendant l'ouverture de session, alors que le Dock enregistrait encore les apps. La tuile du Dock est aussi retirée lorsque l'app continue de s'exécuter hors du dossier Applications après refus du déplacement.

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-09-11
+
 ### Corretto
 
 - Avviando Tiley come elemento di login con «Mostra icona nel Dock» disattivato, l'icona poteva comunque essere registrata nel Dock. Il bundle dell'app ora si dichiara come applicazione della barra dei menu (`LSUIElement`), quindi il processo parte senza riquadro nel Dock e si promuove ad app normale solo quando l'icona del Dock è attiva. In precedenza partiva come app normale e passava alla policy accessoria un istante dopo, troppo tardi durante il login mentre il Dock stava ancora registrando le app. Il riquadro del Dock viene ora rimosso anche quando l'app continua a funzionare fuori dalla cartella Applicazioni dopo aver rifiutato lo spostamento.

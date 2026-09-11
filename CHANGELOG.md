@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-09-11
+
 ### Fixed
 
 - When Tiley was launched as a login item with "Show Dock icon" turned off, its icon could still be registered in the Dock. The app bundle now declares itself a menu bar application (`LSUIElement`), so the process starts without a Dock tile and only promotes itself to a regular app when the Dock icon is enabled. Previously it started as a regular app and switched to the accessory policy a moment later, which was too late during login while the Dock was still registering apps. The Dock tile is now also removed when the app keeps running outside the Applications folder after the move prompt is declined.
@@ -928,7 +930,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Localization: English, Japanese, Korean, Simplified Chinese, Traditional Chinese
 
 
-[Unreleased]: https://github.com/yusuke/tiley/compare/v5.2.1...HEAD
+[Unreleased]: https://github.com/yusuke/tiley/compare/v5.3.0...HEAD
+[5.3.0]: https://github.com/yusuke/tiley/releases/tag/v5.3.0
 [5.2.1]: https://github.com/yusuke/tiley/releases/tag/v5.2.1
 [5.2.0]: https://github.com/yusuke/tiley/releases/tag/v5.2.0
 [5.1.9]: https://github.com/yusuke/tiley/releases/tag/v5.1.9

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-09-11
+
 ### Corregido
 
 - Al iniciar Tiley como elemento de inicio de sesión con «Mostrar icono en el Dock» desactivado, el icono podía seguir registrándose en el Dock. El paquete de la app ahora se declara como aplicación de barra de menús (`LSUIElement`), de modo que el proceso arranca sin mosaico en el Dock y solo se promueve a app normal cuando el icono del Dock está activado. Antes arrancaba como app normal y cambiaba a la política accesoria un instante después, lo que era demasiado tarde durante el inicio de sesión mientras el Dock aún registraba apps. El mosaico del Dock también se elimina ahora cuando la app sigue ejecutándose fuera de la carpeta Aplicaciones tras rechazar el aviso de traslado.

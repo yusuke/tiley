@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-09-11
+
 ### Corrigido
 
 - Ao iniciar o Tiley como item de login com "Mostrar ícone no Dock" desativado, o ícone ainda podia ser registrado no Dock. O pacote do app agora se declara como aplicativo de barra de menus (`LSUIElement`), então o processo inicia sem um bloco no Dock e só é promovido a app comum quando o ícone do Dock está ativado. Antes, ele iniciava como app comum e mudava para a política acessória um instante depois, o que era tarde demais durante o login, enquanto o Dock ainda registrava os apps. O bloco do Dock também é removido quando o app continua em execução fora da pasta Aplicativos após recusar o aviso de mover.
