@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.1] - 2026-09-12
+
 ### Corregido
 
 - El atajo global «Mostrar Tiley» no se podía borrar ni cambiar de forma fiable. Al borrarlo se registraba el valor interno «sin atajo» (cuyo código de tecla coincide con el de `A`) como una `A` sin modificadores, por lo que escribir normalmente abría Tiley. Además, salir de la ventana de ajustes por cualquier vía distinta del botón Atrás —hacer clic en el icono de la barra de menús, cambiar a otra app, cerrar la ventana o pulsar «Salir de Tiley»— descartaba en silencio todos los cambios no guardados, de modo que el atajo anterior seguía activo y en UserDefaults. Ahora un atajo borrado no se registra, y los cambios se guardan por cualquier vía de salida de los ajustes.

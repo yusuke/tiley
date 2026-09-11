@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.1] - 2026-09-12
+
 ### Behoben
 
 - Das globale Tastenkürzel „Tiley anzeigen“ ließ sich nicht zuverlässig löschen oder ändern. Beim Löschen wurde der interne „kein Kürzel“-Wert (dessen Keycode dem von `A` entspricht) als nacktes `A` registriert, sodass normales Tippen Tiley öffnete. Außerdem verwarf jeder andere Weg aus dem Einstellungsfenster als der Zurück-Knopf — Klick auf das Menüleistensymbol, Wechsel zu einer anderen App, Schließen des Fensters oder „Tiley beenden“ — stillschweigend alle ungesicherten Änderungen, sodass das vorherige Kürzel in UserDefaults blieb und aktiv war. Ein gelöschtes Kürzel wird jetzt nicht mehr registriert, und Änderungen werden auf jedem Weg aus den Einstellungen gesichert.
