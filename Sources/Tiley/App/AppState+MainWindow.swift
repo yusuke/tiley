@@ -480,7 +480,6 @@ extension AppState {
 
         if canReuse {
             // --- Reuse path: same screens, just update state and show ---
-            // prepareForReuse is <1ms so we show ALL windows synchronously.
             perfLog("reusing controllers")
             selectedLayoutPresetID = nil
 
@@ -489,18 +488,32 @@ extension AppState {
             targetCtrl.show(asKey: true)
             perfLog("target window shown (reused)")
 
-            for screen in screens where screen.displayID != targetScreen.displayID {
-                if let ctrl = mainWindowControllers[screen.displayID] {
-                    ctrl.prepareForReuse(
-                        screenRole: .secondary(screen: screen),
-                        targetScreen: screen
-                    )
-                    ctrl.show(asKey: false)
+            let secondaryScreens = screens.filter { $0.displayID != targetScreen.displayID }
+            if secondaryScreens.isEmpty {
+                perfLog("all windows shown (single screen, reused)")
+                isRecreatingWindows = false
+                applyWindowLevel()
+            } else {
+                // Show the secondaries on the next turn, as the recreate path
+                // does: each `show` lays out and orders a window, and doing
+                // them serially here delayed the target window's first frame
+                // by one show per extra display.
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    for screen in secondaryScreens {
+                        if let ctrl = self.mainWindowControllers[screen.displayID] {
+                            ctrl.prepareForReuse(
+                                screenRole: .secondary(screen: screen),
+                                targetScreen: screen
+                            )
+                            ctrl.show(asKey: false)
+                        }
+                    }
+                    perfLog("secondary windows shown (deferred, reused)")
+                    self.isRecreatingWindows = false
+                    self.applyWindowLevel()
                 }
             }
-            perfLog("all windows shown (reused)")
-            isRecreatingWindows = false
-            applyWindowLevel()
         } else {
             // --- Recreate path: screen configuration changed ---
             // Fully remove old windows from screen since controllers will be discarded.

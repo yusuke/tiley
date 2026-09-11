@@ -264,6 +264,12 @@ final class AppState: NSObject, NSMenuDelegate {
         }
     }
     @ObservationIgnored var screenChangeTask: Task<Void, Never>?
+    /// Debounce for `didChangeScreenParametersNotification`, which arrives
+    /// 3–6 times in a burst on display connect / wake / resolution change.
+    @ObservationIgnored var screenChangeWorkItem: DispatchWorkItem?
+    /// Screen arrangement at the last handled change; identical bursts are
+    /// no-ops so the overlay windows are not rebuilt for nothing.
+    @ObservationIgnored var lastScreenConfigurationSignature: ScreenConfigurationSignature?
     /// The most recent layout-application task. Window moves run off the main
     /// actor (the AX retry dance sleeps between steps); rapid repeated applies
     /// chain onto this task so they keep the strict ordering the old
@@ -916,6 +922,7 @@ final class AppState: NSObject, NSMenuDelegate {
         appActivationTask?.cancel()
         appDeactivationTask?.cancel()
         screenChangeTask?.cancel()
+        screenChangeWorkItem?.cancel()
         windowListCacheTask?.cancel()
         appLaunchTerminationTask?.cancel()
         wallpaperStoreWatchSource?.cancel()

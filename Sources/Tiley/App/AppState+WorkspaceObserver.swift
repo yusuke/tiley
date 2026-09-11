@@ -99,10 +99,11 @@ extension AppState {
             for await _ in notifications {
                 guard !Task.isCancelled else { break }
                 await MainActor.run { [weak self] in
-                    self?.handleScreenConfigurationChange()
+                    self?.scheduleScreenConfigurationChange()
                 }
             }
         }
+        lastScreenConfigurationSignature = ScreenConfigurationSignature.current()
 
         Task { [weak self] in
             let notifications = NotificationCenter.default.notifications(
@@ -233,7 +234,32 @@ extension AppState {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
     }
 
+    /// Coalesces the notification burst into one `handleScreenConfigurationChange`
+    /// ~150 ms after the last event. With the overlay open, every event used
+    /// to tear down and rebuild every main-window controller (an
+    /// `NSHostingView` plus its SwiftUI tree per display).
+    func scheduleScreenConfigurationChange() {
+        screenChangeWorkItem?.cancel()
+        let item = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.screenChangeWorkItem = nil
+            self.handleScreenConfigurationChange()
+        }
+        screenChangeWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15, execute: item)
+    }
+
     func handleScreenConfigurationChange() {
+        // The notification also fires when nothing we depend on changed
+        // (e.g. a burst that settles back to the same arrangement after
+        // wake). Skip the whole pass unless the per-display geometry differs.
+        let signature = ScreenConfigurationSignature.current()
+        guard signature != lastScreenConfigurationSignature else {
+            debugLog("screen parameters changed — arrangement identical, skipped")
+            return
+        }
+        lastScreenConfigurationSignature = signature
+        debugLog("screen parameters changed — screens=\(signature.entries.count)")
         // Re-register display hotkeys so newly connected displays become active
         // and disconnected display hotkeys are cleaned up.
         registerDisplayHotKeys()
@@ -345,5 +371,30 @@ extension AppState {
             isLoadingWindowList = true
         }
         refreshAvailableWindows(snapToFreshTop: true)
+    }
+}
+
+/// Per-display geometry used to decide whether a screen-parameter change
+/// is worth acting on. `visibleFrame` is included because Dock / menu bar
+/// changes also fire the notification and do move the overlay windows.
+struct ScreenConfigurationSignature: Equatable {
+    struct Entry: Equatable {
+        var frame: CGRect
+        var visibleFrame: CGRect
+        var scale: CGFloat
+    }
+    var entries: [CGDirectDisplayID: Entry]
+
+    @MainActor
+    static func current() -> ScreenConfigurationSignature {
+        var entries: [CGDirectDisplayID: Entry] = [:]
+        for screen in NSScreen.screens {
+            entries[screen.displayID] = Entry(
+                frame: screen.frame,
+                visibleFrame: screen.visibleFrame,
+                scale: screen.backingScaleFactor
+            )
+        }
+        return ScreenConfigurationSignature(entries: entries)
     }
 }

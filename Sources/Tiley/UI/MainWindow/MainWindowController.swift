@@ -53,6 +53,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     private let onLocalShortcut: (HotKeyShortcut) -> Bool
     private let onKeyCommand: (NSEvent) -> Bool
     private var screenParameterTask: Task<Void, Never>?
+    /// The 0 / 150 / 400 ms relayout sequence for the latest screen-parameter
+    /// event; a new event restarts it instead of queueing another sequence.
+    private var screenRelayoutTask: Task<Void, Never>?
     private var isHidingWindow = false
     private static let fadeInKey = "tileyFadeIn"
     private static let fadeOutKey = "tileyFadeOut"
@@ -266,6 +269,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     func releaseForTeardown() {
         screenParameterTask?.cancel()
         screenParameterTask = nil
+        screenRelayoutTask?.cancel()
+        screenRelayoutTask = nil
         guard let window else { return }
         window.delegate = nil
         window.orderOut(nil)
@@ -320,19 +325,31 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             )
             for await _ in notifications {
                 guard !Task.isCancelled else { break }
-                await MainActor.run { self?.relayoutForScreenConfigurationChange() }
-                try? await Task.sleep(for: .milliseconds(150))
-                guard !Task.isCancelled else { break }
-                await MainActor.run { self?.relayoutForScreenConfigurationChange() }
-                try? await Task.sleep(for: .milliseconds(250))
-                guard !Task.isCancelled else { break }
-                await MainActor.run { self?.relayoutForScreenConfigurationChange() }
+                await MainActor.run { self?.scheduleRelayoutForScreenConfigurationChange() }
             }
+        }
+    }
+
+    /// The notification arrives in bursts; the `for await` loop above used
+    /// to replay the whole 0 / 150 / 400 ms sequence for every buffered
+    /// event (a burst of five meant fifteen relayouts spread over ~2 s).
+    /// Restart the sequence instead so it runs once for the settled state.
+    private func scheduleRelayoutForScreenConfigurationChange() {
+        screenRelayoutTask?.cancel()
+        screenRelayoutTask = Task { [weak self] in
+            self?.relayoutForScreenConfigurationChange()
+            try? await Task.sleep(for: .milliseconds(150))
+            guard !Task.isCancelled else { return }
+            self?.relayoutForScreenConfigurationChange()
+            try? await Task.sleep(for: .milliseconds(250))
+            guard !Task.isCancelled else { return }
+            self?.relayoutForScreenConfigurationChange()
         }
     }
 
     deinit {
         screenParameterTask?.cancel()
+        screenRelayoutTask?.cancel()
     }
 
     private func relayoutForScreenConfigurationChange() {
@@ -368,7 +385,13 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.minSize = targetSize
         window.maxSize = targetSize
         if frameChanged {
-            window.setFrame(frame, display: true, animate: animated)
+            // `display: true` forced a synchronous SwiftUI layout + draw of
+            // the hosting view here, before the window is even ordered
+            // front. The callers order it front (or it is already visible)
+            // right after, so the regular display cycle paints it — and
+            // the layer fade-in starts from alpha 0, so no stale frame
+            // can show.
+            window.setFrame(frame, display: false, animate: animated)
         }
     }
 
