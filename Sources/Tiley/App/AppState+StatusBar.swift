@@ -215,12 +215,17 @@ extension AppState {
             _ = NSApp.setActivationPolicy(.regular)
             applyDockIconBadge()
         } else {
-            if isInitialStartup {
-                // Activation policy is already .accessory (set in
-                // applicationWillFinishLaunching).  Skip the .prohibited
-                // → .accessory dance to avoid a use-after-free crash
-                // caused by rapid activation policy transitions during
-                // early app startup.
+            if isInitialStartup, NSApp.activationPolicy() == .accessory {
+                // Activation policy is already .accessory (LSUIElement in
+                // Info.plist, or applicationWillFinishLaunching for dev
+                // builds).  Skip the .prohibited → .accessory dance to
+                // avoid a use-after-free crash caused by rapid activation
+                // policy transitions during early app startup.
+                //
+                // If the policy is still .regular at this point, the
+                // move-to-Applications alert promoted it and the user
+                // declined the move; fall through so the Dock tile is
+                // removed as the setting requires.
                 return
             }
             // Switching to .accessory causes macOS to hide all windows and

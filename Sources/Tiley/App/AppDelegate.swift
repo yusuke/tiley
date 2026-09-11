@@ -24,16 +24,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillFinishLaunching(_ notification: Notification) {
-        // Set the activation policy as early as possible so the app never
-        // appears in the Dock during startup when "Show Dock icon" is off.
-        // Otherwise macOS may register a stale Dock entry for the app
-        // before start() switches to .accessory.
+        // The bundle declares `LSUIElement = true`, so the process starts
+        // with the .accessory policy and never gets a Dock tile before any
+        // of our code runs.  Switching to .accessory here (as we used to do
+        // without LSUIElement) was too late for login-item launches: the
+        // Dock had already registered the tile — and kept it — by the time
+        // this delegate method ran.
         //
-        // Skip when the app is not in /Applications (and not a dev build),
-        // because moveToApplicationsFolderIfNeeded() needs .regular policy
-        // to show a modal alert in the foreground.
+        // Promote to .regular only when the user wants a Dock icon.
+        // moveToApplicationsFolderIfNeeded() switches to .regular itself
+        // when it needs to present its modal alert, and dev builds run
+        // without an Info.plist and therefore start as .regular anyway —
+        // in that case, fall back to .accessory here.
         let dockIconVisible = UserDefaults.standard.object(forKey: "dockIconVisible") as? Bool ?? false
-        if !dockIconVisible && !needsMoveToApplicationsFolder() {
+        if dockIconVisible {
+            _ = NSApp.setActivationPolicy(.regular)
+        } else if !needsMoveToApplicationsFolder() {
             _ = NSApp.setActivationPolicy(.accessory)
         }
     }
