@@ -550,8 +550,14 @@ final class AccessibilityService {
     /// Moves and resizes the given window synchronously, then returns.
     /// Call ``verifyAndCorrectFrame(_:for:)`` afterwards (on a background
     /// thread) to handle apps that asynchronously revert position or size.
+    /// - Parameter constrainToVisibleFrame: when the app caps the size (its
+    ///   minimum / maximum), also pull the window inside the target screen's
+    ///   visible frame. Right for layout application; wrong for the group
+    ///   release corrections, which must not relocate a window the user just
+    ///   placed (partly off-screen or straddling displays) — pass `false`.
     @discardableResult
-    func setFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement) throws -> Bool {
+    func setFrame(_ frame: CGRect, on screenFrame: CGRect, for window: AXUIElement,
+                  constrainToVisibleFrame: Bool = true) throws -> Bool {
         // Exit native fullscreen before resizing — fullscreen windows
         // cannot be moved or resized via the Accessibility API.
         exitFullScreenIfNeeded(window)
@@ -566,7 +572,7 @@ final class AccessibilityService {
         let (actualPos, actualSize) = readPositionAndSize(of: window)
         let constrained = abs(actualSize.width - targetSize.width) > 2
                        || abs(actualSize.height - targetSize.height) > 2
-        if constrained {
+        if constrained && constrainToVisibleFrame {
             let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
             // Compute the AX bounds of the target screen's visible frame.
             let targetScreen = NSScreen.screens.first { $0.frame == screenFrame }

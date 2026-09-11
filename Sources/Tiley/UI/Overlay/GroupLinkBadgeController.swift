@@ -199,6 +199,18 @@ final class GroupLinkBadgeController {
     /// Pending "shrink the panel after fade-out" tasks, keyed by badge id, so
     /// a re-hover during fade-out can cancel the shrink.
     private var pendingPanelShrinkByID: [AdjacencyKey: DispatchWorkItem] = [:]
+    /// Faded-out panels kept for reuse. The badge set changes on every focus
+    /// move between group / candidate windows, and each change used to
+    /// allocate a fresh `NSPanel` + `NSHostingView` (a WindowServer surface
+    /// and a SwiftUI tree) and free the outgoing ones. A pooled panel keeps
+    /// its hosting view; only `rootView` is swapped on reissue.
+    private var panelPool: [NSPanel] = []
+    private static let maxPooledPanels = 4
+    /// Bumped each time a panel is (re)issued to a badge. `BadgeDot` is
+    /// keyed on it so a reused hosting view does not carry the previous
+    /// occupant's `@State` (a stale hover flag would scale the new badge).
+    private var panelGeneration = 0
+    private var generationByBadge: [AdjacencyKey: Int] = [:]
 
     init() {}
 
@@ -215,6 +227,7 @@ final class GroupLinkBadgeController {
             badgesByID.removeValue(forKey: id)
             hoverShownByID.remove(id)
             panelExpandedByID.remove(id)
+            generationByBadge.removeValue(forKey: id)
             pendingPanelShrinkByID.removeValue(forKey: id)?.cancel()
             fadeOutAndClose(window, duration: duration)
         }
@@ -254,6 +267,7 @@ final class GroupLinkBadgeController {
         badgesByID.removeAll()
         hoverShownByID.removeAll()
         panelExpandedByID.removeAll()
+        generationByBadge.removeAll()
         for (_, work) in pendingPanelShrinkByID { work.cancel() }
         pendingPanelShrinkByID.removeAll()
         for window in snapshot.values {
@@ -279,31 +293,17 @@ final class GroupLinkBadgeController {
             window.setFrame(frame, display: false)
             isNew = explicitNew ?? false
         } else {
-            // An NSPanel with `.nonactivatingPanel` keeps Tiley from becoming the
-            // frontmost app when the user clicks the badge. This avoids the
-            // "clicking the badge activates Tiley → focus leaves the grouped
-            // apps → badges disappear" failure mode.
-            let panel = NSPanel(
-                contentRect: frame,
-                styleMask: [.borderless, .nonactivatingPanel],
-                backing: .buffered,
-                defer: false
-            )
-            panel.level = .floating
-            panel.backgroundColor = .clear
-            panel.isOpaque = false
-            panel.hasShadow = false
-            panel.ignoresMouseEvents = false
-            panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
-            panel.becomesKeyOnlyIfNeeded = true
-            panel.hidesOnDeactivate = false
-            panel.isFloatingPanel = true
-            panel.worksWhenModal = true
-            // Disable the system's default fade-in/fade-out on show/hide:
-            // we drive fades ourselves.
-            panel.animationBehavior = .none
+            let panel: NSPanel
+            if let pooled = panelPool.popLast() {
+                pooled.setFrame(frame, display: false)
+                panel = pooled
+            } else {
+                panel = Self.makeBadgePanel(frame: frame)
+            }
             // Start at alpha=0 so the fade-in can ramp it up.
             panel.alphaValue = 0
+            panelGeneration += 1
+            generationByBadge[badge.id] = panelGeneration
             window = panel
             windowsByBadge[badge.id] = panel
             isNew = explicitNew ?? true
@@ -356,15 +356,21 @@ final class GroupLinkBadgeController {
                 self?.handleMenuAction(id: id, action: .fillScreenHeight)
             }
         )
-        if let existingHost = window.contentView as? NSHostingView<BadgeDot> {
-            existingHost.rootView = rootView
+        let hostRoot = BadgeHostView(generation: generationByBadge[badge.id] ?? 0, dot: rootView)
+        if let existingHost = window.contentView as? NSHostingView<BadgeHostView> {
+            existingHost.rootView = hostRoot
             existingHost.frame = CGRect(origin: .zero, size: frame.size)
         } else {
-            let hosting = NSHostingView(rootView: rootView)
+            let hosting = NSHostingView(rootView: hostRoot)
             hosting.frame = CGRect(origin: .zero, size: frame.size)
             window.contentView = hosting
         }
-        window.orderFront(nil)
+        // Badges are floating-level panels, so ordering only matters when
+        // the panel is not on screen yet; an unconditional `orderFront` ran
+        // three or four times per hover cycle.
+        if !window.isVisible {
+            window.orderFront(nil)
+        }
 
         if isNew {
             // Fade in.
@@ -484,15 +490,63 @@ final class GroupLinkBadgeController {
         return CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: width, height: height))
     }
 
+    /// An NSPanel with `.nonactivatingPanel` keeps Tiley from becoming the
+    /// frontmost app when the user clicks the badge. This avoids the
+    /// "clicking the badge activates Tiley → focus leaves the grouped
+    /// apps → badges disappear" failure mode.
+    private static func makeBadgePanel(frame: CGRect) -> NSPanel {
+        let panel = NSPanel(
+            contentRect: frame,
+            styleMask: [.borderless, .nonactivatingPanel],
+            backing: .buffered,
+            defer: false
+        )
+        panel.level = .floating
+        panel.backgroundColor = .clear
+        panel.isOpaque = false
+        panel.hasShadow = false
+        panel.ignoresMouseEvents = false
+        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
+        panel.becomesKeyOnlyIfNeeded = true
+        panel.hidesOnDeactivate = false
+        panel.isFloatingPanel = true
+        panel.worksWhenModal = true
+        // Disable the system's default fade-in/fade-out on show/hide:
+        // we drive fades ourselves.
+        panel.animationBehavior = .none
+        return panel
+    }
+
+    /// Fades the panel out, then parks it in `panelPool` for the next badge.
+    /// A panel is removed from `windowsByBadge` before it is handed here and
+    /// only enters the pool from this completion, so a fading panel can never
+    /// be reissued mid-fade.
     private func fadeOutAndClose(_ window: NSWindow, duration: TimeInterval) {
         NSAnimationContext.runAnimationGroup({ context in
             context.duration = duration
             window.animator().alphaValue = 0
-        }, completionHandler: {
+        }, completionHandler: { [weak self] in
             window.orderOut(nil)
-            window.contentView = nil
-            window.alphaValue = 1
+            if let self, let panel = window as? NSPanel, self.panelPool.count < Self.maxPooledPanels {
+                panel.alphaValue = 0
+                self.panelPool.append(panel)
+            } else {
+                window.contentView = nil
+                window.alphaValue = 1
+            }
         })
+    }
+}
+
+/// Root of each badge panel's hosting view. `BadgeDot` owns `@State` (the
+/// hover flag); keying it on the panel's issue generation gives a reused
+/// hosting view a fresh `BadgeDot` instead of the previous badge's state.
+private struct BadgeHostView: View {
+    let generation: Int
+    let dot: BadgeDot
+
+    var body: some View {
+        dot.id(generation)
     }
 }
 

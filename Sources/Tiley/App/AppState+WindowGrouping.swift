@@ -2150,13 +2150,32 @@ extension AppState {
                 isApplyingGroupTransform = true
                 if let c = srcCorr {
                     debugLog("WindowGrouping: resolve overlap (\(sourceEdge.rawValue)) retry=\(retry) source=\(lastSourceID) corrected=\(c)")
-                    robustMoveWindow(cgWindowID: lastSourceID, to: c)
-                    group.lastKnownFrames[lastSourceID] = c
+                    if robustMoveWindow(cgWindowID: lastSourceID, to: c) {
+                        group.lastKnownFrames[lastSourceID] = c
+                    } else {
+                        // The source would not shrink (its minimum size).
+                        // Cache what is actually on screen — caching the
+                        // rejected frame made the next drag look like a
+                        // resize — and resolve the overlap by translation
+                        // instead: push the follower outward, and if the
+                        // follower cannot go there either (already off the
+                        // screen edge), pull the source back so the pair
+                        // touches again. One pass; no further retries.
+                        didFix = true
+                        resolveOverlapByTranslation(
+                            group: &group, sourceID: lastSourceID, otherID: otherID,
+                            sourceEdge: sourceEdge, followerFrame: liveTarget, tol: tol
+                        )
+                        break
+                    }
                 }
                 if let c = followerCorr {
                     debugLog("WindowGrouping: resolve gap (\(sourceEdge.rawValue)) retry=\(retry) follower=\(otherID) corrected=\(c)")
-                    robustMoveWindow(cgWindowID: otherID, to: c)
-                    group.lastKnownFrames[otherID] = c
+                    if robustMoveWindow(cgWindowID: otherID, to: c) {
+                        group.lastKnownFrames[otherID] = c
+                    } else if let liveFol = liveFrame(of: otherID) {
+                        group.lastKnownFrames[otherID] = liveFol
+                    }
                 }
                 didFix = true
             }
@@ -2259,6 +2278,58 @@ extension AppState {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
                 self?.isApplyingGroupTransform = false
             }
+        }
+    }
+
+    /// Release-time fallback when the source refused to shrink out of the
+    /// follower's territory: move windows, never resize them. First the
+    /// follower is pushed outward so its contact edge meets the source's;
+    /// if the app (or the screen edge) rejects that, the source is pulled
+    /// back by the overlap instead. Caches always end up holding the frames
+    /// actually on screen.
+    private func resolveOverlapByTranslation(
+        group: inout WindowGroup, sourceID: CGWindowID, otherID: CGWindowID,
+        sourceEdge: WindowAdjacency.Edge, followerFrame: CGRect, tol: CGFloat
+    ) {
+        guard let liveSrc = liveFrame(of: sourceID) else { return }
+        group.lastKnownFrames[sourceID] = liveSrc
+        let overlapping: Bool
+        switch sourceEdge {
+        case .right:  overlapping = liveSrc.maxX > followerFrame.minX + tol
+        case .left:   overlapping = liveSrc.minX < followerFrame.maxX - tol
+        case .top:    overlapping = liveSrc.maxY > followerFrame.minY + tol
+        case .bottom: overlapping = liveSrc.minY < followerFrame.maxY - tol
+        }
+        guard overlapping else {
+            debugLog("WindowGrouping: source shrink refused but contact consistent (source moved) — done")
+            return
+        }
+        var pushed = followerFrame
+        switch sourceEdge {
+        case .right:  pushed.origin.x = liveSrc.maxX
+        case .left:   pushed.origin.x = liveSrc.minX - followerFrame.width
+        case .top:    pushed.origin.y = liveSrc.maxY
+        case .bottom: pushed.origin.y = liveSrc.minY - followerFrame.height
+        }
+        debugLog("WindowGrouping: source shrink refused — pushing follower \(otherID) to \(pushed)")
+        if robustMoveWindow(cgWindowID: otherID, to: pushed) {
+            group.lastKnownFrames[otherID] = pushed
+            return
+        }
+        guard let liveFol = liveFrame(of: otherID) else { return }
+        group.lastKnownFrames[otherID] = liveFol
+        var pulled = liveSrc
+        switch sourceEdge {
+        case .right:  pulled.origin.x = liveFol.minX - liveSrc.width
+        case .left:   pulled.origin.x = liveFol.maxX
+        case .top:    pulled.origin.y = liveFol.minY - liveSrc.height
+        case .bottom: pulled.origin.y = liveFol.maxY
+        }
+        debugLog("WindowGrouping: follower push refused — pulling source \(sourceID) back to \(pulled)")
+        if robustMoveWindow(cgWindowID: sourceID, to: pulled) {
+            group.lastKnownFrames[sourceID] = pulled
+        } else if let l = liveFrame(of: sourceID) {
+            group.lastKnownFrames[sourceID] = l
         }
     }
 
@@ -2584,28 +2655,51 @@ extension AppState {
         AXUIElementPerformAction(window, kAXRaiseAction as CFString)
     }
 
-    /// Setter used when we **really need** the app to accept the frame — e.g.
-    /// the drag-release correction. Uses the full `setFrame` dance (pre-nudge
-    /// + bounce + position fixup), then verifies against the live frame and
-    /// retries on mismatch.
-    private func robustMoveWindow(cgWindowID: CGWindowID, to frame: CGRect) {
+    /// Setter used when we **really need** the app to accept the frame — the
+    /// drag-release correction. Returns whether the live frame matches
+    /// `frame` afterwards.
+    ///
+    /// The first attempt is a plain position + size write. Only when that
+    /// changed the frame but did not land exactly (an app settling its
+    /// layout asynchronously) does it escalate to the full `setFrame` dance
+    /// (pre-nudge + bounce + position fixup) — without the visible-frame
+    /// clamp, which would relocate a window the user just placed partly
+    /// off-screen. When the app refuses the size outright (its minimum /
+    /// maximum, a window mostly off-screen), the live frame does not move
+    /// at all and the function gives up immediately: every escalated
+    /// attempt used to bounce the window to the corner of the screen and
+    /// back, which — three attempts × three release retries — was the
+    /// "linked windows jump around on release" symptom when a group is
+    /// pushed past the screen edge.
+    @discardableResult
+    private func robustMoveWindow(cgWindowID: CGWindowID, to frame: CGRect) -> Bool {
         guard let target = windowTarget(byID: cgWindowID),
-              let window = target.windowElement else { return }
-        // Retry up to 3 times so the app actually accepts the frame.
+              let window = target.windowElement else { return false }
+        var previous = liveFrame(of: cgWindowID)
+        var matched = false
         for attempt in 0..<3 {
-            do {
-                try accessibilityService.setFrame(frame, on: target.screenFrame, for: window)
-            } catch {
-                debugLog("robustMoveWindow attempt=\(attempt) error: \(error)")
+            if attempt == 0 {
+                accessibilityService.setFrameLightweight(frame, on: target.screenFrame, for: window)
+            } else {
+                do {
+                    try accessibilityService.setFrame(frame, on: target.screenFrame, for: window,
+                                                      constrainToVisibleFrame: false)
+                } catch {
+                    debugLog("robustMoveWindow attempt=\(attempt) error: \(error)")
+                }
             }
-            // verify
-            if let live = liveFrame(of: cgWindowID) {
-                let match = Self.framesMatch(live, frame, tolerance: 2)
-                debugLog("robustMoveWindow attempt=\(attempt) target=\(frame) live=\(live) match=\(match)")
-                if match { break }
+            guard let live = liveFrame(of: cgWindowID) else { break }
+            matched = Self.framesMatch(live, frame, tolerance: 2)
+            debugLog("robustMoveWindow attempt=\(attempt) target=\(frame) live=\(live) match=\(matched)")
+            if matched { break }
+            if let previous, Self.framesMatch(live, previous, tolerance: 0.5) {
+                debugLog("robustMoveWindow: frame refused by app (no change) — not retrying")
+                break
             }
+            previous = live
         }
         recentlySetFrames[cgWindowID] = (frame, CFAbsoluteTimeGetCurrent())
+        return matched
     }
 
     private func moveMemberWindow(cgWindowID: CGWindowID, to frame: CGRect) {

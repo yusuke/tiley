@@ -1087,14 +1087,21 @@ private struct AssignAppBadgeButton: NSViewRepresentable {
         }
 
         context.coordinator.onClick = onClick
+        context.coordinator.appliedDiameter = diameter
         return button
     }
 
     func updateNSView(_ nsView: NSButton, context: Context) {
+        context.coordinator.onClick = onClick
+        // `updateNSView` runs for every parent re-evaluation (each hovered
+        // cell in edit mode, times the unassigned rectangles), and building
+        // a `SymbolConfiguration` + `withSymbolConfiguration` allocates a
+        // new NSImage each time. The diameter is the only input.
+        guard context.coordinator.appliedDiameter != diameter else { return }
+        context.coordinator.appliedDiameter = diameter
         nsView.layer?.cornerRadius = diameter / 2
         let config = NSImage.SymbolConfiguration(pointSize: diameter * 0.58, weight: .semibold)
         nsView.image = nsView.image?.withSymbolConfiguration(config)
-        context.coordinator.onClick = onClick
     }
 
     func makeCoordinator() -> Coordinator {
@@ -1103,6 +1110,8 @@ private struct AssignAppBadgeButton: NSViewRepresentable {
 
     final class Coordinator: NSObject {
         var onClick: ((NSView, NSPoint) -> Void)?
+        /// Diameter the current image / corner radius were built for.
+        var appliedDiameter: CGFloat?
 
         @objc func pressed(_ sender: NSButton) {
             let center = NSPoint(x: sender.bounds.midX, y: sender.bounds.maxY)
