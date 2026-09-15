@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Behoben
+
+- Globale Layout-Tastenkürzel konnten statt des aktiven Fensters das zuletzt von Tiley angeordnete Fenster verschieben. Seit 5.3.0 nutzte die Suche nach dem Zielfenster die Fensterliste vom letzten Öffnen des Tiley-Fensters, und diese Liste wird nach dem Schließen nicht mehr aktualisiert. Globale Tastenkürzel prüfen jetzt die aktuelle Fensterliste.
+
 ## [5.3.1] - 2026-09-12
 
 ### Behoben

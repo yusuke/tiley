@@ -129,29 +129,46 @@ extension AppState {
         // and can stall it 100 ms+ with many windows. The authoritative
         // background refresh reconciles the target moments later. Only fall
         // back to a synchronous capture when no list exists at all.
-        let allTargets: [WindowTarget]
-        if !availableWindowTargets.isEmpty {
+        // `availableWindowTargets` goes stale once the overlay closes, so
+        // global hotkeys must not read it.
+        var allTargets: [WindowTarget]
+        var usesCache = false
+        if isShowingLayoutGrid, !availableWindowTargets.isEmpty {
             allTargets = availableWindowTargets
         } else if hasWindowListCache, !cachedWindowTargets.isEmpty {
             realignCacheWithLiveZOrder()
             allTargets = cachedWindowTargets
+            usesCache = true
         } else {
             allTargets = windowManager?.captureAllWindows().targets ?? []
         }
 
-        if let focused = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID) {
-            // Validate the focused window exists in the real window list.
-            // Finder's desktop is returned by AX but excluded from CGWindowList,
-            // so it won't match here.
-            let tolerance: CGFloat = 5
-            let isRealWindow = allTargets.contains {
-                $0.processIdentifier == focused.processIdentifier
-                && abs($0.frame.origin.x - focused.frame.origin.x) < tolerance
-                && abs($0.frame.origin.y - focused.frame.origin.y) < tolerance
-                && abs($0.frame.width - focused.frame.width) < tolerance
-                && abs($0.frame.height - focused.frame.height) < tolerance
+        // Validate the focused window exists in the real window list.
+        // Finder's desktop is returned by AX but excluded from CGWindowList,
+        // so it won't match here.
+        let tolerance: CGFloat = 5
+        func isListed(_ window: WindowTarget) -> Bool {
+            allTargets.contains {
+                $0.processIdentifier == window.processIdentifier
+                && abs($0.frame.origin.x - window.frame.origin.x) < tolerance
+                && abs($0.frame.origin.y - window.frame.origin.y) < tolerance
+                && abs($0.frame.width - window.frame.width) < tolerance
+                && abs($0.frame.height - window.frame.height) < tolerance
             }
-            if isRealWindow {
+        }
+
+        let focused = windowManager?.captureFocusedWindow(preferredPID: lastTargetPID)
+        if let focused, isListed(focused) {
+            return focused
+        }
+        // The cache lacks windows opened since its last refresh. Recapture
+        // before settling on a window other than the focused one.
+        if usesCache {
+            allTargets = windowManager?.captureAllWindows().targets ?? []
+        }
+
+        if let focused {
+            if usesCache, isListed(focused) {
                 return focused
             }
             // The focused window is not a real window (e.g. Finder's desktop).

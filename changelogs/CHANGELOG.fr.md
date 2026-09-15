@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigé
+
+- Les raccourcis globaux de disposition pouvaient déplacer la dernière fenêtre placée par Tiley au lieu de la fenêtre active. Depuis la version 5.3.0, la recherche de la fenêtre cible réutilisait la liste des fenêtres de la dernière ouverture de la fenêtre de Tiley, et cette liste n'est plus mise à jour après sa fermeture. Les raccourcis globaux vérifient désormais la liste actuelle des fenêtres.
+
 ## [5.3.1] - 2026-09-12
 
 ### Corrigé

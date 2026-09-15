@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Global layout shortcuts could move the window Tiley arranged last instead of the active window. Since 5.3.0, finding the target window reused the window list from when Tiley's window was last open, and that list goes stale after it closes. Global shortcuts now check the current window list.
+
 ## [5.3.1] - 2026-09-12
 
 ### Fixed
