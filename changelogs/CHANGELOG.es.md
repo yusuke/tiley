@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [5.3.2] - 2026-09-15
+
 ### Corregido
 
 - Los atajos globales de disposición podían mover la última ventana que Tiley había colocado en lugar de la ventana activa. Desde la versión 5.3.0, la búsqueda de la ventana de destino reutilizaba la lista de ventanas de la última vez que se abrió la ventana de Tiley, y esa lista deja de actualizarse al cerrarla. Ahora los atajos globales comprueban la lista de ventanas actual.
