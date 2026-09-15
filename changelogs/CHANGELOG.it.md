@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corretto
+
+- Le scorciatoie globali di layout potevano spostare l'ultima finestra sistemata da Tiley invece della finestra attiva. Dalla versione 5.3.0 la ricerca della finestra di destinazione riutilizzava l'elenco delle finestre dell'ultima apertura della finestra di Tiley, e quell'elenco non viene più aggiornato dopo la chiusura. Ora le scorciatoie globali controllano l'elenco attuale delle finestre.
+
 ## [5.3.1] - 2026-09-12
 
 ### Corretto

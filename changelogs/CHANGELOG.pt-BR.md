@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Corrigido
+
+- Os atalhos globais de layout podiam mover a última janela organizada pelo Tiley em vez da janela ativa. Desde a versão 5.3.0, a busca da janela de destino reutilizava a lista de janelas da última vez que a janela do Tiley foi aberta, e essa lista deixa de ser atualizada depois que ela fecha. Agora os atalhos globais verificam a lista de janelas atual.
+
 ## [5.3.1] - 2026-09-12
 
 ### Corrigido
