@@ -79,6 +79,10 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
     /// identifier, or `nil` for an unassigned slot. Helpers pad/truncate on
     /// access so the effective length always equals `allSelections.count`.
     var rectangleApps: [String?]
+    /// When true, applying the preset only moves the active window into the
+    /// primary rectangle; secondary rectangles are not filled with other
+    /// windows.
+    var activeWindowOnly: Bool
 
     /// A sentinel selection used when all selections have been deleted in the editor.
     static let emptySelection = GridSelection(startColumn: -1, startRow: -1, endColumn: -1, endRow: -1)
@@ -164,6 +168,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         case globalShortcut
         case groupedPairs
         case rectangleApps
+        case activeWindowOnly
     }
 
     init(
@@ -175,7 +180,8 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         baseColumns: Int,
         shortcuts: [HotKeyShortcut],
         groupedPairs: [PresetGroupPair] = [],
-        rectangleApps: [String?] = []
+        rectangleApps: [String?] = [],
+        activeWindowOnly: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -186,6 +192,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         self.shortcuts = shortcuts
         self.groupedPairs = groupedPairs
         self.rectangleApps = rectangleApps
+        self.activeWindowOnly = activeWindowOnly
     }
 
     init(from decoder: any Decoder) throws {
@@ -198,6 +205,7 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         baseColumns = try container.decode(Int.self, forKey: .baseColumns)
         groupedPairs = try container.decodeIfPresent([PresetGroupPair].self, forKey: .groupedPairs) ?? []
         rectangleApps = try container.decodeIfPresent([String?].self, forKey: .rectangleApps) ?? []
+        activeWindowOnly = try container.decodeIfPresent(Bool.self, forKey: .activeWindowOnly) ?? false
 
         // Decode new array format first, fall back to legacy formats
         if let shortcuts = try container.decodeIfPresent([HotKeyShortcut].self, forKey: .shortcuts) {
@@ -236,6 +244,9 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
         if !groupedPairs.isEmpty {
             try container.encode(groupedPairs, forKey: .groupedPairs)
         }
+        if activeWindowOnly {
+            try container.encode(activeWindowOnly, forKey: .activeWindowOnly)
+        }
         let normalizedApps = normalizedRectangleApps
         if normalizedApps.contains(where: { $0 != nil }) {
             try container.encode(normalizedApps, forKey: .rectangleApps)
@@ -244,6 +255,18 @@ struct LayoutPreset: Identifiable, Equatable, Codable {
 
     func scaledSelection(toRows rows: Int, columns: Int) -> GridSelection {
         selection.scaled(fromRows: baseRows, columns: baseColumns, toRows: rows, columns: columns)
+    }
+
+    /// The preset as it should be applied: with `activeWindowOnly`, only the
+    /// primary rectangle (and its app assignment) remains, so no other
+    /// windows are moved.
+    var effectiveForApplication: LayoutPreset {
+        guard activeWindowOnly, !secondarySelections.isEmpty else { return self }
+        var copy = self
+        copy.secondarySelections = []
+        copy.groupedPairs = []
+        copy.rectangleApps = Array(normalizedRectangleApps.prefix(1))
+        return copy
     }
 
     func scaledSecondarySelections(toRows rows: Int, columns: Int) -> [GridSelection] {

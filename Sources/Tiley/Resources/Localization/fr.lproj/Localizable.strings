@@ -70,6 +70,8 @@
 "Don't Eject" = "Ne pas éjecter";
 "Add Shortcut" = "Ajouter un raccourci";
 "Add Global Shortcut" = "Ajouter un raccourci global";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "S’applique uniquement à la fenêtre active. Cliquer pour remplir aussi les autres rectangles avec les fenêtres suivantes.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "Déplace aussi les fenêtres suivantes dans les autres rectangles. Cliquer pour n’appliquer qu’à la fenêtre active.";
 "Edit Layout" = "Modifier la disposition";
 "Done Editing" = "Terminer la modification";
 "Delete Shortcut" = "Supprimer le raccourci";

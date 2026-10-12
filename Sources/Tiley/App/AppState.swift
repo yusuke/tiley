@@ -2152,7 +2152,7 @@ final class AppState: NSObject, NSMenuDelegate {
 
     /// Applies a layout preset targeting a specific screen.
     func applyLayoutPresetOnScreen(id: UUID, visibleFrame: CGRect, screenFrame: CGRect) {
-        guard let preset = layoutPreset(for: id) else { return }
+        guard let preset = layoutPreset(for: id)?.effectiveForApplication else { return }
         guard accessibilityGranted || accessibilityService.checkAccess(prompt: false) else {
             requestAccessibilityAccess()
             return

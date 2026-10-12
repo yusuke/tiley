@@ -70,6 +70,8 @@
 "Don't Eject" = "No expulsar";
 "Add Shortcut" = "Añadir atajo";
 "Add Global Shortcut" = "Añadir atajo global";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "Se aplica solo a la ventana activa. Haz clic para llenar también los otros rectángulos con las siguientes ventanas.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "También mueve las siguientes ventanas a los otros rectángulos. Haz clic para aplicar solo a la ventana activa.";
 "Edit Layout" = "Editar disposición";
 "Done Editing" = "Finalizar edición";
 "Delete Shortcut" = "Eliminar atajo";

@@ -70,6 +70,8 @@
 "Don't Eject" = "Non espellere";
 "Add Shortcut" = "Aggiungi scorciatoia";
 "Add Global Shortcut" = "Aggiungi scorciatoia globale";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "Si applica solo alla finestra attiva. Clicca per riempire anche gli altri rettangoli con le finestre successive.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "Sposta anche le finestre successive negli altri rettangoli. Clicca per applicare solo alla finestra attiva.";
 "Edit Layout" = "Modifica layout";
 "Done Editing" = "Fine modifica";
 "Delete Shortcut" = "Elimina scorciatoia";

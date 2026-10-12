@@ -70,6 +70,8 @@
 "Don't Eject" = "不推出";
 "Add Shortcut" = "添加快捷键";
 "Add Global Shortcut" = "添加全局快捷键";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "仅应用于活动窗口。点击后也会用后续窗口填充其他矩形。";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "也会将后续窗口移入其他矩形。点击后仅应用于活动窗口。";
 "Edit Layout" = "编辑布局";
 "Done Editing" = "完成编辑";
 "Delete Shortcut" = "删除快捷键";

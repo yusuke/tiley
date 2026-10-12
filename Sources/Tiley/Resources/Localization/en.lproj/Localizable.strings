@@ -70,6 +70,8 @@
 "Don't Eject" = "Don't Eject";
 "Add Shortcut" = "Add Shortcut";
 "Add Global Shortcut" = "Add Global Shortcut";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "Applies to the active window only. Click to also fill the other rectangles with the next windows.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "Also moves the next windows into the other rectangles. Click to apply to the active window only.";
 "Edit Layout" = "Edit Layout";
 "Done Editing" = "Done Editing";
 "Delete Shortcut" = "Delete Shortcut";

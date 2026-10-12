@@ -70,6 +70,8 @@
 "Don't Eject" = "Não ejetar";
 "Add Shortcut" = "Adicionar atalho";
 "Add Global Shortcut" = "Adicionar atalho global";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "Aplica-se apenas à janela ativa. Clique para preencher também os outros retângulos com as próximas janelas.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "Também move as próximas janelas para os outros retângulos. Clique para aplicar apenas à janela ativa.";
 "Edit Layout" = "Editar layout";
 "Done Editing" = "Concluir edição";
 "Delete Shortcut" = "Excluir atalho";

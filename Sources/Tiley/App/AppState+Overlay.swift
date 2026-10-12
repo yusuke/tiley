@@ -70,6 +70,7 @@ extension AppState {
 
     /// Shows preview rectangles for multiple selections mapped to selected windows.
     func updateLayoutPreviewForPreset(_ preset: LayoutPreset, screenContext: ScreenContext? = nil, showIndexLabels: Bool = false) {
+        let preset = preset.effectiveForApplication
         guard isShowingLayoutGrid else {
             hidePreviewOverlay()
             return
@@ -223,6 +224,7 @@ extension AppState {
     /// info: the assigned app for assigned slots, the picked
     /// selected/z-ordered window for unassigned slots).
     func computePresetHoverInfo(for preset: LayoutPreset) -> (highlights: [Int: Int], windowInfo: [PresetHoverWindowInfo]) {
+        let preset = preset.effectiveForApplication
         let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
 
         if allSelections.count <= 1 {

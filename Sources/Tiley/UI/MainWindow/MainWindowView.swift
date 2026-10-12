@@ -2704,6 +2704,23 @@ struct MainWindowView: View {
                         appState.setShortcutRecordingActive(true)
                     }
                 }
+
+                if isEditing && !isAdding && !isReplacing && !preset.secondarySelections.isEmpty {
+                    // Multi-rectangle presets fill the extra rectangles with
+                    // the next windows in z-order; this limits the preset to
+                    // the active window.
+                    AddShortcutButton(colorScheme: colorScheme, tooltip: preset.activeWindowOnly
+                        ? NSLocalizedString("Applies to the active window only. Click to also fill the other rectangles with the next windows.", comment: "Tooltip for active-window-only toggle when enabled")
+                        : NSLocalizedString("Also moves the next windows into the other rectangles. Click to apply to the active window only.", comment: "Tooltip for active-window-only toggle when disabled")) {
+                        Image(systemName: preset.activeWindowOnly ? "macwindow" : "macwindow.on.rectangle")
+                            .font(.system(size: 9, weight: .semibold))
+                            .foregroundStyle(preset.activeWindowOnly ? Color.accentColor : Color.secondary)
+                    } action: {
+                        appState.updateLayoutPreset(preset.id) { p in
+                            p.activeWindowOnly.toggle()
+                        }
+                    }
+                }
             }
 
             if isAdding {

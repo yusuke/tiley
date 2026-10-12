@@ -70,6 +70,8 @@
 "Don't Eject" = "Nicht auswerfen";
 "Add Shortcut" = "Tastenkürzel hinzufügen";
 "Add Global Shortcut" = "Globales Kürzel hinzufügen";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "Gilt nur für das aktive Fenster. Klicken, um die anderen Rechtecke auch mit den nächsten Fenstern zu füllen.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "Verschiebt auch die nächsten Fenster in die anderen Rechtecke. Klicken, um nur das aktive Fenster anzuordnen.";
 "Edit Layout" = "Layout bearbeiten";
 "Done Editing" = "Bearbeitung abschließen";
 "Delete Shortcut" = "Tastenkürzel löschen";

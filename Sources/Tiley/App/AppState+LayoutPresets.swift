@@ -93,7 +93,7 @@ extension AppState {
     }
 
     func applyLayoutPreset(id: UUID) {
-        guard let preset = layoutPreset(for: id) else { return }
+        guard let preset = layoutPreset(for: id)?.effectiveForApplication else { return }
         guard accessibilityGranted || accessibilityService.checkAccess(prompt: false) else {
             requestAccessibilityAccess()
             return

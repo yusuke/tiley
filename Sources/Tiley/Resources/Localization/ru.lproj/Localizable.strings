@@ -70,6 +70,8 @@
 "Don't Eject" = "Не извлекать";
 "Add Shortcut" = "Добавить сочетание";
 "Add Global Shortcut" = "Добавить глобальное сочетание";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "Применяется только к активному окну. Нажмите, чтобы также заполнять другие прямоугольники следующими окнами.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "Также перемещает следующие окна в другие прямоугольники. Нажмите, чтобы применять только к активному окну.";
 "Edit Layout" = "Редактировать макет";
 "Done Editing" = "Завершить редактирование";
 "Delete Shortcut" = "Удалить сочетание клавиш";

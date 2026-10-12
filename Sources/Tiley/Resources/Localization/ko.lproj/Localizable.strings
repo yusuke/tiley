@@ -70,6 +70,8 @@
 "Don't Eject" = "추출 안 함";
 "Add Shortcut" = "단축키 추가";
 "Add Global Shortcut" = "전역 단축키 추가";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "활성 윈도우에만 적용됩니다. 클릭하면 다른 사각형에도 다음 윈도우를 배치합니다.";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "다른 사각형에도 다음 윈도우를 배치합니다. 클릭하면 활성 윈도우에만 적용합니다.";
 "Edit Layout" = "레이아웃 편집";
 "Done Editing" = "편집 완료";
 "Delete Shortcut" = "단축키 삭제";

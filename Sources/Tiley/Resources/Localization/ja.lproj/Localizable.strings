@@ -70,6 +70,8 @@
 "Don't Eject" = "取り出さない";
 "Add Shortcut" = "ショートカットを追加";
 "Add Global Shortcut" = "グローバルショートカットを追加";
+"Applies to the active window only. Click to also fill the other rectangles with the next windows." = "アクティブなウインドウのみに適用します。クリックすると、他の矩形にも次のウインドウを配置します。";
+"Also moves the next windows into the other rectangles. Click to apply to the active window only." = "他の矩形にも次のウインドウを配置します。クリックするとアクティブなウインドウのみに適用します。";
 "Edit Layout" = "レイアウトを編集";
 "Done Editing" = "編集を完了";
 "Delete Shortcut" = "ショートカットを削除";
