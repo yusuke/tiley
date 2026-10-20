@@ -145,6 +145,27 @@ final class AccessibilityService {
         AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), Self.globalMessagingTimeout)
     }
 
+    /// `_AXUIElementGetWindow` — private HIServices API that returns the
+    /// CGWindowID backing an AX window element. ABI-stable for over a decade
+    /// (yabai, AltTab, and Rectangle all rely on it). Resolved via dlsym so
+    /// the app degrades to frame-matching if the symbol ever disappears.
+    private typealias AXGetWindowFunc = @convention(c) (AXUIElement, UnsafeMutablePointer<CGWindowID>) -> AXError
+
+    private static let _axGetWindow: AXGetWindowFunc? = {
+        guard let handle = dlopen(nil, RTLD_LAZY),
+              let sym = dlsym(handle, "_AXUIElementGetWindow") else { return nil }
+        return unsafeBitCast(sym, to: AXGetWindowFunc.self)
+    }()
+
+    /// Returns the CGWindowID for an AX window element, or nil if the
+    /// private API is unavailable or the element has no backing window.
+    static func cgWindowID(of window: AXUIElement) -> CGWindowID? {
+        guard let fn = _axGetWindow else { return nil }
+        var wid: CGWindowID = 0
+        guard fn(window, &wid) == .success, wid != 0 else { return nil }
+        return wid
+    }
+
     func checkAccess(prompt: Bool) -> Bool {
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: prompt] as CFDictionary
         return AXIsProcessTrustedWithOptions(options)
@@ -261,6 +282,9 @@ final class AccessibilityService {
         let appName = NSRunningApplication(processIdentifier: pid)?.localizedName ?? NSLocalizedString("App", comment: "Generic app name fallback")
         let windowTitle = summary.title
 
+        let cgWindowID = Self.cgWindowID(of: windowElement)
+            ?? cgWindowIDByBoundsMatch(pid: pid, axOrigin: origin, size: sizeRect)
+
         let result = WindowTarget(
             appElement: appElement,
             windowElement: windowElement,
@@ -270,11 +294,38 @@ final class AccessibilityService {
             frame: frame,
             visibleFrame: visibleFrame,
             screenFrame: screenFrame,
-            isHidden: NSRunningApplication(processIdentifier: pid)?.isHidden ?? false
+            isHidden: NSRunningApplication(processIdentifier: pid)?.isHidden ?? false,
+            cgWindowID: cgWindowID
         )
         let elapsed = (CFAbsoluteTimeGetCurrent() - perfStart) * 1000
         debugLog("windowTarget(for: \(pid)) done (\(String(format: "%.1f", elapsed))ms)")
         return result
+    }
+
+    /// Fallback CGWindowID resolution when `_AXUIElementGetWindow` is
+    /// unavailable: match the AX frame against the app's on-screen layer-0
+    /// CG windows. The list is front-to-back, so on a tie the frontmost
+    /// (focused) window wins.
+    private func cgWindowIDByBoundsMatch(pid: pid_t, axOrigin: CGPoint, size: CGSize) -> CGWindowID {
+        guard let list = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[CFString: Any]] else { return 0 }
+        let tolerance: CGFloat = 5
+        for info in list {
+            guard info[kCGWindowOwnerPID] as? pid_t == pid,
+                  (info[kCGWindowLayer] as? Int) == 0,
+                  let wid = info[kCGWindowNumber] as? CGWindowID,
+                  let boundsRef = info[kCGWindowBounds],
+                  let bounds = CGRect(dictionaryRepresentation: boundsRef as! CFDictionary) else { continue }
+            if abs(bounds.origin.x - axOrigin.x) < tolerance,
+               abs(bounds.origin.y - axOrigin.y) < tolerance,
+               abs(bounds.width - size.width) < tolerance,
+               abs(bounds.height - size.height) < tolerance {
+                return wid
+            }
+        }
+        return 0
     }
 
     /// Detects per-axis resize capability of a window using non-destructive
@@ -568,8 +619,11 @@ final class AccessibilityService {
 
         // If the app constrained the size (e.g. minimum window size),
         // recalculate the position so the window stays within the
-        // target screen's visible area.
-        let (actualPos, actualSize) = readPositionAndSize(of: window)
+        // target screen's visible area. Settle-aware: an animated apply
+        // (Chrome) must not be judged — or repositioned — mid-flight,
+        // otherwise the clamp below fits the position to a stale size.
+        let (actualPos, actualSize) = readSettlingIfMismatched(
+            window, expectedOrigin: targetOrigin, expectedSize: targetSize)
         let constrained = abs(actualSize.width - targetSize.width) > 2
                        || abs(actualSize.height - targetSize.height) > 2
         if constrained && constrainToVisibleFrame {
@@ -635,6 +689,80 @@ final class AccessibilityService {
         return (pos, size)
     }
 
+    /// Waits until a window's frame stops changing and returns the settled
+    /// position and size.
+    ///
+    /// Some apps — notably Chrome — animate AX-initiated frame changes over
+    /// a few hundred milliseconds. An immediate read-back mid-animation
+    /// looks like the app rejected or constrained the change, which used to
+    /// trigger rescue paths (bounce, position re-sets) that redirected the
+    /// in-flight animation and left the window at an intermediate frame.
+    /// Callers should read once first and only settle-wait on a mismatch,
+    /// so apps that apply frames synchronously pay no extra latency.
+    /// A single pair of samples 60 ms apart is NOT enough to declare
+    /// stability: an ease-out animation's tail moves under 1px per sample
+    /// while still tens of pixels short of the target, and treating that
+    /// as settled let corrective writes land mid-flight and cancel the
+    /// remaining animation (Chrome froze at intermediate frames). Settled
+    /// now means either the frame reached the expected target, or it held
+    /// still for three consecutive samples (~180 ms) — longer than any
+    /// animation pauses mid-flight.
+    private func settledPositionAndSize(of window: AXUIElement,
+                                        targetOrigin: CGPoint? = nil,
+                                        targetSize: CGSize? = nil,
+                                        timeout: TimeInterval = 1.2) -> (pos: CGPoint, size: CGSize) {
+        func reachedTarget(_ sample: (pos: CGPoint, size: CGSize)) -> Bool {
+            guard targetOrigin != nil || targetSize != nil else { return false }
+            if let o = targetOrigin,
+               abs(sample.pos.x - o.x) > 2 || abs(sample.pos.y - o.y) > 2 {
+                return false
+            }
+            if let s = targetSize,
+               abs(sample.size.width - s.width) > 2 || abs(sample.size.height - s.height) > 2 {
+                return false
+            }
+            return true
+        }
+
+        var last = readPositionAndSize(of: window)
+        var stableSamples = 0
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if reachedTarget(last) { return last }
+            usleep(60_000) // 60 ms between samples
+            let now = readPositionAndSize(of: window)
+            let stable = abs(now.pos.x - last.pos.x) <= 1
+                      && abs(now.pos.y - last.pos.y) <= 1
+                      && abs(now.size.width - last.size.width) <= 1
+                      && abs(now.size.height - last.size.height) <= 1
+            stableSamples = stable ? stableSamples + 1 : 0
+            last = now
+            if stableSamples >= 3 { return now }
+        }
+        return last
+    }
+
+    /// Reads the frame once and, only if it doesn't match the expected
+    /// origin/size, waits for any in-flight animation to settle before
+    /// returning. `expectedOrigin` may be nil to compare size only.
+    private func readSettlingIfMismatched(_ window: AXUIElement,
+                                          expectedOrigin: CGPoint?,
+                                          expectedSize: CGSize?,
+                                          tolerance: CGFloat = 2) -> (pos: CGPoint, size: CGSize) {
+        let first = readPositionAndSize(of: window)
+        var mismatch = false
+        if let o = expectedOrigin {
+            mismatch = mismatch || abs(first.pos.x - o.x) > tolerance || abs(first.pos.y - o.y) > tolerance
+        }
+        if let s = expectedSize {
+            mismatch = mismatch || abs(first.size.width - s.width) > tolerance || abs(first.size.height - s.height) > tolerance
+        }
+        guard mismatch else { return first }
+        return settledPositionAndSize(of: window,
+                                      targetOrigin: expectedOrigin,
+                                      targetSize: expectedSize)
+    }
+
     /// Converts an AppKit frame to AX origin + size.
     private func axOriginAndSize(for frame: CGRect, screenFrame: CGRect) -> (origin: CGPoint, size: CGSize) {
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screenFrame.maxY
@@ -652,9 +780,10 @@ final class AccessibilityService {
     ///      screen edge (critical for maximise).
     ///   2. Set size — the window is now at the correct origin so it has room
     ///      to expand.  Some apps may revert the position here.
-    ///   3. Nudge position 1px off-target — defeats AX de-duplication.
-    ///   4. Set final position — always accepted because it differs from the
-    ///      nudge.
+    ///   3. Settle, then verify: only if the settled position is off-target,
+    ///      nudge 1px (defeats AX de-duplication) and re-set. Writes are
+    ///      never issued while an animated apply is still in flight — a
+    ///      position write mid-animation cancels the remainder (Chrome).
     ///
     /// On non-primary screens (especially mixed-DPI setups), AX size changes
     /// may silently fail.  In that case we "bounce" the window: move it to
@@ -727,18 +856,26 @@ final class AccessibilityService {
             throw WindowAccessError.positionSetFailed
         }
 
+        // 1b. Let an animated move (Chrome) land before sizing, so the app
+        //     doesn't clamp the size against the window's old position.
+        //     Synchronous apps match on the first read and pay nothing.
+        _ = readSettlingIfMismatched(window, expectedOrigin: origin, expectedSize: nil)
+
         // 2. Set target size.
         let sizeResult = AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         guard sizeResult == .success else {
             throw WindowAccessError.sizeSetFailed
         }
 
-        // 2b. Verify that the size actually changed.  Some apps (e.g. Chrome)
-        //     return .success but silently ignore the size change.  In that
-        //     case, bounce the window to the top-left of the visible area
+        // 2b. Verify that the size actually changed.  Some apps return
+        //     .success but silently ignore the size change.  Others (Chrome)
+        //     accept it and animate towards it — settle first so an
+        //     in-flight animation isn't mistaken for a refusal.  On a real
+        //     refusal, bounce the window to the top-left of the visible area
         //     (giving maximum room to expand), resize there, then continue
         //     to position correction below.
-        let (_, afterSize) = readPositionAndSize(of: window)
+        let (_, afterSize) = readSettlingIfMismatched(
+            window, expectedOrigin: nil, expectedSize: size)
         let sizeUnchanged = abs(afterSize.width - size.width) > 2
                          || abs(afterSize.height - size.height) > 2
         if sizeUnchanged {
@@ -757,22 +894,16 @@ final class AccessibilityService {
         //    app's own adjustment and lose.
         usleep(50_000) // 50 ms
 
-        // 4. Nudge position 1px off-target so the AX subsystem won't
-        //    de-duplicate the real set in step 5.
-        var nudged = origin
-        nudged.y += 1
-        if let nudgeVal = AXValueCreate(.cgPoint, &nudged) {
-            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, nudgeVal)
-        }
-
-        // 5. Set final position — always treated as a change because it
-        //    differs from the nudged value.
-        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
-
-        // 6. Verify position stuck — some apps asynchronously revert
+        // 4. Verify position stuck — some apps asynchronously revert
         //    position after a size change even on the primary screen.
+        //    Correct-only-on-mismatch: an unconditional nudge + re-set here
+        //    used to land mid-animation (Chrome) and cancel the remaining
+        //    move, freezing the window at an intermediate frame. The settle
+        //    read waits out any animation first; a window that landed on
+        //    target gets no writes at all.
         for attempt in 0..<3 {
-            let (afterPos, _) = readPositionAndSize(of: window)
+            let (afterPos, _) = readSettlingIfMismatched(
+                window, expectedOrigin: origin, expectedSize: nil, tolerance: 4)
             let posOK = abs(afterPos.x - origin.x) <= 4
                      && abs(afterPos.y - origin.y) <= 4
             guard !posOK else { break }
@@ -784,6 +915,35 @@ final class AccessibilityService {
             }
             AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
         }
+
+        // 5. Final size assertion. The primary-screen path never re-checked
+        //    size after the position fixes; apps that re-assert their own
+        //    bounds late (Chrome) could leave the size drifted with nothing
+        //    correcting it. One settled re-set, then let the caller's
+        //    constrained handling take over.
+        let (_, settledSize) = readSettlingIfMismatched(
+            window, expectedOrigin: nil, expectedSize: size)
+        if abs(settledSize.width - size.width) > 2 || abs(settledSize.height - size.height) > 2 {
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+        }
+    }
+
+    /// True when `actual` looks like the request was clamped to a screen's
+    /// visible area rather than an app-side minimum: some axis is pinned at
+    /// a screen's visible dimension that the request exceeds. Distinguishes
+    /// "AppKit still constrains against the old screen" (worth waiting out)
+    /// from "the app refuses to be this small" (hopeless to retry).
+    private func isClampedToSomeScreen(actual: CGSize, requested: CGSize) -> Bool {
+        for screen in NSScreen.screens {
+            let visible = screen.visibleFrame
+            if abs(actual.height - visible.height) <= 2, requested.height > visible.height + 2 {
+                return true
+            }
+            if abs(actual.width - visible.width) <= 2, requested.width > visible.width + 2 {
+                return true
+            }
+        }
+        return false
     }
 
     /// For non-primary screens: first try to resize directly on the
@@ -824,26 +984,46 @@ final class AccessibilityService {
         //    correct screen before resizing.
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
 
+        // 1b. Wait for the move to land before sizing. Chrome animates
+        //     cross-display moves and clamps a size request against the
+        //     screen the window is still on, so a size set issued mid-move
+        //     gets capped to the old screen's remaining room (e.g.
+        //     1344x1084 when leaving the built-in display from x=384) and
+        //     the cap sticks. Synchronous apps match on the first read and
+        //     pay nothing.
+        _ = readSettlingIfMismatched(window, expectedOrigin: origin, expectedSize: nil)
+
         // 2. Set size — the window is now on the target screen so the
         //    app can use the full screen dimensions for constraints.
         AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
 
-        // 2b. If the size doesn't match the target (e.g. the app still
-        //     uses the old screen's constraints after a cross-screen
-        //     move), wait briefly and retry up to 2 times.
-        for _ in 0..<2 {
-            let (_, afterSize) = readPositionAndSize(of: window)
+        // 2b. If the size doesn't match the target, retry. Two budgets:
+        //     when the rejected axis is pinned at another screen's visible
+        //     dimension, the window's screen membership hasn't caught up
+        //     with the move yet (the space transition lags the position
+        //     landing by several hundred ms, and AppKit clamps against the
+        //     OLD screen until it flips) — be patient, the clamp lifts.
+        //     Anything else is an app-side minimum that no retry will
+        //     change, so bail after the quick attempts.
+        var sizeAttempts = 0
+        while true {
+            let (_, afterSize) = readSettlingIfMismatched(
+                window, expectedOrigin: nil, expectedSize: size)
             let sizeMismatch = abs(afterSize.width - size.width) > 2
                             || abs(afterSize.height - size.height) > 2
             guard sizeMismatch else { break }
-            usleep(50_000) // 50 ms
+            let budget = isClampedToSomeScreen(actual: afterSize, requested: size) ? 8 : 2
+            sizeAttempts += 1
+            guard sizeAttempts < budget else { break }
+            usleep(150_000) // 150 ms — screen reassignment needs real time
             AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
         }
 
         // 2c. If size is still wrong and fits on the primary screen,
         //     bounce there to resize — AX is more reliable on primary.
         do {
-            let (_, sz) = readPositionAndSize(of: window)
+            let (_, sz) = readSettlingIfMismatched(
+                window, expectedOrigin: nil, expectedSize: size)
             let stillWrong = abs(sz.width - size.width) > 2
                           || abs(sz.height - size.height) > 2
             if stillWrong, let primary = NSScreen.screens.first {
@@ -866,27 +1046,30 @@ final class AccessibilityService {
         //    response to the size change.
         usleep(50_000)
 
-        // 4. Nudge + final position to defeat AX de-duplication.
-        var nudged = origin
-        nudged.y += 1
-        if let nudgeVal = AXValueCreate(.cgPoint, &nudged) {
-            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, nudgeVal)
-        }
-        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
-
-        // 5. Final size correction — some apps re-constrain size after
-        //    moving to a different screen.
-        let (_, finalSize) = readPositionAndSize(of: window)
-        if abs(finalSize.width - size.width) > 2 || abs(finalSize.height - size.height) > 2 {
+        // 4. Final size correction — some apps re-constrain size after
+        //    moving to a different screen. Verified: a single
+        //    fire-and-forget re-set could itself be clamped or land
+        //    mid-animation and nothing would notice.
+        for _ in 0..<2 {
+            let (_, finalSize) = readSettlingIfMismatched(
+                window, expectedOrigin: nil, expectedSize: size)
+            let sizeOK = abs(finalSize.width - size.width) <= 2
+                      && abs(finalSize.height - size.height) <= 2
+            guard !sizeOK else { break }
             AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, sizeValue)
+            usleep(50_000)
         }
 
-        // 6. Verify position stuck — some apps (e.g. Electron/Notion)
+        // 5. Verify position stuck — some apps (e.g. Electron/Notion)
         //    asynchronously revert position after a size change, and the
-        //    revert can take longer than the 50 ms wait in step 3.
-        //    Retry up to 3 times with increasing waits.
+        //    revert can take longer than the 50 ms wait in step 3, and the
+        //    2c bounce leaves the window parked on the primary screen.
+        //    Correct-only-on-mismatch: the former unconditional nudge +
+        //    re-set cancelled Chrome's in-flight animated moves. Retry up
+        //    to 3 times with increasing waits.
         for attempt in 0..<3 {
-            let (afterPos, _) = readPositionAndSize(of: window)
+            let (afterPos, _) = readSettlingIfMismatched(
+                window, expectedOrigin: origin, expectedSize: nil, tolerance: 4)
             let posOK = abs(afterPos.x - origin.x) <= 4
                      && abs(afterPos.y - origin.y) <= 4
             guard !posOK else { break }
@@ -899,7 +1082,7 @@ final class AccessibilityService {
             AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
         }
 
-        // 7. Re-raise in case the bounce changed z-order.
+        // 6. Re-raise in case the bounce changed z-order.
         raiseWindow(window)
     }
 
@@ -1068,6 +1251,8 @@ final class AccessibilityService {
             let origin: CGPoint   // AX/CG top-left coordinates
             let size: CGSize
             let title: String?
+            /// Resolved via _AXUIElementGetWindow; 0 when unavailable.
+            let windowID: CGWindowID
         }
 
         perfLog("cgEntries filtered (\(cgEntries.count) entries, \(orderedPIDs.count) unique PIDs)")
@@ -1089,7 +1274,8 @@ final class AccessibilityService {
                       summary.subrole == "AXStandardWindow",
                       let origin = summary.origin, let size = summary.size,
                       size.width > 0, size.height > 0 else { continue }
-                infos.append(AXWindowInfo(element: w, origin: origin, size: size, title: summary.title))
+                let wid = Self.cgWindowID(of: w) ?? 0
+                infos.append(AXWindowInfo(element: w, origin: origin, size: size, title: summary.title, windowID: wid))
             }
             axWindowsByPID[pid] = infos
         }
@@ -1102,18 +1288,31 @@ final class AccessibilityService {
         for cgEntry in currentSpaceEntries {
             guard !hiddenPIDs.contains(cgEntry.pid) else { continue }
             guard let axInfos = axWindowsByPID[cgEntry.pid] else { continue }
+            var matchedIndex: Int?
+
+            // Exact match by CGWindowID (private AX API) — immune to the
+            // frame heuristics below, which fail for apps whose CG bounds
+            // and AX frame disagree mid-animation (Chrome).
+            if cgEntry.windowID != 0 {
+                matchedIndex = axInfos.firstIndex { info in
+                    info.windowID == cgEntry.windowID
+                        && !usedAXWindows.contains(ObjectIdentifier(info.element))
+                }
+            }
+
             // Find matching AX window by position/size comparison.
             let tolerance: CGFloat = 5
-            var matchedIndex: Int?
-            for (i, axInfo) in axInfos.enumerated() {
-                let id = ObjectIdentifier(axInfo.element)
-                guard !usedAXWindows.contains(id) else { continue }
-                if abs(axInfo.origin.x - cgEntry.bounds.origin.x) < tolerance
-                    && abs(axInfo.origin.y - cgEntry.bounds.origin.y) < tolerance
-                    && abs(axInfo.size.width - cgEntry.bounds.width) < tolerance
-                    && abs(axInfo.size.height - cgEntry.bounds.height) < tolerance {
-                    matchedIndex = i
-                    break
+            if matchedIndex == nil {
+                for (i, axInfo) in axInfos.enumerated() {
+                    let id = ObjectIdentifier(axInfo.element)
+                    guard !usedAXWindows.contains(id) else { continue }
+                    if abs(axInfo.origin.x - cgEntry.bounds.origin.x) < tolerance
+                        && abs(axInfo.origin.y - cgEntry.bounds.origin.y) < tolerance
+                        && abs(axInfo.size.width - cgEntry.bounds.width) < tolerance
+                        && abs(axInfo.size.height - cgEntry.bounds.height) < tolerance {
+                        matchedIndex = i
+                        break
+                    }
                 }
             }
 
@@ -1255,7 +1454,8 @@ final class AccessibilityService {
                     frame: frame,
                     visibleFrame: visibleFrame,
                     screenFrame: screenFrame,
-                    isHidden: true
+                    isHidden: true,
+                    cgWindowID: Self.cgWindowID(of: w) ?? 0
                 ))
                 addedAny = true
             }
