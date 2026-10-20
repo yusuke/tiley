@@ -110,7 +110,13 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         window.level = .normal
         let displayID = self.targetScreen.displayID
         window.identifier = NSUserInterfaceItemIdentifier("main-window-\(displayID)")
-        window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary, .transient]
+        // .canJoinAllSpaces, not .moveToActiveSpace: hide() keeps the window
+        // ordered in (layer opacity 0) for instant re-show, and
+        // .moveToActiveSpace only relocates a window when it is ordered in —
+        // so a re-shown overlay stayed on the Space it first opened on.
+        // Living on every Space means the overlay always appears on the
+        // desktop currently in view (matching the other overlay windows).
+        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
         window.isReleasedWhenClosed = false
         window.autorecalculatesKeyViewLoop = false
         hostingView.wantsLayer = true
