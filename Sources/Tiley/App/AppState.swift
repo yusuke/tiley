@@ -295,6 +295,10 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var hotKeyHandler: EventHandlerRef?
     @ObservationIgnored var hotKeysYieldedToDebug = false
     @ObservationIgnored var lastTargetPID: pid_t?
+    /// Grid selection Tiley last applied to each window, so display movement
+    /// can re-apply the same slot on the destination screen's grid instead of
+    /// scaling raw pixel frames between differently sized displays.
+    @ObservationIgnored var lastAppliedGridSelections: [CGWindowID: GridSelection] = [:]
     @ObservationIgnored var workspaceObserverTask: Task<Void, Never>?
     @ObservationIgnored var appActivationTask: Task<Void, Never>?
     @ObservationIgnored var appDeactivationTask: Task<Void, Never>?
@@ -1670,6 +1674,9 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             self.alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
             self.recordTileyPlacedFrames(for: placements.map { $0.target.cgWindowID })
+            for placement in placements {
+                self.rememberAppliedSelection(allSelections[placement.selectionIndex], for: placement.target)
+            }
             self.isApplyingGroupTransform = false
 
             // Raise in the requested order so the primary (first-selected) ends
@@ -1904,6 +1911,9 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             self.alignAdjacentEdgesAfterPreset(placements: placements, selections: selections, screenFrame: currentScreenFrame)
             self.recordTileyPlacedFrames(for: placements.map { $0.target.cgWindowID })
+            for placement in placements {
+                self.rememberAppliedSelection(selections[placement.selectionIndex], for: placement.target)
+            }
             self.isApplyingGroupTransform = false
 
             // Raise in the requested order so the primary ends up topmost.
@@ -2035,6 +2045,7 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             if case .success = result {
                 self.recordTileyPlacedFrames(for: [target.cgWindowID])
+                self.rememberAppliedSelection(selection, for: target)
             }
             self.isApplyingGroupTransform = false
             switch result {
@@ -2134,6 +2145,7 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             if case .success = result {
                 self.recordTileyPlacedFrames(for: [target.cgWindowID])
+                self.rememberAppliedSelection(selection, for: target)
             }
             self.isApplyingGroupTransform = false
             switch result {
