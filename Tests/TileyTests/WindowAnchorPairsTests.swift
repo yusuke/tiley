@@ -54,6 +54,11 @@ final class WindowAnchorPairsTests {
             defer: false
         )
         win.title = title
+        // NSWindow defaults to isReleasedWhenClosed = true, so the close()
+        // in deinit would release the window a second time on top of the
+        // strong reference in `openedWindows` (over-release → SIGSEGV when
+        // the main-actor Task's autorelease pool pops).
+        win.isReleasedWhenClosed = false
         win.makeKeyAndOrderFront(nil)
         // Pump the run loop so the window server registers the window and a
         // valid CGWindowID is assigned.
