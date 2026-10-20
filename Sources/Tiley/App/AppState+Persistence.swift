@@ -18,6 +18,7 @@ enum UserDefaultsKey {
     static let debugSimulateUpdate = "debugSimulateUpdate"
     static let displayShortcuts = "displayShortcuts"
     static let showNearIcon = "showNearIcon"
+    static let presetShortcutCyclesDisplays = "presetShortcutCyclesDisplays"
 }
 
 extension AppState {
@@ -64,6 +65,9 @@ extension AppState {
         }
         if let storedShowNearIcon = defaults.object(forKey: UserDefaultsKey.showNearIcon) as? Bool {
             showNearIcon = storedShowNearIcon
+        }
+        if let storedPresetShortcutCyclesDisplays = defaults.object(forKey: UserDefaultsKey.presetShortcutCyclesDisplays) as? Bool {
+            presetShortcutCyclesDisplays = storedPresetShortcutCyclesDisplays
         }
         if let storedQuitAppOnLastWindowClose = defaults.object(forKey: UserDefaultsKey.quitAppOnLastWindowClose) as? Bool {
             quitAppOnLastWindowClose = storedQuitAppOnLastWindowClose

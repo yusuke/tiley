@@ -35,6 +35,7 @@
 "Show menu icon" = "Menüleistensymbol anzeigen";
 "Show Dock icon" = "Dock-Symbol anzeigen";
 "Show near icon when clicked" = "Beim Klick neben dem Symbol anzeigen";
+"Repeat shortcut cycles displays" = "Wiederholter Kurzbefehl wechselt das Display";
 "Write debug log to ~/tiley.log" = "Debug-Log in ~/tiley.log schreiben";
 "Reset to Default" = "Auf Standard zurücksetzen";
 "Reset Grid to Default" = "Raster zurücksetzen";

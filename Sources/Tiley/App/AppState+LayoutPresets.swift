@@ -158,6 +158,37 @@ extension AppState {
         }
     }
 
+    /// How long a repeat press of the same global preset shortcut keeps
+    /// cycling displays before the sequence resets.
+    static let presetCyclePressWindow: TimeInterval = 3
+
+    /// Global preset hotkey entry point. The first press applies the preset
+    /// on the target window's current screen. A repeat press of the same
+    /// shortcut within `presetCyclePressWindow` moves the window to the next
+    /// display and applies the preset there, looping back to the first
+    /// display when it runs out of screens.
+    func handleGlobalPresetShortcut(id: UUID) {
+        let now = Date()
+        let isRepeatPress = lastGlobalPresetID == id
+            && lastGlobalPresetPressAt.map { now.timeIntervalSince($0) <= Self.presetCyclePressWindow } == true
+        lastGlobalPresetID = id
+        lastGlobalPresetPressAt = now
+
+        let screens = NSScreen.screens.sorted { $0.displayID < $1.displayID }
+        if isRepeatPress, presetShortcutCyclesDisplays, screens.count > 1,
+           let target = windowManager?.captureFocusedWindow() {
+            let currentScreen = screens.max(by: { a, b in
+                a.frame.intersection(target.frame).area < b.frame.intersection(target.frame).area
+            }) ?? screens[0]
+            let currentIndex = screens.firstIndex(where: { $0.displayID == currentScreen.displayID }) ?? 0
+            let nextScreen = screens[(currentIndex + 1) % screens.count]
+            applyLayoutPresetOnScreen(id: id, visibleFrame: nextScreen.visibleFrame, screenFrame: nextScreen.frame)
+            return
+        }
+
+        applyLayoutPreset(id: id)
+    }
+
     func handleLocalShortcut(_ shortcut: HotKeyShortcut) -> Bool {
         guard isShowingLayoutGrid, !isEditingSettings else { return false }
 

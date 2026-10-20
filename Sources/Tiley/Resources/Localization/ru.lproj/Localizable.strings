@@ -35,6 +35,7 @@
 "Show menu icon" = "Показывать значок в строке меню";
 "Show Dock icon" = "Показывать значок в Dock";
 "Show near icon when clicked" = "Показывать рядом с иконкой при нажатии";
+"Repeat shortcut cycles displays" = "Повторное нажатие сочетания переключает дисплеи";
 "Write debug log to ~/tiley.log" = "Записывать отладочный лог в ~/tiley.log";
 "Reset to Default" = "Сбросить";
 "Reset Grid to Default" = "Сбросить сетку";

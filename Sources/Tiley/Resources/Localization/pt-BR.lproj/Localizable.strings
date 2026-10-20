@@ -35,6 +35,7 @@
 "Show menu icon" = "Mostrar ícone na barra de menus";
 "Show Dock icon" = "Mostrar ícone no Dock";
 "Show near icon when clicked" = "Mostrar perto do ícone ao clicar";
+"Repeat shortcut cycles displays" = "Repetir o atalho alterna entre telas";
 "Write debug log to ~/tiley.log" = "Gravar log de depuração em ~/tiley.log";
 "Reset to Default" = "Redefinir padrão";
 "Reset Grid to Default" = "Redefinir grade";

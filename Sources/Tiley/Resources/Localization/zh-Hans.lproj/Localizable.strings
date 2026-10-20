@@ -35,6 +35,7 @@
 "Show menu icon" = "显示菜单图标";
 "Show Dock icon" = "显示 Dock 图标";
 "Show near icon when clicked" = "点击图标时在图标附近显示";
+"Repeat shortcut cycles displays" = "重复按快捷键在显示器间循环";
 "Write debug log to ~/tiley.log" = "将调试日志写入 ~/tiley.log";
 "Reset to Default" = "恢复默认";
 "Reset Grid to Default" = "将网格恢复为默认";

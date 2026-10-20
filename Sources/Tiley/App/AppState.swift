@@ -76,6 +76,7 @@ final class AppState: NSObject, NSMenuDelegate {
         var dockIconVisible: Bool
         var quitAppOnLastWindowClose: Bool
         var showNearIcon: Bool
+        var presetShortcutCyclesDisplays: Bool
         var enableDebugLog: Bool
         var debugSimulateUpdate: Bool
         var displayShortcutSettings: DisplayShortcutSettings
@@ -209,6 +210,14 @@ final class AppState: NSObject, NSMenuDelegate {
             UserDefaults.standard.set(showNearIcon, forKey: UserDefaultsKey.showNearIcon)
         }
     }
+    /// Whether a repeat press of the same global preset shortcut moves the
+    /// window to the next display instead of re-applying in place.
+    var presetShortcutCyclesDisplays = true {
+        didSet {
+            guard !isLoadingSettings else { return }
+            UserDefaults.standard.set(presetShortcutCyclesDisplays, forKey: UserDefaultsKey.presetShortcutCyclesDisplays)
+        }
+    }
     var displayShortcutSettings = DisplayShortcutSettings.default
     var layoutPresets: [LayoutPreset] = []
     @ObservationIgnored private var selectedLayoutPresetIDStorage: UUID? = nil
@@ -295,6 +304,9 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var hotKeyHandler: EventHandlerRef?
     @ObservationIgnored var hotKeysYieldedToDebug = false
     @ObservationIgnored var lastTargetPID: pid_t?
+    /// Repeat-press display cycling for global preset shortcuts.
+    @ObservationIgnored var lastGlobalPresetID: UUID?
+    @ObservationIgnored var lastGlobalPresetPressAt: Date?
     @ObservationIgnored var workspaceObserverTask: Task<Void, Never>?
     @ObservationIgnored var appActivationTask: Task<Void, Never>?
     @ObservationIgnored var appDeactivationTask: Task<Void, Never>?
@@ -615,6 +627,7 @@ final class AppState: NSObject, NSMenuDelegate {
             dockIconVisible: dockIconVisible,
             quitAppOnLastWindowClose: quitAppOnLastWindowClose,
             showNearIcon: showNearIcon,
+            presetShortcutCyclesDisplays: presetShortcutCyclesDisplays,
             enableDebugLog: enableDebugLog,
             debugSimulateUpdate: debugSimulateUpdate,
             displayShortcutSettings: displayShortcutSettings
@@ -1145,6 +1158,9 @@ final class AppState: NSObject, NSMenuDelegate {
         if settings.menuIconVisible != current.menuIconVisible { setMenuIconVisible(settings.menuIconVisible) }
         if settings.dockIconVisible != current.dockIconVisible { setDockIconVisible(settings.dockIconVisible) }
         if settings.showNearIcon != current.showNearIcon { showNearIcon = settings.showNearIcon }
+        if settings.presetShortcutCyclesDisplays != current.presetShortcutCyclesDisplays {
+            presetShortcutCyclesDisplays = settings.presetShortcutCyclesDisplays
+        }
         if settings.quitAppOnLastWindowClose != current.quitAppOnLastWindowClose {
             quitAppOnLastWindowClose = settings.quitAppOnLastWindowClose
         }

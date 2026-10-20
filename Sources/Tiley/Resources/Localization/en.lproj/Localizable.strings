@@ -35,6 +35,7 @@
 "Show menu icon" = "Show menu icon";
 "Show Dock icon" = "Show Dock icon";
 "Show near icon when clicked" = "Show near icon when clicked";
+"Repeat shortcut cycles displays" = "Repeat shortcut cycles displays";
 "Write debug log to ~/tiley.log" = "Write debug log to ~/tiley.log";
 "Reset to Default" = "Reset to Default";
 "Reset Grid to Default" = "Reset Grid to Default";
