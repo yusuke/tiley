@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **Pin to All Spaces**: the Move to Space picker has a new Pin This Window tile (press P, or click it). It keeps the window on whichever desktop you're looking at; choose it again (it then reads Unpin) to unpin. The picker also lists every other pinned window with its own Unpin button, so a pinned window can be unpinned even when another app has focus; ⇧P unpins them all. It also has its own optional shortcut in Settings › Display Move Shortcuts. macOS no longer lets apps make another app's window appear on all desktops, so the window follows you: when you switch with the keyboard (⌃← / ⌃→ or Switch to Desktop N), Tiley holds the window so it moves with you in the same animation. After a trackpad swipe or Mission Control, Tiley goes back for it once the switch finishes, then returns focus to the app you switched to. Minimized windows and hidden apps stay put, and pins clear when Tiley quits.
+
 ## [5.3.2] - 2026-09-15
 
 ### Fixed

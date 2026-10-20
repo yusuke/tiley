@@ -19,6 +19,10 @@ private typealias CopyManagedDisplaySpacesFunc = @convention(c) (CGSConnectionID
 /// CGSOrderWindow(cid, windowID, orderingMode, relativeToWindowID) -> CGError
 /// orderingMode: kCGSOrderAbove = 1, kCGSOrderBelow = -1, kCGSOrderOut = 0
 private typealias OrderWindowFunc = @convention(c) (CGSConnectionID, CGWindowID, Int32, CGWindowID) -> CGError
+/// CGSSetSymbolicHotKeyValue(hotKey, keyEquivalent, virtualKeyCode, modifiers) -> CGError
+private typealias SetSymbolicHotKeyValueFunc = @convention(c) (Int32, UInt16, UInt16, UInt32) -> CGError
+/// CGSSetSymbolicHotKeyEnabled(hotKey, enabled) -> CGError
+private typealias SetSymbolicHotKeyEnabledFunc = @convention(c) (Int32, Bool) -> CGError
 
 enum CGSPrivate {
     static let kCGSSpaceAll: UInt32 = 0x7
@@ -53,6 +57,8 @@ enum CGSPrivate {
     private static let _copySpacesForWindows: CopySpacesForWindowsFunc? = resolve("CGSCopySpacesForWindows", slsName: "SLSCopySpacesForWindows")
     private static let _copyManagedDisplaySpaces: CopyManagedDisplaySpacesFunc? = resolve("CGSCopyManagedDisplaySpaces", slsName: "SLSCopyManagedDisplaySpaces")
     private static let _orderWindow: OrderWindowFunc? = resolve("CGSOrderWindow", slsName: "SLSOrderWindow")
+    private static let _setSymbolicHotKeyValue: SetSymbolicHotKeyValueFunc? = resolve("CGSSetSymbolicHotKeyValue", slsName: "SLSSetSymbolicHotKeyValue")
+    private static let _setSymbolicHotKeyEnabled: SetSymbolicHotKeyEnabledFunc? = resolve("CGSSetSymbolicHotKeyEnabled", slsName: "SLSSetSymbolicHotKeyEnabled")
 
     // MARK: - Public interface
 
@@ -79,6 +85,26 @@ enum CGSPrivate {
     static func managedDisplaySpaces(_ cid: CGSConnectionID) -> CFArray? {
         guard let fn = _copyManagedDisplaySpaces else { return nil }
         return fn(cid)
+    }
+
+    // MARK: - Symbolic hotkeys
+
+    /// Applies a system symbolic hotkey (e.g. "Switch to Desktop N") to the
+    /// running session immediately. The saved preference must be written
+    /// separately for the change to survive a logout.
+    @discardableResult
+    static func setSymbolicHotKey(_ id: Int32, keyCode: UInt16, modifiers: UInt32, enabled: Bool) -> Bool {
+        guard let setValue = _setSymbolicHotKeyValue, let setEnabled = _setSymbolicHotKeyEnabled else {
+            debugLog("setSymbolicHotKey: unresolved symbols")
+            return false
+        }
+        // 65535 = no character equivalent, as System Settings stores it.
+        let valueErr = setValue(id, 65535, keyCode, modifiers)
+        let enabledErr = setEnabled(id, enabled)
+        if valueErr != .success || enabledErr != .success {
+            debugLog("setSymbolicHotKey: id=\(id) valueErr=\(valueErr.rawValue) enabledErr=\(enabledErr.rawValue)")
+        }
+        return valueErr == .success && enabledErr == .success
     }
 
     // MARK: - Window ordering

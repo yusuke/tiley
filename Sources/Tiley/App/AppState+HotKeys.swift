@@ -46,6 +46,10 @@ extension AppState {
            let s = displayShortcutSettings.bringToFront.local, s == shortcut { return true }
         if displayShortcutSettings.closeOrQuit.localEnabled,
            let s = displayShortcutSettings.closeOrQuit.local, s == shortcut { return true }
+        if displayShortcutSettings.moveToSpace.localEnabled,
+           let s = displayShortcutSettings.moveToSpace.local, s == shortcut { return true }
+        if displayShortcutSettings.pinToAllSpaces.localEnabled,
+           let s = displayShortcutSettings.pinToAllSpaces.local, s == shortcut { return true }
         return false
     }
 
@@ -86,6 +90,12 @@ extension AppState {
         }
         if let s = isGlobal ? displayShortcutSettings.closeOrQuit.global : displayShortcutSettings.closeOrQuit.local {
             result.append(("closeOrQuit\(suffix)", s))
+        }
+        if let s = isGlobal ? displayShortcutSettings.moveToSpace.global : displayShortcutSettings.moveToSpace.local {
+            result.append(("moveToSpace\(suffix)", s))
+        }
+        if let s = isGlobal ? displayShortcutSettings.pinToAllSpaces.global : displayShortcutSettings.pinToAllSpaces.local {
+            result.append(("pinToAllSpaces\(suffix)", s))
         }
         return result
     }
@@ -265,6 +275,12 @@ extension AppState {
         }
         if displayShortcutSettings.moveToOther.globalEnabled {
             registerOne(displayShortcutSettings.moveToOther.global, action: .moveToOther)
+        }
+        if displayShortcutSettings.moveToSpace.globalEnabled {
+            registerOne(displayShortcutSettings.moveToSpace.global, action: .moveToSpace)
+        }
+        if displayShortcutSettings.pinToAllSpaces.globalEnabled {
+            registerOne(displayShortcutSettings.pinToAllSpaces.global, action: .pinToAllSpaces)
         }
         let resolver = displayFingerprintResolverForHotKeys()
         for entry in displayShortcutSettings.moveToDisplay {

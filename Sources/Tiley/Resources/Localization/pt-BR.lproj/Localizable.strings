@@ -156,3 +156,39 @@
 "Choose an application to assign to this region." = "Escolha um aplicativo para atribuir a esta região.";
 "%@ has no windows to place." = "%@ não tem janelas para posicionar.";
 "Couldn't find a window for %@ after launching." = "Não foi possível encontrar uma janela para %@ após iniciar.";
+
+/* Move to Space */
+"Move to Space" = "Mover para Espaço";
+"Desktop %d" = "Mesa %d";
+"Current" = "Atual";
+"Press a number to move the window · P to pin to all spaces · Esc to cancel" = "Pressione um número para mover a janela · P para fixar em todos os Spaces · Esc para cancelar";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Ative “Mover um espaço para a esquerda” e “Mover um espaço para a direita” em Ajustes do Sistema › Teclado › Atalhos de Teclado › Mission Control para mover janelas entre espaços.";
+"Mission Control Shortcuts…" = "Atalhos do Mission Control…";
+"All Displays" = "Todos os monitores";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Mesas sem atalho são alcançadas passo a passo com ⌃← / ⌃→. Ative os atalhos “Alternar para a Mesa” em Mission Control.";
+"Open Keyboard Shortcuts…" = "Abrir Atalhos de Teclado…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: Mesa %@ — tudo pronto para saltos diretos.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: Mesa %@ — sem atalho para a Mesa %@.";
+"macOS only has shortcuts up to Desktop %d." = "O macOS só oferece atalhos até a Mesa %d.";
+"Turn On Missing Shortcuts…" = "Ativar atalhos ausentes…";
+"Turn on Switch to Desktop shortcuts?" = "Ativar os atalhos “Alternar para a Mesa”?";
+"None of the missing shortcuts can be turned on." = "Nenhum dos atalhos ausentes pode ser ativado.";
+"Tiley will turn on these system shortcuts:" = "O Tiley ativará estes atalhos do sistema:";
+"Desktop %d: %@" = "Mesa %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Estas teclas trocarão de mesa em qualquer app. Você pode alterá-las em Ajustes do Sistema › Teclado › Atalhos de Teclado › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Mesa %@ ignorada: a tecla já é usada por outro atalho do sistema.";
+"OK" = "OK";
+"Turn On" = "Ativar";
+
+/* Pin to All Spaces */
+"Pin to All Spaces" = "Fixar em Todos os Spaces";
+"Pinned to All Spaces" = "Fixada em Todos os Spaces";
+"Unpinned from All Spaces" = "Desafixada de Todos os Spaces";
+"Press the shortcut again to unpin. A pinned window rides along when you switch desktops with the keyboard; after a swipe or Mission Control, Tiley brings it over once the switch finishes." = "Pressione o atalho de novo para desafixar. Uma janela fixada acompanha você ao trocar de mesa pelo teclado; depois de um gesto ou do Mission Control, o Tiley a traz quando a troca termina.";
+"Unpin" = "Desafixar";
+"Stop keeping this window on every desktop" = "Deixar de manter esta janela em todas as mesas";
+"Keep this window on whichever desktop you're on" = "Manter esta janela na mesa em que você estiver";
+"Pin This Window" = "Fixar Esta Janela";
+"Also pinned to all spaces" = "Também fixadas em todos os Spaces";
+"⇧P unpins all" = "⇧P desafixa todas";
+"%d windows" = "%d janelas";

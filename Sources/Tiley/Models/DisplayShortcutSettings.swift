@@ -19,6 +19,10 @@ struct DisplayShortcutSettings: Codable, Equatable {
     var bringToFront: DisplayShortcutEntry
     /// Shortcut for closing the selected window or quitting the app.
     var closeOrQuit: DisplayShortcutEntry
+    /// Shows a picker of the display's Mission Control spaces to send the window to.
+    var moveToSpace: DisplayShortcutEntry
+    /// Pins the window to all Spaces, or unpins it.
+    var pinToAllSpaces: DisplayShortcutEntry
 
     static let defaultCloseOrQuit = DisplayShortcutEntry(
         local: HotKeyShortcut(keyCode: UInt32(kVK_ANSI_Slash), modifiers: 0),
@@ -54,7 +58,9 @@ struct DisplayShortcutSettings: Codable, Equatable {
         selectNextWindow: defaultSelectNextWindow,
         selectPreviousWindow: defaultSelectPreviousWindow,
         bringToFront: defaultBringToFront,
-        closeOrQuit: defaultCloseOrQuit
+        closeOrQuit: defaultCloseOrQuit,
+        moveToSpace: .empty,
+        pinToAllSpaces: .empty
     )
 
     init(from decoder: any Decoder) throws {
@@ -72,6 +78,10 @@ struct DisplayShortcutSettings: Codable, Equatable {
             ?? Self.defaultBringToFront
         closeOrQuit = try container.decodeIfPresent(DisplayShortcutEntry.self, forKey: .closeOrQuit)
             ?? Self.defaultCloseOrQuit
+        moveToSpace = try container.decodeIfPresent(DisplayShortcutEntry.self, forKey: .moveToSpace)
+            ?? .empty
+        pinToAllSpaces = try container.decodeIfPresent(DisplayShortcutEntry.self, forKey: .pinToAllSpaces)
+            ?? .empty
     }
 
     init(
@@ -83,7 +93,9 @@ struct DisplayShortcutSettings: Codable, Equatable {
         selectNextWindow: DisplayShortcutEntry = defaultSelectNextWindow,
         selectPreviousWindow: DisplayShortcutEntry = defaultSelectPreviousWindow,
         bringToFront: DisplayShortcutEntry = defaultBringToFront,
-        closeOrQuit: DisplayShortcutEntry = defaultCloseOrQuit
+        closeOrQuit: DisplayShortcutEntry = defaultCloseOrQuit,
+        moveToSpace: DisplayShortcutEntry = .empty,
+        pinToAllSpaces: DisplayShortcutEntry = .empty
     ) {
         self.moveToPrimary = moveToPrimary
         self.moveToNext = moveToNext
@@ -94,6 +106,8 @@ struct DisplayShortcutSettings: Codable, Equatable {
         self.selectPreviousWindow = selectPreviousWindow
         self.bringToFront = bringToFront
         self.closeOrQuit = closeOrQuit
+        self.moveToSpace = moveToSpace
+        self.pinToAllSpaces = pinToAllSpaces
     }
 
     /// Returns the entry matching a fingerprint and occurrence index, or nil.
@@ -182,6 +196,10 @@ enum DisplayHotKeyAction {
     case moveToPrevious
     case moveToOther
     case moveToDisplay(displayID: CGDirectDisplayID)
+    /// Shows the space picker for the focused window.
+    case moveToSpace
+    /// Pins the focused window to all Spaces, or unpins it.
+    case pinToAllSpaces
 }
 
 // MARK: - Display fingerprint resolution

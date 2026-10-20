@@ -719,6 +719,16 @@ extension AppState {
                 }
                 return true
             }
+            if displayShortcutSettings.moveToSpace.localEnabled,
+               let s = displayShortcutSettings.moveToSpace.local, matchesShortcut(shortcut, s) {
+                executeDisplayShortcutLocal(.moveToSpace)
+                return true
+            }
+            if displayShortcutSettings.pinToAllSpaces.localEnabled,
+               let s = displayShortcutSettings.pinToAllSpaces.local, matchesShortcut(shortcut, s) {
+                executeDisplayShortcutLocal(.pinToAllSpaces)
+                return true
+            }
             if displayShortcutSettings.closeOrQuit.localEnabled,
                let s = displayShortcutSettings.closeOrQuit.local, matchesShortcut(shortcut, s) {
                 if selectedWindowIndices.count > 1 {

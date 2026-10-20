@@ -156,3 +156,39 @@
 "Choose an application to assign to this region." = "Scegli un'applicazione da assegnare a questa regione.";
 "%@ has no windows to place." = "%@ non ha finestre da posizionare.";
 "Couldn't find a window for %@ after launching." = "Nessuna finestra trovata per %@ dopo l'avvio.";
+
+/* Move to Space */
+"Move to Space" = "Sposta in Spazio";
+"Desktop %d" = "Scrivania %d";
+"Current" = "Attuale";
+"Press a number to move the window · P to pin to all spaces · Esc to cancel" = "Premi un numero per spostare la finestra · P per fissarla su tutti gli spazi · Esc per annullare";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Attiva «Sposta a sinistra di uno spazio» e «Sposta a destra di uno spazio» in Impostazioni di Sistema › Tastiera › Abbreviazioni da tastiera › Mission Control per spostare le finestre tra gli spazi.";
+"Mission Control Shortcuts…" = "Abbreviazioni di Mission Control…";
+"All Displays" = "Tutti i monitor";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Le scrivanie senza abbreviazione si raggiungono un passo alla volta con ⌃← / ⌃→. Attiva le abbreviazioni “Passa alla scrivania” in Mission Control.";
+"Open Keyboard Shortcuts…" = "Apri abbreviazioni da tastiera…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: Scrivania %@ — tutte pronte per i salti diretti.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: Scrivania %@ — nessuna abbreviazione per Scrivania %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS offre abbreviazioni solo fino alla Scrivania %d.";
+"Turn On Missing Shortcuts…" = "Attiva abbreviazioni mancanti…";
+"Turn on Switch to Desktop shortcuts?" = "Attivare le abbreviazioni “Passa alla scrivania”?";
+"None of the missing shortcuts can be turned on." = "Nessuna delle abbreviazioni mancanti può essere attivata.";
+"Tiley will turn on these system shortcuts:" = "Tiley attiverà queste abbreviazioni di sistema:";
+"Desktop %d: %@" = "Scrivania %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Questi tasti cambieranno scrivania in ogni app. Puoi modificarli in Impostazioni di Sistema › Tastiera › Abbreviazioni da tastiera › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Scrivania %@ saltata: il tasto è già usato da un’altra abbreviazione di sistema.";
+"OK" = "OK";
+"Turn On" = "Attiva";
+
+/* Pin to All Spaces */
+"Pin to All Spaces" = "Fissa su tutti gli spazi";
+"Pinned to All Spaces" = "Fissata su tutti gli spazi";
+"Unpinned from All Spaces" = "Non più fissata su tutti gli spazi";
+"Press the shortcut again to unpin. A pinned window rides along when you switch desktops with the keyboard; after a swipe or Mission Control, Tiley brings it over once the switch finishes." = "Premi di nuovo l’abbreviazione per sbloccarla. Una finestra fissata ti segue quando cambi scrivania con la tastiera; dopo uno scorrimento o Mission Control, Tiley la porta lì al termine del cambio.";
+"Unpin" = "Sblocca";
+"Stop keeping this window on every desktop" = "Non mantenere più questa finestra su ogni scrivania";
+"Keep this window on whichever desktop you're on" = "Mantieni questa finestra sulla scrivania in cui ti trovi";
+"Pin This Window" = "Fissa questa finestra";
+"Also pinned to all spaces" = "Fissate anche su tutti gli spazi";
+"⇧P unpins all" = "⇧P le sblocca tutte";
+"%d windows" = "%d finestre";

@@ -156,3 +156,39 @@
 "Choose an application to assign to this region." = "Выберите приложение для назначения этой области.";
 "%@ has no windows to place." = "У %@ нет окон для размещения.";
 "Couldn't find a window for %@ after launching." = "Не удалось найти окно для %@ после запуска.";
+
+/* Move to Space */
+"Move to Space" = "Переместить в Space";
+"Desktop %d" = "Рабочий стол %d";
+"Current" = "Текущий";
+"Press a number to move the window · P to pin to all spaces · Esc to cancel" = "Нажмите цифру, чтобы переместить окно · P — закрепить на всех пространствах · Esc — отмена";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Включите «Перейти на один Space влево» и «Перейти на один Space вправо» в Системных настройках › Клавиатура › Сочетания клавиш › Mission Control, чтобы перемещать окна между пространствами.";
+"Mission Control Shortcuts…" = "Сочетания клавиш Mission Control…";
+"All Displays" = "Все дисплеи";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Рабочие столы без сочетания клавиш открываются по шагам через ⌃← / ⌃→. Включите сочетания «Переход на рабочий стол» в разделе Mission Control.";
+"Open Keyboard Shortcuts…" = "Открыть сочетания клавиш…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: рабочий стол %@ — всё настроено для прямого перехода.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: рабочий стол %@ — нет сочетания для рабочего стола %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS предлагает сочетания только до рабочего стола %d.";
+"Turn On Missing Shortcuts…" = "Включить недостающие сочетания…";
+"Turn on Switch to Desktop shortcuts?" = "Включить сочетания «Переход на рабочий стол»?";
+"None of the missing shortcuts can be turned on." = "Ни одно из недостающих сочетаний нельзя включить.";
+"Tiley will turn on these system shortcuts:" = "Tiley включит эти системные сочетания клавиш:";
+"Desktop %d: %@" = "Рабочий стол %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Эти клавиши будут переключать рабочие столы в любой программе. Изменить их можно в Системных настройках › Клавиатура › Сочетания клавиш › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Рабочий стол %@ пропущен: его клавиша уже занята другим системным сочетанием.";
+"OK" = "ОК";
+"Turn On" = "Включить";
+
+/* Pin to All Spaces */
+"Pin to All Spaces" = "Закрепить на всех пространствах";
+"Pinned to All Spaces" = "Закреплено на всех пространствах";
+"Unpinned from All Spaces" = "Откреплено от всех пространств";
+"Press the shortcut again to unpin. A pinned window rides along when you switch desktops with the keyboard; after a swipe or Mission Control, Tiley brings it over once the switch finishes." = "Нажмите сочетание клавиш ещё раз, чтобы открепить. Закреплённое окно переходит вместе с вами при смене рабочего стола с клавиатуры; после жеста или Mission Control Tiley переносит его, когда переключение завершится.";
+"Unpin" = "Открепить";
+"Stop keeping this window on every desktop" = "Больше не держать это окно на каждом рабочем столе";
+"Keep this window on whichever desktop you're on" = "Держать это окно на текущем рабочем столе";
+"Pin This Window" = "Закрепить это окно";
+"Also pinned to all spaces" = "Также закреплены на всех пространствах";
+"⇧P unpins all" = "⇧P открепляет все";
+"%d windows" = "Окон: %d";

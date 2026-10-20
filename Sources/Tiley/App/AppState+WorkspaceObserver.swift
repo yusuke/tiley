@@ -139,6 +139,7 @@ extension AppState {
                     AccessibilityService.invalidateWindowSpaceCache()
                     self?.dissolveGroupsWithSplitSpaces()
                     self?.scheduleWindowListCacheRefresh()
+                    self?.schedulePinnedWindowFollow()
                 }
             }
         }
