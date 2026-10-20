@@ -260,8 +260,12 @@ extension AppState {
         rectangleApps: [String?],
         groupedPairs: [PresetGroupPair],
         anchorTarget: WindowTarget,
-        presetName: String
+        presetName: String,
+        gridRows: Int? = nil,
+        gridColumns: Int? = nil
     ) async {
+        let layoutRows = gridRows ?? rows
+        let layoutColumns = gridColumns ?? columns
         // 1. Screen frame resolution — use the anchor target's screen.
         let currentVisibleFrame: CGRect
         let currentScreenFrame: CGRect
@@ -326,8 +330,8 @@ extension AppState {
             let frame = GridCalculator.frame(
                 for: entry.selection,
                 in: currentVisibleFrame,
-                rows: rows,
-                columns: columns,
+                rows: layoutRows,
+                columns: layoutColumns,
                 gap: gap
             )
 
@@ -445,7 +449,9 @@ extension AppState {
                 groupedPairs: groupedPairs,
                 selections: allSelections,
                 windowIDBySelectionIndex: windowIDBySelectionIndex,
-                visibleFrame: currentVisibleFrame
+                visibleFrame: currentVisibleFrame,
+                gridRows: layoutRows,
+                gridColumns: layoutColumns
             )
 
             // Additionally, for pairs where one or both sides are app-assigned,

@@ -110,7 +110,9 @@ extension AppState {
 
         activeLayoutTarget = target
         lastTargetPID = target.processIdentifier
-        let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+        // Apply on the grid the preset was created with, not the current
+        // grid settings — saved layouts hold their creation-time grid.
+        let allSelections = preset.allSelections
         let rectangleApps = preset.normalizedRectangleApps
         let hasAnyAssignment = rectangleApps.contains(where: { $0 != nil })
 
@@ -122,7 +124,9 @@ extension AppState {
                     rectangleApps: rectangleApps,
                     groupedPairs: preset.groupedPairs,
                     anchorTarget: target,
-                    presetName: preset.name
+                    presetName: preset.name,
+                    gridRows: preset.baseRows,
+                    gridColumns: preset.baseColumns
                 )
             }
             return
@@ -133,16 +137,16 @@ extension AppState {
                 // Enough selected windows — use explicit selection order.
                 let selection = allSelections[0]
                 let secondarySelections = Array(allSelections.dropFirst())
-                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, groupedPairs: preset.groupedPairs)
+                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, groupedPairs: preset.groupedPairs, gridRows: preset.baseRows, gridColumns: preset.baseColumns)
             } else {
                 // Not enough selected windows — selected first, fill from z-order.
-                applyPresetToZOrderedWindows(selections: allSelections, groupedPairs: preset.groupedPairs)
+                applyPresetToZOrderedWindows(selections: allSelections, groupedPairs: preset.groupedPairs, gridRows: preset.baseRows, gridColumns: preset.baseColumns)
             }
         } else if allSelections.count > 1 {
             // Single window but multi-layout preset — fill from z-order.
-            applyPresetToZOrderedWindows(selections: allSelections, groupedPairs: preset.groupedPairs)
+            applyPresetToZOrderedWindows(selections: allSelections, groupedPairs: preset.groupedPairs, gridRows: preset.baseRows, gridColumns: preset.baseColumns)
         } else {
-            apply(selection: allSelections.first ?? preset.scaledSelection(toRows: rows, columns: columns), to: target)
+            apply(selection: allSelections.first ?? preset.selection, to: target, gridRows: preset.baseRows, gridColumns: preset.baseColumns)
         }
         TelemetryDeck.signal("presetApplied", parameters: ["presetName": preset.name])
     }

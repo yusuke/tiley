@@ -92,7 +92,70 @@ extension AppState {
         moveWindowProportionally(target: target, from: currentScreen, to: destinationScreen)
     }
 
+    /// A grid selection together with the grid dimensions it was applied on.
+    /// Presets carry their creation-time grid, which can differ from the
+    /// current grid settings.
+    struct AppliedGridSlot {
+        var selection: GridSelection
+        var rows: Int
+        var columns: Int
+    }
+
+    /// Remembers the grid slot Tiley applied to a window so a later
+    /// display move can re-apply the same slot on the destination screen.
+    func rememberAppliedSelection(_ selection: GridSelection, gridRows: Int, gridColumns: Int, for target: WindowTarget) {
+        guard target.cgWindowID != 0 else { return }
+        lastAppliedGridSelections[target.cgWindowID] = AppliedGridSlot(selection: selection, rows: gridRows, columns: gridColumns)
+    }
+
+    /// Returns the recorded grid slot for a window, but only while the
+    /// window still occupies that slot on the source screen. A stale record
+    /// (the user moved or resized the window since) is dropped so the
+    /// caller falls back to proportional movement.
+    func gridSelectionForDisplayMove(of target: WindowTarget, on srcScreen: NSScreen) -> AppliedGridSlot? {
+        guard target.cgWindowID != 0,
+              let slot = lastAppliedGridSelections[target.cgWindowID] else { return nil }
+        let expected = GridCalculator.frame(
+            for: slot.selection,
+            in: srcScreen.visibleFrame,
+            rows: slot.rows,
+            columns: slot.columns,
+            gap: gap
+        )
+        // Generous tolerance: apps with minimum-size constraints land near,
+        // but not exactly on, the requested frame.
+        let tolerance: CGFloat = 32
+        guard abs(expected.minX - target.frame.minX) <= tolerance,
+              abs(expected.minY - target.frame.minY) <= tolerance,
+              abs(expected.width - target.frame.width) <= tolerance,
+              abs(expected.height - target.frame.height) <= tolerance else {
+            lastAppliedGridSelections.removeValue(forKey: target.cgWindowID)
+            return nil
+        }
+        return slot
+    }
+
     func moveWindowProportionally(target: WindowTarget, from srcScreen: NSScreen, to dstScreen: NSScreen) {
+        // When Tiley placed this window into a grid slot, re-apply that slot
+        // on the destination screen's grid. Proportional pixel scaling breaks
+        // down between displays with different resolutions or aspect ratios.
+        if let slot = gridSelectionForDisplayMove(of: target, on: srcScreen) {
+            let frame = GridCalculator.frame(
+                for: slot.selection,
+                in: dstScreen.visibleFrame,
+                rows: slot.rows,
+                columns: slot.columns,
+                gap: gap
+            )
+            do {
+                try windowManager?.move(target: target, to: frame, onScreenFrame: dstScreen.frame)
+                return
+            } catch {
+                debugLog("moveWindowToDisplay grid re-apply error: \(error)")
+                // Fall through to proportional movement.
+            }
+        }
+
         let srcVisible = srcScreen.visibleFrame
         let dstVisible = dstScreen.visibleFrame
 

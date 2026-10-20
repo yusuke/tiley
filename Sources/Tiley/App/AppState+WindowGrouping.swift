@@ -184,14 +184,18 @@ extension AppState {
         groupedPairs: [PresetGroupPair],
         selections: [GridSelection],
         windowIDBySelectionIndex: [Int: CGWindowID],
-        visibleFrame: CGRect
+        visibleFrame: CGRect,
+        gridRows: Int? = nil,
+        gridColumns: Int? = nil
     ) {
         guard !groupedPairs.isEmpty else { return }
         guard accessibilityGranted else { return }
 
+        let layoutRows = gridRows ?? rows
+        let layoutColumns = gridColumns ?? columns
         let targetFrames: [Int: CGRect] = Dictionary(
             uniqueKeysWithValues: selections.enumerated().map { idx, sel in
-                (idx, GridCalculator.frame(for: sel, in: visibleFrame, rows: rows, columns: columns, gap: gap))
+                (idx, GridCalculator.frame(for: sel, in: visibleFrame, rows: layoutRows, columns: layoutColumns, gap: gap))
             }
         )
         let epsilon = max(WindowAdjacencyDetector.defaultEdgeEpsilon, gap + 4.0)

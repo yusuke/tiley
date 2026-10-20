@@ -295,6 +295,11 @@ final class AppState: NSObject, NSMenuDelegate {
     @ObservationIgnored var hotKeyHandler: EventHandlerRef?
     @ObservationIgnored var hotKeysYieldedToDebug = false
     @ObservationIgnored var lastTargetPID: pid_t?
+    /// Grid slot (selection plus the grid it was applied on) Tiley last
+    /// applied to each window, so display movement can re-apply the same
+    /// slot on the destination screen's grid instead of scaling raw pixel
+    /// frames between differently sized displays.
+    @ObservationIgnored var lastAppliedGridSelections: [CGWindowID: AppliedGridSlot] = [:]
     @ObservationIgnored var workspaceObserverTask: Task<Void, Never>?
     @ObservationIgnored var appActivationTask: Task<Void, Never>?
     @ObservationIgnored var appDeactivationTask: Task<Void, Never>?
@@ -1555,7 +1560,11 @@ final class AppState: NSObject, NSMenuDelegate {
     ///   - secondarySelections: Additional selections for 2nd, 3rd, ... windows (by sidebar/Z-order).
     ///   - visibleFrame: If provided, use this screen's visible frame (e.g. from mouse pointer's screen).
     ///   - screenFrame: If provided, use this screen frame for coordinate conversion.
-    func applyToMultipleWindows(selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil, groupedPairs: [PresetGroupPair] = []) {
+    func applyToMultipleWindows(selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil, groupedPairs: [PresetGroupPair] = [], gridRows: Int? = nil, gridColumns: Int? = nil) {
+        // Presets pass their own creation-time grid; ad-hoc selections use
+        // the current grid settings.
+        let layoutRows = gridRows ?? rows
+        let layoutColumns = gridColumns ?? columns
         guard let primaryTarget = activeLayoutTarget else { return }
 
         // Determine the target screen: use the provided screen (mouse pointer's screen)
@@ -1610,8 +1619,8 @@ final class AppState: NSObject, NSMenuDelegate {
             let frame = GridCalculator.frame(
                 for: sel,
                 in: currentVisibleFrame,
-                rows: rows,
-                columns: columns,
+                rows: layoutRows,
+                columns: layoutColumns,
                 gap: gap
             )
 
@@ -1670,6 +1679,9 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             self.alignAdjacentEdgesAfterPreset(placements: placements, selections: allSelections, screenFrame: currentScreenFrame)
             self.recordTileyPlacedFrames(for: placements.map { $0.target.cgWindowID })
+            for placement in placements {
+                self.rememberAppliedSelection(allSelections[placement.selectionIndex], gridRows: layoutRows, gridColumns: layoutColumns, for: placement.target)
+            }
             self.isApplyingGroupTransform = false
 
             // Raise in the requested order so the primary (first-selected) ends
@@ -1709,7 +1721,9 @@ final class AppState: NSObject, NSMenuDelegate {
                     groupedPairs: groupedPairs,
                     selections: allSelections,
                     windowIDBySelectionIndex: windowIDBySelectionIndex,
-                    visibleFrame: currentVisibleFrame
+                    visibleFrame: currentVisibleFrame,
+                    gridRows: layoutRows,
+                    gridColumns: layoutColumns
                 )
             }
         }
@@ -1810,7 +1824,9 @@ final class AppState: NSObject, NSMenuDelegate {
     /// Applies a multi-layout preset. Selected windows are placed first
     /// (as primary, secondary, …), then remaining layout slots are filled
     /// with unselected windows picked by actual z-order (frontmost first).
-    func applyPresetToZOrderedWindows(selections: [GridSelection], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil, groupedPairs: [PresetGroupPair] = []) {
+    func applyPresetToZOrderedWindows(selections: [GridSelection], visibleFrame: CGRect? = nil, screenFrame: CGRect? = nil, groupedPairs: [PresetGroupPair] = [], gridRows: Int? = nil, gridColumns: Int? = nil) {
+        let layoutRows = gridRows ?? rows
+        let layoutColumns = gridColumns ?? columns
         guard let primaryTarget = activeLayoutTarget else { return }
 
         let currentVisibleFrame: CGRect
@@ -1856,8 +1872,8 @@ final class AppState: NSObject, NSMenuDelegate {
             let frame = GridCalculator.frame(
                 for: sel,
                 in: currentVisibleFrame,
-                rows: rows,
-                columns: columns,
+                rows: layoutRows,
+                columns: layoutColumns,
                 gap: gap
             )
 
@@ -1904,6 +1920,9 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             self.alignAdjacentEdgesAfterPreset(placements: placements, selections: selections, screenFrame: currentScreenFrame)
             self.recordTileyPlacedFrames(for: placements.map { $0.target.cgWindowID })
+            for placement in placements {
+                self.rememberAppliedSelection(selections[placement.selectionIndex], gridRows: layoutRows, gridColumns: layoutColumns, for: placement.target)
+            }
             self.isApplyingGroupTransform = false
 
             // Raise in the requested order so the primary ends up topmost.
@@ -1939,7 +1958,9 @@ final class AppState: NSObject, NSMenuDelegate {
                     groupedPairs: groupedPairs,
                     selections: selections,
                     windowIDBySelectionIndex: windowIDBySelectionIndex,
-                    visibleFrame: currentVisibleFrame
+                    visibleFrame: currentVisibleFrame,
+                    gridRows: layoutRows,
+                    gridColumns: layoutColumns
                 )
             }
         }
@@ -1983,7 +2004,9 @@ final class AppState: NSObject, NSMenuDelegate {
         clearWindowCyclingState(animateRestore: true)
     }
 
-    func apply(selection: GridSelection, to target: WindowTarget) {
+    func apply(selection: GridSelection, to target: WindowTarget, gridRows: Int? = nil, gridColumns: Int? = nil) {
+        let layoutRows = gridRows ?? rows
+        let layoutColumns = gridColumns ?? columns
         if target.isHidden {
             // Unhiding a placeholder target pumps the run loop for ~150 ms
             // (`unhideAppIfNeeded`); take Tiley's windows off screen first so
@@ -2008,8 +2031,8 @@ final class AppState: NSObject, NSMenuDelegate {
         let frame = GridCalculator.frame(
             for: selection,
             in: currentVisibleFrame,
-            rows: rows,
-            columns: columns,
+            rows: layoutRows,
+            columns: layoutColumns,
             gap: gap
         )
 
@@ -2035,6 +2058,7 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             if case .success = result {
                 self.recordTileyPlacedFrames(for: [target.cgWindowID])
+                self.rememberAppliedSelection(selection, gridRows: layoutRows, gridColumns: layoutColumns, for: target)
             }
             self.isApplyingGroupTransform = false
             switch result {
@@ -2057,11 +2081,13 @@ final class AppState: NSObject, NSMenuDelegate {
     }
 
     /// Commits a layout selection on a specific screen (used by multi-screen grid/preset interactions).
-    func commitLayoutSelectionOnScreen(_ selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect, screenFrame: CGRect, groupedPairs: [PresetGroupPair] = []) {
+    func commitLayoutSelectionOnScreen(_ selection: GridSelection, secondarySelections: [GridSelection] = [], visibleFrame: CGRect, screenFrame: CGRect, groupedPairs: [PresetGroupPair] = [], gridRows: Int? = nil, gridColumns: Int? = nil) {
         // Wait for the authoritative window list before picking targets.
         if deferUntilWindowListReady({ [weak self] in
-            self?.commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs)
+            self?.commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs, gridRows: gridRows, gridColumns: gridColumns)
         }) { return }
+        let layoutRows = gridRows ?? rows
+        let layoutColumns = gridColumns ?? columns
 
         if activeLayoutTarget == nil, lastTargetPID != nil {
             activeLayoutTarget = resolveWindowTarget()
@@ -2083,15 +2109,15 @@ final class AppState: NSObject, NSMenuDelegate {
         let allSelections = [selection] + secondarySelections
         if selectedWindowIndices.count > 1 {
             if selectedWindowIndices.count >= allSelections.count {
-                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs)
+                applyToMultipleWindows(selection: selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs, gridRows: gridRows, gridColumns: gridColumns)
             } else {
-                applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs)
+                applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs, gridRows: gridRows, gridColumns: gridColumns)
             }
             return
         }
         if allSelections.count > 1 {
             // Single window but multi-layout preset — fill from z-order.
-            applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs)
+            applyPresetToZOrderedWindows(selections: allSelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: groupedPairs, gridRows: gridRows, gridColumns: gridColumns)
             return
         }
 
@@ -2113,8 +2139,8 @@ final class AppState: NSObject, NSMenuDelegate {
         let frame = GridCalculator.frame(
             for: selection,
             in: currentVisibleFrame,
-            rows: rows,
-            columns: columns,
+            rows: layoutRows,
+            columns: layoutColumns,
             gap: gap
         )
 
@@ -2134,6 +2160,7 @@ final class AppState: NSObject, NSMenuDelegate {
             )
             if case .success = result {
                 self.recordTileyPlacedFrames(for: [target.cgWindowID])
+                self.rememberAppliedSelection(selection, gridRows: layoutRows, gridColumns: layoutColumns, for: target)
             }
             self.isApplyingGroupTransform = false
             switch result {
@@ -2183,7 +2210,7 @@ final class AppState: NSObject, NSMenuDelegate {
         // assignment-aware async pipeline (matches applyLayoutPreset).
         let rectangleApps = preset.normalizedRectangleApps
         if rectangleApps.contains(where: { $0 != nil }) {
-            let allSelections = preset.allScaledSelections(toRows: rows, columns: columns)
+            let allSelections = preset.allSelections
             var anchor = target
             anchor = WindowTarget(
                 appElement: anchor.appElement,
@@ -2206,15 +2233,15 @@ final class AppState: NSObject, NSMenuDelegate {
                     rectangleApps: rectangleApps,
                     groupedPairs: preset.groupedPairs,
                     anchorTarget: anchor,
-                    presetName: preset.name
+                    presetName: preset.name,
+                    gridRows: preset.baseRows,
+                    gridColumns: preset.baseColumns
                 )
             }
             return
         }
 
-        let selection = preset.scaledSelection(toRows: rows, columns: columns)
-        let secondarySelections = preset.scaledSecondarySelections(toRows: rows, columns: columns)
-        commitLayoutSelectionOnScreen(selection, secondarySelections: secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: preset.groupedPairs)
+        commitLayoutSelectionOnScreen(preset.selection, secondarySelections: preset.secondarySelections, visibleFrame: visibleFrame, screenFrame: screenFrame, groupedPairs: preset.groupedPairs, gridRows: preset.baseRows, gridColumns: preset.baseColumns)
     }
 
     /// Common tail of every layout application: drops the active target,

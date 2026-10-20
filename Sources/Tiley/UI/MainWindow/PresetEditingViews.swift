@@ -415,9 +415,17 @@ struct PresetGridPreviewView: View, Equatable {
     }
 
     var body: some View {
-        let gap: CGFloat = 2
-        let cellWidth = max(2, (size.width - gap * CGFloat(max(0, columns - 1))) / CGFloat(max(columns, 1)))
-        let cellHeight = max(2, (size.height - gap * CGFloat(max(0, rows - 1))) / CGFloat(max(rows, 1)))
+        // Shrink the inter-cell gap on dense grids so the whole grid
+        // always fits the thumbnail frame (each cell keeps ≥ 1pt).
+        let baseGap: CGFloat = 2
+        let gapX: CGFloat = columns > 1
+            ? max(0, min(baseGap, (size.width - CGFloat(columns)) / CGFloat(columns - 1)))
+            : 0
+        let gapY: CGFloat = rows > 1
+            ? max(0, min(baseGap, (size.height - CGFloat(rows)) / CGFloat(rows - 1)))
+            : 0
+        let cellWidth = max(1, (size.width - gapX * CGFloat(max(0, columns - 1))) / CGFloat(max(columns, 1)))
+        let cellHeight = max(1, (size.height - gapY * CGFloat(max(0, rows - 1))) / CGFloat(max(rows, 1)))
         let allSelections = [selection] + secondarySelections
 
         let paddedApps: [String?] = {
@@ -487,8 +495,8 @@ struct PresetGridPreviewView: View, Equatable {
                         .fill(fillColor)
                         .frame(width: cellWidth, height: cellHeight)
                         .position(
-                            x: CGFloat(column) * (cellWidth + gap) + (cellWidth / 2),
-                            y: CGFloat(row) * (cellHeight + gap) + (cellHeight / 2)
+                            x: CGFloat(column) * (cellWidth + gapX) + (cellWidth / 2),
+                            y: CGFloat(row) * (cellHeight + gapY) + (cellHeight / 2)
                         )
                 }
             }
@@ -501,11 +509,11 @@ struct PresetGridPreviewView: View, Equatable {
                    let icon = AppIconLookup.icon(forBundleID: bid) {
                     let n = sel.normalized
                     let width = CGFloat(n.endColumn - n.startColumn + 1) * cellWidth
-                        + CGFloat(n.endColumn - n.startColumn) * gap
+                        + CGFloat(n.endColumn - n.startColumn) * gapX
                     let height = CGFloat(n.endRow - n.startRow + 1) * cellHeight
-                        + CGFloat(n.endRow - n.startRow) * gap
-                    let centerX = CGFloat(n.startColumn) * (cellWidth + gap) + width / 2
-                    let centerY = CGFloat(n.startRow) * (cellHeight + gap) + height / 2
+                        + CGFloat(n.endRow - n.startRow) * gapY
+                    let centerX = CGFloat(n.startColumn) * (cellWidth + gapX) + width / 2
+                    let centerY = CGFloat(n.startRow) * (cellHeight + gapY) + height / 2
                     let iconSide = min(width, height) * 0.6
                     Image(nsImage: icon)
                         .resizable()
@@ -530,7 +538,8 @@ struct PresetGridPreviewView: View, Equatable {
                             inSelections: allSelections,
                             cellWidth: cellWidth,
                             cellHeight: cellHeight,
-                            gap: gap
+                            gapX: gapX,
+                            gapY: gapY
                         )
                         MiniPresetGroupingBadge(diameter: badgeDiameter)
                             .position(center)
@@ -547,26 +556,27 @@ struct PresetGridPreviewView: View, Equatable {
         inSelections selections: [GridSelection],
         cellWidth: CGFloat,
         cellHeight: CGFloat,
-        gap: CGFloat
+        gapX: CGFloat,
+        gapY: CGFloat
     ) -> CGPoint {
         let a = selections[adj.indexA].normalized
         let overlapMid = (CGFloat(adj.overlapStart) + CGFloat(adj.overlapEnd + 1)) / 2
         switch adj.edgeOfA {
         case .right:
-            let x = CGFloat(a.endColumn + 1) * (cellWidth + gap) - gap / 2
-            let y = overlapMid * (cellHeight + gap) - gap / 2
+            let x = CGFloat(a.endColumn + 1) * (cellWidth + gapX) - gapX / 2
+            let y = overlapMid * (cellHeight + gapY) - gapY / 2
             return CGPoint(x: x, y: y)
         case .left:
-            let x = CGFloat(a.startColumn) * (cellWidth + gap) - gap / 2
-            let y = overlapMid * (cellHeight + gap) - gap / 2
+            let x = CGFloat(a.startColumn) * (cellWidth + gapX) - gapX / 2
+            let y = overlapMid * (cellHeight + gapY) - gapY / 2
             return CGPoint(x: x, y: y)
         case .bottom:
-            let y = CGFloat(a.endRow + 1) * (cellHeight + gap) - gap / 2
-            let x = overlapMid * (cellWidth + gap) - gap / 2
+            let y = CGFloat(a.endRow + 1) * (cellHeight + gapY) - gapY / 2
+            let x = overlapMid * (cellWidth + gapX) - gapX / 2
             return CGPoint(x: x, y: y)
         case .top:
-            let y = CGFloat(a.startRow) * (cellHeight + gap) - gap / 2
-            let x = overlapMid * (cellWidth + gap) - gap / 2
+            let y = CGFloat(a.startRow) * (cellHeight + gapY) - gapY / 2
+            let x = overlapMid * (cellWidth + gapX) - gapX / 2
             return CGPoint(x: x, y: y)
         }
     }
