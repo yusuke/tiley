@@ -17,12 +17,26 @@ extension AppState {
             showDisplayPickerMenu(for: target, isLocal: false)
             return
         }
+        if case .moveToSpace = action {
+            guard let target = windowManager?.captureFocusedWindow() else { return }
+            showSpacePicker(for: target)
+            return
+        }
         guard let target = windowManager?.captureFocusedWindow() else { return }
         moveWindowToDisplay(target: target, action: action)
     }
 
     /// Executes a display movement action using the overlay's active target (local shortcut path).
     func executeDisplayShortcutLocal(_ action: DisplayHotKeyAction) {
+        if case .moveToSpace = action {
+            // Use the window selected in the overlay's list, like Bring to Front.
+            let selected = (activeTargetIndex >= 0 && activeTargetIndex < availableWindowTargets.count)
+                ? availableWindowTargets[activeTargetIndex] : nil
+            guard let target = selected ?? activeLayoutTarget else { return }
+            dismissOverlayImmediately()
+            showSpacePicker(for: target)
+            return
+        }
         if case .moveToOther = action {
             // Signal the action bar on the mouse cursor's display to show the popup.
             let mouseLocation = NSEvent.mouseLocation
@@ -61,8 +75,8 @@ extension AppState {
             guard screens.count > 1 else { return }
             destinationScreen = screens[(currentIndex - 1 + screens.count) % screens.count]
 
-        case .moveToOther:
-            return // handled separately via popup menu
+        case .moveToOther, .moveToSpace:
+            return // handled separately via picker
 
         case .moveToDisplay(let targetDisplayID):
             guard screens.count > 1,

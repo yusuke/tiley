@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "选择要分配给此区域的应用程序。";
 "%@ has no windows to place." = "%@ 没有可放置的窗口。";
 "Couldn't find a window for %@ after launching." = "启动后未能找到 %@ 的窗口。";
+
+/* Move to Space */
+"Move to Space" = "移动到空间";
+"Desktop %d" = "桌面 %d";
+"Current" = "当前";
+"Press a number to move the window · Esc to cancel" = "按数字键移动窗口 · 按 Esc 取消";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "要在空间之间移动窗口，请在“系统设置” › “键盘” › “键盘快捷键” › “调度中心”中打开“向左移动一个空间”和“向右移动一个空间”。";
+"Mission Control Shortcuts…" = "调度中心快捷键…";
+"All Displays" = "所有显示器";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "没有快捷键的桌面会用 ⌃← / ⌃→ 逐个切换。请在“调度中心”下打开“切换到桌面”快捷键。";
+"Open Keyboard Shortcuts…" = "打开键盘快捷键…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@：桌面 %@ — 均可直接跳转。";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@：桌面 %@ — 桌面 %@ 没有快捷键。";
+"macOS only has shortcuts up to Desktop %d." = "macOS 仅提供到桌面 %d 的快捷键。";
+"Turn On Missing Shortcuts…" = "打开缺少的快捷键…";
+"Turn on Switch to Desktop shortcuts?" = "要打开“切换到桌面”快捷键吗？";
+"None of the missing shortcuts can be turned on." = "没有可以打开的缺少快捷键。";
+"Tiley will turn on these system shortcuts:" = "Tiley 将打开以下系统快捷键：";
+"Desktop %d: %@" = "桌面 %d：%@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "这些按键会在所有应用中切换桌面。你可以稍后在“系统设置” › “键盘” › “键盘快捷键” › “调度中心”中更改。";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "已跳过桌面 %@：其按键已被另一个系统快捷键使用。";
+"OK" = "好";
+"Turn On" = "打开";

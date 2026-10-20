@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "選擇要指派到此區域的應用程式。";
 "%@ has no windows to place." = "%@ 沒有可放置的視窗。";
 "Couldn't find a window for %@ after launching." = "啟動後找不到 %@ 的視窗。";
+
+/* Move to Space */
+"Move to Space" = "移動到空間";
+"Desktop %d" = "桌面 %d";
+"Current" = "目前";
+"Press a number to move the window · Esc to cancel" = "按數字鍵移動視窗 · 按 Esc 取消";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "若要在空間之間移動視窗，請在「系統設定」›「鍵盤」›「鍵盤快速鍵」›「指揮中心」中開啟「向左移動一個空間」和「向右移動一個空間」。";
+"Mission Control Shortcuts…" = "指揮中心快速鍵…";
+"All Displays" = "所有顯示器";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "沒有快速鍵的桌面會用 ⌃← / ⌃→ 逐一切換。請在「指揮中心」下開啟「切換到桌面」快速鍵。";
+"Open Keyboard Shortcuts…" = "打開鍵盤快速鍵…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@：桌面 %@ — 皆可直接跳轉。";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@：桌面 %@ — 桌面 %@ 沒有快速鍵。";
+"macOS only has shortcuts up to Desktop %d." = "macOS 僅提供到桌面 %d 的快速鍵。";
+"Turn On Missing Shortcuts…" = "開啟缺少的快速鍵…";
+"Turn on Switch to Desktop shortcuts?" = "要開啟「切換到桌面」快速鍵嗎？";
+"None of the missing shortcuts can be turned on." = "沒有可以開啟的缺少快速鍵。";
+"Tiley will turn on these system shortcuts:" = "Tiley 將開啟以下系統快速鍵：";
+"Desktop %d: %@" = "桌面 %d：%@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "這些按鍵會在所有 App 中切換桌面。你可以稍後在「系統設定」›「鍵盤」›「鍵盤快速鍵」›「指揮中心」中更改。";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "已略過桌面 %@：其按鍵已被另一個系統快速鍵使用。";
+"OK" = "好";
+"Turn On" = "開啟";

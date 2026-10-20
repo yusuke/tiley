@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "この領域に割り当てるアプリケーションを選択してください。";
 "%@ has no windows to place." = "%@ に配置できるウインドウがありません。";
 "Couldn't find a window for %@ after launching." = "%@ を起動しましたが、ウインドウが見つかりませんでした。";
+
+/* Move to Space */
+"Move to Space" = "操作スペースに移動";
+"Desktop %d" = "デスクトップ %d";
+"Current" = "現在";
+"Press a number to move the window · Esc to cancel" = "数字キーでウインドウを移動 · Escでキャンセル";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "ウインドウを操作スペース間で移動するには、システム設定 › キーボード › キーボードショートカット › Mission Control で「左の操作スペースに移動」と「右の操作スペースに移動」をオンにしてください。";
+"Mission Control Shortcuts…" = "Mission Controlのショートカット…";
+"All Displays" = "すべてのディスプレイ";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "ショートカットのないデスクトップには ⌃← / ⌃→ で1つずつ移動します。Mission Controlの「デスクトップへ切り替える」ショートカットをオンにしてください。";
+"Open Keyboard Shortcuts…" = "キーボードショートカットを開く…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@：デスクトップ %@ — すべて直接移動できます。";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@：デスクトップ %@ — デスクトップ %@ にショートカットがありません。";
+"macOS only has shortcuts up to Desktop %d." = "macOSのショートカットはデスクトップ %d までです。";
+"Turn On Missing Shortcuts…" = "足りないショートカットをオンにする…";
+"Turn on Switch to Desktop shortcuts?" = "「デスクトップへ切り替える」ショートカットをオンにしますか？";
+"None of the missing shortcuts can be turned on." = "オンにできるショートカットはありません。";
+"Tiley will turn on these system shortcuts:" = "Tileyは次のシステムショートカットをオンにします：";
+"Desktop %d: %@" = "デスクトップ %d：%@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "これらのキーはすべてのアプリでデスクトップを切り替えます。あとでシステム設定 › キーボード › キーボードショートカット › Mission Controlで変更できます。";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "デスクトップ %@ はスキップしました：キーが別のシステムショートカットで使われています。";
+"OK" = "OK";
+"Turn On" = "オンにする";

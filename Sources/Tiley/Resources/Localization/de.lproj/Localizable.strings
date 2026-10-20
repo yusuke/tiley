@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "Wähle eine Anwendung, die diesem Bereich zugewiesen werden soll.";
 "%@ has no windows to place." = "%@ hat keine Fenster zum Platzieren.";
 "Couldn't find a window for %@ after launching." = "Nach dem Start wurde kein Fenster für %@ gefunden.";
+
+/* Move to Space */
+"Move to Space" = "In Space verschieben";
+"Desktop %d" = "Schreibtisch %d";
+"Current" = "Aktuell";
+"Press a number to move the window · Esc to cancel" = "Zahl drücken, um das Fenster zu verschieben · Esc zum Abbrechen";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Aktiviere „Einen Space nach links“ und „Einen Space nach rechts“ unter Systemeinstellungen › Tastatur › Tastaturkurzbefehle › Mission Control, um Fenster zwischen Spaces zu verschieben.";
+"Mission Control Shortcuts…" = "Mission Control-Kurzbefehle …";
+"All Displays" = "Alle Displays";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Schreibtische ohne Kurzbefehl werden schrittweise mit ⌃← / ⌃→ erreicht. Aktiviere die „Zu Schreibtisch“-Kurzbefehle unter Mission Control.";
+"Open Keyboard Shortcuts…" = "Tastaturkurzbefehle öffnen …";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: Schreibtisch %@ – alle für direkte Sprünge eingerichtet.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: Schreibtisch %@ – kein Kurzbefehl für Schreibtisch %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS bietet Kurzbefehle nur bis Schreibtisch %d.";
+"Turn On Missing Shortcuts…" = "Fehlende Kurzbefehle aktivieren …";
+"Turn on Switch to Desktop shortcuts?" = "„Zu Schreibtisch“-Kurzbefehle aktivieren?";
+"None of the missing shortcuts can be turned on." = "Keiner der fehlenden Kurzbefehle kann aktiviert werden.";
+"Tiley will turn on these system shortcuts:" = "Tiley aktiviert diese Systemkurzbefehle:";
+"Desktop %d: %@" = "Schreibtisch %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Diese Tasten wechseln in jeder App den Schreibtisch. Du kannst sie später unter Systemeinstellungen › Tastatur › Tastaturkurzbefehle › Mission Control ändern.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Schreibtisch %@ übersprungen: Die Taste wird bereits von einem anderen Systemkurzbefehl verwendet.";
+"OK" = "OK";
+"Turn On" = "Aktivieren";

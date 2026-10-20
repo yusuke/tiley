@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "Choose an application to assign to this region.";
 "%@ has no windows to place." = "%@ has no windows to place.";
 "Couldn't find a window for %@ after launching." = "Couldn't find a window for %@ after launching.";
+
+/* Move to Space */
+"Move to Space" = "Move to Space";
+"Desktop %d" = "Desktop %d";
+"Current" = "Current";
+"Press a number to move the window · Esc to cancel" = "Press a number to move the window · Esc to cancel";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces.";
+"Mission Control Shortcuts…" = "Mission Control Shortcuts…";
+"All Displays" = "All Displays";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control.";
+"Open Keyboard Shortcuts…" = "Open Keyboard Shortcuts…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: Desktop %@ — all set up for direct jumps.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: Desktop %@ — no shortcut for Desktop %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS only has shortcuts up to Desktop %d.";
+"Turn On Missing Shortcuts…" = "Turn On Missing Shortcuts…";
+"Turn on Switch to Desktop shortcuts?" = "Turn on Switch to Desktop shortcuts?";
+"None of the missing shortcuts can be turned on." = "None of the missing shortcuts can be turned on.";
+"Tiley will turn on these system shortcuts:" = "Tiley will turn on these system shortcuts:";
+"Desktop %d: %@" = "Desktop %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Skipped Desktop %@: its key is already used by another system shortcut.";
+"OK" = "OK";
+"Turn On" = "Turn On";

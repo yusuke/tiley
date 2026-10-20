@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "Scegli un'applicazione da assegnare a questa regione.";
 "%@ has no windows to place." = "%@ non ha finestre da posizionare.";
 "Couldn't find a window for %@ after launching." = "Nessuna finestra trovata per %@ dopo l'avvio.";
+
+/* Move to Space */
+"Move to Space" = "Sposta in Spazio";
+"Desktop %d" = "Scrivania %d";
+"Current" = "Attuale";
+"Press a number to move the window · Esc to cancel" = "Premi un numero per spostare la finestra · Esc per annullare";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Attiva «Sposta a sinistra di uno spazio» e «Sposta a destra di uno spazio» in Impostazioni di Sistema › Tastiera › Abbreviazioni da tastiera › Mission Control per spostare le finestre tra gli spazi.";
+"Mission Control Shortcuts…" = "Abbreviazioni di Mission Control…";
+"All Displays" = "Tutti i monitor";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Le scrivanie senza abbreviazione si raggiungono un passo alla volta con ⌃← / ⌃→. Attiva le abbreviazioni “Passa alla scrivania” in Mission Control.";
+"Open Keyboard Shortcuts…" = "Apri abbreviazioni da tastiera…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: Scrivania %@ — tutte pronte per i salti diretti.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: Scrivania %@ — nessuna abbreviazione per Scrivania %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS offre abbreviazioni solo fino alla Scrivania %d.";
+"Turn On Missing Shortcuts…" = "Attiva abbreviazioni mancanti…";
+"Turn on Switch to Desktop shortcuts?" = "Attivare le abbreviazioni “Passa alla scrivania”?";
+"None of the missing shortcuts can be turned on." = "Nessuna delle abbreviazioni mancanti può essere attivata.";
+"Tiley will turn on these system shortcuts:" = "Tiley attiverà queste abbreviazioni di sistema:";
+"Desktop %d: %@" = "Scrivania %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Questi tasti cambieranno scrivania in ogni app. Puoi modificarli in Impostazioni di Sistema › Tastiera › Abbreviazioni da tastiera › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Scrivania %@ saltata: il tasto è già usato da un’altra abbreviazione di sistema.";
+"OK" = "OK";
+"Turn On" = "Attiva";

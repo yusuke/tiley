@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "이 영역에 할당할 애플리케이션을 선택하세요.";
 "%@ has no windows to place." = "%@에 배치할 수 있는 윈도우가 없습니다.";
 "Couldn't find a window for %@ after launching." = "%@을(를) 실행했지만 윈도우를 찾지 못했습니다.";
+
+/* Move to Space */
+"Move to Space" = "Space로 이동";
+"Desktop %d" = "데스크탑 %d";
+"Current" = "현재";
+"Press a number to move the window · Esc to cancel" = "숫자를 눌러 윈도우 이동 · Esc로 취소";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Space 간에 윈도우를 이동하려면 시스템 설정 › 키보드 › 키보드 단축키 › Mission Control에서 ‘왼쪽 Space로 이동’과 ‘오른쪽 Space로 이동’을 켜십시오.";
+"Mission Control Shortcuts…" = "Mission Control 단축키…";
+"All Displays" = "모든 디스플레이";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "단축키가 없는 데스크탑은 ⌃← / ⌃→로 한 단계씩 이동합니다. Mission Control에서 ‘데스크탑으로 전환’ 단축키를 켜십시오.";
+"Open Keyboard Shortcuts…" = "키보드 단축키 열기…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: 데스크탑 %@ — 모두 바로 이동할 수 있습니다.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: 데스크탑 %@ — 데스크탑 %@에 단축키가 없습니다.";
+"macOS only has shortcuts up to Desktop %d." = "macOS는 데스크탑 %d까지만 단축키를 제공합니다.";
+"Turn On Missing Shortcuts…" = "누락된 단축키 켜기…";
+"Turn on Switch to Desktop shortcuts?" = "‘데스크탑으로 전환’ 단축키를 켜겠습니까?";
+"None of the missing shortcuts can be turned on." = "켤 수 있는 누락된 단축키가 없습니다.";
+"Tiley will turn on these system shortcuts:" = "Tiley가 다음 시스템 단축키를 켭니다:";
+"Desktop %d: %@" = "데스크탑 %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "이 키는 모든 앱에서 데스크탑을 전환합니다. 나중에 시스템 설정 › 키보드 › 키보드 단축키 › Mission Control에서 변경할 수 있습니다.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "데스크탑 %@ 건너뜀: 키가 이미 다른 시스템 단축키에 사용 중입니다.";
+"OK" = "확인";
+"Turn On" = "켜기";

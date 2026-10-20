@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "Elige una aplicación para asignarla a esta región.";
 "%@ has no windows to place." = "%@ no tiene ventanas que colocar.";
 "Couldn't find a window for %@ after launching." = "No se encontró una ventana para %@ después de iniciarla.";
+
+/* Move to Space */
+"Move to Space" = "Mover a espacio";
+"Desktop %d" = "Escritorio %d";
+"Current" = "Actual";
+"Press a number to move the window · Esc to cancel" = "Pulsa un número para mover la ventana · Esc para cancelar";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Activa «Mover un espacio a la izquierda» y «Mover un espacio a la derecha» en Ajustes del Sistema › Teclado › Funciones rápidas de teclado › Mission Control para mover ventanas entre espacios.";
+"Mission Control Shortcuts…" = "Funciones rápidas de Mission Control…";
+"All Displays" = "Todas las pantallas";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Los escritorios sin función rápida se alcanzan paso a paso con ⌃← / ⌃→. Activa las funciones rápidas “Cambiar a Escritorio” en Mission Control.";
+"Open Keyboard Shortcuts…" = "Abrir funciones rápidas de teclado…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: Escritorio %@ — todo listo para saltos directos.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: Escritorio %@ — sin función rápida para Escritorio %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS solo ofrece funciones rápidas hasta el Escritorio %d.";
+"Turn On Missing Shortcuts…" = "Activar funciones rápidas que faltan…";
+"Turn on Switch to Desktop shortcuts?" = "¿Activar las funciones rápidas “Cambiar a Escritorio”?";
+"None of the missing shortcuts can be turned on." = "No se puede activar ninguna de las funciones rápidas que faltan.";
+"Tiley will turn on these system shortcuts:" = "Tiley activará estas funciones rápidas del sistema:";
+"Desktop %d: %@" = "Escritorio %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Estas teclas cambiarán de escritorio en cualquier app. Puedes cambiarlas en Ajustes del Sistema › Teclado › Funciones rápidas de teclado › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Se omitió el Escritorio %@: su tecla ya la usa otra función rápida del sistema.";
+"OK" = "Aceptar";
+"Turn On" = "Activar";

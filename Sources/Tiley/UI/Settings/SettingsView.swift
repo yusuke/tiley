@@ -597,6 +597,23 @@ struct SettingsView: View {
                     systemImage: "filemenu.and.selection"
                 )
 
+                Divider().opacity(0.4)
+
+                displayShortcutRow(
+                    label: NSLocalizedString("Move to Space", comment: "Shortcut action - shows a picker of Mission Control spaces"),
+                    localBinding: $draftSettings.displayShortcutSettings.moveToSpace.local,
+                    localEnabledBinding: $draftSettings.displayShortcutSettings.moveToSpace.localEnabled,
+                    globalBinding: $draftSettings.displayShortcutSettings.moveToSpace.global,
+                    globalEnabledBinding: $draftSettings.displayShortcutSettings.moveToSpace.globalEnabled,
+                    localKeyPath: "moveToSpace.local",
+                    globalKeyPath: "moveToSpace.global",
+                    systemImage: "square.grid.3x1.below.line.grid.1x2"
+                )
+
+                DesktopShortcutStatusView()
+                    .padding(.leading, shortcutIconColumnWidth + 8)
+                    .padding(.bottom, 6)
+
                 let resolver = Self.cachedDisplayResolver()
                 ForEach(resolver.displays, id: \.displayID) { resolved in
                     Divider().opacity(0.4)
@@ -775,7 +792,7 @@ struct SettingsView: View {
     private func validateDisplayShortcut(_ candidate: HotKeyShortcut, excludeKeyPath: String) -> String? {
         // Reserved keys
         if !candidate.isGlobal {
-            if !excludeKeyPath.hasPrefix("selectNextWindow") && !excludeKeyPath.hasPrefix("selectPreviousWindow") && !excludeKeyPath.hasPrefix("bringToFront") && !excludeKeyPath.hasPrefix("closeOrQuit") {
+            if !excludeKeyPath.hasPrefix("selectNextWindow") && !excludeKeyPath.hasPrefix("selectPreviousWindow") && !excludeKeyPath.hasPrefix("bringToFront") && !excludeKeyPath.hasPrefix("closeOrQuit") && !excludeKeyPath.hasPrefix("moveToSpace") {
                 if draftWindowActionConflicts(with: candidate) {
                     return NSLocalizedString("This shortcut is already used for a window action.", comment: "Shortcut conflict with window action")
                 }
@@ -836,6 +853,9 @@ struct SettingsView: View {
         if let s = candidate.isGlobal ? ds.closeOrQuit.global : ds.closeOrQuit.local {
             allSlots.append(("closeOrQuit\(suffix)", s))
         }
+        if let s = candidate.isGlobal ? ds.moveToSpace.global : ds.moveToSpace.local {
+            allSlots.append(("moveToSpace\(suffix)", s))
+        }
         for (kp, s) in allSlots where kp != excludeKeyPath {
             if s.keyCode == candidate.keyCode && s.modifiers == candidate.modifiers {
                 return NSLocalizedString("This shortcut is already used by another display shortcut.", comment: "Display shortcut conflict with another display shortcut")
@@ -855,6 +875,122 @@ struct SettingsView: View {
            let s = ds.bringToFront.local, s == shortcut { return true }
         if ds.closeOrQuit.localEnabled,
            let s = ds.closeOrQuit.local, s == shortcut { return true }
+        if ds.moveToSpace.localEnabled,
+           let s = ds.moveToSpace.local, s == shortcut { return true }
         return false
+    }
+}
+
+// MARK: - Desktop shortcut status
+
+/// Shows which desktops can't be reached with a single "Switch to Desktop N"
+/// press, with a button to the system Keyboard Shortcuts settings. Refreshes
+/// whenever Tiley becomes active again, e.g. after returning from System Settings.
+private struct DesktopShortcutStatusView: View {
+    @State private var coverage: [SpaceMover.DesktopShortcutCoverage] = []
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            ForEach(coverage, id: \.displayName) { display in
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Image(systemName: display.missing.isEmpty ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                        .foregroundStyle(display.missing.isEmpty ? Color.green : Color.orange)
+                    Text(summary(for: display))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            if coverage.contains(where: { !$0.missing.isEmpty }) {
+                Text(NSLocalizedString(
+                    "Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control.",
+                    comment: "Settings hint about missing Switch to Desktop shortcuts"))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            HStack(spacing: 8) {
+                if !fixableDesktops.isEmpty {
+                    Button(NSLocalizedString("Turn On Missing Shortcuts…", comment: "Button that turns on missing Switch to Desktop shortcuts")) {
+                        confirmAndEnableMissingShortcuts()
+                    }
+                }
+                Button(NSLocalizedString("Open Keyboard Shortcuts…", comment: "Button that opens the system Keyboard Shortcuts settings")) {
+                    SpaceMover.openMissionControlShortcutSettings()
+                }
+            }
+            .controlSize(.small)
+        }
+        .font(.system(size: 11))
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .onAppear(perform: refresh)
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            refresh()
+        }
+        .onReceive(NSWorkspace.shared.notificationCenter.publisher(for: NSWorkspace.activeSpaceDidChangeNotification)) { _ in
+            refresh()
+        }
+    }
+
+    private func refresh() {
+        coverage = SpaceMover.desktopShortcutCoverage()
+    }
+
+    /// Missing desktops that macOS has a shortcut slot for (1–16).
+    private var fixableDesktops: [Int] {
+        coverage.flatMap(\.missing).filter { $0 <= SpaceMover.maxDesktopShortcutNumber }
+    }
+
+    private func confirmAndEnableMissingShortcuts() {
+        let (plans, skipped) = SpaceMover.planDesktopShortcuts(for: fixableDesktops)
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = NSLocalizedString("Turn on Switch to Desktop shortcuts?", comment: "Confirm alert title")
+
+        var lines: [String] = []
+        if plans.isEmpty {
+            lines.append(NSLocalizedString("None of the missing shortcuts can be turned on.", comment: "Confirm alert: nothing to do"))
+        } else {
+            lines.append(NSLocalizedString("Tiley will turn on these system shortcuts:", comment: "Confirm alert intro"))
+            for plan in plans {
+                lines.append(String(format: NSLocalizedString("Desktop %d: %@", comment: "Confirm alert line: desktop number, key"),
+                                    plan.desktopNumber, plan.keyLabel))
+            }
+            lines.append("")
+            lines.append(NSLocalizedString("These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control.", comment: "Confirm alert note"))
+        }
+        if !skipped.isEmpty {
+            lines.append("")
+            lines.append(String(format: NSLocalizedString("Skipped Desktop %@: its key is already used by another system shortcut.", comment: "Confirm alert: desktops skipped for key conflicts"),
+                                SpaceMover.formatRanges(skipped)))
+        }
+        alert.informativeText = lines.joined(separator: "\n")
+
+        if plans.isEmpty {
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK button"))
+            alert.runModal()
+            return
+        }
+        alert.addButton(withTitle: NSLocalizedString("Turn On", comment: "Confirm button that turns shortcuts on"))
+        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel button"))
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        SpaceMover.enableDesktopShortcuts(plans)
+        refresh()
+    }
+
+    private func summary(for display: SpaceMover.DesktopShortcutCoverage) -> String {
+        let all = SpaceMover.formatRanges(display.desktopNumbers)
+        if display.missing.isEmpty {
+            return String(format: NSLocalizedString(
+                "%@: Desktop %@ — all set up for direct jumps.",
+                comment: "Settings: display name, its System Settings desktop numbers"), display.displayName, all)
+        }
+        var text = String(format: NSLocalizedString(
+            "%@: Desktop %@ — no shortcut for Desktop %@.",
+            comment: "Settings: display name, its System Settings desktop numbers, numbers without a shortcut"),
+            display.displayName, all, SpaceMover.formatRanges(display.missing))
+        if display.missing.contains(where: { $0 > SpaceMover.maxDesktopShortcutNumber }) {
+            text += " " + String(format: NSLocalizedString(
+                "macOS only has shortcuts up to Desktop %d.",
+                comment: "Settings: macOS limit on Switch to Desktop shortcuts"), SpaceMover.maxDesktopShortcutNumber)
+        }
+        return text
     }
 }

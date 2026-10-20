@@ -372,6 +372,8 @@ final class AppState: NSObject, NSMenuDelegate {
     /// identified by PID + window element + title so the match survives index shifts.
     @ObservationIgnored var pendingTargetAfterClose: (pid: pid_t, windowElement: AXUIElement?, windowTitle: String?)?
     @ObservationIgnored var displayHighlightWindow: NSWindow?
+    /// The open "Move to Space" picker, if any.
+    @ObservationIgnored var spacePickerController: SpacePickerController?
 
     // MARK: - Window Grouping
     /// Active window groups, keyed by group UUID.

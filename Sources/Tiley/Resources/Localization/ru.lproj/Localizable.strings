@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "Выберите приложение для назначения этой области.";
 "%@ has no windows to place." = "У %@ нет окон для размещения.";
 "Couldn't find a window for %@ after launching." = "Не удалось найти окно для %@ после запуска.";
+
+/* Move to Space */
+"Move to Space" = "Переместить в Space";
+"Desktop %d" = "Рабочий стол %d";
+"Current" = "Текущий";
+"Press a number to move the window · Esc to cancel" = "Нажмите цифру, чтобы переместить окно · Esc — отмена";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Включите «Перейти на один Space влево» и «Перейти на один Space вправо» в Системных настройках › Клавиатура › Сочетания клавиш › Mission Control, чтобы перемещать окна между пространствами.";
+"Mission Control Shortcuts…" = "Сочетания клавиш Mission Control…";
+"All Displays" = "Все дисплеи";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Рабочие столы без сочетания клавиш открываются по шагам через ⌃← / ⌃→. Включите сочетания «Переход на рабочий стол» в разделе Mission Control.";
+"Open Keyboard Shortcuts…" = "Открыть сочетания клавиш…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@: рабочий стол %@ — всё настроено для прямого перехода.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@: рабочий стол %@ — нет сочетания для рабочего стола %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS предлагает сочетания только до рабочего стола %d.";
+"Turn On Missing Shortcuts…" = "Включить недостающие сочетания…";
+"Turn on Switch to Desktop shortcuts?" = "Включить сочетания «Переход на рабочий стол»?";
+"None of the missing shortcuts can be turned on." = "Ни одно из недостающих сочетаний нельзя включить.";
+"Tiley will turn on these system shortcuts:" = "Tiley включит эти системные сочетания клавиш:";
+"Desktop %d: %@" = "Рабочий стол %d: %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Эти клавиши будут переключать рабочие столы в любой программе. Изменить их можно в Системных настройках › Клавиатура › Сочетания клавиш › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Рабочий стол %@ пропущен: его клавиша уже занята другим системным сочетанием.";
+"OK" = "ОК";
+"Turn On" = "Включить";

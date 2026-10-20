@@ -156,3 +156,26 @@
 "Choose an application to assign to this region." = "Choisissez une application à attribuer à cette région.";
 "%@ has no windows to place." = "%@ n'a aucune fenêtre à placer.";
 "Couldn't find a window for %@ after launching." = "Aucune fenêtre trouvée pour %@ après le lancement.";
+
+/* Move to Space */
+"Move to Space" = "Déplacer vers un Space";
+"Desktop %d" = "Bureau %d";
+"Current" = "Actuel";
+"Press a number to move the window · Esc to cancel" = "Appuyez sur un chiffre pour déplacer la fenêtre · Échap pour annuler";
+"Turn on “Move left a space” and “Move right a space” in System Settings › Keyboard › Keyboard Shortcuts › Mission Control to move windows between spaces." = "Activez « Déplacer d’un espace vers la gauche » et « Déplacer d’un espace vers la droite » dans Réglages Système › Clavier › Raccourcis clavier › Mission Control pour déplacer des fenêtres entre les espaces.";
+"Mission Control Shortcuts…" = "Raccourcis Mission Control…";
+"All Displays" = "Tous les écrans";
+"Desktops without a shortcut are reached one step at a time with ⌃← / ⌃→. Turn on “Switch to Desktop” shortcuts under Mission Control." = "Les bureaux sans raccourci sont atteints pas à pas avec ⌃← / ⌃→. Activez les raccourcis « Passer au bureau » sous Mission Control.";
+"Open Keyboard Shortcuts…" = "Ouvrir les raccourcis clavier…";
+"%@: Desktop %@ — all set up for direct jumps." = "%@ : Bureau %@ — tous prêts pour les sauts directs.";
+"%@: Desktop %@ — no shortcut for Desktop %@." = "%@ : Bureau %@ — aucun raccourci pour Bureau %@.";
+"macOS only has shortcuts up to Desktop %d." = "macOS ne propose des raccourcis que jusqu’au Bureau %d.";
+"Turn On Missing Shortcuts…" = "Activer les raccourcis manquants…";
+"Turn on Switch to Desktop shortcuts?" = "Activer les raccourcis « Passer au bureau » ?";
+"None of the missing shortcuts can be turned on." = "Aucun des raccourcis manquants ne peut être activé.";
+"Tiley will turn on these system shortcuts:" = "Tiley activera ces raccourcis système :";
+"Desktop %d: %@" = "Bureau %d : %@";
+"These keys will switch desktops in every app. You can change them later in System Settings › Keyboard › Keyboard Shortcuts › Mission Control." = "Ces touches changeront de bureau dans toutes les apps. Vous pourrez les modifier dans Réglages Système › Clavier › Raccourcis clavier › Mission Control.";
+"Skipped Desktop %@: its key is already used by another system shortcut." = "Bureau %@ ignoré : sa touche est déjà utilisée par un autre raccourci système.";
+"OK" = "OK";
+"Turn On" = "Activer";
